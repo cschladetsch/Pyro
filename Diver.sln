@@ -44,7 +44,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executor", "Library\Executo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ext", "Ext", "{086669FE-817A-4BD2-84A4-E1D90C667250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow2", "Library\Ext\Flow2\Flow2.csproj", "{18326C80-2CC4-417D-8FEE-EA608ED85636}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow2", "Library\Ext\Flow\Flow2.csproj", "{18326C80-2CC4-417D-8FEE-EA608ED85636}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
