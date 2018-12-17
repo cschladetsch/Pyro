@@ -33,6 +33,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkGen", "App\NetworkGen\NetworkGen.csproj", "{E6CD36B6-157B-4B89-BCA0-AAAC0E56688A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generated", "Generated", "{3248338A-7D2F-45B1-A7D2-802BD6C7A29F}"
+	ProjectSection(SolutionItems) = preProject
+		Generated\Readme.md = Generated\Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity3d", "Library\Unity\Unity3d.csproj", "{C1E2EA3D-BAF8-4FC6-9238-E96C65EB1B51}"
 EndProject
@@ -47,6 +50,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow2", "Library\Ext\Flow\Flow2.csproj", "{18326C80-2CC4-417D-8FEE-EA608ED85636}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{723E24B8-056B-4C33-9446-6777AC37FFA4}"
+	ProjectSection(SolutionItems) = preProject
+		Bin\Readme.md = Bin\Readme.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{4E28C0D6-849B-4559-A5EC-EC1FA772315C}"
 	ProjectSection(SolutionItems) = preProject
