@@ -1,4 +1,4 @@
-namespace Diver.Core
+namespace Diver
 {
     public class Id
     {

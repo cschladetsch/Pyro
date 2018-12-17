@@ -14,7 +14,7 @@ namespace Diver.Network
     public class Id
     {
         private Guid _registy;
-        private Diver.Core.Id _id;
+        private int _id;
     }
 
     public interface IClass<T> : IClassBase
