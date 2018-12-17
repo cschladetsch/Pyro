@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{633E509A-2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCore", "Test\TestCore\TestCore.csproj", "{7C9C4206-DEBC-4F4E-9CC1-F44FEFBB27F3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libray", "Libray", "{93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}"
 	ProjectSection(SolutionItems) = preProject
 		Library\Readme.md = Library\Readme.md
 	EndProjectSection
