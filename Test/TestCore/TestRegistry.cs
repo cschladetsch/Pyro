@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace TestCore
 {
-    [TestClass]
+    [TestFixture]
     public class TestRegistry
     {
-        [TestMethod]
+        [Test]
         public void TestMethod1()
         {
         }

@@ -1,4 +1,4 @@
-﻿namespace Diver.PiLang
+﻿namespace Diver
 {
     public struct Slice
     {
