@@ -15,12 +15,11 @@ namespace Diver.Core.Network
         string Handshake(Guid node, int port);
 
         bool SendText(string text);
-        bool ReceiveText(IResponseBase response);
 
         void Ping(DateTime sent);
         DateTime Pong();
 
-        List<object> Execute(IRef<Continuation> cont);
+        List<object> Execute(Diver.IRef<Continuation> cont);
     }
 
     public interface IResponseBase

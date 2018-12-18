@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Diver
 {
     public interface IRegistry
     {
-        Guid Id { get; }
+        Guid Guid { get; }
+
+        object Get(Id id);
+        void Set(Id id, object value);
+        void Set<T>(Id id, T value);
+
+        Id Add(object value);
+        IRef<T> Add<T>(T value);
     }
 }

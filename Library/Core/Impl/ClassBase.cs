@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
 
 namespace Diver.Impl
 {
-    public class ClassBase
+    public class ClassBase : StructBase, IClassBase 
     {
-        public AssemblyName AssemblyName;
-        public string TypeName;
+        internal ClassBase(IRegistry reg, Type type) : base(reg, type)
+        {
+        }
     }
 }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{575091D8-A55C-4794-9F15-120E927C3305}</ProjectGuid>
+    <ProjectGuid>{6DE9D394-6AA8-476A-9206-4A94C3AA795B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver</RootNamespace>
-    <AssemblyName>Core</AssemblyName>
+    <RootNamespace>BuiltinTypes</RootNamespace>
+    <AssemblyName>BuiltinTypes</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,19 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,36 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Create.cs" />
-    <Compile Include="IClass.cs" />
-    <Compile Include="IClassBase.cs" />
-    <Compile Include="IFactory.cs" />
-    <Compile Include="Impl\Class.cs" />
-    <Compile Include="Impl\ClassBase.cs" />
-    <Compile Include="Id.cs" />
-    <Compile Include="Impl\Factory.cs" />
-    <Compile Include="Exceptions.cs" />
-    <Compile Include="IStructBase.cs" />
-    <Compile Include="ITypeBase.cs" />
-    <Compile Include="IStruct.cs" />
-    <Compile Include="Impl\Ref.cs" />
-    <Compile Include="Impl\RefBase.cs" />
-    <Compile Include="Impl\Struct.cs" />
-    <Compile Include="Impl\StructBase.cs" />
-    <Compile Include="IRefBase.cs" />
-    <Compile Include="Impl\Registry.cs" />
-    <Compile Include="IRegistry.cs" />
+    <Compile Include="Array.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IRef.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

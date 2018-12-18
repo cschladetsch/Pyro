@@ -1,19 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Diver.Impl
 {
-    public class Registry
+    public class Registry : IRegistry
     {
-        public Class<T> Register<T>()
+        public Guid Guid { get; }
+
+        public object Get(Id id)
+        {
+            return _instances[id].BaseValue;
+        }
+
+        public void Set(Id id, object value)
+        {
+            _instances[id].Set(value);
+        }
+
+        public void Set<T>(Id id, T value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Id Add(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRef<T> Get<T>(Id id)
+        {
+            var obj = _instances[id].BaseValue;
+            return obj as IRef<T>;
+        }
+
+        public IRef<T> Add<T>(T value) //where T : class, new()
+        {
+            var type = typeof(T);
+            IClassBase klass = null;
+            if (!_classes.TryGetValue(type, out klass))
+            {
+                klass = AddClass(type);
+            }
+
+            return new Ref<T>(value);
+        }
+
+        private IClassBase AddClass(Type type)
+        {
+            return _classes[type] = new ClassBase(this, type);
+        }
+
+        private Class<T> Register<T>() where T : class, new()
         {
             return null;
         }
 
-        private Dictionary<Guid, ClassBase> _classes = new Dictionary<Guid, ClassBase>();
-        private Dictionary<Id, ObjectBase> _instances = new Dictionary<Id, ObjectBase>();
+        private Id NextId()
+        {
+            return new Id(_nextId++);
+        }
+
+        private int _nextId;
+        private Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
+        private Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
     }
 }
