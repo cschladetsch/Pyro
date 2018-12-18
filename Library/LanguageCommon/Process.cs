@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using Diver.Core;
 
 namespace Diver
 {
@@ -27,14 +26,16 @@ namespace Diver
 
         public IRef<T> New<T>()
         {
-            return _registry.New<T>();
+            //return _registry.Add<T>()
+            return null;
         }
 
         public IRef<T> New<T>(T val)
         {
-            var obj = _registry.New<T>();
-            obj.Value = val;
-            return obj;
+            //var obj = _registry.Add<T>();
+            //obj.Value = val;
+            //return obj;
+            return null;
         }
 
         private bool _failed;
