@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Diver.Core
+namespace TestPeer
 {
-    class StringStream
+    public class Class1
     {
     }
 }

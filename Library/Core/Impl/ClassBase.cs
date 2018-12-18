@@ -1,15 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Diver.Core.Impl
+namespace Diver.Impl
 {
-    public class ClassBase
+    public class ClassBase : StructBase, IClassBase
     {
-        public AssemblyName AssemblyName;
-        public string TypeName;
+        internal ClassBase(IRegistry reg, Type type) 
+            : base(reg, type)
+        {
+        }
+
+        public IRefBase Create(IRegistry reg, Id id)
+        {
+            return new RefBase(reg, this, id);
+        }
+
+        public IRefBase Create(IRegistry reg, Id id, object value)
+        {
+            return new RefBase(reg, this, id, value);
+        }
+
+        public IConstRefBase CreateConst(IRegistry reg, Id id)
+        {
+            return new ConstRefBase(reg, this, id);
+        }
+
+        public IConstRefBase CreateConst(IRegistry reg, Id id, object value)
+        {
+            return new ConstRefBase(reg, this, id, value);
+        }
     }
 }

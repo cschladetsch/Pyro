@@ -44,5 +44,15 @@
     <Compile Include="Executor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ext\Flow\Flow2.csproj">
+      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+      <Name>Flow2</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
