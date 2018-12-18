@@ -2,14 +2,12 @@
 {
     internal class Ref<T> : ConstRef<T>, IRef<T> where T : class, new()
     {
-        private Class<T> _class;
-
-        public Ref(IRegistry reg, Class<T> @class, Id id)
+        public Ref(IRegistry reg, IClass<T> @class, Id id)
             : base(reg, @class, id)
         {
         }
 
-        public Ref(IRegistry reg, Class<T> class1, Id id, T value)
+        public Ref(IRegistry reg, IClass<T> class1, Id id, T value)
             : base(reg, class1, id, value)
         {
         }

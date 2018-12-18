@@ -13,7 +13,7 @@ namespace Diver.Impl
             return new Ref<T>(reg, this, id);
         }
 
-        public new IRef<T> Create(IRegistry reg, Id id, T value)
+        public IRef<T> Create(IRegistry reg, Id id, T value)
         {
             return new Ref<T>(reg, this, id, value);
         }

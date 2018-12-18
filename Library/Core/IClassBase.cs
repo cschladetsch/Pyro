@@ -13,6 +13,7 @@ namespace Diver
         AssemblyName Assembly { get; }
         Version Version { get; }
         string TypeName { get; } 
+        Type Type { get; }
 
         void SetProperty(IRefBase obj, string name, object value);
         object GetProperty(IRefBase obj, string name);

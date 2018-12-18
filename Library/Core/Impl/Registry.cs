@@ -22,18 +22,16 @@ namespace Diver.Impl
             _instances[id].Set(value);
         }
 
-        public IRefBase AddVal<T>(T value)
+        public IRefBase AddVal(object value)
         {
-            return Add((object) value);
+            var klass = GetClass(value?.GetType());
+            return klass == null ? RefBase.None : AddNew(klass, value);
         }
 
         public IRefBase Add(object value)
         {
             var klass = GetClass(value?.GetType());
-            if (klass == null)
-                return RefBase.None;
-
-            return AddNew(klass, value);
+            return klass == null ? RefBase.None : AddNew(klass, value);
         }
 
         private IClass<T> GetClass<T>() where T: class, new()
@@ -46,6 +44,7 @@ namespace Diver.Impl
             _classes[type] = typed;
             return typed;
         }
+
         private IClassBase GetClass(Type type)
         {
             if (type == null)
@@ -58,8 +57,7 @@ namespace Diver.Impl
 
         private IClassBase FindClass(Type type)
         {
-            IClassBase klass;
-            return _classes.TryGetValue(type, out klass) ? klass : null;
+            return _classes.TryGetValue(type, out var klass) ? klass : null;
         }
 
         public IRef<T> Get<T>(Id id)
@@ -104,11 +102,6 @@ namespace Diver.Impl
             _instances.Add(id, refBase);
             return refBase;
         }
-
-        //private Class<T> Register<T>() where T : class, new()
-        //{
-        //    return null;
-        //}
 
         private Id NextId()
         {

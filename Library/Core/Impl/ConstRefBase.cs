@@ -15,6 +15,11 @@ namespace Diver.Impl
         public bool IsConst => true;
         public object BaseValue => _baseValue;
 
+        public T Get<T>()
+        {
+            return (T) _baseValue;
+        }
+
         public ConstRefBase(Id id)
         {
             _id = id;

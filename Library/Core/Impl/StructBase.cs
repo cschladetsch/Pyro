@@ -10,6 +10,8 @@ namespace Diver.Impl
         public AssemblyName Assembly => _assembly;
         public Version Version => _version;
         public string TypeName => _typeName;
+        public string RealTypeName => Type.FullName;
+        public Type Type => _type;
 
         internal StructBase(IRegistry reg, Type type)
         {
@@ -46,12 +48,14 @@ namespace Diver.Impl
             if (!_properties.TryGetValue(name, out pi))
                 throw new MemberNotFoundException(TypeName, name);
             pi.SetValue(obj, value);
-            
         }
 
         public IRef<T> GetProperty<T>(IRefBase obj, string name)
         {
-            throw new NotImplementedException();
+            //var prop = GetProperty(obj, name) as IRef<T>;
+            //return prop.Value;
+            // TODO: only store IRef<T> properties and fields.
+            return null;
         }
 
         public object InvokeMethod(string name, List<object> args)
@@ -71,6 +75,7 @@ namespace Diver.Impl
 
         private readonly AssemblyName _assembly;
         private readonly Version _version;
+        private readonly Type _type;
         private readonly string _typeName;
         private readonly IRegistry _registry;
 

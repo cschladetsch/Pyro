@@ -12,8 +12,7 @@ namespace Diver
         void Set(Id id, object value);
         void Set<T>(Id id, T value);
 
-        // TODO: replace with IVal<T> AddVal<T>(T Val);
-        IRefBase AddVal<T>(T value);
+        IRefBase AddVal(object value);
 
         IRefBase Add(object value);
         IRef<T> Add<T>(T value) where T : class, new(); 
