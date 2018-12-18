@@ -9,4 +9,12 @@ namespace Diver
         {
         }
     }
+
+    public class CouldNotMakeClass : Exception
+    {
+        public CouldNotMakeClass(Type type)
+            : base($"Couldn't make class for {type.FullName}")
+        {
+        }
+    }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Diver.Impl
 {
-    public class Ref<T> : RefBase, IRef<T>
+    public class Ref<T> : ConstRef<T>, IRef<T>
     {
         public Ref()
         {
@@ -11,7 +11,7 @@
             Value = value;
         }
 
-        public T Value
+        public new T Value
         {
             get => (T) BaseValue;
             set => BaseValue = value;

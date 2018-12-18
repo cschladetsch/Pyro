@@ -62,7 +62,7 @@ namespace Diver.Impl
             throw new NotImplementedException();
         }
 
-        public void SetValue(RefBase objectBase, object value)
+        public void SetValue(IRefBase objectBase, object value)
         {
             throw new System.NotImplementedException();
         }

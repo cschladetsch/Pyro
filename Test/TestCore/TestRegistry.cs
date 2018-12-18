@@ -12,10 +12,17 @@ namespace Diver.TestCore
     public class TestRegistry
     {
         [Test]
-        public void TestMethod1()
+        public void TestBuiltins()
         {
             var reg = new Impl.Registry();
-            reg.Add(42);
+
+            var refNum = reg.Add(42);
+            var num = reg.Get<int>(refNum.Id);
+            Assert.AreEqual(num, 42);
+
+            var refStr = reg.Add("Foo");
+            var str = reg.Get<string>(refStr.Id);
+            Assert.AreEqual(str, "Foo");
         }
     }
 }

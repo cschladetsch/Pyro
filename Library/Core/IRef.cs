@@ -1,7 +1,7 @@
 ﻿namespace Diver
 {
-    public interface IRef<T> : IRefBase
+    public interface IRef<T> : IConstRef<T>
     {
-        T Value { get; set; }
+        new T Value { get; set; }
     }
 }

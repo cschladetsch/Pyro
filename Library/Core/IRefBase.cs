@@ -1,19 +1,12 @@
-﻿using System;
-
-namespace Diver
+﻿namespace Diver
 {
     /// <summary>
     /// An interface to an object created by a registry.
     /// </summary>
-    public interface IRefBase
+    public interface IRefBase : IConstRefBase
     {
-        Id Id { get; }
-        IRegistry Registry { get; }
-        object BaseValue { get; set; }
-        Type ValueType { get; }
-        IClassBase Class { get; }
+        new object BaseValue { get; set; }
 
         void Set(object value);
-        object Get();
     }
 }

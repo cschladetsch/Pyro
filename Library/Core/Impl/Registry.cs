@@ -22,55 +22,79 @@ namespace Diver.Impl
             _instances[id].Set(value);
         }
 
-        public Id Add(object value)
+        public IRefBase Add(object value)
         {
             var klass = GetClass(value?.GetType());
             if (klass == null)
-                return Id.None;
+                return RefBase.None;
 
-            var id = NextId();
-            _instances[id] = klass.Create(this, id, value);
-            return id;
+            return AddNew(klass, value);
         }
 
         private IClassBase GetClass(Type type)
         {
             if (type == null)
-                return null;
-            return null;
+                type = typeof(void);
+            var klass = FindClass(type);
+            if (klass != null)
+                return klass;
+            return _classes[type] = new ClassBase(this, type);
+        }
+
+        private IClassBase FindClass(Type type)
+        {
+            IClassBase klass;
+            return _classes.TryGetValue(type, out klass) ? klass : null;
         }
 
         public IRef<T> Get<T>(Id id)
         {
-            var obj = _instances[id].BaseValue;
-            return obj as IRef<T>;
+            return _instances[id].BaseValue as IRef<T>;
         }
 
-        public IRef<T> Add<T>(T value) //where T : class, new()
+        public IRef<T> Add<T>(T value)
         {
-            var type = typeof(T);
-            IClassBase klass = null;
-            if (!_classes.TryGetValue(type, out klass))
-            {
-                klass = AddClass(type);
-            }
-
-            return new Ref<T>(value);
+            var classBase = GetClass(typeof(T));
+            if (classBase == null)
+                throw new CouldNotMakeClass(value.GetType());
+            return AddNew(classBase, value) as IRef<T>;
         }
 
-        private IClassBase AddClass(Type type)
+        IConstRefBase AddConst(Id id, object value)
         {
-            return _classes[type] = new ClassBase(this, type);
+            var type = value?.GetType();
+            var classBase = GetClass(type);
+            if (classBase == null)
+                throw new CouldNotMakeClass(value?.GetType());
+            return classBase.Create(this, NextId(), value);
         }
 
-        private Class<T> Register<T>() where T : class, new()
+        public IConstRef<T> AddConst<T>(Id id, T val)
         {
-            return null;
+            throw new NotImplementedException();
         }
+
+        private IRefBase AddNew(IClassBase classBase, object value)
+        {
+            var id = NextId();
+            var refBase = classBase.Create(this, id);
+            _instances.Add(id, refBase);
+            return refBase;
+        }
+
+        //private Class<T> Register<T>() where T : class, new()
+        //{
+        //    return null;
+        //}
 
         private Id NextId()
         {
             return new Id(++_nextId);
+        }
+
+        IConstRefBase IRegistry.AddConst(Id id, object val)
+        {
+            throw new NotImplementedException();
         }
 
         private int _nextId;
