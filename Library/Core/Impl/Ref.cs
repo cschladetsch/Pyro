@@ -1,20 +1,34 @@
 ﻿namespace Diver.Impl
 {
-    public class Ref<T> : ConstRef<T>, IRef<T>
+    internal class Ref<T> : ConstRef<T>, IRef<T> where T : class, new()
     {
-        public Ref()
+        private Class<T> _class;
+
+        public Ref(IRegistry reg, Class<T> @class, Id id)
+            : base(reg, @class, id)
         {
         }
 
-        public Ref(T value)
+        public Ref(IRegistry reg, Class<T> class1, Id id, T value)
+            : base(reg, class1, id, value)
         {
-            Value = value;
         }
 
         public new T Value
         {
             get => (T) BaseValue;
             set => BaseValue = value;
+        }
+
+        public new object BaseValue
+        {
+            get => _baseValue;
+            set => _baseValue = value;
+        }
+
+        public void Set(object value)
+        {
+            Value = value as T;
         }
     }
 }

@@ -14,6 +14,8 @@ namespace Diver.Impl
         internal StructBase(IRegistry reg, Type type)
         {
             _registry = reg;
+            InstanceType = type;
+            _typeName = type.FullName;
             foreach (var prop in type.GetProperties())
                 _properties[prop.Name] = prop;
             foreach (var method in type.GetMethods())

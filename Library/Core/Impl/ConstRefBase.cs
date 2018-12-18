@@ -5,7 +5,7 @@ namespace Diver.Impl
     /// <summary>
     /// Common implementation behind all type-specific objects in the Dive system.
     /// </summary>
-    public class ConstRefBase : IConstRefBase
+    internal class ConstRefBase : IConstRefBase
     {
         public static ConstRefBase None = new ConstRefBase(Diver.Id.None);
         public Id Id => _id;
@@ -13,42 +13,33 @@ namespace Diver.Impl
         public Type ValueType => BaseValue?.GetType();
         public IClassBase Class => _classBase;
         public bool IsConst => true;
+        public object BaseValue => _baseValue;
 
-        public object Get()
-        {
-            return _registry.Get(_id);
-        }
-
-        public object BaseValue
-        {
-            get => _registry.Get(_id);
-            set => _registry.Set(_id, value);
-        }
-
-        internal ConstRefBase()
-        {
-        }
-
-        internal ConstRefBase(Id id)
+        public ConstRefBase(Id id)
         {
             _id = id;
         }
 
-        internal ConstRefBase(IRegistry reg, IClassBase @class, Id id)
+        public ConstRefBase(IRegistry reg, IClassBase klass, Id id)
         {
+            _id = id;
             _registry = reg;
-            _id = id;
-            _classBase = @class;
+            _classBase = klass;
         }
 
-        internal ConstRefBase(IRegistry reg, IClassBase @class, Id id, object val)
+        public ConstRefBase(IRegistry reg, IClassBase @class, Id id, object val)
             : this(reg, @class, id)
         {
             reg.AddConst(id, val);
         }
 
-        protected readonly IRegistry _registry;
+        protected ConstRefBase()
+        {
+        }
         protected readonly Id _id;
+        protected object _baseValue;
+        protected readonly IRegistry _registry;
         protected readonly IClassBase _classBase;
+
     }
 }

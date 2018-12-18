@@ -22,6 +22,11 @@ namespace Diver.Impl
             _instances[id].Set(value);
         }
 
+        public IRefBase AddVal<T>(T value)
+        {
+            return Add((object) value);
+        }
+
         public IRefBase Add(object value)
         {
             var klass = GetClass(value?.GetType());
@@ -31,6 +36,16 @@ namespace Diver.Impl
             return AddNew(klass, value);
         }
 
+        private IClass<T> GetClass<T>() where T: class, new()
+        {
+            var type = typeof(T);
+            var klass = FindClass(type);
+            if (klass != null)
+                return klass as IClass<T>;
+            var typed = new Class<T>(this, type);
+            _classes[type] = typed;
+            return typed;
+        }
         private IClassBase GetClass(Type type)
         {
             if (type == null)
@@ -52,15 +67,15 @@ namespace Diver.Impl
             return _instances[id].BaseValue as IRef<T>;
         }
 
-        public IRef<T> Add<T>(T value)
+        public IRef<T> Add<T>(T value) where T : class, new()
         {
-            var classBase = GetClass(typeof(T));
-            if (classBase == null)
+            var klass = GetClass<T>();
+            if (klass == null)
                 throw new CouldNotMakeClass(value.GetType());
-            return AddNew(classBase, value) as IRef<T>;
+            return AddNew<T>(klass, value);
         }
 
-        IConstRefBase AddConst(Id id, object value)
+        public IConstRefBase AddConst(Id id, object value)
         {
             var type = value?.GetType();
             var classBase = GetClass(type);
@@ -74,10 +89,18 @@ namespace Diver.Impl
             throw new NotImplementedException();
         }
 
-        private IRefBase AddNew(IClassBase classBase, object value)
+        private IRef<T> AddNew<T>(IClassBase classBase, T value)
         {
             var id = NextId();
             var refBase = classBase.Create(this, id);
+            _instances.Add(id, refBase);
+            return refBase as IRef<T>;
+        }
+
+        private IRefBase AddNew(IClassBase classBase, object value)
+        {
+            var id = NextId();
+            var refBase = classBase.Create(this, id, value);
             _instances.Add(id, refBase);
             return refBase;
         }
@@ -92,7 +115,7 @@ namespace Diver.Impl
             return new Id(++_nextId);
         }
 
-        IConstRefBase IRegistry.AddConst(Id id, object val)
+        T IRegistry.Get<T>(Id id)
         {
             throw new NotImplementedException();
         }

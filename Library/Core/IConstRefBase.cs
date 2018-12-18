@@ -10,7 +10,6 @@ namespace Diver
         IClassBase Class { get; }
         bool IsConst { get; }
         object BaseValue { get; }
-        object Get();
     }
 
     public interface IConstRefBase<out T>
