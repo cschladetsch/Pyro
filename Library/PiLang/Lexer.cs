@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Diver.Core;
 
-namespace PiLang
+namespace Diver
 {
-    public class Lexer
+    public class Lexer : Process
     {
+        protected Lexer(IRegistry reg) : base(reg)
+        {
+        }
     }
 }
