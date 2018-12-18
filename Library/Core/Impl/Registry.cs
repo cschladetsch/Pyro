@@ -19,12 +19,25 @@ namespace Diver.Impl
 
         public void Set<T>(Id id, T value)
         {
-            throw new NotImplementedException();
+            _instances[id].Set(value);
         }
 
         public Id Add(object value)
         {
-            throw new NotImplementedException();
+            var klass = GetClass(value?.GetType());
+            if (klass == null)
+                return Id.None;
+
+            var id = NextId();
+            _instances[id] = klass.Create(this, id, value);
+            return id;
+        }
+
+        private IClassBase GetClass(Type type)
+        {
+            if (type == null)
+                return null;
+            return null;
         }
 
         public IRef<T> Get<T>(Id id)
@@ -57,11 +70,11 @@ namespace Diver.Impl
 
         private Id NextId()
         {
-            return new Id(_nextId++);
+            return new Id(++_nextId);
         }
 
         private int _nextId;
-        private Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
-        private Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
+        private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
+        private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
     }
 }

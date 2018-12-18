@@ -22,6 +22,7 @@ namespace Diver
 
         object InvokeMethod(string name, List<object> args);
         void InvokeEvent(string name, List<object> args);
+        IRefBase Create(IRegistry reg, Id id, object value);
     }
 }
 

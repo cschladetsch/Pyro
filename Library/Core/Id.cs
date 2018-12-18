@@ -4,6 +4,8 @@ namespace Diver
     {
         public int Value => _value;
 
+        internal static Id None = new Id(0);
+
         internal Id(int start = 0)
         {
             _value = start;
