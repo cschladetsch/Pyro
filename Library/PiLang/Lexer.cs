@@ -2,7 +2,12 @@
 {
     public class Lexer : LexerCommon<EToken, Token, TokenFactory>
     {
-        public Lexer(string input, TokenFactory factory) : base(input, factory)
+        public Lexer() : base("", null)
+        {
+        }
+
+        public Lexer(string input, TokenFactory factory) 
+            : base(input, factory)
         {
         }
 
@@ -70,7 +75,7 @@
                 return PathnameOrKeyword();
 
             if (char.IsDigit(current))
-                return Add(EToken.Int, Gather(char.IsDigit));
+                return AddSlice(EToken.Int, Gather(char.IsDigit));//Gather(char.IsDigit));
 
             switch (current)
             {
@@ -80,19 +85,19 @@
             case '(': return Add(EToken.OpenParan);
             case ')': return Add(EToken.CloseParan);
             case ':': return Add(EToken.Colon);
-            case ' ': return Add(EToken.Whitespace, Gather(IsSpaceChar));
+            case ' ': return AddSlice(EToken.Whitespace, Gather(IsSpaceChar));
             case '@': return Add(EToken.Lookup);
             case ',': return Add(EToken.Comma);
             case '#': return Add(EToken.Store);
             case '*': return Add(EToken.Mul);
             case '[': return Add(EToken.OpenSquareBracket);
             case ']': return Add(EToken.CloseSquareBracket);
-            case '=': return AddIfNext('=', EToken.Equiv, Enum::Assign);
+            case '=': return AddIfNext('=', EToken.Equiv, EToken.Assign);
             case '!': return Add(EToken.Replace);
             case '&': return Add(EToken.Suspend);
-            case '|': return AddIfNext('|', EToken.Or, Enum::BitOr);
-            case '<': return AddIfNext('=', EToken.LessEquiv, Enum::Less);
-            case '>': return AddIfNext('=', EToken.GreaterEquiv, Enum::Greater);
+            case '|': return AddIfNext('|', EToken.Or, EToken.BitOr);
+            case '<': return AddIfNext('=', EToken.LessEquiv, EToken.LessEquiv);
+            case '>': return AddIfNext('=', EToken.GreaterEquiv, EToken.Greater);
             case '"': return LexString(); // "comment to unfuck Visual Studio Code's syntax hilighter
             case '\t': return Add(EToken.Tab);
             case '\n': return Add(EToken.NewLine);
@@ -127,11 +132,15 @@
                 if (Peek() == '/')
                 {
                     Next();
-                    const int start = offset;
+                    int start = _offset;
                     while (Next() != '\n')
                         ;
 
-                    Add(Token(EToken.Comment, *this, lineNumber, Slice(start, offset)));
+                    Add(
+                        _factory.NewToken(
+                            EToken.Comment, 
+                            _lineNumber, 
+                            new Slice(start, _offset)));
                     Next();
                     return true;
                 }
@@ -141,7 +150,12 @@
             LexError("Unrecognised %c");
 
             return false;
-        }r
+        }
+
+        private bool IsSpaceChar(char arg)
+        {
+            throw new System.NotImplementedException();
+        }
 
         protected override void Terminate()
         {

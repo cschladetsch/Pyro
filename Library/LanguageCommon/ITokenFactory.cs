@@ -16,8 +16,6 @@
         TToken NewTokenIdent(int lineNumber, Slice slice);
         TToken NewTokenString(int lineNumber, Slice slice);
         TToken NewEmptyToken(int lineNumber, Slice slice);
-        void SetLexer<TEnum1, TToken1, TTokenFactory>(LexerCommon<TEnum1, TToken1, TTokenFactory> lexerCommon)
-            where TToken1 : class, ITokenBase<TEnum1>, new()
-            where TTokenFactory : class, ITokenFactory<TEnum1, TToken1>, new();
+        void SetLexer(LexerBase lexer);
     }
 }

@@ -3,6 +3,11 @@
     public class TokenFactory :
         ITokenFactory<EToken, Token>
     {
+        public TokenFactory()
+        {
+            throw new System.NotImplementedException();
+        }
+
         internal TokenFactory(LexerBase lexer)
         {
             _lexer = lexer;
@@ -28,6 +33,12 @@
             return NewToken(EToken.None, lineNumber, slice);
         }
 
-        private readonly LexerBase _lexer;
+        public void SetLexer(LexerBase lexer)
+        {
+            _lexer = lexer;
+        }
+
+        private LexerBase _lexer;
+
     }
 }

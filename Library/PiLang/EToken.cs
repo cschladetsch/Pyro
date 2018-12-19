@@ -25,12 +25,15 @@
         Multiply,
         Divide,
         Equiv,
-        NotRquiv,
+        Assign,
+        NotEquiv,
         Less,
         Greater,
         LessEquiv,
         GreaterEquiv,
         Dup,
+        Lookup,
+        Comma,
         Drop,
         Over,
         Rot,
@@ -76,12 +79,23 @@
         ToSet,
         Mul,
 
-        NotEquiv,
         Contents,
         Size,
         New,
         DropN,
 
+        BitOr,
+        Decrement,
+        Increment,
+        MinusAssign,
+        Tab,
+        NewLine,
 
+        OpenParan,
+        CloseParan,
+        Colon,
+        Whitespace,
+        PlusAssign,
+        Comment
     }
 }

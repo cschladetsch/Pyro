@@ -80,33 +80,27 @@ namespace Diver
             _tokens.Add(_factory.NewTokenString(lineNumber, slice));
         }
 
-        protected bool Add(TToken token)
-        {
-            _tokens.Add(token);
-            return true;
-        }
-
-        protected bool Add(TEnum type, Slice slice)
+        protected bool AddSlice(TEnum type, Slice slice)
         {
             _tokens.Add(_factory.NewToken(type,_lineNumber, slice));
             return true;
         }
 
-        bool Add(TEnum type, int len = 1)
+        protected bool Add(TEnum type, int len = 1)
         {
-            Add(type, new Slice(_offset, _offset + len));
+            AddSlice(type, new Slice(_offset, _offset + len));
             while (len-- > 0)
                 Next();
 
             return true;
         }
 
-        protected bool AddIfNext(char ch, TEnum thentype, TEnum elseType)
+        protected bool AddIfNext(char ch, TEnum thenType, TEnum elseType)
         {
             if (Peek() == ch)
             {
                 Next();
-                return Add(thentype, 2);
+                return Add(thenType, 2);
             }
 
             return Add(elseType, 1);
