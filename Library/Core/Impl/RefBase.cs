@@ -12,11 +12,6 @@
             set => base._baseValue = value;
         }
 
-        public void Set(object value)
-        {
-            _registry.Set(_id, value);
-        }
-
         private RefBase()
         {
         }

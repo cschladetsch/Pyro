@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Diver.Executor;
 
 namespace Diver.Core.Network
@@ -39,7 +38,7 @@ namespace Diver.Core.Network
         void Ping(DateTime sent);
         DateTime Pong();
 
-        IResponse Execute(Diver.IRef<Continuation> cont);
+        IResponse Execute(IRef<Continuation> cont);
     }
 
     public interface IResponseBase

@@ -1,6 +1,4 @@
 ﻿using Diver.Core.Network;
-using Diver.Network;
-using NUnit.Core;
 using NUnit.Framework;
 
 namespace Diver.Tests
@@ -11,9 +9,9 @@ namespace Diver.Tests
         [Test]
         public void TestLocalPeer()
         {
-            var reg = new Impl.Registry();
+            //var reg = new Impl.Registry();
 
-            IRef<Peer> peer = reg.Add(new Peer());
+            //IRef<Peer> peer = reg.Add(new Peer());
         }
     }
 }

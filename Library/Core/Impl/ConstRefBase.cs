@@ -35,7 +35,7 @@ namespace Diver.Impl
         public ConstRefBase(IRegistry reg, IClassBase @class, Id id, object val)
             : this(reg, @class, id)
         {
-            reg.AddConst(id, val);
+            reg.AddConst(val);
         }
 
         protected ConstRefBase()

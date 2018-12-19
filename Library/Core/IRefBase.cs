@@ -6,7 +6,5 @@
     public interface IRefBase : IConstRefBase
     {
         new object BaseValue { get; set; }
-
-        void Set(object value);
     }
 }

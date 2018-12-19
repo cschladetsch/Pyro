@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
+      <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Executor\Executor.csproj">

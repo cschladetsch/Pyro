@@ -1,4 +1,6 @@
-﻿namespace Diver.PiLang
+﻿using System;
+
+namespace Diver.PiLang
 {
     public class Lexer : LexerCommon<EToken, Token, TokenFactory>
     {
@@ -136,11 +138,12 @@
                     while (Next() != '\n')
                         ;
 
-                    Add(
-                        _factory.NewToken(
-                            EToken.Comment, 
-                            _lineNumber, 
-                            new Slice(start, _offset)));
+                    throw new NotImplementedException();
+                    //Add(
+                    //    _factory.NewToken(
+                    //        EToken.Comment, 
+                    //        _lineNumber, 
+                    //        new Slice(start, _offset)));
                     Next();
                     return true;
                 }
@@ -150,6 +153,11 @@
             LexError("Unrecognised %c");
 
             return false;
+        }
+
+        private bool PathnameOrKeyword()
+        {
+            throw new System.NotImplementedException();
         }
 
         private bool IsSpaceChar(char arg)

@@ -68,10 +68,6 @@
       <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
       <Name>CoreNetwork</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Core\Core.csproj">
-      <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
@@ -79,14 +75,6 @@
     <ProjectReference Include="..\..\Library\Ext\Flow\Flow2.csproj">
       <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
       <Name>Flow2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Network\Network.csproj">
-      <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
-      <Name>Network</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\PiLang\PiLang.csproj">
-      <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
-      <Name>PiLang</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
