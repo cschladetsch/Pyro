@@ -12,29 +12,23 @@ namespace Diver.Tests
         [Test]
         public void TestNumbersAndOps()
         {
-            var lex = LexString("1 2 + 2 - 3 *");
-            Compare(
-                lex, 
-                new []
-                {
-                        EToken.Int, EToken.Int, EToken.Plus, 
-                        EToken.Int, EToken.Minus, EToken.Int, EToken.Multiply,
-                }
+            AssertSameTokens(
+                LexString("1 2 + 2 - 3 *"), 
+                EToken.Int, EToken.Int, EToken.Plus, 
+                EToken.Int, EToken.Minus, EToken.Int, EToken.Multiply
             );
         }
 
         [Test]
         public void TestComments()
         {
-            var lex = LexString("// comment");
-            Compare(lex, new[] {EToken.Comment});
+            AssertSameTokens(LexString("// comment"), EToken.Comment);
         }
 
         [Test]
         public void TestStrings()
         {
-            var lex = LexString("\"foo\" \"bar\" +");
-            Compare(lex, new[] {EToken.String, EToken.String, EToken.Plus});
+            AssertSameTokens(LexString("\"foo\" \"bar\" +"), EToken.String, EToken.String, EToken.Plus);
         }
 
         private Lexer LexString(string text, bool write = false)
@@ -46,7 +40,7 @@ namespace Diver.Tests
             return lex;
         }
 
-        private void Compare(Lexer lex, IEnumerable<EToken> tokens)
+        private void AssertSameTokens(Lexer lex, params EToken[] tokens)
         {
             var testSequence = tokens.ToList();
             var input = lex.Tokens.ToList();
