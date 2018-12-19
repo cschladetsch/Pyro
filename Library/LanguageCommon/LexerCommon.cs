@@ -1,21 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Diver
 {
-    public interface ITokenFactory<TEnum, TToken>
-        where TToken : class, new()
-    {
-        TToken NewToken(LexerBase lexer, TEnum en, int lineNumber, Slice slice);
-        TToken NewToken(LexerBase lexer, Slice slice);
-        TToken NewTokenIdent(LexerBase lexer, int lineNumber, Slice slice);
-        TToken NewTokenString(LexerBase lexer, int lineNumber, Slice slice);
-        TToken NewEmptyToken(LexerBase lexer, int lineNumber, Slice slice);
-    }
-
     public abstract class LexerCommon<TEnum, TToken, TTokenFactory> 
         : LexerBase
-        where TToken : class, new()
+        where TToken : class, ITokenBase<TEnum>, new()
         where TTokenFactory : ITokenFactory<TEnum, TToken>
     {
         public IList<TToken> Tokens => _tokens;
@@ -71,13 +62,11 @@ namespace Diver
         protected TToken LexAlpha()
         {
             TToken tok = _factory.NewTokenIdent(this, _lineNumber, Gather((c) => char.IsLetter(c)));
-            //auto kw = keyWords.find(tok.Text());
-            //auto keyword = kw != keyWords.end();
-            //if (keyword)
-            //    tok.type = kw->second;
+            TEnum en;
+            if (_keyWords.TryGetValue(tok.ToString(), out en))
+                tok.Type = en;
 
-            //return tok;
-            return new TToken();
+            return tok;
         }
 
         protected override void LexError(string fmt, params object[] args)
@@ -146,64 +135,46 @@ namespace Diver
 
         static string CreateErrorMessage(TToken tok, string fmt, params object[] args)
         {
-            //char buff0[2000];
-            //va_list ap;
-            //va_start(ap, fmt);
-            //#ifdef WIN32
-            //vsprintf_s(buff0, fmt, ap);
-            //#else
-            //vsprintf(buff0, fmt, ap);
-            //#endif
+            var buff = $"({tok.LineNumber}):[{tok.Slice.Start}: {string.Format(fmt, args)}";
+            int beforeContext = 2;
+            int afterContext = 2;
 
-            //const char *fmt1 = "%s(%d):[%d]: %s\n";
-            //char buff[2000];
-            //#ifdef WIN32
-            //sprintf_s(buff, fmt1, "", tok.lineNumber, tok.slice.Start, buff0);
-            //#else
-            //sprintf(buff, fmt1, "", tok.lineNumber, tok.slice.Start, buff0);
-            //#endif
-            //int beforeContext = 2;
-            //int afterContext = 2;
+            var lex = tok.Lexer;
+            int start = Math.Max(0, tok.LineNumber - beforeContext);
+            int end = Math.Min(lex.Lines.Count - 1, tok.LineNumber + afterContext);
 
-            //const LexerBase &lex = *tok.lexer;
-            //int start = std::max(0, tok.lineNumber - beforeContext);
-            //int end = std::min((int)lex.GetLines().size() - 1, tok.lineNumber + afterContext);
+            var str = new StringBuilder();
+            str.AppendLine(buff);
+            for (int n = start; n <= end; ++n)
+            {
+                foreach (var ch in lex.GetLine(n))
+                {
+                    if (ch == '\t')
+                        str.Append("    ");
+                    else
+                        str.Append(ch);
+                }
 
-            //std::stringstream err;
-            //err << buff << std::endl;
-            //for (int n = start; n <= end; ++n)
-            //{
-            //    for (auto ch : lex.GetLine(n))
-            //    {
-            //        if (ch == '\t')
-            //            err << "    ";
-            //        else
-            //            err << ch;
-            //    }
+                if (n == tok.LineNumber)
+                {
+                    for (int ch = 0; ch < (int)lex.GetLine(n).Length; ++ch)
+                    {
+                        if (ch == tok.Slice.Start)
+                        {
+                            str.Append('^');
+                            break;
+                        }
 
-            //    if (n == tok.lineNumber)
-            //    {
-            //        for (int ch = 0; ch < (int)lex.GetLine(n).size(); ++ch)
-            //        {
-            //            if (ch == tok.slice.Start)
-            //            {
-            //                err << '^';
-            //                break;
-            //            }
+                        var c = lex.GetLine(tok.LineNumber)[ch];
+                        if (c == '\t')
+                            str.Append("    ");
+                        else
+                            str.Append(' ');
+                    }
+                }
+            }
 
-            //            auto c = lex.GetLine(tok.lineNumber)[ch];
-            //            if (c == '\t')
-            //                err << "    ";
-            //            else
-            //                err << ' ';
-            //        }
-
-            //        err << std::endl;
-            //    }
-            //}
-
-            //return err.str();
-            return "";
+            return str.ToString();
         }
 
         protected List<TToken> _tokens = new List<TToken>();

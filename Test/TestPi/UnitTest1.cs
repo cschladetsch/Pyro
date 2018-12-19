@@ -1,14 +1,15 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace TestPi
+namespace Driver.Tests
 {
     [TestFixture]
-    public class UnitTest1
+    public class TestPi
     {
         [Test]
-        public void TestMethod1()
+        public void TestComments()
         {
+
         }
     }
 }

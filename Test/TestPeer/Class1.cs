@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Diver.Core.Network;
+using Diver.Network;
+using NUnit.Core;
+using NUnit.Framework;
 
-namespace TestPeer
+namespace Diver.Tests
 {
-    public class Class1
+    [TestFixture]
+    public class TestPeer
     {
+        [Test]
+        public void TestLocalPeer()
+        {
+            var reg = new Impl.Registry();
+
+            IRef<Peer> peer = reg.New<Peer>();
+        }
     }
 }

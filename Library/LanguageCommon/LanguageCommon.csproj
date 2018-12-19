@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITokenBase.cs" />
+    <Compile Include="ITokenFactory.cs" />
     <Compile Include="LexerBase.cs" />
     <Compile Include="LexerCommon.cs" />
     <Compile Include="Process.cs" />

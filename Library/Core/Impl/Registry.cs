@@ -7,25 +7,9 @@ namespace Diver.Impl
     {
         public Guid Guid { get; }
 
-        public object Get(Id id)
+        public IRefBase Get(Id id)
         {
-            return _instances[id].BaseValue;
-        }
-
-        public void Set(Id id, object value)
-        {
-            _instances[id].Set(value);
-        }
-
-        public void Set<T>(Id id, T value)
-        {
-            _instances[id].Set(value);
-        }
-
-        public IRefBase AddVal(object value)
-        {
-            var klass = GetClass(value?.GetType());
-            return klass == null ? RefBase.None : AddNew(klass, value);
+            return _instances[id];
         }
 
         public IRefBase Add(object value)
@@ -43,21 +27,6 @@ namespace Diver.Impl
             var typed = new Class<T>(this, type);
             _classes[type] = typed;
             return typed;
-        }
-
-        private IClassBase GetClass(Type type)
-        {
-            if (type == null)
-                type = typeof(void);
-            var klass = FindClass(type);
-            if (klass != null)
-                return klass;
-            return _classes[type] = new ClassBase(this, type);
-        }
-
-        private IClassBase FindClass(Type type)
-        {
-            return _classes.TryGetValue(type, out var klass) ? klass : null;
         }
 
         public IRef<T> Get<T>(Id id)
@@ -87,6 +56,21 @@ namespace Diver.Impl
             throw new NotImplementedException();
         }
 
+        private IClassBase GetClass(Type type)
+        {
+            if (type == null)
+                type = typeof(void);
+            var klass = FindClass(type);
+            if (klass != null)
+                return klass;
+            return _classes[type] = new ClassBase(this, type);
+        }
+
+        private IClassBase FindClass(Type type)
+        {
+            return _classes.TryGetValue(type, out var klass) ? klass : null;
+        }
+
         private IRef<T> AddNew<T>(IClassBase classBase, T value)
         {
             var id = NextId();
@@ -106,11 +90,6 @@ namespace Diver.Impl
         private Id NextId()
         {
             return new Id(++_nextId);
-        }
-
-        T IRegistry.Get<T>(Id id)
-        {
-            throw new NotImplementedException();
         }
 
         private int _nextId;

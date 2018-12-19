@@ -13,6 +13,7 @@ namespace Diver
         public int Offset => _offset;
         public int LineNumber => _lineNumber;
         public string Line => _lines[_lineNumber];
+        public List<string> Lines => _lines;
 
         protected virtual void AddStringToken(int ln, Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }

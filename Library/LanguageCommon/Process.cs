@@ -2,6 +2,9 @@
 
 namespace Diver
 {
+    /// <summary>
+    /// Common to all custom language's Lexer, Parser, and Translator processes
+    /// </summary>
     public class Process
     {
         public bool Failed => _failed;
@@ -24,18 +27,14 @@ namespace Diver
             return Fail(string.Format(fmt, args));
         }
 
-        public IRef<T> New<T>()
+        public IRef<T> New<T>() where T : class, new()
         {
-            //return _registry.Add<T>()
-            return null;
+            return _registry.Add<T>(new T());
         }
 
         public IRef<T> New<T>(T val)
         {
-            //var obj = _registry.Add<T>();
-            //obj.Value = val;
-            //return obj;
-            return null;
+            return _registry.Add(val);
         }
 
         private bool _failed;
