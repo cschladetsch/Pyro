@@ -34,7 +34,7 @@ namespace Diver.Impl
             return klass == null ? RefBase.None : AddNew(klass, value);
         }
 
-        private IClass<T> GetClass<T>() where T: class, new()
+        private IClass<T> GetClass<T>()
         {
             var type = typeof(T);
             var klass = FindClass(type);
@@ -65,7 +65,7 @@ namespace Diver.Impl
             return _instances[id].BaseValue as IRef<T>;
         }
 
-        public IRef<T> Add<T>(T value) where T : class, new()
+        public IRef<T> Add<T>(T value)
         {
             var klass = GetClass<T>();
             if (klass == null)
@@ -73,7 +73,7 @@ namespace Diver.Impl
             return AddNew<T>(klass, value);
         }
 
-        public IConstRefBase AddConst(Id id, object value)
+        public IConstRefBase AddConst(object value)
         {
             var type = value?.GetType();
             var classBase = GetClass(type);

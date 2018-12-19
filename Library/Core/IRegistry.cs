@@ -10,14 +10,12 @@ namespace Diver
         T Get<T>(Id id);
 
         void Set(Id id, object value);
-        void Set<T>(Id id, T value);
-
-        IRefBase AddVal(object value);
-
         IRefBase Add(object value);
-        IRef<T> Add<T>(T value) where T : class, new(); 
 
-        IConstRefBase AddConst(Id id, object val);
-        IConstRef<T> AddConst<T>(Id id, T val);
+        void Set<T>(Id id, T value);
+        IRef<T> Add<T>(T value);
+
+        IConstRefBase AddConst(object val);
+        IConstRef<T> AddConst<T>(T val);
     }
 }

@@ -16,18 +16,17 @@ namespace Diver.TestCore
         {
             var reg = new Impl.Registry();
 
-            var refNum = reg.AddVal(42);
-            Assert.IsNotNull(refNum);
-            Assert.IsNotNull(refNum.BaseValue);
+            IRef<int> num = reg.Add(42);
+            Assert.IsNotNull(num);
+            Assert.IsNotNull(num.Value);
 
-            var num = reg.Get(refNum.Id);
-            Assert.AreEqual(num, 42);
+            Assert.AreEqual(num.Value, 42);
 
-            Assert.AreEqual(refNum.Get<int>(), 42);
+            IConstRefBase cref = num;
+            Assert.AreEqual(cref.Get<int>(), 42);
 
-            var refStr = reg.AddVal("Foo");
-            var str = reg.Get(refStr.Id);
-            Assert.AreEqual(str, "Foo");
+            var str = reg.Add("Foo");
+            Assert.AreEqual(str.Value, "Foo");
         }
 
         [Test] 
