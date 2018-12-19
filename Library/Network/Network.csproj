@@ -53,6 +53,13 @@
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ext\NetworkComms\NetworkComms.Net\NetworkCommsDotNet\NetworkCommsDotNet.csproj">
+      <Project>{7db00305-f5ed-4545-9d83-542132c8177e}</Project>
+      <Name>NetworkCommsDotNet</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

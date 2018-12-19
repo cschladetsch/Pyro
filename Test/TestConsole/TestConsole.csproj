@@ -54,10 +54,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\App\Console\Console.csproj">
-      <Project>{f504faf8-582f-4187-a208-effa419529b1}</Project>
-      <Name>Console</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>

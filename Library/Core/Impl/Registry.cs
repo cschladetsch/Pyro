@@ -82,7 +82,7 @@ namespace Diver.Impl
             return classBase.Create(this, NextId(), value);
         }
 
-        public IConstRef<T> AddConst<T>(Id id, T val)
+        public IConstRef<T> AddConst<T>(T val)
         {
             throw new NotImplementedException();
         }

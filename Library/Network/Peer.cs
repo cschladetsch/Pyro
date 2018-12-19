@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Diver.Network
 {
@@ -11,20 +6,16 @@ namespace Diver.Network
     {
     }
 
-    public class Id
+    public class NetId
     {
         private Guid _registy;
-        private int _id;
+        private Id _id;
     }
 
-    public interface IClass<T> : IClassBase
+    public interface INetworkClass<T> : IClassBase
     {
         IAgent<T> NewAgent();
         IProxy<T> NewProxy();
-    }
-
-    public interface IClassBase
-    {
     }
 
     public interface IProxy<T> : IProxyBase
