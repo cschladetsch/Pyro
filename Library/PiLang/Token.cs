@@ -4,7 +4,7 @@
     {
         public Token()
         {
-            throw new System.NotImplementedException();
+            _type = EToken.None;
         }
 
         public Token(EToken type, LexerBase lexer, int ln, Slice slice)

@@ -48,7 +48,6 @@ namespace Diver.PiLang
             _keyWords.Add("tolist", EToken.ToList);
             _keyWords.Add("tomap", EToken.ToMap);
             _keyWords.Add("toset", EToken.ToSet);
-            _keyWords.Add("mul", EToken.Mul);
             _keyWords.Add("expand", EToken.Expand);
             _keyWords.Add("noteq", EToken.NotEquiv);
             _keyWords.Add("lls", EToken.Contents);
@@ -81,7 +80,7 @@ namespace Diver.PiLang
             case '@': return Add(EToken.Lookup);
             case ',': return Add(EToken.Comma);
             case '#': return Add(EToken.Store);
-            case '*': return Add(EToken.Mul);
+            case '*': return Add(EToken.Multiply);
             case '[': return Add(EToken.OpenSquareBracket);
             case ']': return Add(EToken.CloseSquareBracket);
             case '=': return AddIfNext('=', EToken.Equiv, EToken.Assign);
@@ -124,20 +123,19 @@ namespace Diver.PiLang
                 if (Peek() == '/')
                 {
                     Next();
-                    int start = _offset;
+                    int start = _offset + 1;
                     while (Next() != '\n')
                         ;
 
-                    throw new NotImplementedException();
-                    //Add(
-                    //    _factory.NewToken(
-                    //        EToken.Comment, 
-                    //        _lineNumber, 
-                    //        new Slice(start, _offset)));
-                    Next();
+                    var comment = _factory.NewToken(
+                        EToken.Comment,
+                        _lineNumber,
+                        new Slice(start, _offset));
+                    _tokens.Add(comment);
                     return true;
                 }
-                return PathnameOrKeyword();
+
+                return Add(EToken.Divide);
             }
 
             LexError("Unrecognised %c");

@@ -77,7 +77,6 @@
         ToList,
         ToMap,
         ToSet,
-        Mul,
 
         Contents,
         Size,
