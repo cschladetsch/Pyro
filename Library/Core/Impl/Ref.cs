@@ -1,6 +1,8 @@
-﻿namespace Diver.Impl
+﻿using System;
+
+namespace Diver.Impl
 {
-    internal class Ref<T> : ConstRef<T>, IRef<T> where T : class, new()
+    internal class Ref<T> : ConstRef<T>, IRef<T>
     {
         public Ref(IRegistry reg, IClass<T> @class, Id id)
             : base(reg, @class, id)
@@ -26,7 +28,8 @@
 
         public void Set(object value)
         {
-            Value = value as T;
+            //Value = value as T;
+            throw new NotImplementedException();
         }
     }
 }
