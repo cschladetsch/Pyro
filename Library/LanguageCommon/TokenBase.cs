@@ -1,14 +1,19 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Diver
 {
-    class TokenBase<ETokenType>
+    public class TokenBase<ETokenType> : ITokenBase<ETokenType>
     {
-        public ETokenType Type => _type;
         public Slice Slice => _slice;
+        public ETokenType Type { get; set; }
         public int LineNumber => _lineNumber;
         public LexerBase Lexer => _lexer;
         public string Text => Lexer.GetText(LineNumber, Slice);
+
+        public TokenBase()
+        {
+        }
 
         public TokenBase(ETokenType type, LexerBase lexer, int ln, Slice slice)
         {

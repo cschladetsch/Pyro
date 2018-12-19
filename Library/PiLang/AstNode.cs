@@ -18,7 +18,7 @@ namespace Diver.PiLang
             Type = type;
         }
 
-        public AstNode(ETokenType type)
+        public AstNode(EToken type)
         {
             Type = EAstNodeType.TokenType;
             Token = new Token() {Type = type};
@@ -46,9 +46,9 @@ namespace Diver.PiLang
             _children.Add(node);
         }
 
-        public void Add(ETokenType tokenType)
+        public void Add(EToken token)
         {
-            _children.Add(new AstNode(tokenType));
+            _children.Add(new AstNode(token));
         }
         public void Add(EAstNodeType type, object value)
         {

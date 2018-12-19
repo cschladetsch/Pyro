@@ -10,9 +10,8 @@ namespace Diver
         public bool Failed => _failed;
         public string Error => _error;
 
-        protected Process(IRegistry reg)
+        protected Process()
         {
-            _registry = reg;
         }
 
         public bool Fail(string err)
@@ -27,18 +26,7 @@ namespace Diver
             return Fail(string.Format(fmt, args));
         }
 
-        public IRef<T> New<T>() where T : class, new()
-        {
-            return _registry.Add<T>(new T());
-        }
-
-        public IRef<T> New<T>(T val)
-        {
-            return _registry.Add(val);
-        }
-
         private bool _failed;
         protected string _error;
-        private IRegistry _registry;
     }
 }

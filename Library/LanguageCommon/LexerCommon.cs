@@ -7,13 +7,14 @@ namespace Diver
     public abstract class LexerCommon<TEnum, TToken, TTokenFactory> 
         : LexerBase
         where TToken : class, ITokenBase<TEnum>, new()
-        where TTokenFactory : ITokenFactory<TEnum, TToken>
+        where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new()
     {
         public IList<TToken> Tokens => _tokens;
 
-        protected LexerCommon(string input, TTokenFactory factory, IRegistry reg) : base(input, reg)
+        protected LexerCommon(string input, TTokenFactory factory) : base(input)
         {
             _factory = factory;
+            _factory.SetLexer(this);
         }
 
         public bool Process()
@@ -61,7 +62,7 @@ namespace Diver
 
         protected TToken LexAlpha()
         {
-            TToken tok = _factory.NewTokenIdent(this, _lineNumber, Gather((c) => char.IsLetter(c)));
+            TToken tok = _factory.NewTokenIdent(_lineNumber, Gather((c) => char.IsLetter(c)));
             TEnum en;
             if (_keyWords.TryGetValue(tok.ToString(), out en))
                 tok.Type = en;
@@ -76,7 +77,7 @@ namespace Diver
 
         protected override void AddStringToken(int lineNumber, Slice slice)
         {
-            _tokens.Add(_factory.NewTokenString(this, lineNumber, slice));
+            _tokens.Add(_factory.NewTokenString(lineNumber, slice));
         }
 
         protected bool Add(TToken token)
@@ -87,7 +88,7 @@ namespace Diver
 
         protected bool Add(TEnum type, Slice slice)
         {
-            _tokens.Add(_factory.NewToken(this, type,_lineNumber, slice));
+            _tokens.Add(_factory.NewToken(type,_lineNumber, slice));
             return true;
         }
 
@@ -130,7 +131,7 @@ namespace Diver
 
         protected bool LexError(string text)
         {
-            return Fail(CreateErrorMessage(_factory.NewEmptyToken(this, _lineNumber, new Slice(_offset, _offset)), text, Current()));
+            return Fail(CreateErrorMessage(_factory.NewEmptyToken(_lineNumber, new Slice(_offset, _offset)), text, Current()));
         }
 
         static string CreateErrorMessage(TToken tok, string fmt, params object[] args)
@@ -179,6 +180,6 @@ namespace Diver
 
         protected List<TToken> _tokens = new List<TToken>();
         protected Dictionary<string, TEnum> _keyWords;
-        protected TTokenFactory _factory;
+        protected TTokenFactory _factory = new TTokenFactory();
     }
 }

@@ -13,7 +13,7 @@ namespace Diver.Tests
         {
             var reg = new Impl.Registry();
 
-            IRef<Peer> peer = reg.New<Peer>();
+            IRef<Peer> peer = reg.Add(new Peer());
         }
     }
 }

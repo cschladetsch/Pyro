@@ -1,10 +1,11 @@
 ﻿namespace Diver.PiLang
 {
-    public enum ETokenType
+    public enum EToken
     {
         None,
         Integer,
         Float,
+        Int,
         String,
         True,
         False,
@@ -50,5 +51,37 @@
         GetTraceLevel,
         GetDebugLevel,
         SetDebugLevel,
+
+        If,
+        IfElse,
+        For,
+        Self,
+        While,
+        Assert,
+        ToRho,
+        ToRhoSequence,
+        Not,
+        And,
+        Or,
+        Xor,
+
+        Swap,
+        RotN,
+        GarbageCollect,
+        Clear,
+        ChangeFolder,
+        PrintFolder,
+        ToList,
+        ToMap,
+        ToSet,
+        Mul,
+
+        NotEquiv,
+        Contents,
+        Size,
+        New,
+        DropN,
+
+
     }
 }

@@ -1,5 +1,10 @@
 ﻿namespace Diver
 {
+    /// <summary>
+    /// A segment in a string.
+    ///
+    /// May be useful to add a LineNumber field later
+    /// </summary>
     public struct Slice
     {
         public int Start, End;

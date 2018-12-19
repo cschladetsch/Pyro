@@ -18,7 +18,7 @@ namespace Diver
         protected virtual void AddStringToken(int ln, Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }
 
-        public LexerBase(string input, IRegistry reg) : base(reg)
+        public LexerBase(string input)
         {
             _input = input;
         }
