@@ -11,9 +11,8 @@ namespace Diver
     {
         public IList<TToken> Tokens => _tokens;
 
-        protected LexerCommon(string input, TTokenFactory factory) : base(input)
+        protected LexerCommon(string input) : base(input)
         {
-            _factory = factory;
             _factory.SetLexer(this);
         }
 
@@ -173,7 +172,7 @@ namespace Diver
         }
 
         protected List<TToken> _tokens = new List<TToken>();
-        protected Dictionary<string, TEnum> _keyWords;
+        protected Dictionary<string, TEnum> _keyWords = new Dictionary<string, TEnum>();
         protected TTokenFactory _factory = new TTokenFactory();
     }
 }

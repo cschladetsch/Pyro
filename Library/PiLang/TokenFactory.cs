@@ -3,16 +3,6 @@
     public class TokenFactory :
         ITokenFactory<EToken, Token>
     {
-        public TokenFactory()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        internal TokenFactory(LexerBase lexer)
-        {
-            _lexer = lexer;
-        }
-
         public Token NewToken(EToken en, int lineNumber, Slice slice)
         {
             return new Token(en, _lexer, lineNumber, slice);

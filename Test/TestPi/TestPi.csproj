@@ -54,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\LanguageCommon\LanguageCommon.csproj">
+      <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
+      <Name>LanguageCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\PiLang\PiLang.csproj">
       <Project>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</Project>
       <Name>PiLang</Name>

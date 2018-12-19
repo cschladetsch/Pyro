@@ -4,67 +4,57 @@ namespace Diver.PiLang
 {
     public class Lexer : LexerCommon<EToken, Token, TokenFactory>
     {
-        public Lexer() : base("", null)
+        public Lexer(string input)
+            : base(input)
         {
-        }
-
-        public Lexer(string input, TokenFactory factory) 
-            : base(input, factory)
-        {
+            var factory = new TokenFactory();
+            factory.SetLexer(this);
         }
 
         protected override void AddKeyWords()
         {
-            _keyWords["if"] = EToken.If;
-            _keyWords["ife"] = EToken.IfElse;
-            _keyWords["for"] = EToken.For;
-            _keyWords["true"] = EToken.True;
-            _keyWords["false"] = EToken.False;
-            _keyWords["self"] = EToken.Self;
-            _keyWords["while"] = EToken.While;
-            _keyWords["assert"] = EToken.Assert;
-            _keyWords["div"] = EToken.Divide;
-            _keyWords["rho"] = EToken.ToRho;
-            _keyWords["rho{"] = EToken.ToRhoSequence;
-
-            _keyWords["not"] = EToken.Not;
-            _keyWords["and"] = EToken.And;
-            _keyWords["or"] = EToken.Or;
-            _keyWords["xor"] = EToken.Xor;
-            _keyWords["exists"] = EToken.Exists;
-
-            _keyWords["drop"] = EToken.Drop;
-            _keyWords["dup"] = EToken.Dup;
-            _keyWords["over"] = EToken.Over;
-            _keyWords["swap"] = EToken.Swap;
-            _keyWords["rot"] = EToken.Rot;
-            _keyWords["rotn"] = EToken.RotN;
-            _keyWords["toarray"] = EToken.ToArray;
-            _keyWords["gc"] = EToken.GarbageCollect;
-            _keyWords["clear"] = EToken.Clear;
-            _keyWords["expand"] = EToken.Expand;
-            _keyWords["cd"] = EToken.ChangeFolder;
-            _keyWords["pwd"] = EToken.PrintFolder;
-            _keyWords["type"] = EToken.GetType;
-            _keyWords["size"] = EToken.Size;
-            _keyWords["depth"] = EToken.Depth;
-            _keyWords["new"] = EToken.New;
-            _keyWords["dropn"] = EToken.DropN;
-
-            _keyWords["toarray"] = EToken.ToArray;
-            _keyWords["tolist"] = EToken.ToList;
-            _keyWords["tomap"] = EToken.ToMap;
-            _keyWords["toset"] = EToken.ToSet;
-
-            _keyWords["div"] = EToken.Divide;
-            _keyWords["mul"] = EToken.Mul;
-            
-            _keyWords["expand"] = EToken.Expand;
-            _keyWords["noteq"] = EToken.NotEquiv;
-            _keyWords["lls"] = EToken.Contents;
-            _keyWords["ls"] = EToken.GetContents;
-            _keyWords["freeze"] = EToken.Freeze;
-            _keyWords["thaw"] = EToken.Thaw;
+            _keyWords.Add("if", EToken.If);
+            _keyWords.Add("ife", EToken.IfElse);
+            _keyWords.Add("for", EToken.For);
+            _keyWords.Add("true", EToken.True);
+            _keyWords.Add("false", EToken.False);
+            _keyWords.Add("self", EToken.Self);
+            _keyWords.Add("while", EToken.While);
+            _keyWords.Add("assert", EToken.Assert);
+            _keyWords.Add("div", EToken.Divide);
+            _keyWords.Add("rho", EToken.ToRho);
+            _keyWords.Add("rho{", EToken.ToRhoSequence);
+            _keyWords.Add("not", EToken.Not);
+            _keyWords.Add("and", EToken.And);
+            _keyWords.Add("or", EToken.Or);
+            _keyWords.Add("xor", EToken.Xor);
+            _keyWords.Add("exists", EToken.Exists);
+            _keyWords.Add("drop", EToken.Drop);
+            _keyWords.Add("dup", EToken.Dup);
+            _keyWords.Add("over", EToken.Over);
+            _keyWords.Add("swap", EToken.Swap);
+            _keyWords.Add("rot", EToken.Rot);
+            _keyWords.Add("rotn", EToken.RotN);
+            _keyWords.Add("toarray", EToken.ToArray);
+            _keyWords.Add("gc", EToken.GarbageCollect);
+            _keyWords.Add("clear", EToken.Clear);
+            _keyWords.Add("cd", EToken.ChangeFolder);
+            _keyWords.Add("pwd", EToken.PrintFolder);
+            _keyWords.Add("type", EToken.GetType);
+            _keyWords.Add("size", EToken.Size);
+            _keyWords.Add("depth", EToken.Depth);
+            _keyWords.Add("new", EToken.New);
+            _keyWords.Add("dropn", EToken.DropN);
+            _keyWords.Add("tolist", EToken.ToList);
+            _keyWords.Add("tomap", EToken.ToMap);
+            _keyWords.Add("toset", EToken.ToSet);
+            _keyWords.Add("mul", EToken.Mul);
+            _keyWords.Add("expand", EToken.Expand);
+            _keyWords.Add("noteq", EToken.NotEquiv);
+            _keyWords.Add("lls", EToken.Contents);
+            _keyWords.Add("ls", EToken.GetContents);
+            _keyWords.Add("freeze", EToken.Freeze);
+            _keyWords.Add("thaw", EToken.Thaw);
         }
 
         protected override bool NextToken()
@@ -162,7 +152,7 @@ namespace Diver.PiLang
 
         private bool IsSpaceChar(char arg)
         {
-            throw new System.NotImplementedException();
+            return char.IsWhiteSpace(arg);
         }
 
         protected override void Terminate()
