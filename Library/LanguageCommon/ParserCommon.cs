@@ -5,21 +5,6 @@ using System.Text;
 
 namespace Diver.LanguageCommon
 {
-    public interface IAstFactory<in TTokenNode, TAstNode, in EAstEnum>
-    {
-        void AddChild(TAstNode parent, TAstNode node);
-        void AddChild(TAstNode parent, object node);
-        TAstNode New(TTokenNode t);
-        //TAstNode New(TAstNode e, TTokenNode t);
-        TAstNode New(EAstEnum e, TTokenNode t);
-        TAstNode New(EAstEnum t);
-    }
-
-    public interface ITokenNode<out TEnum>
-    {
-        TEnum Type { get; }
-    }
-
     // common for all parsers.
     // iterate over a stream of tokens to produce an abstract syntax tree
     public class ParserCommon<TLexer, TAstNode, TTokenNode, ETokenEnum, EAstEnum, AstFactory>
@@ -256,7 +241,7 @@ namespace Diver.LanguageCommon
         }
 
         protected List<TTokenNode> _tokens = new List<TTokenNode>();
-        private Stack<TAstNode> _stack = new Stack<TAstNode>();
+        private readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
         protected int _current;
         protected TAstNode _root;
         protected string _error;
