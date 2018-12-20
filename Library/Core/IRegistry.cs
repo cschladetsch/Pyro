@@ -11,8 +11,10 @@ namespace Diver
 
         IRefBase Add(object value);
         IRef<T> Add<T>(T value);
+        IRef<T> Add<T>();
 
         IConstRefBase AddConst(object val);
         IConstRef<T> AddConst<T>(T val);
+        IConstRef<T> AddConst<T>();
     }
 }

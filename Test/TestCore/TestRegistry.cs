@@ -25,7 +25,8 @@ namespace Diver.TestCore
             IConstRefBase cref = num;
             Assert.AreEqual(cref.Get<int>(), 42);
 
-            var str = reg.Add("Foo");
+            var str = reg.Add<string>();
+            str.Value = "Foo";
             Assert.AreEqual(str.Value, "Foo");
         }
 
@@ -33,7 +34,6 @@ namespace Diver.TestCore
         public void TestReferenceFields()
         {
             var reg = new Impl.Registry();
-
             IRef<Foo> foo = reg.Add(new Foo());
             Assert.AreSame(foo.Class.Type, typeof(Foo));
         }

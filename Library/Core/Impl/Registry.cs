@@ -42,6 +42,14 @@ namespace Diver.Impl
             return AddNew<T>(klass, value);
         }
 
+        public IRef<T> Add<T>()
+        {
+            var klass = GetClass<T>();
+            if (klass == null)
+                throw new CouldNotMakeClass(typeof(T));
+            return AddNew<T>(klass);
+        }
+
         public IConstRefBase AddConst(object value)
         {
             var type = value?.GetType();
@@ -52,6 +60,11 @@ namespace Diver.Impl
         }
 
         public IConstRef<T> AddConst<T>(T val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IConstRef<T> AddConst<T>()
         {
             throw new NotImplementedException();
         }
@@ -71,16 +84,19 @@ namespace Diver.Impl
             return _classes.TryGetValue(type, out var klass) ? klass : null;
         }
 
-        private IRef<T> AddNew<T>(IClassBase classBase, T value)
+        private IRef<T> AddNew<T>(IClassBase classBase)
         {
             var id = NextId();
             classBase.Create(this, id, out var refBase);
             _instances.Add(id, refBase);
-            if (!(refBase is IRef<T> typed))
-                return null;
-            typed.Value = value;
-            return typed;
+            return refBase as IRef<T>;
+        }
 
+        private IRef<T> AddNew<T>(IClassBase classBase, T value)
+        {
+            var val = AddNew<T>(classBase);
+            val.Value = value;
+            return val;
         }
 
         private IRefBase AddNew(IClassBase classBase, object value)
