@@ -11,5 +11,6 @@
         Array,
         Continuation,
         TokenType,
+        Object
     }
 }

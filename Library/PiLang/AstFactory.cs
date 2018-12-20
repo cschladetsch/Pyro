@@ -7,32 +7,33 @@ namespace Diver.PiLang
     {
         public void AddChild(AstNode parent, AstNode node)
         {
-            throw new NotImplementedException();
+            parent.Children.Add(node);
         }
 
         public void AddChild(AstNode parent, object node)
         {
-            throw new NotImplementedException();
+            parent.Children.Add(new AstNode(EAstNode.Object, node));
         }
 
-        public AstNode New(Token t)
+        public AstNode New(Token token)
         {
-            throw new NotImplementedException();
+            return new AstNode(EAstNode.TokenType, token);
         }
 
-        public AstNode New(AstNode e, Token t)
-        {
-            throw new NotImplementedException();
-        }
+        //public AstNode New(AstNode e, Token t)
+        //{
+        //    //AddChild(New());
+        //    return null;
+        //}
 
         public AstNode New(EAstNode e, Token t)
         {
-            throw new NotImplementedException();
+            return new AstNode(e, t);
         }
 
         public AstNode New(EAstNode t)
         {
-            throw new NotImplementedException();
+            return new AstNode(t);
         }
     }
 }
