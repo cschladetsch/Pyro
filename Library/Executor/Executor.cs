@@ -1,54 +1,110 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Diver.Executor
+namespace Diver.Exec
 {
-    public enum EOperation
-    {
-        Plus,
-        Minus,
-        Multiply,
-        Divide,
-
-        Store,
-        Retrieve,
-
-        Suspend,
-        Resume,
-        Replace,
-        
-        Print,
-        Assert,
-
-        If,
-        IfThen,
-        IfThenElse,
-
-        ToArray,
-        ToMap,
-        ToSet,
-        ToPair,
-
-        Expand,
-    }
-
     public class Executor
     {
-        public List<object> Data => _data;
-        public List<object> Context => _context;
+        public Stack<object> DataStack => _data;
+        public Stack<IRef<Continuation>> ContextStack => _context;
 
-        void Continue(Continuation cont)
+        public Executor()
         {
-            object next;
-            while (cont.Next(out next))
+            AddOperations();
+        }
+
+        private void AddOperations()
+        {
+            _actions[EOperation.Plus] = () => Push(Pop() + Pop());
+            _actions[EOperation.Minus] = () => Push(Pop() - Pop());
+            _actions[EOperation.Multiply] = () => Push(Pop() * Pop());
+            _actions[EOperation.Divide] = () => Push(Pop() / Pop());
+
+            _actions[EOperation.Suspend] = Suspend;
+            _actions[EOperation.Resume] = Resume;
+            _actions[EOperation.Replace] = Break;
+
+            _actions[EOperation.Store] = () => Context().SetScopeObject(Pop<string>(), Pop());
+            _actions[EOperation.Retrieve] = () => Push(Context().FromScope(Pop<string>()));
+        }
+
+        public void Continue(IRef<Continuation> cont)
+        {
+            while (true)
             {
-                if (next is IRefBase obj)
+                while (cont.Value.Next(out var next))
                 {
+                    if (next is IRef<EOperation> op)
+                    {
+                        if (_actions.TryGetValue(op.Value, out var action))
+                        {
+                            action();
+                        }
+                        else
+                        {
+                            throw new NotImplementedException($"Operation {op.Value}");
+                        }
+                    }
+                    else
+                    {
+                        _data.Push(next);
+                    }
+
+                    if (_break)
+                        break;
                 }
+
+                _break = false;
+
+                if (_context.Count > 0)
+                    Continue(_context.Pop());
+                else
+                    break;
             }
         }
 
+        private Continuation Context()
+        {
+            return _context.Peek().Value;
+        }
 
-        private List<object> _data = new List<object>();
-        private List<object> _context = new List<object>();
+        private void Suspend()
+        {
+            _context.Push(_context.Peek());
+            Resume();
+        }
+
+        private void Resume()
+        {
+            _context.Push(Pop());
+            Break();
+        }
+
+        private void Break()
+        {
+            _break = true;
+        }
+
+        private void Push(object obj)
+        {
+            _data.Push(obj);
+        }
+
+        private T Pop<T>()
+        {
+            var data = _data.Pop() as IRef<T>;
+            return data.Value;
+        }
+
+        private dynamic Pop()
+        {
+            var pop = _data.Pop();
+            return !(pop is IRefBase data) ? pop : data.BaseValue;
+        }
+
+        private bool _break;
+        private Stack<object> _data = new Stack<object>();
+        private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
+        private Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
     }
 }
