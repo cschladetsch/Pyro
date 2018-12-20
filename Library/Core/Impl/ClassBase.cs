@@ -9,9 +9,9 @@ namespace Diver.Impl
         {
         }
 
-        public IRefBase Create(IRegistry reg, Id id)
+        public virtual void Create(IRegistry reg, Id id, out IRefBase refBase)
         {
-            return new RefBase(reg, this, id);
+            refBase = new RefBase(reg, this, id);
         }
 
         public IRefBase Create(IRegistry reg, Id id, object value)

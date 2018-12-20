@@ -35,8 +35,7 @@ namespace Diver.TestCore
             var reg = new Impl.Registry();
 
             IRef<Foo> foo = reg.Add(new Foo());
-            //Assert.AreSame(foo.Class.T);
-
+            Assert.AreSame(foo.Class.Type, typeof(Foo));
         }
     }
 }

@@ -8,9 +8,9 @@ namespace Diver.Impl
         {
         }
 
-        public new IRef<T> Create(IRegistry reg, Id id)
+        public override void Create(IRegistry reg, Id id, out IRefBase refBase)
         {
-            return new Ref<T>(reg, this, id);
+            refBase = new Ref<T>(reg, this, id);
         }
 
         public IRef<T> Create(IRegistry reg, Id id, T value)

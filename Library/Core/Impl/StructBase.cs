@@ -15,6 +15,7 @@ namespace Diver.Impl
 
         internal StructBase(IRegistry reg, Type type)
         {
+            _type = type;
             _registry = reg;
             InstanceType = type;
             _typeName = type.FullName;
