@@ -24,7 +24,7 @@ namespace Diver.Impl
             var klass = FindClass(type);
             if (klass != null)
                 return klass as IClass<T>;
-            var typed = new Class<T>(this, type);
+            var typed = new Class<T>(this);
             _classes[type] = typed;
             return typed;
         }

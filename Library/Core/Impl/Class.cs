@@ -4,7 +4,7 @@ namespace Diver.Impl
 {
     public class Class<T> : ClassBase, IClass<T>
     {
-        internal Class(IRegistry reg, Type type) : base(reg, type)
+        internal Class(IRegistry reg) : base(reg, typeof(T))
         {
         }
 
