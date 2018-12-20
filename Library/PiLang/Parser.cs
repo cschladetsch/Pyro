@@ -7,6 +7,7 @@ namespace Diver.PiLang
     /// </summary>
     public class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAst, AstFactory>
     {
+
         public Parser(LexerBase lexer) : base(lexer, null)
         {
         }
@@ -20,6 +21,13 @@ namespace Diver.PiLang
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
+            RemoveWhitespace();
+
+            return Run(structure);
+        }
+
+        private void RemoveWhitespace()
+        {
             foreach (var tok in _lexer.Tokens)
             {
                 switch (tok.Type)
@@ -33,8 +41,6 @@ namespace Diver.PiLang
 
                 _tokens.Add(tok);
             }
-
-            return Run(structure);
         }
 
         private bool Run(EStructure st)
@@ -67,16 +73,6 @@ namespace Diver.PiLang
                     _root.Add(_astFactory.New(Consume()));
                     return true;
             }
-        }
-
-        private bool ParseArray(AstNode context)
-        {
-            return false;
-        }
-
-        private bool ParseContinuation(AstNode context)
-        {
-            return false;
         }
 
         private bool ParseCompound(AstNode root, EAst type, EToken end)
