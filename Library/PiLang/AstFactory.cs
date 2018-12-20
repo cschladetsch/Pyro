@@ -3,7 +3,7 @@ using Diver.LanguageCommon;
 
 namespace Diver.PiLang
 {
-    public class AstFactory : IAstFactory<Token, AstNode, EAstNode>
+    public class AstFactory : IAstFactory<Token, AstNode, EAst>
     {
         public void AddChild(AstNode parent, AstNode node)
         {
@@ -12,12 +12,12 @@ namespace Diver.PiLang
 
         public void AddChild(AstNode parent, object node)
         {
-            parent.Children.Add(new AstNode(EAstNode.Object, node));
+            parent.Children.Add(new AstNode(EAst.Object, node));
         }
 
         public AstNode New(Token token)
         {
-            return new AstNode(EAstNode.TokenType, token);
+            return new AstNode(EAst.TokenType, token);
         }
 
         //public AstNode New(AstNode e, Token t)
@@ -26,12 +26,12 @@ namespace Diver.PiLang
         //    return null;
         //}
 
-        public AstNode New(EAstNode e, Token t)
+        public AstNode New(EAst e, Token t)
         {
             return new AstNode(e, t);
         }
 
-        public AstNode New(EAstNode t)
+        public AstNode New(EAst t)
         {
             return new AstNode(t);
         }

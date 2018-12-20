@@ -4,7 +4,7 @@ namespace Diver.PiLang
 {
     public class AstNode
     {
-        public EAstNode Type = EAstNode.None;
+        public EAst Type = EAst.None;
         public Token Token;
         public object Value;
         public List<AstNode> Children => _children;
@@ -13,24 +13,24 @@ namespace Diver.PiLang
         {
         }
 
-        public AstNode(EAstNode type)
+        public AstNode(EAst type)
         {
             Type = type;
         }
 
         public AstNode(EToken type)
         {
-            Type = EAstNode.TokenType;
+            Type = EAst.TokenType;
             Token = new Token() {Type = type};
         }
 
-        public AstNode(EAstNode type, Token token)
+        public AstNode(EAst type, Token token)
         {
             Type = type;
             Token = token;
         }
 
-        public AstNode(EAstNode type, object value)
+        public AstNode(EAst type, object value)
         {
             Type = type;
             Value = value;
@@ -50,7 +50,7 @@ namespace Diver.PiLang
         {
             _children.Add(new AstNode(token));
         }
-        public void Add(EAstNode type, object value)
+        public void Add(EAst type, object value)
         {
             _children.Add(new AstNode(type, value));  
         }

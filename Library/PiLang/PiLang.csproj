@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="AstFactory.cs" />
     <Compile Include="AstNode.cs" />
-    <Compile Include="EAstNode.cs" />
+    <Compile Include="EAst.cs" />
     <Compile Include="EToken.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Parser.cs" />

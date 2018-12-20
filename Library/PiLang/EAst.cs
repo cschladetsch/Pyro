@@ -1,6 +1,6 @@
 ﻿namespace Diver.PiLang
 {
-    public enum EAstNode
+    public enum EAst
     {
         None,
         Program,

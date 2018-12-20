@@ -2,25 +2,71 @@
 
 namespace Diver.PiLang
 {
-    class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAst, AstFactory>
+    /// <summary>
+    /// Parser for the Pi language. It's quite simple.
+    /// </summary>
+    public class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAst, AstFactory>
     {
-        protected Parser(LexerBase lexer, IRegistry r) : base(lexer, r)
+        public Parser(LexerBase lexer) : base(lexer, null)
         {
         }
 
-        protected override bool Process(Lexer lex, EStructure st)
+        public override bool Process(Lexer lex, EStructure structure)
         {
-            return false;
+            _current = 0;
+            _indent = 0;
+            _lexer = lex;
+
+            if (_lexer.Failed)
+                return Fail(_lexer.Error);
+
+            foreach (var tok in _lexer.Tokens)
+            {
+                switch (tok.Type)
+                {
+                    case EToken.Whitespace:
+                    case EToken.Tab:
+                    case EToken.NewLine:
+                    case EToken.Comment:
+                        continue;
+                }
+
+                _tokens.Add(tok);
+            }
+
+            return Run(structure);
         }
 
         private bool Run(EStructure st)
         {
-            return false;
+            _root = _astFactory.New(EAst.Continuation);
+            while (!Failed && NextSingle(_root))
+                ;
+            return !Failed;
         }
 
         private bool NextSingle(AstNode context)
         {
-            return false;
+            if (Empty())
+                return false;
+
+            var tok = Current();
+            switch (tok.Type)
+            {
+                case EToken.OpenSquareBracket:
+                    return ParseCompound(_root, EAst.Array, EToken.CloseSquareBracket);
+                case EToken.OpenBrace:
+                    return ParseCompound(_root, EAst.Continuation, EToken.CloseBrace);
+                case EToken.CloseSquareBracket:
+                case EToken.CloseBrace:
+                    Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
+                    return false;
+                case EToken.None:
+                    return false;
+                default:
+                    _root.Add(_astFactory.New(Consume()));
+                    return true;
+            }
         }
 
         private bool ParseArray(AstNode context)
@@ -35,7 +81,23 @@ namespace Diver.PiLang
 
         private bool ParseCompound(AstNode root, EAst type, EToken end)
         {
-            return false;
+            Consume();
+            var node = NewNode(type);
+            while (!Empty() && !Failed && !Try(end))
+            {
+                if (!NextSingle(node))
+                    return Fail(_lexer.CreateErrorMessage(Current(), "Malformed compound %s", type.ToString()));
+            }
+
+            if (Empty())
+                return Fail("Malformed compound");
+
+            if (Failed)
+                return false;
+
+            Consume();
+            _root.Add(node);
+            return true;
         }
     }
 }

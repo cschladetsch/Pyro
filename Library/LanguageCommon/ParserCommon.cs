@@ -37,7 +37,7 @@ namespace Diver.LanguageCommon
             _indent = 0;
         }
 
-        protected virtual bool Process(TLexer lex, EStructure st)
+        public virtual bool Process(TLexer lex, EStructure structure)
         {
             return false;
         }
@@ -64,9 +64,9 @@ namespace Diver.LanguageCommon
 
         string PrintTree()
         { 
-            //std::stringstream str;
-            //PrintTree(str, 0, root);
-            //return str.str();
+            //std::stringstream structure;
+            //PrintTree(structure, 0, root);
+            //return structure.structure();
             return "";
         }
 
@@ -84,11 +84,11 @@ namespace Diver.LanguageCommon
                 str.Append("    ");
 
             //trtring indent(4 * level, ' ');
-            //str << indent << val.c_str() << std::endl;
+            //structure << indent << val.c_str() << std::endl;
             //for (auto const
             //&ch : root->GetChildren())
             //{
-            //    PrintTree(str, level + 1, ch);
+            //    PrintTree(structure, level + 1, ch);
             //}
         }
 
@@ -255,14 +255,14 @@ namespace Diver.LanguageCommon
             return _astFactory.New(t);
         }
 
-        private List<TTokenNode> _tokens;
-        private Stack<TAstNode> _stack;
-        private int _current;
+        protected List<TTokenNode> _tokens = new List<TTokenNode>();
+        private Stack<TAstNode> _stack = new Stack<TAstNode>();
+        protected int _current;
         protected TAstNode _root;
         protected string _error;
-        private int _indent;
-        private TLexer _lexer;
-        private AstFactory _astFactory = new AstFactory();
+        protected int _indent;
+        protected TLexer _lexer;
+        protected AstFactory _astFactory = new AstFactory();
     }
 }
 

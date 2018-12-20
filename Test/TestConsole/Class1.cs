@@ -10,6 +10,10 @@ namespace Diver.Tests
     [TestFixture]
     public class TestConsole
     {
-
+        [Test]
+        public void Test()
+        {
+            Assert.IsTrue(true);
+        }
     }
 }

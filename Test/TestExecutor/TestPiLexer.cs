@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Diver.PiLang;
 using NUnit.Framework;
-using Debug = System.Diagnostics.Debug;
 
-namespace Diver.Tests
+namespace Diver.Test
 {
     [TestFixture]
     public class TestPi
