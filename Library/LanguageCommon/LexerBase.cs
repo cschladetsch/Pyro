@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Diver
+namespace Diver.LanguageCommon
 {
     /// <summary>
     /// Common to all lexers. Provides basic lexing functionality that is not specific to

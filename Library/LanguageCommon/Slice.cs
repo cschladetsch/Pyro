@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Diver.LanguageCommon
 {
     /// <summary>
     /// A segment in a string.

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
-namespace Diver
+namespace Diver.LanguageCommon
 {
     /// <summary>
     /// Common to all custom language's Lexer, Parser, and Translator processes

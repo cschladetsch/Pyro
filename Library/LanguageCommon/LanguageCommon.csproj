@@ -7,7 +7,7 @@
     <ProjectGuid>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LanguageCommon</RootNamespace>
+    <RootNamespace>Diver.LanguageCommon</RootNamespace>
     <AssemblyName>LanguageCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -41,14 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EStructure.cs" />
     <Compile Include="ITokenBase.cs" />
     <Compile Include="ITokenFactory.cs" />
     <Compile Include="LexerBase.cs" />
     <Compile Include="LexerCommon.cs" />
+    <Compile Include="ParserCommon.cs" />
     <Compile Include="Process.cs" />
+    <Compile Include="ProcessCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slice.cs" />
     <Compile Include="TokenBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

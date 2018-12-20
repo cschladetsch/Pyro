@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Console
+namespace Diver
 {
-    class Program
+    public class Console
     {
-        static void Main(string[] args)
+        string MakePrompt()
         {
-
+            return "> ";
         }
+
+        private IRegistry _registry;
     }
 }

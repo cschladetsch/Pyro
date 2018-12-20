@@ -1,4 +1,6 @@
-﻿namespace Diver.PiLang
+﻿using Diver.LanguageCommon;
+
+namespace Diver.PiLang
 {
     public class TokenFactory :
         ITokenFactory<EToken, Token>

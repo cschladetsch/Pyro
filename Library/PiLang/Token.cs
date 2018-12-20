@@ -1,6 +1,10 @@
-﻿namespace Diver.PiLang
+﻿using Diver.LanguageCommon;
+
+namespace Diver.PiLang
 {
-    public class Token : TokenBase<EToken>
+    public class Token 
+        : TokenBase<EToken>
+        , ITokenNode<EToken>
     {
         public Token()
         {

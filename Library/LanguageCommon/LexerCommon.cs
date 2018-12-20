@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Diver
+namespace Diver.LanguageCommon
 {
+    public interface ILexerCommon<TToken>
+    {
+        string CreateErrorMessage(TToken tok, string fmt, params object[] args);
+    }
+
     public abstract class LexerCommon<TEnum, TToken, TTokenFactory> 
-        : LexerBase
+        : LexerBase, ILexerCommon<TToken>
         where TToken : class, ITokenBase<TEnum>, new()
         where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new()
     {
@@ -127,7 +132,7 @@ namespace Diver
             return Fail(CreateErrorMessage(_factory.NewEmptyToken(_lineNumber, new Slice(_offset, _offset)), text, Current()));
         }
 
-        static string CreateErrorMessage(TToken tok, string fmt, params object[] args)
+        public string CreateErrorMessage(TToken tok, string fmt, params object[] args)
         {
             var buff = $"({tok.LineNumber}):[{tok.Slice.Start}: {string.Format(fmt, args)}";
             int beforeContext = 2;

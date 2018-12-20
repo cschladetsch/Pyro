@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Diver.LanguageCommon;
 
 namespace Diver.PiLang
 {
-    class Parser
+    class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAstNode, AstFactory>
     {
+        protected Parser(LexerBase lexer, IRegistry r) : base(lexer, r)
+        {
+        }
     }
 }

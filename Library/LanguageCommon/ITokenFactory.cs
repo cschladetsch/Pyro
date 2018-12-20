@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Diver.LanguageCommon
 {
     /// <summary>
     /// Required to make tokens based on different enumeration types.

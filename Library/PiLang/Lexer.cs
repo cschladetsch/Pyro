@@ -1,4 +1,5 @@
 ﻿using System;
+using Diver.LanguageCommon;
 
 namespace Diver.PiLang
 {

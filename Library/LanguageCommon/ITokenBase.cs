@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Diver.LanguageCommon
 {
     public interface ITokenBase<TEnum>
     {
