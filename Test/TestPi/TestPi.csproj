@@ -72,7 +72,7 @@
       <Name>PiLang</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{AFC905F1-F4D7-430D-B005-B6B9E01245AF}</Project>
+      <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
       <Name>TestCommon</Name>
     </ProjectReference>
   </ItemGroup>

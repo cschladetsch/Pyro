@@ -63,6 +63,10 @@
       <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
       <Name>Flow2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
+      <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
+      <Name>TestCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
