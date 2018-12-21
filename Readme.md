@@ -26,3 +26,7 @@ $ git clone git@github.com:cschladetsch/Diver.git
 $ git submodule init
 $ git submodule update
 ```
+
+## Build the Libraries
+
+Binary assemblies are built to $(DRIVER_HOME)/Bin. Each project also copies its output assembly to the `Liminal/Assemblies` folder within the sample Unity3d project.
