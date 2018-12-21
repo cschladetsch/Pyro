@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Diver.PiLang;
+using Diver.Language.PiLang;
 using NUnit.Framework;
 
 namespace Diver.Test

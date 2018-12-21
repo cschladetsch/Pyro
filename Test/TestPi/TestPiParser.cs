@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 
-using Diver.LanguageCommon;
+using Diver.Language;
+using Diver.Language.PiLang;
 
 namespace Diver.Test
 {
@@ -10,10 +11,9 @@ namespace Diver.Test
         [Test]
         public void TestSimpleTokens()
         {
-            var lexer = new Diver.PiLang.Lexer("1 2 3");
-            var parser = new Diver.PiLang.Parser(lexer);
+            var lexer = new Lexer("1 2 3");
+            var parser = new Parser(lexer);
             parser.Process(lexer, EStructure.None);
-
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using Diver.Exec;
 using NUnit.Framework;
 
-using Diver.LanguageCommon;
+using Diver.Language;
+using Diver.Language.PiLang;
 
 namespace Diver.Test
 {
@@ -14,9 +13,9 @@ namespace Diver.Test
         [Test]
         public void TestSimpleTokens()
         {
-            var lexer = new Diver.PiLang.Lexer("1 2 3 + +");
+            var lexer = new Lexer("1 2 3 + +");
             Assert.IsTrue(lexer.Process());
-            var parser = new Diver.PiLang.Parser(lexer);
+            var parser = new Parser(lexer);
             if (parser.Failed)
                 Debug.WriteLine(parser.Error);
             Assert.IsTrue(parser.Process(lexer, EStructure.None));

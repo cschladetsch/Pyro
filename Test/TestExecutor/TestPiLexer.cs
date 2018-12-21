@@ -1,6 +1,7 @@
 ﻿using System.Linq;
-using Diver.PiLang;
 using NUnit.Framework;
+
+using Diver.Language.PiLang;
 
 namespace Diver.Test
 {

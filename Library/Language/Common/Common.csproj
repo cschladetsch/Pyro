@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</ProjectGuid>
+    <ProjectGuid>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.RhoLang</RootNamespace>
-    <AssemblyName>RhoLang</AssemblyName>
+    <RootNamespace>Diver.Language</RootNamespace>
+    <AssemblyName>LanguageCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(SolutionDir)\Bin\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)\Bin\$(Configuration)</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)\Bin\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)\Bin\$(Configuration)</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,21 +41,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lexer\EToken.cs" />
-    <Compile Include="Lexer\Lexer.cs" />
-    <Compile Include="Lexer\Token.cs" />
-    <Compile Include="Lexer\TokenFactory.cs" />
-    <Compile Include="Parser\AstFactory.cs" />
-    <Compile Include="Parser\AstNode.cs" />
-    <Compile Include="Parser\EAst.cs" />
-    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="EStructure.cs" />
+    <Compile Include="IAstFactory.cs" />
+    <Compile Include="ITokenBase.cs" />
+    <Compile Include="ITokenFactory.cs" />
+    <Compile Include="ITokenNode.cs" />
+    <Compile Include="LexerBase.cs" />
+    <Compile Include="LexerCommon.cs" />
+    <Compile Include="ParserCommon.cs" />
+    <Compile Include="Process.cs" />
+    <Compile Include="ProcessCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Translator.cs" />
+    <Compile Include="Slice.cs" />
+    <Compile Include="TokenBase.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj">
+      <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).dll $(SolutionDir)\Unity3d\DriverProject\Assets\Liminal\Assemblies
+
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

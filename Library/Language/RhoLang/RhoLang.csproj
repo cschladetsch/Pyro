@@ -1,20 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\NUnit.3.11.0\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.11.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{78931217-1400-4BFA-BB40-63CE304581EE}</ProjectGuid>
+    <ProjectGuid>{F0AAF194-595F-4595-9AAA-432924F36BE8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestExecutor</RootNamespace>
-    <AssemblyName>TestExecutor</AssemblyName>
+    <RootNamespace>Driver.Language.RhoLang</RootNamespace>
+    <AssemblyName>RhoLang</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,45 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestExecutor.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Lexer\EToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestPiLexer.cs" />
-    <Compile Include="TestPiParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\BuiltinTypes\BuiltinTypes.csproj">
+    <Folder Include="Parser\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuiltinTypes\BuiltinTypes.csproj">
       <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
       <Name>BuiltinTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
-      <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
-      <Name>Executor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\PiLang\PiLang.csproj">
-      <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
-      <Name>PiLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
-      <Name>TestCommon</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.11.0\build\NUnit.props'))" />
-  </Target>
 </Project>
