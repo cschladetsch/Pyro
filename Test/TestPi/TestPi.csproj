@@ -71,10 +71,6 @@
       <Project>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</Project>
       <Name>PiLang</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
-      <Name>TestCommon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
