@@ -62,4 +62,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).dll $(SolutionDir)\Unity3d\DriverProject\Assets\Liminal\Assemblies
+
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
