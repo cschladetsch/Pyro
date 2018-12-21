@@ -4,12 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1E960438-F9C1-46A4-B98E-171A87DF1D33}</ProjectGuid>
+    <ProjectGuid>{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Console</RootNamespace>
     <AssemblyName>Console</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(SolutionDir)\Bin\$(Configuration)</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +27,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)\Bin\$(Configuration)</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -49,6 +50,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\CoreNetwork\CoreNetwork.csproj">
+      <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
+      <Name>CoreNetwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Language\RhoLang\RhoLang.csproj">
+      <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
+      <Name>RhoLang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\BuiltinTypes\BuiltinTypes.csproj">
+      <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
+      <Name>BuiltinTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Console\Console.csproj">
+      <Project>{d3a3e0ba-decb-4301-83e0-dee41942c2a4}</Project>
+      <Name>Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Core\Core.csproj">
+      <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
@@ -61,9 +82,17 @@
       <Project>{7db00305-f5ed-4545-9d83-542132c8177e}</Project>
       <Name>NetworkCommsDotNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\LanguageCommon\LanguageCommon.csproj">
-      <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
-      <Name>LanguageCommon</Name>
+    <ProjectReference Include="..\..\Library\Network\Network.csproj">
+      <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
+      <Name>Network</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\PiLang\PiLang.csproj">
+      <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
+      <Name>PiLang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkGen\NetworkGen.csproj">
+      <Project>{e6cd36b6-157b-4b89-bca0-aaac0e56688a}</Project>
+      <Name>NetworkGen</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
