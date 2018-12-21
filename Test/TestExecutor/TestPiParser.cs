@@ -1,8 +1,6 @@
-﻿using Diver.Exec;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 using Diver.LanguageCommon;
-using Diver.Tests;
 
 namespace Diver.Test
 {

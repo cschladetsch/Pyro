@@ -69,10 +69,6 @@
       <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
       <Name>PiLang</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
-      <Name>TestCommon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

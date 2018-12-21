@@ -2,7 +2,7 @@
 using Diver.Exec;
 using NUnit.Framework;
 
-namespace Diver.Tests
+namespace Diver.Test
 {
     [TestFixture]
     public class TestExecutor : TestCommon

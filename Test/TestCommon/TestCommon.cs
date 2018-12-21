@@ -1,7 +1,7 @@
 ﻿using Diver.Impl;
 using NUnit.Framework;
 
-namespace Diver.Tests
+namespace Diver.Test
 {
     [TestFixture]
     public class TestCommon
