@@ -1,36 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
+
 using Diver;
 using Diver.Exec;
-using Diver.Impl;
-using UnityEngine;
 using UnityEngine.Assertions;
 
+// A simple test that ensures we can call into and use all the
+// C#7 features used by Diver.
 public class TestExec : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        IRegistry _reg = new Registry();
-        var code = _reg.Add(new List<object>());
-        var coro = _reg.Add(new Continuation(code.Value));
+        IRegistry reg = new Diver.Impl.Registry();
+        var code = reg.Add(new List<object>());
+        var coro = reg.Add(new Continuation(code.Value));
 
         code.Value.Add(1);
         code.Value.Add(2);
-        code.Value.Add(_reg.Add(EOperation.Plus));
+        code.Value.Add(reg.Add(EOperation.Plus));
 
-        var executor = _reg.Add(new Executor());
+        var executor = reg.Add(new Executor());
         var exec = executor.Value;
         exec.Continue(coro);
 
         var data = exec.DataStack;
         Assert.AreEqual(1, data.Count);
         Assert.AreEqual(3, data.Pop());
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("1 + 2 = 3");
     }
 }
