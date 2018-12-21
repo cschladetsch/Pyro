@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RhoLang.Lexer
+﻿namespace Diver.Language.RhoLang
 {
-    class EToken
+    public class EToken
     {
     }
 }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F0AAF194-595F-4595-9AAA-432924F36BE8}</ProjectGuid>
+    <ProjectGuid>{BA0FB904-B750-4C6A-93B0-44265B4408E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Driver.Language.RhoLang</RootNamespace>
-    <AssemblyName>RhoLang</AssemblyName>
+    <RootNamespace>Diver.Language.NyLang</RootNamespace>
+    <AssemblyName>Zeta</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -42,18 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Lexer\TokenFactory.cs" />
-    <Compile Include="Lexer\Token.cs" />
-    <Compile Include="Lexer\Lexer.cs" />
-    <Compile Include="Lexer\EToken.cs" />
-    <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Parser\EAst.cs" />
-    <Compile Include="Parser\AstNode.cs" />
-    <Compile Include="Parser\AstFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\App\NetworkGen\NetworkGen.csproj">
+      <Project>{e6cd36b6-157b-4b89-bca0-aaac0e56688a}</Project>
+      <Name>NetworkGen</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\BuiltinTypes\BuiltinTypes.csproj">
       <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
       <Name>BuiltinTypes</Name>
@@ -62,10 +57,29 @@
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Executor\Executor.csproj">
+      <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
+      <Name>Executor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Network\Network.csproj">
+      <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
+      <Name>Network</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PiLang\PiLang.csproj">
+      <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
+      <Name>PiLang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RhoLang\RhoLang.csproj">
+      <Project>{f0aaf194-595f-4595-9aaa-432924f36be8}</Project>
+      <Name>RhoLang</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
