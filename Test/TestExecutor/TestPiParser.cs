@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using Diver.Exec;
 using NUnit.Framework;
 
 using Diver.LanguageCommon;
@@ -23,8 +25,8 @@ namespace Diver.Test
             Console.WriteLine(parser.PrintTree());
 
             //var root = parser.Root;
-            //var val = root.Value;
-            //var cont = _reg.Add(root.Value as Continuation);
+            //var code = root.Value;
+            //var cont = _reg.Add(new Continuation(code as List<object>));
             //_exec.Continue(cont);
         }
     }

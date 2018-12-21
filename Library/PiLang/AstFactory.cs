@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Diver.LanguageCommon;
 
 namespace Diver.PiLang
 {
+    /// <summary>
+    /// Ast node factory for Pi lang
+    /// </summary>
     public class AstFactory : IAstFactory<Token, AstNode, EAst>
     {
         public void AddChild(AstNode parent, AstNode node)
@@ -20,12 +22,6 @@ namespace Diver.PiLang
         {
             return new AstNode(EAst.TokenType, token);
         }
-
-        //public AstNode New(AstNode e, Token t)
-        //{
-        //    //AddChild(New());
-        //    return null;
-        //}
 
         public AstNode New(EAst e, Token t)
         {
