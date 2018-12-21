@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
 
 using Diver.LanguageCommon;
@@ -19,6 +20,7 @@ namespace Diver.Test
             Assert.IsTrue(parser.Process(lexer, EStructure.None));
 
             Debug.WriteLine(parser.PrintTree());
+            Console.WriteLine(parser.PrintTree());
 
             //var root = parser.Root;
             //var val = root.Value;
