@@ -12,6 +12,7 @@ namespace Diver.LanguageCommon
         where TLexer : ILexerCommon<TTokenNode>
         where AstFactory : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
         where TTokenNode : class, ITokenNode<ETokenEnum>
+        where TAstNode : class
     {
         public string Error => _error;
         public TAstNode Root => _root;
@@ -47,12 +48,11 @@ namespace Diver.LanguageCommon
             return !Failed;
         }
 
-        string PrintTree()
+        public string PrintTree()
         { 
-            //std::stringstream structure;
-            //PrintTree(structure, 0, root);
-            //return structure.structure();
-            return "";
+            var str = new StringBuilder();
+            PrintTree(str, 0, _root);
+            return str.ToString();
         }
 
         public override string ToString()
@@ -70,11 +70,12 @@ namespace Diver.LanguageCommon
 
             //trtring indent(4 * level, ' ');
             //structure << indent << val.c_str() << std::endl;
-            //for (auto const
-            //&ch : root->GetChildren())
-            //{
-            //    PrintTree(structure, level + 1, ch);
-            //}
+            str.Append(val);
+            str.Append(Environment.NewLine);
+            foreach (var ch in _astFactory.GetChildren(root))
+            {
+                PrintTree(str, level + 1, ch);
+            }
         }
 
         protected bool Has()

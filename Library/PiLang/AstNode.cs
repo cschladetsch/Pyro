@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Diver.LanguageCommon;
 
 namespace Diver.PiLang
 {
@@ -7,7 +8,7 @@ namespace Diver.PiLang
         public EAst Type = EAst.None;
         public Token Token;
         public object Value;
-        public List<AstNode> Children => _children;
+        public IList<AstNode> Children => _children;
 
         public AstNode()
         {

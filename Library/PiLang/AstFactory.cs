@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Diver.LanguageCommon;
 
 namespace Diver.PiLang
@@ -34,6 +35,11 @@ namespace Diver.PiLang
         public AstNode New(EAst t)
         {
             return new AstNode(t);
+        }
+
+        public IList<AstNode> GetChildren(AstNode node)
+        {
+            return node.Children;
         }
     }
 }

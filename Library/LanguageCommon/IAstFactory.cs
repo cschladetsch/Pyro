@@ -1,4 +1,6 @@
-﻿namespace Diver.LanguageCommon
+﻿using System.Collections.Generic;
+
+namespace Diver.LanguageCommon
 {
     public interface IAstFactory<in TTokenNode, TAstNode, in EAstEnum>
     {
@@ -8,5 +10,6 @@
         //TAstNode New(TAstNode e, TTokenNode t);
         TAstNode New(EAstEnum e, TTokenNode t);
         TAstNode New(EAstEnum t);
+        IList<TAstNode> GetChildren(TAstNode node);
     }
 }
