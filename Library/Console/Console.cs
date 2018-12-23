@@ -8,9 +8,11 @@ namespace Diver
 {
     public class Console
     {
-        string MakePrompt()
+        public string Path => "/";
+        public string Prompt => ">";
+
+        public void Process(string input)
         {
-            return "> ";
         }
 
         private IRegistry _registry;
