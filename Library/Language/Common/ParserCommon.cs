@@ -12,7 +12,7 @@ namespace Diver.Language
         where TLexer : ILexerCommon<TTokenNode>
         where AstFactory : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
         where TTokenNode : class, ITokenNode<ETokenEnum>
-        where TAstNode : class
+        where TAstNode : class//, IAstNode<TAstNode>
     {
         public TAstNode Root => _root;
 
@@ -56,7 +56,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return _root.ToString();
+            return _astFactory.GetChildren(_root)[0].ToString();
         }
 
         void PrintTree(StringBuilder str, int level, TAstNode root)

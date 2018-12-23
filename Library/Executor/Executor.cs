@@ -24,14 +24,24 @@ namespace Diver.Exec
             _actions[EOperation.Resume] = Resume;
             _actions[EOperation.Replace] = Break;
 
-            _actions[EOperation.Store] = () => Context().SetScopeObject(Pop<string>(), Pop());
+            _actions[EOperation.Store] = StoreValue;
             _actions[EOperation.Retrieve] = () => Push(Context().FromScope(Pop<string>()));
         }
 
-        public void Continue(Continuation cont)
+        void StoreValue()
         {
+            var name = Pop<string>();
+            var val = Pop();
+            Context().SetScopeObject(name, val);
+        }
+
+        public void Continue(IRef<Continuation> continuation)
+        {
+            _current = continuation;
             while (true)
             {
+                var cont = _current.Value;
+
                 while (cont.Next(out var next))
                 {
                     if (next is IRef<EOperation> op)
@@ -57,23 +67,16 @@ namespace Diver.Exec
                 _break = false;
 
                 if (_context.Count > 0)
-                    Continue(_context.Pop());
+                    _current = _context.Pop();
                 else
                     break;
             }
         }
 
-        public void Continue(IRef<Continuation> cont)
-        {
-            if (cont == null)
-                return;
-
-            Continue(cont.Value);
-        }
-
         private Continuation Context()
         {
-            return _context.Peek().Value;
+            return _current.Value;
+            //return _context.Peek().Value;
         }
 
         private void Suspend()
@@ -100,7 +103,10 @@ namespace Diver.Exec
 
         private T Pop<T>()
         {
-            var data = _data.Pop() as IRef<T>;
+            var top = Pop();
+            if (top is T val)
+                return val;
+            var data = top as IRef<T>;
             return data.Value;
         }
 
@@ -111,8 +117,9 @@ namespace Diver.Exec
         }
 
         private bool _break;
-        private Stack<object> _data = new Stack<object>();
-        private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
-        private Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+        private readonly Stack<object> _data = new Stack<object>();
+        private IRef<Continuation> _current;
+        private readonly Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
+        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
     }
 }

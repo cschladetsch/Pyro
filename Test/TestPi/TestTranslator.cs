@@ -25,10 +25,10 @@ namespace Diver.Test
         public void TestVars()
         {
             Run("42 a #");
-            Assert.AreSame(0, DataStack.Count);
+            Assert.AreEqual(0, DataStack.Count);
             Assert.IsTrue(_scope.ContainsKey("a"));
             var a = _scope["a"];
-            Assert.AreSame(42, a);
+            Assert.AreEqual(42, a);
         }
 
         [Test]
@@ -55,16 +55,17 @@ namespace Diver.Test
             _exec.Continue(Translate(text));
         }
 
-        private Continuation Translate(string text)
+        private IRef<Continuation> Translate(string text)
         {
             var trans = new Translator(_reg, text);
             Debug.WriteLine($"Trans.Error= '{trans.Error}");
+            Debug.WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Continuation.Value;
+            return _continuation = trans.Continuation;
         }
 
-        private Continuation _continuation;
-        private Dictionary<string, object> _scope => _continuation.Scope;
-        private IList<object> _code => _continuation.Code;
+        private IRef<Continuation> _continuation;
+        private Dictionary<string, object> _scope => _continuation.Value.Scope;
+        private IList<object> _code => _continuation.Value.Code;
     }
 }

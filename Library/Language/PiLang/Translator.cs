@@ -10,6 +10,8 @@ namespace Diver.Language.PiLang
     public class Translator : ProcessCommon
     {
         public IRef<Continuation> Continuation;
+        public Lexer Lexer => _lexer;
+        public Parser Parser => _parser;
 
         public Translator(IRegistry reg, string input) : base(reg)
         {
@@ -18,17 +20,23 @@ namespace Diver.Language.PiLang
 
         public bool Run(string input)
         {
-            var lexer = new Lexer(input);
-            if (!lexer.Process())
-                return Fail($"LexerError: {lexer.Error}");
+            _lexer = new Lexer(input);
+            
+            if (!_lexer.Process())
+                return Fail($"LexerError: {_lexer.Error}");
 
-            var parser = new Parser(lexer);
-            if (!parser.Process(lexer, EStructure.Sequence))
-                return Fail($"ParserError: {parser.Error}");
+            _parser = new Parser(_lexer);
+            if (!_parser.Process(_lexer, EStructure.Sequence))
+                return Fail($"ParserError: {_parser.Error}");
 
             Continuation = New(new Continuation(new List<object>()));
 
-            return TranslateNode(parser.Root, Continuation.Value.Code);
+            return TranslateNode(_parser.Root, Continuation.Value.Code);
+        }
+
+        public override string ToString()
+        {
+            return $"Lexer: {_lexer}\nParser: {_parser}";
         }
 
         private bool TranslateNode(AstNode node, IList<object> objects)
@@ -120,5 +128,8 @@ namespace Diver.Language.PiLang
             objects.Add(cont);
             return true;
         }
+
+        private Lexer _lexer;
+        protected internal Parser _parser;
     }
 }

@@ -7,7 +7,6 @@ namespace Diver.Language.PiLang
     /// </summary>
     public class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAst, AstFactory>
     {
-
         public Parser(LexerBase lexer) : base(lexer, null)
         {
         }

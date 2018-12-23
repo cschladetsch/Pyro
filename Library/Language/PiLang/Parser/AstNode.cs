@@ -2,7 +2,7 @@
 
 namespace Diver.Language.PiLang
 {
-    public class AstNode
+    public class AstNode //: IAstNode<AstNode>
     {
         public EAst Type = EAst.None;
         public Token Token;
