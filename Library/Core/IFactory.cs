@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Diver
+﻿namespace Diver
 {
     public interface IFactory
     {

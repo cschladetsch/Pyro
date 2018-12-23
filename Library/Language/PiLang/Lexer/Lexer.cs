@@ -75,7 +75,7 @@
             case ')': return Add(EToken.CloseParan);
             case ':': return Add(EToken.Colon);
             case ' ': return AddSlice(EToken.Whitespace, Gather(IsSpaceChar));
-            case '@': return Add(EToken.Lookup);
+            case '@': return Add(EToken.Retrieve);
             case ',': return Add(EToken.Comma);
             case '#': return Add(EToken.Store);
             case '*': return Add(EToken.Multiply);
@@ -127,13 +127,13 @@
 
                     var comment = _factory.NewToken(
                         EToken.Comment,
-                        _lineNumber,
-                        new Slice(start, _offset));
+                        new Slice(this, start, _offset));
                     _tokens.Add(comment);
                     return true;
                 }
 
-                return Add(EToken.Divide);
+                //return LexError("/ is not a valid Token");//Add(EToken.Divide);
+                return Add(EToken.Separator);
             }
 
             LexError("Unrecognised %c");
@@ -143,7 +143,13 @@
 
         private bool PathnameOrKeyword()
         {
-            throw new System.NotImplementedException();
+            var begin = _offset;
+            var start = Current();
+            Next();
+            while (char.IsLetterOrDigit(Current()))
+                Next();
+            _tokens.Add(_factory.NewTokenIdent(new Slice(this, begin, _offset)));
+            return true;
         }
 
         private bool IsSpaceChar(char arg)

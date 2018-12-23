@@ -15,7 +15,7 @@ namespace Diver.Language
         public string Line => _lines[_lineNumber];
         public List<string> Lines => _lines;
 
-        protected virtual void AddStringToken(int ln, Slice slice) { }
+        protected virtual void AddStringToken(Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }
 
         public LexerBase(string input)
@@ -28,9 +28,9 @@ namespace Diver.Language
             return _lines[lineNumber];
         }
 
-        public string GetText(int lineNumber, Slice slice)
+        public string GetText(Slice slice)
         {
-            return _lines[lineNumber].Substring(slice.Start, slice.End);
+            return _lines[slice.LineNumber].Substring(slice.Start, slice.End);
         }
 
         protected void CreateLines()
@@ -85,7 +85,7 @@ namespace Diver.Language
             Next();
 
             // the +1 and -1 to remove the start and end double quote " characters
-            AddStringToken(_lineNumber, new Slice(start + 1, _offset - 1));
+            AddStringToken(new Slice(this, start + 1, _offset - 1));
 
             return true;
         }
@@ -135,7 +135,7 @@ namespace Diver.Language
             while (filter(Next()))
                 ;
 
-            return new Slice(start, _offset);
+            return new Slice(this, start, _offset);
         }
 
         private readonly  List<string> _lines = new List<string>();

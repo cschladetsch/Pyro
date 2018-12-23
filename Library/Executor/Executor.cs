@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Diver.Exec
 {
+    /// <summary>
+    /// Processes a sequence of Continuations.
+    /// </summary>
     public class Executor
     {
         public Stack<object> DataStack => _data;
@@ -24,15 +27,32 @@ namespace Diver.Exec
             _actions[EOperation.Resume] = Resume;
             _actions[EOperation.Replace] = Break;
 
-            _actions[EOperation.Store] = () => Context().SetScopeObject(Pop<string>(), Pop());
-            _actions[EOperation.Retrieve] = () => Push(Context().FromScope(Pop<string>()));
+            _actions[EOperation.Store] = StoreValue;
+            _actions[EOperation.Retrieve] = GetValue;
         }
 
-        public void Continue(IRef<Continuation> cont)
+        private void StoreValue()
         {
+            var name = Pop<string>();
+            var val = Pop();
+            Context().SetScopeObject(name, val);
+        }
+
+        private void GetValue()
+        {
+            var label = Pop<string>();
+            var fromScope = Context().FromScope(label);
+            Push(fromScope);
+        }
+
+        public void Continue(IRef<Continuation> continuation)
+        {
+            _current = continuation;
             while (true)
             {
-                while (cont.Value.Next(out var next))
+                var cont = _current.Value;
+
+                while (cont.Next(out var next))
                 {
                     if (next is IRef<EOperation> op)
                     {
@@ -57,7 +77,7 @@ namespace Diver.Exec
                 _break = false;
 
                 if (_context.Count > 0)
-                    Continue(_context.Pop());
+                    _current = _context.Pop();
                 else
                     break;
             }
@@ -65,21 +85,30 @@ namespace Diver.Exec
 
         private Continuation Context()
         {
-            return _context.Peek().Value;
+            return _current.Value;
         }
 
+        /// <summary>
+        /// Perform a continuation, then return to current context
+        /// </summary>
         private void Suspend()
         {
-            _context.Push(_context.Peek());
+            _context.Push(_current);
             Resume();
         }
 
+        /// <summary>
+        /// Resume the continuation that spawned the current one
+        /// </summary>
         private void Resume()
         {
             _context.Push(Pop());
             Break();
         }
 
+        /// <summary>
+        /// Stop the current continuation and resume whatever is on the context stack
+        /// </summary>
         private void Break()
         {
             _break = true;
@@ -90,9 +119,12 @@ namespace Diver.Exec
             _data.Push(obj);
         }
 
-        private T Pop<T>()
+        public T Pop<T>()
         {
-            var data = _data.Pop() as IRef<T>;
+            var top = Pop();
+            if (top is T val)
+                return val;
+            var data = top as IRef<T>;
             return data.Value;
         }
 
@@ -103,8 +135,9 @@ namespace Diver.Exec
         }
 
         private bool _break;
-        private Stack<object> _data = new Stack<object>();
-        private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
-        private Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+        private readonly Stack<object> _data = new Stack<object>();
+        private IRef<Continuation> _current;
+        private readonly Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
+        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
     }
 }

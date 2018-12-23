@@ -50,18 +50,19 @@
     <Compile Include="TestPiLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPiParser.cs" />
+    <Compile Include="TestTranslator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\BuiltinTypes\BuiltinTypes.csproj">
-      <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
-      <Name>BuiltinTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
+      <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
+      <Name>Executor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>

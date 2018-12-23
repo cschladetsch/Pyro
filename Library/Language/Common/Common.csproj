@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ELanguage.cs" />
     <Compile Include="EStructure.cs" />
     <Compile Include="IAstFactory.cs" />
+    <Compile Include="IAstNode.cs" />
     <Compile Include="ITokenBase.cs" />
     <Compile Include="ITokenFactory.cs" />
     <Compile Include="ITokenNode.cs" />
@@ -60,6 +62,9 @@
       <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

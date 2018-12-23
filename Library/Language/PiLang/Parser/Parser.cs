@@ -1,16 +1,17 @@
-﻿namespace Diver.Language.PiLang
+﻿using System;
+
+namespace Diver.Language.PiLang
 {
     /// <summary>
     /// Parser for the Pi language. It's quite simple.
     /// </summary>
     public class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAst, AstFactory>
     {
-
         public Parser(LexerBase lexer) : base(lexer, null)
         {
         }
 
-        public override bool Process(Lexer lex, EStructure structure)
+        public override bool Process(Lexer lex, EStructure structure = EStructure.None)
         {
             _current = 0;
             _indent = 0;
@@ -54,13 +55,12 @@
             if (Empty())
                 return false;
 
-            var tok = Current();
-            switch (tok.Type)
+            switch (Current().Type)
             {
                 case EToken.OpenSquareBracket:
-                    return ParseCompound(_root, EAst.Array, EToken.CloseSquareBracket);
+                    return ParseCompound(context, EAst.Array, EToken.CloseSquareBracket);
                 case EToken.OpenBrace:
-                    return ParseCompound(_root, EAst.Continuation, EToken.CloseBrace);
+                    return ParseCompound(context, EAst.Continuation, EToken.CloseBrace);
                 case EToken.CloseSquareBracket:
                 case EToken.CloseBrace:
                     Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
@@ -68,9 +68,29 @@
                 case EToken.None:
                     return false;
                 default:
-                    _root.Add(_astFactory.New(Consume()));
+                    context.Add(AddValue(_astFactory.New(Consume())));
                     return true;
             }
+        }
+
+        private static AstNode AddValue(AstNode node)
+        {
+            var token = node.Token;
+            var text = token.GetText();
+            switch (token.Type)
+            {
+                case EToken.Int:
+                    node.Value = int.Parse(text);
+                    break;
+                case EToken.String:
+                    node.Value = text;
+                    break;
+                default:
+                    node.Value = text;
+                    break;
+            }
+
+            return node;
         }
 
         private bool ParseCompound(AstNode root, EAst type, EToken end)
@@ -90,7 +110,7 @@
                 return false;
 
             Consume();
-            _root.Add(node);
+            root.Add(node);
             return true;
         }
     }

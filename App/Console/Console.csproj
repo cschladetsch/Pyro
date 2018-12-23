@@ -54,10 +54,6 @@
       <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
       <Name>CoreNetwork</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\BuiltinTypes\BuiltinTypes.csproj">
-      <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
-      <Name>BuiltinTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Console\Console.csproj">
       <Project>{d3a3e0ba-decb-4301-83e0-dee41942c2a4}</Project>
       <Name>Console</Name>

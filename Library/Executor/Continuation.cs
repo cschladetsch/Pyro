@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Diver.Exec
 {
+    /// <summary>
+    /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.
+    /// </summary>
     public class Continuation
     {
         public List<object> Code { get => _code; set => _code = value; }
@@ -42,7 +44,7 @@ namespace Diver.Exec
         }
 
         private int _next;
-        private List<object> _code = new List<object>();
+        private List<object> _code;
         private Dictionary<string, object> _scope = new Dictionary<string, object>();
     }
 }

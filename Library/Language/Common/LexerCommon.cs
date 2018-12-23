@@ -66,7 +66,7 @@ namespace Diver.Language
 
         protected TToken LexAlpha()
         {
-            TToken tok = _factory.NewTokenIdent(_lineNumber, Gather((c) => char.IsLetter(c)));
+            TToken tok = _factory.NewTokenIdent(Gather(char.IsLetter));
             TEnum en;
             if (_keyWords.TryGetValue(tok.ToString(), out en))
                 tok.Type = en;
@@ -79,20 +79,20 @@ namespace Diver.Language
             _error = string.Format(fmt, args);
         }
 
-        protected override void AddStringToken(int lineNumber, Slice slice)
+        protected override void AddStringToken(Slice slice)
         {
-            _tokens.Add(_factory.NewTokenString(lineNumber, slice));
+            _tokens.Add(_factory.NewTokenString(slice));
         }
 
         protected bool AddSlice(TEnum type, Slice slice)
         {
-            _tokens.Add(_factory.NewToken(type,_lineNumber, slice));
+            _tokens.Add(_factory.NewToken(type, slice));
             return true;
         }
 
         protected bool Add(TEnum type, int len = 1)
         {
-            AddSlice(type, new Slice(_offset, _offset + len));
+            AddSlice(type, new Slice(this, _offset, _offset + len));
             while (len-- > 0)
                 Next();
 
@@ -129,7 +129,7 @@ namespace Diver.Language
 
         protected bool LexError(string text)
         {
-            return Fail(CreateErrorMessage(_factory.NewEmptyToken(_lineNumber, new Slice(_offset, _offset)), text, Current()));
+            return Fail(CreateErrorMessage(_factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
         }
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args)

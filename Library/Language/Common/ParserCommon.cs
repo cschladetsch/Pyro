@@ -12,9 +12,8 @@ namespace Diver.Language
         where TLexer : ILexerCommon<TTokenNode>
         where AstFactory : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
         where TTokenNode : class, ITokenNode<ETokenEnum>
-        where TAstNode : class
+        where TAstNode : class//, IAstNode<TAstNode>
     {
-        public string Error => _error;
         public TAstNode Root => _root;
 
         protected ParserCommon(LexerBase lexer, IRegistry r) : base(r)
@@ -57,7 +56,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return _root.ToString();
+            return _astFactory.GetChildren(_root)[0].ToString();
         }
 
         void PrintTree(StringBuilder str, int level, TAstNode root)
@@ -245,7 +244,6 @@ namespace Diver.Language
         private readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
         protected int _current;
         protected TAstNode _root;
-        protected string _error;
         protected int _indent;
         protected TLexer _lexer;
         protected AstFactory _astFactory = new AstFactory();

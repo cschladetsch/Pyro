@@ -32,7 +32,6 @@
         LessEquiv,
         GreaterEquiv,
         Dup,
-        Lookup,
         Comma,
         Drop,
         Over,
@@ -95,6 +94,8 @@
         Colon,
         Whitespace,
         PlusAssign,
-        Comment
+        Comment,
+        Retrieve,
+        Separator
     }
 }

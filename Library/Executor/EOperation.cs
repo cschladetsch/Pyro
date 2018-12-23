@@ -1,5 +1,8 @@
 ﻿namespace Diver.Exec
 {
+    /// <summary>
+    /// Operations that can be performed by and Executor
+    /// </summary>
     public enum EOperation
     {
         Plus,
@@ -27,5 +30,8 @@
         ToPair,
 
         Expand,
+        Dup,
+        Clear,
+        Swap
     }
 }

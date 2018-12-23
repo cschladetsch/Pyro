@@ -1,13 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Security;
 
 namespace BuiltinTypes
 {
     public class Array
     {
-        public List<object> Objects => _objects;
-        public int? Count => _objects?.Count;
-#pragma warning disable CS0649 // Field 'Array._objects' is never assigned to, and will always have its default value null
-        private List<object> _objects;
-#pragma warning restore CS0649 // Field 'Array._objects' is never assigned to, and will always have its default value null
+        public IList<object> Objects => _objects;
+        public int Count => _objects.Count;
+        private readonly List<object> _objects = new List<object>();
+    }
+
+    public class Map
+    {
+        public IDictionary<object, object> Map => _map;
+
+        private Dictionary<object, object> _map = new Dictionary<object, object>(EqualObject);
     }
 }
