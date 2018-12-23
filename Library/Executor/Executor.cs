@@ -25,7 +25,7 @@ namespace Diver.Exec
             _actions[EOperation.Replace] = Break;
 
             _actions[EOperation.Store] = StoreValue;
-            _actions[EOperation.Retrieve] = () => Push(Context().FromScope(Pop<string>()));
+            _actions[EOperation.Retrieve] = GetValue;
         }
 
         void StoreValue()
@@ -33,6 +33,13 @@ namespace Diver.Exec
             var name = Pop<string>();
             var val = Pop();
             Context().SetScopeObject(name, val);
+        }
+
+        void GetValue()
+        {
+            var label = Pop<string>();
+            var fromScope = Context().FromScope(label);
+            Push(fromScope);
         }
 
         public void Continue(IRef<Continuation> continuation)

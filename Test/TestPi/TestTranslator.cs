@@ -24,14 +24,12 @@ namespace Diver.Test
         [Test]
         public void TestVars()
         {
-            Run("42 a #");
-            Assert.AreEqual(0, DataStack.Count);
+            Run("1 a # a @ 2 +");
             Assert.IsTrue(_scope.ContainsKey("a"));
             var a = _scope["a"];
-            Assert.AreEqual(42, a);
-
-            Run("a @");
-            Assert.AreEqual(42, _exec.Pop<int>());
+            Assert.AreEqual(1, a);
+            Assert.AreEqual(1 + 2, _exec.Pop<int>());
+            Assert.AreEqual(0, DataStack.Count);
         }
 
         [Test]
