@@ -1,6 +1,7 @@
 ﻿namespace Diver.Language.PiLang
 {
-    public class Lexer : LexerCommon<EToken, Token, TokenFactory>
+    public class Lexer
+        : LexerCommon<EToken, Token, TokenFactory>
     {
         public Lexer(string input)
             : base(input)

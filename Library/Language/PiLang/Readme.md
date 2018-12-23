@@ -2,9 +2,11 @@
 
 This is a post-fix language that is very fast to parse and execute, but is not very easy for a humman to write complex programs with.
 
+Read all about [Stack-Oriented Programming](https://en.wikipedia.org/wiki/Stack-oriented_programming)
+
 ## Two Stacks
 
-Most language systems have one exposed stack: the data stack. This is used to keep track of the history of contexts that led to the current context, and is also used to store local variables.
+Most such stack-based language systems have one exposed stack: the data stack. This is used to keep track of the history of contexts that led to the current context, and is also used to store local variables.
 
 In Pi, there are two distinct stacks that can be manipulated directly and separately:
 

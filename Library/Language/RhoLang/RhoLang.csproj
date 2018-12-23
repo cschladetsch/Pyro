@@ -52,7 +52,9 @@
     <Compile Include="Parser\AstFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Readme.md" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>

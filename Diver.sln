@@ -107,7 +107,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhoLang", "Library\Language
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Library\Language\Common\Common.csproj", "{329084C8-82D9-44C9-86DD-FA587C1A6FA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NyLang", "Library\Language\Zeta\NyLang.csproj", "{BA0FB904-B750-4C6A-93B0-44265B4408E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauLang", "Library\Language\Zeta\TauLang.csproj", "{BA0FB904-B750-4C6A-93B0-44265B4408E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "Test\TestConsole\TestConsole.csproj", "{C841442A-0CD1-4AEE-9BBA-B41757E1BC45}"
 EndProject

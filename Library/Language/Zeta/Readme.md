@@ -1,4 +1,4 @@
-# Documentation
+# Tau Documentation
 
-Ny is the network language that works in pre-fix: + 1 1.
+**Tau** is the network language that works in pre-fix: + 1 1.
 
