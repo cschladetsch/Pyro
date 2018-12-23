@@ -12,7 +12,7 @@ namespace Diver.Language.PiLang
         {
         }
 
-        public override bool Process(Lexer lex, EStructure structure)
+        public override bool Process(Lexer lex, EStructure structure = EStructure.None)
         {
             _current = 0;
             _indent = 0;
@@ -56,13 +56,12 @@ namespace Diver.Language.PiLang
             if (Empty())
                 return false;
 
-            var tok = Current();
-            switch (tok.Type)
+            switch (Current().Type)
             {
                 case EToken.OpenSquareBracket:
-                    return ParseCompound(_root, EAst.Array, EToken.CloseSquareBracket);
+                    return ParseCompound(context, EAst.Array, EToken.CloseSquareBracket);
                 case EToken.OpenBrace:
-                    return ParseCompound(_root, EAst.Continuation, EToken.CloseBrace);
+                    return ParseCompound(context, EAst.Continuation, EToken.CloseBrace);
                 case EToken.CloseSquareBracket:
                 case EToken.CloseBrace:
                     Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
@@ -70,7 +69,7 @@ namespace Diver.Language.PiLang
                 case EToken.None:
                     return false;
                 default:
-                    _root.Add(AddValue(_astFactory.New(Consume())));
+                    context.Add(AddValue(_astFactory.New(Consume())));
                     return true;
             }
         }
@@ -112,7 +111,7 @@ namespace Diver.Language.PiLang
                 return false;
 
             Consume();
-            _root.Add(node);
+            root.Add(node);
             return true;
         }
     }

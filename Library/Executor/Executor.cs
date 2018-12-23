@@ -28,11 +28,11 @@ namespace Diver.Exec
             _actions[EOperation.Retrieve] = () => Push(Context().FromScope(Pop<string>()));
         }
 
-        public void Continue(IRef<Continuation> cont)
+        public void Continue(Continuation cont)
         {
             while (true)
             {
-                while (cont.Value.Next(out var next))
+                while (cont.Next(out var next))
                 {
                     if (next is IRef<EOperation> op)
                     {
@@ -61,6 +61,14 @@ namespace Diver.Exec
                 else
                     break;
             }
+        }
+
+        public void Continue(IRef<Continuation> cont)
+        {
+            if (cont == null)
+                return;
+
+            Continue(cont.Value);
         }
 
         private Continuation Context()

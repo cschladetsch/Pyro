@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Diver.Exec;
 using Diver.Language.PiLang;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -14,15 +15,42 @@ namespace Diver.Test
     public class TestTranslator : TestCommon
     {
         [Test]
-        public void Test()
+        public void TestAdd()
         {
-            var text = "1 2 +";
+            Run("1 2 +");
+            Assert.AreEqual(3, Pop<int>());
+        }
+
+        [Test]
+        public void TestAddString()
+        {
+            Run("\"foo\" \"bar\" +");
+            Assert.AreEqual("barfoo", Pop<string>());
+        }
+
+        [Test]
+        public void TestArray()
+        {
+            Run("[1 2 [3 4 5]]");
+            var list = Pop<List<object>>();
+            Assert.AreEqual(1, list[0]);
+            Assert.AreEqual(2, list[1]);
+            var inner = list[2] as IList<object>;
+            Assert.IsNotNull(inner);
+            Assert.IsTrue(inner.SequenceEqual(new object[] {3,4,5}));
+        }
+
+        void Run(string text)
+        {
+            _exec.Continue(Translate(text));
+        }
+
+        Continuation Translate(string text)
+        {
             var trans = new Translator(_reg, text);
             Debug.WriteLine($"Trans.Error= '{trans.Error}");
             Assert.IsFalse(trans.Failed);
-
-            _exec.Continue(trans.Continuation);
-            Assert.AreEqual(3, Pop<int>());
+            return trans.Continuation.Value;
         }
     }
 }
