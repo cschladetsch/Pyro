@@ -96,6 +96,7 @@
         Whitespace,
         PlusAssign,
         Comment,
-        Retrieve
+        Retrieve,
+        Separator
     }
 }

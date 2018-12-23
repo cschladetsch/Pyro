@@ -133,7 +133,8 @@
                     return true;
                 }
 
-                return Add(EToken.Divide);
+                //return LexError("/ is not a valid Token");//Add(EToken.Divide);
+                return Add(EToken.Separator);
             }
 
             LexError("Unrecognised %c");
@@ -143,7 +144,13 @@
 
         private bool PathnameOrKeyword()
         {
-            throw new System.NotImplementedException();
+            var begin = _offset;
+            var start = Current();
+            Next();
+            while (char.IsLetterOrDigit(Current()))
+                Next();
+            _tokens.Add(_factory.NewTokenIdent(_lineNumber, new Slice(begin, _offset)));
+            return true;
         }
 
         private bool IsSpaceChar(char arg)
