@@ -2,6 +2,10 @@
 
 runner=`find packages -name nunit3-console.exe`
 find Test -name \*.csproj > tests.txt
-$runner @tests.txt
+
+# what a hack to get colored output
+echo "$runner @tests.txt" > runtests.bat
+echo cmd /k runtests.bat
+
 
 
