@@ -2,6 +2,11 @@
 
 namespace Diver
 {
+    /// <summary>
+    /// A mapping of id to object.
+    ///
+    /// Can be serialised to Json or binary
+    /// </summary>
     public interface IRegistry
     {
         Guid Guid { get; }

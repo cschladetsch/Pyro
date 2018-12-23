@@ -29,24 +29,21 @@ namespace Diver.Impl
 
         public void SetProperty(IRefBase obj, string name, object value)
         {
-            PropertyInfo pi = null;
-            if (!_properties.TryGetValue(name, out pi))
+            if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
             pi.SetValue(obj, value);
         }
 
         public object GetProperty(IRefBase obj, string name)
         {
-            PropertyInfo pi = null;
-            if (!_properties.TryGetValue(name, out pi))
+            if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
             return pi.GetValue(obj);
         }
 
         public void SetProperty<T>(IRefBase obj, string name, T value)
         {
-            PropertyInfo pi = null;
-            if (!_properties.TryGetValue(name, out pi))
+            if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
             pi.SetValue(obj, value);
         }

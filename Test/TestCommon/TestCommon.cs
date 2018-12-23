@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Diver.Impl;
 using NUnit.Framework;
 
 namespace Diver.Test
 {
+    /// <summary>
+    /// Common to all (most) unit tests in the system
+    /// </summary>
     [TestFixture]
     public class TestCommon
     {

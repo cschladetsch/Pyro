@@ -1,5 +1,8 @@
 namespace Diver
 {
+    /// <summary>
+    /// Every object in a Registry has a unique Id.
+    /// </summary>
     public class Id
     {
         public int Value => _value;
@@ -28,8 +31,7 @@ namespace Diver
 
         public override bool Equals(object obj)
         {
-            var id = obj as Id;
-            if (id == null)
+            if (!(obj is Id id))
                 return false;
             return id._value == _value;
         }

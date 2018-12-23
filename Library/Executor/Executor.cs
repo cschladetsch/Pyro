@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Diver.Exec
 {
+    /// <summary>
+    /// Processes a sequence of Continuations.
+    /// </summary>
     public class Executor
     {
         public Stack<object> DataStack => _data;
@@ -28,14 +31,14 @@ namespace Diver.Exec
             _actions[EOperation.Retrieve] = GetValue;
         }
 
-        void StoreValue()
+        private void StoreValue()
         {
             var name = Pop<string>();
             var val = Pop();
             Context().SetScopeObject(name, val);
         }
 
-        void GetValue()
+        private void GetValue()
         {
             var label = Pop<string>();
             var fromScope = Context().FromScope(label);
@@ -83,21 +86,29 @@ namespace Diver.Exec
         private Continuation Context()
         {
             return _current.Value;
-            //return _context.Peek().Value;
         }
 
+        /// <summary>
+        /// Perform a continuation, then return to current context
+        /// </summary>
         private void Suspend()
         {
-            _context.Push(_context.Peek());
+            _context.Push(_current);
             Resume();
         }
 
+        /// <summary>
+        /// Resume the continuation that spawned the current one
+        /// </summary>
         private void Resume()
         {
             _context.Push(Pop());
             Break();
         }
 
+        /// <summary>
+        /// Stop the current continuation and resume whatever is on the context stack
+        /// </summary>
         private void Break()
         {
             _break = true;
