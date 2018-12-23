@@ -6,23 +6,20 @@ namespace Diver.Language.PiLang
     {
         public Slice Slice => _slice;
         public ETokenType Type { get => _type; set => _type = value; } 
-        public int LineNumber => _lineNumber;
-        public LexerBase Lexer => _lexer;
-        public string Text => Lexer.GetText(LineNumber, Slice);
+        public int LineNumber => _slice.LineNumber;
+        public LexerBase Lexer => _slice.Lexer;
+        public string Text => Lexer.GetText(Slice);
+        public char this[int n] => Lexer.Input[_slice.Start + n];
 
         public TokenBase()
         {
         }
 
-        public TokenBase(ETokenType type, LexerBase lexer, int ln, Slice slice)
+        public TokenBase(ETokenType type, Slice slice)
         {
             _type = type;
-            _lineNumber = ln;
             _slice = slice;
-            _lexer = lexer;
         }
-
-        public char this[int n] => _lexer.Input[_slice.Start + n];
 
         public override string ToString()
         {
@@ -40,18 +37,16 @@ namespace Diver.Language.PiLang
 
         public string GetText()
         {
-            if (_lexer == null)
+            if (Lexer == null)
                 return "";
 
             if (_slice.Length == 0)
                 return "";
 
-            return _lexer.GetLine(_lineNumber).Substring(_slice.Start, _slice.Length);
+            return Lexer.GetLine(LineNumber).Substring(_slice.Start, _slice.Length);
         }
 
         public ETokenType _type;
-        private Slice _slice;
-        private readonly LexerBase _lexer;
-        private readonly int _lineNumber;
+        private readonly Slice _slice;
     }
 }

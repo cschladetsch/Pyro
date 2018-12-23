@@ -101,7 +101,7 @@ namespace Diver.Exec
             _data.Push(obj);
         }
 
-        private T Pop<T>()
+        public T Pop<T>()
         {
             var top = Pop();
             if (top is T val)

@@ -12,10 +12,10 @@
     public interface ITokenFactory<in TEnum, out TToken>
         where TToken : class, new()
     {
-        TToken NewToken(TEnum en, int lineNumber, Slice slice);
-        TToken NewTokenIdent(int lineNumber, Slice slice);
-        TToken NewTokenString(int lineNumber, Slice slice);
-        TToken NewEmptyToken(int lineNumber, Slice slice);
+        TToken NewToken(TEnum en, Slice slice);
+        TToken NewTokenIdent(Slice slice);
+        TToken NewTokenString(Slice slice);
+        TToken NewEmptyToken(Slice slice);
         void SetLexer(LexerBase lexer);
     }
 }

@@ -1,26 +1,29 @@
 ﻿namespace Diver.Language.PiLang
 {
-    public class TokenFactory :
-        ITokenFactory<EToken, Token>
+    /// <summary>
+    /// Makes Tokens because C# doesn't allow for constructors that take arguments on generic types
+    /// </summary>
+    public class TokenFactory
+        : ITokenFactory<EToken, Token>
     {
-        public Token NewToken(EToken en, int lineNumber, Slice slice)
+        public Token NewToken(EToken en, Slice slice)
         {
-            return new Token(en, _lexer, lineNumber, slice);
+            return new Token(en, slice);
         }
 
-        public Token NewTokenIdent(int lineNumber, Slice slice)
+        public Token NewTokenIdent(Slice slice)
         {
-            return NewToken(EToken.Ident, lineNumber, slice);
+            return NewToken(EToken.Ident, slice);
         }
 
-        public Token NewTokenString(int lineNumber, Slice slice)
+        public Token NewTokenString(Slice slice)
         {
-            return NewToken(EToken.String, lineNumber, slice);
+            return NewToken(EToken.String, slice);
         }
 
-        public Token NewEmptyToken(int lineNumber, Slice slice)
+        public Token NewEmptyToken(Slice slice)
         {
-            return NewToken(EToken.None, lineNumber, slice);
+            return NewToken(EToken.None, slice);
         }
 
         public void SetLexer(LexerBase lexer)
@@ -29,6 +32,5 @@
         }
 
         private LexerBase _lexer;
-
     }
 }

@@ -9,8 +9,8 @@
             _type = EToken.None;
         }
 
-        public Token(EToken type, LexerBase lexer, int ln, Slice slice)
-            : base(type, lexer, ln, slice)
+        public Token(EToken type, Slice slice)
+            : base(type, slice)
         {
         }
     }

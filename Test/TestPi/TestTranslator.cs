@@ -29,6 +29,9 @@ namespace Diver.Test
             Assert.IsTrue(_scope.ContainsKey("a"));
             var a = _scope["a"];
             Assert.AreEqual(42, a);
+
+            Run("a @");
+            Assert.AreEqual(42, _exec.Pop<int>());
         }
 
         [Test]

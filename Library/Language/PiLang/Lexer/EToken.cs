@@ -32,7 +32,6 @@
         LessEquiv,
         GreaterEquiv,
         Dup,
-        Lookup,
         Comma,
         Drop,
         Over,

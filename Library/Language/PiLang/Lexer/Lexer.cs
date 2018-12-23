@@ -75,7 +75,7 @@
             case ')': return Add(EToken.CloseParan);
             case ':': return Add(EToken.Colon);
             case ' ': return AddSlice(EToken.Whitespace, Gather(IsSpaceChar));
-            case '@': return Add(EToken.Lookup);
+            case '@': return Add(EToken.Retrieve);
             case ',': return Add(EToken.Comma);
             case '#': return Add(EToken.Store);
             case '*': return Add(EToken.Multiply);
@@ -127,8 +127,7 @@
 
                     var comment = _factory.NewToken(
                         EToken.Comment,
-                        _lineNumber,
-                        new Slice(start, _offset));
+                        new Slice(this, start, _offset));
                     _tokens.Add(comment);
                     return true;
                 }
@@ -149,7 +148,7 @@
             Next();
             while (char.IsLetterOrDigit(Current()))
                 Next();
-            _tokens.Add(_factory.NewTokenIdent(_lineNumber, new Slice(begin, _offset)));
+            _tokens.Add(_factory.NewTokenIdent(new Slice(this, begin, _offset)));
             return true;
         }
 
