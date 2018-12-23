@@ -34,6 +34,14 @@ namespace Diver.Test
             return typed.Value;
         }
 
+        protected void WriteLine(string fmt, params object[] args)
+        {
+            var text = string.Format(fmt, args);
+            System.Diagnostics.Trace.WriteLine(text);
+            TestContext.Out.WriteLine(text);
+            System.Console.WriteLine(text);
+        }
+
         protected Stack<object> DataStack => _exec.DataStack;
         protected IRegistry _reg;
         protected IRef<Diver.Exec.Executor> _executor;

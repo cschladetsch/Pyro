@@ -56,7 +56,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return _astFactory.GetChildren(_root)[0].ToString();
+            return PrintTree();//_astFactory.GetChildren(_root)[0].ToString();
         }
 
         void PrintTree(StringBuilder str, int level, TAstNode root)

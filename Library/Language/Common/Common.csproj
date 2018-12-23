@@ -45,6 +45,7 @@
     <Compile Include="EStructure.cs" />
     <Compile Include="IAstFactory.cs" />
     <Compile Include="IAstNode.cs" />
+    <Compile Include="ILexerCommon.cs" />
     <Compile Include="ITokenBase.cs" />
     <Compile Include="ITokenFactory.cs" />
     <Compile Include="ITokenNode.cs" />

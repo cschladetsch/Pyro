@@ -4,11 +4,6 @@ using System.Text;
 
 namespace Diver.Language
 {
-    public interface ILexerCommon<TToken>
-    {
-        string CreateErrorMessage(TToken tok, string fmt, params object[] args);
-    }
-
     public abstract class LexerCommon<TEnum, TToken, TTokenFactory> 
         : LexerBase, ILexerCommon<TToken>
         where TToken : class, ITokenBase<TEnum>, new()

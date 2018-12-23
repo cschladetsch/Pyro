@@ -59,8 +59,7 @@ namespace Diver.Test
         private IRef<Continuation> Translate(string text)
         {
             var trans = new Translator(_reg, text);
-            Debug.WriteLine($"Trans.Error= '{trans.Error}");
-            Debug.WriteLine(trans.ToString());
+            WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Continuation;
         }
