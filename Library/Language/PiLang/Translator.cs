@@ -1,24 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Diver.Exec;
 
 namespace Diver.Language.PiLang
 {
+    /// <summary>
+    /// Translates input Pi text source code to an executable Continuation
+    /// </summary>
     public class Translator : ProcessCommon
     {
         public IRef<Continuation> Continuation;
 
-        public Translator(string input)
+        public Translator(IRegistry reg, string input) : base(reg)
         {
-            _lexer = new Lexer(input);
-            if (_lexer.Failed)
-
+            Run(input);
         }
 
-        private Lexer _lexer;
-        private Parser _parser;
+        public bool Run(string input)
+        {
+            var lexer = new Lexer(input);
+            if (!lexer.Process())
+                return Fail($"LexerError: {lexer.Error}");
+
+            var parser = new Parser(lexer);
+            if (!parser.Process(lexer, EStructure.Sequence))
+                return Fail($"ParserError: {parser.Error}");
+
+            Continuation = New(new Continuation(new List<object>()));
+
+            return TranslateNode(parser.Root, Continuation.Value.Code);
+        }
+
+        private bool TranslateNode(AstNode node, IList<object> objects)
+        {
+            if (node == null)
+                return Fail("Null Ast Node");
+
+            foreach (var ast in node.Children)
+                if (!AddNode(ast, objects))
+                    return false;
+
+            return true;
+        }
+
+        private bool AddNode(AstNode ast, IList<object> objects)
+        {
+            switch (ast.Type)
+            {
+                case EAst.None:
+                    break;
+                case EAst.TokenType:
+                    AddToken(ast, objects);
+                    break;
+                case EAst.Array:
+                    return TranslateArray(ast, objects);
+                case EAst.Map:
+                    return TranslateMap(ast, objects);
+                case EAst.Continuation:
+                    return TranslateContinuation(ast, objects);
+                default:
+                    objects.Add(ast.Value);
+                    break;
+            }
+
+            return true;
+        }
+
+        private void AddToken(AstNode node, IList<object> objects)
+        {
+            var token = node.Token;
+            switch (token.Type)
+            {
+                case EToken.Plus:
+                    objects.Add(New(EOperation.Plus));
+                    break;
+                case EToken.Minus:
+                    objects.Add(New(EOperation.Minus));
+                    break;
+                case EToken.Store:
+                    objects.Add(New(EOperation.Store));
+                    break;
+                case EToken.Retrieve:
+                    objects.Add(New(EOperation.Retrieve));
+                    break;
+                case EToken.Dup:
+                    objects.Add(New(EOperation.Dup));
+                    break;
+                case EToken.Clear:
+                    objects.Add(New(EOperation.Clear));
+                    break;
+                case EToken.Swap:
+                    objects.Add(New(EOperation.Swap));
+                    break;
+                default:
+                    objects.Add(node.Value);
+                    break;
+            }
+        }
+
+        private bool TranslateMap(AstNode ast, IList<object> objects)
+        {
+            throw new NotImplementedException("TranslateMap");
+        }
+
+        private bool TranslateArray(AstNode astNode, IList<object> objects)
+        {
+            var array = new List<object>();
+            if (!TranslateNode(astNode, array))
+                return Fail($"Failed to translate ${astNode}");
+            objects.Add(array);
+            return true;
+        }
+
+        private bool TranslateContinuation(AstNode astNode, IList<object> objects)
+        {
+            var cont = New(new Continuation(new List<object>()));
+            if (!TranslateNode(astNode, cont.Value.Code))
+                return Fail($"Failed to translate ${astNode}");
+            objects.Add(cont);
+            return true;
+        }
     }
 }

@@ -14,7 +14,6 @@ namespace Diver.Language
         where TTokenNode : class, ITokenNode<ETokenEnum>
         where TAstNode : class
     {
-        public string Error => _error;
         public TAstNode Root => _root;
 
         protected ParserCommon(LexerBase lexer, IRegistry r) : base(r)
@@ -245,7 +244,6 @@ namespace Diver.Language
         private readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
         protected int _current;
         protected TAstNode _root;
-        protected string _error;
         protected int _indent;
         protected TLexer _lexer;
         protected AstFactory _astFactory = new AstFactory();

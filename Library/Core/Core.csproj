@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Array.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="IClass.cs" />
     <Compile Include="IClassBase.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="IRefBase.cs" />
     <Compile Include="Impl\Registry.cs" />
     <Compile Include="IRegistry.cs" />
+    <Compile Include="Operations.cs" />
+    <Compile Include="Pair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRef.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

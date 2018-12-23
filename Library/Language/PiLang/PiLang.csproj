@@ -53,10 +53,6 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BuiltinTypes\BuiltinTypes.csproj">
-      <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
-      <Name>BuiltinTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>

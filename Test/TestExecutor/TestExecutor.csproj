@@ -53,10 +53,6 @@
     <Compile Include="TestPiParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\BuiltinTypes\BuiltinTypes.csproj">
-      <Project>{6de9d394-6aa8-476a-9206-4a94c3aa795b}</Project>
-      <Name>BuiltinTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>

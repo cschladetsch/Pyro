@@ -27,5 +27,8 @@
         ToPair,
 
         Expand,
+        Dup,
+        Clear,
+        Swap
     }
 }

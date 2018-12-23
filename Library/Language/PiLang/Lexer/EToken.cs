@@ -95,6 +95,7 @@
         Colon,
         Whitespace,
         PlusAssign,
-        Comment
+        Comment,
+        Retrieve
     }
 }
