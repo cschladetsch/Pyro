@@ -1,0 +1,16 @@
+#!/bin/sh
+
+runner=`find packages -name nunit3-console.exe`
+tests=`find Test -name \*.csproj`
+
+# tests are one-per-line; make them comma-separated for the test runner
+args=`echo $tests | sed 's/\n/\, /'`
+
+echo $runner --test=$args
+# this should work: run all tests at once: $runner --test=$args
+
+for test in $tests ; do
+    $runner $test
+done
+
+

@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Array.cs" />
+    <Compile Include="BuiltinTypes\Array.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="IClass.cs" />
     <Compile Include="IClassBase.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="IRefBase.cs" />
     <Compile Include="Impl\Registry.cs" />
     <Compile Include="IRegistry.cs" />
+    <Compile Include="BuiltinTypes\Map.cs" />
     <Compile Include="Operations.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +99,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
