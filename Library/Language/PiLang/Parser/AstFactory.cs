@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Diver.Language.PiLang
+namespace Diver.Language
 {
     /// <summary>
     /// Ast node factory for Pi lang
     /// </summary>
-    public class AstFactory : IAstFactory<PiToken, PiAstNode, EPiAst>
+    public class PiAstFactory : IAstFactory<PiToken, PiAstNode, EPiAst>
     {
         public void AddChild(PiAstNode parent, PiAstNode node)
         {

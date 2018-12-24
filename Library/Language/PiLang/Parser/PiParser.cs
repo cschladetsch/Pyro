@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Diver.Language.PiLang
+namespace Diver.Language
 {
     /// <summary>
     /// Parser for the Pi language. It's quite simple.
     /// </summary>
     public class PiParser
-        : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, AstFactory>
+        : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
     {
         public PiParser(LexerBase lexer) : base(lexer, null)
         {

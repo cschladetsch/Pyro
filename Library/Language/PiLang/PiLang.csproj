@@ -46,7 +46,6 @@
     <Compile Include="Parser\EPiAst.cs" />
     <Compile Include="Lexer\EPiToken.cs" />
     <Compile Include="Lexer\PiLexer.cs" />
-    <Compile Include="Parser\IAstNode.cs" />
     <Compile Include="Parser\PiParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lexer\PiToken.cs" />

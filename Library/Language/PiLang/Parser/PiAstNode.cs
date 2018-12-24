@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Diver.Language.PiLang
+namespace Diver.Language
 {
     public class PiAstNode
     {
