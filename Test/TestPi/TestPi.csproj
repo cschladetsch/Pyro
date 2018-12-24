@@ -47,6 +47,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Comments.pi" />
     <Compile Include="TestPiLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPiParser.cs" />
@@ -54,6 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Scripts\Boolean.pi" />
+    <None Include="Scripts\Continuations.pi" />
+    <None Include="Scripts\Conditionals.pi" />
+    <None Include="Scripts\Variables.pi" />
+    <None Include="Scripts\Arithmetic.pi" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">

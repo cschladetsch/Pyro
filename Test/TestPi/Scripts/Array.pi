@@ -1,0 +1,11 @@
+﻿// test arrays
+
+[] expand 0 == assert
+[2] expand 1 == assert 2 == assert
+[1 2 3] size 3 == assert
+[1 2 3] reverse [3 2 1] == assert
+[1 2] 0 at 1 == assert
+[1 2] 1 at 2 == assert
+[1 2] 3 push_back [1 2 3] == assert
+[1 2 3] 0 remove [2 3] == assert
+1 2 3 3 toarray [1 2 3] == assert

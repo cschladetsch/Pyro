@@ -1,0 +1,8 @@
+﻿// test global tree scope
+
+1 '/a #
+'a exists not assert
+'/a exists assert
+2 '/a/b # 
+/a/b /a + 3 == assert
+

@@ -1,0 +1,13 @@
+﻿// test booleans and assertions
+
+true assert
+false not assert
+
+true not not assert
+false true and not assert
+false true or assert
+true false or assert
+true true and assert
+false true xor assert
+
+

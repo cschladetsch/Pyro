@@ -49,8 +49,6 @@
   <ItemGroup>
     <Compile Include="TestExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestPiLexer.cs" />
-    <Compile Include="TestPiParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
