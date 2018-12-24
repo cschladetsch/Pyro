@@ -47,7 +47,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Array.pi" />
     <None Include="Scripts\Comments.pi" />
+    <None Include="Scripts\Floats.pi" />
     <Compile Include="TestPiLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPiParser.cs" />
@@ -58,6 +60,12 @@
     <None Include="Scripts\Boolean.pi" />
     <None Include="Scripts\Continuations.pi" />
     <None Include="Scripts\Conditionals.pi" />
+    <None Include="Scripts\Loops.pi" />
+    <None Include="Scripts\Map.pi" />
+    <None Include="Scripts\Relational.pi" />
+    <None Include="Scripts\StackOperations.pi" />
+    <None Include="Scripts\Strings.pi" />
+    <None Include="Scripts\TreeScope.pi" />
     <None Include="Scripts\Variables.pi" />
     <None Include="Scripts\Arithmetic.pi" />
   </ItemGroup>
