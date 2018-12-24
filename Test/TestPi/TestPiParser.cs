@@ -11,8 +11,8 @@ namespace Diver.Test
     class TestPiParser : TestCommon
     {
         protected internal PiParser Parser;
-        protected internal IList<AstNode> Sequence => Parser.Root.Children;
-        protected internal AstNode First => Sequence?[0];
+        protected internal IList<PiAstNode> Sequence => Parser.Root.Children;
+        protected internal PiAstNode First => Sequence?[0];
 
         [Test]
         public void TestSimpleTokens()
@@ -27,14 +27,14 @@ namespace Diver.Test
         public void TestPathnames()
         {
             Parse("foo");
-            Assert.AreEqual(EAst.Ident, First.Type);
+            Assert.AreEqual(EPiAst.Ident, First.Type);
             Assert.AreEqual("foo", First.Value.ToString());
             var ident = First.Value as Label;
             Assert.IsNotNull(ident);
             Assert.IsFalse(ident.Quoted);
 
             Parse("'foo", true);
-            Assert.AreEqual(EAst.Ident, First.Type);
+            Assert.AreEqual(EPiAst.Ident, First.Type);
             var ident1 = First.Value as Label;
             Assert.IsNotNull(ident1);
             Assert.IsTrue(ident1.Quoted);
@@ -42,15 +42,15 @@ namespace Diver.Test
             Assert.AreEqual("'foo", First.Value.ToString());
 
             Parse("foo/bar");
-            Assert.AreEqual(EAst.Pathname, First.Type);
+            Assert.AreEqual(EPiAst.Pathname, First.Type);
             Assert.AreEqual("foo/bar", First.Value.ToString());
 
             Parse("'foo/bar");
-            Assert.AreEqual(EAst.Pathname, First.Type);
+            Assert.AreEqual(EPiAst.Pathname, First.Type);
             Assert.AreEqual("'foo/bar", First.Value.ToString());
 
             Parse("'foo/bar/spam");
-            Assert.AreEqual(EAst.Pathname, First.Type);
+            Assert.AreEqual(EPiAst.Pathname, First.Type);
             Assert.AreEqual("'foo/bar/spam", First.Value.ToString());
         }
 
@@ -60,7 +60,7 @@ namespace Diver.Test
             Parse("[42 23]");
             var array = Sequence[0];
             Assert.IsNotNull(array);
-            //Assert.AreSame(EAst.Array, array.Type); WTF
+            //Assert.AreSame(EPiAst.Array, array.Type); WTF
             var contents = Sequence[0].Children;
             Assert.AreEqual(42, contents[0].Value);
             Assert.AreEqual(23, contents[1].Value);

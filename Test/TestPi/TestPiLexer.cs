@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Diver.Language.PiLang;
+using Diver.Language;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -12,32 +12,32 @@ namespace Diver.Test
         {
             AssertSameTokens(
                 "1 2 + 2 - 3 *", 
-                EToken.Int, EToken.Int, EToken.Plus, 
-                EToken.Int, EToken.Minus, EToken.Int, EToken.Multiply
+                EPiToken.Int, EPiToken.Int, EPiToken.Plus, 
+                EPiToken.Int, EPiToken.Minus, EPiToken.Int, EPiToken.Multiply
             );
         }
 
         [Test]
         public void TestPathnames()
         {
-            AssertSameTokens("ident", EToken.Ident);
-            AssertSameTokens("ident/ident", EToken.Ident, EToken.Separator, EToken.Ident);
-            AssertSameTokens("'ident/ident", EToken.Quote, EToken.Ident, EToken.Separator, EToken.Ident);
+            AssertSameTokens("ident", EPiToken.Ident);
+            AssertSameTokens("ident/ident", EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
+            AssertSameTokens("'ident/ident", EPiToken.Quote, EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
         }
 
         [Test]
         public void TestComments()
         {
-            AssertSameTokens("// comment", EToken.Comment);
+            AssertSameTokens("// comment", EPiToken.Comment);
         }
 
         [Test]
         public void TestStrings()
         {
-            AssertSameTokens("\"foo\" \"bar\" +", EToken.String, EToken.String, EToken.Plus);
+            AssertSameTokens("\"foo\" \"bar\" +", EPiToken.String, EPiToken.String, EPiToken.Plus);
         }
 
-        private void AssertSameTokens(string input, params EToken[] tokens)
+        private void AssertSameTokens(string input, params EPiToken[] tokens)
         {
             var lex = new PiLexer(input);
             if (lex.Failed)
@@ -50,9 +50,9 @@ namespace Diver.Test
         {
             switch (piToken.Type)
             {
-                case EToken.Whitespace:
-                case EToken.Tab:
-                case EToken.NewLine:
+                case EPiToken.Whitespace:
+                case EPiToken.Tab:
+                case EPiToken.NewLine:
                     return true;
             }
 

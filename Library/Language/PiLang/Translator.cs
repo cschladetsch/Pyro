@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Diver.Exec;
 
 namespace Diver.Language.PiLang
@@ -11,7 +12,7 @@ namespace Diver.Language.PiLang
     {
         public IRef<Continuation> Continuation;
         public PiLexer Lexer => _lexer;
-        public PiParser Parser => Parser;
+        public PiParser Parser => _parser;
 
         public Translator(IRegistry reg, string input) : base(reg)
         {
@@ -39,65 +40,59 @@ namespace Diver.Language.PiLang
             return $"=== Translator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {Parser}";
         }
 
-        private bool TranslateNode(AstNode node, IList<object> objects)
+        private bool TranslateNode(PiAstNode node, IList<object> objects)
         {
-            if (node == null)
-                return Fail("Null Ast Node");
-
-            foreach (var ast in node.Children)
-                if (!AddNode(ast, objects))
-                    return false;
-
-            return true;
+            return node?.Children.All(ast => AddNode(ast, objects))
+               ?? Fail("Null Ast Node");
         }
 
-        private bool AddNode(AstNode ast, IList<object> objects)
+        private bool AddNode(PiAstNode piAst, IList<object> objects)
         {
-            switch (ast.Type)
+            switch (piAst.Type)
             {
-                case EAst.None:
+                case EPiAst.None:
                     break;
-                case EAst.TokenType:
-                    AddToken(ast, objects);
+                case EPiAst.TokenType:
+                    AddToken(piAst, objects);
                     break;
-                case EAst.Array:
-                    return TranslateArray(ast, objects);
-                case EAst.Map:
-                    return TranslateMap(ast, objects);
-                case EAst.Continuation:
-                    return TranslateContinuation(ast, objects);
+                case EPiAst.Array:
+                    return TranslateArray(piAst, objects);
+                case EPiAst.Map:
+                    return TranslateMap(piAst, objects);
+                case EPiAst.Continuation:
+                    return TranslateContinuation(piAst, objects);
                 default:
-                    objects.Add(ast.Value);
+                    objects.Add(piAst.Value);
                     break;
             }
 
             return true;
         }
 
-        private void AddToken(AstNode node, IList<object> objects)
+        private void AddToken(PiAstNode node, IList<object> objects)
         {
             var token = node.PiToken;
             switch (token.Type)
             {
-                case EToken.Plus:
+                case EPiToken.Plus:
                     objects.Add(New(EOperation.Plus));
                     break;
-                case EToken.Minus:
+                case EPiToken.Minus:
                     objects.Add(New(EOperation.Minus));
                     break;
-                case EToken.Store:
+                case EPiToken.Store:
                     objects.Add(New(EOperation.Store));
                     break;
-                case EToken.Retrieve:
+                case EPiToken.Retrieve:
                     objects.Add(New(EOperation.Retrieve));
                     break;
-                case EToken.Dup:
+                case EPiToken.Dup:
                     objects.Add(New(EOperation.Dup));
                     break;
-                case EToken.Clear:
+                case EPiToken.Clear:
                     objects.Add(New(EOperation.Clear));
                     break;
-                case EToken.Swap:
+                case EPiToken.Swap:
                     objects.Add(New(EOperation.Swap));
                     break;
                 default:
@@ -106,25 +101,25 @@ namespace Diver.Language.PiLang
             }
         }
 
-        private bool TranslateMap(AstNode ast, IList<object> objects)
+        private bool TranslateMap(PiAstNode piAst, IList<object> objects)
         {
             throw new NotImplementedException("TranslateMap");
         }
 
-        private bool TranslateArray(AstNode astNode, IList<object> objects)
+        private bool TranslateArray(PiAstNode piAstNode, IList<object> objects)
         {
             var array = new List<object>();
-            if (!TranslateNode(astNode, array))
-                return Fail($"Failed to translate ${astNode}");
+            if (!TranslateNode(piAstNode, array))
+                return Fail($"Failed to translate ${piAstNode}");
             objects.Add(array);
             return true;
         }
 
-        private bool TranslateContinuation(AstNode astNode, IList<object> objects)
+        private bool TranslateContinuation(PiAstNode piAstNode, IList<object> objects)
         {
             var cont = New(new Continuation(new List<object>()));
-            if (!TranslateNode(astNode, cont.Value.Code))
-                return Fail($"Failed to translate ${astNode}");
+            if (!TranslateNode(piAstNode, cont.Value.Code))
+                return Fail($"Failed to translate ${piAstNode}");
             objects.Add(cont);
             return true;
         }

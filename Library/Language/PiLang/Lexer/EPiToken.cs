@@ -1,6 +1,6 @@
-﻿namespace Diver.Language.PiLang
+﻿namespace Diver.Language
 {
-    public enum EToken
+    public enum EPiToken
     {
         None,
         Integer,

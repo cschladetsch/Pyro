@@ -1,6 +1,6 @@
-﻿namespace Diver.Language.PiLang
+﻿namespace Diver.Language
 {
-    public enum EAst
+    public enum EPiAst
     {
         None,
         Program,

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Diver.Tests
 {
@@ -11,7 +6,7 @@ namespace Diver.Tests
     public class TestConsole
     {
         [Test]
-        public void Test()
+        public void TestPrompt()
         {
             Assert.IsTrue(true);
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Diver.RhoLang.Lexer
 {
-    class TokenFactory
+    class RhoTokenFactory
     {
     }
 }

@@ -42,9 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parser\AstFactory.cs" />
-    <Compile Include="Parser\AstNode.cs" />
-    <Compile Include="Parser\EAst.cs" />
-    <Compile Include="Lexer\EToken.cs" />
+    <Compile Include="Parser\PiAstNode.cs" />
+    <Compile Include="Parser\EPiAst.cs" />
+    <Compile Include="Lexer\EPiToken.cs" />
     <Compile Include="Lexer\PiLexer.cs" />
     <Compile Include="Parser\IAstNode.cs" />
     <Compile Include="Parser\PiParser.cs" />

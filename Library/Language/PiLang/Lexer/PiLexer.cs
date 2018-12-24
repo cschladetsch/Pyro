@@ -1,7 +1,7 @@
-﻿namespace Diver.Language.PiLang
+﻿namespace Diver.Language
 {
     public class PiLexer
-        : LexerCommon<EToken, PiToken, PiTokenFactory>
+        : LexerCommon<EPiToken, PiToken, PiTokenFactory>
     {
         public PiLexer(string input)
             : base(input)
@@ -12,47 +12,47 @@
 
         protected override void AddKeyWords()
         {
-            _keyWords.Add("if", EToken.If);
-            _keyWords.Add("ife", EToken.IfElse);
-            _keyWords.Add("for", EToken.For);
-            _keyWords.Add("true", EToken.True);
-            _keyWords.Add("false", EToken.False);
-            _keyWords.Add("self", EToken.Self);
-            _keyWords.Add("while", EToken.While);
-            _keyWords.Add("assert", EToken.Assert);
-            _keyWords.Add("div", EToken.Divide);
-            _keyWords.Add("rho", EToken.ToRho);
-            _keyWords.Add("rho{", EToken.ToRhoSequence);
-            _keyWords.Add("not", EToken.Not);
-            _keyWords.Add("and", EToken.And);
-            _keyWords.Add("or", EToken.Or);
-            _keyWords.Add("xor", EToken.Xor);
-            _keyWords.Add("exists", EToken.Exists);
-            _keyWords.Add("drop", EToken.Drop);
-            _keyWords.Add("dup", EToken.Dup);
-            _keyWords.Add("over", EToken.Over);
-            _keyWords.Add("swap", EToken.Swap);
-            _keyWords.Add("rot", EToken.Rot);
-            _keyWords.Add("rotn", EToken.RotN);
-            _keyWords.Add("toarray", EToken.ToArray);
-            _keyWords.Add("gc", EToken.GarbageCollect);
-            _keyWords.Add("clear", EToken.Clear);
-            _keyWords.Add("cd", EToken.ChangeFolder);
-            _keyWords.Add("pwd", EToken.PrintFolder);
-            _keyWords.Add("type", EToken.GetType);
-            _keyWords.Add("size", EToken.Size);
-            _keyWords.Add("depth", EToken.Depth);
-            _keyWords.Add("new", EToken.New);
-            _keyWords.Add("dropn", EToken.DropN);
-            _keyWords.Add("tolist", EToken.ToList);
-            _keyWords.Add("tomap", EToken.ToMap);
-            _keyWords.Add("toset", EToken.ToSet);
-            _keyWords.Add("expand", EToken.Expand);
-            _keyWords.Add("noteq", EToken.NotEquiv);
-            _keyWords.Add("lls", EToken.Contents);
-            _keyWords.Add("ls", EToken.GetContents);
-            _keyWords.Add("freeze", EToken.Freeze);
-            _keyWords.Add("thaw", EToken.Thaw);
+            _keyWords.Add("if", EPiToken.If);
+            _keyWords.Add("ife", EPiToken.IfElse);
+            _keyWords.Add("for", EPiToken.For);
+            _keyWords.Add("true", EPiToken.True);
+            _keyWords.Add("false", EPiToken.False);
+            _keyWords.Add("self", EPiToken.Self);
+            _keyWords.Add("while", EPiToken.While);
+            _keyWords.Add("assert", EPiToken.Assert);
+            _keyWords.Add("div", EPiToken.Divide);
+            _keyWords.Add("rho", EPiToken.ToRho);
+            _keyWords.Add("rho{", EPiToken.ToRhoSequence);
+            _keyWords.Add("not", EPiToken.Not);
+            _keyWords.Add("and", EPiToken.And);
+            _keyWords.Add("or", EPiToken.Or);
+            _keyWords.Add("xor", EPiToken.Xor);
+            _keyWords.Add("exists", EPiToken.Exists);
+            _keyWords.Add("drop", EPiToken.Drop);
+            _keyWords.Add("dup", EPiToken.Dup);
+            _keyWords.Add("over", EPiToken.Over);
+            _keyWords.Add("swap", EPiToken.Swap);
+            _keyWords.Add("rot", EPiToken.Rot);
+            _keyWords.Add("rotn", EPiToken.RotN);
+            _keyWords.Add("toarray", EPiToken.ToArray);
+            _keyWords.Add("gc", EPiToken.GarbageCollect);
+            _keyWords.Add("clear", EPiToken.Clear);
+            _keyWords.Add("cd", EPiToken.ChangeFolder);
+            _keyWords.Add("pwd", EPiToken.PrintFolder);
+            _keyWords.Add("type", EPiToken.GetType);
+            _keyWords.Add("size", EPiToken.Size);
+            _keyWords.Add("depth", EPiToken.Depth);
+            _keyWords.Add("new", EPiToken.New);
+            _keyWords.Add("dropn", EPiToken.DropN);
+            _keyWords.Add("tolist", EPiToken.ToList);
+            _keyWords.Add("tomap", EPiToken.ToMap);
+            _keyWords.Add("toset", EPiToken.ToSet);
+            _keyWords.Add("expand", EPiToken.Expand);
+            _keyWords.Add("noteq", EPiToken.NotEquiv);
+            _keyWords.Add("lls", EPiToken.Contents);
+            _keyWords.Add("ls", EPiToken.GetContents);
+            _keyWords.Add("freeze", EPiToken.Freeze);
+            _keyWords.Add("thaw", EPiToken.Thaw);
         }
 
         protected override bool NextToken()
@@ -65,38 +65,38 @@
                 return IdentOrKeyword();
 
             if (char.IsDigit(current))
-                return AddSlice(EToken.Int, Gather(char.IsDigit));
+                return AddSlice(EPiToken.Int, Gather(char.IsDigit));
 
             switch (current)
             {
-            case Pathname.Quote: return Add(EToken.Quote);
-            case '{': return Add(EToken.OpenBrace);
-            case '}': return Add(EToken.CloseBrace);
-            case '(': return Add(EToken.OpenParan);
-            case ')': return Add(EToken.CloseParan);
-            case ':': return Add(EToken.Colon);
-            case ' ': return AddSlice(EToken.Whitespace, Gather(IsSpaceChar));
-            case '@': return Add(EToken.Retrieve);
-            case ',': return Add(EToken.Comma);
-            case '#': return Add(EToken.Store);
-            case '*': return Add(EToken.Multiply);
-            case '[': return Add(EToken.OpenSquareBracket);
-            case ']': return Add(EToken.CloseSquareBracket);
-            case '=': return AddIfNext('=', EToken.Equiv, EToken.Assign);
-            case '!': return Add(EToken.Replace);
-            case '&': return Add(EToken.Suspend);
-            case '|': return AddIfNext('|', EToken.Or, EToken.BitOr);
-            case '<': return AddIfNext('=', EToken.LessEquiv, EToken.LessEquiv);
-            case '>': return AddIfNext('=', EToken.GreaterEquiv, EToken.Greater);
+            case Pathname.Quote: return Add(EPiToken.Quote);
+            case '{': return Add(EPiToken.OpenBrace);
+            case '}': return Add(EPiToken.CloseBrace);
+            case '(': return Add(EPiToken.OpenParan);
+            case ')': return Add(EPiToken.CloseParan);
+            case ':': return Add(EPiToken.Colon);
+            case ' ': return AddSlice(EPiToken.Whitespace, Gather(IsSpaceChar));
+            case '@': return Add(EPiToken.Retrieve);
+            case ',': return Add(EPiToken.Comma);
+            case '#': return Add(EPiToken.Store);
+            case '*': return Add(EPiToken.Multiply);
+            case '[': return Add(EPiToken.OpenSquareBracket);
+            case ']': return Add(EPiToken.CloseSquareBracket);
+            case '=': return AddIfNext('=', EPiToken.Equiv, EPiToken.Assign);
+            case '!': return Add(EPiToken.Replace);
+            case '&': return Add(EPiToken.Suspend);
+            case '|': return AddIfNext('|', EPiToken.Or, EPiToken.BitOr);
+            case '<': return AddIfNext('=', EPiToken.LessEquiv, EPiToken.LessEquiv);
+            case '>': return AddIfNext('=', EPiToken.GreaterEquiv, EPiToken.Greater);
             case '"': return LexString(); 
-            case '\t': return Add(EToken.Tab);
-            case '\n': return Add(EToken.NewLine);
+            case '\t': return Add(EPiToken.Tab);
+            case '\n': return Add(EPiToken.NewLine);
             case '-':
                 if (Peek() == '-')
-                    return AddTwoCharOp(EToken.Decrement);
+                    return AddTwoCharOp(EPiToken.Decrement);
                 if (Peek() == '=')
-                    return AddTwoCharOp(EToken.MinusAssign);
-                return Add(EToken.Minus);
+                    return AddTwoCharOp(EPiToken.MinusAssign);
+                return Add(EPiToken.Minus);
 
             case '.':
                 if (Peek() == '.')
@@ -105,18 +105,18 @@
                     if (Peek() == '.')
                     {
                         Next();
-                        return Add(EToken.Resume, 3);
+                        return Add(EPiToken.Resume, 3);
                     }
                     return Fail("Two dots doesn't work");
                 }
-                return Add(EToken.Dot);
+                return Add(EPiToken.Dot);
 
             case '+':
                 if (Peek() == '+')
-                    return AddTwoCharOp(EToken.Increment);
+                    return AddTwoCharOp(EPiToken.Increment);
                 if (Peek() == '=')
-                    return AddTwoCharOp(EToken.PlusAssign);
-                return Add(EToken.Plus);
+                    return AddTwoCharOp(EPiToken.PlusAssign);
+                return Add(EPiToken.Plus);
 
             case '/':
                 if (Peek() == '/')
@@ -127,14 +127,14 @@
                         ;
 
                     var comment = _factory.NewToken(
-                        EToken.Comment,
+                        EPiToken.Comment,
                         new Slice(this, start, _offset));
                     _tokens.Add(comment);
                     return true;
                 }
 
-                //return LexError("/ is not a valid PiToken");//Add(EToken.Divide);
-                return Add(EToken.Separator);
+                //return LexError("/ is not a valid PiToken");//Add(EPiToken.Divide);
+                return Add(EPiToken.Separator);
             }
 
             LexError("Unrecognised %c");

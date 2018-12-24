@@ -1,29 +1,29 @@
-﻿namespace Diver.Language.PiLang
+﻿namespace Diver.Language
 {
     /// <summary>
     /// Makes Tokens because C# doesn't allow for constructors that take arguments on generic types
     /// </summary>
     public class PiTokenFactory
-        : ITokenFactory<EToken, PiToken>
+        : ITokenFactory<EPiToken, PiToken>
     {
-        public PiToken NewToken(EToken en, Slice slice)
+        public PiToken NewToken(EPiToken en, Slice slice)
         {
             return new PiToken(en, slice);
         }
 
         public PiToken NewTokenIdent(Slice slice)
         {
-            return NewToken(EToken.Ident, slice);
+            return NewToken(EPiToken.Ident, slice);
         }
 
         public PiToken NewTokenString(Slice slice)
         {
-            return NewToken(EToken.String, slice);
+            return NewToken(EPiToken.String, slice);
         }
 
         public PiToken NewEmptyToken(Slice slice)
         {
-            return NewToken(EToken.None, slice);
+            return NewToken(EPiToken.None, slice);
         }
 
         public void SetLexer(LexerBase lexer)

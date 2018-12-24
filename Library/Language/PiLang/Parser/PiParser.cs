@@ -3,9 +3,10 @@
 namespace Diver.Language.PiLang
 {
     /// <summary>
-    /// _parser for the Pi language. It's quite simple.
+    /// Parser for the Pi language. It's quite simple.
     /// </summary>
-    public class PiParser : ParserCommon<PiLexer, AstNode, PiToken, EToken, EAst, AstFactory>
+    public class PiParser
+        : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, AstFactory>
     {
         public PiParser(LexerBase lexer) : base(lexer, null)
         {
@@ -31,10 +32,10 @@ namespace Diver.Language.PiLang
             {
                 switch (tok.Type)
                 {
-                    case EToken.Whitespace:
-                    case EToken.Tab:
-                    case EToken.NewLine:
-                    case EToken.Comment:
+                    case EPiToken.Whitespace:
+                    case EPiToken.Tab:
+                    case EPiToken.NewLine:
+                    case EPiToken.Comment:
                         continue;
                 }
 
@@ -44,32 +45,32 @@ namespace Diver.Language.PiLang
 
         private bool Run(EStructure st)
         {
-            _root = _astFactory.New(EAst.Continuation);
+            _root = _astFactory.New(EPiAst.Continuation);
             while (!Failed && NextSingle(_root))
                 ;
             return !Failed;
         }
 
-        private bool NextSingle(AstNode context)
+        private bool NextSingle(PiAstNode context)
         {
             if (Empty())
                 return false;
 
             switch (Current().Type)
             {
-                case EToken.Quote:
-                case EToken.Separator:
-                case EToken.Ident:
+                case EPiToken.Quote:
+                case EPiToken.Separator:
+                case EPiToken.Ident:
                     return ParsePathname(context);
 
-                case EToken.OpenSquareBracket:
-                    return ParseCompound(context, EAst.Array, EToken.CloseSquareBracket);
-                case EToken.OpenBrace:
-                    return ParseCompound(context, EAst.Continuation, EToken.CloseBrace);
-                case EToken.CloseSquareBracket:
-                case EToken.CloseBrace:
+                case EPiToken.OpenSquareBracket:
+                    return ParseCompound(context, EPiAst.Array, EPiToken.CloseSquareBracket);
+                case EPiToken.OpenBrace:
+                    return ParseCompound(context, EPiAst.Continuation, EPiToken.CloseBrace);
+                case EPiToken.CloseSquareBracket:
+                case EPiToken.CloseBrace:
                     return Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
-                case EToken.None:
+                case EPiToken.None:
                     return false;
                 default:
                     context.Add(AddValue(_astFactory.New(Consume())));
@@ -77,29 +78,29 @@ namespace Diver.Language.PiLang
             }
         }
 
-        private bool ParsePathname(AstNode context)
+        private bool ParsePathname(PiAstNode context)
         {
             var elements = new List<Pathname.Element>();
-            var prev = EToken.None;
+            var prev = EPiToken.None;
             var quoted = false;
             while (true)
             {
                 switch (Current().Type)
                 {
-                    case EToken.Quote:
-                        if (quoted || prev != EToken.None)
+                    case EPiToken.Quote:
+                        if (quoted || prev != EPiToken.None)
                             return FailLocation("Malformed pathname");
                         quoted = true;
                         break;
-                    case EToken.Separator:
-                        if (prev == EToken.Separator)
+                    case EPiToken.Separator:
+                        if (prev == EPiToken.Separator)
                             return FailLocation("Malformed pathname");
                         elements.Add(new Pathname.Element(Pathname.EElementType.Separator));
                         break;
-                    case EToken.Ident:
+                    case EPiToken.Ident:
                         // we can have an ident after an optional initial quote, or after a separator
-                        var start = prev == EToken.None || prev == EToken.Quote;
-                        if (start ^ prev != EToken.Separator)
+                        var start = prev == EPiToken.None || prev == EPiToken.Quote;
+                        if (start ^ prev != EPiToken.Separator)
                             return FailLocation("Malformed pathname");
                         elements.Add(new Pathname.Element(Current().Text));
                         break;
@@ -114,15 +115,15 @@ namespace Diver.Language.PiLang
             }
 
             done:
-            AstNode node = null;
+            PiAstNode node = null;
             if (elements.Count == 1 && elements[0].Type == Pathname.EElementType.Ident)
             {
-                node = NewNode(EAst.Ident);
+                node = NewNode(EPiAst.Ident);
                 node.Value = new Label(elements[0].Ident, quoted);
             }
             else
             {
-                node = NewNode(EAst.Pathname);
+                node = NewNode(EPiAst.Pathname);
                 node.Value = new Pathname(elements, quoted);
             }
             context.Add(node);
@@ -135,16 +136,16 @@ namespace Diver.Language.PiLang
             return Fail(_lexer.CreateErrorMessage(Current(), fmt, args));
         }
 
-        private static AstNode AddValue(AstNode node)
+        private static PiAstNode AddValue(PiAstNode node)
         {
             var token = node.PiToken;
             var text = token.GetText();
             switch (token.Type)
             {
-                case EToken.Int:
+                case EPiToken.Int:
                     node.Value = int.Parse(text);
                     break;
-                case EToken.String:
+                case EPiToken.String:
                     node.Value = text;
                     break;
                 default:
@@ -155,7 +156,7 @@ namespace Diver.Language.PiLang
             return node;
         }
 
-        private bool ParseCompound(AstNode root, EAst type, EToken end)
+        private bool ParseCompound(PiAstNode root, EPiAst type, EPiToken end)
         {
             Consume();
             var node = NewNode(type);

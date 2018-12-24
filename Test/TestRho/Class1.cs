@@ -6,8 +6,9 @@ namespace Diver.Test.Rho
     public class TestLexer
     {
         [Test]
-        void TestBasic()
+        public void TestBasic()
         {
+            Assert.IsTrue(true);
         }
     }
 }
