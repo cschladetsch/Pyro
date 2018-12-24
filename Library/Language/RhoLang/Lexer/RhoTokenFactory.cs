@@ -1,12 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Diver.Language;
 
-namespace Diver.RhoLang.Lexer
+namespace Diver.RhoLang
 {
-    class RhoTokenFactory
+    public class RhoTokenFactory : ITokenFactory<ERhoToken, RhoToken>
     {
+        public RhoToken NewToken(ERhoToken en, Slice slice)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public RhoToken NewTokenIdent(Slice slice)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public RhoToken NewTokenString(Slice slice)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public RhoToken NewEmptyToken(Slice slice)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetLexer(LexerBase lexer)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

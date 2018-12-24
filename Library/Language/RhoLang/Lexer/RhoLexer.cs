@@ -2,11 +2,11 @@
 
 namespace Diver.Language
 {
-    public class RhoLexer : ILexerCommon<RhoToken>
+    public class RhoLexer 
+        : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory>
     {
-        public string CreateErrorMessage(RhoToken tok, string fmt, params object[] args)
+        public RhoLexer(string input) : base(input)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

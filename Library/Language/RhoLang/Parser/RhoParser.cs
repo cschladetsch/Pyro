@@ -1,7 +1,4 @@
-﻿using Diver.RhoLang;
-using Diver.RhoLang.Lexer;
-
-namespace Diver.Language
+﻿namespace Diver.Language
 {
     /// <summary>
     /// Parser for the Pi language. It's quite simple.
