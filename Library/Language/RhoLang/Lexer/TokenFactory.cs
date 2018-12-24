@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Diver.Language.RhoLang
+namespace Diver.RhoLang.Lexer
 {
-    public class TokenFactory
+    class TokenFactory
     {
     }
 }

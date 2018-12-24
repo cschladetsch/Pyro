@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Driver.Language.RhoLang
+namespace Diver.RhoLang.Parser
 {
-    internal class AstNode
+    class AstNode
     {
     }
 }

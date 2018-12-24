@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RhoLang
+namespace Diver.RhoLang
 {
-    public class Class1
+    class Translator
     {
     }
 }

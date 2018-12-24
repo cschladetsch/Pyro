@@ -4,9 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Driver.Language.RhoLang
+namespace Diver.RhoLang
 {
-    internal enum EAst
+    public enum EAst
     {
+        None,
+        Int,
+        String,
+
+        Plus,
+        Minus,
+
+        Call,
+        Assign,
+        Equiv,
+        Ident,
+        Continuation,
+        Lambda,
+
     }
 }
