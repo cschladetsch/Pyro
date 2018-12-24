@@ -4,6 +4,8 @@
     {
         None,
         Int,
+        Float,
+        IpAddress,
         String,
         Plus,
         Minus,
@@ -12,6 +14,8 @@
         Equiv,
         Ident,
         Continuation,
+        FunDev,
+        ArgList,
         Lambda,
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Diver.Language
 {
     /// <summary>
-    /// Parser for the Pi language. It's quite simple.
+    /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.
     /// </summary>
     public class RhoParser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
@@ -17,10 +17,10 @@
             _indent = 0;
             _lexer = lex;
 
-            //if (_lexer.Failed)
-            //    return Fail(_lexer.Error);
+            if (_lexer.Failed)
+                return Fail(_lexer.Error);
 
-            //RemoveWhitespace();
+            //RemoveWhitespace()n
 
             //return Run(structure);
 

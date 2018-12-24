@@ -7,6 +7,7 @@
         Float,
         Int,
         String,
+        IpAddress,
         True,
         False,
         Ident,
