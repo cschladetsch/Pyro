@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
 
-namespace Diver.Language.PiLang
+namespace Diver.Language
 {
     /// <summary>
     /// Translates input Pi text source code to an executable Continuation
     /// </summary>
-    public class Translator : ProcessCommon
+    public class PiTranslator : ProcessCommon
     {
         public IRef<Continuation> Continuation;
         public PiLexer Lexer => _lexer;
         public PiParser Parser => _parser;
 
-        public Translator(IRegistry reg, string input) : base(reg)
+        public PiTranslator(IRegistry reg, string input) : base(reg)
         {
             Run(input);
         }
@@ -37,7 +37,7 @@ namespace Diver.Language.PiLang
 
         public override string ToString()
         {
-            return $"=== Translator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {Parser}";
+            return $"=== PITranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {Parser}";
         }
 
         private bool TranslateNode(PiAstNode node, IList<object> objects)

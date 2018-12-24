@@ -50,7 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lexer\PiToken.cs" />
     <Compile Include="Lexer\PiTokenFactory.cs" />
-    <Compile Include="Translator.cs" />
+    <Compile Include="PITranslator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.csproj">

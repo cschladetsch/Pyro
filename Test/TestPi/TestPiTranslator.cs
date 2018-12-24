@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
-using Diver.Language.PiLang;
 using NUnit.Framework;
+using Diver.Language;
 
 namespace Diver.Test
 {
@@ -54,7 +54,7 @@ namespace Diver.Test
 
         private IRef<Continuation> Translate(string text)
         {
-            var trans = new Translator(_reg, text);
+            var trans = new PiTranslator(_reg, text);
             WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Continuation;
