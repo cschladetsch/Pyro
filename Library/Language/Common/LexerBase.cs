@@ -30,7 +30,7 @@ namespace Diver.Language
 
         public string GetText(Slice slice)
         {
-            return _lines[slice.LineNumber].Substring(slice.Start, slice.End);
+            return _lines[slice.LineNumber].Substring(slice.Start, slice.Length);
         }
 
         protected void CreateLines()

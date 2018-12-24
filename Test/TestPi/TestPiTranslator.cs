@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Diver.Exec;
 using Diver.Language.PiLang;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Diver.Test
 {
     [TestFixture]
-    public class TestTranslator : TestCommon
+    public class TestPiTranslator : TestCommon
     {
         [Test]
         public void TestAdd()

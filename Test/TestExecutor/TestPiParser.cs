@@ -13,9 +13,9 @@ namespace Diver.Test
         [Test]
         public void TestSimpleTokens()
         {
-            var lexer = new Lexer("1 2 3 + +");
+            var lexer = new PiLexer("1 2 3 + +");
             Assert.IsTrue(lexer.Process());
-            var parser = new Parser(lexer);
+            var parser = new PiParser(lexer);
             if (parser.Failed)
                 Debug.WriteLine(parser.Error);
             Assert.IsTrue(parser.Process(lexer, EStructure.None));

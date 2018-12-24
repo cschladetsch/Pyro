@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using Diver.Exec;
 using NUnit.Framework;
 
 using Diver.Language;
@@ -14,16 +10,48 @@ namespace Diver.Test
     [TestFixture()]
     class TestPiParser : TestCommon
     {
-        protected internal Parser Parser;
+        protected internal PiParser Parser;
         protected internal IList<AstNode> Sequence => Parser.Root.Children;
+        protected internal AstNode First => Sequence?[0];
 
         [Test]
         public void TestSimpleTokens()
         {
-            var lexer = new Lexer("1 2 3");
+            var lexer = new PiLexer("1 2 3");
             Assert.IsTrue(lexer.Process());
-            var parser = new Parser(lexer);
+            var parser = new PiParser(lexer);
             Assert.IsTrue(parser.Process(lexer));
+        }
+
+        [Test]
+        public void TestPathnames()
+        {
+            Parse("foo");
+            Assert.AreEqual(EAst.Ident, First.Type);
+            Assert.AreEqual("foo", First.Value.ToString());
+            var ident = First.Value as Label;
+            Assert.IsNotNull(ident);
+            Assert.IsFalse(ident.Quoted);
+
+            Parse("'foo", true);
+            Assert.AreEqual(EAst.Ident, First.Type);
+            var ident1 = First.Value as Label;
+            Assert.IsNotNull(ident1);
+            Assert.IsTrue(ident1.Quoted);
+
+            Assert.AreEqual("'foo", First.Value.ToString());
+
+            Parse("foo/bar");
+            Assert.AreEqual(EAst.Pathname, First.Type);
+            Assert.AreEqual("foo/bar", First.Value.ToString());
+
+            Parse("'foo/bar");
+            Assert.AreEqual(EAst.Pathname, First.Type);
+            Assert.AreEqual("'foo/bar", First.Value.ToString());
+
+            Parse("'foo/bar/spam");
+            Assert.AreEqual(EAst.Pathname, First.Type);
+            Assert.AreEqual("'foo/bar/spam", First.Value.ToString());
         }
 
         [Test]
@@ -54,14 +82,18 @@ namespace Diver.Test
         //    Assert.AreEqual(3, nested[2]);
         //}
 
-        private void Parse(string text)
+        private void Parse(string text, bool verbose = false)
         {
-            var lexer = new Lexer(text);
+            var lexer = new PiLexer(text);
             Assert.IsTrue(lexer.Process());
+            if (verbose)
+                WriteLine(lexer.ToString());
             if (lexer.Failed)
-                Debug.WriteLine(lexer.Error);
-            Parser = new Parser(lexer);
+                WriteLine(lexer.Error);
+            Parser = new PiParser(lexer);
             Parser.Process(lexer, EStructure.None);
+            if (verbose)
+                WriteLine(Parser.PrintTree());
             if (Parser.Failed)
                 Debug.WriteLine(Parser.Error);
             Assert.IsFalse(Parser.Failed);

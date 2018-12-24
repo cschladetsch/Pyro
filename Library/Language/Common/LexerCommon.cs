@@ -129,7 +129,7 @@ namespace Diver.Language
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args)
         {
-            var buff = $"({tok.LineNumber}):[{tok.Slice.Start}: {string.Format(fmt, args)}";
+            var buff = $"({tok.LineNumber}):[{tok.Slice.Start}]: {string.Format(fmt, args)}";
             int beforeContext = 2;
             int afterContext = 2;
 

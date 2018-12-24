@@ -5,7 +5,7 @@ namespace Diver.Language.PiLang
     public class AstNode //: IAstNode<AstNode>
     {
         public EAst Type = EAst.None;
-        public Token Token;
+        public PiToken PiToken;
         public object Value;
         public IList<AstNode> Children => _children;
 
@@ -21,13 +21,13 @@ namespace Diver.Language.PiLang
         public AstNode(EToken type)
         {
             Type = EAst.TokenType;
-            Token = new Token() {Type = type};
+            PiToken = new PiToken() {Type = type};
         }
 
-        public AstNode(EAst type, Token token)
+        public AstNode(EAst type, PiToken piToken)
         {
             Type = type;
-            Token = token;
+            PiToken = piToken;
         }
 
         public AstNode(EAst type, object value)
@@ -38,7 +38,7 @@ namespace Diver.Language.PiLang
 
         public override string ToString()
         {
-            return $"{Type}: '{Token}'";
+            return $"{Type}: '{PiToken}'";
         }
 
         public void Add(AstNode node)

@@ -59,7 +59,7 @@ namespace Diver.Language
             return PrintTree();//_astFactory.GetChildren(_root)[0].ToString();
         }
 
-        void PrintTree(StringBuilder str, int level, TAstNode root)
+        private void PrintTree(StringBuilder str, int level, TAstNode root)
         {
             var val = root.ToString();
             if (string.IsNullOrEmpty(val))
@@ -67,8 +67,6 @@ namespace Diver.Language
             for (int n = 0; n < level; ++n)
                 str.Append("    ");
 
-            //trtring indent(4 * level, ' ');
-            //structure << indent << val.c_str() << std::endl;
             str.Append(val);
             str.Append(Environment.NewLine);
             foreach (var ch in _astFactory.GetChildren(root))

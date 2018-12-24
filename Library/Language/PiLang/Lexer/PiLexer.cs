@@ -1,12 +1,12 @@
 ﻿namespace Diver.Language.PiLang
 {
-    public class Lexer
-        : LexerCommon<EToken, Token, TokenFactory>
+    public class PiLexer
+        : LexerCommon<EToken, PiToken, PiTokenFactory>
     {
-        public Lexer(string input)
+        public PiLexer(string input)
             : base(input)
         {
-            var factory = new TokenFactory();
+            var factory = new PiTokenFactory();
             factory.SetLexer(this);
         }
 
@@ -62,14 +62,14 @@
                 return false;
 
             if (char.IsLetter(current))
-                return PathnameOrKeyword();
+                return IdentOrKeyword();
 
             if (char.IsDigit(current))
-                return AddSlice(EToken.Int, Gather(char.IsDigit));//Gather(char.IsDigit));
+                return AddSlice(EToken.Int, Gather(char.IsDigit));
 
             switch (current)
             {
-            //case '\'': return PathnameOrKeyword();
+            case Pathname.Quote: return Add(EToken.Quote);
             case '{': return Add(EToken.OpenBrace);
             case '}': return Add(EToken.CloseBrace);
             case '(': return Add(EToken.OpenParan);
@@ -88,7 +88,7 @@
             case '|': return AddIfNext('|', EToken.Or, EToken.BitOr);
             case '<': return AddIfNext('=', EToken.LessEquiv, EToken.LessEquiv);
             case '>': return AddIfNext('=', EToken.GreaterEquiv, EToken.Greater);
-            case '"': return LexString(); // "comment to unfuck Visual Studio Code's syntax hilighter
+            case '"': return LexString(); 
             case '\t': return Add(EToken.Tab);
             case '\n': return Add(EToken.NewLine);
             case '-':
@@ -109,7 +109,7 @@
                     }
                     return Fail("Two dots doesn't work");
                 }
-                return Add(EToken.Self);
+                return Add(EToken.Dot);
 
             case '+':
                 if (Peek() == '+')
@@ -133,7 +133,7 @@
                     return true;
                 }
 
-                //return LexError("/ is not a valid Token");//Add(EToken.Divide);
+                //return LexError("/ is not a valid PiToken");//Add(EToken.Divide);
                 return Add(EToken.Separator);
             }
 
@@ -142,10 +142,9 @@
             return false;
         }
 
-        private bool PathnameOrKeyword()
+        private bool IdentOrKeyword()
         {
             var begin = _offset;
-            var start = Current();
             Next();
             while (char.IsLetterOrDigit(Current()))
                 Next();

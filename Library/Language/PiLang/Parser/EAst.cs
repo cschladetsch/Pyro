@@ -11,6 +11,8 @@
         Array,
         Continuation,
         TokenType,
+        Ident,
+        Pathname,
         Object
     }
 }

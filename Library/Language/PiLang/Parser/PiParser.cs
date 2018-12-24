@@ -1,17 +1,17 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Diver.Language.PiLang
 {
     /// <summary>
-    /// Parser for the Pi language. It's quite simple.
+    /// _parser for the Pi language. It's quite simple.
     /// </summary>
-    public class Parser : ParserCommon<Lexer, AstNode, Token, EToken, EAst, AstFactory>
+    public class PiParser : ParserCommon<PiLexer, AstNode, PiToken, EToken, EAst, AstFactory>
     {
-        public Parser(LexerBase lexer) : base(lexer, null)
+        public PiParser(LexerBase lexer) : base(lexer, null)
         {
         }
 
-        public override bool Process(Lexer lex, EStructure structure = EStructure.None)
+        public override bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
             _current = 0;
             _indent = 0;
@@ -57,14 +57,18 @@ namespace Diver.Language.PiLang
 
             switch (Current().Type)
             {
+                case EToken.Quote:
+                case EToken.Separator:
+                case EToken.Ident:
+                    return ParsePathname(context);
+
                 case EToken.OpenSquareBracket:
                     return ParseCompound(context, EAst.Array, EToken.CloseSquareBracket);
                 case EToken.OpenBrace:
                     return ParseCompound(context, EAst.Continuation, EToken.CloseBrace);
                 case EToken.CloseSquareBracket:
                 case EToken.CloseBrace:
-                    Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
-                    return false;
+                    return Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
                 case EToken.None:
                     return false;
                 default:
@@ -73,9 +77,67 @@ namespace Diver.Language.PiLang
             }
         }
 
+        private bool ParsePathname(AstNode context)
+        {
+            var elements = new List<Pathname.Element>();
+            var prev = EToken.None;
+            var quoted = false;
+            while (true)
+            {
+                switch (Current().Type)
+                {
+                    case EToken.Quote:
+                        if (quoted || prev != EToken.None)
+                            return FailLocation("Malformed pathname");
+                        quoted = true;
+                        break;
+                    case EToken.Separator:
+                        if (prev == EToken.Separator)
+                            return FailLocation("Malformed pathname");
+                        elements.Add(new Pathname.Element(Pathname.EElementType.Separator));
+                        break;
+                    case EToken.Ident:
+                        // we can have an ident after an optional initial quote, or after a separator
+                        var start = prev == EToken.None || prev == EToken.Quote;
+                        if (start ^ prev != EToken.Separator)
+                            return FailLocation("Malformed pathname");
+                        elements.Add(new Pathname.Element(Current().Text));
+                        break;
+                    default:
+                        goto done;
+                }
+
+                prev = Current().Type;
+                Consume();
+                if (Empty())
+                    break;
+            }
+
+            done:
+            AstNode node = null;
+            if (elements.Count == 1 && elements[0].Type == Pathname.EElementType.Ident)
+            {
+                node = NewNode(EAst.Ident);
+                node.Value = new Label(elements[0].Ident, quoted);
+            }
+            else
+            {
+                node = NewNode(EAst.Pathname);
+                node.Value = new Pathname(elements, quoted);
+            }
+            context.Add(node);
+
+            return true;
+        }
+
+        bool FailLocation(string fmt, params object[] args)
+        {
+            return Fail(_lexer.CreateErrorMessage(Current(), fmt, args));
+        }
+
         private static AstNode AddValue(AstNode node)
         {
-            var token = node.Token;
+            var token = node.PiToken;
             var text = token.GetText();
             switch (token.Type)
             {

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Diver.Test
 {
     [TestFixture]
-    public class TestPi
+    public class TestPiLexer : TestCommon
     {
         [Test]
         public void TestNumbersAndOps()
@@ -15,6 +15,14 @@ namespace Diver.Test
                 EToken.Int, EToken.Int, EToken.Plus, 
                 EToken.Int, EToken.Minus, EToken.Int, EToken.Multiply
             );
+        }
+
+        [Test]
+        public void TestPathnames()
+        {
+            AssertSameTokens("ident", EToken.Ident);
+            AssertSameTokens("ident/ident", EToken.Ident, EToken.Separator, EToken.Ident);
+            AssertSameTokens("'ident/ident", EToken.Quote, EToken.Ident, EToken.Separator, EToken.Ident);
         }
 
         [Test]
@@ -31,14 +39,16 @@ namespace Diver.Test
 
         private void AssertSameTokens(string input, params EToken[] tokens)
         {
-            var lex = new Lexer(input);
+            var lex = new PiLexer(input);
+            if (lex.Failed)
+                WriteLine("LexerFailed: {0}", lex.Error);
             Assert.IsTrue(lex.Process());
             Assert.IsTrue(lex.Tokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).SequenceEqual(tokens));
         }
 
-        private bool IsWhiteSpace(Token token)
+        private bool IsWhiteSpace(PiToken piToken)
         {
-            switch (token.Type)
+            switch (piToken.Type)
             {
                 case EToken.Whitespace:
                 case EToken.Tab:

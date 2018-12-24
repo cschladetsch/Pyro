@@ -10,8 +10,8 @@ namespace Diver.Language.PiLang
     public class Translator : ProcessCommon
     {
         public IRef<Continuation> Continuation;
-        public Lexer Lexer => _lexer;
-        public Parser Parser => _parser;
+        public PiLexer Lexer => _lexer;
+        public PiParser Parser => Parser;
 
         public Translator(IRegistry reg, string input) : base(reg)
         {
@@ -20,23 +20,23 @@ namespace Diver.Language.PiLang
 
         public bool Run(string input)
         {
-            _lexer = new Lexer(input);
+            _lexer = new PiLexer(input);
             
             if (!_lexer.Process())
                 return Fail($"LexerError: {_lexer.Error}");
 
-            _parser = new Parser(_lexer);
-            if (!_parser.Process(_lexer, EStructure.Sequence))
-                return Fail($"ParserError: {_parser.Error}");
+            _parser = new PiParser(_lexer);
+            if (!Parser.Process(_lexer, EStructure.Sequence))
+                return Fail($"ParserError: {Parser.Error}");
 
             Continuation = New(new Continuation(new List<object>()));
 
-            return TranslateNode(_parser.Root, Continuation.Value.Code);
+            return TranslateNode(Parser.Root, Continuation.Value.Code);
         }
 
         public override string ToString()
         {
-            return $"=== Translator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}";
+            return $"=== Translator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {Parser}";
         }
 
         private bool TranslateNode(AstNode node, IList<object> objects)
@@ -76,7 +76,7 @@ namespace Diver.Language.PiLang
 
         private void AddToken(AstNode node, IList<object> objects)
         {
-            var token = node.Token;
+            var token = node.PiToken;
             switch (token.Type)
             {
                 case EToken.Plus:
@@ -129,7 +129,7 @@ namespace Diver.Language.PiLang
             return true;
         }
 
-        private Lexer _lexer;
-        protected internal Parser _parser;
+        private PiLexer _lexer;
+        protected internal PiParser _parser;
     }
 }

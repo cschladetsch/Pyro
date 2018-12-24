@@ -1,15 +1,15 @@
 ﻿namespace Diver.Language.PiLang
 {
-    public class Token 
+    public class PiToken 
         : TokenBase<EToken>
         , ITokenNode<EToken>
     {
-        public Token()
+        public PiToken()
         {
             _type = EToken.None;
         }
 
-        public Token(EToken type, Slice slice)
+        public PiToken(EToken type, Slice slice)
             : base(type, slice)
         {
         }

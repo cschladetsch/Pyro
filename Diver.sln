@@ -111,6 +111,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauLang", "Library\Language
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "Test\TestConsole\TestConsole.csproj", "{C841442A-0CD1-4AEE-9BBA-B41757E1BC45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRho", "Test\TestRho\TestRho.csproj", "{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -193,6 +195,10 @@ Global
 		{C841442A-0CD1-4AEE-9BBA-B41757E1BC45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C841442A-0CD1-4AEE-9BBA-B41757E1BC45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C841442A-0CD1-4AEE-9BBA-B41757E1BC45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,6 +231,7 @@ Global
 		{329084C8-82D9-44C9-86DD-FA587C1A6FA4} = {789EF740-5925-4AF1-9E55-3315E731EE8A}
 		{BA0FB904-B750-4C6A-93B0-44265B4408E8} = {789EF740-5925-4AF1-9E55-3315E731EE8A}
 		{C841442A-0CD1-4AEE-9BBA-B41757E1BC45} = {633E509A-26A0-410E-BF83-91201ECBB488}
+		{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E} = {633E509A-26A0-410E-BF83-91201ECBB488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B78CF9FE-EE87-47B6-99F7-300B5AEFB5BC}

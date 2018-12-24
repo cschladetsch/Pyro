@@ -57,6 +57,7 @@
     <Compile Include="IClass.cs" />
     <Compile Include="IClassBase.cs" />
     <Compile Include="IConstRefBase.cs" />
+    <Compile Include="IdentBase.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="Impl\Class.cs" />
     <Compile Include="Impl\ClassBase.cs" />
@@ -77,8 +78,10 @@
     <Compile Include="Impl\Registry.cs" />
     <Compile Include="IRegistry.cs" />
     <Compile Include="BuiltinTypes\Map.cs" />
+    <Compile Include="Label.cs" />
     <Compile Include="Operations.cs" />
     <Compile Include="Pair.cs" />
+    <Compile Include="Pathname.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRef.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

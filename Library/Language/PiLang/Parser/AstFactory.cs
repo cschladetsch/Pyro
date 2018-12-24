@@ -5,7 +5,7 @@ namespace Diver.Language.PiLang
     /// <summary>
     /// Ast node factory for Pi lang
     /// </summary>
-    public class AstFactory : IAstFactory<Token, AstNode, EAst>
+    public class AstFactory : IAstFactory<PiToken, AstNode, EAst>
     {
         public void AddChild(AstNode parent, AstNode node)
         {
@@ -17,12 +17,12 @@ namespace Diver.Language.PiLang
             parent.Children.Add(new AstNode(EAst.Object, node));
         }
 
-        public AstNode New(Token token)
+        public AstNode New(PiToken piToken)
         {
-            return new AstNode(EAst.TokenType, token);
+            return new AstNode(EAst.TokenType, piToken);
         }
 
-        public AstNode New(EAst e, Token t)
+        public AstNode New(EAst e, PiToken t)
         {
             return new AstNode(e, t);
         }

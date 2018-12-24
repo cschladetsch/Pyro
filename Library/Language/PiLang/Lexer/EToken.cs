@@ -96,6 +96,8 @@
         PlusAssign,
         Comment,
         Retrieve,
-        Separator
+        Separator,
+        Dot,
+        Quote,
     }
 }

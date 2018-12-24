@@ -3,25 +3,25 @@
     /// <summary>
     /// Makes Tokens because C# doesn't allow for constructors that take arguments on generic types
     /// </summary>
-    public class TokenFactory
-        : ITokenFactory<EToken, Token>
+    public class PiTokenFactory
+        : ITokenFactory<EToken, PiToken>
     {
-        public Token NewToken(EToken en, Slice slice)
+        public PiToken NewToken(EToken en, Slice slice)
         {
-            return new Token(en, slice);
+            return new PiToken(en, slice);
         }
 
-        public Token NewTokenIdent(Slice slice)
+        public PiToken NewTokenIdent(Slice slice)
         {
             return NewToken(EToken.Ident, slice);
         }
 
-        public Token NewTokenString(Slice slice)
+        public PiToken NewTokenString(Slice slice)
         {
             return NewToken(EToken.String, slice);
         }
 
-        public Token NewEmptyToken(Slice slice)
+        public PiToken NewEmptyToken(Slice slice)
         {
             return NewToken(EToken.None, slice);
         }

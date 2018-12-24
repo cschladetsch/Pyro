@@ -32,14 +32,14 @@ namespace Diver.Test
 
         private void AssertSameTokens(string input, params EToken[] tokens)
         {
-            var lex = new Lexer(input);
+            var lex = new PiLexer(input);
             Assert.IsTrue(lex.Process());
             Assert.IsTrue(lex.Tokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).SequenceEqual(tokens));
         }
 
-        private bool IsWhiteSpace(Token token)
+        private bool IsWhiteSpace(PiToken piToken)
         {
-            switch (token.Type)
+            switch (piToken.Type)
             {
                 case EToken.Whitespace:
                 case EToken.Tab:
