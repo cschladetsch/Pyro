@@ -30,6 +30,10 @@ namespace Diver
     {
     }
 
+    public class AssertionFailedException : Exception
+    {
+    }
+
     public class DataStackEmptyException : Exception
     {
     }

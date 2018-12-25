@@ -83,28 +83,37 @@ namespace Diver.Language
             switch (token.Type)
             {
                 case EPiToken.Plus:
-                    objects.Add(New(EOperation.Plus));
+                    objects.Add(EOperation.Plus);
                     break;
                 case EPiToken.Minus:
-                    objects.Add(New(EOperation.Minus));
+                    objects.Add(EOperation.Minus);
                     break;
                 case EPiToken.Store:
-                    objects.Add(New(EOperation.Store));
+                    objects.Add(EOperation.Store);
                     break;
                 case EPiToken.Retrieve:
-                    objects.Add(New(EOperation.Retrieve));
+                    objects.Add(EOperation.Retrieve);
                     break;
                 case EPiToken.Dup:
-                    objects.Add(New(EOperation.Dup));
+                    objects.Add(EOperation.Dup);
                     break;
                 case EPiToken.Clear:
-                    objects.Add(New(EOperation.Clear));
+                    objects.Add(EOperation.Clear);
                     break;
                 case EPiToken.Swap:
-                    objects.Add(New(EOperation.Swap));
+                    objects.Add(EOperation.Swap);
                     break;
                 case EPiToken.Break:
-                    objects.Add(New(EOperation.Break));
+                    objects.Add(EOperation.Break);
+                    break;
+                case EPiToken.Assert:
+                    objects.Add(EOperation.Assert);
+                    break;
+                case EPiToken.True:
+                    objects.Add(true);
+                    break;
+                case EPiToken.False:
+                    objects.Add(false);
                     break;
                 default:
                     objects.Add(node.Value);

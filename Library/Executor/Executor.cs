@@ -41,6 +41,13 @@ namespace Diver.Exec
 
             _actions[EOperation.Store] = StoreValue;
             _actions[EOperation.Retrieve] = GetValue;
+            _actions[EOperation.Assert] = Assert;
+        }
+
+        void Assert()
+        {
+            if (!Pop<bool>())
+                throw new AssertionFailedException();
         }
 
         private dynamic ResolvePop()
@@ -78,42 +85,45 @@ namespace Diver.Exec
             _current = continuation;
             while (true)
             {
-                var cont = _current.Value;
-
-                while (cont.Next(out var next))
-                {
-                    if (next is IRef<EOperation> op)
-                    {
-                        if (_actions.TryGetValue(op.Value, out var action))
-                        {
-                            action();
-                        }
-                        else
-                        {
-                            throw new NotImplementedException($"Operation {op.Value}");
-                        }
-                    }
-                    else
-                    {
-                        var item = Resolve(next);
-                        if (item == null)
-                        {
-                            item = Resolve(next);
-                            throw new NullValueException();
-                        }
-                        _data.Push(item);
-                    }
-
-                    if (_break)
-                        break;
-                }
-
+                Execute(_current.Value);
                 _break = false;
-
                 if (_context.Count > 0)
                     _current = _context.Pop();
                 else
                     break;
+            }
+        }
+
+        private void Execute(Continuation cont)
+        {
+            while (cont.Next(out var next))
+            {
+                // unbox reference types
+                if (next is IRefBase refBase)
+                    next = refBase.BaseValue;
+
+                Perform(next);
+
+                if (_break)
+                    break;
+            }
+        }
+
+        private void Perform(object next)
+        {
+            if (next is EOperation op)
+            {
+                if (_actions.TryGetValue(op, out var action))
+                    action();
+                else
+                    throw new NotImplementedException($"Operation {op}");
+            }
+            else
+            {
+                var item = Resolve(next);
+                if (item == null)
+                    throw new NullValueException();
+                _data.Push(item);
             }
         }
 

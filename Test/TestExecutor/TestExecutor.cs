@@ -32,7 +32,7 @@ namespace Diver.Test
         [Test]
         public void TestStrings()
         {
-            TestPrimitives("foo", "bar", "barfoo");
+            TestPrimitives("foo", "bar", "foobar");
         }
     }
 }

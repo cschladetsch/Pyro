@@ -20,7 +20,17 @@ namespace Diver.Test
         [Test]
         public void TestBreak()
         {
-            Assert.Throws<DebugBreakException>(() => Run("break"));
+            Assert.Throws<DebugBreakException>(
+                () => Run("break"));
+        }
+
+        [Test]
+        public void TestAssertion()
+        {
+            Run("true assert");
+            Run("true not not assert");
+            Assert.Throws<AssertionFailedException>(
+                () => Run("false assert"));
         }
 
         [Test]
@@ -79,5 +89,4 @@ namespace Diver.Test
         private Dictionary<string, object> _scope => _continuation.Value.Scope;
         private IList<object> _code => _continuation.Value.Code;
     }
-
 }
