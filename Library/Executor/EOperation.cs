@@ -33,6 +33,7 @@
         Dup,
         Clear,
         Swap,
-        Break
+        Break,
+        Not
     }
 }

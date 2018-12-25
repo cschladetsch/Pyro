@@ -42,6 +42,7 @@ namespace Diver.Exec
             _actions[EOperation.Store] = StoreValue;
             _actions[EOperation.Retrieve] = GetValue;
             _actions[EOperation.Assert] = Assert;
+            _actions[EOperation.Not] = () => Push(!Pop<bool>());
         }
 
         void Assert()
