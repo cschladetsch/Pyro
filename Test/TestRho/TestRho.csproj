@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Scripts\NestedFunctions.rho" />
     <None Include="Scripts\PassingFunctions.rho" />
+    <None Include="Scripts\Random.rho" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

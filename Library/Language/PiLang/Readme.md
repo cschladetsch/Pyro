@@ -27,4 +27,4 @@ See the [tests](/Test/TestPi)
 
 ## Examples
 
-See the tests.
+See the [tests](/Test/TestPi) and the [test scripts](/Test/TestPi/Scripts)
