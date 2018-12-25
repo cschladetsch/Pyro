@@ -18,7 +18,7 @@ namespace Diver.Exec
 
         public bool HasScopeObject(string label)
         {
-            return _scope.ContainsValue(label);
+            return _scope.ContainsKey(label);
         }
 
         public void SetScopeObject(string label, object val)

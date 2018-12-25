@@ -22,6 +22,14 @@ namespace Diver
     {
     }
 
+    public class DebugBreakException : Exception
+    {
+    }
+
+    public class NullValueException : Exception
+    {
+    }
+
     public class DataStackEmptyException : Exception
     {
     }

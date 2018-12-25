@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 
 namespace Diver.Exec
 {
@@ -18,8 +19,18 @@ namespace Diver.Exec
 
         private void AddOperations()
         {
-            _actions[EOperation.Plus] = () => Push(Pop() + Pop());
-            _actions[EOperation.Minus] = () => Push(Pop() - Pop());
+            _actions[EOperation.Plus] = () =>
+            {
+                var b = ResolvePop();
+                var a = ResolvePop();
+                Push(a + b);
+            };
+            _actions[EOperation.Minus] = () =>
+            {
+                var a = ResolvePop();
+                var b = ResolvePop();
+                Push(a - b);
+            };
             _actions[EOperation.Multiply] = () => Push(Pop() * Pop());
             _actions[EOperation.Divide] = () => Push(Pop() / Pop());
 
@@ -32,9 +43,14 @@ namespace Diver.Exec
             _actions[EOperation.Retrieve] = GetValue;
         }
 
+        private dynamic ResolvePop()
+        {
+            return Resolve(Pop());
+        }
+
         private void DebugBreak()
         {
-            throw new NotImplementedException();
+            throw new DebugBreakException();
         }
 
         private void StoreValue()
@@ -79,7 +95,13 @@ namespace Diver.Exec
                     }
                     else
                     {
-                        _data.Push(Resolve(next));
+                        var item = Resolve(next);
+                        if (item == null)
+                        {
+                            item = Resolve(next);
+                            throw new NullValueException();
+                        }
+                        _data.Push(item);
                     }
 
                     if (_break)
@@ -169,6 +191,8 @@ namespace Diver.Exec
 
         private void Push(object obj)
         {
+            if (obj == null)
+                throw new NullValueException();
             _data.Push(obj);
         }
 
@@ -177,6 +201,8 @@ namespace Diver.Exec
             if (_data.Count == 0)
                 throw new DataStackEmptyException();
             var top = Pop();
+            if (top == null)
+                throw new NullValueException();
             if (top is T val)
                 return val;
             if (!(top is IRef<T> data))
@@ -194,9 +220,18 @@ namespace Diver.Exec
         }
 
         private bool _break;
-        private readonly Stack<object> _data = new Stack<object>();
+        private Stack<object> _data = new Stack<object>();
         private IRef<Continuation> _current;
-        private readonly Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
+        private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+
+        public void Clear()
+        {
+            _data = new Stack<object>();
+            _context = new Stack<IRef<Continuation>>();
+            _break = false;
+            _current = null;
+        }
     }
+
 }

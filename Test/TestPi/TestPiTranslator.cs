@@ -14,30 +14,32 @@ namespace Diver.Test
         {
             Run("1 2 +");
             Assert.AreEqual(3, Pop<int>());
+            Assert.AreEqual(0, DataStack.Count);
         }
 
         [Test]
         public void TestBreak()
         {
-            Run("break");
+            Assert.Throws<DebugBreakException>(() => Run("break"));
         }
 
         [Test]
         public void TestVars()
         {
-            //Run("1 'a # break a 2 +");
-            //Assert.IsTrue(_scope.ContainsKey("a"));
-            //var a = _scope["a"];
-            //Assert.AreEqual(1, a);
-            //Assert.AreEqual(1 + 2, _exec.Pop<int>());
-            //Assert.AreEqual(0, DataStack.Count);
+            Run("1 'a # a 2 +");
+            Assert.IsTrue(_scope.ContainsKey("a"));
+            var a = _scope["a"];
+            Assert.AreEqual(1, a);
+            Assert.AreEqual(1, DataStack.Count);
+            Assert.AreEqual(1 + 2, _exec.Pop<int>());
+            Assert.AreEqual(0, DataStack.Count);
         }
 
         [Test]
         public void TestAddString()
         {
             Run("\"foo\" \"bar\" +");
-            Assert.AreEqual("barfoo", Pop<string>());
+            Assert.AreEqual("foobar", Pop<string>());
         }
 
         [Test]
@@ -54,7 +56,13 @@ namespace Diver.Test
 
         private void Run(string text)
         {
+            _exec.Clear();
             _exec.Continue(Translate(text));
+        }
+
+        private void BreakRun(string text)
+        {
+            Assert.Throws<DebugBreakException>(() => Run(text));
         }
 
         private IRef<Continuation> Translate(string text)
@@ -71,4 +79,5 @@ namespace Diver.Test
         private Dictionary<string, object> _scope => _continuation.Value.Scope;
         private IList<object> _code => _continuation.Value.Code;
     }
+
 }
