@@ -32,6 +32,7 @@
         Expand,
         Dup,
         Clear,
-        Swap
+        Swap,
+        Break
     }
 }

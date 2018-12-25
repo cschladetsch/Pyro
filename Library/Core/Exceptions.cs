@@ -17,4 +17,28 @@ namespace Diver
         {
         }
     }
+
+    public class ContextStackEmptyException : Exception
+    {
+    }
+
+    public class DataStackEmptyException : Exception
+    {
+    }
+
+    public class TypeMismatchError : Exception
+    {
+        public Type Expected, Got;
+
+        public TypeMismatchError(Type expected, Type got) : base()
+        {
+            Expected = expected;
+            Got = got;
+        }
+
+        public override string ToString()
+        {
+            return $"Expected {Expected}, got {Got}";
+        }
+    }
 }

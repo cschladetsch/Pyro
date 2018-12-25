@@ -5,6 +5,14 @@ using Diver.Exec;
 
 namespace Diver.Language
 {
+    public class TranslatorBase<TLexer, TParser>
+        : ProcessCommon
+    {
+        protected TranslatorBase(IRegistry r) : base(r)
+        {
+        }
+    }
+
     /// <summary>
     /// Translates input Pi text source code to an executable Continuation
     /// </summary>
@@ -94,6 +102,9 @@ namespace Diver.Language
                     break;
                 case EPiToken.Swap:
                     objects.Add(New(EOperation.Swap));
+                    break;
+                case EPiToken.Break:
+                    objects.Add(New(EOperation.Break));
                     break;
                 default:
                     objects.Add(node.Value);

@@ -10,6 +10,8 @@ namespace Diver.Test
     [TestFixture]
     public class TestCommon
     {
+        protected const string ScriptsFolder = "Scripts";
+
         [SetUp]
         public void Setup()
         {

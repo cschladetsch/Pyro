@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using System.Net.Mime;
+
+namespace Diver.Language
 {
     /// <summary>
     /// A segment in a lexer
@@ -9,6 +11,7 @@
         public int Length => End - Start;
         public int LineNumber;
         public LexerBase Lexer;
+        public string Text => ToString();
 
         public Slice(LexerBase lexer, int ln, int start, int end)
             : this(lexer, start, end)

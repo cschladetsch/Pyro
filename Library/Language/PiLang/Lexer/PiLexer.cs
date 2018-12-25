@@ -12,7 +12,7 @@
 
         protected override void AddKeyWords()
         {
-            _keyWords.Add("if", EPiToken.If);
+            _keyWords.Add("break", EPiToken.Break);
             _keyWords.Add("ife", EPiToken.IfElse);
             _keyWords.Add("for", EPiToken.For);
             _keyWords.Add("true", EPiToken.True);
@@ -144,12 +144,25 @@
 
         private bool IdentOrKeyword()
         {
+            AddKeywordOrIdent(GatherIdent());
+            return true;
+        }
+
+        private void AddKeywordOrIdent(Slice slice)
+        {
+            if (_keyWords.TryGetValue(slice.Text, out EPiToken tok))
+                _tokens.Add(_factory.NewToken(tok, slice));
+            else
+                _tokens.Add(_factory.NewTokenIdent(slice));
+        }
+
+        private Slice GatherIdent()
+        {
             var begin = _offset;
             Next();
             while (char.IsLetterOrDigit(Current()))
                 Next();
-            _tokens.Add(_factory.NewTokenIdent(new Slice(this, begin, _offset)));
-            return true;
+            return new Slice(this, begin, _offset);
         }
 
         private bool IsSpaceChar(char arg)

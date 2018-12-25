@@ -17,10 +17,15 @@ namespace Diver.Test
         }
 
         [Test]
+        public void TestBreak()
+        {
+            Run("break");
+        }
+
+        [Test]
         public void TestVars()
         {
-            // TODO: Quoted idents
-            //Run("1 a # a @ 2 +");
+            //Run("1 'a # break a 2 +");
             //Assert.IsTrue(_scope.ContainsKey("a"));
             //var a = _scope["a"];
             //Assert.AreEqual(1, a);
@@ -56,6 +61,8 @@ namespace Diver.Test
         {
             var trans = new PiTranslator(_reg, text);
             WriteLine(trans.ToString());
+            if (trans.Failed)
+                WriteLine($"Translation error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Continuation;
         }

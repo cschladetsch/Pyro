@@ -21,6 +21,7 @@
         Suspend,
         Replace,
         Resume,
+        Break,
         Plus,
         Minus,
         Multiply,

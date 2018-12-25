@@ -18,8 +18,15 @@ namespace Diver.Test
         }
 
         [Test]
+        public void TestBreak()
+        {
+            AssertSameTokens("break", EPiToken.Break);
+        }
+
+        [Test]
         public void TestPathnames()
         {
+            AssertSameTokens("a", EPiToken.Ident);
             AssertSameTokens("ident", EPiToken.Ident);
             AssertSameTokens("ident/ident", EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
             AssertSameTokens("'ident/ident", EPiToken.Quote, EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
@@ -40,9 +47,9 @@ namespace Diver.Test
         private void AssertSameTokens(string input, params EPiToken[] tokens)
         {
             var lex = new PiLexer(input);
+            Assert.IsTrue(lex.Process());
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
-            Assert.IsTrue(lex.Process());
             Assert.IsTrue(lex.Tokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).SequenceEqual(tokens));
         }
 

@@ -26,16 +26,28 @@ namespace Diver.Exec
             _actions[EOperation.Suspend] = Suspend;
             _actions[EOperation.Resume] = Resume;
             _actions[EOperation.Replace] = Break;
+            _actions[EOperation.Break] = DebugBreak;
 
             _actions[EOperation.Store] = StoreValue;
             _actions[EOperation.Retrieve] = GetValue;
         }
 
+        private void DebugBreak()
+        {
+            throw new NotImplementedException();
+        }
+
         private void StoreValue()
         {
-            var name = Pop<string>();
+            var name = Pop<IdentBase>();
             var val = Pop();
-            Context().SetScopeObject(name, val);
+            if (name is Label label)
+            {
+                Context().SetScopeObject(label.Text, val);
+                return;
+            }
+
+            throw new NotImplementedException();
         }
 
         private void GetValue()
@@ -67,7 +79,7 @@ namespace Diver.Exec
                     }
                     else
                     {
-                        _data.Push(next);
+                        _data.Push(Resolve(next));
                     }
 
                     if (_break)
@@ -81,6 +93,47 @@ namespace Diver.Exec
                 else
                     break;
             }
+        }
+
+        private object Resolve(object next)
+        {
+            if (next == null)
+                return null;
+            if (!(next is IdentBase ident))
+                return next;
+            return ident.Quoted ? ident : Resolve(ident);
+        }
+
+        private object Resolve(IdentBase identBase)
+        {
+            if (identBase is Label label)
+                return ResolveContextually(label);
+
+            if (identBase is Pathname path)
+                return ResolvePath(path);
+
+            throw new NotImplementedException($"Cannot resolve {identBase}");
+        }
+
+        private object ResolvePath(Pathname path)
+        {
+            throw new NotImplementedException();
+        }
+
+        private object ResolveContextually(Label label)
+        {
+            var current = Context();
+            var ident = label.Text;
+            if (current.HasScopeObject(ident))
+                return current.Scope[ident];
+            foreach (var contRef in _context)
+            {
+                var cont = contRef.Value;
+                if (cont.HasScopeObject(ident))
+                    return cont.Scope[ident];
+            }
+
+            return null;
         }
 
         private Continuation Context()
@@ -121,15 +174,21 @@ namespace Diver.Exec
 
         public T Pop<T>()
         {
+            if (_data.Count == 0)
+                throw new DataStackEmptyException();
             var top = Pop();
             if (top is T val)
                 return val;
-            var data = top as IRef<T>;
+            if (!(top is IRef<T> data))
+                throw new TypeMismatchError(typeof(T), top.GetType());
             return data.Value;
         }
 
         private dynamic Pop()
         {
+            if (_data.Count == 0)
+                throw new DataStackEmptyException();
+
             var pop = _data.Pop();
             return !(pop is IRefBase data) ? pop : data.BaseValue;
         }
