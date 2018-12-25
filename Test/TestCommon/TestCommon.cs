@@ -36,6 +36,11 @@ namespace Diver.Test
             return typed.Value;
         }
 
+        protected void WriteLine(object obj)
+        {
+            WriteLine("{0}", obj.ToString());
+        }
+
         protected void WriteLine(string fmt, params object[] args)
         {
             var text = string.Format(fmt, args);

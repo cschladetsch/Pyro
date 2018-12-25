@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Diver.Language;
 using NUnit.Compatibility;
 using NUnit.Framework;
@@ -21,17 +22,25 @@ namespace Diver.Test
                 RunScript(file);
         }
 
-        private void RunScript(string fileName)
+        private void RunScript(string filePath)
         {
-            WriteLine($"Running {fileName}");
-            var text = File.ReadAllText(fileName);
-            var trans = new PiTranslator(_reg, text);
-            if (Verbose)
-                WriteLine($"Translator for {fileName}: {trans}");
-            if (trans.Failed)
-                WriteLine($"Error: {trans.Error}");
-            Assert.IsFalse(trans.Failed);
-            _exec.Continue(trans.Continuation);
+            var fileName = Path.GetFileName(filePath);
+            try
+            {
+                WriteLine($"Running {fileName}");
+                var text = File.ReadAllText(filePath);
+                var trans = new PiTranslator(_reg, text);
+                if (Verbose)
+                    WriteLine($"Translator for {filePath}: {trans}");
+                if (trans.Failed)
+                    WriteLine($"Error: {trans.Error}");
+                Assert.IsFalse(trans.Failed);
+                _exec.Continue(trans.Continuation);
+            }
+            catch (Exception e)
+            {
+                WriteLine($"Script {fileName}: Exception={e.Message}");
+            }
         }
     }
 }
