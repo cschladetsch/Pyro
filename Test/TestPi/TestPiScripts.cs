@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Diver.Language;
+using NUnit.Compatibility;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -12,7 +13,11 @@ namespace Diver.Test
         [Test]
         public void RunScripts()
         {
-            foreach (var file in Directory.GetFiles(ScriptsFolder, "*.pi"))
+            var root = TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
+            var path = Path.Combine(root, ScriptsFolder);
+            WriteLine($"Scripts in: {path}");
+            var files = Directory.GetFiles(path, "*.pi");
+            foreach (var file in files)
                 RunScript(file);
         }
 

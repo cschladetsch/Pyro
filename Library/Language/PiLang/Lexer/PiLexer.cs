@@ -90,6 +90,7 @@
             case '>': return AddIfNext('=', EPiToken.GreaterEquiv, EPiToken.Greater);
             case '"': return LexString(); 
             case '\t': return Add(EPiToken.Tab);
+            case '\r': 
             case '\n': return Add(EPiToken.NewLine);
             case '-':
                 if (Peek() == '-')
@@ -137,7 +138,7 @@
                 return Add(EPiToken.Separator);
             }
 
-            LexError("Unrecognised %c");
+            LexError($"Unrecognised '{current}'");
 
             return false;
         }
