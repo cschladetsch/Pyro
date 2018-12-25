@@ -1,8 +1,10 @@
 ﻿// test global tree scope
 
-1 '/a #
-'a exists not assert
-'/a exists assert
-2 '/a/b # 
-/a/b /a + 3 == assert
+1 '/a #                 // store to root of tree
+'a exists not assert    // ensure it wasn't stored to local scope
+'/a exists assert       // ensure it exists in the root of the tree
+2 '/a/b #               // store to child of /a
+/a/b /a + 3 == assert   // add objects in the tree together
+
+'/a cd pwd '/a == assert    // change folder, assert change made
 
