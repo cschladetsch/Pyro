@@ -1,0 +1,14 @@
+﻿// test Rho arithmetic and operator precedence
+
+assert(1+2 == 3)
+assert(3-1 == 2)
+assert(2*3 == 6)
+assert(4/2 == 2)
+
+assert(2*3-1 == 5)
+assert(2*(3-1) == 4)
+assert((6+4)/2+4 == 9)
+assert("foo" + "bar" == "foobar")
+
+// ?? assert([1 2] + [3 4] == [1 2 3 4])
+

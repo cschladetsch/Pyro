@@ -12,17 +12,21 @@ namespace Diver.Test
         public bool Verbose = true;
 
         [Test]
+        public void RunScript()
+        {
+
+        }
+
+        [Test]
         public void RunScripts()
         {
             var root = TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
             var path = Path.Combine(root, ScriptsFolder);
-            WriteLine($"Scripts in: {path}");
-            var files = Directory.GetFiles(path, "*.pi");
-            foreach (var file in files)
-                RunScript(file);
+            foreach (var file in Directory.GetFiles(path, "*.pi"))
+                Assert.IsTrue(RunScript(file));
         }
 
-        private void RunScript(string filePath)
+        private bool RunScript(string filePath)
         {
             var fileName = Path.GetFileName(filePath);
             try
@@ -40,7 +44,10 @@ namespace Diver.Test
             catch (Exception e)
             {
                 WriteLine($"Script {fileName}: Exception={e.Message}");
+                return false;
             }
+
+            return true;
         }
     }
 }

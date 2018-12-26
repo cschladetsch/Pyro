@@ -2,12 +2,10 @@
 
 true assert
 false not assert
-
 true not not assert
 false true and not assert
 false true or assert
 true false or assert
 true true and assert
+true false and not assert
 false true xor assert
-
-
