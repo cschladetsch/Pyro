@@ -1,0 +1,12 @@
+﻿// test persitence
+
+a = 1
+b = freeze(a)
+println(b)
+c = thaw(a)
+assert(c == 1)
+
+f = [1 2 3 "foo" [4 5 6]]
+g = thaw(freeze(f))
+assert(g == f)
+

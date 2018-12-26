@@ -1,0 +1,23 @@
+﻿// test creating and using C# instances
+
+foo = Foo()
+assert(typeof(foo) == Foo)
+
+b = foo.M0();
+c = foo.M1(b);
+d = foo.M2("foo", "bar")
+assert(b == 42)
+assert(c == 42/2)
+assert(d == "foobar")
+
+f = a.F0
+g = a.F1
+h = a.F2
+assert(f == 12)
+assert(g == "foo")
+assert(h == [1 2 3])
+
+writeln(Foo.Documentation)
+writeln(foo.Documentation)
+writeln(foo.M0.Documentation)
+writeln(foo.F0.Documentation)

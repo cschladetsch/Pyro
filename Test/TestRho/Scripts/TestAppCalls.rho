@@ -1,0 +1,20 @@
+﻿// test creating and using C# instances
+
+Foo new 'foo #
+foo typeof Foo equals!
+
+'M0 foo & 'a #
+a 'M1 foo & 'b #
+"foo" "bar" 'M2 foo & 'c #
+
+a 42 equals!
+b 21 equals!
+"foobar" c equals!
+
+'F0 foo . 'f #
+'F1 foo . 'g #
+'F2 foo . 'h #
+
+f 12 equals!
+"foo" g equals!
+[1 2 3] h equals!
