@@ -1,11 +1,5 @@
 ﻿// test floating point
 
-// set precision of floating-point fractional comparisons
-4 set_float_precision
-
-// helper to ease readability
-{ == assert } 'equals #
-
 -1 -1 + -2 equals!
 -1 -1 - 0 equals!
 
