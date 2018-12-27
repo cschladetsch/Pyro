@@ -1,9 +1,7 @@
 ﻿// test continuations
 
 1 2 { + } & 3 == assert
-2 3 4 { + * } & 20 == assert
-1 2 { 2 + ... 666 } & + 5 == assert
-
+2 3 4 { + * } & 14 == assert
 1 { 1 + } { 2 + } true ife & 2 == assert
 1 { 1 + } { 2 + } false ife & 3 == assert
-
+3 'a # { {1 +} 'a # 3 a &} & a + 7 == assert

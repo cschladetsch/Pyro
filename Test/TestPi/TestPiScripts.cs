@@ -9,14 +9,15 @@ namespace Diver.Test
         [Test]
         public void RunScript()
         {
-            //_exec.TraceLevel = 100;
-            //TestScript("Comments.pi");
-            //TestScript("Arithmetic.pi");
-            //TestScript("Boolean.pi");
-            //TestScript("Array.pi");
+            //_exec.TraceLevel = 100
+            TestScript("Comments.pi");
+            TestScript("Arithmetic.pi");
+            TestScript("Boolean.pi");
+            TestScript("Array.pi");
             TestScript("Conditionals.pi");
             TestScript("Continuations.pi");
-            
+            //TestScript("Relational.pi");
+
         }
 
         private void TestScript(string scriptName)
