@@ -4,10 +4,7 @@
 1 m has assert
 "foo" m has assert
 1 m at 2 == assert
-"foo" m at 3 == assert
-666 m has false == assert
-//666 m find // throws
-
-("spam" "bar") m insert &
-"spam" m at "bar" == assert
-
+"foo" m at "bar" == assert
+666 m has not == assert
+"spam" 123 m insert
+"spam" m at 123 == assert

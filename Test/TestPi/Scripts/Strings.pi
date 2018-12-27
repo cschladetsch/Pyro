@@ -1,6 +1,6 @@
 ﻿// test strings
 
-"foo" "bar" + "foobar" == assert
-"spam" 3 * "spamspamspam" == assert
+"hello, " "world" + "hello, world" == assert
+// is this a good idea? "spam" 3 * "spamspamspam" == assert
 // error: 3 "spam" * 
 
