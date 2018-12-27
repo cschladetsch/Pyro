@@ -30,9 +30,9 @@ namespace Diver.Exec
             {
                 var a = ResolvePop();
                 var b = ResolvePop();
-                Push(a - b);
+                Push(b - a);
             };
-            _actions[EOperation.Multiply] = () => Push(Pop() * Pop());
+            _actions[EOperation.Multiply] = () => Push(ResolvePop() * ResolvePop());
             _actions[EOperation.Divide] = Divide;
 
             _actions[EOperation.Suspend] = Suspend;
@@ -43,20 +43,20 @@ namespace Diver.Exec
             _actions[EOperation.Store] = StoreValue;
             _actions[EOperation.Retrieve] = GetValue;
             _actions[EOperation.Assert] = Assert;
-            _actions[EOperation.Not] = () => Push(!Pop<bool>());
+            _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
             _actions[EOperation.Equiv] = Equiv;
         }
 
         private void Divide()
         {
-            var a = Pop();
-            var b = Pop();
+            var a = ResolvePop();
+            var b = ResolvePop();
             Push(b / a);
         }
         private void Equiv()
         {
-            var a = Pop();
-            var b = Pop();
+            var a = ResolvePop();
+            var b = ResolvePop();
             Push(a.Equals(b));
         }
 
@@ -69,6 +69,11 @@ namespace Diver.Exec
         private dynamic ResolvePop()
         {
             return Resolve(Pop());
+        }
+
+        private dynamic ResolvePop<T>()
+        {
+            return Resolve(Pop<T>());
         }
 
         private void DebugBreak()
@@ -99,15 +104,20 @@ namespace Diver.Exec
         public void Continue(IRef<Continuation> continuation)
         {
             _current = continuation;
-            while (true)
-            {
-                Execute(_current.Value);
-                _break = false;
-                if (_context.Count > 0)
-                    _current = _context.Pop();
-                else
-                    break;
-            }
+            Execute(_current.Value);
+            _break = false;
+            _current = null;
+
+            // Do we really want to keep executing all contexts? I don't think so...
+            //while (true)
+            //{
+            //    Execute(_current.Value);
+            //    _break = false;
+            //    if (_context.Count > 0)
+            //        _current = _context.Pop();
+            //    else
+            //        break;
+            //}
         }
 
         private void Execute(Continuation cont)
@@ -125,7 +135,7 @@ namespace Diver.Exec
                     {
                         if (next is EOperation op)
                         {
-                            Write("-->");
+                            Write("leads to-->");
                             WriteDataStack();
                         }
                     }
