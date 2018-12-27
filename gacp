@@ -1,5 +1,8 @@
-git add *
-git commit -m "$*"
+#!/bin/sh
+
+# git add all changes, then make a new commit and push it
+git add * 
+git commit -m "$*" 
 git push
 
 
