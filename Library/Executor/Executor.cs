@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Text;
 
 namespace Diver.Exec
 {
@@ -18,49 +16,12 @@ namespace Diver.Exec
             AddOperations();
         }
 
-        private void AddOperations()
+        public void Clear()
         {
-            _actions[EOperation.Plus] = () =>
-            {
-                var b = RPop();
-                var a = RPop();
-                Push(a + b);
-            };
-            _actions[EOperation.Minus] = () =>
-            {
-                var a = RPop();
-                var b = RPop();
-                Push(b - a);
-            };
-            _actions[EOperation.Multiply] = () => Push(RPop() * RPop());
-            _actions[EOperation.Divide] = Divide;
-
-            _actions[EOperation.Suspend] = Suspend;
-            _actions[EOperation.Resume] = Resume;
-            _actions[EOperation.Replace] = Break;
-            _actions[EOperation.Break] = DebugBreak;
-
-            _actions[EOperation.Store] = StoreValue;
-            _actions[EOperation.Retrieve] = GetValue;
-            _actions[EOperation.Assert] = Assert;
-            _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
-            _actions[EOperation.Equiv] = Equiv;
-            _actions[EOperation.LogicalAnd] = () => Push(RPop() && RPop());
-            _actions[EOperation.LogicalOr] = () => Push(RPop() || RPop());
-            _actions[EOperation.LogicalXor] = () => Push(RPop() ^ RPop());
-        }
-
-        private void Divide()
-        {
-            var a = RPop();
-            var b = RPop();
-            Push(b / a);
-        }
-        private void Equiv()
-        {
-            var a = RPop();
-            var b = RPop();
-            Push(a.Equals(b));
+            _data = new Stack<object>();
+            _context = new Stack<IRef<Continuation>>();
+            _break = false;
+            _current = null;
         }
 
         void Assert()
@@ -72,6 +33,11 @@ namespace Diver.Exec
         private dynamic RPop()
         {
             return Resolve(Pop());
+        }
+
+        private dynamic RPop<T>()
+        {
+            return ResolvePop<T>();
         }
 
         private dynamic ResolvePop<T>()
@@ -110,17 +76,6 @@ namespace Diver.Exec
             Execute(_current.Value);
             _break = false;
             _current = null;
-
-            // Do we really want to keep executing all contexts? I don't think so...
-            //while (true)
-            //{
-            //    Execute(_current.Value);
-            //    _break = false;
-            //    if (_context.Count > 0)
-            //        _current = _context.Pop();
-            //    else
-            //        break;
-            //}
         }
 
         private void Execute(Continuation cont)
@@ -169,7 +124,7 @@ namespace Diver.Exec
             {
                 var item = Resolve(next);
                 if (item == null)
-                    throw new NullValueException();
+                    throw new UnknownIdentifierException(next);
                 _data.Push(item);
             }
         }
@@ -281,14 +236,6 @@ namespace Diver.Exec
         private IRef<Continuation> _current;
         private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
-
-        public void Clear()
-        {
-            _data = new Stack<object>();
-            _context = new Stack<IRef<Continuation>>();
-            _break = false;
-            _current = null;
-        }
     }
 
 }

@@ -1,14 +1,13 @@
 ﻿// dictionaries
 
-[(1 2) ("foo" 3)] >map 'm #
+1 2 "foo" "bar" 3 tomap 'm #
 1 m has assert
 "foo" m has assert
-1 m find 2 == assert
-"foo" m find 3 == assert
+1 m at 2 == assert
+"foo" m at 3 == assert
 666 m has false == assert
-666 m find // throws
+//666 m find // throws
 
-("spam" "bar") m add &
-"spam" m find "bar" == assert
-
+("spam" "bar") m insert &
+"spam" m at "bar" == assert
 

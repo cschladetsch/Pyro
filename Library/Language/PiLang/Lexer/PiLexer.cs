@@ -34,25 +34,32 @@
             _keyWords.Add("swap", EPiToken.Swap);
             _keyWords.Add("rot", EPiToken.Rot);
             _keyWords.Add("rotn", EPiToken.RotN);
-            _keyWords.Add("toarray", EPiToken.ToArray);
             _keyWords.Add("gc", EPiToken.GarbageCollect);
             _keyWords.Add("clear", EPiToken.Clear);
             _keyWords.Add("cd", EPiToken.ChangeFolder);
             _keyWords.Add("pwd", EPiToken.PrintFolder);
             _keyWords.Add("type", EPiToken.GetType);
-            _keyWords.Add("size", EPiToken.Size);
             _keyWords.Add("depth", EPiToken.Depth);
             _keyWords.Add("new", EPiToken.New);
             _keyWords.Add("dropn", EPiToken.DropN);
-            _keyWords.Add("tolist", EPiToken.ToList);
-            _keyWords.Add("tomap", EPiToken.ToMap);
-            _keyWords.Add("toset", EPiToken.ToSet);
-            _keyWords.Add("expand", EPiToken.Expand);
             _keyWords.Add("noteq", EPiToken.NotEquiv);
             _keyWords.Add("lls", EPiToken.Contents);
             _keyWords.Add("ls", EPiToken.GetContents);
             _keyWords.Add("freeze", EPiToken.Freeze);
             _keyWords.Add("thaw", EPiToken.Thaw);
+            _keyWords.Add("size", EPiToken.Size);
+            _keyWords.Add("tomap", EPiToken.ToMap);
+            _keyWords.Add("toset", EPiToken.ToSet);
+            _keyWords.Add("tolist", EPiToken.ToList);
+            _keyWords.Add("toarray", EPiToken.ToArray);
+            _keyWords.Add("expand", EPiToken.Expand);
+            _keyWords.Add("remove", EPiToken.Remove);
+            _keyWords.Add("push_front", EPiToken.PushFront);
+            _keyWords.Add("push_back", EPiToken.PushFront);
+            _keyWords.Add("back", EPiToken.GetBack);
+            _keyWords.Add("at", EPiToken.At);
+            _keyWords.Add("insert", EPiToken.Insert);
+            _keyWords.Add("has", EPiToken.Has);
         }
 
         protected override bool NextToken()
@@ -61,7 +68,7 @@
             if (current == 0)
                 return false;
 
-            if (char.IsLetter(current))
+            if (char.IsLetter(current) || current == '_')
                 return IdentOrKeyword();
 
             if (char.IsDigit(current))
@@ -84,7 +91,7 @@
             case ']': return Add(EPiToken.CloseSquareBracket);
             case '=': return AddIfNext('=', EPiToken.Equiv, EPiToken.Assign);
             case '!': return Add(EPiToken.Replace);
-            case '&': return AddIfNext('&', EPiToken.LogicalAnd, EPiToken.Suspend);
+            case '&': return AddIfNext('&', EPiToken.And, EPiToken.Suspend);
             case '|': return AddIfNext('|', EPiToken.Or, EPiToken.BitOr);
             case '<': return AddIfNext('=', EPiToken.LessEquiv, EPiToken.LessEquiv);
             case '>': return AddIfNext('=', EPiToken.GreaterEquiv, EPiToken.Greater);
@@ -160,11 +167,16 @@
                 _tokens.Add(_factory.NewTokenIdent(slice));
         }
 
+        bool IsValidIdentGlyph(char ch)
+        {
+            return char.IsLetterOrDigit(ch) || ch == '_';
+        }
+
         private Slice GatherIdent()
         {
             var begin = _offset;
             Next();
-            while (char.IsLetterOrDigit(Current()))
+            while (IsValidIdentGlyph(Current()))
                 Next();
             return new Slice(this, begin, _offset);
         }

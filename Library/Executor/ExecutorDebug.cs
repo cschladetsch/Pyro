@@ -31,12 +31,24 @@ namespace Diver.Exec
             Write($"{string.Format(fmt, args)}\n");
         }
 
+        private void DebugTrace()
+        {
+            WriteLine(DebugWrite());
+        }
+
         private string DebugWrite()
         {
             var str = new StringBuilder();
             WriteDataStack(str);
             WriteContinuation(str);
             return str.ToString();
+        }
+
+        private void WriteContinuation()
+        {
+            var str = new StringBuilder();
+            WriteContinuation(str);
+            WriteLine(str);
         }
 
         private void WriteContinuation(StringBuilder str)
@@ -48,7 +60,7 @@ namespace Diver.Exec
                 Context().DebugWrite(str);
         }
 
-        private void WriteDataStack(int max = 4)
+        public void WriteDataStack(int max = 4)
         {
             var str = new StringBuilder();
             WriteDataStack(str, max);

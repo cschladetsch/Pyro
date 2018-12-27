@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using Diver.Language;
 using NUnit.Framework;
 
@@ -7,6 +8,15 @@ namespace Diver.Test
     [TestFixture]
     public class TestPiLexer : TestCommon
     {
+        [Test]
+        public void TestIdents()
+        {
+            var lex = Lex("a __a a__ a_b ___");
+            var tokens = lex.Tokens.Where(t => !IsWhiteSpace(t)).ToList();
+            Assert.AreEqual(5, tokens.Count);
+            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new []{"a", "__a", "a__", "a_b", "___"}));
+        }
+
         [Test]
         public void TestNumbersAndOps()
         {
@@ -46,10 +56,7 @@ namespace Diver.Test
 
         private void AssertSameTokens(string input, params EPiToken[] tokens)
         {
-            var lex = new PiLexer(input);
-            Assert.IsTrue(lex.Process());
-            if (lex.Failed)
-                WriteLine("LexerFailed: {0}", lex.Error);
+            var lex = Lex(input);
             Assert.IsTrue(lex.Tokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).SequenceEqual(tokens));
         }
 

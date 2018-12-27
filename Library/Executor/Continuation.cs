@@ -65,14 +65,20 @@ namespace Diver.Exec
 
             if (_code == null)
             {
-                str.AppendLine(    "No code");
+                str.AppendLine("    No code");
+                return;
+            }
+
+            if (_next == _code.Count)
+            {
+                str.AppendLine("    [end]");
                 return;
             }
 
             var index = Math.Max(0, _next - 3);
-            str.AppendLine($"    Code to {index}/{_code.Count}:");
+            str.AppendLine($"    Code from {index} to error at {_next}/{_code.Count}:");
             str.Append("        ");
-            for (int n = index; n < _next; ++n)
+            for (int n = index; n <= _next; ++n)
             {
                 str.Append($"{_code[n]}, ");
             }

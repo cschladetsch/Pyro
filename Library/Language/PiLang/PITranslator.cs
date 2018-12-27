@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -120,14 +121,65 @@ namespace Diver.Language
                 case EPiToken.Equiv:
                     objects.Add(EOperation.Equiv);
                     break;
-                case EPiToken.LogicalAnd:
+                case EPiToken.And:
                     objects.Add(EOperation.LogicalAnd);
                     break;
-                case EPiToken.LogicalOr:
+                case EPiToken.Or:
                     objects.Add(EOperation.LogicalOr);
                     break;
-                case EPiToken.LogicalXor:
+                case EPiToken.Xor:
                     objects.Add(EOperation.LogicalXor);
+                    break;
+                case EPiToken.Size:
+                    objects.Add(EOperation.Size);
+                    break;
+                case EPiToken.ToList:
+                    objects.Add(EOperation.ToList);
+                    break;
+                case EPiToken.ToArray:
+                    objects.Add(EOperation.ToArray);
+                    break;
+                case EPiToken.ToMap:
+                    objects.Add(EOperation.ToMap);
+                    break;
+                case EPiToken.ToSet:
+                    objects.Add(EOperation.ToSet);
+                    break;
+                case EPiToken.Expand:
+                    objects.Add(EOperation.Expand);
+                    break;
+                case EPiToken.Insert:
+                    objects.Add(EOperation.Insert);
+                    break;
+                case EPiToken.Remove:
+                    objects.Add(EOperation.Remove);
+                    break;
+                case EPiToken.PushFront:
+                    objects.Add(EOperation.PushFront);
+                    break;
+                case EPiToken.PushBack:
+                    objects.Add(EOperation.PushBack);
+                    break;
+                case EPiToken.GetBack:
+                    objects.Add(EOperation.GetBack);
+                    break;
+                case EPiToken.Has:
+                    objects.Add(EOperation.Has);
+                    break;
+                case EPiToken.At:
+                    objects.Add(EOperation.At);
+                    break;
+                case EPiToken.DebugPrintDataStack:
+                    objects.Add(EOperation.DebugPrintDataStack);
+                    break;
+                case EPiToken.DebugPrintContinuation:
+                    objects.Add(EOperation.DebugPrintContinuation);
+                    break;
+                case EPiToken.DebugPrintContextStack:
+                    objects.Add(EOperation.DebugPrintContextStack);
+                    break;
+                case EPiToken.DebugPrint:
+                    objects.Add(EOperation.DebugPrint);
                     break;
                 default:
                     objects.Add(node.Value);

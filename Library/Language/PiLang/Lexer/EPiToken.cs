@@ -41,7 +41,6 @@
         Depth,
         Pick,
         Expand,
-        ToArray,
         Name,
         Fullname,
         Freeze,
@@ -101,8 +100,20 @@
         Separator,
         Dot,
         Quote,
-        LogicalOr,
-        LogicalAnd,
-        LogicalXor
+
+        DebugPrint,
+        DebugPrintDataStack,
+        DebugPrintContinuation,
+        DebugPrintContextStack,
+
+        ToArray,
+        Remove,
+        At,
+        PushBack,
+        PushFront,
+        Insert,
+        GetBack,
+        Has
     }
+
 }

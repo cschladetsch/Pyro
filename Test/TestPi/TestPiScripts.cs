@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using Diver.Language;
-using NUnit.Compatibility;
+﻿using System.IO;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -16,7 +12,7 @@ namespace Diver.Test
             //_exec.TraceLevel = 100;
             //Assert.IsTrue(RunScript("Comments.pi"));
             //Assert.IsTrue(RunScript("Arithmetic.pi"));
-            Assert.IsTrue(RunScript("Boolean.pi"));
+            //Assert.IsTrue(RunScript("Boolean.pi"));
         }
 
         [Test]

@@ -11,6 +11,7 @@
         Divide,
 
         Store,
+        Has,
         Retrieve,
 
         Suspend,
@@ -38,6 +39,18 @@
         Equiv,
         LogicalAnd,
         LogicalOr,
-        LogicalXor
+        LogicalXor,
+        Size,
+        GetBack,
+        PushBack,
+        PushFront,
+        ToList,
+        Remove,
+        Insert,
+        At,
+        DebugPrintDataStack,
+        DebugPrintContextStack,
+        DebugPrint,
+        DebugPrintContinuation
     }
 }

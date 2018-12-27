@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
 using NUnit.Framework;
@@ -13,14 +14,38 @@ namespace Diver.Test
     [TestFixture]
     public class TestCommon
     {
-        protected const string ScriptsFolder = "Scripts";
         public bool Verbose = true;
+        public const string ScriptsFolder = "Scripts";
+
+        protected IRef<Continuation> _continuation;
+        protected Dictionary<string, object> _scope => _continuation?.Value.Scope;
+        protected IList<object> _code => _continuation?.Value.Code;
+        protected Stack<object> DataStack => _exec.DataStack;
+        protected IRegistry _reg;
+        protected IRef<Executor> _executor;
+        protected Executor _exec;
+
+        protected void Run(string text)
+        {
+            _exec.Clear();
+            _exec.Continue(Translate(text));
+        }
+
+        private IRef<Continuation> Translate(string text)
+        {
+            var trans = new PiTranslator(_reg, text);
+            WriteLine(trans.ToString());
+            if (trans.Failed)
+                WriteLine($"Translation error: {trans.Error}");
+            Assert.IsFalse(trans.Failed);
+            return _continuation = trans.Continuation;
+        }
 
         [SetUp]
         public void Setup()
         {
             _reg = new Registry();
-            _executor = _reg.Add(new Exec.Executor());
+            _executor = _reg.Add(new Executor());
             _exec = _executor.Value;
         }
 
@@ -77,10 +102,21 @@ namespace Diver.Test
 
             return true;
         }
+
         protected string GetScriptsPath()
         {
             var root = TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
             return Path.Combine(root, ScriptsFolder);
+        }
+
+        protected void AssertEmpty()
+        {
+            Assert.AreEqual(0, DataStack.Count);
+        }
+
+        protected void AssertTop<T>(T val)
+        {
+            Assert.AreEqual(val, Pop<T>());
         }
 
         protected object Pop()
@@ -92,9 +128,9 @@ namespace Diver.Test
         protected T Pop<T>()
         {
             var top = Pop();
-            if (top is T result)            // deal with unwrapped values
+            if (top is T result) // deal with unwrapped values
                 return result;
-            var typed = top as IRef<T>;     // deal with boxed values
+            var typed = top as IRef<T>; // deal with boxed values
             Assert.IsNotNull(typed);
             return typed.Value;
         }
@@ -112,9 +148,13 @@ namespace Diver.Test
             System.Console.WriteLine(text);
         }
 
-        protected Stack<object> DataStack => _exec.DataStack;
-        protected IRegistry _reg;
-        protected IRef<Diver.Exec.Executor> _executor;
-        protected Diver.Exec.Executor _exec;
+        protected PiLexer Lex(string input)
+        {
+            var lex = new PiLexer(input);
+            Assert.IsTrue(lex.Process());
+            if (lex.Failed)
+                WriteLine("LexerFailed: {0}", lex.Error);
+            return lex;
+        }
     }
 }

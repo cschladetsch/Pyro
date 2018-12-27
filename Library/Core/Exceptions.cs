@@ -38,6 +38,21 @@ namespace Diver
     {
     }
 
+    public class UnknownIdentifierException : Exception
+    {
+        public object What;
+
+        public UnknownIdentifierException(object obj)
+        {
+            What = obj;
+        }
+
+        public override string ToString()
+        {
+            return $"Unknown object ${What}";
+        }
+    }
+
     public class TypeMismatchError : Exception
     {
         public Type Expected, Got;
