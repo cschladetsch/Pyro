@@ -93,6 +93,8 @@
             case '\r': 
             case '\n': return Add(EPiToken.NewLine);
             case '-':
+                if (char.IsDigit(Peek()))
+                    return AddSlice(EPiToken.Int, Gather(char.IsDigit));
                 if (Peek() == '-')
                     return AddTwoCharOp(EPiToken.Decrement);
                 if (Peek() == '=')

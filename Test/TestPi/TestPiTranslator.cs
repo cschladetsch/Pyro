@@ -61,6 +61,15 @@ namespace Diver.Test
         }
 
         [Test]
+        public void TestNegativeInts()
+        {
+            Run("-1345 -0");
+            AssertTop(0);
+            AssertTop(-1345);
+            AssertEmpty();
+        }
+
+        [Test]
         public void TestVars()
         {
             Run("1 'a # a 2 +");
