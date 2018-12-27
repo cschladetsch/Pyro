@@ -107,6 +107,14 @@ namespace Diver.Exec
                 try
                 {
                     Perform(next);
+                    if (TraceLevel > 5)
+                    {
+                        if (next is EOperation op)
+                        {
+                            Write("-->");
+                            WriteDataStack();
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
@@ -120,19 +128,9 @@ namespace Diver.Exec
             }
         }
 
-        void WriteLine(object obj)
-        {
-            WriteLine($"{obj}");
-        }
-
-        void WriteLine(string text, params object[] args)
-        {
-            System.Diagnostics.Debug.WriteLine(text);
-            Console.WriteLine(text);
-        }
-
         private void Perform(object next)
         {
+            PerformPrelude(next);
             if (next is EOperation op)
             {
                 if (_actions.TryGetValue(op, out var action))
