@@ -143,10 +143,12 @@ namespace Diver.Test
 
         protected void WriteLine(string fmt, params object[] args)
         {
-            var text = string.Format(fmt, args);
+            string text = null;
+            if (args != null && args.Length > 0)
+                text = string.Format(fmt, args);
             System.Diagnostics.Trace.WriteLine(text);
             TestContext.Out.WriteLine(text);
-            System.Console.WriteLine(text);
+            Console.WriteLine(text);
         }
 
         protected PiLexer Lex(string input)
