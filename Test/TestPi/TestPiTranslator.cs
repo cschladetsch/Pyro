@@ -13,19 +13,35 @@ namespace Diver.Test
         public void TestAdd()
         {
             Run("1 2 +");
-            Assert.AreEqual(3, Pop<int>());
-            Assert.AreEqual(0, DataStack.Count);
+            AssertTop(3);
+            AssertEmpty();
         }
 
         [Test]
         public void TestEquiv()
         {
             Run("1 1 ==");
-            Assert.AreEqual(true, Pop<bool>());
-            Assert.AreEqual(0, DataStack.Count);
+            AssertTop(true);
+            AssertEmpty();
             Run("1 2 ==");
-            Assert.AreEqual(false, Pop<bool>());
+            AssertTop(false);
+            AssertEmpty();
+            Run("\"foo\" \"foo\" ==");
+            AssertTop(true);
+            AssertEmpty();
+            Run("\"foo\" \"bar\" ==");
+            AssertTop(false);
+            AssertEmpty();
+        }
+
+        private void AssertEmpty()
+        {
             Assert.AreEqual(0, DataStack.Count);
+        }
+
+        private void AssertTop<T>(T val)
+        {
+            Assert.AreEqual(val, Pop<T>());
         }
 
         [Test]
@@ -52,8 +68,8 @@ namespace Diver.Test
             var a = _scope["a"];
             Assert.AreEqual(1, a);
             Assert.AreEqual(1, DataStack.Count);
-            Assert.AreEqual(1 + 2, _exec.Pop<int>());
-            Assert.AreEqual(0, DataStack.Count);
+            Assert.AreEqual(1 + 2, Pop<int>());
+            AssertEmpty();
         }
 
         [Test]
