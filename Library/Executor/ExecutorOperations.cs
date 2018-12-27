@@ -32,9 +32,9 @@ namespace Diver.Exec
             _actions[EOperation.Assert] = Assert;
             _actions[EOperation.Equiv] = Equiv;
             _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
-            _actions[EOperation.LogicalAnd] = () => Push(RPop() && RPop());
-            _actions[EOperation.LogicalOr] = () => Push(RPop() || RPop());
-            _actions[EOperation.LogicalXor] = () => Push(RPop() ^ RPop());
+            _actions[EOperation.LogicalAnd] = LogicalAnd;
+            _actions[EOperation.LogicalOr] = LogicalOr;
+            _actions[EOperation.LogicalXor] = LogicalXor;
             _actions[EOperation.ToArray] = ToArray;
             _actions[EOperation.ToList] = ToArray;
             _actions[EOperation.ToMap] = ToMap;
@@ -52,6 +52,28 @@ namespace Diver.Exec
             _actions[EOperation.DebugPrintContextStack] = DebugPrintContextStack;
             _actions[EOperation.DebugPrint] = DebugTrace;
             _actions[EOperation.Depth] = () => Push(_data.Count);
+        }
+
+        private void LogicalXor()
+        {
+            var a = RPop();
+            var b = RPop();
+            Push(a ^ b);
+        }
+
+        private void LogicalAnd()
+        {
+            var a = RPop();
+            var b = RPop();
+            Push(a && b);
+        }
+
+        private void LogicalOr()
+        {
+            var a = RPop();
+            var b = RPop();
+            var c = a || b;
+            Push(c);
         }
 
         private void DebugPrintContextStack()

@@ -13,7 +13,6 @@ namespace Diver.Test
             Run("1 2 3 [3 4 5] \"foo\" debug_datastack");
         }
 
-
         [Test]
         public void TestDepth()
         {
@@ -67,9 +66,23 @@ namespace Diver.Test
 
             Run("false true and");
             AssertTop(false);
+            AssertEmpty();
 
             Run("false true and not");
             AssertTop(true);
+            AssertEmpty();
+
+            Run("false true or");
+            AssertTop(true);
+            AssertEmpty();
+
+            Run("true false and");
+            AssertTop(false);
+            AssertEmpty();
+
+            Run("true false and not");
+            AssertTop(true);
+            AssertEmpty();
         }
 
         [Test]
