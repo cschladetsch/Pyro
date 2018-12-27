@@ -6,10 +6,10 @@ namespace Diver.Exec
     /// <summary>
     /// Processes a sequence of Continuations.
     /// </summary>
-    public partial class Executor
+    public partial class Executor : Reflected<Executor>
     {
         public Stack<object> DataStack => _data;
-        public Stack<IRef<Continuation>> ContextStack => _context;
+        public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
 
         public Executor()
@@ -20,7 +20,7 @@ namespace Diver.Exec
         public void Clear()
         {
             _data = new Stack<object>();
-            _context = new Stack<IRef<Continuation>>();
+            _context = new Stack<Continuation>();
             _break = false;
             _current = null;
         }
@@ -71,10 +71,27 @@ namespace Diver.Exec
             Push(fromScope);
         }
 
+        void Continue(dynamic body)
+        {
+            switch (body)
+            {
+                case IRef<Continuation> cont:
+                    Continue(cont);
+                    break;
+                default:
+                    throw new Exception($"Cannot continue a {body.GetType().Name}");
+            }
+        }
+
         public void Continue(IRef<Continuation> continuation)
         {
+            Continue(continuation.Value);
+        }
+
+        public void Continue(Continuation continuation)
+        {
             _current = continuation;
-            Execute(_current.Value);
+            Execute(continuation);
             _break = false;
             _current = null;
         }
@@ -164,9 +181,8 @@ namespace Diver.Exec
             var ident = label.Text;
             if (current.HasScopeObject(ident))
                 return current.Scope[ident];
-            foreach (var contRef in _context)
+            foreach (var cont in _context)
             {
-                var cont = contRef.Value;
                 if (cont.HasScopeObject(ident))
                     return cont.Scope[ident];
             }
@@ -176,7 +192,7 @@ namespace Diver.Exec
 
         private Continuation Context()
         {
-            return _current.Value;
+            return _current;
         }
 
         /// <summary>
@@ -237,8 +253,8 @@ namespace Diver.Exec
 
         private bool _break;
         private Stack<object> _data = new Stack<object>();
-        private IRef<Continuation> _current;
-        private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
+        private Continuation _current;
+        private Stack<Continuation> _context = new Stack<Continuation>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
     }
 }

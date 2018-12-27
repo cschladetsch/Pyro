@@ -51,6 +51,7 @@
     <None Include="Scripts\Comments.pi" />
     <None Include="Scripts\Common.pi" />
     <None Include="Scripts\Floats.pi" />
+    <Compile Include="TestConditionals.cs" />
     <Compile Include="TestContainers.cs" />
     <Compile Include="TestPiLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,13 +1,10 @@
 ﻿// test conditionals
 
 // if
-1 true if 1 equals!
-2 false if 0 depth equals!
+1 true if 1 == assert
+2 false if depth 0 == assert
 
 // if-else
-1 2 true ife 1 equals!
-1 2 false ife 2 equals!
-
-1 { 1 + } { 2 + } true ife & 2 equals!
-1 { 1 + } { 2 + } false ife & 3 equals!
+1 2 true ife 1 == assert
+1 2 false ife 2 == assert
 

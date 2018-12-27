@@ -13,6 +13,7 @@
         protected override void AddKeyWords()
         {
             _keyWords.Add("break", EPiToken.Break);
+            _keyWords.Add("if", EPiToken.If);
             _keyWords.Add("ife", EPiToken.IfElse);
             _keyWords.Add("for", EPiToken.For);
             _keyWords.Add("true", EPiToken.True);

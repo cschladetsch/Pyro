@@ -7,6 +7,8 @@ namespace Diver.Exec
 {
     public partial class Executor
     {
+        public int FloatPrecision;
+
         private void AddOperations()
         {
             _actions[EOperation.Plus] = () =>
@@ -55,9 +57,25 @@ namespace Diver.Exec
             _actions[EOperation.SetFloatPrecision] = SetFloatPrecision;
             _actions[EOperation.Write] = () => Write(RPop());
             _actions[EOperation.WriteLine] = () => WriteLine(RPop());
+            _actions[EOperation.If] = If;
+            _actions[EOperation.IfElse] = IfElse;
         }
 
-        public int FloatPrecision;
+        private void IfElse()
+        {
+            var test = RPop<bool>();
+            var thenBody = RPop();
+            var ifBody = RPop();
+            Push(test ? ifBody : thenBody);
+        }
+
+        private void If()
+        {
+            var test = RPop<bool>();
+            var ifBody = RPop();
+            if (test)
+                Push(ifBody);
+        }
 
         private void SetFloatPrecision()
         {
@@ -88,7 +106,8 @@ namespace Diver.Exec
 
         private void DebugPrintContextStack()
         {
-            throw new NotImplementedException();
+            //WriteContextStack();
+            throw new NotImplementedException("DebugPrintContextStack");
         }
 
         private void DebugPrintContinuation()

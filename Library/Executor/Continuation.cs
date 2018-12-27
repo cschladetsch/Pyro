@@ -7,7 +7,7 @@ namespace Diver.Exec
     /// <summary>
     /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.
     /// </summary>
-    public class Continuation
+    public class Continuation : Reflected<Continuation>
     {
         public List<object> Code { get => _code; set => _code = value; }
         public Dictionary<string, object> Scope { get => _scope; set => _scope = value; }
@@ -75,7 +75,7 @@ namespace Diver.Exec
                 return;
             }
 
-            var index = Math.Max(0, _next - 3);
+            var index = Math.Max(0, _next - 6);
             str.AppendLine($"    Code from {index} to fault at {_next}/{_code.Count}:");
             str.Append("        ");
             for (int n = index; n <= _next; ++n)

@@ -18,7 +18,7 @@ namespace Diver.Test
             // expand map to the stack
             Run(makeMap + " expand");
             _exec.WriteDataStack(10);
-            AssertTop(2);
+            AssertPop(2);
             Assert.AreEqual(4, DataStack.Count);
             DataStack.Clear();
 

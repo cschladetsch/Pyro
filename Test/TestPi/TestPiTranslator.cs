@@ -38,19 +38,19 @@ namespace Diver.Test
         public void TestArith()
         {
             Run("1 2 +");
-            AssertTop(3);
+            AssertPop(3);
             AssertEmpty();
 
             Run("3 -1 +");
-            AssertTop(2);
+            AssertPop(2);
             AssertEmpty();
 
             Run("6 2 *");
-            AssertTop(12);
+            AssertPop(12);
             AssertEmpty();
 
             Run("6 2 div");
-            AssertTop(3);
+            AssertPop(3);
             AssertEmpty();
         }
 
@@ -58,36 +58,36 @@ namespace Diver.Test
         public void TestEquiv()
         {
             Run("1 1 ==");
-            AssertTop(true);
+            AssertPop(true);
             AssertEmpty();
             Run("1 2 ==");
-            AssertTop(false);
+            AssertPop(false);
             AssertEmpty();
             Run("\"foo\" \"foo\" ==");
-            AssertTop(true);
+            AssertPop(true);
             AssertEmpty();
             Run("\"foo\" \"bar\" ==");
-            AssertTop(false);
+            AssertPop(false);
             AssertEmpty();
 
             Run("false true and");
-            AssertTop(false);
+            AssertPop(false);
             AssertEmpty();
 
             Run("false true and not");
-            AssertTop(true);
+            AssertPop(true);
             AssertEmpty();
 
             Run("false true or");
-            AssertTop(true);
+            AssertPop(true);
             AssertEmpty();
 
             Run("true false and");
-            AssertTop(false);
+            AssertPop(false);
             AssertEmpty();
 
             Run("true false and not");
-            AssertTop(true);
+            AssertPop(true);
             AssertEmpty();
         }
 
@@ -111,8 +111,8 @@ namespace Diver.Test
         public void TestNegativeInts()
         {
             Run("-1345 -0");
-            AssertTop(0);
-            AssertTop(-1345);
+            AssertPop(0);
+            AssertPop(-1345);
             AssertEmpty();
         }
 

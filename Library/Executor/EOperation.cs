@@ -24,8 +24,7 @@
         WriteLine,
 
         If,
-        IfThen,
-        IfThenElse,
+        IfElse,
 
         ToArray,
         ToMap,

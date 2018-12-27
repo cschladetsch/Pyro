@@ -115,7 +115,7 @@ namespace Diver.Test
             Assert.AreEqual(0, DataStack.Count);
         }
 
-        protected void AssertTop<T>(T val)
+        protected void AssertPop<T>(T val)
         {
             Assert.AreEqual(val, Pop<T>());
         }

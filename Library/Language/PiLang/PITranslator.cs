@@ -1,8 +1,7 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.AccessControl;
+
 using Diver.Exec;
 
 namespace Diver.Language
@@ -184,14 +183,18 @@ namespace Diver.Language
                 case EPiToken.Depth:
                     objects.Add(EOperation.Depth);
                     break;
-
                 case EPiToken.Write:
                     objects.Add(EOperation.Write);
                     break;
                 case EPiToken.WriteLine:
                     objects.Add(EOperation.WriteLine);
                     break;
-
+                case EPiToken.If:
+                    objects.Add(EOperation.If);
+                    break;
+                case EPiToken.IfElse:
+                    objects.Add(EOperation.IfElse);
+                    break;
                 case EPiToken.SetFloatPrecision:
                     objects.Add(EOperation.SetFloatPrecision);
                     break;
