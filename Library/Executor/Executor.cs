@@ -33,7 +33,7 @@ namespace Diver.Exec
                 Push(a - b);
             };
             _actions[EOperation.Multiply] = () => Push(Pop() * Pop());
-            _actions[EOperation.Divide] = () => Push(Pop() / Pop());
+            _actions[EOperation.Divide] = Divide;
 
             _actions[EOperation.Suspend] = Suspend;
             _actions[EOperation.Resume] = Resume;
@@ -47,6 +47,12 @@ namespace Diver.Exec
             _actions[EOperation.Equiv] = Equiv;
         }
 
+        private void Divide()
+        {
+            var a = Pop();
+            var b = Pop();
+            Push(b / a);
+        }
         private void Equiv()
         {
             var a = Pop();

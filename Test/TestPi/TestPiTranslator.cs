@@ -10,9 +10,21 @@ namespace Diver.Test
     public class TestPiTranslator : TestCommon
     {
         [Test]
-        public void TestAdd()
+        public void TestArith()
         {
             Run("1 2 +");
+            AssertTop(3);
+            AssertEmpty();
+
+            Run("3 -1 +");
+            AssertTop(2);
+            AssertEmpty();
+
+            Run("6 2 *");
+            AssertTop(12);
+            AssertEmpty();
+
+            Run("6 2 div");
             AssertTop(3);
             AssertEmpty();
         }

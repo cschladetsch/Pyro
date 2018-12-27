@@ -81,6 +81,12 @@ namespace Diver.Language
                 case EPiToken.Minus:
                     objects.Add(EOperation.Minus);
                     break;
+                case EPiToken.Multiply:
+                    objects.Add(EOperation.Multiply);
+                    break;
+                case EPiToken.Divide:
+                    objects.Add(EOperation.Divide);
+                    break;
                 case EPiToken.Store:
                     objects.Add(EOperation.Store);
                     break;

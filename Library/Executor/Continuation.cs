@@ -72,7 +72,7 @@ namespace Diver.Exec
             var index = Math.Max(0, _next - 3);
             str.AppendLine($"    Code to {index}/{_code.Count}:");
             str.Append("        ");
-            for (int n = 0; n < index; ++n)
+            for (int n = index; n < _next; ++n)
             {
                 str.Append($"{_code[n]}, ");
             }
