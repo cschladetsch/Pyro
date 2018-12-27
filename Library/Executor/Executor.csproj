@@ -44,6 +44,7 @@
     <Compile Include="Continuation.cs" />
     <Compile Include="EOperation.cs" />
     <Compile Include="Executor.cs" />
+    <Compile Include="ExecutorDebug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

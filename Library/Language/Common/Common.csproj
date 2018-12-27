@@ -63,6 +63,10 @@
       <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Executor\Executor.csproj">
+      <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
+      <Name>Executor</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Readme.md" />

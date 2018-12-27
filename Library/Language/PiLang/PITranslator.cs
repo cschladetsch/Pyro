@@ -1,24 +1,17 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
 
 namespace Diver.Language
 {
-    public class TranslatorBase<TLexer, TParser>
-        : ProcessCommon
-    {
-        protected TranslatorBase(IRegistry r) : base(r)
-        {
-        }
-    }
-
     /// <summary>
     /// Translates input Pi text source code to an executable Continuation
     /// </summary>
     public class PiTranslator : ProcessCommon
     {
-        public IRef<Continuation> Continuation;
+        public IRef<Continuation> Continuation => _continuation;
         public PiLexer Lexer => _lexer;
         public PiParser Parser => _parser;
 
@@ -38,14 +31,14 @@ namespace Diver.Language
             if (!Parser.Process(_lexer, EStructure.Sequence))
                 return Fail($"ParserError: {Parser.Error}");
 
-            Continuation = New(new Continuation(new List<object>()));
+            _continuation = New(new Continuation(new List<object>()));
 
             return TranslateNode(Parser.Root, Continuation.Value.Code);
         }
 
         public override string ToString()
         {
-            return $"=== PITranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {Parser}";
+            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}";
         }
 
         private bool TranslateNode(PiAstNode node, IList<object> objects)
@@ -149,5 +142,6 @@ namespace Diver.Language
 
         private PiLexer _lexer;
         protected internal PiParser _parser;
+        private IRef<Continuation> _continuation;
     }
 }

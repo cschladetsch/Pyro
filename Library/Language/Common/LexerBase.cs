@@ -7,7 +7,7 @@ namespace Diver.Language
     /// Common to all lexers. Provides basic lexing functionality that is not specific to
     /// any token-type.
     /// </summary>
-    public class LexerBase : Process
+    public class LexerBase : Process, ILexer
     {
         public string Input => _input;
         public int Offset => _offset;

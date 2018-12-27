@@ -9,8 +9,8 @@ namespace Diver.Test
     [TestFixture()]
     class TestPiParser : TestCommon
     {
-        protected internal PiParser Parser;
-        protected internal IList<PiAstNode> Sequence => Parser.Root.Children;
+        protected internal PiParser PiParser;
+        protected internal IList<PiAstNode> Sequence => PiParser.Root.Children;
         protected internal PiAstNode First => Sequence?[0];
 
         [Test]
@@ -89,14 +89,14 @@ namespace Diver.Test
                 WriteLine(lexer.ToString());
             if (lexer.Failed)
                 WriteLine(lexer.Error);
-            Parser = new PiParser(lexer);
-            Parser.Process(lexer, EStructure.None);
+            PiParser = new PiParser(lexer);
+            PiParser.Process(lexer, EStructure.None);
             if (verbose)
-                WriteLine(Parser.PrintTree());
-            if (Parser.Failed)
-                Debug.WriteLine(Parser.Error);
-            Assert.IsFalse(Parser.Failed);
-            Assert.IsNotNull(Parser.Root);
+                WriteLine(PiParser.PrintTree());
+            if (PiParser.Failed)
+                Debug.WriteLine(PiParser.Error);
+            Assert.IsFalse(PiParser.Failed);
+            Assert.IsNotNull(PiParser.Root);
         }
     }
 }

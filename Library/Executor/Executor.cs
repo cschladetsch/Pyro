@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Text;
 
 namespace Diver.Exec
 {
     /// <summary>
     /// Processes a sequence of Continuations.
     /// </summary>
-    public class Executor
+    public partial class Executor
     {
         public Stack<object> DataStack => _data;
         public Stack<IRef<Continuation>> ContextStack => _context;
@@ -103,11 +104,31 @@ namespace Diver.Exec
                 if (next is IRefBase refBase)
                     next = refBase.BaseValue;
 
-                Perform(next);
+                try
+                {
+                    Perform(next);
+                }
+                catch (Exception e)
+                {
+                    WriteLine(e);
+                    WriteLine(DebugWrite());
+                    throw;
+                }
 
                 if (_break)
                     break;
             }
+        }
+
+        void WriteLine(object obj)
+        {
+            WriteLine($"{obj}");
+        }
+
+        void WriteLine(string text, params object[] args)
+        {
+            System.Diagnostics.Debug.WriteLine(text);
+            Console.WriteLine(text);
         }
 
         private void Perform(object next)

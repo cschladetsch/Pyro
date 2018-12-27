@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Diver.Impl;
+using Diver.Language;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -11,6 +14,7 @@ namespace Diver.Test
     public class TestCommon
     {
         protected const string ScriptsFolder = "Scripts";
+        public bool Verbose = true;
 
         [SetUp]
         public void Setup()
@@ -18,6 +22,65 @@ namespace Diver.Test
             _reg = new Registry();
             _executor = _reg.Add(new Exec.Executor());
             _exec = _executor.Value;
+        }
+
+        protected string GetFullScriptPathname(string scriptName)
+        {
+            return Path.Combine(GetScriptsPath(), scriptName);
+        }
+
+        protected bool RunScript(string scriptName)
+        {
+            return RunScriptPathname(GetFullScriptPathname(scriptName));
+        }
+
+        // TODO: overkill at the moment
+        //protected ITranslator MakeTranslator(string scriptName)
+        //{
+        //    //new PiTranslator(_reg, text)t;
+        //    object klass = null;
+        //    switch (Path.GetExtension(scriptName))
+        //    {
+        //        case ".pi":
+        //            klass = typeof(PiTranslator);
+        //            break;
+        //        case ".rho":
+        //            klass = typeof(RhoTranslator);
+        //            break;
+        //        case ".tau":
+        //            klass = typeof(TauTranslator);
+        //            break;
+        //    }
+        //    return Activator.CreateInstance(type, _reg, text)
+        //}
+
+        protected bool RunScriptPathname(string filePath)
+        {
+            var fileName = Path.GetFileName(filePath);
+            try
+            {
+                WriteLine($"Running {fileName}");
+                var text = File.ReadAllText(filePath);
+                var trans = new PiTranslator(_reg, text);
+                if (Verbose)
+                    WriteLine($"Translator for {filePath}: {trans}");
+                if (trans.Failed)
+                    WriteLine($"Error: {trans.Error}");
+                Assert.IsFalse(trans.Failed);
+                _exec.Continue(trans.Continuation);
+            }
+            catch (Exception e)
+            {
+                WriteLine($"Script {fileName}: Exception={e.Message}");
+                return false;
+            }
+
+            return true;
+        }
+        protected string GetScriptsPath()
+        {
+            var root = TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
+            return Path.Combine(root, ScriptsFolder);
         }
 
         protected object Pop()
