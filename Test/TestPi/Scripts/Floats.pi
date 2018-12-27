@@ -1,13 +1,14 @@
 ﻿// test floating point
 
--1 -1 + -2 equals!
--1 -1 - 0 equals!
+{ == assert } 'eq #
 
-1 1.5 + 2.5 equals!
-1.1 2.2 + 3.3 equals!
-7 2 / 3.5 equals!
-10 3 / 3.3333 equals!
-2.3 4.5 * 10.35 equals!
-1.003 floor 1 equals!
-1.003 ceil 2 equals!
--1.2 3.4 + 2.2 equals!
+-1 -1 + -2 eq!
+-1 -1 - 0 eq!
+1 1.5 + 2.5 eq!
+1.1 2.2 + 3.3 eq!
+7 2 / 3.5 eq!
+10 3 / 3.3333 eq!
+2.3 4.5 * 10.35 eq!
+1.003 floor 1 eq!
+1.003 ceil 2 eq!
+-1.2 3.4 + 2.2 eq!

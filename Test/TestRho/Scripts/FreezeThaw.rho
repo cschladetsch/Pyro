@@ -2,7 +2,7 @@
 
 a = 1
 b = freeze(a)
-println(b)
+writeln(b)
 c = thaw(a)
 assert(c == 1)
 
