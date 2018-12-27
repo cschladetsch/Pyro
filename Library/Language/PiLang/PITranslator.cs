@@ -189,6 +189,15 @@ namespace Diver.Language
                 case EPiToken.WriteLine:
                     objects.Add(EOperation.WriteLine);
                     break;
+                case EPiToken.Suspend:
+                    objects.Add(EOperation.Suspend);
+                    break;
+                case EPiToken.Replace:
+                    objects.Add(EOperation.Replace);
+                    break;
+                case EPiToken.Resume:
+                    objects.Add(EOperation.Resume);
+                    break;
                 case EPiToken.If:
                     objects.Add(EOperation.If);
                     break;

@@ -91,9 +91,17 @@ namespace Diver.Exec
         public void Continue(Continuation continuation)
         {
             _current = continuation;
-            Execute(continuation);
             _break = false;
-            _current = null;
+
+            while (true)
+            {
+                Execute(_current);
+                _break = false;
+                if (_context.Count > 0)
+                    _current = _context.Pop();
+                else
+                    break;
+            }
         }
 
         private void Execute(Continuation cont)

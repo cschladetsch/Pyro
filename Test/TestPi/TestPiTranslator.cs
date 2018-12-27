@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Diver.Exec;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -7,6 +8,16 @@ namespace Diver.Test
     [TestFixture]
     public class TestPiTranslator : TestCommon
     {
+        [Test]
+        public void TestConditionalExec()
+        {
+            Run("1 { 1 + } { 2 + } true ife &");
+            AssertPop(2);
+
+            Run("1 { 1 + } { 2 + } false ife &");
+            AssertPop(3);
+        }
+
         [SetUp]
         public void LoadCommon()
         {
