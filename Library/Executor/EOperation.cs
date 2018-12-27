@@ -34,6 +34,7 @@
         Clear,
         Swap,
         Break,
-        Not
+        Not,
+        Equiv
     }
 }

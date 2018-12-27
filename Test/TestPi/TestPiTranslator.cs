@@ -18,6 +18,17 @@ namespace Diver.Test
         }
 
         [Test]
+        public void TestEquiv()
+        {
+            Run("1 1 ==");
+            Assert.AreEqual(true, Pop<bool>());
+            Assert.AreEqual(0, DataStack.Count);
+            Run("1 2 ==");
+            Assert.AreEqual(false, Pop<bool>());
+            Assert.AreEqual(0, DataStack.Count);
+        }
+
+        [Test]
         public void TestBreak()
         {
             Assert.Throws<DebugBreakException>(

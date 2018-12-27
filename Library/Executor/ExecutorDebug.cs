@@ -63,11 +63,13 @@ namespace Diver.Exec
             for (int n = max - 1; n >= 0; --n)
             {
                 var obj = data[n];
-                var type = obj.GetType().FullName;
-                if (type.StartsWith("System."))
-                    type = type.Remove(0, 7);
-                str.AppendLine($"    [{n}]: {obj} ({type})");
+                str.AppendLine($"    [{n}]: {GetTyped(obj)}");
             }
+        }
+
+        private static string GetTyped(object obj)
+        {
+            return obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
         }
 
         private void PerformPrelude(object next)
@@ -79,7 +81,7 @@ namespace Diver.Exec
             if (TraceLevel > 5)
             {
                 WriteDataStack(str);
-                str.AppendLine($"next: '{next}'");
+                str.AppendLine($"next: '{GetTyped(next)}'");
             }
             WriteLine(str);
         }

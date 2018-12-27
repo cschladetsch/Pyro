@@ -98,8 +98,9 @@ namespace Diver.Language
         {
             if (Peek() == ch)
             {
+                Add(thenType, 2);
                 Next();
-                return Add(thenType, 2);
+                return true;
             }
 
             return Add(elseType, 1);

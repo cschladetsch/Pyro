@@ -44,6 +44,14 @@ namespace Diver.Exec
             _actions[EOperation.Retrieve] = GetValue;
             _actions[EOperation.Assert] = Assert;
             _actions[EOperation.Not] = () => Push(!Pop<bool>());
+            _actions[EOperation.Equiv] = Equiv;
+        }
+
+        private void Equiv()
+        {
+            var a = Pop();
+            var b = Pop();
+            Push(a.Equals(b));
         }
 
         void Assert()

@@ -111,6 +111,9 @@ namespace Diver.Language
                 case EPiToken.False:
                     objects.Add(false);
                     break;
+                case EPiToken.Equiv:
+                    objects.Add(EOperation.Equiv);
+                    break;
                 default:
                     objects.Add(node.Value);
                     break;
