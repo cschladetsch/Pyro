@@ -14,8 +14,9 @@ namespace Diver.Test
         public void RunScript()
         {
             //_exec.TraceLevel = 100;
-            Assert.IsTrue(RunScript("Comments.pi"));
-            Assert.IsTrue(RunScript("Arithmetic.pi"));
+            //Assert.IsTrue(RunScript("Comments.pi"));
+            //Assert.IsTrue(RunScript("Arithmetic.pi"));
+            Assert.IsTrue(RunScript("Boolean.pi"));
         }
 
         [Test]

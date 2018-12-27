@@ -35,6 +35,9 @@
         Swap,
         Break,
         Not,
-        Equiv
+        Equiv,
+        LogicalAnd,
+        LogicalOr,
+        LogicalXor
     }
 }

@@ -22,17 +22,17 @@ namespace Diver.Exec
         {
             _actions[EOperation.Plus] = () =>
             {
-                var b = ResolvePop();
-                var a = ResolvePop();
+                var b = RPop();
+                var a = RPop();
                 Push(a + b);
             };
             _actions[EOperation.Minus] = () =>
             {
-                var a = ResolvePop();
-                var b = ResolvePop();
+                var a = RPop();
+                var b = RPop();
                 Push(b - a);
             };
-            _actions[EOperation.Multiply] = () => Push(ResolvePop() * ResolvePop());
+            _actions[EOperation.Multiply] = () => Push(RPop() * RPop());
             _actions[EOperation.Divide] = Divide;
 
             _actions[EOperation.Suspend] = Suspend;
@@ -45,18 +45,21 @@ namespace Diver.Exec
             _actions[EOperation.Assert] = Assert;
             _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
             _actions[EOperation.Equiv] = Equiv;
+            _actions[EOperation.LogicalAnd] = () => Push(RPop() && RPop());
+            _actions[EOperation.LogicalOr] = () => Push(RPop() || RPop());
+            _actions[EOperation.LogicalXor] = () => Push(RPop() ^ RPop());
         }
 
         private void Divide()
         {
-            var a = ResolvePop();
-            var b = ResolvePop();
+            var a = RPop();
+            var b = RPop();
             Push(b / a);
         }
         private void Equiv()
         {
-            var a = ResolvePop();
-            var b = ResolvePop();
+            var a = RPop();
+            var b = RPop();
             Push(a.Equals(b));
         }
 
@@ -66,7 +69,7 @@ namespace Diver.Exec
                 throw new AssertionFailedException();
         }
 
-        private dynamic ResolvePop()
+        private dynamic RPop()
         {
             return Resolve(Pop());
         }

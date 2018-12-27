@@ -84,11 +84,12 @@
             case ']': return Add(EPiToken.CloseSquareBracket);
             case '=': return AddIfNext('=', EPiToken.Equiv, EPiToken.Assign);
             case '!': return Add(EPiToken.Replace);
-            case '&': return Add(EPiToken.Suspend);
+            case '&': return AddIfNext('&', EPiToken.LogicalAnd, EPiToken.Suspend);
             case '|': return AddIfNext('|', EPiToken.Or, EPiToken.BitOr);
             case '<': return AddIfNext('=', EPiToken.LessEquiv, EPiToken.LessEquiv);
             case '>': return AddIfNext('=', EPiToken.GreaterEquiv, EPiToken.Greater);
             case '"': return LexString(); 
+            case '^': return Add(EPiToken.Xor);
             case '\t': return Add(EPiToken.Tab);
             case '\r': 
             case '\n': return Add(EPiToken.NewLine);

@@ -120,6 +120,15 @@ namespace Diver.Language
                 case EPiToken.Equiv:
                     objects.Add(EOperation.Equiv);
                     break;
+                case EPiToken.LogicalAnd:
+                    objects.Add(EOperation.LogicalAnd);
+                    break;
+                case EPiToken.LogicalOr:
+                    objects.Add(EOperation.LogicalOr);
+                    break;
+                case EPiToken.LogicalXor:
+                    objects.Add(EOperation.LogicalXor);
+                    break;
                 default:
                     objects.Add(node.Value);
                     break;

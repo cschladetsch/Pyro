@@ -101,5 +101,8 @@
         Separator,
         Dot,
         Quote,
+        LogicalOr,
+        LogicalAnd,
+        LogicalXor
     }
 }
