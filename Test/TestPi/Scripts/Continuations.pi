@@ -1,6 +1,6 @@
 ﻿// test continuations
 
-1 2 { + } & 2 == assert
+1 2 { + } & 3 == assert
 2 3 4 { + * } & 20 == assert
 1 2 { 2 + ... 666 } & + 5 == assert
 

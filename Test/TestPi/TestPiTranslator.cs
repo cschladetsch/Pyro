@@ -9,6 +9,26 @@ namespace Diver.Test
     public class TestPiTranslator : TestCommon
     {
         [Test]
+        public void TestContinuations()
+        {
+            Run("1 1 {+} &");
+            AssertPop(2);
+            AssertEmpty();
+
+            Run("1 2 { + } & 3 ==");
+            AssertPop(true);
+            AssertEmpty();
+
+            Run("2 3 4 { + * } &");
+            AssertPop(14);
+            AssertEmpty();
+
+            Run("3 'a # { {1 +} 'a # 3 a &} & a +");
+            AssertPop(7);
+            AssertEmpty();
+        }
+
+        [Test]
         public void TestConditionalExec()
         {
             Run("1 { 1 + } { 2 + } true ife &");
