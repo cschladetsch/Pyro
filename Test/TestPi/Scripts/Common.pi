@@ -6,3 +6,4 @@
 // helper to ease readability
 { == assert } 'equals #
 
+//"Setup common" writeln

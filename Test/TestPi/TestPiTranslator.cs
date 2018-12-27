@@ -7,6 +7,12 @@ namespace Diver.Test
     [TestFixture]
     public class TestPiTranslator : TestCommon
     {
+        [SetUp]
+        public void LoadCommon()
+        {
+            RunScript("Common.pi");
+        }
+
         [Test]
         public void TestDebugList()
         {

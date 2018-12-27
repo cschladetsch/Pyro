@@ -61,6 +61,7 @@
             _keyWords.Add("insert", EPiToken.Insert);
             _keyWords.Add("has", EPiToken.Has);
             _keyWords.Add("debug_datastack", EPiToken.DebugPrintDataStack);
+            _keyWords.Add("set_float_precision", EPiToken.SetFloatPrecision);
         }
 
         protected override bool NextToken()

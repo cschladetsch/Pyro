@@ -184,6 +184,17 @@ namespace Diver.Language
                 case EPiToken.Depth:
                     objects.Add(EOperation.Depth);
                     break;
+
+                case EPiToken.Write:
+                    objects.Add(EOperation.Write);
+                    break;
+                case EPiToken.WriteLine:
+                    objects.Add(EOperation.WriteLine);
+                    break;
+
+                case EPiToken.SetFloatPrecision:
+                    objects.Add(EOperation.SetFloatPrecision);
+                    break;
                 default:
                     objects.Add(node.Value);
                     break;

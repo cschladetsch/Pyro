@@ -20,6 +20,8 @@
         
         Print,
         Assert,
+        Write,
+        WriteLine,
 
         If,
         IfThen,
@@ -52,6 +54,7 @@
         DebugPrintContextStack,
         DebugPrint,
         DebugPrintContinuation,
-        Depth
+        Depth,
+        SetFloatPrecision
     }
 }

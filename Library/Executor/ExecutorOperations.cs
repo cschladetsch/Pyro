@@ -52,6 +52,16 @@ namespace Diver.Exec
             _actions[EOperation.DebugPrintContextStack] = DebugPrintContextStack;
             _actions[EOperation.DebugPrint] = DebugTrace;
             _actions[EOperation.Depth] = () => Push(_data.Count);
+            _actions[EOperation.SetFloatPrecision] = SetFloatPrecision;
+            _actions[EOperation.Write] = () => Write(RPop());
+            _actions[EOperation.WriteLine] = () => WriteLine(RPop());
+        }
+
+        public int FloatPrecision;
+
+        private void SetFloatPrecision()
+        {
+            FloatPrecision = RPop<int>();
         }
 
         private void LogicalXor()

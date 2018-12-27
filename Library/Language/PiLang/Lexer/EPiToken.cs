@@ -77,6 +77,8 @@
         ToList,
         ToMap,
         ToSet,
+        Write,
+        WriteLine,
 
         Contents,
         Size,
@@ -113,7 +115,8 @@
         PushFront,
         Insert,
         GetBack,
-        Has
+        Has,
+        SetFloatPrecision
     }
 
 }
