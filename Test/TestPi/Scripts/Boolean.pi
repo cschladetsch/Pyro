@@ -9,3 +9,6 @@ true false or assert
 true true and assert
 true false and not assert
 false true xor assert
+
+debug_datastack
+0 depth == assert

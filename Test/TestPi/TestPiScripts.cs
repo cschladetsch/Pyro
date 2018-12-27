@@ -12,15 +12,15 @@ namespace Diver.Test
             //_exec.TraceLevel = 100;
             //Assert.IsTrue(RunScript("Comments.pi"));
             //Assert.IsTrue(RunScript("Arithmetic.pi"));
-            //Assert.IsTrue(RunScript("Boolean.pi"));
+            Assert.IsTrue(RunScript("Boolean.pi"));
+            //Assert.IsTrue(RunScript("Array.pi"));
         }
 
-        [Test]
+        //[Test]
         public void RunAllScripts()
         {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.pi"))
                 Assert.IsTrue(RunScriptPathname(file));
         }
-
     }
 }

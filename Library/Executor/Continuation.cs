@@ -76,7 +76,7 @@ namespace Diver.Exec
             }
 
             var index = Math.Max(0, _next - 3);
-            str.AppendLine($"    Code from {index} to error at {_next}/{_code.Count}:");
+            str.AppendLine($"    Code from {index} to fault at {_next}/{_code.Count}:");
             str.Append("        ");
             for (int n = index; n <= _next; ++n)
             {

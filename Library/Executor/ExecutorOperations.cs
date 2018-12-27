@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Diver.Exec
 {
@@ -49,6 +51,7 @@ namespace Diver.Exec
             _actions[EOperation.DebugPrintContinuation] = DebugPrintContinuation;
             _actions[EOperation.DebugPrintContextStack] = DebugPrintContextStack;
             _actions[EOperation.DebugPrint] = DebugTrace;
+            _actions[EOperation.Depth] = () => Push(_data.Count);
         }
 
         private void DebugPrintContextStack()
@@ -115,10 +118,11 @@ namespace Diver.Exec
         private void At()
         {
             var cont = RPop();
+            var index = RPop();
             switch (cont)
             {
                 case List<object> list:
-                    Push(list[RPop<int>()]);
+                    Push(list[ConstRef<int>(index)]);
                     break;
                 case Dictionary<object,object> dict:
                     Push(dict[RPop()]);
@@ -126,6 +130,15 @@ namespace Diver.Exec
                 default:
                     throw new NotImplementedException($"Cannot use 'at' operation on a {cont.GetType().Name}");
             }
+        }
+
+        private T ConstRef<T>(object obj)
+        {
+            if (obj is T result)
+                return result;
+            if (obj is IConstRef<T> cref)
+                return cref.Value;
+            throw new CannotConvertException(obj, typeof(T));
         }
 
         private void Insert()
@@ -175,22 +188,23 @@ namespace Diver.Exec
 
         private void Remove()
         {
-            var index = RPop();
             var cont = RPop();
+            var index = RPop();
             switch (cont)
             {
                 case List<object> list:
                     list.RemoveAt(index);
-                    return;
+                    break;
                 case Dictionary<object, object> dict:
                     dict.Remove(index);
-                    return;
+                    break;
                 case HashSet<object> set:
                     set.Remove(index);
-                    return;
+                    break;
                 default:
                     throw new NotImplementedException($"Cannot remove {index} from type {cont.GetType().Name}");
             }
+            Push(cont);
         }
 
         private void GetSize()
@@ -214,16 +228,16 @@ namespace Diver.Exec
 
         private void PushBack()
         {
-            var obj = RPop();
             var cont = RPop<List<object>>() as List<object>;
+            var obj = RPop();
             cont.Add(obj);
             Push(cont);
         }
 
         private void PushFront()
         {
-            var obj = RPop();
             var cont = RPop<List<object>>() as List<object>;
+            var obj = RPop();
             cont.Insert(0, obj);
             Push(cont);
         }
@@ -250,7 +264,36 @@ namespace Diver.Exec
         {
             var a = RPop();
             var b = RPop();
+            switch (a)
+            {
+                case IEnumerable<object> list:
+                {
+                    var other = b as IEnumerable<object>;
+                    if (other == null)
+                        throw new CannotEnumerateException(a, b);
+                    Push(list.SequenceEqual(other));
+                    return;
+                }
+            }
+
             Push(a.Equals(b));
+        }
+    }
+
+    public class CannotConvertException : Exception
+    {
+        public object Object;
+        public Type TargetType;
+
+        public CannotConvertException(object obj, Type type)
+        {
+            Object = obj;
+            TargetType = type;
+        }
+
+        public override string ToString()
+        {
+            return $"Couldn't convert {Object} to type {TargetType.Name}";
         }
     }
 }

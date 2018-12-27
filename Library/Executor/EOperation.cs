@@ -51,6 +51,7 @@
         DebugPrintDataStack,
         DebugPrintContextStack,
         DebugPrint,
-        DebugPrintContinuation
+        DebugPrintContinuation,
+        Depth
     }
 }

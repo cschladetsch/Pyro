@@ -49,7 +49,22 @@ namespace Diver
 
         public override string ToString()
         {
-            return $"Unknown object ${What}";
+            return $"Unknown object {What}";
+        }
+    }
+
+    public class CannotEnumerateException : Exception
+    {
+        public object Left, Right;
+        public CannotEnumerateException(object o, object o1)
+        {
+            Left = o;
+            Right = o1;
+        }
+
+        public override string ToString()
+        {
+            return $"Cannot enumerate {Left.GetType().Name} with {Right.GetType().Name}";
         }
     }
 

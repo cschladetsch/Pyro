@@ -181,6 +181,9 @@ namespace Diver.Language
                 case EPiToken.DebugPrint:
                     objects.Add(EOperation.DebugPrint);
                     break;
+                case EPiToken.Depth:
+                    objects.Add(EOperation.Depth);
+                    break;
                 default:
                     objects.Add(node.Value);
                     break;

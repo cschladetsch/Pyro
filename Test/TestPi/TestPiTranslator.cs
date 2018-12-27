@@ -8,6 +8,22 @@ namespace Diver.Test
     public class TestPiTranslator : TestCommon
     {
         [Test]
+        public void TestDebugList()
+        {
+            Run("1 2 3 [3 4 5] \"foo\" debug_datastack");
+        }
+
+
+        [Test]
+        public void TestDepth()
+        {
+            Run("depth");
+            Assert.AreEqual(0, Pop<int>());
+            Run("1 2 3 depth");
+            Assert.AreEqual(3, Pop<int>());
+        }
+
+        [Test]
         public void TestIdents()
         {
             Assert.Throws<UnknownIdentifierException>(() => Run("asdasd"));

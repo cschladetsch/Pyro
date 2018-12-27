@@ -40,6 +40,8 @@ namespace Diver.Test
         [Test]
         public void TestArray()
         {
+            Run("[] [] == assert");
+
             Run("[1 2 3]");
             TestListContents();
 

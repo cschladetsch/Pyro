@@ -85,6 +85,7 @@ namespace Diver.Test
             try
             {
                 WriteLine($"Running {fileName}");
+                _exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = new PiTranslator(_reg, text);
                 if (Verbose)

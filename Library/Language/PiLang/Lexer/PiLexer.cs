@@ -55,11 +55,12 @@
             _keyWords.Add("expand", EPiToken.Expand);
             _keyWords.Add("remove", EPiToken.Remove);
             _keyWords.Add("push_front", EPiToken.PushFront);
-            _keyWords.Add("push_back", EPiToken.PushFront);
+            _keyWords.Add("push_back", EPiToken.PushBack);
             _keyWords.Add("back", EPiToken.GetBack);
             _keyWords.Add("at", EPiToken.At);
             _keyWords.Add("insert", EPiToken.Insert);
             _keyWords.Add("has", EPiToken.Has);
+            _keyWords.Add("debug_datastack", EPiToken.DebugPrintDataStack);
         }
 
         protected override bool NextToken()

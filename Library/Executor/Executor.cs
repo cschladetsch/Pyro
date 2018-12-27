@@ -10,6 +10,7 @@ namespace Diver.Exec
     {
         public Stack<object> DataStack => _data;
         public Stack<IRef<Continuation>> ContextStack => _context;
+        public string SourceFilename;
 
         public Executor()
         {
@@ -89,6 +90,7 @@ namespace Diver.Exec
                 try
                 {
                     Perform(next);
+                    
                     if (TraceLevel > 5)
                     {
                         if (next is EOperation op)
@@ -101,6 +103,8 @@ namespace Diver.Exec
                 catch (Exception e)
                 {
                     WriteLine(e);
+                    if (!string.IsNullOrEmpty(SourceFilename))
+                        WriteLine($"While executing {SourceFilename}:");
                     WriteLine(DebugWrite());
                     throw;
                 }
@@ -237,5 +241,4 @@ namespace Diver.Exec
         private Stack<IRef<Continuation>> _context = new Stack<IRef<Continuation>>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
     }
-
 }
