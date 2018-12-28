@@ -3,11 +3,12 @@ using Diver.RhoLang;
 
 namespace Diver.Language
 {
-    public class RhoAstFactory : IAstFactory<RhoToken, RhoAstNode, ERhoAst>
+    public class RhoAstFactory
+        : IAstFactory<RhoToken, RhoAstNode, ERhoAst>
     {
         public void AddChild(RhoAstNode parent, RhoAstNode node)
         {
-            throw new System.NotImplementedException();
+            parent.Children.Add(node);
         }
 
         public void AddChild(RhoAstNode parent, object node)
