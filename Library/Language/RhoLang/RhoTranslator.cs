@@ -11,13 +11,15 @@ namespace Diver.Language
         {
         }
 
-        public bool Run(string text)
+        public bool Run(string text, EStructure st = EStructure.Expression)
         {
             _lexer = new RhoLexer(text);
+            _lexer.Process();
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
             _parser = new RhoParser(_lexer);
+            _parser.Process(_lexer, st);
             if (_parser.Failed)
                 return Fail(_parser.Error);
 

@@ -31,6 +31,12 @@ namespace Diver.Test
             _exec.Continue(PiTranslate(text));
         }
 
+        protected void RunRho(string text, EStructure st = EStructure.Expression)
+        {
+            _exec.Clear();
+            _exec.Continue(RhoTranslate(text));
+        }
+
         private Continuation PiTranslate(string text)
         {
             var trans = new PiTranslator(_reg, text);

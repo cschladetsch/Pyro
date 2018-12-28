@@ -3,12 +3,12 @@
 namespace Diver.Test.Rho
 {
     [TestFixture]
-    public class TestLexer
+    public class TestRhoBasic : TestCommon
     {
         [Test]
         public void TestBasic()
         {
-            Assert.IsTrue(true);
+            RunRho("1");
         }
     }
 }

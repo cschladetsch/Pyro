@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Diver.RhoLang;
 
 namespace Diver.Language
 {
@@ -13,27 +12,27 @@ namespace Diver.Language
 
         public void AddChild(RhoAstNode parent, object node)
         {
-            throw new System.NotImplementedException();
+            parent.Children.Add(new RhoAstNode(ERhoAst.TokenType, node));
         }
 
         public RhoAstNode New(RhoToken t)
         {
-            throw new System.NotImplementedException();
+            return new RhoAstNode(ERhoAst.TokenType, t);
         }
 
         public RhoAstNode New(ERhoAst e, RhoToken t)
         {
-            throw new System.NotImplementedException();
+            return new RhoAstNode(e, t);
         }
 
         public RhoAstNode New(ERhoAst t)
         {
-            throw new System.NotImplementedException();
+            return new RhoAstNode(t);
         }
 
         public IList<RhoAstNode> GetChildren(RhoAstNode node)
         {
-            throw new System.NotImplementedException();
+            return node.Children;
         }
 
         //public RhoAstNode New(ERhoToken token)
