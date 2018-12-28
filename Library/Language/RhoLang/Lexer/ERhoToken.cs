@@ -61,6 +61,7 @@
         Comment,
         Separator,
         Fun,
-        Yield
+        Yield,
+        Ident
     }
 }

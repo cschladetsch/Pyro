@@ -138,6 +138,37 @@ namespace Diver.Language
             return new Slice(this, start, _offset);
         }
 
+        protected bool IdentOrKeyword()
+        {
+            AddKeywordOrIdent(GatherIdent());
+            return true;
+        }
+
+        protected virtual void AddKeywordOrIdent(Slice gatherIdent)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected bool IsValidIdentGlyph(char ch)
+        {
+            return char.IsLetterOrDigit(ch) || ch == '_';
+        }
+
+        protected Slice GatherIdent()
+        {
+            var begin = _offset;
+            Next();
+            while (IsValidIdentGlyph(Current()))
+                Next();
+            return new Slice(this, begin, _offset);
+        }
+
+        protected bool IsSpaceChar(char arg)
+        {
+            return char.IsWhiteSpace(arg);
+        }
+
+
         private readonly  List<string> _lines = new List<string>();
         protected string _input;
         protected int _offset, _lineNumber;

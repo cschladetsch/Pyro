@@ -156,37 +156,12 @@
             return false;
         }
 
-        private bool IdentOrKeyword()
-        {
-            AddKeywordOrIdent(GatherIdent());
-            return true;
-        }
-
-        private void AddKeywordOrIdent(Slice slice)
+        protected override void AddKeywordOrIdent(Slice slice)
         {
             if (_keyWords.TryGetValue(slice.Text, out EPiToken tok))
                 _tokens.Add(_factory.NewToken(tok, slice));
             else
                 _tokens.Add(_factory.NewTokenIdent(slice));
-        }
-
-        bool IsValidIdentGlyph(char ch)
-        {
-            return char.IsLetterOrDigit(ch) || ch == '_';
-        }
-
-        private Slice GatherIdent()
-        {
-            var begin = _offset;
-            Next();
-            while (IsValidIdentGlyph(Current()))
-                Next();
-            return new Slice(this, begin, _offset);
-        }
-
-        private bool IsSpaceChar(char arg)
-        {
-            return char.IsWhiteSpace(arg);
         }
 
         protected override void Terminate()
