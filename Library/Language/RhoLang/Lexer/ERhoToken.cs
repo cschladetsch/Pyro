@@ -70,6 +70,7 @@
         Pathname,
         Float,
         List,
-        In
+        In,
+        Retrieve
     }
 }

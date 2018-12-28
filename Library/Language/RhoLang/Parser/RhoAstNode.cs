@@ -6,8 +6,10 @@ namespace Diver.Language
     {
         public ERhoAst Type = ERhoAst.None;
         public RhoToken RhoToken;
+        public RhoToken Token => RhoToken;
         public object Value;
         public IList<RhoAstNode> Children => _children;
+        public string Text => Token?.Text;
 
         public RhoAstNode()
         {
@@ -63,5 +65,10 @@ namespace Diver.Language
         }
 
         private readonly List<RhoAstNode> _children = new List<RhoAstNode>();
+
+        public RhoAstNode GetChild(int n)
+        {
+            return Children[n];
+        }
     }
 }

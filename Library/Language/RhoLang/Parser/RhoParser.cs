@@ -78,16 +78,15 @@
             return true;
         }
 
-        bool Program()
+        private bool Program()
         {
             while (!Try(ERhoToken.None) && !Failed)
             {
                 ConsumeNewLines();
-                if (!Statement(_root))
-                {
-                    Fail("Statement expected");
-                    return false;
-                }
+                if (Statement(_root))
+                    continue;
+                Fail("Statement expected");
+                return false;
             }
 
             return true;
@@ -278,7 +277,7 @@
                 var ident = Pop();
                 if (!Logical())
                 {
-                    Fail(_lexer.CreateErrorMessage(Current(), "Assignment requires an expression"));
+                    CreateError("Assignment requires an expression");
                     return false;
                 }
 

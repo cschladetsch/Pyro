@@ -59,27 +59,10 @@ namespace Diver.Test
             Parse("[42 23]");
             var array = Sequence[0];
             Assert.IsNotNull(array);
-            //Assert.AreSame(EPiAst.Array, array.Type); WTF
             var contents = Sequence[0].Children;
             Assert.AreEqual(42, contents[0].Value);
             Assert.AreEqual(23, contents[1].Value);
         }
-
-        //[Test]
-        //public void TestArray2()
-        //{
-        //    Parse("[\"foo\" [1 2 3]]");
-        //    Assert.IsNotNull(Sequence[0]);
-        //    var list = Sequence[0] as IList<object>;
-        //    Assert.IsNotNull(list);
-        //    var nested = Sequence[1] as IList<object>;
-        //    Assert.IsNotNull(nested);
-        //    Assert.AreEqual("foo", list[0]);
-        //    Assert.AreEqual(3, nested.Count);
-        //    Assert.AreEqual(1, nested[0]);
-        //    Assert.AreEqual(2, nested[1]);
-        //    Assert.AreEqual(3, nested[2]);
-        //}
 
         private void Parse(string text, bool verbose = false)
         {

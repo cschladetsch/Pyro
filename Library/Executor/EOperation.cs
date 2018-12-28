@@ -54,6 +54,14 @@
         DebugPrint,
         DebugPrintContinuation,
         Depth,
-        SetFloatPrecision
+        SetFloatPrecision,
+        Assign,
+        Self,
+        NotEquiv,
+        Less,
+        Greater,
+        GreaterOrEquiv,
+        LessOrEquiv,
+        GetProperty
     }
 }

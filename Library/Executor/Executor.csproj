@@ -43,10 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Continuation.cs" />
+    <Compile Include="Continuation.Debug.cs" />
     <Compile Include="EOperation.cs" />
     <Compile Include="Executor.cs" />
-    <Compile Include="ExecutorDebug.cs" />
-    <Compile Include="ExecutorOperations.cs" />
+    <Compile Include="Executor.Debug.cs" />
+    <Compile Include="Executor.Operations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflected.cs" />
   </ItemGroup>

@@ -18,7 +18,7 @@ namespace Diver.Test
         public const string ScriptsFolder = "Scripts";
 
         protected IRef<Continuation> _continuation;
-        protected Dictionary<string, object> _scope => _continuation?.Value.Scope;
+        protected IDictionary<string, object> _scope => _continuation?.Value.Scope;
         protected IList<object> _code => _continuation?.Value.Code;
         protected Stack<object> DataStack => _exec.DataStack;
         protected IRegistry _reg;

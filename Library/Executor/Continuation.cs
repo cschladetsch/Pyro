@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Text;
 
 namespace Diver.Exec
@@ -7,14 +8,30 @@ namespace Diver.Exec
     /// <summary>
     /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.
     /// </summary>
-    public class Continuation : Reflected<Continuation>
+    public partial class Continuation : Reflected<Continuation>
     {
-        public List<object> Code { get => _code; set => _code = value; }
-        public Dictionary<string, object> Scope { get => _scope; set => _scope = value; }
+        public IList<object> Code => _code;//{ get => _code; set => _code = value; }
+        public IDictionary<string, object> Scope => _scope;//{ get => _scope; set => _scope = value; }
+        public IList<string> Args => _args;
 
         public Continuation(List<object> code)
         {
             _code = code;
+        }
+
+        public void AddArg(string ident)
+        {
+            _args.Add(ident);
+        }
+
+        public void Enter(Executor exec)
+        {
+            foreach (var arg in _args)
+            {
+                _scope[arg] = exec.DataStack.Pop();
+            }
+
+            _next = 0;
         }
 
         public bool HasScopeObject(string label)
@@ -45,43 +62,8 @@ namespace Diver.Exec
         }
 
         private int _next;
-        private List<object> _code;
-        private Dictionary<string, object> _scope = new Dictionary<string, object>();
-
-        public void DebugWrite(StringBuilder str)
-        {
-            if (_scope == null)
-            {
-                str.AppendLine("    No scope");
-            }
-            else
-            {
-                str.AppendLine("    Scope:");
-                foreach (var obj in _scope)
-                {
-                    str.AppendLine($"    {obj.Key}={obj.Value}");
-                }
-            }
-
-            if (_code == null)
-            {
-                str.AppendLine("    No code");
-                return;
-            }
-
-            if (_next == _code.Count)
-            {
-                str.AppendLine("    [end]");
-                return;
-            }
-
-            var index = Math.Max(0, _next - 6);
-            str.AppendLine($"    Code from {index} to fault at {_next}/{_code.Count}:");
-            str.Append("        ");
-            for (int n = index; n <= _next; ++n)
-            {
-                str.Append($"{_code[n]}, ");
-            }
-        }
+        private List<string> _args;
+        private readonly List<object> _code;
+        private readonly Dictionary<string, object> _scope = new Dictionary<string, object>();
     }
 }

@@ -12,7 +12,6 @@
         Call,
         Assign,
         Continuation,
-        FunDev,
         ArgList,
         Lambda,
         Program,
@@ -20,9 +19,6 @@
         Function,
         Block,
         Conditional,
-        Assignment,
-        Increment,
-        Decrement,
         TokenType,
         Positive,
         Negative,
@@ -41,6 +37,7 @@
         Pathname,
         Home,
         NewLine,
-        GetMember
+        GetMember,
+        Assignment
     }
 }

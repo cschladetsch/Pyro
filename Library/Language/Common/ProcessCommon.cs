@@ -17,6 +17,6 @@
             return _reg.Add(val);
         }
 
-        private readonly IRegistry _reg;
+        protected readonly IRegistry _reg;
     }
 }
