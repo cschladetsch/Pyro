@@ -10,6 +10,7 @@ namespace Diver.Language
         protected TranslatorCommon(IRegistry r)
             : base(r)
         {
+            _stack.Push(new Continuation(new List<object>()));
         }
 
         protected virtual Continuation Translate(

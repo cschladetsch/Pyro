@@ -76,7 +76,11 @@ namespace Diver.Language
                 //    return;
 
                 case ERhoToken.Assign:
-                    TranslateBinaryOp(node, EOperation.Assign);
+                    TranslateNode(node.GetChild(0));
+                    // need to quote the ident
+                    var ident = new Label(node.GetChild(1).Text, true);
+                    Append(ident);
+                    Append(EOperation.Assign);
                     return;
 
                 case ERhoToken.Retrieve:

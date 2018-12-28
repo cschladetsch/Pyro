@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities.Statements;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -59,6 +60,14 @@ namespace Diver.Exec
             _actions[EOperation.WriteLine] = () => WriteLine(RPop());
             _actions[EOperation.If] = If;
             _actions[EOperation.IfElse] = IfElse;
+            _actions[EOperation.Assign] = Assign;
+        }
+
+        private void Assign()
+        {
+            var ident = Pop<Label>();
+            var val = RPop();
+            _current.SetScopeObject(ident.Text, val);
         }
 
         private void IfElse()

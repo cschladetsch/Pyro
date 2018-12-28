@@ -8,7 +8,7 @@ namespace Diver.Test.Rho
         [Test]
         public void TestBasic()
         {
-            RunRho("1");
+            RunRho("a = 1");
         }
     }
 }

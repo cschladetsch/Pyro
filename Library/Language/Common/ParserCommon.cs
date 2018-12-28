@@ -205,7 +205,7 @@ namespace Diver.Language
 
         protected bool Try(ETokenEnum type)
         {
-            return Current().Type.Equals(type);
+            return !Empty() && Current().Type.Equals(type);
         }
 
         protected TAstNode Expect(ETokenEnum type)
