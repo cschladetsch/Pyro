@@ -69,7 +69,6 @@
     <None Include="Scripts\Relational.pi" />
     <None Include="Scripts\StackOperations.pi" />
     <None Include="Scripts\Strings.pi" />
-    <None Include="Scripts\TestAppCalls.pi" />
     <None Include="Scripts\TreeScope.pi" />
     <None Include="Scripts\Variables.pi" />
     <None Include="Scripts\Arithmetic.pi" />
