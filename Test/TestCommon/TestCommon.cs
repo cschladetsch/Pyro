@@ -17,9 +17,9 @@ namespace Diver.Test
         public bool Verbose = true;
         public const string ScriptsFolder = "Scripts";
 
-        protected IRef<Continuation> _continuation;
-        protected IDictionary<string, object> _scope => _continuation?.Value.Scope;
-        protected IList<object> _code => _continuation?.Value.Code;
+        protected Continuation _continuation;
+        protected IDictionary<string, object> _scope => _continuation?.Scope;
+        protected IList<object> _code => _continuation?.Code;
         protected Stack<object> DataStack => _exec.DataStack;
         protected IRegistry _reg;
         protected IRef<Executor> _executor;
@@ -28,10 +28,10 @@ namespace Diver.Test
         protected void Run(string text)
         {
             _exec.Clear();
-            _exec.Continue(Translate(text));
+            _exec.Continue(PiTranslate(text));
         }
 
-        private IRef<Continuation> Translate(string text)
+        private Continuation PiTranslate(string text)
         {
             var trans = new PiTranslator(_reg, text);
             WriteLine(trans.ToString());
@@ -39,6 +39,17 @@ namespace Diver.Test
                 WriteLine($"Translation error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Continuation;
+        }
+
+        private Continuation RhoTranslate(string text)
+        {
+            var trans = new RhoTranslator(_reg);
+            trans.Run(text);
+            WriteLine(trans.ToString());
+            if (trans.Failed)
+                WriteLine($"Translation error: {trans.Error}");
+            Assert.IsFalse(trans.Failed);
+            return trans.Result();
         }
 
         [SetUp]
@@ -151,7 +162,7 @@ namespace Diver.Test
             Console.WriteLine(text);
         }
 
-        protected PiLexer Lex(string input)
+        protected PiLexer PiLex(string input)
         {
             var lex = new PiLexer(input);
             Assert.IsTrue(lex.Process());

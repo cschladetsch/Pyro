@@ -11,7 +11,7 @@ namespace Diver.Test
         [Test]
         public void TestIdents()
         {
-            var lex = Lex("a __a a__ a_b ___");
+            var lex = PiLex("a __a a__ a_b ___");
             var tokens = lex.Tokens.Where(t => !IsWhiteSpace(t)).ToList();
             Assert.AreEqual(5, tokens.Count);
             Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new []{"a", "__a", "a__", "a_b", "___"}));
@@ -56,7 +56,7 @@ namespace Diver.Test
 
         private void AssertSameTokens(string input, params EPiToken[] tokens)
         {
-            var lex = Lex(input);
+            var lex = PiLex(input);
             Assert.IsTrue(lex.Tokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).SequenceEqual(tokens));
         }
 

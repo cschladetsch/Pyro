@@ -11,7 +11,7 @@ namespace Diver.Language
     /// </summary>
     public class PiTranslator : ProcessCommon
     {
-        public IRef<Continuation> Continuation => _continuation;
+        public Continuation Continuation => _continuation;
         public PiLexer Lexer => _lexer;
         public PiParser Parser => _parser;
 
@@ -31,9 +31,9 @@ namespace Diver.Language
             if (!Parser.Process(_lexer, EStructure.Sequence))
                 return Fail($"ParserError: {Parser.Error}");
 
-            _continuation = New(new Continuation(new List<object>()));
+            _continuation = new Continuation(new List<object>());
 
-            return TranslateNode(Parser.Root, Continuation.Value.Code);
+            return TranslateNode(Parser.Root, Continuation.Code);
         }
 
         public override string ToString()
@@ -238,6 +238,6 @@ namespace Diver.Language
 
         private PiLexer _lexer;
         protected internal PiParser _parser;
-        private IRef<Continuation> _continuation;
+        private Continuation _continuation;
     }
 }

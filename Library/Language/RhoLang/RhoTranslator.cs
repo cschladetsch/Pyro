@@ -6,11 +6,24 @@ namespace Diver.Language
     public class RhoTranslator 
         : TranslatorBase<RhoParser>
     {
-        protected RhoTranslator(RhoLexer lex, RhoParser parse, IRegistry r)
+        public RhoTranslator(IRegistry r)
             : base(r)
         {
-            _lexer = lex;
-            _parser = parse;
+        }
+
+        public bool Run(string text)
+        {
+            _lexer = new RhoLexer(text);
+            if (_lexer.Failed)
+                return Fail(_lexer.Error);
+
+            _parser = new RhoParser(_lexer);
+            if (_parser.Failed)
+                return Fail(_parser.Error);
+
+            TranslateNode(_parser.Root);
+
+            return !Failed;
         }
 
         void TranslateToken(RhoAstNode node)
@@ -190,7 +203,7 @@ namespace Diver.Language
         //}
 
 
-        void TranslateNode(RhoAstNode node)
+        protected void TranslateNode(RhoAstNode node)
         {
             if (node == null)
             {
@@ -329,7 +342,7 @@ namespace Diver.Language
             return $"=== RhoTranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}";
         }
 
-        private readonly RhoLexer _lexer;
-        private readonly RhoParser _parser;
+        private RhoLexer _lexer;
+        private RhoParser _parser;
     }
 }

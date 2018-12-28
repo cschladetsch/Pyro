@@ -67,6 +67,10 @@
       <Project>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</Project>
       <Name>PiLang</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
+      <Project>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</Project>
+      <Name>RhoLang</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
