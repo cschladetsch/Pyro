@@ -2,31 +2,34 @@
 
 namespace Diver.RhoLang
 {
-    public class RhoTokenFactory : ITokenFactory<ERhoToken, RhoToken>
+    public class RhoTokenFactory
+        : ITokenFactory<ERhoToken, RhoToken>
     {
         public RhoToken NewToken(ERhoToken en, Slice slice)
         {
-            throw new System.NotImplementedException();
+            return new RhoToken(en, slice);
         }
 
         public RhoToken NewTokenIdent(Slice slice)
         {
-            throw new System.NotImplementedException();
+            return NewToken(ERhoToken.Ident, slice);
         }
 
         public RhoToken NewTokenString(Slice slice)
         {
-            throw new System.NotImplementedException();
+            return NewToken(ERhoToken.String, slice);
         }
 
         public RhoToken NewEmptyToken(Slice slice)
         {
-            throw new System.NotImplementedException();
+            return NewToken(ERhoToken.None, slice);
         }
 
         public void SetLexer(LexerBase lexer)
         {
-            throw new System.NotImplementedException();
+            _lexer = lexer;
         }
+
+        private LexerBase _lexer;
     }
 }

@@ -1,10 +1,17 @@
 ﻿namespace Diver.Language
 {
-    public class RhoToken : ITokenNode<ERhoToken>, ITokenBase<ERhoToken>
+    public class RhoToken
+        : TokenBase<ERhoToken>
+        , ITokenNode<ERhoToken>
     {
-        public ERhoToken Type { get; set; }
-        public int LineNumber { get; }
-        public Slice Slice { get; }
-        public LexerBase Lexer { get; }
+        public RhoToken()
+        {
+            _type = ERhoToken.None;
+        }
+
+        public RhoToken(ERhoToken type, Slice slice)
+            : base(type, slice)
+        {
+        }
     }
 }
