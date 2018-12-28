@@ -2,6 +2,9 @@
 
 namespace Diver.Language
 {
+    /// <summary>
+    /// Lexer for the Rho language
+    /// </summary>
     public class RhoLexer 
         : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory>
     {
@@ -95,7 +98,7 @@ namespace Diver.Language
                 if (Peek() == '/')
                 {
                     Next();
-                    int start = _offset + 1;
+                    var start = _offset + 1;
                     while (Next() != '\n')
                         ;
 
@@ -117,7 +120,7 @@ namespace Diver.Language
 
         protected override void AddKeywordOrIdent(Slice slice)
         {
-            if (_keyWords.TryGetValue(slice.Text, out ERhoToken tok))
+            if (_keyWords.TryGetValue(slice.Text, out var tok))
                 _tokens.Add(_factory.NewToken(tok, slice));
             else
                 _tokens.Add(_factory.NewTokenIdent(slice));

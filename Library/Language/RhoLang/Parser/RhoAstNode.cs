@@ -2,6 +2,9 @@
 
 namespace Diver.Language
 {
+    /// <summary>
+    /// A node in the Rho Abstract Syntax Tree
+    /// </summary>
     public class RhoAstNode
     {
         public ERhoAst Type = ERhoAst.None;
@@ -64,11 +67,11 @@ namespace Diver.Language
             _children.Add(new RhoAstNode(type, value));
         }
 
-        private readonly List<RhoAstNode> _children = new List<RhoAstNode>();
-
         public RhoAstNode GetChild(int n)
         {
             return Children[n];
         }
+
+        private readonly List<RhoAstNode> _children = new List<RhoAstNode>();
     }
 }

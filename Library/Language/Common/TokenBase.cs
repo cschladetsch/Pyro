@@ -2,7 +2,8 @@
 
 namespace Diver.Language
 {
-    public class TokenBase<ETokenType> : ITokenBase<ETokenType>
+    public class TokenBase<ETokenType>
+        : ITokenBase<ETokenType>
     {
         public Slice Slice => _slice;
         public ETokenType Type { get => _type; set => _type = value; } 

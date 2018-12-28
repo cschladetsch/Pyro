@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Diver.Test
 {
     /// <summary>
-    /// Common to all (most) unit tests in the system
+    /// Common to most unit tests in the system
     /// </summary>
     [TestFixture]
     public class TestCommon
@@ -24,6 +24,14 @@ namespace Diver.Test
         protected IRegistry _reg;
         protected IRef<Executor> _executor;
         protected Executor _exec;
+
+        [SetUp]
+        public void Setup()
+        {
+            _reg = new Registry();
+            _executor = _reg.Add(new Executor());
+            _exec = _executor.Value;
+        }
 
         protected void Run(string text)
         {
@@ -56,14 +64,6 @@ namespace Diver.Test
                 WriteLine($"Translation error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
             return trans.Result();
-        }
-
-        [SetUp]
-        public void Setup()
-        {
-            _reg = new Registry();
-            _executor = _reg.Add(new Executor());
-            _exec = _executor.Value;
         }
 
         protected string GetFullScriptPathname(string scriptName)
@@ -160,7 +160,7 @@ namespace Diver.Test
 
         protected void WriteLine(string fmt, params object[] args)
         {
-            string text = null;
+            string text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);
             System.Diagnostics.Trace.WriteLine(text);

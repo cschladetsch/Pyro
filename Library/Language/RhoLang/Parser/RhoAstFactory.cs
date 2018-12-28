@@ -2,6 +2,11 @@
 
 namespace Diver.Language
 {
+    /// <summary>
+    /// Make RhoAstNodes with various arguments.
+    /// Required because C# doesn't allow template types to
+    /// take parameters for constructors.
+    /// </summary>
     public class RhoAstFactory
         : IAstFactory<RhoToken, RhoAstNode, ERhoAst>
     {

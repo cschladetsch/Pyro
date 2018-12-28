@@ -9,6 +9,7 @@ namespace Diver.Test.Rho
         public void TestBasic()
         {
             RunRho("a = 1");
+            RunRho("assert(true)");
         }
     }
 }

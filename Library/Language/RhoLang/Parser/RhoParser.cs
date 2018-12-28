@@ -43,7 +43,7 @@
             }
         }
 
-        new bool Run(EStructure st)
+        private new bool Run(EStructure st)
         {
             switch (st)
             {
@@ -78,7 +78,7 @@
             return true;
         }
 
-        private bool Program()
+        private void Program()
         {
             while (!Try(ERhoToken.None) && !Failed)
             {
@@ -86,13 +86,10 @@
                 if (Statement(_root))
                     continue;
                 Fail("Statement expected");
-                return false;
             }
-
-            return true;
         }
 
-        void Function(RhoAstNode node)
+        private void Function(RhoAstNode node)
         {
             ConsumeNewLines();
 
@@ -122,7 +119,7 @@
             node.Add(fun);
         }
 
-        void While(RhoAstNode block)
+        private void While(RhoAstNode block)
         {
             var w = NewNode(Consume());
             if (!Expression())
@@ -135,14 +132,14 @@
             block.Add(w);
         }
 
-        void AddBlock(RhoAstNode fun)
+        private void AddBlock(RhoAstNode fun)
         {
             var block = NewNode(ERhoAst.Block);
             Block(block);
             fun.Add(block);
         }
 
-        void Block(RhoAstNode node)
+        private void Block(RhoAstNode node)
         {
             ConsumeNewLines();
 
@@ -186,7 +183,7 @@
             }
         }
 
-        bool Statement(RhoAstNode block)
+        private bool Statement(RhoAstNode block)
         {
             switch (Current().Type)
             {
@@ -261,7 +258,7 @@
             return true;
         }
 
-        bool Expression()
+        private bool Expression()
         {
             if (!Logical())
                 return false;
@@ -289,7 +286,7 @@
             return true;
         }
 
-        bool Logical()
+        private bool Logical()
         {
             if (!Relational())
                 return false;
@@ -371,7 +368,7 @@
             return true;
         }
 
-        bool Term()
+        private bool Term()
         {
             if (!Factor())
                 return false;
@@ -390,7 +387,7 @@
             return true;
         }
 
-        bool Factor()
+        private bool Factor()
         {
             if (Try(ERhoToken.OpenParan))
             {
@@ -453,7 +450,7 @@
             return false;
         }
 
-        bool ParseFactorIdent()
+        private bool ParseFactorIdent()
         {
             PushConsume();
 
@@ -483,7 +480,7 @@
             return true;
         }
 
-        void ParseMethodCall()
+        private void ParseMethodCall()
         {
             Consume();
             var call = NewNode(ERhoAst.Call);
@@ -514,7 +511,7 @@
                 call.Add(Consume());
         }
 
-        void ParseGetMember()
+        private void ParseGetMember()
         {
             Consume();
             var get = NewNode(ERhoAst.GetMember);
@@ -523,7 +520,7 @@
             Push(get);
         }
 
-        void IfCondition(RhoAstNode block)
+        private void IfCondition(RhoAstNode block)
         {
             if (!Try(ERhoToken.If))
                 return;
@@ -559,7 +556,7 @@
             block.Add(cond);
         }
 
-        void ParseIndexOp()
+        private void ParseIndexOp()
         {
             Consume();
             var index = NewNode(ERhoAst.IndexOp);
@@ -575,7 +572,7 @@
             Push(index);
         }
 
-        void For(RhoAstNode block)
+        private void For(RhoAstNode block)
         {
             if (!Try(ERhoToken.For))
                 return;
@@ -635,7 +632,7 @@
             return Fail(_lexer.CreateErrorMessage(Current(), string.Format(text, args)));
         }
 
-        void ConsumeNewLines()
+        private void ConsumeNewLines()
         {
             while (Try(ERhoToken.NewLine))
                 Consume();

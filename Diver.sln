@@ -102,6 +102,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiLang", "Library\Language\PiLang\PiLang.csproj", "{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Language", "Language", "{789EF740-5925-4AF1-9E55-3315E731EE8A}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Readme.md = Library\Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Library\Language\Common\Common.csproj", "{329084C8-82D9-44C9-86DD-FA587C1A6FA4}"
 EndProject

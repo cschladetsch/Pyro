@@ -1,5 +1,5 @@
-# Contains the libraries used by the system
+# Languages used by the system
 
-This includes external git repos stored as submodules.
+This includes *Pi* and *Rho*. And soon, *Tau*.
 
 
