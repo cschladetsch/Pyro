@@ -50,7 +50,7 @@
     <Compile Include="Parser\RhoAstFactory.cs" />
     <Compile Include="Parser\RhoParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Translator.cs" />
+    <Compile Include="RhoTranslator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.csproj">

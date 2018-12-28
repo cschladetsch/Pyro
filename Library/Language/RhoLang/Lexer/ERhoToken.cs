@@ -62,6 +62,14 @@
         Separator,
         Fun,
         Yield,
-        Ident
+        Ident,
+        Semi,
+        Replace,
+        Call,
+        ArgList,
+        Pathname,
+        Float,
+        List,
+        In
     }
 }

@@ -32,7 +32,7 @@ namespace Diver.Language
             return false;
         }
 
-        bool Run(EStructure st)
+        protected bool Run(EStructure st)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace Diver.Language
             {
                 //KAI_TRACE_ERROR_1(Fail("Expected something"));
                 //KAI_THROW_1(LogicError, "Expected something");
-                throw new Exception("");
+                throw new Exception("Expected something");
             }
 
             return _tokens[_current];
@@ -239,7 +239,7 @@ namespace Diver.Language
         }
 
         protected List<TTokenNode> _tokens = new List<TTokenNode>();
-        private readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
+        protected readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
         protected int _current;
         protected TAstNode _root;
         protected int _indent;

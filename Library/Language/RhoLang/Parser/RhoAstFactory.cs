@@ -35,5 +35,10 @@ namespace Diver.Language
         {
             throw new System.NotImplementedException();
         }
+
+        //public RhoAstNode New(ERhoToken token)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 }

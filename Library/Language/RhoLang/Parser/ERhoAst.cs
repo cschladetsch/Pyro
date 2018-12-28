@@ -40,5 +40,7 @@
         Object,
         Pathname,
         Home,
+        NewLine,
+        GetMember
     }
 }

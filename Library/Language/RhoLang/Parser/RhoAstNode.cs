@@ -46,10 +46,17 @@ namespace Diver.Language
             _children.Add(node);
         }
 
+        public void Add(RhoToken token)
+        {
+            // TODO: Keep Slice info for debugging
+            Add(token.Type);
+        }
+
         public void Add(ERhoToken piToken)
         {
             _children.Add(new RhoAstNode(piToken));
         }
+
         public void Add(ERhoAst type, object value)
         {
             _children.Add(new RhoAstNode(type, value));

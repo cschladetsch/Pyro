@@ -20,11 +20,629 @@
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
-            //RemoveWhitespace()n
+            RemoveWhitespace();
 
-            //return Run(structure);
+            _root = NewNode(ERhoAst.Program);
+
+            return Run(structure);
+        }
+
+        private void RemoveWhitespace()
+        {
+            foreach (var tok in _lexer.Tokens)
+            {
+                switch (tok.Type)
+                {
+                    case ERhoToken.Whitespace:
+                    case ERhoToken.NewLine:
+                    case ERhoToken.Comment:
+                        continue;
+                }
+
+                _tokens.Add(tok);
+            }
+        }
+
+        new bool Run(EStructure st)
+        {
+            switch (st)
+            {
+                case EStructure.Statement:
+                    if (!Statement(_root))
+                    {
+                        return CreateError("Statement expected");
+                    }
+                    break;
+
+                case EStructure.Expression:
+                    if (!Expression())
+                    {
+                        return CreateError("Expression expected");
+                    }
+                    _root.Add(Pop());
+                    break;
+
+                case EStructure.Function:
+                    Function(_root);
+                    break;
+
+                case EStructure.Program:
+                    Program();
+                    break;
+            }
+
+            ConsumeNewLines();
+            if (_stack.Count != 0)
+                return Fail("[Internal] Error: Stack not empty after parsing");
+
+            return true;
+        }
+
+        bool Program()
+        {
+            while (!Try(ERhoToken.None) && !Failed)
+            {
+                ConsumeNewLines();
+                if (!Statement(_root))
+                {
+                    Fail("Statement expected");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        void Function(RhoAstNode node)
+        {
+            ConsumeNewLines();
+
+            Expect(ERhoToken.Fun);
+            Expect(ERhoToken.Ident);
+            var name = Last();
+            var fun = NewNode(ERhoAst.Function);
+            fun.Add(name);
+            Expect(ERhoToken.OpenParan);
+            var args = NewNode(ERhoAst.None);
+            fun.Add(args);
+
+            if (Try(ERhoToken.Ident))
+            {
+                args.Add(Consume());
+                while (Try(ERhoToken.Comma))
+                {
+                    Consume();
+                    args.Add(Expect(ERhoToken.Ident));
+                }
+            }
+
+            Expect(ERhoToken.CloseParan);
+            Expect(ERhoToken.NewLine);
+
+            AddBlock(fun);
+            node.Add(fun);
+        }
+
+        void While(RhoAstNode block)
+        {
+            var w = NewNode(Consume());
+            if (!Expression())
+            {
+                CreateError("While what?");
+                return;
+            }
+
+            w.Add(Pop());
+            block.Add(w);
+        }
+
+        void AddBlock(RhoAstNode fun)
+        {
+            var block = NewNode(ERhoAst.Block);
+            Block(block);
+            fun.Add(block);
+        }
+
+        void Block(RhoAstNode node)
+        {
+            ConsumeNewLines();
+
+            ++indent;
+            while (!Failed)
+            {
+                int level = 0;
+                while (Try(ERhoToken.Tab))
+                {
+                    ++level;
+                    Consume();
+                }
+
+                if (Try(ERhoToken.NewLine))
+                {
+                    Consume();
+                    continue;
+                }
+
+                // close current block
+                if (level < indent)
+                {
+                    --indent;
+
+                    // rewind to start of tab sequence to determine next block
+                    --current;
+                    while (Try(ERhoToken.Tab))
+                        --current;
+
+                    ++current;
+                    return;
+                }
+
+                if (level != indent)
+                {
+                    CreateError("Mismatch block indent");
+                    return;
+                }
+
+                Statement(node);
+            }
+        }
+
+        bool Statement(RhoAstNode block)
+        {
+            switch (Current().Type)
+            {
+                case ERhoToken.Assert:
+                {
+                    var ass = NewNode(Consume());
+                    if (!Expression())
+                    {
+                        Fail(_lexer.CreateErrorMessage(Current(), "Assert needs an expression to test"));
+                        return false;
+                    }
+
+                    ass.Add(Pop());
+                    block.Add(ass);
+                    goto finis;
+                }
+
+                case ERhoToken.Return:
+                case ERhoToken.Yield:
+                {
+                    var ret = NewNode(Consume());
+                    if (Expression())
+                        ret.Add(Pop());
+                    block.Add(ret);
+                    goto finis;
+                }
+
+                case ERhoToken.While:
+                {
+                    While(block);
+                    return true;
+                }
+
+                case ERhoToken.For:
+                {
+                    For(block);
+                    return true;
+                }
+
+                case ERhoToken.If:
+                {
+                    IfCondition(block);
+                    return true;
+                }
+
+                case ERhoToken.Fun:
+                {
+                    Function(block);
+                    return true;
+                }
+            }
+
+            ConsumeNewLines();
+
+            if (Try(ERhoToken.None))
+                return true;
+
+            if (!Expression())
+                return false;
+
+            block.Add(Pop());
+
+            finis:
+
+            //// statements can end with an optional semi followed by a new line
+            //if (Try(ERhoToken.Semi))
+            //    Consume();
+
+            if (!Try(ERhoToken.None))
+                Expect(ERhoToken.NewLine);
+
+            return true;
+        }
+
+        bool Expression()
+        {
+            if (!Logical())
+                return false;
+
+            if (Try(ERhoToken.Assign) 
+                || Try(ERhoToken.PlusAssign) 
+                || Try(ERhoToken.MinusAssign) 
+                //|| Try(ERhoToken.MulAssign) 
+                //|| Try(ERhoToken.DivAssign)
+                )
+            {
+                var node = NewNode(Consume());
+                var ident = Pop();
+                if (!Logical())
+                {
+                    Fail(_lexer.CreateErrorMessage(Current(), "Assignment requires an expression"));
+                    return false;
+                }
+
+                node.Add(Pop());
+                node.Add(ident);
+                Push(node);
+            }
+
+            return true;
+        }
+
+        bool Logical()
+        {
+            if (!Relational())
+                return false;
+
+            while (Try(ERhoToken.And) || Try(ERhoToken.Or))
+            {
+                var node = NewNode(Consume());
+                node.Add(Pop());
+                if (!Relational())
+                    return CreateError("Relational expected");
+
+                node.Add(Pop());
+                Push(node);
+            }
+
+            return true;
+        }
+
+        bool Relational()
+        {
+            if (!Additive())
+                return false;
+
+            while (Try(ERhoToken.Less) || Try(ERhoToken.Greater) || Try(ERhoToken.Equiv) || Try(ERhoToken.NotEquiv)
+                || Try(ERhoToken.LessEquiv) || Try(ERhoToken.GreaterEquiv))
+            {
+                var node = NewNode(Consume());
+                node.Add(Pop());
+                if (!Additive())
+                    return CreateError("Additive expected");
+
+                node.Add(Pop());
+                Push(node);
+            }
+
+            return true;
+        }
+
+        bool Additive()
+        {
+            // unary +/- operator
+            if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
+            {
+                var uniSigned = NewNode(Consume());
+                if (!Term())
+                    return CreateError("Term expected");
+
+                uniSigned.Add(Pop());
+                Push(uniSigned);
+                return true;
+            }
+
+            if (Try(ERhoToken.Not))
+            {
+                var negate = NewNode(Consume());
+                if (!Additive())
+                    return CreateError("Additive expected");
+
+                negate.Add(Pop());
+                Push(negate);
+                return true;
+            }
+
+            if (!Term())
+                return false;
+
+            while (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
+            {
+                //[1]
+                var node = NewNode(Consume());
+                node.Add(Pop());
+                if (!Term())
+                    return CreateError("Term expected");
+
+                node.Add(Pop());
+                Push(node);
+            }
+
+            return true;
+        }
+
+        bool Term()
+        {
+            if (!Factor())
+                return false;
+
+            while (Try(ERhoToken.Multiply) || Try(ERhoToken.Divide))
+            {
+                var node = NewNode(Consume());
+                node.Add(Pop());
+                if (!Factor())
+                    return CreateError("Factor expected with a term");
+
+                node.Add(Pop());
+                Push(node);
+            }
+
+            return true;
+        }
+
+        bool Factor()
+        {
+            if (Try(ERhoToken.OpenParan))
+            {
+                var exp = NewNode(Consume());
+                if (!Expression())
+                    return CreateError("Expected an expression");
+
+                Expect(ERhoToken.CloseParan);
+                exp.Add(Pop());
+                Push(exp);
+                return true;
+            }
+
+            if (Try(ERhoToken.OpenSquareBracket))
+            {
+                var list = NewNode(ERhoAst.List);
+                do
+                {
+                    Consume();
+                    if (Try(ERhoToken.CloseSquareBracket))
+                        break;
+                    if (Expression())
+                        list.Add(Pop());
+                    else
+                    {
+                        Fail("Badly formed array");
+                        return false;
+                    }
+                }
+                while (Try(ERhoToken.Comma));
+
+                Expect(ERhoToken.CloseSquareBracket);
+                Push(list);
+
+                return true;
+            }
+
+            if (   Try(ERhoToken.Int) 
+                || Try(ERhoToken.Float) 
+                || Try(ERhoToken.String) 
+                || Try(ERhoToken.True) 
+                || Try(ERhoToken.False)
+                )
+            {
+                return PushConsume();
+            }
+
+            if (Try(ERhoToken.Self))
+                return PushConsume();
+
+            //    while (Try(ERhoToken.Lookup))
+            //        return PushConsume();
+
+            if (Try(ERhoToken.Ident))
+                return ParseFactorIdent();
+
+            if (Try(ERhoToken.Pathname))
+                return ParseFactorIdent();
 
             return false;
         }
+
+        bool ParseFactorIdent()
+        {
+            PushConsume();
+
+            while (!Failed)
+            {
+                if (Try(ERhoToken.Dot))
+                {
+                    ParseGetMember();
+                    continue;
+                }
+
+                if (Try(ERhoToken.OpenParan))
+                {
+                    ParseMethodCall();
+                    continue;
+                }
+
+                if (Try(ERhoToken.OpenSquareBracket))
+                {
+                    ParseIndexOp();
+                    continue;
+                }
+
+                break;
+            }
+
+            return true;
+        }
+
+        void ParseMethodCall()
+        {
+            Consume();
+            var call = NewNode(ERhoAst.Call);
+            call.Add(Pop());
+            var args = NewNode(ERhoAst.ArgList);
+            call.Add(args);
+
+            if (Expression())
+            {
+                args.Add(Pop());
+                while (Try(ERhoToken.Comma))
+                {
+                    Consume();
+                    if (!Expression())
+                    {
+                        CreateError("What is the next argument?");
+                        return;
+                    }
+
+                    args.Add(Pop());
+                }
+            }
+
+            Push(call);
+            Expect(ERhoToken.CloseParan);
+
+            if (Try(ERhoToken.Replace))
+                call.Add(Consume());
+        }
+
+        void ParseGetMember()
+        {
+            Consume();
+            var get = NewNode(ERhoAst.GetMember);
+            get.Add(Pop());
+            get.Add(Expect(ERhoToken.Ident));
+            Push(get);
+        }
+
+        void IfCondition(RhoAstNode block)
+        {
+            if (!Try(ERhoToken.If))
+                return;
+
+            Consume();
+
+            if (!Expression())
+            {
+                CreateError("If what?");
+                return;
+            }
+
+            var condition = Pop();
+
+            // get the true-clause
+            var trueClause = NewNode(ERhoAst.Block);
+            Block(trueClause);
+
+            // make the conditional node in AST
+            var cond = NewNode(ERhoAst.Conditional);
+            cond.Add(condition);
+            cond.Add(trueClause);
+
+            // if there's an else, add it as well
+            if (Try(ERhoToken.Else))
+            {
+                Consume();
+                var falseClause = NewNode(ERhoAst.Block);
+                Block(falseClause);
+                cond.Add(falseClause);
+            }
+
+            block.Add(cond);
+        }
+
+        void ParseIndexOp()
+        {
+            Consume();
+            var index = NewNode(ERhoAst.IndexOp);
+            index.Add(Pop());
+            if (!Expression())
+            {
+                CreateError("Index what?");
+                return;
+            }
+
+            Expect(ERhoToken.CloseSquareBracket);
+            index.Add(Pop());
+            Push(index);
+        }
+
+        void For(RhoAstNode block)
+        {
+            if (!Try(ERhoToken.For))
+                return;
+
+            Consume();
+
+            var f = NewNode(ERhoAst.For);
+            if (!Expression())
+            {
+                CreateError("For what?");
+                return;
+            }
+
+            if (Try(ERhoToken.In))
+            {
+                Consume();
+                f.Add(Pop());
+
+                if (!Expression())
+                {
+                    CreateError("For each in what?");
+                    return;
+                }
+
+                f.Add(Pop());
+            }
+            else
+            {
+                Expect(ERhoToken.Semi);
+                f.Add(Pop());
+
+                if (!Expression())
+                {
+                    CreateError("When does the for statement stop?");
+                    return;
+                }
+
+                f.Add(Pop());
+                Expect(ERhoToken.Semi);
+
+                if (!Expression())
+                {
+                    CreateError("What happens when a for statement ends?");
+                    return;
+                }
+
+                f.Add(Pop());
+            }
+
+            Expect(ERhoToken.NewLine);
+            AddBlock(f);
+            block.Add(f);
+        }
+
+        private bool CreateError(string text, params object[] args)
+        {
+            return Fail(_lexer.CreateErrorMessage(Current(), string.Format(text, args)));
+        }
+
+        void ConsumeNewLines()
+        {
+            while (Try(ERhoToken.NewLine))
+                Consume();
+        }
+
+        private int indent;
+        private int current;
     }
 }
