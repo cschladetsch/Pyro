@@ -45,14 +45,12 @@ namespace Diver.Test.Rho
         {
             RunRho("a = 1 + 2");
             AssertVarEquals("a", 3);
-
-            // TODO: issues with \r and \n
-            //RunRho(@"
-            //    a = 1
-            //    b = 2
-            //    c = (a + b)*2
-            //    ", EStructure.Program);
-            //AssertVarEquals("c", 6);
+            RunRho(@"
+                a = 1
+                b = 2
+                c = (a + b)*2
+                ", EStructure.Program);
+            AssertVarEquals("c", 6);
         }
 
         private void AssertVarEquals<T>(string ident, T val)
