@@ -128,6 +128,7 @@ namespace Diver.Language
 
         protected override void Terminate()
         {
+            _tokens.Add(_factory.NewToken(ERhoToken.None, new Slice(this, _offset, _offset)));
         }
     }
 }

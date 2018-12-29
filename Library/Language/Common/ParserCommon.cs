@@ -56,7 +56,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return PrintTree();//_astFactory.GetChildren(_root)[0].ToString();
+            return PrintTree();
         }
 
         private void PrintTree(StringBuilder str, int level, TAstNode root)
@@ -86,18 +86,17 @@ namespace Diver.Language
                 _stack.Push(node);
         }
 
-        protected void Append(object Q)
+        protected void Append(object obj)
         {
-            ///Top()->Children.push_back(std::make_shared<AstNode>(AstEnum::Object, Q));
-            _astFactory.AddChild(Top(), Q);
+            _astFactory.AddChild(Top(), obj);
         }
 
         protected TAstNode Pop()
         {
             if (_stack.Count == 0)
             {
-                //MUST CreateError("Internal Error: Parse stack empty");
-                throw new NotImplementedException();
+                FailWith("Empty context stack");
+                throw new ContextStackEmptyException();
             }
 
             return _stack.Pop();
@@ -116,6 +115,12 @@ namespace Diver.Language
 
         protected TTokenNode Next()
         {
+            if (_current == _tokens.Count)
+            {
+                FailWith("Expected more");
+                throw new Exception("Expected more");
+            }
+
             return _tokens[++_current];
         }
 
@@ -128,8 +133,7 @@ namespace Diver.Language
         {
             if (!Has())
             {
-                //KAI_TRACE_ERROR_1(Fail("Expected something"));
-                //KAI_THROW_1(LogicError, "Expected something");
+                FailWith("Expected something more");
                 throw new Exception("Expected something");
             }
 
@@ -148,14 +152,7 @@ namespace Diver.Language
 
         protected TTokenNode Peek()
         {
-            if (_current + 1 >= _tokens.Count)
-            {
-                //KAI_TRACE_ERROR() << "End of tokens stream looking for a %s", TokenEnumType::ToString(ty);
-                //return false;
-                return null;
-            }
-
-            return _tokens[_current + 1];
+            return _current + 1 >= _tokens.Count ? null : _tokens[_current + 1];
         }
 
         protected bool PeekConsume(ETokenEnum ty)
@@ -192,7 +189,8 @@ namespace Diver.Language
             {
                 //KAI_TRACE_ERROR_1(Fail("Unexpected end of file"));
                 //KAI_THROW_1(LogicError, "Expected something");
-                throw new NotImplementedException();
+                FailWith("Expected something more");
+                throw new NotImplementedException("Expected something");
             }
 
             return _tokens[_current++];
@@ -208,15 +206,18 @@ namespace Diver.Language
             return !Empty() && Current().Type.Equals(type);
         }
 
+        protected bool FailWith(string text)
+        {
+            return Fail(_lexer.CreateErrorMessage(Current(), text));
+        }
+
         protected TAstNode Expect(ETokenEnum type)
         {
             var tok = Current();
             if (!tok.Type.Equals(type))
             {
-                //Fail(Lexer::CreateErrorMessage(tok, "Expected %s, have %s", TokenEnumType::ToString(type),
-                //    TokenEnumType::ToString(tok.type)));
-                //return nullptr;
-                throw new NotImplementedException();
+                FailWith($"Expected {type}, have {tok}");
+                return null;
             }
 
             Next();

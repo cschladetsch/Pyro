@@ -4,6 +4,9 @@ using Diver.Exec;
 
 namespace Diver.Language
 {
+    /// <summary>
+    /// Common to all processes that translate an AST to Pi code sequences.
+    /// </summary>
     public class TranslatorCommon
         : ProcessCommon
     {

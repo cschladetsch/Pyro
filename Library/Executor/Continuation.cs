@@ -19,6 +19,19 @@ namespace Diver.Exec
             _code = code;
         }
 
+        public override string ToString()
+        {
+            var str = new StringBuilder();
+            str.Append($"Continuation: {_scope.Count} args, {_code.Count} instructions:\n\t");
+            foreach (var c in _code)
+            {
+                str.Append(c);
+                str.Append(", ");
+            }
+
+            return str.ToString();
+        }
+
         public void AddArg(string ident)
         {
             _args.Add(ident);

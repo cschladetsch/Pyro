@@ -190,12 +190,13 @@
                 case ERhoToken.Assert:
                 {
                     var ass = NewNode(Consume());
+                    Expect(ERhoToken.OpenParan);
                     if (!Expression())
                     {
                         Fail(_lexer.CreateErrorMessage(Current(), "Assert needs an expression to test"));
                         return false;
                     }
-
+                    Expect(ERhoToken.CloseParan);
                     ass.Add(Pop());
                     block.Add(ass);
                     goto finis;

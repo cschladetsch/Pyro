@@ -345,7 +345,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return $"=== RhoTranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}";
+            return $"=== RhoTranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}\nCode: {Result().ToString()}";
         }
 
         private RhoLexer _lexer;

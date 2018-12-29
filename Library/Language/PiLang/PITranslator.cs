@@ -38,7 +38,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}";
+            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}\nCode: {Continuation}\n";
         }
 
         private bool TranslateNode(PiAstNode node, IList<object> objects)
