@@ -1,6 +1,6 @@
 ﻿namespace Diver.Network
 {
-    public class Peer
+    public interface IAgentBase
     {
     }
 }

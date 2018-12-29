@@ -79,7 +79,6 @@
     <Compile Include="IRegistry.cs" />
     <Compile Include="BuiltinTypes\Map.cs" />
     <Compile Include="Label.cs" />
-    <Compile Include="Operations.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Pathname.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

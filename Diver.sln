@@ -14,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{9392
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{7E50329A-E782-4AF6-B6BE-E0AB3FF26C82}"
+	ProjectSection(SolutionItems) = preProject
+		App\Readme.md = App\Readme.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{F06FFE4A-7255-4347-B1E2-CA3296B27B59}"
 	ProjectSection(SolutionItems) = preProject

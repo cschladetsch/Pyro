@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAgent.cs" />
+    <Compile Include="IAgentBase.cs" />
+    <Compile Include="IDomain.cs" />
+    <Compile Include="IProxy.cs" />
+    <Compile Include="IProxyBase.cs" />
+    <Compile Include="NetId.cs" />
     <Compile Include="Peer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,6 +65,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Impl\Unity3d\Readme.md" />
+    <None Include="Impl\Readme.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
