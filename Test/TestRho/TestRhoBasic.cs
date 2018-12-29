@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
+using Diver.Language;
 using NUnit.Framework;
 
 namespace Diver.Test.Rho
@@ -43,8 +44,30 @@ namespace Diver.Test.Rho
         [Test]
         public void TestArithmetic()
         {
+            RunRho(
+@"
+a = 1
+b = 2
+c = a + b
+", EStructure.Program);
+            AssertVarEquals("c", 3);
             RunRho("a = 1 + 2");
-            //AssertPop(3);
+            AssertVarEquals("a", 3);
+        }
+
+        private void AssertVarEquals<T>(string ident, T val)
+        {
+            Assert.IsTrue(_scope.ContainsKey(ident));
+            var obj = _scope[ident];
+            switch (obj)
+            {
+                case T v:
+                    Assert.AreEqual(v, val);
+                    return;
+                case IRefBase rb:
+                    Assert.AreEqual(rb.BaseValue, val);
+                    return;
+            }
         }
     }
 }

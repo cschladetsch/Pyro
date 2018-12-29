@@ -11,7 +11,7 @@
         {
         }
 
-        public override bool Process(RhoLexer lex, EStructure structure = EStructure.None)
+        public override bool Process(RhoLexer lex, EStructure structure)
         {
             _current = 0;
             _indent = 0;
@@ -34,7 +34,6 @@
                 switch (tok.Type)
                 {
                     case ERhoToken.Whitespace:
-                    case ERhoToken.NewLine:
                     case ERhoToken.Comment:
                         continue;
                 }
@@ -49,52 +48,49 @@
             {
                 case EStructure.Statement:
                     if (!Statement(_root))
-                    {
                         return CreateError("Statement expected");
-                    }
                     break;
 
                 case EStructure.Expression:
                     if (!Expression())
-                    {
                         return CreateError("Expression expected");
-                    }
+                    ConsumeNewLines();
+                    if (!Try(ERhoToken.None))
+                        return Fail("Unexpected extra stuff found");
                     _root.Add(Pop());
                     break;
 
                 case EStructure.Function:
-                    Function(_root);
-                    break;
+                    return Function(_root);
 
                 case EStructure.Program:
-                    Program();
-                    break;
+                    return Program();
             }
 
             ConsumeNewLines();
-            if (_stack.Count != 0)
-                return Fail("[Internal] Error: Stack not empty after parsing");
-
-            return true;
+            return _stack.Count == 0 || Fail("Stack not empty after parsing");
         }
 
-        private void Program()
+        private bool Program()
         {
             while (!Try(ERhoToken.None) && !Failed)
             {
                 ConsumeNewLines();
                 if (Statement(_root))
                     continue;
-                Fail("Statement expected");
+                return Fail("Statement expected");
             }
+            return true;
         }
 
-        private void Function(RhoAstNode node)
+        private bool Function(RhoAstNode node)
         {
             ConsumeNewLines();
 
             Expect(ERhoToken.Fun);
             Expect(ERhoToken.Ident);
+            if (Failed)
+                return false;
             var name = Last();
             var fun = NewNode(ERhoAst.Function);
             fun.Add(name);
@@ -115,8 +111,13 @@
             Expect(ERhoToken.CloseParan);
             Expect(ERhoToken.NewLine);
 
+            if (Failed)
+                return false;
+
             AddBlock(fun);
             node.Add(fun);
+
+            return !Failed;
         }
 
         private void While(RhoAstNode block)

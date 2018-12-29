@@ -36,13 +36,13 @@ namespace Diver.Test
         protected void Run(string text)
         {
             _exec.Clear();
-            _exec.Continue(PiTranslate(text));
+            _exec.Continue(_continuation = PiTranslate(text));
         }
 
         protected void RunRho(string text, EStructure st = EStructure.Expression)
         {
             _exec.Clear();
-            _exec.Continue(RhoTranslate(text));
+            _exec.Continue(_continuation = RhoTranslate(text, st));
         }
 
         private Continuation PiTranslate(string text)
