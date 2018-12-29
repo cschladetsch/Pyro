@@ -1,4 +1,4 @@
-# Appplications
+# Applications
 
 This folder contains the source for applications produced by the solution.
 
