@@ -1,10 +1,14 @@
 # Diver
 
-Distrubuted, Interactive Virtual Experience Renderer
+Distrubuted, Interactive Virtual Experience Re-entrancy.
+
+Provides a means to save an entire GameObject and all child GameObjects by *freezing* it to a binary or text blob, then *thawing* it back into a live GameObject.
+
+External context is also saved and restored.
 
 ## Overview
 
-*DIVER* is a cross-platform .Net library supporting object persistence, networking, and a coroutine micro-kernel.
+*Diver* is a cross-platform .Net library supporting object persistence, networking, and a coroutine micro-kernel.
 
 Each major component has its own project, and its own Readme.md file.
 
