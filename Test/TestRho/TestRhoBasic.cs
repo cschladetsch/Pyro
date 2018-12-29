@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Diagnostics.Contracts;
+using NUnit.Framework;
 
 namespace Diver.Test.Rho
 {
@@ -18,6 +19,20 @@ namespace Diver.Test.Rho
             Ensure("!(true && false)");
             Ensure("(true || false) ^ false");
             Ensure("!!(true ^ false)");
+
+            Fail("false");
+            Fail("!true");
+            Fail("true && false");
+            Fail("true ^ true");
+            Fail("!!(true ^ true)");
+            Fail("false || false");
+            Fail("!true || !true");
+            Fail("!true && !true");
+        }
+
+        private void Fail(string text)
+        {
+            Assert.Throws<AssertionFailedException>(() => Ensure(text));
         }
 
         private void Ensure(string text)
