@@ -48,9 +48,9 @@ namespace Diver.Test.Rho
 @"
 a = 1
 b = 2
-c = a + b
+c = (a + b)*2
 ", EStructure.Program);
-            AssertVarEquals("c", 3);
+            AssertVarEquals("c", 6);
             RunRho("a = 1 + 2");
             AssertVarEquals("a", 3);
         }
@@ -68,6 +68,17 @@ c = a + b
                     Assert.AreEqual(rb.BaseValue, val);
                     return;
             }
+        }
+
+        [Test]
+        public void TestFunction()
+        {
+            RunRho(
+@"
+fun foo()
+    1
+assert(foo() == 1)
+", EStructure.Function);
         }
     }
 }
