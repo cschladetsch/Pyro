@@ -63,7 +63,12 @@ namespace Diver.Language
             case '"': return LexString(); 
             case '^': return Add(ERhoToken.Xor);
             case '\t': return Add(ERhoToken.Tab);
-            case '\r': 
+            case '\r':
+            {
+                // fuck I hate this
+                Next();
+                return true;
+            }
             case '\n': return Add(ERhoToken.NewLine);
             case '-':
                 if (char.IsDigit(Peek()))

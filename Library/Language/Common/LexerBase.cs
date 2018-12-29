@@ -20,7 +20,12 @@ namespace Diver.Language
 
         public LexerBase(string input)
         {
-            _input = input;
+            _input = UnfuckNewLines(input);
+        }
+
+        private string UnfuckNewLines(string input)
+        {
+            return input.Replace("\r", "");
         }
 
         public string GetLine(int lineNumber)

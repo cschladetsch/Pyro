@@ -88,12 +88,9 @@
             ConsumeNewLines();
 
             Expect(ERhoToken.Fun);
-            Expect(ERhoToken.Ident);
-            if (Failed)
-                return false;
-            var name = Last();
+            var name = Expect(ERhoToken.Ident);
             var fun = NewNode(ERhoAst.Function);
-            fun.Add(name);
+            fun.Add(new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true)));
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.None);
             fun.Add(args);
