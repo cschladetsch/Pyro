@@ -52,12 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Readme.md" />
     <None Include="Scripts\FreezeThaw.rho" />
     <None Include="Scripts\NestedFunctions.rho" />
     <None Include="Scripts\PassingFunctions.rho" />
     <None Include="Scripts\Random.rho" />
     <None Include="Scripts\Arithmetic.rho" />
-    <None Include="Scripts\TestAppCalls.rho" />
     <None Include="Scripts\Variables.rho" />
   </ItemGroup>
   <ItemGroup>

@@ -19,7 +19,6 @@ namespace Diver.Test
 
             Run("1 2 false ife");
             AssertPop(2);
-
         }
     }
 }
