@@ -139,6 +139,10 @@ namespace Diver.Language
                     TranslateBinaryOp(node, EOperation.LogicalAnd);
                     return;
 
+                case ERhoToken.Xor:
+                    TranslateBinaryOp(node, EOperation.LogicalXor);
+                    return;
+
                 case ERhoToken.Int:
                     Append(int.Parse(node.Text));
                     return;

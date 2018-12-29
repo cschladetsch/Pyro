@@ -6,10 +6,30 @@ namespace Diver.Test.Rho
     public class TestRhoBasic : TestCommon
     {
         [Test]
-        public void TestBasic()
+        public void TestBoolean()
         {
-            RunRho("a = 1");
-            RunRho("assert(true)");
+            Ensure("true");
+            Ensure("!false");
+            Ensure("!!true");
+            Ensure("true == true");
+            Ensure("true || false");
+            Ensure("true != false");
+            Ensure("true ^ false");
+            Ensure("!(true && false)");
+            Ensure("(true || false) ^ false");
+            Ensure("!!(true ^ false)");
+        }
+
+        private void Ensure(string text)
+        {
+            RunRho($"assert({text})");
+        }
+
+        [Test]
+        public void TestArithmetic()
+        {
+            RunRho("a = 1 + 2");
+            //AssertPop(3);
         }
     }
 }

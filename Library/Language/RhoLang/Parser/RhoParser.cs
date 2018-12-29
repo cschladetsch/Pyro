@@ -292,7 +292,7 @@
             if (!Relational())
                 return false;
 
-            while (Try(ERhoToken.And) || Try(ERhoToken.Or))
+            while (Try(ERhoToken.And) || Try(ERhoToken.Or) || Try(ERhoToken.Xor))
             {
                 var node = NewNode(Consume());
                 node.Add(Pop());

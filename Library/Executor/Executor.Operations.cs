@@ -34,6 +34,7 @@ namespace Diver.Exec
             _actions[EOperation.Retrieve] = GetValue;
             _actions[EOperation.Assert] = Assert;
             _actions[EOperation.Equiv] = Equiv;
+            _actions[EOperation.NotEquiv] = NotEquiv;
             _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
             _actions[EOperation.LogicalAnd] = LogicalAnd;
             _actions[EOperation.LogicalOr] = LogicalOr;
@@ -61,6 +62,12 @@ namespace Diver.Exec
             _actions[EOperation.If] = If;
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
+        }
+
+        private void NotEquiv()
+        {
+            Equiv();
+            Push(!Pop());
         }
 
         private void Assign()
