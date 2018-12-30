@@ -49,7 +49,7 @@ namespace Diver
 
         public override string ToString()
         {
-            return $"Unknown object {What}";
+            return $"Unknown object '{What}'";
         }
     }
 

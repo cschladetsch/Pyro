@@ -17,6 +17,16 @@ namespace Diver.Exec
             AddOperations();
         }
 
+        public void PushContext(Continuation continuation)
+        {
+            _context.Push(continuation);
+        }
+
+        public void Continue()
+        {
+            Continue(_context.Pop());
+        }
+
         public void Clear()
         {
             _data = new Stack<object>();
@@ -27,6 +37,7 @@ namespace Diver.Exec
 
         void Assert()
         {
+            WriteLine("--- Asserting ---");
             if (!Pop<bool>())
                 throw new AssertionFailedException();
         }
@@ -71,17 +82,17 @@ namespace Diver.Exec
             Push(fromScope);
         }
 
-        void Continue(dynamic body)
-        {
-            switch (body)
-            {
-                case IRef<Continuation> cont:
-                    Continue(cont);
-                    break;
-                default:
-                    throw new Exception($"Cannot continue a {body.GetType().Name}");
-            }
-        }
+        //void Continue(dynamic body)
+        //{
+        //    switch (body)
+        //    {
+        //        case IRef<Continuation> cont:
+        //            Continue(cont);
+        //            break;
+        //        default:
+        //            throw new Exception($"Cannot continue a {body.GetType().Name}");
+        //    }
+        //}
 
         public void Continue(IRef<Continuation> continuation)
         {
@@ -130,10 +141,10 @@ namespace Diver.Exec
                 }
                 catch (Exception e)
                 {
-                    WriteLine(e);
                     if (!string.IsNullOrEmpty(SourceFilename))
                         WriteLine($"While executing {SourceFilename}:");
                     WriteLine(DebugWrite());
+                    WriteLine($"Exception: {e}");
                     throw;
                 }
 
@@ -267,5 +278,6 @@ namespace Diver.Exec
         private Continuation _current;
         private Stack<Continuation> _context = new Stack<Continuation>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+
     }
 }

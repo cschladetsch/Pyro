@@ -1,4 +1,7 @@
-﻿namespace Diver.Language
+﻿using System;
+using Diver.Exec;
+
+namespace Diver.Language
 {
     /// <summary>
     /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.
@@ -116,6 +119,13 @@
             AddBlock(fun);
             node.Add(fun);
 
+            // TODO: nested methods: this is too early
+            if (indent > 0)
+            {
+                //node.Add(_astFactory.New(ERhoAst.Suspend));
+                Console.WriteLine("Inner function");
+            }
+
             return !Failed;
         }
 
@@ -137,6 +147,18 @@
             var block = NewNode(ERhoAst.Block);
             Block(block);
             fun.Add(block);
+
+            if (hack)
+            {
+                //hack = false;
+                //Append(_astFactory.New(ERhoAst.Suspend));
+                Console.WriteLine("Hack true ,still in inner");
+            }
+            // TODO: inner functions
+            //if (indent > 0)
+            //{
+            //    fun.Add(_astFactory.New(ERhoAst.Suspend));
+            //}
         }
 
         private void Block(RhoAstNode node)
@@ -170,6 +192,7 @@
                         --current;
 
                     ++current;
+
                     return;
                 }
 
@@ -181,7 +204,14 @@
 
                 Statement(node);
             }
+            //if (hack)
+            //{
+            //    Append(_astFactory.New(ERhoAst.Suspend));
+            //}
+
         }
+
+        private bool hack = false;
 
         private bool Statement(RhoAstNode block)
         {
@@ -235,6 +265,14 @@
                 case ERhoToken.Fun:
                 {
                     Function(block);
+                    hack = indent > 0;
+                    if (indent > 0)
+                    {
+                        //block.Add(_astFactory.New(ERhoAst.Suspend));
+                        // TODO: don;t want to add to block:
+                        // want to add to owner of block
+                        Console.WriteLine("Inner block two");
+                    }
                     return true;
                 }
             }

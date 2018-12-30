@@ -28,7 +28,10 @@ namespace Diver.Exec
         
         void WriteLine(string fmt, params object[] args)
         {
-            Write($"{string.Format(fmt, args)}\n");
+            if (args == null || args.Length == 0)
+                Write(fmt + '\n');
+            else
+                Write($"{string.Format(fmt, args)}\n");
         }
 
         private void DebugTrace()

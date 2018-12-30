@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
+using System.Linq;
 using System.Text;
 
 namespace Diver.Exec
@@ -22,12 +23,27 @@ namespace Diver.Exec
         public override string ToString()
         {
             var str = new StringBuilder();
-            str.Append($"Continuation: {_scope.Count} args, {_code.Count} instructions:\n\t");
+            //str.Append($"Continuation: {_scope.Count} args, {_code.Count} instructions:\n\t");
+            str.Append('{');
+            str.Append($"#{_next}/{_code.Count} ");
+            if (_args != null)
+            {
+                str.Append('(');
+                var comma = "";
+                foreach (var a in _args)
+                {
+                    str.Append($"{a}{comma}");
+                    comma = ", ";
+                }
+                str.Append(") ");
+            }
+
             foreach (var c in _code)
             {
                 str.Append(c);
                 str.Append(", ");
             }
+            str.Append('}');
 
             return str.ToString();
         }

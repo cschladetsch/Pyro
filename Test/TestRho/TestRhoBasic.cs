@@ -125,5 +125,30 @@ else
             RunRho(ifThenElse2);
             AssertPop(2);
         }
+
+        [Test]
+        public void TestLocalScope()
+        {
+            var text = @"
+fun foo(a)
+	b = a + 1
+	assert(b == 3)
+foo(2)
+";
+            RunRho(text);
+        }
+
+        [Test]
+        public void TestNestedFunctions()
+        {
+            var text = @"
+fun foo(a)
+	fun bar(b)
+		a + b
+	bar(2)
+//assert(foo(3) == 5)
+";
+            RunRho(text);
+        }
     }
 }

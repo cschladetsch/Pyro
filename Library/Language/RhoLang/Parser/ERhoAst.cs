@@ -34,6 +34,7 @@
         Home,
         NewLine,
         GetMember,
-        Assignment
+        Assignment,
+        Suspend
     }
 }

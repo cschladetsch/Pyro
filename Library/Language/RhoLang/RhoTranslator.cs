@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -223,6 +224,10 @@ namespace Diver.Language
 
             switch (node.Type)
             {
+                case ERhoAst.Suspend:
+                    Append(EOperation.Suspend);
+                    break;
+
                 case ERhoAst.Pathname:
                     TranslateToken(node);
                     return;
