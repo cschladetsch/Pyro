@@ -338,6 +338,9 @@ namespace Diver.Language
                 TranslateNode(ch[2]);
             TranslateNode(ch[0]);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
+
+            // TODO: Allow for if! and if... as well as if&
+            Append(EOperation.Suspend);
         }
 
         static void TranslateFor(RhoAstNode node)

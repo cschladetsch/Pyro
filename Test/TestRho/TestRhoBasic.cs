@@ -100,13 +100,30 @@ assert(bar(foo) == 3)
         [Test]
         public void TestConditionals()
         {
-            var text = @"
+            var ifThen = @"
 if true
-	1 
+	1 + 2
 ";
-            RunRho(text);
-            _exec.Continue(_exec.Pop<Continuation>());
-            AssertPop(1);
+            RunRho(ifThen);
+            AssertPop(3);
+
+            var ifThenElse1 = @"
+if true
+	1 - 2
+else
+	2
+";
+            RunRho(ifThenElse1);
+            AssertPop(-1);
+
+            var ifThenElse2 = @"
+if false
+	1
+else
+	2
+";
+            RunRho(ifThenElse2);
+            AssertPop(2);
         }
     }
 }
