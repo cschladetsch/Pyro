@@ -34,15 +34,25 @@ namespace Diver.Exec
 
         public void AddArg(string ident)
         {
+            if (_args == null)
+                _args = new List<string>();
             _args.Add(ident);
         }
 
         public void Enter(Executor exec)
         {
+            if (_args == null)
+                return;
+
+            // already entered
+            if (_next != 0)
+                return;
+
+            if (exec.DataStack.Count < _args.Count)
+                throw new DataStackEmptyException();
+            
             foreach (var arg in _args)
-            {
                 _scope[arg] = exec.DataStack.Pop();
-            }
 
             _next = 0;
         }

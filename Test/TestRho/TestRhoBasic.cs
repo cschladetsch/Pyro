@@ -75,7 +75,24 @@ namespace Diver.Test.Rho
 @"fun foo()
 	1
 assert(foo() == 1)
-", EStructure.Function);
+", EStructure.Program);
+
+            RunRho(
+@"
+fun foo(a)
+	a
+foo(42)
+", EStructure.Program);
+
+            RunRho(
+@"
+fun foo()
+	1
+fun bar(f)
+	2 + f()
+assert(bar(foo) == 3)
+", EStructure.Program);
+
         }
     }
 }

@@ -98,7 +98,10 @@ namespace Diver.Exec
                 Execute(_current);
                 _break = false;
                 if (_context.Count > 0)
+                {
                     _current = _context.Pop();
+                    _current.Enter(this);
+                }
                 else
                     break;
             }

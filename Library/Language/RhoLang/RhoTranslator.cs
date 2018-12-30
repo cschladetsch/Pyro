@@ -308,7 +308,7 @@ namespace Diver.Language
 
             // write the name and store
             Append(cont);
-            Append(ch[0].Text);
+            Append(ch[0].Value);
             Append(EOperation.Store);
         }
 

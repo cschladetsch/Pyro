@@ -92,7 +92,7 @@
             var fun = NewNode(ERhoAst.Function);
             fun.Add(new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true)));
             Expect(ERhoToken.OpenParan);
-            var args = NewNode(ERhoAst.None);
+            var args = NewNode(ERhoAst.ArgList);
             fun.Add(args);
 
             if (Try(ERhoToken.Ident))
