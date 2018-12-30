@@ -76,11 +76,14 @@ namespace Diver.Exec
         {
             var has = _next < _code.Count;
             next = has ? _code[_next++] : null;
+            if (!has)
+                Reset();
             return has;
         }
 
         public void Reset()
         {
+            _scope.Clear();
             _next = 0;
         }
 

@@ -91,6 +91,7 @@ fun foo()
 fun bar(f)
 	2 + f()
 assert(bar(foo) == 3)
+assert(bar(foo) == 3)
 ", EStructure.Program);
 
         }
