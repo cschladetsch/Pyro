@@ -49,7 +49,7 @@ namespace Diver.Language
             case '(': return Add(ERhoToken.OpenParan);
             case ')': return Add(ERhoToken.CloseParan);
             case ':': return Add(ERhoToken.Colon);
-            case ' ': return AddSlice(ERhoToken.Whitespace, Gather(IsSpaceChar));
+            case ' ': return AddSlice(ERhoToken.Whitespace, Gather(c => c == ' '));
             case ',': return Add(ERhoToken.Comma);
             case '*': return Add(ERhoToken.Multiply);
             case '[': return Add(ERhoToken.OpenSquareBracket);

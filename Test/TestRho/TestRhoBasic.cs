@@ -1,4 +1,5 @@
-﻿using Diver.Language;
+﻿using Diver.Exec;
+using Diver.Language;
 using NUnit.Framework;
 
 namespace Diver.Test.Rho
@@ -100,17 +101,12 @@ assert(bar(foo) == 3)
         public void TestConditionals()
         {
             var text = @"
-if (true)
+if true
 	1 
 ";
-            var lex = new RhoLexer(text);
-            WriteLine(lex.ToString());
-
-            var parser = new RhoParser(lex, _reg, EStructure.Expression);
-            WriteLine(parser.ToString());
-
-            //AssertPop(1);
-            //AssertPop();
+            RunRho(text);
+            _exec.Continue(_exec.Pop<Continuation>());
+            AssertPop(1);
         }
     }
 }

@@ -327,14 +327,17 @@ namespace Diver.Language
 
         private void TranslateIf(RhoAstNode node)
         {
+            // ch[0]: test clause
+            // ch[1]: then-block
+            // ch[2]: [optional] else-block
             var ch = node.Children;
-            TranslateNode(ch[0]);
+
+            TranslateNode(ch[1]);
             var hasElse = ch.Count > 2;
             if (hasElse)
                 TranslateNode(ch[2]);
-
-            TranslateNode(ch[1]);
-            Append(hasElse ? EOperation.If : EOperation.IfElse);
+            TranslateNode(ch[0]);
+            Append(hasElse ? EOperation.IfElse : EOperation.If);
         }
 
         static void TranslateFor(RhoAstNode node)
