@@ -69,6 +69,10 @@
       <Project>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
+      <Project>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</Project>
+      <Name>RhoLang</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestCommon\TestCommon.csproj">
       <Project>{AFC905F1-F4D7-430D-B005-B6B9E01245AF}</Project>
       <Name>TestCommon</Name>

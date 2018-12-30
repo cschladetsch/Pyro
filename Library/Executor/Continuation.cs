@@ -83,7 +83,8 @@ namespace Diver.Exec
 
         public void Reset()
         {
-            _scope.Clear();
+            // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
+            //_scope.Clear();
             _next = 0;
         }
 

@@ -58,10 +58,10 @@ namespace Diver.Test
         private Continuation RhoTranslate(string text, EStructure st = EStructure.Statement)
         {
             var trans = new RhoTranslator(_reg);
-            trans.Run(text, st);
-            WriteLine(trans.ToString());
+            trans.Process(text, st);
             if (trans.Failed)
                 WriteLine($"Translation error: {trans.Error}");
+            WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return trans.Result();
         }

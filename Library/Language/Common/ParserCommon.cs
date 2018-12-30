@@ -16,36 +16,38 @@ namespace Diver.Language
     {
         public TAstNode Root => _root;
 
-        protected ParserCommon(LexerBase lexer, IRegistry r) : base(r)
+        protected ParserCommon(TLexer lexer, IRegistry reg)
+            : base(reg)
         {
             _current = 0;
             _indent = 0;
+            _lexer = lexer;
         }
 
-        public virtual bool Process(TLexer lex, EStructure structure)
-        {
-            return false;
-        }
+        //public virtual bool Process(TLexer lex, EStructure structure)
+        //{
+        //    return false;
+        //}
 
-        protected virtual bool Process()
-        {
-            return false;
-        }
+        //protected virtual bool Process()
+        //{
+        //    return false;
+        //}
 
-        protected bool Run(EStructure st)
-        {
-            try
-            {
-                Process(_lexer, st);
-            }
-            catch (Exception e)
-            {
-                if (!Failed)
-                    Fail(_lexer.CreateErrorMessage(Current(), "%s", e.ToString()));
-            }
+        //protected bool Run(EStructure st)
+        //{
+        //    try
+        //    {
+        //        Process(_lexer, st);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        if (!Failed)
+        //            Fail(_lexer.CreateErrorMessage(Current(), "%s", e.ToString()));
+        //    }
 
-            return !Failed;
-        }
+        //    return !Failed;
+        //}
 
         public string PrintTree()
         { 

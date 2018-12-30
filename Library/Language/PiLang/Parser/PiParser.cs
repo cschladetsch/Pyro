@@ -8,11 +8,11 @@ namespace Diver.Language
     public class PiParser
         : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
     {
-        public PiParser(LexerBase lexer) : base(lexer, null)
+        public PiParser(PiLexer lexer) : base(lexer, null)
         {
         }
 
-        public override bool Process(PiLexer lex, EStructure structure = EStructure.None)
+        public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
             _current = 0;
             _indent = 0;

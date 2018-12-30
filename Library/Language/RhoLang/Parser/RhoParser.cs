@@ -6,17 +6,16 @@
     public class RhoParser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
     {
-        public RhoParser(LexerBase lexer)
-            : base(lexer, null)
-        {
-        }
-
-        public override bool Process(RhoLexer lex, EStructure structure)
+        public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
+            : base(lexer, reg)
         {
             _current = 0;
             _indent = 0;
-            _lexer = lex;
+            _structure = st;
+        }
 
+        public bool Process()
+        {
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
@@ -24,7 +23,7 @@
 
             _root = NewNode(ERhoAst.Program);
 
-            return Run(structure);
+            return Run(_structure);
         }
 
         private void RemoveWhitespace()
@@ -33,6 +32,7 @@
             {
                 switch (tok.Type)
                 {
+                    // keep tabs!
                     case ERhoToken.Whitespace:
                     case ERhoToken.Comment:
                         continue;
@@ -42,7 +42,7 @@
             }
         }
 
-        private new bool Run(EStructure st)
+        private bool Run(EStructure st)
         {
             switch (st)
             {
@@ -90,6 +90,8 @@
             Expect(ERhoToken.Fun);
             var name = Expect(ERhoToken.Ident);
             var fun = NewNode(ERhoAst.Function);
+
+            // ensure the label for the function is quoted
             fun.Add(new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true)));
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
@@ -183,7 +185,9 @@
 
         private bool Statement(RhoAstNode block)
         {
-            switch (Current().Type)
+            ConsumeNewLines();
+            var type = Current().Type;
+            switch (type)
             {
                 case ERhoToken.Assert:
                 {
@@ -639,5 +643,6 @@
 
         private int indent;
         private int current;
+        private EStructure _structure;
     }
 }

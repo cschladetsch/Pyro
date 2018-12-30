@@ -95,5 +95,22 @@ assert(bar(foo) == 3)
 ", EStructure.Program);
 
         }
+
+        [Test]
+        public void TestConditionals()
+        {
+            var text = @"
+if (true)
+	1 
+";
+            var lex = new RhoLexer(text);
+            WriteLine(lex.ToString());
+
+            var parser = new RhoParser(lex, _reg, EStructure.Expression);
+            WriteLine(parser.ToString());
+
+            //AssertPop(1);
+            //AssertPop();
+        }
     }
 }
