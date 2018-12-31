@@ -81,7 +81,7 @@ namespace Diver.Language
                 ConsumeNewLines();
                 if (Statement(_root))
                     continue;
-                return Fail("Statement expected");
+                return CreateError("Statement expected");
             }
             return true;
         }
@@ -147,18 +147,6 @@ namespace Diver.Language
             var block = NewNode(ERhoAst.Block);
             Block(block);
             fun.Add(block);
-
-            if (hack)
-            {
-                //hack = false;
-                //Append(_astFactory.New(ERhoAst.Suspend));
-                Console.WriteLine("Hack true ,still in inner");
-            }
-            // TODO: inner functions
-            //if (indent > 0)
-            //{
-            //    fun.Add(_astFactory.New(ERhoAst.Suspend));
-            //}
         }
 
         private void Block(RhoAstNode node)
@@ -204,19 +192,13 @@ namespace Diver.Language
 
                 Statement(node);
             }
-            //if (hack)
-            //{
-            //    Append(_astFactory.New(ERhoAst.Suspend));
-            //}
-
         }
-
-        private bool hack = false;
 
         private bool Statement(RhoAstNode block)
         {
             ConsumeNewLines();
             var type = Current().Type;
+
             switch (type)
             {
                 case ERhoToken.WriteLine:
@@ -276,16 +258,7 @@ namespace Diver.Language
 
                 case ERhoToken.Fun:
                 {
-                    Function(block);
-                    hack = indent > 0;
-                    if (indent > 0)
-                    {
-                        //block.Add(_astFactory.New(ERhoAst.Suspend));
-                        // TODO: don;t want to add to block:
-                        // want to add to owner of block
-                        Console.WriteLine("Inner block two");
-                    }
-                    return true;
+                    return Function(block);
                 }
             }
 

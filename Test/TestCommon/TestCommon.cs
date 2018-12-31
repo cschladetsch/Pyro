@@ -50,7 +50,11 @@ namespace Diver.Test
             var trans = new PiTranslator(_reg, text);
             WriteLine(trans.ToString());
             if (trans.Failed)
+            {
                 WriteLine($"Translation error: {trans.Error}");
+                WriteLine($"Parser error: {trans.Parser.Error}");
+                WriteLine($"Lexer error: {trans.Lexer.Error}");
+            }
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Continuation;
         }

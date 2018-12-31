@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Activation;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -6,6 +7,8 @@ namespace Diver.Language
     public class RhoTranslator 
         : TranslatorBase<RhoParser>
     {
+        public RhoLexer Lexer => _lexer;
+        public RhoParser Parser => _parser;
         public RhoTranslator(IRegistry r)
             : base(r)
         {
@@ -285,12 +288,6 @@ namespace Diver.Language
 
                 case ERhoAst.Function:
                     TranslateFunction(node);
-                    //if (_funIndent-- > 0)
-                    //{
-                    //    PushNew();
-                    //    Append(EOperation.Suspend);
-                    //    Append(Pop());
-                    //}
                     return;
 
                 case ERhoAst.Program:
@@ -311,28 +308,28 @@ namespace Diver.Language
 
         private void TranslateFunction(RhoAstNode node)
         {
-            ++_funIndent;
+            _funIndent++;
 
-            // child 0: ident
-            // child 1: args
-            // child 2: block
             var ch = node.Children;
+            var ident = ch[0].Value;
+            var args = ch[1].Children;
+            var block = ch[2].Children;
 
             // write the body
             PushNew();
-            foreach (var b in ch[2].Children)
-            {
-                TranslateNode(b);
-            }
+            foreach (var obj in block)
+                TranslateNode(obj);
+            var cont = Pop();
 
             // add the args
-            var cont = Pop();
-            foreach (var arg in ch[1].Children)
+            foreach (var arg in args)
                 cont.AddArg(arg.Token.Text);
 
             // write the name and store
             Append(cont);
-            Append(ch[0].Value);
+            if (_funIndent-- > 1)
+                Append(EOperation.Suspend);
+            Append(ident);
             Append(EOperation.Store);
         }
 

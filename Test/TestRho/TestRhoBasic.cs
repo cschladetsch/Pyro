@@ -148,16 +148,24 @@ foo(2)
         //[Test]
         public void TestNestedFunctions()
         {
+            //            var text = @"
+            //fun foo()
+            //	fun bar()
+            //		1
+            //	writeln(""testing"")
+            //	fun spam()
+            //		2
+            //	bar()
+            //	spam()
+            //";
             var text = @"
 fun foo()
 	fun bar()
-		1
-	writeln(""testing"")
-	fun spam()
-		2
+		writeln(""in bar"")
 	bar()
-	spam()
+foo()
 ";
+
             RunRho(text);
         }
     }
