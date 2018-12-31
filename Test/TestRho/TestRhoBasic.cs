@@ -44,12 +44,12 @@ namespace Diver.Test.Rho
         [Test]
         public void TestArithmetic()
         {
-            RunRho("a = 1 + 2");
+            RunRho("a = 1 + 2", EStructure.Statement);
             AssertVarEquals("a", 3);
-            RunRho(@"
-                a = 1
+            RunRho(@"a = 1
                 b = 2
                 c = (a + b)*2
+                writeln(c)
                 ", EStructure.Program);
             AssertVarEquals("c", 6);
         }
@@ -74,7 +74,8 @@ namespace Diver.Test.Rho
         {
             RunRho(
 @"fun foo()
-	1
+	assert(true)
+	assert(true)
 assert(foo() == 1)
 ", EStructure.Program);
 
@@ -160,11 +161,15 @@ foo(2)
             //";
             var text = @"
 fun foo()
-	fun bar()
-		writeln(""in bar"")
-	bar()
-foo()
+	writeln(""test"")
 ";
+
+//fun foo()
+//	fun bar()
+//		writeln(""in bar"")
+//	bar()
+//foo()
+//";
 
             RunRho(text);
         }

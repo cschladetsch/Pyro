@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Diver.Language
 {
@@ -16,6 +17,8 @@ namespace Diver.Language
             _structure = st;
         }
 
+        public RhoAstNode Result => _stack.Peek();
+
         public bool Process()
         {
             if (_lexer.Failed)
@@ -23,19 +26,26 @@ namespace Diver.Language
 
             RemoveWhitespace();
 
-            _root = NewNode(ERhoAst.Program);
-
-            return Run(_structure);
+            _stack.Push(NewNode(ERhoAst.Program));
+            return Parse(_structure);
         }
 
         private void RemoveWhitespace()
         {
+            var prevNl = false;
             foreach (var tok in _lexer.Tokens)
             {
+                // remove useless consecutive newlines
+                var nl = tok.Type == ERhoToken.NewLine;
+                if (prevNl && nl)
+                    continue;
+
+                prevNl = nl;
+
                 switch (tok.Type)
                 {
                     // keep tabs!
-                    case ERhoToken.Whitespace:
+                    case ERhoToken.Space:
                     case ERhoToken.Comment:
                         continue;
                 }
@@ -44,48 +54,50 @@ namespace Diver.Language
             }
         }
 
-        private bool Run(EStructure st)
+        private bool Parse(EStructure st)
         {
+            bool result = false;
             switch (st)
             {
                 case EStructure.Statement:
-                    if (!Statement(_root))
-                        return CreateError("Statement expected");
+                    result = Statement();
                     break;
 
                 case EStructure.Expression:
-                    if (!Expression())
-                        return CreateError("Expression expected");
-                    ConsumeNewLines();
-                    if (!Try(ERhoToken.None))
-                        return Fail("Unexpected extra stuff found");
-                    _root.Add(Pop());
+                    result = Expression();
                     break;
 
                 case EStructure.Function:
-                    return Function(_root);
+                    result = Function();
+                    break;
 
                 case EStructure.Program:
-                    return Program();
+                    result = Program();
+                    break;
             }
 
-            ConsumeNewLines();
+            if (Failed || !result)
+                return false;
+
+            if (!Try(ERhoToken.None))
+                return Fail("Unexpected extra stuff found");
+
             return _stack.Count == 0 || Fail("Stack not empty after parsing");
         }
 
         private bool Program()
         {
-            while (!Try(ERhoToken.None) && !Failed)
+            while (!Failed && !Try(ERhoToken.None))
             {
-                ConsumeNewLines();
-                if (Statement(_root))
+                if (Statement())
                     continue;
-                return CreateError("Statement expected");
+                return false;
             }
+
             return true;
         }
 
-        RhoAstNode QuotedIdent()
+        private RhoAstNode QuotedIdent()
         {
             return new RhoAstNode(ERhoAst.Ident, new Label(Expect(ERhoToken.Ident).Text, true));
         }
@@ -128,10 +140,8 @@ namespace Diver.Language
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private bool Function(RhoAstNode node)
+        private bool Function()
         {
-            ConsumeNewLines();
-
             Expect(ERhoToken.Fun);
             var cont = NewNode(ERhoAst.Function);
             var ident = QuotedIdent();
@@ -155,40 +165,40 @@ namespace Diver.Language
             if (Failed)
                 return false;
 
-            var code = NewNode(ERhoAst.Block);
-            Block(code);
+            if (!Block())
+                return CreateError("Block expected");
             cont.Add(ident);
             cont.Add(args);
-            cont.Add(code);
+            cont.Add(Pop());
             var assign = NewNode(ERhoAst.Assignment);
             assign.Add(cont);
-            assign.Add(Expect(ERhoToken.Ident));
-            node.Add(assign);
+            assign.Add(ident);
+            assign.Add(assign);
 
             return !Failed;
         }
 
-        private void While(RhoAstNode block)
+        private bool While()
         {
-            var w = NewNode(Consume());
+            var wile = NewNode(Consume());
+            Expect(ERhoToken.OpenParan);
             if (!Expression())
-            {
-                CreateError("While what?");
-                return;
-            }
+                return CreateError("While what?");
+            Expect(ERhoToken.CloseParan);
 
-            w.Add(Pop());
-            block.Add(w);
+            wile.Add(Pop());
+            if (!Block())
+                return CreateError("No While body");
+            wile.Add(Pop());
+            Push(wile);
+            return true;
         }
 
-        /// <summary>
-        /// This seems to be broken too
-        /// </summary>
-        /// <param name="node"></param>
-        private void Block(RhoAstNode node)
+        private bool Block()
         {
-            ConsumeNewLines();
+            //ConsumeNewLines();
 
+            Push(NewNode(ERhoAst.Block));
             ++indent;
             while (!Failed)
             {
@@ -217,22 +227,23 @@ namespace Diver.Language
 
                     ++current;
 
-                    return;
+                    return true;
                 }
 
                 if (level != indent)
                 {
-                    CreateError("Mismatch block indent");
-                    return;
+                    return CreateError("Mismatch block indent");
                 }
 
-                Statement(node);
+                Statement();
             }
+
+            return false;
         }
 
-        private bool Statement(RhoAstNode block)
+        private bool Statement()
         {
-            ConsumeNewLines();
+            //ConsumeNewLines();
             var type = Current().Type;
 
             switch (type)
@@ -246,7 +257,7 @@ namespace Diver.Language
                         return FailWith("Write what?");
                     Expect(ERhoToken.CloseParan);
                     write.Add(Pop());
-                    block.Add(write);
+                    Append(write);
                     goto finis;
                 }
 
@@ -255,13 +266,10 @@ namespace Diver.Language
                     var assert = NewNode(Consume());
                     Expect(ERhoToken.OpenParan);
                     if (!Expression())
-                    {
-                        Fail(_lexer.CreateErrorMessage(Current(), "Assert needs an expression to test"));
-                        return false;
-                    }
+                        return FailWith("Assert needs an expression to test");
                     Expect(ERhoToken.CloseParan);
                     assert.Add(Pop());
-                    block.Add(assert);
+                    Append(assert);
                     goto finis;
                 }
 
@@ -271,35 +279,31 @@ namespace Diver.Language
                     var ret = NewNode(Consume());
                     if (Expression())
                         ret.Add(Pop());
-                    block.Add(ret);
+                    Append(ret);
                     goto finis;
                 }
 
                 case ERhoToken.While:
                 {
-                    While(block);
-                    return true;
+                    return While();
                 }
 
                 case ERhoToken.For:
                 {
-                    For(block);
-                    return true;
+                    //return For();
+                    throw new NotImplementedException("For statements");
                 }
 
                 case ERhoToken.If:
                 {
-                    IfCondition(block);
-                    return true;
+                    return IfCondition();
                 }
 
                 case ERhoToken.Fun:
                 {
-                    return Function(block);
+                    return Function();
                 }
             }
-
-            ConsumeNewLines();
 
             if (Try(ERhoToken.None))
                 return true;
@@ -307,13 +311,9 @@ namespace Diver.Language
             if (!Expression())
                 return false;
 
-            block.Add(Pop());
+            Push(Pop());
 
             finis:
-
-            //// statements can end with an optional semi followed by a new line
-            //if (Try(ERhoToken.Semi))
-            //    Consume();
 
             if (!Try(ERhoToken.None))
                 Expect(ERhoToken.NewLine);
@@ -321,8 +321,9 @@ namespace Diver.Language
             return true;
         }
 
-        private void Call()
+        private bool Call()
         {
+            // eat the opening paranthesis
             Consume();
 
             var call = NewNode(ERhoAst.Call);
@@ -338,48 +339,38 @@ namespace Diver.Language
                     Consume();
                     if (!Expression())
                     {
-                        CreateError("What is the next argument?");
-                        return;
+                        return CreateError("What is the next argument?");
                     }
 
                     args.Add(Pop());
                 }
             }
 
-            Push(call);
             Expect(ERhoToken.CloseParan);
 
-            if (Try(ERhoToken.Replace))
-                call.Add(Consume());
+            return true;
         }
 
-        private void GetMember()
+        private bool GetMember()
         {
-            Consume();
-            var get = NewNode(ERhoAst.GetMember);
-            get.Add(Pop());
-            get.Add(Expect(ERhoToken.Ident));
-            Push(get);
+            PushConsume();
+            Append(Expect(ERhoToken.Ident));
+            return true;
         }
 
-        private void IfCondition(RhoAstNode block)
+        private bool IfCondition()
         {
-            if (!Try(ERhoToken.If))
-                return;
-
-            Consume();
+            PushConsume();
 
             if (!Expression())
-            {
-                CreateError("If what?");
-                return;
-            }
+                return CreateError("If what?");
 
             var condition = Pop();
 
             // get the true-clause
             var trueClause = NewNode(ERhoAst.Block);
-            Block(trueClause);
+            if (!Block())
+                return CreateError("If needs a block");
 
             // make the conditional node in AST
             var cond = NewNode(ERhoAst.Conditional);
@@ -390,28 +381,24 @@ namespace Diver.Language
             if (Try(ERhoToken.Else))
             {
                 Consume();
-                var falseClause = NewNode(ERhoAst.Block);
-                Block(falseClause);
-                cond.Add(falseClause);
+                if (!Block())
+                    return CreateError("No else block");
+                cond.Add(Pop());
             }
 
-            block.Add(cond);
+            Append(cond);
+            return true;
         }
 
-        private void IndexOp()
+        private bool IndexOp()
         {
-            Consume();
-            var index = NewNode(ERhoAst.IndexOp);
-            index.Add(Pop());
+            PushConsume();
             if (!Expression())
-            {
-                CreateError("Index what?");
-                return;
-            }
+                return CreateError("Index what?");
 
             Expect(ERhoToken.CloseSquareBracket);
-            index.Add(Pop());
-            Push(index);
+            Append(Pop());
+            return true;
         }
 
         private void For(RhoAstNode block)
@@ -475,11 +462,11 @@ namespace Diver.Language
             return Fail(_lexer.CreateErrorMessage(Current(), string.Format(text, args)));
         }
 
-        private void ConsumeNewLines()
-        {
-            while (Try(ERhoToken.NewLine))
-                Consume();
-        }
+        //private void ConsumeNewLines()
+        //{
+        //    while (Try(ERhoToken.NewLine))
+        //        Consume();
+        //}
 
         private int indent;
         private int current;

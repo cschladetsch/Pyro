@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Activation;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -14,7 +13,7 @@ namespace Diver.Language
         {
         }
 
-        public bool Process(string text, EStructure st = EStructure.Program)
+        public bool Process(string text, EStructure st)
         {
             _lexer = new RhoLexer(text);
             _lexer.Process();
@@ -23,10 +22,11 @@ namespace Diver.Language
 
             _parser = new RhoParser(_lexer, _reg, st);
             _parser.Process();
+            Console.WriteLine(_parser.PrintTree());
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
-            TranslateNode(_parser.Root);
+            TranslateNode(_parser.Result);
 
             return !Failed;
         }

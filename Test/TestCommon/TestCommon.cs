@@ -59,7 +59,7 @@ namespace Diver.Test
             return _continuation = trans.Continuation;
         }
 
-        private Continuation RhoTranslate(string text, EStructure st = EStructure.Statement)
+        private Continuation RhoTranslate(string text, EStructure st)
         {
             var trans = new RhoTranslator(_reg);
             trans.Process(text, st);

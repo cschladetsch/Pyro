@@ -27,7 +27,7 @@
 
                 node.Add(Pop());
                 node.Add(ident);
-                Push(node);
+                Append(node);
             }
 
             return true;
@@ -57,8 +57,12 @@
             if (!Additive())
                 return false;
 
-            while (Try(ERhoToken.Less) || Try(ERhoToken.Greater) || Try(ERhoToken.Equiv) || Try(ERhoToken.NotEquiv)
-                || Try(ERhoToken.LessEquiv) || Try(ERhoToken.GreaterEquiv))
+            while (Try(ERhoToken.Less) 
+                   || Try(ERhoToken.Greater) 
+                   || Try(ERhoToken.Equiv) 
+                   || Try(ERhoToken.NotEquiv)
+                   || Try(ERhoToken.LessEquiv) 
+                   || Try(ERhoToken.GreaterEquiv))
             {
                 var node = NewNode(Consume());
                 node.Add(Pop());
@@ -204,23 +208,23 @@
             {
                 if (Try(ERhoToken.Dot))
                 {
-                    GetMember();
-                    continue;
+                    if (!GetMember())
+                        return false;
                 }
-
-                if (Try(ERhoToken.OpenParan))
+                else if (Try(ERhoToken.OpenParan))
                 {
-                    Call();
-                    continue;
+                    if (!Call())
+                        return false;
                 }
-
-                if (Try(ERhoToken.OpenSquareBracket))
+                else if (Try(ERhoToken.OpenSquareBracket))
                 {
-                    IndexOp();
-                    continue;
+                    if (!IndexOp())
+                        return false;
                 }
-
-                break;
+                else
+                {
+                    break;
+                }
             }
 
             return true;

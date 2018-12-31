@@ -12,6 +12,8 @@ namespace Diver.Language
         {
         }
 
+        public PiAstNode Root => _stack.Peek();
+
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
             _current = 0;
@@ -45,8 +47,8 @@ namespace Diver.Language
 
         private bool Run(EStructure st)
         {
-            _root = _astFactory.New(EPiAst.Continuation);
-            while (!Failed && NextSingle(_root))
+            _stack.Push(_astFactory.New(EPiAst.Continuation));
+            while (!Failed && NextSingle(Top()))
                 ;
             return !Failed;
         }

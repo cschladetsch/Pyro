@@ -14,8 +14,6 @@ namespace Diver.Language
         where TTokenNode : class, ITokenNode<ETokenEnum>
         where TAstNode : class//, IAstNode<TAstNode>
     {
-        public TAstNode Root => _root;
-
         protected ParserCommon(TLexer lexer, IRegistry reg)
             : base(reg)
         {
@@ -52,7 +50,7 @@ namespace Diver.Language
         public string PrintTree()
         { 
             var str = new StringBuilder();
-            PrintTree(str, 0, _root);
+            PrintTree(str, 0, _stack.Peek());
             return str.ToString();
         }
 
@@ -88,8 +86,10 @@ namespace Diver.Language
                 _stack.Push(node);
         }
 
-        protected void Append(object obj)
+        protected void Append(TAstNode obj)
         {
+            if (obj == null)
+                throw new ArgumentNullException();
             _astFactory.AddChild(Top(), obj);
         }
 
@@ -219,7 +219,7 @@ namespace Diver.Language
             if (!tok.Type.Equals(type))
             {
                 FailWith($"Expected {type}, have {tok}");
-                return null;
+                throw new Exception(Error);
             }
 
             Next();
@@ -244,7 +244,6 @@ namespace Diver.Language
         protected List<TTokenNode> _tokens = new List<TTokenNode>();
         protected readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
         protected int _current;
-        protected TAstNode _root;
         protected int _indent;
         protected TLexer _lexer;
         protected AstFactory _astFactory = new AstFactory();
