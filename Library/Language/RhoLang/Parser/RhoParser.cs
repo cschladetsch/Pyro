@@ -1,12 +1,11 @@
 ﻿using System;
-using Diver.Exec;
 
 namespace Diver.Language
 {
     /// <summary>
     /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.
     /// </summary>
-    public class RhoParser
+    public partial class RhoParser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
     {
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
@@ -130,13 +129,14 @@ namespace Diver.Language
 
             Expect(ERhoToken.Fun);
             var name = Expect(ERhoToken.Ident);
-            var fun = NewNode(ERhoAst.Function);
+            var cont = NewNode(ERhoAst.Function);
 
             // ensure the label for the function is quoted
-            fun.Add(new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true)));
+            var ident = new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true));
+            cont.Add(ident);
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
-            fun.Add(args);
+            cont.Add(args);
 
             if (Try(ERhoToken.Ident))
             {
@@ -154,15 +154,15 @@ namespace Diver.Language
             if (Failed)
                 return false;
 
-            AddBlock(fun);
-            node.Add(fun);
-
-            // TODO: nested methods: this is too early
-            if (indent > 0)
-            {
-                //node.Add(_astFactory.New(ERhoAst.Suspend));
-                Console.WriteLine("Inner function");
-            }
+            var code = NewNode(ERhoAst.Block);
+            Block(code);
+            cont.Add(ident);
+            cont.Add(args);
+            cont.Add(code);
+            var assign = NewNode(ERhoAst.Assignment);
+            assign.Add(cont);
+            assign.Add(ident);
+            node.Add(assign);
 
             return !Failed;
         }
@@ -180,13 +180,10 @@ namespace Diver.Language
             block.Add(w);
         }
 
-        private void AddBlock(RhoAstNode fun)
-        {
-            var block = NewNode(ERhoAst.Block);
-            Block(block);
-            fun.Add(block);
-        }
-
+        /// <summary>
+        /// This seems to be broken too
+        /// </summary>
+        /// <param name="node"></param>
         private void Block(RhoAstNode node)
         {
             ConsumeNewLines();
@@ -251,9 +248,10 @@ namespace Diver.Language
                     block.Add(write);
                     goto finis;
                 }
+
                 case ERhoToken.Assert:
                 {
-                    var ass = NewNode(Consume());
+                    var assert = NewNode(Consume());
                     Expect(ERhoToken.OpenParan);
                     if (!Expression())
                     {
@@ -261,8 +259,8 @@ namespace Diver.Language
                         return false;
                     }
                     Expect(ERhoToken.CloseParan);
-                    ass.Add(Pop());
-                    block.Add(ass);
+                    assert.Add(Pop());
+                    block.Add(assert);
                     goto finis;
                 }
 
@@ -322,234 +320,13 @@ namespace Diver.Language
             return true;
         }
 
-        private bool Expression()
-        {
-            if (!Logical())
-                return false;
-
-            if (Try(ERhoToken.Assign) 
-                || Try(ERhoToken.PlusAssign) 
-                || Try(ERhoToken.MinusAssign) 
-                //|| Try(ERhoToken.MulAssign) 
-                //|| Try(ERhoToken.DivAssign)
-                )
-            {
-                var node = NewNode(Consume());
-                var ident = Pop();
-                if (!Logical())
-                {
-                    CreateError("Assignment requires an expression");
-                    return false;
-                }
-
-                node.Add(Pop());
-                node.Add(ident);
-                Push(node);
-            }
-
-            return true;
-        }
-
-        private bool Logical()
-        {
-            if (!Relational())
-                return false;
-
-            while (Try(ERhoToken.And) || Try(ERhoToken.Or) || Try(ERhoToken.Xor))
-            {
-                var node = NewNode(Consume());
-                node.Add(Pop());
-                if (!Relational())
-                    return CreateError("Relational expected");
-
-                node.Add(Pop());
-                Push(node);
-            }
-
-            return true;
-        }
-
-        bool Relational()
-        {
-            if (!Additive())
-                return false;
-
-            while (Try(ERhoToken.Less) || Try(ERhoToken.Greater) || Try(ERhoToken.Equiv) || Try(ERhoToken.NotEquiv)
-                || Try(ERhoToken.LessEquiv) || Try(ERhoToken.GreaterEquiv))
-            {
-                var node = NewNode(Consume());
-                node.Add(Pop());
-                if (!Additive())
-                    return CreateError("Additive expected");
-
-                node.Add(Pop());
-                Push(node);
-            }
-
-            return true;
-        }
-
-        bool Additive()
-        {
-            // unary +/- operator
-            if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
-            {
-                var uniSigned = NewNode(Consume());
-                if (!Term())
-                    return CreateError("Term expected");
-
-                uniSigned.Add(Pop());
-                Push(uniSigned);
-                return true;
-            }
-
-            if (Try(ERhoToken.Not))
-            {
-                var negate = NewNode(Consume());
-                if (!Additive())
-                    return CreateError("Additive expected");
-
-                negate.Add(Pop());
-                Push(negate);
-                return true;
-            }
-
-            if (!Term())
-                return false;
-
-            while (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
-            {
-                //[1]
-                var node = NewNode(Consume());
-                node.Add(Pop());
-                if (!Term())
-                    return CreateError("Term expected");
-
-                node.Add(Pop());
-                Push(node);
-            }
-
-            return true;
-        }
-
-        private bool Term()
-        {
-            if (!Factor())
-                return false;
-
-            while (Try(ERhoToken.Multiply) || Try(ERhoToken.Divide))
-            {
-                var node = NewNode(Consume());
-                node.Add(Pop());
-                if (!Factor())
-                    return CreateError("Factor expected with a term");
-
-                node.Add(Pop());
-                Push(node);
-            }
-
-            return true;
-        }
-
-        private bool Factor()
-        {
-            if (Try(ERhoToken.OpenParan))
-            {
-                var exp = NewNode(Consume());
-                if (!Expression())
-                    return CreateError("Expected an expression");
-
-                Expect(ERhoToken.CloseParan);
-                exp.Add(Pop());
-                Push(exp);
-                return true;
-            }
-
-            if (Try(ERhoToken.OpenSquareBracket))
-            {
-                var list = NewNode(ERhoAst.List);
-                do
-                {
-                    Consume();
-                    if (Try(ERhoToken.CloseSquareBracket))
-                        break;
-                    if (Expression())
-                        list.Add(Pop());
-                    else
-                    {
-                        Fail("Badly formed array");
-                        return false;
-                    }
-                }
-                while (Try(ERhoToken.Comma));
-
-                Expect(ERhoToken.CloseSquareBracket);
-                Push(list);
-
-                return true;
-            }
-
-            if (   Try(ERhoToken.Int) 
-                || Try(ERhoToken.Float) 
-                || Try(ERhoToken.String) 
-                || Try(ERhoToken.True) 
-                || Try(ERhoToken.False)
-                )
-            {
-                return PushConsume();
-            }
-
-            if (Try(ERhoToken.Self))
-                return PushConsume();
-
-            //    while (Try(ERhoToken.Lookup))
-            //        return PushConsume();
-
-            if (Try(ERhoToken.Ident))
-                return ParseFactorIdent();
-
-            if (Try(ERhoToken.Pathname))
-                return ParseFactorIdent();
-
-            return false;
-        }
-
-        private bool ParseFactorIdent()
-        {
-            PushConsume();
-
-            while (!Failed)
-            {
-                if (Try(ERhoToken.Dot))
-                {
-                    ParseGetMember();
-                    continue;
-                }
-
-                if (Try(ERhoToken.OpenParan))
-                {
-                    ParseMethodCall();
-                    continue;
-                }
-
-                if (Try(ERhoToken.OpenSquareBracket))
-                {
-                    ParseIndexOp();
-                    continue;
-                }
-
-                break;
-            }
-
-            return true;
-        }
-
-        private void ParseMethodCall()
+        private void Call()
         {
             Consume();
+
             var call = NewNode(ERhoAst.Call);
-            call.Add(Pop());
             var args = NewNode(ERhoAst.ArgList);
+            call.Add(Pop());
             call.Add(args);
 
             if (Expression())
@@ -575,7 +352,7 @@ namespace Diver.Language
                 call.Add(Consume());
         }
 
-        private void ParseGetMember()
+        private void GetMember()
         {
             Consume();
             var get = NewNode(ERhoAst.GetMember);
@@ -620,7 +397,7 @@ namespace Diver.Language
             block.Add(cond);
         }
 
-        private void ParseIndexOp()
+        private void IndexOp()
         {
             Consume();
             var index = NewNode(ERhoAst.IndexOp);
@@ -687,7 +464,8 @@ namespace Diver.Language
             }
 
             Expect(ERhoToken.NewLine);
-            AddBlock(f);
+            //AddBlock(f);
+            throw new NotImplementedException();
             block.Add(f);
         }
 
