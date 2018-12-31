@@ -145,7 +145,7 @@ foo(2)
             RunRho(text);
         }
 
-        //[Test]
+        [Test]
         public void TestNestedFunctions()
         {
             //            var text = @"
@@ -160,11 +160,15 @@ foo(2)
             //";
             var text = @"
 fun foo()
-	fun bar()
-		writeln(""in bar"")
-	bar()
-foo()
+	writeln(""test"")
 ";
+
+//fun foo()
+//	fun bar()
+//		writeln(""in bar"")
+//	bar()
+//foo()
+//";
 
             RunRho(text);
         }

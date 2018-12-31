@@ -92,13 +92,14 @@ namespace Diver.Language
 
             Expect(ERhoToken.Fun);
             var name = Expect(ERhoToken.Ident);
-            var fun = NewNode(ERhoAst.Function);
+            var cont = NewNode(ERhoAst.Function);
 
             // ensure the label for the function is quoted
-            fun.Add(new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true)));
+            var ident = new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true));
+            cont.Add(ident);
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
-            fun.Add(args);
+            cont.Add(args);
 
             if (Try(ERhoToken.Ident))
             {
@@ -116,15 +117,10 @@ namespace Diver.Language
             if (Failed)
                 return false;
 
-            AddBlock(fun);
-            node.Add(fun);
-
-            // TODO: nested methods: this is too early
-            if (indent > 0)
-            {
-                //node.Add(_astFactory.New(ERhoAst.Suspend));
-                Console.WriteLine("Inner function");
-            }
+            var ass = NewNode(ERhoAst.Assignment);
+            ass.Add(cont);
+            ass.Add(ident);
+            node.Add(ass);
 
             return !Failed;
         }
