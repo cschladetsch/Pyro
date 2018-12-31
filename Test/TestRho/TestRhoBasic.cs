@@ -127,6 +127,13 @@ else
         }
 
         [Test]
+        public void TestWriteln()
+        {
+            var text = @"writeln(""testing 1 2 3"")";
+            RunRho(text);
+        }
+
+        [Test]
         public void TestLocalScope()
         {
             var text = @"
@@ -138,15 +145,18 @@ foo(2)
             RunRho(text);
         }
 
-        [Test]
+        //[Test]
         public void TestNestedFunctions()
         {
             var text = @"
-fun foo(a)
-	fun bar(b)
-		a + b
-	bar(2)
-//assert(foo(3) == 5)
+fun foo()
+	fun bar()
+		1
+	writeln(""testing"")
+	fun spam()
+		2
+	bar()
+	spam()
 ";
             RunRho(text);
         }

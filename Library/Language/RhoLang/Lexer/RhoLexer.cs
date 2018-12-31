@@ -27,6 +27,8 @@ namespace Diver.Language
             _keyWords.Add("self", ERhoToken.Self);
             _keyWords.Add("while", ERhoToken.While);
             _keyWords.Add("assert", ERhoToken.Assert);
+            _keyWords.Add("writeln", ERhoToken.WriteLine);
+            _keyWords.Add("write", ERhoToken.Write);
         }
 
         protected override bool NextToken()

@@ -20,8 +20,8 @@
         
         Print,
         Assert,
-        Write,
         WriteLine,
+        Write,
 
         If,
         IfElse,

@@ -219,6 +219,18 @@ namespace Diver.Language
             var type = Current().Type;
             switch (type)
             {
+                case ERhoToken.WriteLine:
+                case ERhoToken.Write:
+                {
+                    var write = NewNode(Consume());
+                    Expect(ERhoToken.OpenParan);
+                    if (!Expression())
+                        return FailWith("Write what?");
+                    Expect(ERhoToken.CloseParan);
+                    write.Add(Pop());
+                    block.Add(write);
+                    goto finis;
+                }
                 case ERhoToken.Assert:
                 {
                     var ass = NewNode(Consume());

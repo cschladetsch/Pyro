@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -33,6 +32,16 @@ namespace Diver.Language
         {
             switch (node.RhoToken.Type)
             {
+                case ERhoToken.Write:
+                    TranslateNode(node.GetChild(0));
+                    Append(EOperation.Write);
+                    return;
+
+                case ERhoToken.WriteLine:
+                    TranslateNode(node.GetChild(0));
+                    Append(EOperation.WriteLine);
+                    return;
+
                 case ERhoToken.OpenParan:
                     foreach (var ch in node.Children)
                         TranslateNode(ch);
@@ -261,8 +270,7 @@ namespace Diver.Language
 
                 case ERhoAst.Block:
                     PushNew();
-                    foreach (var st in node.Children)
-                        TranslateNode(st);
+                    TranslateBlock(node);
                     Append(Pop());
                     return;
 
@@ -277,16 +285,23 @@ namespace Diver.Language
 
                 case ERhoAst.Function:
                     TranslateFunction(node);
+                    //if (_funIndent-- > 0)
+                    //{
+                    //    PushNew();
+                    //    Append(EOperation.Suspend);
+                    //    Append(Pop());
+                    //}
                     return;
 
                 case ERhoAst.Program:
-                    foreach (var e in node.Children)
-                        TranslateNode(e);
+                    TranslateBlock(node);
                     return;
             }
 
             Fail($"Unsupported node {node}");
         }
+
+        private int _funIndent;
 
         private void TranslateBlock(RhoAstNode node)
         {
@@ -296,6 +311,8 @@ namespace Diver.Language
 
         private void TranslateFunction(RhoAstNode node)
         {
+            ++_funIndent;
+
             // child 0: ident
             // child 1: args
             // child 2: block
@@ -304,7 +321,9 @@ namespace Diver.Language
             // write the body
             PushNew();
             foreach (var b in ch[2].Children)
+            {
                 TranslateNode(b);
+            }
 
             // add the args
             var cont = Pop();

@@ -67,6 +67,8 @@
         Float,
         List,
         In,
-        Retrieve
+        Retrieve,
+        WriteLine,
+        Write
     }
 }
