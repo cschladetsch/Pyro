@@ -85,6 +85,11 @@ namespace Diver.Language
             return true;
         }
 
+        RhoAstNode QuotedIdent()
+        {
+            return new RhoAstNode(ERhoAst.Ident, new Label(Expect(ERhoToken.Ident).Text, true));
+        }
+
         /// <summary>
         /// NOTE: General idea is to make functions like assignments:
         ///
@@ -128,15 +133,11 @@ namespace Diver.Language
             ConsumeNewLines();
 
             Expect(ERhoToken.Fun);
-            var name = Expect(ERhoToken.Ident);
             var cont = NewNode(ERhoAst.Function);
+            var ident = QuotedIdent();
 
-            // ensure the label for the function is quoted
-            var ident = new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true));
-            cont.Add(ident);
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
-            cont.Add(args);
 
             if (Try(ERhoToken.Ident))
             {
@@ -161,7 +162,7 @@ namespace Diver.Language
             cont.Add(code);
             var assign = NewNode(ERhoAst.Assignment);
             assign.Add(cont);
-            assign.Add(ident);
+            assign.Add(Expect(ERhoToken.Ident));
             node.Add(assign);
 
             return !Failed;

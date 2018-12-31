@@ -308,8 +308,6 @@ namespace Diver.Language
 
         private void TranslateFunction(RhoAstNode node)
         {
-            _funIndent++;
-
             var ch = node.Children;
             var ident = ch[0].Value;
             var args = ch[1].Children;
@@ -327,8 +325,6 @@ namespace Diver.Language
 
             // write the name and store
             Append(cont);
-            if (_funIndent-- > 1)
-                Append(EOperation.Suspend);
             Append(ident);
             Append(EOperation.Store);
         }

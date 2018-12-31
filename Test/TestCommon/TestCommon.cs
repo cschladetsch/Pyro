@@ -64,7 +64,11 @@ namespace Diver.Test
             var trans = new RhoTranslator(_reg);
             trans.Process(text, st);
             if (trans.Failed)
+            {
                 WriteLine($"Translation error: {trans.Error}");
+                WriteLine($"Parser error: {trans.Parser.Error}");
+                WriteLine($"Lexer error: {trans.Lexer.Error}");
+            }
             WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return trans.Result();
