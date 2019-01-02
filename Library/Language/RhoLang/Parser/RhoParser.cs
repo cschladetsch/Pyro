@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlTypes;
 using System.Linq;
 
 namespace Diver.Language
@@ -205,16 +206,22 @@ namespace Diver.Language
             while (!Failed)
             {
                 int level = 0;
-                while (Try(ERhoToken.Tab))
+                if (Try(ERhoToken.Tab))
                 {
                     ++level;
                     Consume();
+                    return Block() || FailWith("Block expected");
                 }
 
                 if (Try(ERhoToken.NewLine))
                 {
                     Consume();
                     continue;
+                }
+
+                if (Statement())
+                {
+                    Append(Pop());
                 }
 
                 // close current block
@@ -236,11 +243,6 @@ namespace Diver.Language
                 {
                     return CreateError("Mismatch block indent");
                 }
-
-                if (Statement())
-                {
-                    Append(Pop());
-                }
             }
 
             return false;
@@ -255,10 +257,14 @@ namespace Diver.Language
 
         private bool Statement()
         {
-            var type = Current().Type;
+            ConsumeNewLines();
 
+            var type = Current().Type;
             switch (type)
             {
+                case ERhoToken.Tab:
+                    Consume();
+                    return Block() || FailWith("Block expected");
                 case ERhoToken.WriteLine:
                 case ERhoToken.Write:
                 {
@@ -277,7 +283,7 @@ namespace Diver.Language
                     if (Expression())
                         ret.Add(Pop());
                     Append(ret);
-                    goto finis;
+                    return true;
                 }
 
                 case ERhoToken.While:
@@ -306,12 +312,12 @@ namespace Diver.Language
                 return true;
 
             if (!Expression())
-                return false;
+                return FailWith("Expression Expected");
 
-            finis:
+            Append(Pop());
 
-            if (!Try(ERhoToken.None))
-                Expect(ERhoToken.NewLine);
+            //if (!Try(ERhoToken.None))
+            //    Expect(ERhoToken.NewLine);
 
             return true;
         }

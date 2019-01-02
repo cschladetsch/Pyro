@@ -183,5 +183,20 @@ namespace Diver.Test
         {
             return Executor.ConstRef<T>(o);
         }
+
+        protected void AssertVarEquals<T>(string ident, T val)
+        {
+            Assert.IsTrue(_scope.ContainsKey(ident));
+            var obj = _scope[ident];
+            switch (obj)
+            {
+                case T v:
+                    Assert.AreEqual(v, val);
+                    return;
+                case IRefBase rb:
+                    Assert.AreEqual(rb.BaseValue, val);
+                    return;
+            }
+        }
     }
 }

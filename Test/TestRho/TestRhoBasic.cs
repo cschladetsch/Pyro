@@ -61,22 +61,6 @@ assert(!false)");
             AssertVarEquals("c", 6);
         }
 
-        private void AssertVarEquals<T>(string ident, T val)
-        {
-            Assert.IsTrue(_scope.ContainsKey(ident));
-            var obj = _scope[ident];
-            switch (obj)
-            {
-                case T v:
-                    Assert.AreEqual(v, val);
-                    return;
-                case IRefBase rb:
-                    Assert.AreEqual(rb.BaseValue, val);
-                    return;
-            }
-        }
-
-
         [Test]
         public void TestParseCall()
         {
@@ -108,6 +92,56 @@ assert(!false)");
             Assert.AreEqual(1, cont.Code[0]);
             Assert.AreEqual(2, cont.Code[1]);
             Assert.AreEqual(3, cont.Code[2]);
+        }
+
+        [Test]
+        public void TestBlocks0()
+        {
+            var code1 = RhoTranslate( @"1").Code;
+            Assert.AreEqual(1, code1.Count);
+            Assert.AreEqual(1, code1[0]);
+
+            var code2 = RhoTranslate(
+@"
+1
+2
+").Code;
+
+            Assert.AreEqual(2, code2.Count);
+            Assert.AreEqual(1, code2[0]);
+            Assert.AreEqual(2, code2[1]);
+        }
+
+        [Test]
+        public void TestBlocks1()
+        {
+            var code = RhoTranslate(
+@"
+1
+	2
+").Code;
+            Assert.AreEqual(1, code.Count);
+            //Assert.AreEqual(1, code[0]);
+            //var inner = ConstRef<Continuation>(code[1]);
+            //Assert.IsNotNull(inner);
+            //Assert.AreEqual(2, inner.Code[0]);
+        }
+
+        [Test]
+        public void TestBlocks2()
+        {
+            var code = RhoTranslate(
+@"
+1
+	2
+3
+").Code;
+            Assert.AreEqual(3, code.Count);
+            //Assert.AreEqual(1, code[0]);
+            //var inner = ConstRef<Continuation>(code[1]);
+            //Assert.IsNotNull(inner);
+            //Assert.AreEqual(2, inner.Code[0]);
+            //Assert.AreEqual(3, code[2]);
         }
 
         [Test]

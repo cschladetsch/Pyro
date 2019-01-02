@@ -83,7 +83,7 @@ namespace Diver.Language
 
         private bool CheckStackExists()
         {
-            return _stack.Count == 0 && FailWith("Empty context stack");
+            return _stack.Count > 0 || FailWith("Empty context stack");
         }
 
         protected TAstNode PushConsume()
