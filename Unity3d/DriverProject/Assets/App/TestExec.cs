@@ -19,9 +19,9 @@ public class TestExec : MonoBehaviour
     void Awake()
     {
         _reg = new Registry();
+        _exec = new Executor();
         _rho = new RhoTranslator(_reg);
         _pi = new PiTranslator(_reg);
-        _exec = new Executor();
     }
 
     void Start()

@@ -73,6 +73,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="IConstRef.cs" />
     <Compile Include="Impl\RefBase.cs" />
+    <Compile Include="IProcess.cs" />
     <Compile Include="IStructBase.cs" />
     <Compile Include="ITypeBase.cs" />
     <Compile Include="IStruct.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="Label.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Pathname.cs" />
+    <Compile Include="Process.cs" />
+    <Compile Include="ProcessCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRef.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

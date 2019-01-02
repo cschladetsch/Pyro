@@ -5,10 +5,8 @@ using Diver.Exec;
 namespace Diver.Language
 {
     public class RhoTranslator 
-        : TranslatorBase<RhoParser>
+        : TranslatorBase<RhoLexer, RhoParser>
     {
-        public RhoLexer Lexer => _lexer;
-        public RhoParser Parser => _parser;
         public RhoTranslator(IRegistry r)
             : base(r)
         {
@@ -373,8 +371,5 @@ namespace Diver.Language
         {
             return $"=== RhoTranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}\nCode: {Result().ToString()}";
         }
-
-        private RhoLexer _lexer;
-        private RhoParser _parser;
     }
 }

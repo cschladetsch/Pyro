@@ -1,16 +1,14 @@
-﻿using System;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Runtime.Remoting.Activation;
-
-namespace Diver.Language
+﻿namespace Diver.Language
 {
     /// <summary>
     /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.
     /// </summary>
     public partial class RhoParser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
+        , IParser
     {
+        public RhoAstNode Result => _stack.Peek();
+
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
             : base(lexer, reg)
         {
@@ -18,8 +16,6 @@ namespace Diver.Language
             _indent = 0;
             _structure = st;
         }
-
-        public RhoAstNode Result => _stack.Peek();
 
         public bool Process()
         {

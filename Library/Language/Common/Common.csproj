@@ -52,6 +52,7 @@
     <Compile Include="IAstFactory.cs" />
     <Compile Include="IAstNode.cs" />
     <Compile Include="ILexerCommon.cs" />
+    <Compile Include="IProcess.cs" />
     <Compile Include="ITokenBase.cs" />
     <Compile Include="ITokenFactory.cs" />
     <Compile Include="ITokenNode.cs" />

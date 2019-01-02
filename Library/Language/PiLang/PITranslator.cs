@@ -9,7 +9,7 @@ namespace Diver.Language
     /// <summary>
     /// Translates input Pi text source code to an executable Continuation
     /// </summary>
-    public class PiTranslator : ProcessCommon
+    public class PiTranslator : TranslatorBase<PiLexer, PiParser>
     {
         public Continuation Continuation => _continuation;
         public PiLexer Lexer => _lexer;

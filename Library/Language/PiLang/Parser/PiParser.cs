@@ -7,6 +7,7 @@ namespace Diver.Language
     /// </summary>
     public class PiParser
         : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
+        , IParser
     {
         public PiParser(PiLexer lexer) : base(lexer, null)
         {
