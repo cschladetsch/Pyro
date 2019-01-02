@@ -35,6 +35,15 @@ namespace Diver.Language
         {
             switch (node.RhoToken.Type)
             {
+                case ERhoToken.Fun:
+                    TranslateFunction(node);
+                    return;
+
+                case ERhoToken.Assert:
+                    TranslateNode(node.GetChild(0));
+                    Append(EOperation.Assert);
+                    return;
+
                  case ERhoToken.If:
                      TranslateIf(node);
                      return;
@@ -65,11 +74,6 @@ namespace Diver.Language
 
                 case ERhoToken.False:
                     Append(false);
-                    return;
-
-                case ERhoToken.Assert:
-                    TranslateNode(node.GetChild(0));
-                    Append(EOperation.Assert);
                     return;
 
                 case ERhoToken.While:
@@ -256,10 +260,6 @@ namespace Diver.Language
                     TranslateBinaryOp(node, EOperation.GetProperty);
                     return;
 
-                case ERhoAst.TokenType:
-                    TranslateToken(node);
-                    return;
-
                 case ERhoAst.Assignment:
                     // like a binary op, but argument order is reversed
                     TranslateNode(node.GetChild(1));
@@ -290,12 +290,11 @@ namespace Diver.Language
                     TranslateFor(node);
                     return;
 
-                case ERhoAst.Function:
-                    TranslateFunction(node);
-                    return;
-
                 case ERhoAst.Program:
                     TranslateBlock(node);
+                    return;
+                default:
+                    TranslateToken(node);
                     return;
             }
 

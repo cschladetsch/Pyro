@@ -1,4 +1,7 @@
-﻿using Diver.Exec;
+﻿using System.ComponentModel.Design;
+using System.Runtime.Remoting;
+using System.Security.Cryptography.X509Certificates;
+using Diver.Exec;
 using Diver.Language;
 using NUnit.Framework;
 
@@ -29,6 +32,10 @@ namespace Diver.Test.Rho
             False("false || false");
             False("!true || !true");
             False("!true && !true");
+
+            RunRho(@"
+assert(true)
+assert(!false)");
         }
 
         private void False(string text)
@@ -69,22 +76,61 @@ namespace Diver.Test.Rho
             }
         }
 
+
         [Test]
-        public void TestFunction()
+        public void TestParseCall()
+        {
+            var prog = RhoTranslate(@"foo()");
+            var code = prog.Code;
+            Assert.AreEqual(2, code.Count);
+            var name = ConstRef<Label>(code[0]);
+            var op = ConstRef<EOperation>(code[1]);
+            Assert.AreEqual("foo", name.ToString());
+            Assert.AreEqual(EOperation.Suspend, op);
+        }
+
+        [Test]
+        public void TestParseFunDef()
+        {
+            var prog = RhoTranslate(
+@"fun foo()
+	1
+	2
+	3
+");
+            var code = prog.Code;
+            Assert.AreEqual(3, code.Count);
+            Assert.AreSame(typeof(Continuation), code[0].GetType());
+            Assert.AreEqual("'foo", code[1].ToString());
+            Assert.AreEqual(EOperation.Store, code[2]);
+
+            var cont = ConstRef<Continuation>(code[0]);
+            Assert.AreEqual(1, cont.Code[0]);
+            Assert.AreEqual(2, cont.Code[1]);
+            Assert.AreEqual(3, cont.Code[2]);
+        }
+
+        [Test]
+        public void TestExecution()
         {
             RunRho(
 @"fun foo()
-	assert(true)
-	assert(true)
-assert(foo() == 1)
-", EStructure.Program);
+	1
+foo()
+");
+            AssertPop(1);
 
             RunRho(
-@"
-fun foo(a)
+@"fun foo()
+	1
+assert(foo() == 1)
+");
+
+            RunRho(
+@"fun foo(a)
 	a
 foo(42)
-", EStructure.Program);
+");
 
             RunRho(
 @"

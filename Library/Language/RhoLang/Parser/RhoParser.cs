@@ -55,6 +55,8 @@ namespace Diver.Language
 
         private bool Parse(EStructure st)
         {
+            _stack.Push(NewNode(ERhoAst.Program));
+
             bool result = false;
             switch (st)
             {
@@ -74,6 +76,7 @@ namespace Diver.Language
             if (Failed || !result)
                 return false;
 
+            ConsumeNewLines();
             if (!Try(ERhoToken.None))
                 return Fail("Unexpected extra stuff found");
 
@@ -82,7 +85,6 @@ namespace Diver.Language
 
         private bool Program()
         {
-            _stack.Push(NewNode(ERhoAst.Program));
             while (!Failed && !Try(ERhoToken.None))
             {
                 if (Statement())
@@ -345,8 +347,10 @@ namespace Diver.Language
 
             var call = NewNode(ERhoAst.Call);
             var args = NewNode(ERhoAst.ArgList);
-            call.Add(Pop());
+
+            call.Add(Pop());        // the thing to call
             call.Add(args);
+            Push(call);
 
             if (Expression())
             {
@@ -364,7 +368,7 @@ namespace Diver.Language
             }
 
             Expect(ERhoToken.CloseParan);
-
+            Append(Pop());
             return true;
         }
 

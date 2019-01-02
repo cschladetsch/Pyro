@@ -55,7 +55,7 @@ namespace Diver.Test
             return _continuation = trans.Continuation;
         }
 
-        private Continuation RhoTranslate(string text, EStructure st)
+        protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_reg);
             trans.Process(text, st);
@@ -177,6 +177,11 @@ namespace Diver.Test
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
             return lex;
+        }
+
+        protected T ConstRef<T>(object o)
+        {
+            return Executor.ConstRef<T>(o);
         }
     }
 }

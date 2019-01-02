@@ -64,24 +64,26 @@ namespace Diver.Language
         protected void Append(TAstNode obj)
         {
             if (obj == null)
-                throw new ArgumentNullException();
+            {
+                FailWith("Cannot add null object to intennal parse stack");
+                return;
+            }
             _astFactory.AddChild(Top(), obj);
         }
 
         protected TAstNode Pop()
         {
-            if (_stack.Count == 0)
-            {
-                FailWith("Empty context stack");
-                throw new ContextStackEmptyException();
-            }
-
-            return _stack.Pop();
+            return !CheckStackExists() ? null : _stack.Pop();
         }
 
         protected TAstNode Top()
         {
-            return _stack.Peek();
+            return !CheckStackExists() ? null : _stack.Peek();
+        }
+
+        private bool CheckStackExists()
+        {
+            return _stack.Count == 0 && FailWith("Empty context stack");
         }
 
         protected TAstNode PushConsume()

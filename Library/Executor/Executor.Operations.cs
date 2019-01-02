@@ -199,7 +199,7 @@ namespace Diver.Exec
             }
         }
 
-        private T ConstRef<T>(object obj)
+        public static T ConstRef<T>(object obj)
         {
             if (obj is T result)
                 return result;
