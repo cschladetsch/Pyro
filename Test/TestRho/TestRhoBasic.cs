@@ -151,12 +151,13 @@ assert(bar(foo) == 3)
         [Test]
         public void TestConditionals()
         {
-            //            var ifThen = @"
-            //if true
-            //	1
-            //";
-            //            RunRho(ifThen);
-            //            AssertPop(1);
+            var ifThen =
+@"
+if true
+    1
+";
+            RunRho(ifThen);
+            AssertPop(1);
 
             var ifThenElse1 = @"
 if true
@@ -196,23 +197,31 @@ foo(2)
             RunRho(text);
         }
 
-        //[Test]
-        public void TestNestedFunctions()
+//        [Test]
+//        public void TestNestedFunctions0()
+//        {
+//            var text = @"
+//fun foo()
+//    fun bar()
+//        1
+//";
+
+        [Test]
+        public void TestNestedFunctions2()
         {
-            //            var text = @"
-            //fun foo()
-            //	fun bar()
-            //		1
-            //	writeln(""testing"")
-            //	fun spam()
-            //		2
-            //	bar()
-            //	spam()
-            //";
             var text = @"
 fun foo()
-	writeln(""test"")
+	fun bar()
+		1
+	writeln(""testing"")
+	fun spam()
+		2
+	bar()
+	spam()
+foo()
 ";
+            RunRho(text);
+
 
 //fun foo()
 //	fun bar()
@@ -220,8 +229,6 @@ fun foo()
 //	bar()
 //foo()
 //";
-
-            RunRho(text);
         }
     }
 }

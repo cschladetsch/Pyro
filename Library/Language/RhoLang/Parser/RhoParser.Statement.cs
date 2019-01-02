@@ -72,7 +72,7 @@ namespace Diver.Language
             Expect(ERhoToken.CloseParan);
             write.Add(Pop());
             Append(write);
-            return false;
+            return true;
         }
 
         private bool If()

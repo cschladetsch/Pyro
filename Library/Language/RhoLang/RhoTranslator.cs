@@ -303,8 +303,6 @@ namespace Diver.Language
             Fail($"Unsupported node {node}");
         }
 
-        private int _funIndent;
-
         private void TranslateBlock(RhoAstNode node)
         {
             foreach (var st in node.Children)

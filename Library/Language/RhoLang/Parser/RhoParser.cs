@@ -147,6 +147,7 @@ namespace Diver.Language
             assign.Add(cont);
             assign.Add(ident);
 
+            WriteLine($"Adding coro block {ident}");
             Append(assign);
 
             PrintTree();
@@ -174,13 +175,25 @@ namespace Diver.Language
         {
             ConsumeNewLines();
 
-            if (!Try(ERhoToken.Tab))
+            var indent = 0;
+            while (TryConsume(ERhoToken.Tab))
+                ++indent;
+
+            if (indent == 0)
                 return false;
 
+            PrintTree();
+            WriteLine($"At indent {indent}, entering Block {_current} {Current()}");
+
             Push(NewNode(ERhoAst.Block));
-            var indent = 1;
             while (!Failed)
             {
+                if (Try(ERhoToken.None))
+                    return true;
+
+                if (!Statement())
+                    return FailWith("Statement expected");
+
                 ConsumeNewLines();
 
                 var level = 0;
@@ -188,16 +201,15 @@ namespace Diver.Language
                     ++level;
 
                 if (level < indent)
+                {
+                    PrintTree();
+                    _current -= indent;
+                    WriteLine($"At indent {level}/{indent}, leaving Block {_current} {Current()}, {Peek()}");
                     return true;
+                }
 
                 if (level != indent)
-                    return CreateError("Mismatch block indent");
-
-                if (Try(ERhoToken.None))
-                    return true;
-
-                if (!Statement())
-                    return FailWith("Statement expected");
+                    return FailWith("Mismatch block indent");
             }
 
             return false;
