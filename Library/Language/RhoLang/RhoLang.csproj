@@ -80,7 +80,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).dll $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+    <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
 
 </PostBuildEvent>
   </PropertyGroup>
