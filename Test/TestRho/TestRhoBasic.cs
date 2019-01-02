@@ -201,11 +201,12 @@ foo(2)
         public void TestNestedFunctions()
         {
             RunRho(@"
-fun bar(f, num)
-	        1 + f(num)
-        fun spam(num)
-	        num + 2
-        bar(spam, 3)
+fun foo()
+	fun bar(f, num)
+		1 + f(num)
+	fun spam(num)
+		num + 2
+	bar(spam, 3)
 foo()
 ");
             AssertPop(6);
