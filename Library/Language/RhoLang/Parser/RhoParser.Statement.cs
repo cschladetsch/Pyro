@@ -2,14 +2,19 @@
 
 namespace Diver.Language
 {
+    /// <summary>
+    /// Rho statements are complete components made of sub-expressions.
+    ///
+    /// NOTE that Statements do not leave anything on the parsing stack.
+    /// They either succeed or leave a decent error contextual lexical+semantic error message.
+    /// </summary>
     public partial class RhoParser
     {
         private bool Statement()
         {
             ConsumeNewLines();
 
-            var type = Current().Type;
-            switch (type)
+            switch (Current().Type)
             {
                 case ERhoToken.WriteLine:
                 case ERhoToken.Write:
@@ -20,19 +25,20 @@ namespace Diver.Language
 
                 case ERhoToken.Return:
                 case ERhoToken.Yield:
+                case ERhoToken.Resume:
+                case ERhoToken.Suspend:
                 {
                     var ret = NewNode(Consume());
                     if (Expression())
                         ret.Add(Pop());
-                    Append(ret);
-                    return true;
+                    return Append(ret);
                 }
 
                 case ERhoToken.While:
                     return While();
 
                 case ERhoToken.For:
-                    throw new NotImplementedException("For statements");
+                    return For();
 
                 case ERhoToken.If:
                     return If();
@@ -40,15 +46,71 @@ namespace Diver.Language
                 case ERhoToken.Fun:
                     return Function();
 
+                // TODO: Need a 'pass' for empty blocks
+                //case ERhoToken.Pass:
+                //    Append(Current().Type);
+                //    return true;
+
                 case ERhoToken.None:
                     return false;
             }
 
             if (!Expression())
                 return FailWith("Expression expected");
-            Append(Pop());
 
-            return !Try(ERhoToken.None);
+            return Append(Pop()) && !Try(ERhoToken.None);
+        }
+
+        private bool Function()
+        {
+            var cont = NewNode(Consume());
+            var ident = MakeQuotedIdent();
+
+            Expect(ERhoToken.OpenParan);
+            var args = NewNode(ERhoAst.ArgList);
+
+            if (Try(ERhoToken.Ident))
+            {
+                args.Add(Consume());
+                while (TryConsume(ERhoToken.Comma))
+                    args.Add(Expect(ERhoToken.Ident));
+            }
+
+            Expect(ERhoToken.CloseParan);
+            Expect(ERhoToken.NewLine);
+
+            if (!Block())
+                return FailWith("Block expected");
+
+            // make the continuation
+            var block = Pop();
+            cont.Add(ident);
+            cont.Add(args);
+            cont.Add(block);
+
+            // assign it within current scope
+            var assign = NewNode(ERhoAst.Assignment);
+            assign.Add(cont);
+            assign.Add(ident);
+
+            return Append(assign);
+        }
+
+        private bool While()
+        {
+            var @while = NewNode(Consume());
+            Expect(ERhoToken.OpenParan);
+            if (!Expression())
+                return FailWith("While what?");
+
+            Expect(ERhoToken.CloseParan);
+            @while.Add(Pop());
+
+            if (!Block())
+                return FailWith("No While body");
+
+            @while.Add(Pop());
+            return Append(@while);
         }
 
         private bool Assert()
@@ -58,9 +120,9 @@ namespace Diver.Language
             if (!Expression())
                 return FailWith("Assert needs an expression to test");
             Expect(ERhoToken.CloseParan);
+
             assert.Add(Pop());
-            Append(assert);
-            return true;
+            return Append(assert);
         }
 
         private bool Write()
@@ -70,18 +132,17 @@ namespace Diver.Language
             if (!Expression())
                 return FailWith("Write what?");
             Expect(ERhoToken.CloseParan);
+
             write.Add(Pop());
-            Append(write);
-            return true;
+            return Append(write);
         }
 
         private bool If()
         {
-            // make the conditional node in AST
             var cond = NewNode(Consume());
-
             if (!Expression())
                 return FailWith("If what?");
+
             var condition = Pop();
 
             // get the true-clause
@@ -99,64 +160,64 @@ namespace Diver.Language
                 cond.Add(Pop());
             }
 
-            Append(cond);
-            return true;
+            return Append(cond);
         }
 
-        private void For(RhoAstNode block)
+        private bool For()
         {
-            if (!Try(ERhoToken.For))
-                return;
+            var @for = NewNode(Consume());
 
-            Consume();
-
-            var f = NewNode(ERhoAst.For);
             if (!Expression())
+                return FailWith("For what?");
+
+            if (TryConsume(ERhoToken.In))
             {
-                FailWith("For what?");
-                return;
-            }
-
-            if (Try(ERhoToken.In))
-            {
-                Consume();
-                f.Add(Pop());
-
-                if (!Expression())
-                {
-                    FailWith("For each in what?");
-                    return;
-                }
-
-                f.Add(Pop());
+                // for (a in b) ...
+                if (!ForEach(@for))
+                    return false;
             }
             else
             {
-                Expect(ERhoToken.Semi);
-                f.Add(Pop());
-
-                if (!Expression())
-                {
-                    FailWith("When does the for statement stop?");
-                    return;
-                }
-
-                f.Add(Pop());
-                Expect(ERhoToken.Semi);
-
-                if (!Expression())
-                {
-                    FailWith("What happens when a for statement ends?");
-                    return;
-                }
-
-                f.Add(Pop());
+                // for (a = 0; n < 10; ++a) ...
+                if (!ForLoop(@for))
+                    return false;
             }
 
-            Expect(ERhoToken.NewLine);
-            //AddBlock(f);
-            throw new NotImplementedException();
-            block.Add(f);
+            return Append(@for);
+        }
+
+        private bool ForEach(RhoAstNode @for)
+        {
+            @for.Add(Pop());
+
+            if (!Expression())
+                return FailWith("For each in what?");
+
+            @for.Add(Pop());
+            return true;
+        }
+
+        private bool ForLoop(RhoAstNode @for)
+        {
+            if (!Expression())
+                return FailWith("For needs an initialiser");
+
+            @for.Add(Pop());
+            Expect(ERhoToken.Semi);
+
+            if (!Expression())
+                return FailWith("When does the for statement stop?");
+
+            @for.Add(Pop());
+            Expect(ERhoToken.Semi);
+
+            if (!Expression())
+                return FailWith("What happens when a for statement ends?");
+
+            @for.Add(Pop());
+            Expect(ERhoToken.CloseParan);
+
+            return true;
         }
     }
 }

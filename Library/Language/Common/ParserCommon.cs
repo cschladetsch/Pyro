@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace Diver.Language
@@ -65,14 +66,13 @@ namespace Diver.Language
                 _stack.Push(node);
         }
 
-        protected void Append(TAstNode obj)
+        protected bool Append(TAstNode obj)
         {
             if (obj == null)
-            {
-                FailWith("Cannot add null object to intennal parse stack");
-                return;
-            }
+                return FailWith("Cannot add Null object to internal parse stack");
+            
             _astFactory.AddChild(Top(), obj);
+            return true;
         }
 
         protected TAstNode Pop()

@@ -31,7 +31,7 @@
         {
             _stack.Push(NewNode(ERhoAst.Program));
 
-            bool result = false;
+            var result = false;
             switch (st)
             {
                 case EStructure.Program:
@@ -53,7 +53,7 @@
             ConsumeNewLines();
 
             if (!Try(ERhoToken.None))
-                return Fail("Unexpected extra stuff found");
+                return FailWith("Unexpected extra stuff found");
 
             return _stack.Count == 1 || Fail("Stack not empty after parsing");
         }
@@ -61,65 +61,9 @@
         private bool Program()
         {
             while (!Failed && !Try(ERhoToken.None))
-            {
                 if (!Statement())
                     return false;
-            }
 
-            return true;
-        }
-
-        private bool Function()
-        {
-            var cont = NewNode(Consume());
-            var ident = QuotedIdent();
-
-            Expect(ERhoToken.OpenParan);
-            var args = NewNode(ERhoAst.ArgList);
-
-            if (Try(ERhoToken.Ident))
-            {
-                args.Add(Consume());
-                while (Try(ERhoToken.Comma))
-                {
-                    Consume();
-                    args.Add(Expect(ERhoToken.Ident));
-                }
-            }
-
-            Expect(ERhoToken.CloseParan);
-            Expect(ERhoToken.NewLine);
-
-            if (!Block())
-                return FailWith("Block expected");
-            var block = Pop();
-            cont.Add(ident);
-            cont.Add(args);
-            cont.Add(block);
-
-            // making a new function is just an assignment from a continuation
-            var assign = NewNode(ERhoAst.Assignment);
-            assign.Add(cont);
-            assign.Add(ident);
-
-            Append(assign);
-
-            return !Failed;
-        }
-
-        private bool While()
-        {
-            var wile = NewNode(Consume());
-            Expect(ERhoToken.OpenParan);
-            if (!Expression())
-                return FailWith("While what?");
-            Expect(ERhoToken.CloseParan);
-            wile.Add(Pop());
-
-            if (!Block())
-                return FailWith("No While body");
-            wile.Add(Pop());
-            Append(wile);
             return true;
         }
 
@@ -202,7 +146,7 @@
                 Consume();
         }
 
-        protected RhoAstNode QuotedIdent()
+        protected RhoAstNode MakeQuotedIdent()
         {
             return new RhoAstNode(ERhoAst.Ident, new Label(Expect(ERhoToken.Ident).Text, true));
         }

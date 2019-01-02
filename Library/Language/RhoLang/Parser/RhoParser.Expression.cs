@@ -10,20 +10,17 @@
             if (!Logical())
                 return false;
 
-            if (Try(ERhoToken.Assign) 
+            if (   Try(ERhoToken.Assign) 
                 || Try(ERhoToken.PlusAssign) 
                 || Try(ERhoToken.MinusAssign) 
-                //|| Try(ERhoToken.MulAssign) 
-                //|| Try(ERhoToken.DivAssign)
-                )
+                || Try(ERhoToken.MulAssign) 
+                || Try(ERhoToken.DivAssign)
+               )
             {
                 var node = NewNode(Consume());
                 var ident = Pop();
                 if (!Logical())
-                {
-                    FailWith("Assignment requires an expression");
-                    return false;
-                }
+                    return FailWith("Assignment requires an expression");
 
                 node.Add(Pop());
                 node.Add(ident);
@@ -43,7 +40,7 @@
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
-                    return FailWith("Relational expected");
+                    return FailWith("Relational component expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -67,7 +64,7 @@
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Additive())
-                    return FailWith("Additive expected");
+                    return FailWith("Additive component expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -94,7 +91,7 @@
             {
                 var negate = NewNode(Consume());
                 if (!Additive())
-                    return FailWith("Additive expected");
+                    return FailWith("Additive component expected");
 
                 negate.Add(Pop());
                 Push(negate);
@@ -188,9 +185,6 @@
             if (Try(ERhoToken.Self))
                 return PushConsumed();
 
-            //    while (Try(ERhoToken.Lookup))
-            //        return PushConsume();
-
             if (Try(ERhoToken.Ident))
                 return ParseFactorIdent();
 
@@ -264,8 +258,7 @@
         private bool GetMember()
         {
             PushConsume();
-            Append(Expect(ERhoToken.Ident));
-            return true;
+            return Append(Expect(ERhoToken.Ident));
         }
 
         private bool IndexOp()

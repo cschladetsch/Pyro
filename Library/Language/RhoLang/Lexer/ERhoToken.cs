@@ -68,6 +68,9 @@
         In,
         Retrieve,
         WriteLine,
-        Write
+        Write,
+        MulAssign,
+        DivAssign,
+        Suspend
     }
 }
