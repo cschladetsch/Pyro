@@ -5,7 +5,7 @@
     /// </summary>
     public partial class RhoParser
     {
-        private bool PushExpression()
+        private bool Expression()
         {
             if (!Logical())
                 return false;
@@ -142,7 +142,7 @@
             if (Try(ERhoToken.OpenParan))
             {
                 var exp = NewNode(Consume());
-                if (!PushExpression())
+                if (!Expression())
                     return CreateError("Expected an expression");
 
                 Expect(ERhoToken.CloseParan);
@@ -159,7 +159,7 @@
                     Consume();
                     if (Try(ERhoToken.CloseSquareBracket))
                         break;
-                    if (PushExpression())
+                    if (Expression())
                         list.Add(Pop());
                     else
                     {

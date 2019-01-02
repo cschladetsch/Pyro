@@ -149,12 +149,12 @@ assert(bar(foo) == 3)
         [Test]
         public void TestConditionals()
         {
-            var ifThen = @"
-if true
-	1
-";
-            RunRho(ifThen);
-            AssertPop(1);
+            //            var ifThen = @"
+            //if true
+            //	1
+            //";
+            //            RunRho(ifThen);
+            //            AssertPop(1);
 
             var ifThenElse1 = @"
 if true
