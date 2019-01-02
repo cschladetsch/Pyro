@@ -66,10 +66,10 @@ namespace Diver.Test.Rho
             Assert.AreEqual(1, code1[0]);
 
             var code2 = RhoTranslate(
-@"
-1
-2
-").Code;
+                @"
+                1
+                2
+                ").Code;
 
             Assert.AreEqual(2, code2.Count);
             Assert.AreEqual(1, code2[0]);
@@ -92,7 +92,8 @@ namespace Diver.Test.Rho
         public void TestParseFunDef()
         {
             var code = RhoTranslate(
-@"fun foo()
+@"
+fun foo()
 	1
 	2
 	3
@@ -139,11 +140,11 @@ foo(42)
 @"
 fun foo()
 	1
-fun bar(f)
-	2 + f()
-assert(bar(foo) == 3)
-assert(bar(foo) == 3)
-", EStructure.Program);
+fun bar(f, n)
+	n + f()
+assert(bar(foo, 1) == 2)
+assert(bar(foo, 2) == 3)
+");
 
         }
 
