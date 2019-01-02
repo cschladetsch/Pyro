@@ -337,7 +337,7 @@ namespace Diver.Exec
                 {
                     var other = b as IEnumerable<object>;
                     if (other == null)
-                        throw new CannotEnumerateException(a, b);
+                        throw new CannotCompareEnumerationsException(a, b);
                     Push(list.SequenceEqual(other));
                     return;
                 }

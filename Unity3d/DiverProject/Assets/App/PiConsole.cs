@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System;
 using Diver;
 using Diver.Exec;
 using Diver.Impl;
@@ -25,31 +25,32 @@ namespace App
             TreeView.Init();
             _treeViewDataSource = new ObservableList<ListNode<TreeViewItem>>();
             TreeView.DataSource = _treeViewDataSource;
-
-            //_pi.Translate("1 2 +");
-            //_exec.Continue(_pi.Continuation);
-            //Debug.Log(_exec.DataStack.Peek());
         }
 
         public void Process(string text)
         {
-            Debug.Log(text);
-            //AddOutputItem(text);
-            //return;
-
-            if (_pi.Translate(text))
+            try
             {
-                _exec.Continue(_pi.Continuation);
-                var index = 0;
-                foreach (var obj in _exec.DataStack)
-                {
-                    AddOutputItem($"{index++}: {obj}");
-                }
-
+                if (_pi.Translate(text))
+                    _exec.Continue(_pi.Continuation);
+                else
+                    AddOutputItem(_pi.Error);
+            }
+            catch (Exception e)
+            {
+                AddOutputItem(e.Message);
                 return;
             }
 
-            AddOutputItem(_pi.Error);
+            WriteDataStack();
+        }
+
+        private void WriteDataStack()
+        {
+            var index = 0;
+            _treeViewDataSource.Clear();
+            foreach (var obj in _exec.DataStack)
+                AddOutputItem($"[{index++}]: {obj}");
         }
 
         private void AddOutputItem(string output)

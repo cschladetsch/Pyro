@@ -50,6 +50,8 @@ namespace Diver.Test
 
             Run("1 2 3 3 tolist expand tolist");
             TestListContents();
+
+            //Assert.Throws<>(() =? Run("["));
         }
 
         private void TestListContents()

@@ -20,22 +20,42 @@ namespace Diver
 
     public class ContextStackEmptyException : Exception
     {
+        public override string ToString()
+        {
+            return "Context stack empty";
+        }
     }
 
     public class DebugBreakException : Exception
     {
+        public override string ToString()
+        {
+            return "DebugBreak";
+        }
     }
 
     public class NullValueException : Exception
     {
+        public override string ToString()
+        {
+            return "Unexpected Null";
+        }
     }
 
     public class AssertionFailedException : Exception
     {
+        public override string ToString()
+        {
+            return "Assertion Failed";
+        }
     }
 
     public class DataStackEmptyException : Exception
     {
+        public override string ToString()
+        {
+            return "Empty stack";
+        }
     }
 
     public class UnknownIdentifierException : Exception
@@ -53,10 +73,10 @@ namespace Diver
         }
     }
 
-    public class CannotEnumerateException : Exception
+    public class CannotCompareEnumerationsException : Exception
     {
         public object Left, Right;
-        public CannotEnumerateException(object o, object o1)
+        public CannotCompareEnumerationsException(object o, object o1)
         {
             Left = o;
             Right = o1;
