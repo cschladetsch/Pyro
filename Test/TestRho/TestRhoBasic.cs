@@ -29,6 +29,10 @@ namespace Diver.Test.Rho
             False("false || false");
             False("!true || !true");
             False("!true && !true");
+
+            RunRho(@"
+                assert(true)
+                assert(!false)");
         }
 
         private void False(string text)
@@ -44,77 +48,125 @@ namespace Diver.Test.Rho
         [Test]
         public void TestArithmetic()
         {
-            RunRho("a = 1 + 2");
+            RunRho("a = 1 + 2", EStructure.Statement);
             AssertVarEquals("a", 3);
-            RunRho(@"
-                a = 1
+            RunRho(@"a = 1
                 b = 2
                 c = (a + b)*2
+                writeln(c)
                 ", EStructure.Program);
             AssertVarEquals("c", 6);
         }
 
-        private void AssertVarEquals<T>(string ident, T val)
+        [Test]
+        public void TestSequence()
         {
-            Assert.IsTrue(_scope.ContainsKey(ident));
-            var obj = _scope[ident];
-            switch (obj)
-            {
-                case T v:
-                    Assert.AreEqual(v, val);
-                    return;
-                case IRefBase rb:
-                    Assert.AreEqual(rb.BaseValue, val);
-                    return;
-            }
+            var code1 = RhoTranslate( @"1").Code;
+            Assert.AreEqual(1, code1.Count);
+            Assert.AreEqual(1, code1[0]);
+
+            var code2 = RhoTranslate(
+                @"
+                1
+                2
+                ").Code;
+
+            Assert.AreEqual(2, code2.Count);
+            Assert.AreEqual(1, code2[0]);
+            Assert.AreEqual(2, code2[1]);
         }
 
         [Test]
-        public void TestFunction()
+        public void TestParseCall()
+        {
+            var prog = RhoTranslate(@"foo()");
+            var code = prog.Code;
+            Assert.AreEqual(2, code.Count);
+            var name = ConstRef<Label>(code[0]);
+            var op = ConstRef<EOperation>(code[1]);
+            Assert.AreEqual("foo", name.ToString());
+            Assert.AreEqual(EOperation.Suspend, op);
+        }
+
+        [Test]
+        public void TestParseFunDef()
+        {
+            var code = RhoTranslate(
+@"
+fun foo()
+	1
+	2
+	3
+").Code;
+            Assert.AreEqual(3, code.Count);
+            Assert.AreSame(typeof(Continuation), code[0].GetType());
+            Assert.AreEqual("'foo", code[1].ToString());
+            Assert.AreEqual(EOperation.Store, code[2]);
+
+            var cont = ConstRef<Continuation>(code[0]);
+            Assert.AreEqual(1, cont.Code[0]);
+            Assert.AreEqual(2, cont.Code[1]);
+            Assert.AreEqual(3, cont.Code[2]);
+        }
+
+        [Test]
+        public void TestExecution()
         {
             RunRho(
 @"fun foo()
 	1
-assert(foo() == 1)
-", EStructure.Program);
+");
+            
+            RunRho(
+@"fun foo()
+	1
+foo()
+");
+            AssertPop(1);
 
             RunRho(
-@"
-fun foo(a)
+@"fun foo()
+	1
+assert(foo() == 1)
+");
+
+            RunRho(
+@"fun foo(a)
 	a
 foo(42)
-", EStructure.Program);
+");
 
             RunRho(
 @"
 fun foo()
 	1
-fun bar(f)
-	2 + f()
-assert(bar(foo) == 3)
-assert(bar(foo) == 3)
-", EStructure.Program);
+fun bar(f, n)
+	n + f()
+assert(bar(foo, 1) == 2)
+assert(bar(foo, 2) == 3)
+");
 
         }
 
         [Test]
         public void TestConditionals()
         {
-            var ifThen = @"
+            var ifThen =
+@"
 if true
-	1 + 2
+	1
 ";
             RunRho(ifThen);
-            AssertPop(3);
+            AssertPop(1);
 
             var ifThenElse1 = @"
 if true
-	1 - 2
+	1
 else
 	2
 ";
             RunRho(ifThenElse1);
-            AssertPop(-1);
+            AssertPop(1);
 
             var ifThenElse2 = @"
 if false
@@ -148,29 +200,15 @@ foo(2)
         [Test]
         public void TestNestedFunctions()
         {
-            //            var text = @"
-            //fun foo()
-            //	fun bar()
-            //		1
-            //	writeln(""testing"")
-            //	fun spam()
-            //		2
-            //	bar()
-            //	spam()
-            //";
-            var text = @"
-fun foo()
-	writeln(""test"")
-";
-
-//fun foo()
-//	fun bar()
-//		writeln(""in bar"")
-//	bar()
-//foo()
-//";
-
-            RunRho(text);
+            RunRho(@"
+fun bar(f, num)
+	        1 + f(num)
+        fun spam(num)
+	        num + 2
+        bar(spam, 3)
+foo()
+");
+            AssertPop(6);
         }
     }
 }

@@ -45,10 +45,12 @@
     <Compile Include="Lexer\RhoLexer.cs" />
     <Compile Include="Lexer\RhoToken.cs" />
     <Compile Include="Lexer\RhoTokenFactory.cs" />
+    <Compile Include="Parser\RhoParser.Expression.cs" />
     <Compile Include="Parser\RhoAstNode.cs" />
     <Compile Include="Parser\ERhoAst.cs" />
     <Compile Include="Parser\RhoAstFactory.cs" />
     <Compile Include="Parser\RhoParser.cs" />
+    <Compile Include="Parser\RhoParser.Statement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RhoTranslator.cs" />
   </ItemGroup>

@@ -14,8 +14,6 @@ namespace Diver.Language
         where TTokenNode : class, ITokenNode<ETokenEnum>
         where TAstNode : class//, IAstNode<TAstNode>
     {
-        public TAstNode Root => _root;
-
         protected ParserCommon(TLexer lexer, IRegistry reg)
             : base(reg)
         {
@@ -24,35 +22,10 @@ namespace Diver.Language
             _lexer = lexer;
         }
 
-        //public virtual bool Process(TLexer lex, EStructure structure)
-        //{
-        //    return false;
-        //}
-
-        //protected virtual bool Process()
-        //{
-        //    return false;
-        //}
-
-        //protected bool Run(EStructure st)
-        //{
-        //    try
-        //    {
-        //        Process(_lexer, st);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        if (!Failed)
-        //            Fail(_lexer.CreateErrorMessage(Current(), "%s", e.ToString()));
-        //    }
-
-        //    return !Failed;
-        //}
-
         public string PrintTree()
         { 
             var str = new StringBuilder();
-            PrintTree(str, 0, _root);
+            PrintTree(str, 0, _stack.Peek());
             return str.ToString();
         }
 
@@ -63,6 +36,10 @@ namespace Diver.Language
 
         private void PrintTree(StringBuilder str, int level, TAstNode root)
         {
+            if (level > 5)
+            {
+                Console.WriteLine("Too big!");
+            }
             var val = root.ToString();
             if (string.IsNullOrEmpty(val))
                 return;
@@ -88,30 +65,41 @@ namespace Diver.Language
                 _stack.Push(node);
         }
 
-        protected void Append(object obj)
+        protected void Append(TAstNode obj)
         {
+            if (obj == null)
+            {
+                FailWith("Cannot add null object to intennal parse stack");
+                return;
+            }
             _astFactory.AddChild(Top(), obj);
         }
 
         protected TAstNode Pop()
         {
-            if (_stack.Count == 0)
-            {
-                FailWith("Empty context stack");
-                throw new ContextStackEmptyException();
-            }
-
-            return _stack.Pop();
+            return !CheckStackExists() ? null : _stack.Pop();
         }
 
         protected TAstNode Top()
         {
-            return _stack.Peek();
+            return !CheckStackExists() ? null : _stack.Peek();
         }
 
-        protected bool PushConsume()
+        private bool CheckStackExists()
         {
-            Push(NewNode(Consume()));
+            return _stack.Count > 0 || FailWith("Empty context stack");
+        }
+
+        protected TAstNode PushConsume()
+        {
+            var node = NewNode(Consume());
+            Push(node);
+            return node;
+        }
+
+        protected bool PushConsumed()
+        {
+            PushConsume();
             return true;
         }
 
@@ -219,7 +207,7 @@ namespace Diver.Language
             if (!tok.Type.Equals(type))
             {
                 FailWith($"Expected {type}, have {tok}");
-                return null;
+                throw new Exception(Error);
             }
 
             Next();
@@ -244,7 +232,6 @@ namespace Diver.Language
         protected List<TTokenNode> _tokens = new List<TTokenNode>();
         protected readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
         protected int _current;
-        protected TAstNode _root;
         protected int _indent;
         protected TLexer _lexer;
         protected AstFactory _astFactory = new AstFactory();

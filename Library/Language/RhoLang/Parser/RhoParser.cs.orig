@@ -75,11 +75,26 @@ namespace Diver.Language
 
         private bool Function()
         {
+<<<<<<< HEAD
+            ConsumeNewLines();
+
+            Expect(ERhoToken.Fun);
+            var name = Expect(ERhoToken.Ident);
+            var cont = NewNode(ERhoAst.Function);
+
+            // ensure the label for the function is quoted
+            var ident = new RhoAstNode(ERhoAst.Ident, new Label(name.Text, true));
+            cont.Add(ident);
+            Expect(ERhoToken.OpenParan);
+            var args = NewNode(ERhoAst.ArgList);
+            cont.Add(args);
+=======
             var cont = NewNode(Consume());
             var ident = QuotedIdent();
 
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
+>>>>>>> feature/nested-functions
 
             if (Try(ERhoToken.Ident))
             {
@@ -101,12 +116,19 @@ namespace Diver.Language
             cont.Add(args);
             cont.Add(block);
 
+<<<<<<< HEAD
+            var ass = NewNode(ERhoAst.Assignment);
+            ass.Add(cont);
+            ass.Add(ident);
+            node.Add(ass);
+=======
             // making a new function is just an assignment from a continuation
             var assign = NewNode(ERhoAst.Assignment);
             assign.Add(cont);
             assign.Add(ident);
 
             Append(assign);
+>>>>>>> feature/nested-functions
 
             return !Failed;
         }

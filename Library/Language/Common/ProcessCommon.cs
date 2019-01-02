@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using System;
+
+namespace Diver.Language
 {
     public class ProcessCommon : Process
     {
@@ -15,6 +17,20 @@
         protected IRef<T> New<T>(T val)
         {
             return _reg.Add(val);
+        }
+
+        protected void WriteLine(object obj)
+        {
+            WriteLine("{0}", obj.ToString());
+        }
+
+        protected void WriteLine(string fmt, params object[] args)
+        {
+            string text = fmt;
+            if (args != null && args.Length > 0)
+                text = string.Format(fmt, args);
+            System.Diagnostics.Trace.WriteLine(text);
+            Console.WriteLine(text);
         }
 
         protected readonly IRegistry _reg;

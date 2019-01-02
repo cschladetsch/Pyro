@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.Remoting.Activation;
+using System.Linq;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -14,7 +14,7 @@ namespace Diver.Language
         {
         }
 
-        public bool Process(string text, EStructure st = EStructure.Program)
+        public bool Process(string text, EStructure st)
         {
             _lexer = new RhoLexer(text);
             _lexer.Process();
@@ -23,10 +23,12 @@ namespace Diver.Language
 
             _parser = new RhoParser(_lexer, _reg, st);
             _parser.Process();
+            Console.WriteLine(_parser.PrintTree());
+            System.Diagnostics.Debug.WriteLine(_parser.PrintTree());
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
-            TranslateNode(_parser.Root);
+            TranslateNode(_parser.Result);
 
             return !Failed;
         }
@@ -35,6 +37,19 @@ namespace Diver.Language
         {
             switch (node.RhoToken.Type)
             {
+                case ERhoToken.Fun:
+                    TranslateFunction(node);
+                    return;
+
+                case ERhoToken.Assert:
+                    TranslateNode(node.GetChild(0));
+                    Append(EOperation.Assert);
+                    return;
+
+                 case ERhoToken.If:
+                     TranslateIf(node);
+                     return;
+
                 case ERhoToken.Write:
                     TranslateNode(node.GetChild(0));
                     Append(EOperation.Write);
@@ -61,11 +76,6 @@ namespace Diver.Language
 
                 case ERhoToken.False:
                     Append(false);
-                    return;
-
-                case ERhoToken.Assert:
-                    TranslateNode(node.GetChild(0));
-                    Append(EOperation.Assert);
                     return;
 
                 case ERhoToken.While:
@@ -252,14 +262,11 @@ namespace Diver.Language
                     TranslateBinaryOp(node, EOperation.GetProperty);
                     return;
 
-                case ERhoAst.TokenType:
-                    TranslateToken(node);
-                    return;
-
                 case ERhoAst.Assignment:
                     // like a binary op, but argument order is reversed
-                    TranslateNode(node.GetChild(1));
+                    //TranslateNode(node.GetChild(1));
                     TranslateNode(node.GetChild(0));
+                    Append(node.GetChild(1).Value);
                     Append(EOperation.Store);
                     return;
 
@@ -286,19 +293,16 @@ namespace Diver.Language
                     TranslateFor(node);
                     return;
 
-                case ERhoAst.Function:
-                    TranslateFunction(node);
-                    return;
-
                 case ERhoAst.Program:
                     TranslateBlock(node);
+                    return;
+                default:
+                    TranslateToken(node);
                     return;
             }
 
             Fail($"Unsupported node {node}");
         }
-
-        private int _funIndent;
 
         private void TranslateBlock(RhoAstNode node)
         {
@@ -308,8 +312,6 @@ namespace Diver.Language
 
         private void TranslateFunction(RhoAstNode node)
         {
-            _funIndent++;
-
             var ch = node.Children;
             var ident = ch[0].Value;
             var args = ch[1].Children;
@@ -325,18 +327,13 @@ namespace Diver.Language
             foreach (var arg in args)
                 cont.AddArg(arg.Token.Text);
 
-            // write the name and store
             Append(cont);
-            if (_funIndent-- > 1)
-                Append(EOperation.Suspend);
-            Append(ident);
-            Append(EOperation.Store);
-        }
+       }
 
         private void TranslateCall(RhoAstNode node)
         {
             var children = node.Children;
-            foreach (var a in children[1].Children)
+            foreach (var a in children[1].Children.Reverse())
                 TranslateNode(a);
 
             TranslateNode(children[0]);
@@ -348,16 +345,16 @@ namespace Diver.Language
 
         private void TranslateIf(RhoAstNode node)
         {
-            // ch[0]: test clause
-            // ch[1]: then-block
-            // ch[2]: [optional] else-block
             var ch = node.Children;
+            var test = ch[0];
+            var thenBlock = ch[1];
+            var elseBlock = ch.Count > 2 ? ch[2] : null;
+            var hasElse = elseBlock != null;
 
-            TranslateNode(ch[1]);
-            var hasElse = ch.Count > 2;
+            TranslateNode(thenBlock);
             if (hasElse)
-                TranslateNode(ch[2]);
-            TranslateNode(ch[0]);
+                TranslateNode(elseBlock);
+            TranslateNode(test);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
 
             // TODO: Allow for if! and if... as well as if&

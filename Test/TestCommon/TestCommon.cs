@@ -50,21 +50,19 @@ namespace Diver.Test
             var trans = new PiTranslator(_reg, text);
             WriteLine(trans.ToString());
             if (trans.Failed)
-            {
-                WriteLine($"Translation error: {trans.Error}");
-                WriteLine($"Parser error: {trans.Parser.Error}");
-                WriteLine($"Lexer error: {trans.Lexer.Error}");
-            }
+                WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Continuation;
         }
 
-        private Continuation RhoTranslate(string text, EStructure st = EStructure.Statement)
+        protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_reg);
             trans.Process(text, st);
+            if (trans.Result() == null)
+                WriteLine($"No output generated");
             if (trans.Failed)
-                WriteLine($"Translation error: {trans.Error}");
+                WriteLine($"Error: {trans.Error}");
             WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return trans.Result();
@@ -179,6 +177,26 @@ namespace Diver.Test
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
             return lex;
+        }
+
+        protected T ConstRef<T>(object o)
+        {
+            return Executor.ConstRef<T>(o);
+        }
+
+        protected void AssertVarEquals<T>(string ident, T val)
+        {
+            Assert.IsTrue(_scope.ContainsKey(ident));
+            var obj = _scope[ident];
+            switch (obj)
+            {
+                case T v:
+                    Assert.AreEqual(v, val);
+                    return;
+                case IRefBase rb:
+                    Assert.AreEqual(rb.BaseValue, val);
+                    return;
+            }
         }
     }
 }
