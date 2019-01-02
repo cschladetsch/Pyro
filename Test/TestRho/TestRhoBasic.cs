@@ -95,7 +95,7 @@ assert(!false)");
         }
 
         [Test]
-        public void TestBlocks0()
+        public void TestSequence()
         {
             var code1 = RhoTranslate( @"1").Code;
             Assert.AreEqual(1, code1.Count);
@@ -110,38 +110,6 @@ assert(!false)");
             Assert.AreEqual(2, code2.Count);
             Assert.AreEqual(1, code2[0]);
             Assert.AreEqual(2, code2[1]);
-        }
-
-        [Test]
-        public void TestBlocks1()
-        {
-            var code = RhoTranslate(
-@"
-1
-	2
-").Code;
-            Assert.AreEqual(1, code.Count);
-            //Assert.AreEqual(1, code[0]);
-            //var inner = ConstRef<Continuation>(code[1]);
-            //Assert.IsNotNull(inner);
-            //Assert.AreEqual(2, inner.Code[0]);
-        }
-
-        [Test]
-        public void TestBlocks2()
-        {
-            var code = RhoTranslate(
-@"
-1
-	2
-3
-").Code;
-            Assert.AreEqual(3, code.Count);
-            //Assert.AreEqual(1, code[0]);
-            //var inner = ConstRef<Continuation>(code[1]);
-            //Assert.IsNotNull(inner);
-            //Assert.AreEqual(2, inner.Code[0]);
-            //Assert.AreEqual(3, code[2]);
         }
 
         [Test]
@@ -183,19 +151,19 @@ assert(bar(foo) == 3)
         {
             var ifThen = @"
 if true
-	1 + 2
+	1
 ";
             RunRho(ifThen);
-            AssertPop(3);
+            AssertPop(1);
 
             var ifThenElse1 = @"
 if true
-	1 - 2
+	1
 else
 	2
 ";
             RunRho(ifThenElse1);
-            AssertPop(-1);
+            AssertPop(1);
 
             var ifThenElse2 = @"
 if false
