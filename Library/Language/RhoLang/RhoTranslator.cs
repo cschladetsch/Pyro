@@ -35,6 +35,10 @@ namespace Diver.Language
         {
             switch (node.RhoToken.Type)
             {
+                 case ERhoToken.If:
+                     TranslateIf(node);
+                     return;
+
                 case ERhoToken.Write:
                     TranslateNode(node.GetChild(0));
                     Append(EOperation.Write);
@@ -344,16 +348,16 @@ namespace Diver.Language
 
         private void TranslateIf(RhoAstNode node)
         {
-            // ch[0]: test clause
-            // ch[1]: then-block
-            // ch[2]: [optional] else-block
             var ch = node.Children;
+            var test = ch[0];
+            var thenBlock = ch[1];
+            var elseBlock = ch.Count > 2 ? ch[2] : null;
+            var hasElse = elseBlock != null;
 
-            TranslateNode(ch[1]);
-            var hasElse = ch.Count > 2;
+            TranslateNode(thenBlock);
             if (hasElse)
-                TranslateNode(ch[2]);
-            TranslateNode(ch[0]);
+                TranslateNode(elseBlock);
+            TranslateNode(test);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
 
             // TODO: Allow for if! and if... as well as if&

@@ -182,11 +182,11 @@
                 || Try(ERhoToken.False)
                 )
             {
-                return PushConsume();
+                return PushConsumed();
             }
 
             if (Try(ERhoToken.Self))
-                return PushConsume();
+                return PushConsumed();
 
             //    while (Try(ERhoToken.Lookup))
             //        return PushConsume();

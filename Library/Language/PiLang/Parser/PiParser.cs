@@ -64,7 +64,6 @@ namespace Diver.Language
                 case EPiToken.Separator:
                 case EPiToken.Ident:
                     return ParsePathname(context);
-
                 case EPiToken.OpenSquareBracket:
                     return ParseCompound(context, EPiAst.Array, EPiToken.CloseSquareBracket);
                 case EPiToken.OpenBrace:
@@ -116,7 +115,7 @@ namespace Diver.Language
                     break;
             }
 
-            done:
+        done:
             PiAstNode node = null;
             if (elements.Count == 1 && elements[0].Type == Pathname.EElementType.Ident)
             {

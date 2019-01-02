@@ -22,31 +22,6 @@ namespace Diver.Language
             _lexer = lexer;
         }
 
-        //public virtual bool Process(TLexer lex, EStructure structure)
-        //{
-        //    return false;
-        //}
-
-        //protected virtual bool Process()
-        //{
-        //    return false;
-        //}
-
-        //protected bool Run(EStructure st)
-        //{
-        //    try
-        //    {
-        //        Process(_lexer, st);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        if (!Failed)
-        //            Fail(_lexer.CreateErrorMessage(Current(), "%s", e.ToString()));
-        //    }
-
-        //    return !Failed;
-        //}
-
         public string PrintTree()
         { 
             var str = new StringBuilder();
@@ -109,9 +84,16 @@ namespace Diver.Language
             return _stack.Peek();
         }
 
-        protected bool PushConsume()
+        protected TAstNode PushConsume()
         {
-            Push(NewNode(Consume()));
+            var node = NewNode(Consume());
+            Push(node);
+            return node;
+        }
+
+        protected bool PushConsumed()
+        {
+            PushConsume();
             return true;
         }
 

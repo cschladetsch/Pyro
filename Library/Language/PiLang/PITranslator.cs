@@ -28,7 +28,7 @@ namespace Diver.Language
                 return Fail($"LexerError: {_lexer.Error}");
 
             _parser = new PiParser(_lexer);
-            if (!Parser.Process(_lexer, EStructure.Sequence))
+            if (!Parser.Process(_lexer, EStructure.Program))
                 return Fail($"ParserError: {Parser.Error}");
 
             _continuation = new Continuation(new List<object>());
