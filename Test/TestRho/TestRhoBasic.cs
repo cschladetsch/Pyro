@@ -31,8 +31,8 @@ namespace Diver.Test.Rho
             False("!true && !true");
 
             RunRho(@"
-assert(true)
-assert(!false)");
+                assert(true)
+                assert(!false)");
         }
 
         private void False(string text)
@@ -59,39 +59,6 @@ assert(!false)");
         }
 
         [Test]
-        public void TestParseCall()
-        {
-            var prog = RhoTranslate(@"foo()");
-            var code = prog.Code;
-            Assert.AreEqual(2, code.Count);
-            var name = ConstRef<Label>(code[0]);
-            var op = ConstRef<EOperation>(code[1]);
-            Assert.AreEqual("foo", name.ToString());
-            Assert.AreEqual(EOperation.Suspend, op);
-        }
-
-        [Test]
-        public void TestParseFunDef()
-        {
-            var prog = RhoTranslate(
-@"fun foo()
-	1
-	2
-	3
-");
-            var code = prog.Code;
-            Assert.AreEqual(3, code.Count);
-            Assert.AreSame(typeof(Continuation), code[0].GetType());
-            Assert.AreEqual("'foo", code[1].ToString());
-            Assert.AreEqual(EOperation.Store, code[2]);
-
-            var cont = ConstRef<Continuation>(code[0]);
-            Assert.AreEqual(1, cont.Code[0]);
-            Assert.AreEqual(2, cont.Code[1]);
-            Assert.AreEqual(3, cont.Code[2]);
-        }
-
-        [Test]
         public void TestSequence()
         {
             var code1 = RhoTranslate( @"1").Code;
@@ -107,6 +74,38 @@ assert(!false)");
             Assert.AreEqual(2, code2.Count);
             Assert.AreEqual(1, code2[0]);
             Assert.AreEqual(2, code2[1]);
+        }
+
+        [Test]
+        public void TestParseCall()
+        {
+            var prog = RhoTranslate(@"foo()");
+            var code = prog.Code;
+            Assert.AreEqual(2, code.Count);
+            var name = ConstRef<Label>(code[0]);
+            var op = ConstRef<EOperation>(code[1]);
+            Assert.AreEqual("foo", name.ToString());
+            Assert.AreEqual(EOperation.Suspend, op);
+        }
+
+        [Test]
+        public void TestParseFunDef()
+        {
+            var code = RhoTranslate(
+@"fun foo()
+	1
+	2
+	3
+").Code;
+            Assert.AreEqual(3, code.Count);
+            Assert.AreSame(typeof(Continuation), code[0].GetType());
+            Assert.AreEqual("'foo", code[1].ToString());
+            Assert.AreEqual(EOperation.Store, code[2]);
+
+            var cont = ConstRef<Continuation>(code[0]);
+            Assert.AreEqual(1, cont.Code[0]);
+            Assert.AreEqual(2, cont.Code[1]);
+            Assert.AreEqual(3, cont.Code[2]);
         }
 
         [Test]
@@ -154,7 +153,7 @@ assert(bar(foo) == 3)
             var ifThen =
 @"
 if true
-    1
+	1
 ";
             RunRho(ifThen);
             AssertPop(1);
@@ -197,38 +196,19 @@ foo(2)
             RunRho(text);
         }
 
-//        [Test]
-//        public void TestNestedFunctions0()
-//        {
-//            var text = @"
-//fun foo()
-//    fun bar()
-//        1
-//";
-
         [Test]
         public void TestNestedFunctions2()
         {
-            var text = @"
+            RunRho(@"
 fun foo()
-	fun bar()
-		1
-	writeln(""testing"")
-	fun spam()
-		2
-	bar()
-	spam()
+	fun bar(f, num)
+		1 + f(num)
+	fun spam(num)
+		num + 2
+	bar(spam, 3)
 foo()
-";
-            RunRho(text);
-
-
-//fun foo()
-//	fun bar()
-//		writeln(""in bar"")
-//	bar()
-//foo()
-//";
+");
+            AssertPop(6);
         }
     }
 }

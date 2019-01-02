@@ -81,12 +81,12 @@ namespace Diver.Language
             var cond = NewNode(Consume());
 
             if (!Expression())
-                return CreateError("If what?");
+                return FailWith("If what?");
             var condition = Pop();
 
             // get the true-clause
             if (!Block())
-                return CreateError("If needs a block");
+                return FailWith("If needs a block");
             cond.Add(condition);
             cond.Add(Pop());
 
@@ -95,7 +95,7 @@ namespace Diver.Language
             if (TryConsume(ERhoToken.Else))
             {
                 if (!Block())
-                    return CreateError("No else block");
+                    return FailWith("No else block");
                 cond.Add(Pop());
             }
 
@@ -113,7 +113,7 @@ namespace Diver.Language
             var f = NewNode(ERhoAst.For);
             if (!Expression())
             {
-                CreateError("For what?");
+                FailWith("For what?");
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace Diver.Language
 
                 if (!Expression())
                 {
-                    CreateError("For each in what?");
+                    FailWith("For each in what?");
                     return;
                 }
 
@@ -137,7 +137,7 @@ namespace Diver.Language
 
                 if (!Expression())
                 {
-                    CreateError("When does the for statement stop?");
+                    FailWith("When does the for statement stop?");
                     return;
                 }
 
@@ -146,7 +146,7 @@ namespace Diver.Language
 
                 if (!Expression())
                 {
-                    CreateError("What happens when a for statement ends?");
+                    FailWith("What happens when a for statement ends?");
                     return;
                 }
 

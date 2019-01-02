@@ -21,7 +21,7 @@
                 var ident = Pop();
                 if (!Logical())
                 {
-                    CreateError("Assignment requires an expression");
+                    FailWith("Assignment requires an expression");
                     return false;
                 }
 
@@ -43,7 +43,7 @@
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
-                    return CreateError("Relational expected");
+                    return FailWith("Relational expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -67,7 +67,7 @@
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Additive())
-                    return CreateError("Additive expected");
+                    return FailWith("Additive expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -83,7 +83,7 @@
             {
                 var uniSigned = NewNode(Consume());
                 if (!Term())
-                    return CreateError("Term expected");
+                    return FailWith("Term expected");
 
                 uniSigned.Add(Pop());
                 Push(uniSigned);
@@ -94,7 +94,7 @@
             {
                 var negate = NewNode(Consume());
                 if (!Additive())
-                    return CreateError("Additive expected");
+                    return FailWith("Additive expected");
 
                 negate.Add(Pop());
                 Push(negate);
@@ -109,7 +109,7 @@
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Term())
-                    return CreateError("Term expected");
+                    return FailWith("Term expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -128,7 +128,7 @@
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Factor())
-                    return CreateError("Factor expected with a term");
+                    return FailWith("Factor expected with a term");
 
                 node.Add(Pop());
                 Push(node);
@@ -143,7 +143,7 @@
             {
                 var exp = NewNode(Consume());
                 if (!Expression())
-                    return CreateError("Expected an expression");
+                    return FailWith("Expected an expression");
 
                 Expect(ERhoToken.CloseParan);
                 exp.Add(Pop());
@@ -238,7 +238,9 @@
             var call = NewNode(ERhoAst.Call);
             var args = NewNode(ERhoAst.ArgList);
 
-            call.Add(Pop());        // the thing to call
+            // the thing to call is on the parse stack. It could be something like
+            // `foo().bar.spam[4](a,b,c)`
+            call.Add(Pop()); 
             call.Add(args);
             Push(call);
 
@@ -249,9 +251,7 @@
                 {
                     Consume();
                     if (!Expression())
-                    {
-                        return CreateError("What is the next argument?");
-                    }
+                        return FailWith("What is the next argument?");
 
                     args.Add(Pop());
                 }
@@ -272,11 +272,10 @@
         {
             PushConsume();
             if (!Expression())
-                return CreateError("Index what?");
+                return FailWith("Index what?");
 
             Expect(ERhoToken.CloseSquareBracket);
             return true;
         }
-
     }
 }

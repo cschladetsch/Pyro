@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Diver.Exec;
 
 namespace Diver.Language
@@ -332,7 +333,7 @@ namespace Diver.Language
         private void TranslateCall(RhoAstNode node)
         {
             var children = node.Children;
-            foreach (var a in children[1].Children)
+            foreach (var a in children[1].Children.Reverse())
                 TranslateNode(a);
 
             TranslateNode(children[0]);

@@ -73,44 +73,6 @@ namespace Diver.Language
             return true;
         }
 
-        /// <summary>
-        /// NOTE: General idea is to make functions like assignments:
-        ///
-        /// This will hopefully solve the nested function problem that's been
-        /// kicking my arse for two nights:
-        ///
-        /// fun foo()
-        ///     fun bar()
-        ///         assert(true)
-        ///     bar()
-        /// foo()
-        ///
-        /// { { true assert } 'bar # } bar & } 'foo # foo &
-        ///                            ^^^ unresolved!
-        ///
-        /// The above results in "unresolved symbol 'bar'", because the inner bar
-        /// function was stored into a local scope and not stored in 'foo's scope.
-        ///
-        /// No amount of fuckery in the Translator or Executor could fix this problem.
-        /// I was wrong-thinking from the start, because of the very way I implemented
-        /// parsing functions in the parser.
-        ///
-        /// The correct way seems to be to make new functions as normal assignments:
-        /// 1 'a #      // normal assignment
-        /// {} 'b #     // function assignment- note it's not wrapped in its own scope!
-        ///
-        /// Before, this would become:
-        /// { {} 'b # }     // no good! b can't be seen outside it's own scope!
-        ///
-        /// This would result in something like for the above:
-        /// {true assert} 'bar # bar & 'foo # foo &
-        /// 
-        /// Where the new continuation is just added directly to local scope, and not its
-        /// own `hidden` scope`.
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
         private bool Function()
         {
             var cont = NewNode(Consume());
@@ -132,11 +94,8 @@ namespace Diver.Language
             Expect(ERhoToken.CloseParan);
             Expect(ERhoToken.NewLine);
 
-            if (Failed)
-                return false;
-
             if (!Block())
-                return CreateError("Block expected");
+                return FailWith("Block expected");
             var block = Pop();
             cont.Add(ident);
             cont.Add(args);
@@ -147,10 +106,7 @@ namespace Diver.Language
             assign.Add(cont);
             assign.Add(ident);
 
-            WriteLine($"Adding coro block {ident}");
             Append(assign);
-
-            PrintTree();
 
             return !Failed;
         }
@@ -160,12 +116,12 @@ namespace Diver.Language
             var wile = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
-                return CreateError("While what?");
+                return FailWith("While what?");
             Expect(ERhoToken.CloseParan);
             wile.Add(Pop());
 
             if (!Block())
-                return CreateError("No While body");
+                return FailWith("No While body");
             wile.Add(Pop());
             Append(wile);
             return true;
@@ -181,9 +137,6 @@ namespace Diver.Language
 
             if (indent == 0)
                 return false;
-
-            PrintTree();
-            WriteLine($"At indent {indent}, entering Block {_current} {Current()}");
 
             Push(NewNode(ERhoAst.Block));
             while (!Failed)
@@ -202,9 +155,8 @@ namespace Diver.Language
 
                 if (level < indent)
                 {
-                    PrintTree();
+                    // return to start so top block can continue
                     _current -= indent;
-                    WriteLine($"At indent {level}/{indent}, leaving Block {_current} {Current()}, {Peek()}");
                     return true;
                 }
 
@@ -222,11 +174,6 @@ namespace Diver.Language
                 return false;
             Consume();
             return true;
-        }
-
-        private bool CreateError(string text, params object[] args)
-        {
-            return Fail(_lexer.CreateErrorMessage(Current(), string.Format(text, args)));
         }
 
         private void RemoveWhitespace()
