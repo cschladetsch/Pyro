@@ -60,10 +60,12 @@ namespace Diver.Language
             return _current < _tokens.Count;
         }
 
-        protected void Push(TAstNode node)
+        protected bool Push(TAstNode node)
         {
-            if (node != null)
-                _stack.Push(node);
+            if (node == null)
+                throw new NullValueException();
+            _stack.Push(node);
+            return true;
         }
 
         protected bool Append(TAstNode obj)

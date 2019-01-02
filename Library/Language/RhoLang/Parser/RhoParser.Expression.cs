@@ -1,7 +1,9 @@
 ﻿namespace Diver.Language
 {
     /// <summary>
-    /// Functions that deal with parsing expressions only
+    /// Functions that deal only with parsing expressions.
+    ///
+    /// NOTE that in Rho, a statement can also be an expression.
     /// </summary>
     public partial class RhoParser
     {
@@ -78,13 +80,12 @@
             // unary +/- operator
             if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
             {
-                var uniSigned = NewNode(Consume());
+                var signed = NewNode(Consume());
                 if (!Term())
                     return FailWith("Term expected");
 
-                uniSigned.Add(Pop());
-                Push(uniSigned);
-                return true;
+                signed.Add(Pop());
+                return Push(signed);
             }
 
             if (Try(ERhoToken.Not))
@@ -94,8 +95,7 @@
                     return FailWith("Additive component expected");
 
                 negate.Add(Pop());
-                Push(negate);
-                return true;
+                return Push(negate);
             }
 
             if (!Term())
@@ -144,8 +144,7 @@
 
                 Expect(ERhoToken.CloseParan);
                 exp.Add(Pop());
-                Push(exp);
-                return true;
+                return Push(exp);
             }
 
             if (Try(ERhoToken.OpenSquareBracket))
@@ -167,9 +166,7 @@
                 while (Try(ERhoToken.Comma));
 
                 Expect(ERhoToken.CloseSquareBracket);
-                Push(list);
-
-                return true;
+                return Push(list);
             }
 
             if (   Try(ERhoToken.Int) 
