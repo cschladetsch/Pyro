@@ -207,9 +207,8 @@ fun foo()
 	fun spam(num)
 		num + 2
 	bar(spam, 3)
-foo()
+assert(foo() == 6)
 ");
-            AssertPop(6);
         }
     }
 }

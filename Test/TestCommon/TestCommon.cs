@@ -150,14 +150,14 @@ namespace Diver.Test
             var top = Pop();
             if (top is T result) // deal with unwrapped values
                 return result;
-            var typed = top as IRef<T>; // deal with boxed values
+            var typed = top as IConstRef<T>; // deal with boxed values
             Assert.IsNotNull(typed);
             return typed.Value;
         }
 
         protected void WriteLine(object obj)
         {
-            WriteLine("{0}", obj.ToString());
+            WriteLine($"{obj}");
         }
 
         protected void WriteLine(string fmt, params object[] args)
