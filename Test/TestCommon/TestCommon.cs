@@ -58,7 +58,7 @@ namespace Diver.Test
         protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_reg);
-            trans.Process(text, st);
+            trans.Translate(text, st);
             if (trans.Result() == null)
                 WriteLine($"No output generated");
             if (trans.Failed)

@@ -14,7 +14,7 @@ namespace Diver.Language
         {
         }
 
-        public bool Process(string text, EStructure st)
+        public new bool Translate(string text, EStructure st = EStructure.Program)
         {
             _lexer = new RhoLexer(text);
             _lexer.Process();
@@ -23,8 +23,6 @@ namespace Diver.Language
 
             _parser = new RhoParser(_lexer, _reg, st);
             _parser.Process();
-            Console.WriteLine(_parser.PrintTree());
-            System.Diagnostics.Debug.WriteLine(_parser.PrintTree());
             if (_parser.Failed)
                 return Fail(_parser.Error);
 

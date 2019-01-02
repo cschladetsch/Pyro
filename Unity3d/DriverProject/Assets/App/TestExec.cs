@@ -3,30 +3,35 @@ using UnityEngine;
 
 using Diver;
 using Diver.Exec;
+using Diver.Impl;
+using Diver.Language;
 using UnityEngine.Assertions;
 
 // A simple test that ensures we can call into and use all the
 // C#7 features used by Diver.
 public class TestExec : MonoBehaviour
 {
+    private IRegistry _reg;
+    private RhoTranslator _rho;
+    private PiTranslator _pi;
+    private Executor _exec;
+
+    void Awake()
+    {
+        _reg = new Registry();
+        _rho = new RhoTranslator(_reg);
+        _pi = new PiTranslator(_reg);
+        _exec = new Executor();
+    }
+
     void Start()
     {
-        IRegistry reg = new Diver.Impl.Registry();
-        var code = reg.Add(new List<object>());
-        var coro = reg.Add(new Continuation(code.Value));
+        _pi.Translate("1 2 +");
+        _exec.Continue(_pi.Continuation);
+        Debug.Log(_exec.Pop<int>());
 
-        code.Value.Add(1);
-        code.Value.Add(2);
-        code.Value.Add(reg.Add(EOperation.Plus));
-
-        var executor = reg.Add(new Executor());
-        var exec = executor.Value;
-        exec.Continue(coro);
-
-        var data = exec.DataStack;
-        Assert.AreEqual(1, data.Count);
-        Assert.AreEqual(3, data.Pop());
-
-        Debug.Log("1 + 2 = 3");
+        _rho.Translate("1 + 2");
+        _exec.Continue(_rho.Result());
+        Debug.Log(_exec.Pop<int>());
     }
 }

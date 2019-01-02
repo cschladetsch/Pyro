@@ -15,12 +15,16 @@ namespace Diver.Language
         public PiLexer Lexer => _lexer;
         public PiParser Parser => _parser;
 
-        public PiTranslator(IRegistry reg, string input) : base(reg)
+        public PiTranslator(IRegistry reg) : base(reg)
         {
-            Run(input);
         }
 
-        public bool Run(string input)
+        public PiTranslator(IRegistry reg, string text) : base(reg)
+        {
+            Translate(text);
+        }
+
+        public bool Translate(string input)
         {
             _lexer = new PiLexer(input);
             
