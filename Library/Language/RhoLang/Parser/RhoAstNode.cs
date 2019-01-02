@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Diver.Language
 {
@@ -44,11 +43,8 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            //var tok = $"{RhoToken}";
             var val = $"{Value}";
             var text = $"{Text}";
-            //if (!string.IsNullOrEmpty(tok))
-            //    tok = $"'{tok}'";
             if (!string.IsNullOrEmpty(val))
                 val = $"{val}";
             if (!string.IsNullOrEmpty(text))

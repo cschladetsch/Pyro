@@ -2,10 +2,12 @@
 
 namespace Diver.Language
 {
+    /// <inheritdoc />
     /// <summary>
     /// Make RhoAstNodes with various arguments.
     /// Required because C# doesn't allow template types to
     /// take parameters for constructors.
+    /// Also, because Enums in C# can only derive from System.Enum.
     /// </summary>
     public class RhoAstFactory
         : IAstFactory<RhoToken, RhoAstNode, ERhoAst>
@@ -39,10 +41,5 @@ namespace Diver.Language
         {
             return node.Children;
         }
-
-        //public RhoAstNode New(ERhoToken token)
-        //{
-        //    throw new System.NotImplementedException();
-        //}
     }
 }

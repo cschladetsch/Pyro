@@ -6,11 +6,11 @@ This is a Python-like, more human-readable language to be used across the wire.
 
 ## Coroutines
 
-Has built-in suppor for Continuations, including the following three main operations:
+Has built-in support for Continuations, including the following three main operations:
 
-* Suspend. This is similar to a traditional function call. Execution will return to current context after being suspended to the given coroutine.
-* Replace. This will continue what is on the data stack, and will not return to current context.
-* Resume. This drops the current context completely, and resumes whatever is on the data stack.
+* `Suspend`. This is similar to a traditional function call. Execution will return to current context after being suspended to the given coroutine.
+* `Replace`. This will continue what is on the data stack, and will not return to current context.
+* `Resume`. This drops the current context completely, and resumes whatever is on the data stack.
 
 ## Tests
 

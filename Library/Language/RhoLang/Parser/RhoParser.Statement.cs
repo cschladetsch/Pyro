@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Diver.Language
+﻿namespace Diver.Language
 {
     /// <summary>
-    /// Rho statements are complete components made of sub-expressions.
+    /// Rho statements are stand-alone components made of sub-expressions.
     ///
-    /// NOTE that Statements do not leave anything on the parsing stack.
-    /// They either succeed or leave a decent error contextual lexical+semantic error message.
+    /// NOTE that Statements do not leave anything on the parsing stack:
+    /// They either succeed or leave a decent contextual lexical+semantic error message.
     /// </summary>
     public partial class RhoParser
     {
@@ -68,7 +66,6 @@ namespace Diver.Language
 
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
-
             if (Try(ERhoToken.Ident))
             {
                 args.Add(Consume());
@@ -139,28 +136,26 @@ namespace Diver.Language
 
         private bool If()
         {
-            var cond = NewNode(Consume());
+            var @if = NewNode(Consume());
             if (!Expression())
                 return FailWith("If what?");
-
-            var condition = Pop();
+            @if.Add(Pop());
 
             // get the true-clause
             if (!Block())
                 return FailWith("If needs a block");
-            cond.Add(condition);
-            cond.Add(Pop());
+            @if.Add(Pop());
 
-            // if there's an else, add it as well
+            // if there's an else-clause, add it as well
             ConsumeNewLines();
             if (TryConsume(ERhoToken.Else))
             {
                 if (!Block())
                     return FailWith("No else block");
-                cond.Add(Pop());
+                @if.Add(Pop());
             }
 
-            return Append(cond);
+            return Append(@if);
         }
 
         private bool For()
@@ -212,7 +207,7 @@ namespace Diver.Language
             Expect(ERhoToken.Semi);
 
             if (!Expression())
-                return FailWith("What happens when a for statement ends?");
+                return FailWith("What happens when the for statement loops?");
 
             @for.Add(Pop());
             Expect(ERhoToken.CloseParan);
