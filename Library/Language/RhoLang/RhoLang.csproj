@@ -50,6 +50,7 @@
     <Compile Include="Parser\ERhoAst.cs" />
     <Compile Include="Parser\RhoAstFactory.cs" />
     <Compile Include="Parser\RhoParser.cs" />
+    <Compile Include="Parser\RhoParser.Statement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RhoTranslator.cs" />
   </ItemGroup>

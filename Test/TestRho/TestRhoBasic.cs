@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Runtime.Remoting;
-using System.Security.Cryptography.X509Certificates;
-using Diver.Exec;
+﻿using Diver.Exec;
 using Diver.Language;
 using NUnit.Framework;
 
@@ -115,6 +112,11 @@ assert(!false)");
         [Test]
         public void TestExecution()
         {
+            RunRho(
+@"fun foo()
+	1
+");
+            
             RunRho(
 @"fun foo()
 	1

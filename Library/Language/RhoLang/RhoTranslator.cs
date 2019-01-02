@@ -23,6 +23,7 @@ namespace Diver.Language
             _parser = new RhoParser(_lexer, _reg, st);
             _parser.Process();
             Console.WriteLine(_parser.PrintTree());
+            System.Diagnostics.Debug.WriteLine(_parser.PrintTree());
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
@@ -262,8 +263,9 @@ namespace Diver.Language
 
                 case ERhoAst.Assignment:
                     // like a binary op, but argument order is reversed
-                    TranslateNode(node.GetChild(1));
+                    //TranslateNode(node.GetChild(1));
                     TranslateNode(node.GetChild(0));
+                    Append(node.GetChild(1).Value);
                     Append(EOperation.Store);
                     return;
 
@@ -326,11 +328,8 @@ namespace Diver.Language
             foreach (var arg in args)
                 cont.AddArg(arg.Token.Text);
 
-            // write the name and store
             Append(cont);
-            Append(ident);
-            Append(EOperation.Store);
-        }
+       }
 
         private void TranslateCall(RhoAstNode node)
         {

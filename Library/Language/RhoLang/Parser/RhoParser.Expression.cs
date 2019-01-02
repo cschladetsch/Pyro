@@ -229,5 +229,54 @@
 
             return true;
         }
+
+        private bool Call()
+        {
+            // eat the opening paranthesis
+            Consume();
+
+            var call = NewNode(ERhoAst.Call);
+            var args = NewNode(ERhoAst.ArgList);
+
+            call.Add(Pop());        // the thing to call
+            call.Add(args);
+            Push(call);
+
+            if (Expression())
+            {
+                args.Add(Pop());
+                while (Try(ERhoToken.Comma))
+                {
+                    Consume();
+                    if (!Expression())
+                    {
+                        return CreateError("What is the next argument?");
+                    }
+
+                    args.Add(Pop());
+                }
+            }
+
+            Expect(ERhoToken.CloseParan);
+            return true;
+        }
+
+        private bool GetMember()
+        {
+            PushConsume();
+            Append(Expect(ERhoToken.Ident));
+            return true;
+        }
+
+        private bool IndexOp()
+        {
+            PushConsume();
+            if (!Expression())
+                return CreateError("Index what?");
+
+            Expect(ERhoToken.CloseSquareBracket);
+            return true;
+        }
+
     }
 }
