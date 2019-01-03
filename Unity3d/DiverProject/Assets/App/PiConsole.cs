@@ -32,7 +32,7 @@ namespace App
             try
             {
                 if (_pi.Translate(text))
-                    _exec.Continue(_pi.Continuation);
+                    _exec.Continue(_pi.Result());
                 else
                     AddOutputItem(_pi.Error);
             }

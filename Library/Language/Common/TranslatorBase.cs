@@ -19,10 +19,9 @@ namespace Diver.Language
             _executor = exec;
         }
 
-        protected override Continuation Translate(
-            string text, EStructure st = EStructure.Statement)
+        public override bool Translate(string text, EStructure st = EStructure.Program)
         {
-            return null;
+            return false;
         }
 
         protected TLexer _lexer;

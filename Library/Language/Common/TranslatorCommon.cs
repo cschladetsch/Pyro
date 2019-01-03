@@ -16,10 +16,9 @@ namespace Diver.Language
             _stack.Push(new Continuation(new List<object>()));
         }
 
-        protected virtual Continuation Translate(
-            string text, EStructure st = EStructure.Statement)
+        public virtual bool Translate(string text, EStructure st = EStructure.Program)
         {
-            return null;
+            return false;
         }
 
         public override string ToString()

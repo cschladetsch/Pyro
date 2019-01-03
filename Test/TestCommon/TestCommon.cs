@@ -47,12 +47,13 @@ namespace Diver.Test
 
         private Continuation PiTranslate(string text)
         {
-            var trans = new PiTranslator(_reg, text);
-            WriteLine(trans.ToString());
+            var trans = new PiTranslator(_reg);
+            trans.Translate(text);
+            //WriteLine(trans.ToString());
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Continuation;
+            return _continuation = trans.Result();
         }
 
         protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
@@ -65,7 +66,7 @@ namespace Diver.Test
                 WriteLine($"Error: {trans.Error}");
             WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
-            return trans.Result();
+            return _continuation = trans.Result();
         }
 
         protected string GetFullScriptPathname(string scriptName)
@@ -106,13 +107,14 @@ namespace Diver.Test
                 WriteLine($"Running {fileName}");
                 _exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
-                var trans = new PiTranslator(_reg, text);
+                var trans = new PiTranslator(_reg);
+                trans.Translate(text);
                 if (Verbose)
                     WriteLine($"Translator for {filePath}: {trans}");
                 if (trans.Failed)
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                _exec.Continue(trans.Continuation);
+                _exec.Continue(trans.Result());
             }
             catch (Exception e)
             {

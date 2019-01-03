@@ -11,20 +11,11 @@ namespace Diver.Language
     /// </summary>
     public class PiTranslator : TranslatorBase<PiLexer, PiParser>
     {
-        public Continuation Continuation => _continuation;
-        public PiLexer Lexer => _lexer;
-        public PiParser Parser => _parser;
-
         public PiTranslator(IRegistry reg) : base(reg)
         {
         }
 
-        public PiTranslator(IRegistry reg, string text) : base(reg)
-        {
-            Translate(text);
-        }
-
-        public bool Translate(string input)
+        public override bool Translate(string input, EStructure st = EStructure.Program)
         {
             _lexer = new PiLexer(input);
             
@@ -37,18 +28,22 @@ namespace Diver.Language
 
             _continuation = new Continuation(new List<object>());
 
-            return TranslateNode(Parser.Root, Continuation.Code);
+            return TranslateNode(Parser.Root, _continuation.Code);
+        }
+
+        public override Continuation Result()
+        {
+            return _continuation;
         }
 
         public override string ToString()
         {
-            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}\nCode: {Continuation}\n";
+            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}\nCode: {_continuation}\n";
         }
 
         private bool TranslateNode(PiAstNode node, IList<object> objects)
         {
-            return node?.Children.All(ast => AddNode(ast, objects))
-               ?? Fail("Null Ast Node");
+            return node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
         }
 
         private bool AddNode(PiAstNode piAst, IList<object> objects)
@@ -240,8 +235,6 @@ namespace Diver.Language
             return true;
         }
 
-        private PiLexer _lexer;
-        protected internal PiParser _parser;
         private Continuation _continuation;
     }
 }

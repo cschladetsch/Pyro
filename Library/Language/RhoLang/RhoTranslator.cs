@@ -12,7 +12,7 @@ namespace Diver.Language
         {
         }
 
-        public new bool Translate(string text, EStructure st = EStructure.Program)
+        public override bool Translate(string text, EStructure st = EStructure.Program)
         {
             _lexer = new RhoLexer(text);
             _lexer.Process();
