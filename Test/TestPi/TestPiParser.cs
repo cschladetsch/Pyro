@@ -32,6 +32,8 @@ namespace Diver.Test
             Assert.IsNotNull(ident);
             Assert.IsFalse(ident.Quoted);
 
+            Parse("s 's", true);
+            Parse("'s s", true);
             Parse("'foo", true);
             Assert.AreEqual(EPiAst.Ident, First.Type);
             var ident1 = First.Value as Label;

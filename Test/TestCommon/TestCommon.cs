@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
@@ -45,7 +46,7 @@ namespace Diver.Test
             _exec.Continue(_continuation = RhoTranslate(text, st));
         }
 
-        private Continuation PiTranslate(string text)
+        protected Continuation PiTranslate(string text)
         {
             var trans = new PiTranslator(_reg);
             trans.Translate(text);
@@ -199,6 +200,33 @@ namespace Diver.Test
                     Assert.AreEqual(rb.BaseValue, val);
                     return;
             }
+        }
+
+        protected void AssertSameTokens(string input, params EPiToken[] tokens)
+        {
+            var lex = PiLex(input);
+            AssertSameTokens(lex.Tokens, tokens);
+        }
+
+        protected void AssertSameTokens(IEnumerable<object> input, params EPiToken[] tokens)
+        {
+            var piTokens = input.Cast<PiToken>().Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
+            var expected = tokens.ToList();
+            Assert.AreEqual(piTokens.Count, expected.Count);
+            Assert.IsTrue(piTokens.SequenceEqual(expected));
+        }
+
+        protected bool IsWhiteSpace(PiToken piToken)
+        {
+            switch (piToken.Type)
+            {
+                case EPiToken.Whitespace:
+                case EPiToken.Tab:
+                case EPiToken.NewLine:
+                    return true;
+            }
+
+            return false;
         }
     }
 }

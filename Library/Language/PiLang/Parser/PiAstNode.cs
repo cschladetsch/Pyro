@@ -38,7 +38,11 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return $"{Type}: '{PiToken}'";
+            var text = $"{PiToken}";
+            if (string.IsNullOrEmpty(text) && Value != null)
+                text = Value.ToString();
+
+            return $"{Type}: '{text}'";
         }
 
         public void Add(PiAstNode node)

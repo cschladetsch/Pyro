@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using Diver.Language;
+using NUnit.Framework;
 
 namespace Diver.Test
 {
@@ -8,13 +10,22 @@ namespace Diver.Test
         [Test]
         public void TestString()
         {
-            const string prelude = @"""foobar"" 's # ";
+            AssertSameTokens("#", EPiToken.Store);
 
-            Run(prelude + "s 'Length .@");
+            const string pre0 = "\"foobar\" 's # ";
+            const string length = pre0 + "'Length s .@";
+            const string sub0 = pre0 + "0 3 'Substring s .@ &";
+            const string sub1 = pre0 + "3 3 'Substring s .@ &";
+
+            AssertSameTokens("s", EPiToken.Ident);
+            AssertSameTokens(pre0, EPiToken.String, EPiToken.Quote, EPiToken.Ident, EPiToken.Store);
+            AssertSameTokens(sub0, EPiToken.String, EPiToken.Quote, EPiToken.Ident, EPiToken.Store, EPiToken.Int, EPiToken.Int, EPiToken.Quote, EPiToken.Ident, EPiToken.Ident, EPiToken.GetMember, EPiToken.Suspend);
+
+            Run(length);
             AssertPop(6);
-            Run(prelude + "0 3 s 'Substring .@ &");
+            Run(sub0);
             AssertPop("foo");
-            Run(prelude + "3 3 s 'Substring .@ &");
+            Run(sub1);
             AssertPop("bar");
         }
     }

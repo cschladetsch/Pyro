@@ -37,10 +37,6 @@ namespace Diver.Language
 
         private void PrintTree(StringBuilder str, int level, TAstNode root)
         {
-            if (level > 5)
-            {
-                Console.WriteLine("Too big!");
-            }
             var val = root.ToString();
             if (string.IsNullOrEmpty(val))
                 return;

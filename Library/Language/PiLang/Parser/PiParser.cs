@@ -91,8 +91,8 @@ namespace Diver.Language
                 switch (Current().Type)
                 {
                     case EPiToken.Quote:
-                        if (quoted || prev != EPiToken.None)
-                            return FailLocation("Malformed pathname");
+                        if (quoted || elements.Count > 0)
+                            goto done;
                         quoted = true;
                         break;
                     case EPiToken.Separator:
@@ -103,9 +103,10 @@ namespace Diver.Language
                     case EPiToken.Ident:
                         // we can have an ident after an optional initial quote, or after a separator
                         var start = prev == EPiToken.None || prev == EPiToken.Quote;
-                        if (start ^ prev != EPiToken.Separator)
-                            return FailLocation("Malformed pathname");
-                        elements.Add(new Pathname.Element(Current().Text));
+                        if (start || prev == EPiToken.Separator)
+                            elements.Add(new Pathname.Element(Current().Text));
+                        else
+                            goto done;
                         break;
                     default:
                         goto done;

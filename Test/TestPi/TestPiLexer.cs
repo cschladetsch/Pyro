@@ -54,24 +54,5 @@ namespace Diver.Test
         {
             AssertSameTokens("\"foo\" \"bar\" +", EPiToken.String, EPiToken.String, EPiToken.Plus);
         }
-
-        private void AssertSameTokens(string input, params EPiToken[] tokens)
-        {
-            var lex = PiLex(input);
-            Assert.IsTrue(lex.Tokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).SequenceEqual(tokens));
-        }
-
-        private bool IsWhiteSpace(PiToken piToken)
-        {
-            switch (piToken.Type)
-            {
-                case EPiToken.Whitespace:
-                case EPiToken.Tab:
-                case EPiToken.NewLine:
-                    return true;
-            }
-
-            return false;
-        }
     }
 }
