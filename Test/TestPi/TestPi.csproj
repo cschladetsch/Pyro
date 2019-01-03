@@ -53,6 +53,7 @@
     <None Include="Scripts\Floats.pi" />
     <Compile Include="TestConditionals.cs" />
     <Compile Include="TestContainers.cs" />
+    <Compile Include="TestNativeObjects.cs" />
     <Compile Include="TestPiLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPiParser.cs" />

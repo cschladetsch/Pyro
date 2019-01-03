@@ -71,9 +71,10 @@ namespace Diver.Language
                     return ParseCompound(context, EPiAst.Continuation, EPiToken.CloseBrace);
                 case EPiToken.CloseSquareBracket:
                 case EPiToken.CloseBrace:
-                    return Fail(_lexer.CreateErrorMessage(Current(), "%s", "Unopened compound"));
+                    return FailLocation("%s", "Unopened compound");
                 case EPiToken.None:
                     return false;
+                // most pi tokens just fall through to being passed to translator
                 default:
                     context.Add(AddValue(_astFactory.New(Consume())));
                     return true;

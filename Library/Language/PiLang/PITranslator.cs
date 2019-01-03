@@ -74,6 +74,9 @@ namespace Diver.Language
             var token = node.PiToken;
             switch (token.Type)
             {
+                case EPiToken.GetMember:
+                    objects.Add(EOperation.GetMember);
+                    break;
                 case EPiToken.Plus:
                     objects.Add(EOperation.Plus);
                     break;

@@ -3,6 +3,7 @@ using System.Activities.Statements;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 
 namespace Diver.Exec
 {
@@ -62,6 +63,28 @@ namespace Diver.Exec
             _actions[EOperation.If] = If;
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
+            _actions[EOperation.GetMember] = GetMember;
+        }
+
+        private void GetMember()
+        {
+            var obj = Pop();
+            var member = Pop<Label>().Text;
+            var @class = (Type)obj.GetType();
+            var pi = @class.GetProperty(member);
+            if (pi != null)
+            {
+                Push(pi.GetValue(pi));
+                return;
+            }
+
+            var mi = @class.GetMethod(member);
+            if (mi != null)
+            {
+                Push(mi);
+                Push(obj);
+                return;
+            }
         }
 
         private void NotEquiv()

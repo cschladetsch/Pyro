@@ -36,6 +36,7 @@ namespace Diver.Test
         [Test]
         public void TestPathnames()
         {
+            AssertSameTokens("'a", EPiToken.Quote, EPiToken.Ident);
             AssertSameTokens("a", EPiToken.Ident);
             AssertSameTokens("ident", EPiToken.Ident);
             AssertSameTokens("ident/ident", EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
