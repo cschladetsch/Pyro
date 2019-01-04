@@ -11,6 +11,7 @@ namespace Diver.Exec
         public Stack<object> DataStack => _data;
         public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
+        public int NumOps => _numOps;
 
         public Executor(IRegistry reg)
         {
@@ -34,6 +35,7 @@ namespace Diver.Exec
             _context = new Stack<Continuation>();
             _break = false;
             _current = null;
+            _numOps = 0;
         }
 
         void Assert()
@@ -144,6 +146,7 @@ namespace Diver.Exec
 
         private void Perform(object next)
         {
+            ++_numOps;
             if (next == null)
                 throw new NullValueException();
 
@@ -283,6 +286,6 @@ namespace Diver.Exec
         private Stack<Continuation> _context = new Stack<Continuation>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry;
+        private int _numOps;
     }
-
 }
