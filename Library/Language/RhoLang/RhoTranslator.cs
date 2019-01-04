@@ -96,10 +96,7 @@ namespace Diver.Language
 
                 case ERhoToken.Assign:
                     TranslateNode(node.GetChild(0));
-                    TranslateNode(node.GetChild(1));
-                    //// need to quote the ident
-                    //var ident = new Label(node.GetChild(1).Text, true);
-                    //Append(ident);
+                    AddQuoted(node.GetChild(1));
                     Append(EOperation.Assign);
                     return;
 
@@ -200,6 +197,11 @@ namespace Diver.Language
             Fail($"Unsupported node {node}");
         }
 
+        private void AddQuoted(RhoAstNode node)
+        {
+            Append(new Label(node.Text, true));
+        }
+
         void TranslateBinaryOp(RhoAstNode node, EOperation op)
         {
             TranslateNode(node.GetChild(0));
@@ -255,13 +257,13 @@ namespace Diver.Language
                     TranslateBinaryOp(node, EOperation.At);
                     return;
 
-                case ERhoAst.Assignment:
-                    // like a binary op, but argument order is reversed
-                    //TranslateNode(node.GetChild(1));
-                    TranslateNode(node.GetChild(0));
-                    Append(node.GetChild(1).Value);
-                    Append(EOperation.Store);
-                    return;
+                //case ERhoAst.Assignment:
+                //    // like a binary op, but argument order is reversed
+                //    //TranslateNode(node.GetChild(1));
+                //    TranslateNode(node.GetChild(0));
+                //    Append(node.GetChild(1).Value);
+                //    Append(EOperation.Store);
+                //    return;
 
                 case ERhoAst.Call:
                     TranslateCall(node);

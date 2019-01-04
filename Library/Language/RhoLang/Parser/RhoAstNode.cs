@@ -35,12 +35,6 @@ namespace Diver.Language
             RhoToken = piToken;
         }
 
-        //public RhoAstNode(ERhoAst type, object value)
-        //{
-        //    Type = type;
-        //    Value = value;
-        //}
-
         public override string ToString()
         {
             var val = $"{Value}";

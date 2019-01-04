@@ -62,7 +62,7 @@
         private bool Function()
         {
             var cont = NewNode(Consume());
-            var ident = MakeQuotedIdent();
+            var ident = Expect(ERhoToken.Ident);
 
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);

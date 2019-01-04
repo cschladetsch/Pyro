@@ -146,11 +146,6 @@
                 Consume();
         }
 
-        protected RhoAstNode MakeQuotedIdent()
-        {
-            return Quote(Expect(ERhoToken.Ident));
-        }
-
         private readonly EStructure _structure;
     }
 }

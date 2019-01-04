@@ -19,32 +19,17 @@
                 || Try(ERhoToken.DivAssign)
                )
             {
-                var node = NewNode(Consume());
-                var ident = Quote(Pop());
+                var assign = NewNode(Consume());
+                var ident = Pop();
                 if (!Logical())
                     return FailWith("Assignment requires an expression");
 
-                node.Add(Pop());
-                node.Add(ident);
-                Push(node);
+                assign.Add(Pop());
+                assign.Add(ident);
+                Push(assign);
             }
 
             return true;
-        }
-
-        RhoAstNode Quote(RhoAstNode node)
-        {
-            if (node.Type != ERhoAst.Ident && node.Text.StartsWith("'"))
-                return node;
-
-            var text = node.Text;
-            if (text.StartsWith("'"))
-                return node;
-            var ident = new Label(text, true);
-            var token = node.Token;
-            var quoted = _astFactory.New(token);
-            quoted.Value = ident;
-            return quoted;
         }
 
         private bool Logical()
@@ -242,7 +227,7 @@
 
             var get = NewNode(ERhoAst.GetMember);
             get.Add(Pop());
-            get.Add(MakeQuotedIdent());
+            get.Add(Expect(ERhoToken.Ident));
             Push(get);
             return true;
         }
