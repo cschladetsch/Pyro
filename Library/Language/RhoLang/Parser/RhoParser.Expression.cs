@@ -19,14 +19,14 @@
                 || Try(ERhoToken.DivAssign)
                )
             {
-                var node = NewNode(Consume());
+                var assign = NewNode(Consume());
                 var ident = Pop();
                 if (!Logical())
                     return FailWith("Assignment requires an expression");
 
-                node.Add(Pop());
-                node.Add(ident);
-                Push(node);
+                assign.Add(Pop());
+                assign.Add(ident);
+                Push(assign);
             }
 
             return true;
@@ -221,6 +221,17 @@
             return true;
         }
 
+        private bool GetMember()
+        {
+            Consume();
+
+            var get = NewNode(ERhoAst.GetMember);
+            get.Add(Pop());
+            get.Add(Expect(ERhoToken.Ident));
+            Push(get);
+            return true;
+        }
+
         private bool Call()
         {
             // eat the opening paranthesis
@@ -252,17 +263,13 @@
             return true;
         }
 
-        private bool GetMember()
-        {
-            PushConsume();
-            return Append(Expect(ERhoToken.Ident));
-        }
-
         private bool IndexOp()
         {
-            PushConsume();
+            var index = PushConsume();
+            index.Add(Pop());
             if (!Expression())
                 return FailWith("Index what?");
+            index.Add(Pop());
 
             Expect(ERhoToken.CloseSquareBracket);
             return true;

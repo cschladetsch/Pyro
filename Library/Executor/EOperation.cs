@@ -62,6 +62,7 @@
         Greater,
         GreaterOrEquiv,
         LessOrEquiv,
-        GetProperty
+        GetProperty,
+        GetMember
     }
 }

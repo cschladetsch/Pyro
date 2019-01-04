@@ -123,6 +123,11 @@
                     }
                     return Fail("Two dots doesn't work");
                 }
+                else if (Peek() == '@')
+                {
+                    return AddTwoCharOp(EPiToken.GetMember);
+                }
+
                 return Add(EPiToken.Dot);
 
             case '+':

@@ -48,6 +48,9 @@ namespace Diver.Test.Rho
         [Test]
         public void TestArithmetic()
         {
+            RunRho("b = 1", EStructure.Statement);
+            AssertVarEquals("b", 1);
+
             RunRho("a = 1 + 2", EStructure.Statement);
             AssertVarEquals("a", 3);
             RunRho(@"a = 1
@@ -110,8 +113,9 @@ fun foo()
         }
 
         [Test]
-        public void TestExecution()
+        public void TestSimpleFunctions()
         {
+            RunRho("a = 1");
             RunRho(
 @"fun foo()
 	1

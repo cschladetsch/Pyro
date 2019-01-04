@@ -108,6 +108,8 @@
         DebugPrintContinuation,
         DebugPrintContextStack,
 
+        GetMember,
+
         ToArray,
         Remove,
         At,
@@ -118,5 +120,4 @@
         Has,
         SetFloatPrecision
     }
-
 }

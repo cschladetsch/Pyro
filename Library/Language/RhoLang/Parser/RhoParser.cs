@@ -146,11 +146,6 @@
                 Consume();
         }
 
-        protected RhoAstNode MakeQuotedIdent()
-        {
-            return new RhoAstNode(ERhoAst.Ident, new Label(Expect(ERhoToken.Ident).Text, true));
-        }
-
         private readonly EStructure _structure;
     }
 }

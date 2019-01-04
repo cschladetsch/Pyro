@@ -4,6 +4,11 @@ namespace Diver
 {
     public class MemberNotFoundException : Exception
     {
+        public MemberNotFoundException(Type type, string member)
+            : base($"Member {member} not found in {type.Name}")
+        {
+        }
+
         public MemberNotFoundException(string typeName, string member)
             : base($"Member {member} not found in {typeName}")
         {

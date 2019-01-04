@@ -12,7 +12,7 @@ namespace Diver.Language
         {
         }
 
-        public new bool Translate(string text, EStructure st = EStructure.Program)
+        public override bool Translate(string text, EStructure st = EStructure.Program)
         {
             _lexer = new RhoLexer(text);
             _lexer.Process();
@@ -23,6 +23,8 @@ namespace Diver.Language
             _parser.Process();
             if (_parser.Failed)
                 return Fail(_parser.Error);
+
+            WriteLine(_parser.PrintTree());
 
             TranslateNode(_parser.Result);
 
@@ -96,9 +98,7 @@ namespace Diver.Language
 
                 case ERhoToken.Assign:
                     TranslateNode(node.GetChild(0));
-                    // need to quote the ident
-                    var ident = new Label(node.GetChild(1).Text, true);
-                    Append(ident);
+                    AddQuoted(node.GetChild(1));
                     Append(EOperation.Assign);
                     return;
 
@@ -199,6 +199,11 @@ namespace Diver.Language
             Fail($"Unsupported node {node}");
         }
 
+        private void AddQuoted(RhoAstNode node)
+        {
+            Append(new Label(node.Text, true));
+        }
+
         void TranslateBinaryOp(RhoAstNode node, EOperation op)
         {
             TranslateNode(node.GetChild(0));
@@ -250,25 +255,34 @@ namespace Diver.Language
                     TranslateToken(node);
                     return;
 
-                case ERhoAst.IndexOp:
-                    TranslateBinaryOp(node, EOperation.At);
-                    return;
-
-                case ERhoAst.GetMember:
-                    TranslateBinaryOp(node, EOperation.GetProperty);
-                    return;
-
                 case ERhoAst.Assignment:
                     // like a binary op, but argument order is reversed
                     //TranslateNode(node.GetChild(1));
                     TranslateNode(node.GetChild(0));
-                    Append(node.GetChild(1).Value);
+                    AddQuoted(node.GetChild(1));
                     Append(EOperation.Store);
                     return;
+
+                case ERhoAst.IndexOp:
+                    TranslateBinaryOp(node, EOperation.At);
+                    return;
+
+                //case ERhoAst.Assignment:
+                //    // like a binary op, but argument order is reversed
+                //    //TranslateNode(node.GetChild(1));
+                //    TranslateNode(node.GetChild(0));
+                //    Append(node.GetChild(1).Value);
+                //    Append(EOperation.Store);
+                //    return;
 
                 case ERhoAst.Call:
                     TranslateCall(node);
                     return;
+
+                case ERhoAst.GetMember:
+                    TranslateGetMember(node);
+                    return;
+
 
                 case ERhoAst.Conditional:
                     TranslateIf(node);
@@ -329,14 +343,28 @@ namespace Diver.Language
         private void TranslateCall(RhoAstNode node)
         {
             var children = node.Children;
-            foreach (var a in children[1].Children.Reverse())
+            var args = children[1].Children;
+            var name = children[0];
+            foreach (var a in args.Reverse())
                 TranslateNode(a);
 
-            TranslateNode(children[0]);
+            TranslateNode(name);
+            // TODO: add Replace/Suspend/Resume to children
             if (children.Count > 2 && children[2].Token.Type == ERhoToken.Replace)
                 Append(EOperation.Replace);
             else
                 Append(EOperation.Suspend);
+        }
+
+        private void TranslateGetMember(RhoAstNode node)
+        {
+            var ch = node.Children;
+            var subject = ch[0];
+            var member = ch[1];
+            var ident = new Label(member.Text, true);
+            Append(ident);
+            TranslateNode(subject);
+            Append(EOperation.GetMember);
         }
 
         private void TranslateIf(RhoAstNode node)

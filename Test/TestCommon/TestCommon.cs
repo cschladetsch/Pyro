@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
@@ -29,7 +30,7 @@ namespace Diver.Test
         public void Setup()
         {
             _reg = new Registry();
-            _executor = _reg.Add(new Executor());
+            _executor = _reg.Add(new Executor(_reg));
             _exec = _executor.Value;
         }
 
@@ -45,14 +46,15 @@ namespace Diver.Test
             _exec.Continue(_continuation = RhoTranslate(text, st));
         }
 
-        private Continuation PiTranslate(string text)
+        protected Continuation PiTranslate(string text)
         {
-            var trans = new PiTranslator(_reg, text);
-            WriteLine(trans.ToString());
+            var trans = new PiTranslator(_reg);
+            trans.Translate(text);
+            //WriteLine(trans.ToString());
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Continuation;
+            return _continuation = trans.Result();
         }
 
         protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
@@ -65,7 +67,7 @@ namespace Diver.Test
                 WriteLine($"Error: {trans.Error}");
             WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
-            return trans.Result();
+            return _continuation = trans.Result();
         }
 
         protected string GetFullScriptPathname(string scriptName)
@@ -106,13 +108,14 @@ namespace Diver.Test
                 WriteLine($"Running {fileName}");
                 _exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
-                var trans = new PiTranslator(_reg, text);
+                var trans = new PiTranslator(_reg);
+                trans.Translate(text);
                 if (Verbose)
                     WriteLine($"Translator for {filePath}: {trans}");
                 if (trans.Failed)
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                _exec.Continue(trans.Continuation);
+                _exec.Continue(trans.Result());
             }
             catch (Exception e)
             {
@@ -197,6 +200,33 @@ namespace Diver.Test
                     Assert.AreEqual(rb.BaseValue, val);
                     return;
             }
+        }
+
+        protected void AssertSameTokens(string input, params EPiToken[] tokens)
+        {
+            var lex = PiLex(input);
+            AssertSameTokens(lex.Tokens, tokens);
+        }
+
+        protected void AssertSameTokens(IEnumerable<object> input, params EPiToken[] tokens)
+        {
+            var piTokens = input.Cast<PiToken>().Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
+            var expected = tokens.ToList();
+            Assert.AreEqual(piTokens.Count, expected.Count);
+            Assert.IsTrue(piTokens.SequenceEqual(expected));
+        }
+
+        protected bool IsWhiteSpace(PiToken piToken)
+        {
+            switch (piToken.Type)
+            {
+                case EPiToken.Whitespace:
+                case EPiToken.Tab:
+                case EPiToken.NewLine:
+                    return true;
+            }
+
+            return false;
         }
     }
 }
