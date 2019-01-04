@@ -38,7 +38,7 @@ namespace Diver.Exec
 
         void Assert()
         {
-            WriteLine("--- Asserting ---");
+            //WriteLine("--- Asserting ---");
             if (!Pop<bool>())
                 throw new AssertionFailedException();
         }

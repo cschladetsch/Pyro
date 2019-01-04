@@ -42,22 +42,22 @@ namespace Diver.Test.Rho
 
         private void True(string text)
         {
-            RhoRun($"assert({text})", EStructure.Statement);
+            RhoRun($"assert({text})");
         }
 
         [Test]
         public void TestArithmetic()
         {
-            RhoRun("b = 1", EStructure.Statement);
+            RhoRun("b = 1");
             AssertVarEquals("b", 1);
 
-            RhoRun("a = 1 + 2", EStructure.Statement);
+            RhoRun("a = 1 + 2");
             AssertVarEquals("a", 3);
             RhoRun(@"a = 1
                 b = 2
                 c = (a + b)*2
                 writeln(c)
-                ", EStructure.Program);
+                ");
             AssertVarEquals("c", 6);
         }
 

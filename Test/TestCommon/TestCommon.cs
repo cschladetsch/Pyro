@@ -40,10 +40,10 @@ namespace Diver.Test
             _exec.Continue(_continuation = PiTranslate(text));
         }
 
-        protected void RhoRun(string text, EStructure st = EStructure.Program)
+        protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             _exec.Clear();
-            _exec.Continue(_continuation = RhoTranslate(text, st));
+            _exec.Continue(_continuation = RhoTranslate(text, trace, st));
         }
 
         protected Continuation PiTranslate(string text)
@@ -56,15 +56,17 @@ namespace Diver.Test
             return _continuation = trans.Result();
         }
 
-        protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
+        protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_reg);
             trans.Translate(text, st);
+
             if (trans.Result() == null)
                 WriteLine($"No output generated");
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
-            WriteLine(trans.ToString());
+            if (trace)
+                WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Result();
         }

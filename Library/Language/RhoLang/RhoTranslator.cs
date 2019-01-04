@@ -12,21 +12,27 @@ namespace Diver.Language
         {
         }
 
+        void ShowTime(string name, Action action)
+        {
+            var start = DateTime.Now;
+            action();
+            WriteLine($"{name} took {(DateTime.Now - start).TotalMilliseconds}");
+        }
+
         public override bool Translate(string text, EStructure st = EStructure.Program)
         {
             _lexer = new RhoLexer(text);
-            _lexer.Process();
+            ShowTime("Lexer", () => _lexer.Process());
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
             _parser = new RhoParser(_lexer, _reg, st);
-            _parser.Process();
+            ShowTime("Parser", () => _parser.Process());
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
-            WriteLine(_parser.PrintTree());
-
-            TranslateNode(_parser.Result);
+            //ShowTime("PrintTree", () => WriteLine(_parser.PrintTree()));
+            ShowTime("Translator", () => TranslateNode(_parser.Result));
 
             return !Failed;
         }
@@ -397,7 +403,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return $"=== RhoTranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}\nCode: {Result().ToString()}";
+            return $"=== RhoTranslator:\n--- Input: {_lexer.Input}--- Lexer: {_lexer}\n--- Parser: {_parser}\n--- Code: {Result().ToString()}";
         }
     }
 }
