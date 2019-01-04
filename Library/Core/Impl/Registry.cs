@@ -14,8 +14,13 @@ namespace Diver.Impl
 
         public bool Register(IClassBase @class)
         {
-            _classes.Add(@class.Type, @class);
+            AddClass(@class.Type, @class);
             return true;
+        }
+
+        public IClassBase GetClass(string name)
+        {
+            return _classNames.TryGetValue(name, out var @class) ? @class : null;
         }
 
         public IRefBase GetRef(Id id)
@@ -48,9 +53,9 @@ namespace Diver.Impl
             var klass = FindClass(type);
             if (klass != null)
                 return klass as IClass<T>;
-            var typed = new Class<T>(this);
-            _classes[type] = typed;
-            return typed;
+            var @class = new Class<T>(this);
+            AddClass(type, @class);
+            return @class;
         }
 
         public IRef<T> GetRef<T>(Id id)
@@ -131,12 +136,19 @@ namespace Diver.Impl
             return refBase;
         }
 
+        private void AddClass(Type type, IClassBase @class)
+        {
+            _classes[type] = @class;
+            _classNames[type.Name] = @class;
+        }
+
         private Id NextId()
         {
             return new Id(++_nextId);
         }
 
         private int _nextId;
+        private readonly Dictionary<string, IClassBase> _classNames = new Dictionary<string, IClassBase>();
         private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
         private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
     }

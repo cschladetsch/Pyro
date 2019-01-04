@@ -14,6 +14,7 @@ namespace Diver
         bool Register(IClassBase @class);
         IRefBase GetRef(Id id);
         IRef<T> GetRef<T>(Id id);
+        IClassBase GetClass(string name);
 
         T Get<T>(object obj);
 

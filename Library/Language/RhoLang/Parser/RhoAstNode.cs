@@ -39,11 +39,14 @@ namespace Diver.Language
         {
             var val = $"{Value}";
             var text = $"{Text}";
+            var type = $"{Type}: ";
             if (!string.IsNullOrEmpty(val))
                 val = $"{val}";
-            if (!string.IsNullOrEmpty(text))
+            if (Token?.Type == ERhoToken.String)
                 text = $"\"{text}\"";
-            return $"{Type}: {val} {text}";
+            if (type == "TokenType: ")
+                type = "";
+            return $"{type}{val} {text}";
         }
 
         public void Add(RhoAstNode node)
@@ -60,11 +63,6 @@ namespace Diver.Language
         {
             _children.Add(new RhoAstNode(piToken));
         }
-
-        //public void Add(ERhoAst type, object value)
-        //{
-        //    _children.Add(new RhoAstNode(type, value));
-        //}
 
         public RhoAstNode GetChild(int n)
         {

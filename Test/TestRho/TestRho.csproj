@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="TestRhoBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestRhoCustomClass.cs" />
     <Compile Include="TestRhoNativeObject.cs" />
   </ItemGroup>
   <ItemGroup>

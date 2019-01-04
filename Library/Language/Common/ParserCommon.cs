@@ -205,7 +205,6 @@ namespace Diver.Language
             if (!tok.Type.Equals(type))
             {
                 FailWith($"Expected {type}, have {tok}");
-                throw new Exception(Error);
             }
 
             Next();
