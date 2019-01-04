@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Api;
-using NUnit.Framework.Internal;
 
 namespace Diver.Test.Rho
 {

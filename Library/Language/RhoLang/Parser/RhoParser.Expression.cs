@@ -56,12 +56,13 @@
             if (!Additive())
                 return false;
 
-            while (Try(ERhoToken.Less) 
+            while (   Try(ERhoToken.Less) 
                    || Try(ERhoToken.Greater) 
                    || Try(ERhoToken.Equiv) 
                    || Try(ERhoToken.NotEquiv)
                    || Try(ERhoToken.LessEquiv) 
-                   || Try(ERhoToken.GreaterEquiv))
+                   || Try(ERhoToken.GreaterEquiv)
+                )
             {
                 var node = NewNode(Consume());
                 node.Add(Pop());
@@ -136,6 +137,13 @@
 
         private bool Factor()
         {
+            if (Try(ERhoToken.New))
+            {
+                var @new = NewNode(Consume());
+                @new.Add(Pop());
+                return Push(@new);
+            }
+
             if (Try(ERhoToken.OpenParan))
             {
                 var exp = NewNode(Consume());

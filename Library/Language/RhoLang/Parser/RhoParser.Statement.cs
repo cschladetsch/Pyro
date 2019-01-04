@@ -49,14 +49,14 @@
                 //    Append(Current().Type);
                 //    return true;
 
-                case ERhoToken.None:
+                case ERhoToken.Nop:
                     return false;
             }
 
             if (!Expression())
                 return FailWith("Expression expected");
 
-            return Append(Pop()) && !Try(ERhoToken.None);
+            return Append(Pop()) && !Try(ERhoToken.Nop);
         }
 
         private bool Function()

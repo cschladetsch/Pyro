@@ -58,6 +58,21 @@ namespace Diver.Impl
             return @class;
         }
 
+        public object New(IClassBase @class, Stack<object> dataStack)
+        {
+            return @class.NewInstance(dataStack);
+        }
+
+        public IRefBase NewRef(IClassBase @class, Stack<object> dataStack)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack)
+        {
+            throw new NotImplementedException();
+        }
+
         public IRef<T> GetRef<T>(Id id)
         {
             return _instances[id].BaseValue as IRef<T>;
@@ -85,7 +100,7 @@ namespace Diver.Impl
             var classBase = GetClass(type);
             if (classBase == null)
                 throw new CouldNotMakeClass(value?.GetType());
-            return classBase.Create(this, NextId(), value);
+            return classBase.Create(NextId(), value);
         }
 
         public IConstRef<T> AddConst<T>(T val)
@@ -116,7 +131,7 @@ namespace Diver.Impl
         private IRef<T> AddNew<T>(IClassBase classBase)
         {
             var id = NextId();
-            classBase.Create(this, id, out var refBase);
+            classBase.Create(id, out var refBase);
             _instances.Add(id, refBase);
             return refBase as IRef<T>;
         }
@@ -131,7 +146,7 @@ namespace Diver.Impl
         private IRefBase AddNew(IClassBase classBase, object value)
         {
             var id = NextId();
-            var refBase = classBase.Create(this, id, value);
+            var refBase = classBase.Create(id, value);
             _instances.Add(id, refBase);
             return refBase;
         }

@@ -29,6 +29,7 @@ namespace Diver.Language
             _keyWords.Add("assert", ERhoToken.Assert);
             _keyWords.Add("writeln", ERhoToken.WriteLine);
             _keyWords.Add("write", ERhoToken.Write);
+            _keyWords.Add("new", ERhoToken.New);
         }
 
         protected override bool NextToken()
@@ -135,7 +136,7 @@ namespace Diver.Language
 
         protected override void Terminate()
         {
-            _tokens.Add(_factory.NewToken(ERhoToken.None, new Slice(this, _offset, _offset)));
+            _tokens.Add(_factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Diver.Impl
 {
@@ -8,25 +9,24 @@ namespace Diver.Impl
         {
         }
 
-        public override void Create(IRegistry reg, Id id, out IRefBase refBase)
+        public override object NewInstance(Stack<object> stack)
         {
-            refBase = new Ref<T>(reg, this, id);
+            return null;
         }
 
-        public IRef<T> Create(IRegistry reg, Id id, T value)
+        public override void Create(Id id, out IRefBase refBase)
         {
-            return new Ref<T>(reg, this, id, value);
+            refBase = new Ref<T>(_registry, this, id);
         }
 
-        public new IConstRef<T> CreateConst(IRegistry reg, Id id)
+        public IRef<T> Create(Id id, T value)
         {
-            return new ConstRef<T>(reg, this, id);
+            return new Ref<T>(_registry, this, id, value);
         }
 
-        public IConstRef<T> CreateConst(IRegistry reg, Id id, T value)
+        public IConstRef<T> CreateConst(Id id, T value)
         {
-            return new ConstRef<T>(reg, this, id, value);
+            return new ConstRef<T>(_registry, this, id, value);
         }
-
     }
 }

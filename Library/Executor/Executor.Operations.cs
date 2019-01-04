@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities.Expressions;
 using System.Activities.Statements;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,6 +65,17 @@ namespace Diver.Exec
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
+            _actions[EOperation.New] = OpNew;
+        }
+
+        private void OpNew()
+        {
+            var obj = RPop();
+            var @class = ConstRef<IClassBase>(obj);
+            if (@class == null)
+                throw new Exception($"Couldn't get class from {obj}");
+
+            Push(_registry.New(@class, DataStack));
         }
 
         private void GetMember()
