@@ -24,6 +24,8 @@ namespace Diver.Language
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
+            WriteLine(_parser.PrintTree());
+
             TranslateNode(_parser.Result);
 
             return !Failed;
@@ -251,6 +253,14 @@ namespace Diver.Language
 
                 case ERhoAst.Pathname:
                     TranslateToken(node);
+                    return;
+
+                case ERhoAst.Assignment:
+                    // like a binary op, but argument order is reversed
+                    //TranslateNode(node.GetChild(1));
+                    TranslateNode(node.GetChild(0));
+                    AddQuoted(node.GetChild(1));
+                    Append(EOperation.Store);
                     return;
 
                 case ERhoAst.IndexOp:

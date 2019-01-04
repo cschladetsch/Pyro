@@ -113,8 +113,9 @@ fun foo()
         }
 
         [Test]
-        public void TestExecution()
+        public void TestSimpleFunctions()
         {
+            RunRho("a = 1");
             RunRho(
 @"fun foo()
 	1

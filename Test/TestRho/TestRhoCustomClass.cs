@@ -17,7 +17,7 @@ namespace Diver.Test.Rho
     public class TestRhoCustomClass : TestCommon
     {
         [Test]
-        void TestCustomClass()
+        public void TestCustomClass()
         {
             _reg.Register(new ClassBuilder<Foo>(_reg)
                 .Methods
