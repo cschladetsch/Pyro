@@ -110,6 +110,7 @@
         GetMember,
         SetMember,
         SetMemberValue,
-
+        ForEachIn,
+        ForLoop,
     }
 }
