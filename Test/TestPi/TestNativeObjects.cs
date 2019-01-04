@@ -14,12 +14,14 @@ namespace Diver.Test
 
             const string pre0 = "\"foobar\" 's # ";
             const string length = pre0 + "'Length s .@";
-            const string sub0 = pre0 + "0 3 'Substring s .@ &";
-            const string sub1 = pre0 + "3 3 'Substring s .@ &";
+            const string sub0 = pre0 + "0 3 'Substring s .@";
+            const string sub1 = pre0 + "3 3 'Substring s .@";
+            const string sub2 = pre0 + "4 'Substring1 s .@";
 
             AssertSameTokens("s", EPiToken.Ident);
             AssertSameTokens(pre0, EPiToken.String, EPiToken.Quote, EPiToken.Ident, EPiToken.Store);
-            AssertSameTokens(sub0, EPiToken.String, EPiToken.Quote, EPiToken.Ident, EPiToken.Store, EPiToken.Int, EPiToken.Int, EPiToken.Quote, EPiToken.Ident, EPiToken.Ident, EPiToken.GetMember, EPiToken.Suspend);
+            AssertSameTokens(sub0, EPiToken.String, EPiToken.Quote, EPiToken.Ident, EPiToken.Store, EPiToken.Int,
+                EPiToken.Int, EPiToken.Quote, EPiToken.Ident, EPiToken.Ident, EPiToken.GetMember);
 
             Run(length);
             AssertPop(6);
@@ -27,6 +29,8 @@ namespace Diver.Test
             AssertPop("foo");
             Run(sub1);
             AssertPop("bar");
+            Run(sub2);
+            AssertPop("ar");
         }
     }
 }

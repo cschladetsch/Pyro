@@ -30,7 +30,7 @@ namespace Diver.Test
         public void Setup()
         {
             _reg = new Registry();
-            _executor = _reg.Add(new Executor());
+            _executor = _reg.Add(new Executor(_reg));
             _exec = _executor.Value;
         }
 

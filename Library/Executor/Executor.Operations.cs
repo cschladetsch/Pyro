@@ -70,21 +70,31 @@ namespace Diver.Exec
         {
             var obj = Pop();
             var member = Pop<Label>().Text;
-            var @class = (Type)obj.GetType();
-            var pi = @class.GetProperty(member);
+            var type = (Type)obj.GetType();
+
+            var pi = type.GetProperty(member);
             if (pi != null)
             {
-                Push(pi.GetValue(pi));
+                Push(pi.GetValue(obj));
                 return;
             }
 
-            var mi = @class.GetMethod(member);
-            if (mi != null)
+            var @class = _registry.GetClass(type);
+            if (@class == null)
             {
-                Push(mi);
-                Push(obj);
+                var mi = type.GetMethod(member);
+                var numArgs = mi.GetParameters().Length;
+                var args = DataStack.Take(numArgs).ToArray();
+                Push(mi.Invoke(obj, args));
                 return;
             }
+
+            var callable = @class.GetCallable(member);
+            if (callable == null)
+                throw new MemberNotFoundException(obj.GetType(), member);
+
+            Push(obj);
+            callable.Invoke(_registry, DataStack);
         }
 
         private void NotEquiv()

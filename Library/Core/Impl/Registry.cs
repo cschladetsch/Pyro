@@ -7,9 +7,33 @@ namespace Diver.Impl
     {
         public Guid Guid { get; }
 
-        public IRefBase Get(Id id)
+        public Registry()
+        {
+            BuiltinTypes.Builtins.Register(this);
+        }
+
+        public bool Register(IClassBase @class)
+        {
+            _classes.Add(@class.Type, @class);
+            return true;
+        }
+
+        public IRefBase GetRef(Id id)
         {
             return _instances[id];
+        }
+
+        public T Get<T>(object obj)
+        {
+            switch (obj)
+            {
+                case T _:
+                    return (T)obj;
+                case IRefBase rb:
+                    return GetRef<T>(rb.Id).Value;
+            }
+
+            throw new TypeMismatchError(typeof(T), obj?.GetType());
         }
 
         public IRefBase Add(object value)
@@ -18,7 +42,7 @@ namespace Diver.Impl
             return klass == null ? RefBase.None : AddNew(klass, value);
         }
 
-        private IClass<T> GetClass<T>()
+        public IClass<T> GetClass<T>()
         {
             var type = typeof(T);
             var klass = FindClass(type);
@@ -29,7 +53,7 @@ namespace Diver.Impl
             return typed;
         }
 
-        public IRef<T> Get<T>(Id id)
+        public IRef<T> GetRef<T>(Id id)
         {
             return _instances[id].BaseValue as IRef<T>;
         }
@@ -69,7 +93,7 @@ namespace Diver.Impl
             throw new NotImplementedException();
         }
 
-        private IClassBase GetClass(Type type)
+        public IClassBase GetClass(Type type)
         {
             if (type == null)
                 type = typeof(void);

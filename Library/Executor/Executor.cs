@@ -12,8 +12,9 @@ namespace Diver.Exec
         public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
 
-        public Executor()
+        public Executor(IRegistry reg)
         {
+            _registry = reg;
             AddOperations();
         }
 
@@ -81,18 +82,6 @@ namespace Diver.Exec
             var fromScope = Context().FromScope(label);
             Push(fromScope);
         }
-
-        //void Continue(dynamic body)
-        //{
-        //    switch (body)
-        //    {
-        //        case IRef<Continuation> cont:
-        //            Continue(cont);
-        //            break;
-        //        default:
-        //            throw new Exception($"Cannot continue a {body.GetType().Name}");
-        //    }
-        //}
 
         public void Continue(IRef<Continuation> continuation)
         {
@@ -278,6 +267,6 @@ namespace Diver.Exec
         private Continuation _current;
         private Stack<Continuation> _context = new Stack<Continuation>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
-
+        private IRegistry _registry;
     }
 }

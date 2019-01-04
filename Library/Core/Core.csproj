@@ -59,7 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuiltinTypes\Array.cs" />
+    <Compile Include="BuiltinTypes\Builtins.cs" />
+    <Compile Include="Impl\Callable.cs" />
+    <Compile Include="Impl\CallableBase.cs" />
+    <Compile Include="ClassBuilder.cs" />
     <Compile Include="Create.cs" />
+    <Compile Include="ICallable.cs" />
     <Compile Include="IClass.cs" />
     <Compile Include="IClassBase.cs" />
     <Compile Include="IConstRefBase.cs" />

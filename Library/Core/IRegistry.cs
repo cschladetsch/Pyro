@@ -11,8 +11,11 @@ namespace Diver
     {
         Guid Guid { get; }
 
-        IRefBase Get(Id id);
-        IRef<T> Get<T>(Id id);
+        bool Register(IClassBase @class);
+        IRefBase GetRef(Id id);
+        IRef<T> GetRef<T>(Id id);
+
+        T Get<T>(object obj);
 
         IRefBase Add(object value);
         IRef<T> Add<T>(T value);
@@ -21,5 +24,7 @@ namespace Diver
         IConstRefBase AddConst(object val);
         IConstRef<T> AddConst<T>(T val);
         IConstRef<T> AddConst<T>();
+        IClassBase GetClass(Type type);
+        IClass<T> GetClass<T>();
     }
 }

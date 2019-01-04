@@ -2,7 +2,7 @@
 {
     internal class ConstRef<T> : ConstRefBase, IConstRef<T>
     {
-        public T Value => _registry.Get<T>(_id).Value;
+        public T Value => _registry.GetRef<T>(_id).Value;
 
         public Class<T> TypedClass => Class as Class<T>;
 

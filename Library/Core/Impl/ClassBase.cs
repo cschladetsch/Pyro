@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Diver.Impl
 {
@@ -7,6 +8,19 @@ namespace Diver.Impl
         internal ClassBase(IRegistry reg, Type type) 
             : base(reg, type)
         {
+        }
+
+        public ICallable GetCallable(string name)
+        {
+            return _callables.TryGetValue(name, out var call) ? call : null;
+        }
+
+        public void AddCallable(string name, ICallable callable)
+        {
+            if (_callables.ContainsKey(name))
+                throw new Exception("Duplicate callabled added to class");
+
+            _callables[name] = callable;
         }
 
         public virtual void Create(IRegistry reg, Id id, out IRefBase refBase)
@@ -28,5 +42,7 @@ namespace Diver.Impl
         {
             return new ConstRefBase(reg, this, id, value);
         }
+
+        private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();
     }
 }
