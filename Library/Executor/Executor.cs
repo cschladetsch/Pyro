@@ -144,6 +144,9 @@ namespace Diver.Exec
 
         private void Perform(object next)
         {
+            if (next == null)
+                throw new NullValueException();
+
             PerformPrelude(next);
             if (next is EOperation op)
             {
@@ -220,7 +223,11 @@ namespace Diver.Exec
         /// </summary>
         private void Resume()
         {
-            _context.Push(Pop());
+            var next = Pop();
+            if (next is ICallable call)
+                call.Invoke(_registry, DataStack);
+            else
+                _context.Push(next);
             Break();
         }
 

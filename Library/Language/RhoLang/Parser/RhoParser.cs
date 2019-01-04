@@ -148,7 +148,7 @@
 
         protected RhoAstNode MakeQuotedIdent()
         {
-            return new RhoAstNode(ERhoAst.Ident, new Label(Expect(ERhoToken.Ident).Text, true));
+            return Quote(Expect(ERhoToken.Ident));
         }
 
         private readonly EStructure _structure;

@@ -17,7 +17,7 @@ namespace Diver.Language
             parent.Children.Add(node);
         }
 
-        public void AddChild(RhoAstNode parent, object node)
+        public void AddChild(RhoAstNode parent, RhoToken node)
         {
             parent.Children.Add(new RhoAstNode(ERhoAst.TokenType, node));
         }

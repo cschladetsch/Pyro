@@ -94,7 +94,7 @@ namespace Diver.Exec
                 throw new MemberNotFoundException(obj.GetType(), member);
 
             Push(obj);
-            callable.Invoke(_registry, DataStack);
+            Push(callable);
         }
 
         private void NotEquiv()

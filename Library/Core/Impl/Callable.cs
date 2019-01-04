@@ -15,8 +15,8 @@ namespace Diver.Impl
         public override void Invoke(IRegistry reg, Stack<object> stack)
         {
             var obj = stack.Pop();
-            var b = stack.Pop();
             var a = stack.Pop();
+            var b = stack.Pop();
             var r = _fun(reg.Get<T>(obj), reg.Get<A>(a), reg.Get<B>(b));
             if (r != null)
                 stack.Push(r);

@@ -20,7 +20,7 @@
                )
             {
                 var node = NewNode(Consume());
-                var ident = Pop();
+                var ident = Quote(Pop());
                 if (!Logical())
                     return FailWith("Assignment requires an expression");
 
@@ -30,6 +30,21 @@
             }
 
             return true;
+        }
+
+        RhoAstNode Quote(RhoAstNode node)
+        {
+            if (node.Type != ERhoAst.Ident && node.Text.StartsWith("'"))
+                return node;
+
+            var text = node.Text;
+            if (text.StartsWith("'"))
+                return node;
+            var ident = new Label(text, true);
+            var token = node.Token;
+            var quoted = _astFactory.New(token);
+            quoted.Value = ident;
+            return quoted;
         }
 
         private bool Logical()
@@ -221,6 +236,17 @@
             return true;
         }
 
+        private bool GetMember()
+        {
+            Consume();
+
+            var get = NewNode(ERhoAst.GetMember);
+            get.Add(Pop());
+            get.Add(MakeQuotedIdent());
+            Push(get);
+            return true;
+        }
+
         private bool Call()
         {
             // eat the opening paranthesis
@@ -252,17 +278,13 @@
             return true;
         }
 
-        private bool GetMember()
-        {
-            PushConsume();
-            return Append(Expect(ERhoToken.Ident));
-        }
-
         private bool IndexOp()
         {
-            PushConsume();
+            var index = PushConsume();
+            index.Add(Pop());
             if (!Expression())
                 return FailWith("Index what?");
+            index.Add(Pop());
 
             Expect(ERhoToken.CloseSquareBracket);
             return true;

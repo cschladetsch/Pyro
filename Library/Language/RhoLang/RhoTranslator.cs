@@ -96,9 +96,10 @@ namespace Diver.Language
 
                 case ERhoToken.Assign:
                     TranslateNode(node.GetChild(0));
-                    // need to quote the ident
-                    var ident = new Label(node.GetChild(1).Text, true);
-                    Append(ident);
+                    TranslateNode(node.GetChild(1));
+                    //// need to quote the ident
+                    //var ident = new Label(node.GetChild(1).Text, true);
+                    //Append(ident);
                     Append(EOperation.Assign);
                     return;
 
@@ -254,10 +255,6 @@ namespace Diver.Language
                     TranslateBinaryOp(node, EOperation.At);
                     return;
 
-                case ERhoAst.GetMember:
-                    TranslateBinaryOp(node, EOperation.GetProperty);
-                    return;
-
                 case ERhoAst.Assignment:
                     // like a binary op, but argument order is reversed
                     //TranslateNode(node.GetChild(1));
@@ -269,6 +266,11 @@ namespace Diver.Language
                 case ERhoAst.Call:
                     TranslateCall(node);
                     return;
+
+                case ERhoAst.GetMember:
+                    TranslateGetMember(node);
+                    return;
+
 
                 case ERhoAst.Conditional:
                     TranslateIf(node);
@@ -329,14 +331,28 @@ namespace Diver.Language
         private void TranslateCall(RhoAstNode node)
         {
             var children = node.Children;
-            foreach (var a in children[1].Children.Reverse())
+            var args = children[1].Children;
+            var name = children[0];
+            foreach (var a in args.Reverse())
                 TranslateNode(a);
 
-            TranslateNode(children[0]);
+            TranslateNode(name);
+            // TODO: add Replace/Suspend/Resume to children
             if (children.Count > 2 && children[2].Token.Type == ERhoToken.Replace)
                 Append(EOperation.Replace);
             else
                 Append(EOperation.Suspend);
+        }
+
+        private void TranslateGetMember(RhoAstNode node)
+        {
+            var ch = node.Children;
+            var subject = ch[0];
+            var member = ch[1];
+            var ident = new Label(member.Text, true);
+            Append(ident);
+            TranslateNode(subject);
+            Append(EOperation.GetMember);
         }
 
         private void TranslateIf(RhoAstNode node)

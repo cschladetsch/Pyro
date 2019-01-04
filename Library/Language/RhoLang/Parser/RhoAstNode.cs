@@ -35,11 +35,11 @@ namespace Diver.Language
             RhoToken = piToken;
         }
 
-        public RhoAstNode(ERhoAst type, object value)
-        {
-            Type = type;
-            Value = value;
-        }
+        //public RhoAstNode(ERhoAst type, object value)
+        //{
+        //    Type = type;
+        //    Value = value;
+        //}
 
         public override string ToString()
         {
@@ -67,10 +67,10 @@ namespace Diver.Language
             _children.Add(new RhoAstNode(piToken));
         }
 
-        public void Add(ERhoAst type, object value)
-        {
-            _children.Add(new RhoAstNode(type, value));
-        }
+        //public void Add(ERhoAst type, object value)
+        //{
+        //    _children.Add(new RhoAstNode(type, value));
+        //}
 
         public RhoAstNode GetChild(int n)
         {
