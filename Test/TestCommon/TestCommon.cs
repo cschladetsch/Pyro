@@ -34,13 +34,13 @@ namespace Diver.Test
             _exec = _executor.Value;
         }
 
-        protected void Run(string text)
+        protected void PiRun(string text)
         {
             _exec.Clear();
             _exec.Continue(_continuation = PiTranslate(text));
         }
 
-        protected void RunRho(string text, EStructure st = EStructure.Program)
+        protected void RhoRun(string text, EStructure st = EStructure.Program)
         {
             _exec.Clear();
             _exec.Continue(_continuation = RhoTranslate(text, st));
@@ -50,7 +50,6 @@ namespace Diver.Test
         {
             var trans = new PiTranslator(_reg);
             trans.Translate(text);
-            //WriteLine(trans.ToString());
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);

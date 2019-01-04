@@ -131,7 +131,7 @@ namespace Diver.Impl
         private IRef<T> AddNew<T>(IClassBase classBase)
         {
             var id = NextId();
-            classBase.Create(id, out var refBase);
+            classBase.NewRef(id, out var refBase);
             _instances.Add(id, refBase);
             return refBase as IRef<T>;
         }

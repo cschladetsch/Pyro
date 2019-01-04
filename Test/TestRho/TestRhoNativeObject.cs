@@ -8,18 +8,18 @@ namespace Diver.Test.Rho
         [Test]
         public void TestString()
         {
-            RunRho(
+            RhoRun(
 @"a = ""foobar""
 ");
             AssertVarEquals("a", "foobar");
 
-            RunRho(
+            RhoRun(
 @"a = ""foobar""
 b = a.Substring(0, 3)
 ");
             AssertVarEquals("b", "foo");
 
-            RunRho(
+            RhoRun(
 @"a = ""foobar""
 assert(a.Length == 6)
 b = a.Substring(0, 3).Substring(0,1)
@@ -28,7 +28,7 @@ assert(b.Length == 1)
 //assert(""foobar"".Substring(0,2).Length == 2)
 ");
 
-            RunRho(
+            RhoRun(
 @"a = ""foobar""
 b = a.Substring(0, 3)
 c = a.Substring(3, 3)

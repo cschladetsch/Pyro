@@ -65,7 +65,6 @@ namespace Diver.Exec
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
-            _actions[EOperation.New] = OpNew;
         }
 
         private void OpNew()
@@ -83,24 +82,39 @@ namespace Diver.Exec
             var obj = Pop();
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
-
-            var pi = type.GetProperty(member);
-            if (pi != null)
-            {
-                Push(pi.GetValue(obj));
-                return;
-            }
-
             var @class = _registry.GetClass(type);
-            if (@class == null)
-            {
-                var mi = type.GetMethod(member);
-                var numArgs = mi.GetParameters().Length;
-                var args = DataStack.Take(numArgs).ToArray();
-                Push(mi.Invoke(obj, args));
-                return;
-            }
 
+            if (GetProperty(type, member, obj)) 
+                return;
+
+            if (GetMethod(type, member, obj, @class))
+                return;
+
+            GetCallable(@class, member, obj);
+        }
+
+        private bool GetProperty(Type type, string member, dynamic obj)
+        {
+            var pi = type.GetProperty(member);
+            if (pi == null)
+                return false;
+            Push(pi.GetValue(obj));
+            return true;
+        }
+
+        private bool GetMethod(Type type, string member, dynamic obj, IClassBase @class)
+        {
+            if (@class != null)
+                return false;
+            var mi = type.GetMethod(member);
+            var numArgs = mi.GetParameters().Length;
+            var args = DataStack.Take(numArgs).ToArray();
+            Push(mi.Invoke(obj, args));
+            return true;
+        }
+
+        private void GetCallable(IClassBase @class, string member, dynamic obj)
+        {
             var callable = @class.GetCallable(member);
             if (callable == null)
                 throw new MemberNotFoundException(obj.GetType(), member);
@@ -157,12 +171,18 @@ namespace Diver.Exec
             Push(a && b);
         }
 
+        private void Divide()
+        {
+            var a = RPop();
+            var b = RPop();
+            Push(b / a);
+        }
+
         private void LogicalOr()
         {
             var a = RPop();
             var b = RPop();
-            var c = a || b;
-            Push(c);
+            Push(a || b);
         }
 
         private void DebugPrintContextStack()
@@ -186,9 +206,7 @@ namespace Diver.Exec
             var count = RPop<int>();
             var set = new HashSet<object>();
             while (count-- > 0)
-            {
                 set.Add(RPop());
-            }
 
             Push(set);
         }
@@ -288,9 +306,7 @@ namespace Diver.Exec
             else
             {
                 foreach (var obj in cont)
-                {
                     Push(obj);
-                }
             }
 
             // finally, push size of container
@@ -363,13 +379,6 @@ namespace Diver.Exec
 
             list.Reverse();
             Push(list);
-        }
-
-        private void Divide()
-        {
-            var a = RPop();
-            var b = RPop();
-            Push(b / a);
         }
 
         private void Equiv()

@@ -30,7 +30,7 @@ namespace Diver.Test.Rho
             False("!true || !true");
             False("!true && !true");
 
-            RunRho(@"
+            RhoRun(@"
                 assert(true)
                 assert(!false)");
         }
@@ -42,18 +42,18 @@ namespace Diver.Test.Rho
 
         private void True(string text)
         {
-            RunRho($"assert({text})", EStructure.Statement);
+            RhoRun($"assert({text})", EStructure.Statement);
         }
 
         [Test]
         public void TestArithmetic()
         {
-            RunRho("b = 1", EStructure.Statement);
+            RhoRun("b = 1", EStructure.Statement);
             AssertVarEquals("b", 1);
 
-            RunRho("a = 1 + 2", EStructure.Statement);
+            RhoRun("a = 1 + 2", EStructure.Statement);
             AssertVarEquals("a", 3);
-            RunRho(@"a = 1
+            RhoRun(@"a = 1
                 b = 2
                 c = (a + b)*2
                 writeln(c)
@@ -115,32 +115,32 @@ fun foo()
         [Test]
         public void TestSimpleFunctions()
         {
-            RunRho("a = 1");
-            RunRho(
+            RhoRun("a = 1");
+            RhoRun(
 @"fun foo()
 	1
 ");
             
-            RunRho(
+            RhoRun(
 @"fun foo()
 	1
 foo()
 ");
             AssertPop(1);
 
-            RunRho(
+            RhoRun(
 @"fun foo()
 	1
 assert(foo() == 1)
 ");
 
-            RunRho(
+            RhoRun(
 @"fun foo(a)
 	a
 foo(42)
 ");
 
-            RunRho(
+            RhoRun(
 @"
 fun foo()
 	1
@@ -160,7 +160,7 @@ assert(bar(foo, 2) == 3)
 if true
 	1
 ";
-            RunRho(ifThen);
+            RhoRun(ifThen);
             AssertPop(1);
 
             var ifThenElse1 = @"
@@ -169,7 +169,7 @@ if true
 else
 	2
 ";
-            RunRho(ifThenElse1);
+            RhoRun(ifThenElse1);
             AssertPop(1);
 
             var ifThenElse2 = @"
@@ -178,7 +178,7 @@ if false
 else
 	2
 ";
-            RunRho(ifThenElse2);
+            RhoRun(ifThenElse2);
             AssertPop(2);
         }
 
@@ -186,7 +186,7 @@ else
         public void TestWriteln()
         {
             var text = @"writeln(""testing 1 2 3"")";
-            RunRho(text);
+            RhoRun(text);
         }
 
         [Test]
@@ -198,13 +198,13 @@ fun foo(a)
 	assert(b == 3)
 foo(2)
 ";
-            RunRho(text);
+            RhoRun(text);
         }
 
         [Test]
         public void TestNestedFunctions()
         {
-            RunRho(@"
+            RhoRun(@"
 fun foo()
 	fun bar(f, num)
 		1 + f(num)

@@ -11,10 +11,10 @@
         Nop,
 
         // instances
-        New,
-        Delete,
+        //New,
+        //Delete,
         HasType,
-        Exists,
+        //Exists,
         GarbageCollect,
 
         // arithmetic

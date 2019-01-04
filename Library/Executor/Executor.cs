@@ -176,12 +176,12 @@ namespace Diver.Exec
         private object Resolve(IdentBase identBase)
         {
             if (identBase is Label label)
-                return ResolveContextually(label);
+                return _registry.GetClass(label.Text) ?? ResolveContextually(label);
 
             if (identBase is Pathname path)
                 return ResolvePath(path);
 
-            throw new NotImplementedException($"Cannot resolve {identBase}");
+            throw new CannotResolve($"{identBase}");
         }
 
         private object ResolvePath(Pathname path)
@@ -223,11 +223,19 @@ namespace Diver.Exec
         /// </summary>
         private void Resume()
         {
-            var next = Pop();
-            if (next is ICallable call)
-                call.Invoke(_registry, DataStack);
-            else
-                _context.Push(next);
+            var next = RPop();
+            switch (next)
+            {
+                case ICallable call:
+                    call.Invoke(_registry, DataStack);
+                    break;
+                case IClassBase @class:
+                    Push(@class.NewInstance(DataStack));
+                    break;
+                default:
+                    _context.Push(next);
+                    break;
+            }
             Break();
         }
 
@@ -276,4 +284,5 @@ namespace Diver.Exec
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry;
     }
+
 }

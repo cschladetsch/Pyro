@@ -23,7 +23,7 @@ namespace Diver.Impl
             _callables[name] = callable;
         }
 
-        public virtual void Create(Id id, out IRefBase refBase)
+        public virtual void NewRef(Id id, out IRefBase refBase)
         {
             refBase = new RefBase(_registry, this, id);
         }

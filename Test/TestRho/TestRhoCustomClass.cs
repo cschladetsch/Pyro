@@ -23,6 +23,13 @@ namespace Diver.Test.Rho
                 .Methods
                     .Add<int,int,int>("Sum", (q,a,b) => q.Sum(a,b))
                 .Class);
+
+            RhoTranslate("a = Foo()");
+            RhoRun(
+@"a = Foo()
+assert(a.Num == 42)
+assert(a.Sum(a.Num, 3) == 42 + 3)
+");
         }
     }
 }

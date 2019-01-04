@@ -27,7 +27,7 @@ namespace Diver
         object InvokeMethod(string name, List<object> args);
         void InvokeEvent(string name, List<object> args);
 
-        void Create(Id id, out IRefBase refBase);
+        void NewRef(Id id, out IRefBase refBase);
 
         IRefBase Create(Id id, object value);
         IConstRefBase CreateConst(Id id, object value);
