@@ -52,7 +52,7 @@
 
             ConsumeNewLines();
 
-            if (!Try(ERhoToken.None))
+            if (!Try(ERhoToken.Nop))
                 return FailWith("Unexpected extra stuff found");
 
             return _stack.Count == 1 || Fail("Stack not empty after parsing");
@@ -60,7 +60,7 @@
 
         private bool Program()
         {
-            while (!Failed && !Try(ERhoToken.None))
+            while (!Failed && !Try(ERhoToken.Nop))
                 if (!Statement())
                     return false;
 
@@ -81,7 +81,7 @@
             Push(NewNode(ERhoAst.Block));
             while (!Failed)
             {
-                if (Try(ERhoToken.None))
+                if (Try(ERhoToken.Nop))
                     return true;
 
                 if (!Statement())

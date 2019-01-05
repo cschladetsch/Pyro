@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using System;
+
+namespace Diver.Language
 {
     /// <summary>
     /// Functions that deal only with parsing expressions.
@@ -56,12 +58,13 @@
             if (!Additive())
                 return false;
 
-            while (Try(ERhoToken.Less) 
+            while (   Try(ERhoToken.Less) 
                    || Try(ERhoToken.Greater) 
                    || Try(ERhoToken.Equiv) 
                    || Try(ERhoToken.NotEquiv)
                    || Try(ERhoToken.LessEquiv) 
-                   || Try(ERhoToken.GreaterEquiv))
+                   || Try(ERhoToken.GreaterEquiv)
+                )
             {
                 var node = NewNode(Consume());
                 node.Add(Pop());
@@ -136,6 +139,13 @@
 
         private bool Factor()
         {
+            if (Try(ERhoToken.New))
+            {
+                var @new = NewNode(Consume());
+                @new.Add(Pop());
+                return Push(@new);
+            }
+
             if (Try(ERhoToken.OpenParan))
             {
                 var exp = NewNode(Consume());
@@ -147,25 +157,25 @@
                 return Push(exp);
             }
 
-            if (Try(ERhoToken.OpenSquareBracket))
+            if (TryConsume(ERhoToken.OpenSquareBracket))
             {
                 var list = NewNode(ERhoAst.List);
-                do
+                while (true)
                 {
-                    Consume();
-                    if (Try(ERhoToken.CloseSquareBracket))
+                    if (TryConsume(ERhoToken.CloseSquareBracket))
                         break;
                     if (Expression())
                         list.Add(Pop());
                     else
-                    {
-                        Fail("Badly formed array");
-                        return false;
-                    }
+                        return FailWith("Expressions required within array");
+                    if (!TryConsume(ERhoToken.Comma))
+                        break;
                 }
-                while (Try(ERhoToken.Comma));
 
                 Expect(ERhoToken.CloseSquareBracket);
+                if (Failed)
+                    return FailWith("Closing bracked expected for array");
+
                 return Push(list);
             }
 

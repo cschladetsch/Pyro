@@ -49,14 +49,14 @@
                 //    Append(Current().Type);
                 //    return true;
 
-                case ERhoToken.None:
+                case ERhoToken.Nop:
                     return false;
             }
 
             if (!Expression())
                 return FailWith("Expression expected");
 
-            return Append(Pop()) && !Try(ERhoToken.None);
+            return Append(Pop()) && !Try(ERhoToken.Nop);
         }
 
         private bool Function()
@@ -158,12 +158,27 @@
             return Append(@if);
         }
 
+        /// <summary>
+        /// A for-loop. Could be one of:
+        ///     for (a in b)
+        ///         block
+        /// or
+        ///     for (a = 0; a &lt; 10; ++a)
+        ///         block
+        /// These are stored in the same Ast node. The way to tell the
+        /// difference is by the number of children in the node.
+        /// </summary>
+        /// <returns></returns>
         private bool For()
         {
             var @for = NewNode(Consume());
 
-            if (!Expression())
-                return FailWith("For what?");
+            Expect(ERhoToken.OpenParan);
+            if (Failed)
+                return false;
+
+            // add loop variable name
+            @for.Add(Expect(ERhoToken.Ident));
 
             if (TryConsume(ERhoToken.In))
             {
@@ -178,29 +193,42 @@
                     return false;
             }
 
+            // always add the final part of the for-loop
+            @for.Add(Pop());
+
+            // both for-loops ends with a closing paran and a block
+            Expect(ERhoToken.CloseParan);
+            if (Failed)
+                return false;
+
+            // add the iteration block
+            if (!Block())
+                return FailWith("For block expected");
+
+            @for.Add(Pop());
+
             return Append(@for);
         }
 
+        // for (a in [1 2 3])
+        //      block
         private bool ForEach(RhoAstNode @for)
         {
-            @for.Add(Pop());
-
             if (!Expression())
                 return FailWith("For each in what?");
 
-            @for.Add(Pop());
             return true;
         }
 
+        // for (a = 0; a < 10; ++a)
+        //      block
         private bool ForLoop(RhoAstNode @for)
         {
-            if (!Expression())
-                return FailWith("For needs an initialiser");
-
-            @for.Add(Pop());
             Expect(ERhoToken.Semi);
+            if (Failed)
+                return false;
 
-            if (!Expression())
+            if (!Logical())
                 return FailWith("When does the for statement stop?");
 
             @for.Add(Pop());
@@ -208,9 +236,6 @@
 
             if (!Expression())
                 return FailWith("What happens when the for statement loops?");
-
-            @for.Add(Pop());
-            Expect(ERhoToken.CloseParan);
 
             return true;
         }

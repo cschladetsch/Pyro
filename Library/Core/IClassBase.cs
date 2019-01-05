@@ -27,12 +27,12 @@ namespace Diver
         object InvokeMethod(string name, List<object> args);
         void InvokeEvent(string name, List<object> args);
 
-        void Create(IRegistry reg, Id id, out IRefBase refBase);
+        void NewRef(Id id, out IRefBase refBase);
 
-        IRefBase Create(IRegistry reg, Id id, object value);
-        IConstRefBase CreateConst(IRegistry reg, Id id, object value);
+        IRefBase Create(Id id, object value);
+        IConstRefBase CreateConst(Id id, object value);
+        object NewInstance(Stack<object> dataStack);
     }
-
 }
 
 //EOF

@@ -34,38 +34,46 @@ namespace Diver.Test
             _exec = _executor.Value;
         }
 
-        protected void Run(string text)
+        protected void PiRun(string text)
         {
             _exec.Clear();
             _exec.Continue(_continuation = PiTranslate(text));
         }
 
-        protected void RunRho(string text, EStructure st = EStructure.Program)
+        protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             _exec.Clear();
-            _exec.Continue(_continuation = RhoTranslate(text, st));
+            Time("Exec took ", () => _exec.Continue(_continuation = RhoTranslate(text, trace, st)));
+        }
+
+        private void Time(string label, Action action)
+        {
+            var start = DateTime.Now;
+            action();
+            WriteLine($"{label} {(DateTime.Now - start).TotalMilliseconds}ms");
         }
 
         protected Continuation PiTranslate(string text)
         {
             var trans = new PiTranslator(_reg);
             trans.Translate(text);
-            //WriteLine(trans.ToString());
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Result();
         }
 
-        protected Continuation RhoTranslate(string text, EStructure st = EStructure.Program)
+        protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_reg);
             trans.Translate(text, st);
+
             if (trans.Result() == null)
                 WriteLine($"No output generated");
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
-            WriteLine(trans.ToString());
+            if (trace)
+                WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
             return _continuation = trans.Result();
         }
@@ -168,9 +176,9 @@ namespace Diver.Test
             string text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);
-            System.Diagnostics.Trace.WriteLine(text);
+            //System.Diagnostics.Trace.WriteLine(text);
             TestContext.Out.WriteLine(text);
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)

@@ -1,8 +1,11 @@
 ﻿namespace Diver.Language
 {
+    /// <summary>
+    /// Tokens used by the Rho language.
+    /// </summary>
     public enum ERhoToken
     {
-        None,
+        Nop,
         Int,
         String,
         Assign,
@@ -19,6 +22,7 @@
         If,
         Else,
         For,
+        In,
         True,
         False,
         Self,
@@ -31,6 +35,7 @@
         Exists,
         GetObjectType,
         New,
+        Delete,
         Return,
         Quote,
         Colon,
@@ -65,7 +70,6 @@
         Pathname,
         Float,
         List,
-        In,
         Retrieve,
         WriteLine,
         Write,

@@ -8,16 +8,16 @@ namespace Diver.Test
         [Test]
         public void TestIfElse()
         {
-            Run("1 true if");
+            PiRun("1 true if");
             AssertPop(1);
 
-            Run("1 false if");
+            PiRun("1 false if");
             AssertEmpty();
 
-            Run("1 2 true ife");
+            PiRun("1 2 true ife");
             AssertPop(1);
 
-            Run("1 2 false ife");
+            PiRun("1 2 false ife");
             AssertPop(2);
         }
     }

@@ -22,7 +22,7 @@ namespace Diver.RhoLang
 
         public RhoToken NewEmptyToken(Slice slice)
         {
-            return NewToken(ERhoToken.None, slice);
+            return NewToken(ERhoToken.Nop, slice);
         }
 
         public void SetLexer(LexerBase lexer)

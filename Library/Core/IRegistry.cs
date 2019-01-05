@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Diver
 {
@@ -27,5 +28,9 @@ namespace Diver
         IConstRef<T> AddConst<T>();
         IClassBase GetClass(Type type);
         IClass<T> GetClass<T>();
+
+        object New(IClassBase @class, Stack<object> dataStack);
+        IRefBase NewRef(IClassBase @class, Stack<object> dataStack);
+        IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack);
     }
 }

@@ -93,6 +93,12 @@ namespace Diver
         }
     }
 
+    public class CannotResolve : Exception
+    {
+        public CannotResolve(string ident) : base($"Couldn't resolve {ident}")
+        {
+        }
+    }
     public class TypeMismatchError : Exception
     {
         public Type Expected, Got;

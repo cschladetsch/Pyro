@@ -1,46 +1,91 @@
 ﻿namespace Diver.Exec
 {
     /// <summary>
-    /// Operations that can be performed by and Executor
+    /// Operations that can be performed by an Executor.
+    ///
+    /// This is the virtual machine that is used by all
+    /// custom languages.
     /// </summary>
     public enum EOperation
     {
+        Nop,
+
+        // instances
+        //New,
+        //Delete,
+        HasType,
+        //Exists,
+        GarbageCollect,
+
+        // arithmetic
         Plus,
         Minus,
         Multiply,
         Divide,
+        Modulo,
 
+        // variables
         Store,
         Has,
         Retrieve,
+        Assign,
+        GetPath,
 
+        // flow control
         Suspend,
         Resume,
         Replace,
         
-        Print,
+        // output
         Assert,
-        WriteLine,
         Write,
+        WriteLine,
 
+        // conditional
         If,
         IfElse,
 
-        ToArray,
-        ToMap,
-        ToSet,
-        ToPair,
-
-        Expand,
+        // stack
+        StackToList,
+        ListToStack,
+        Depth,
         Dup,
         Clear,
         Swap,
         Break,
+        Rot,
+        Roll,
+        RotN,
+        RollN,
+        Pick,
+        Over,
+
+        // serialisation
+        Freeze,
+        Thaw,
+        FreezeText,
+        ThawText,
+        FreezeYaml,
+        ThawYaml,
+
+        // logical
         Not,
         Equiv,
         LogicalAnd,
         LogicalOr,
         LogicalXor,
+        Less,
+        Greater,
+        GreaterOrEquiv,
+        LessOrEquiv,
+        NotEquiv,
+
+        // containers
+        Expand,
+        ToArray,
+        ToMap,
+        ToSet,
+        ToPair,
         Size,
         GetBack,
         PushBack,
@@ -49,20 +94,23 @@
         Remove,
         Insert,
         At,
+
+        // debugging
         DebugPrintDataStack,
         DebugPrintContextStack,
         DebugPrint,
         DebugPrintContinuation,
-        Depth,
+        DebugSetLevel,
+
         SetFloatPrecision,
-        Assign,
+
         Self,
-        NotEquiv,
-        Less,
-        Greater,
-        GreaterOrEquiv,
-        LessOrEquiv,
-        GetProperty,
-        GetMember
+
+        // accessors
+        GetMember,
+        SetMember,
+        SetMemberValue,
+        ForEachIn,
+        ForLoop,
     }
 }

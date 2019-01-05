@@ -13,10 +13,9 @@ namespace Diver.BuiltinTypes
         {
             reg.Register(new ClassBuilder<string>(reg)
                 .Methods
-                    .Add<int,int,string>("Substring", (s,n,m) => reg.Get<string>(s).Substring(reg.Get<int>(n), reg.Get<int>(m)))
-                    .Add<int,string>("Substring1", (s,n) => reg.Get<string>(s).Substring(reg.Get<int>(n)))
+                    .Add<int,int,string>("Substring", (s,n,m) => s.Substring(n,m))
+                    .Add<int,string>("Substring1", (s,n) => s.Substring(n))
                 .Class);
         }
-
     }
 }
