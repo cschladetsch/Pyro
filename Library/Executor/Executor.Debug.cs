@@ -70,7 +70,7 @@ namespace Diver.Exec
             WriteLine(str);
         }
 
-        private void WriteDataStack(StringBuilder str, int max = 4)
+        public void WriteDataStack(StringBuilder str, int max = 4)
         {
             str.AppendLine("Data:");
             var data = _data.ToArray();
