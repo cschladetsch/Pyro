@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LanguageCommon">
+      <HintPath>..\..\Bin\Release\LanguageCommon.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -80,6 +83,14 @@
     <ProjectReference Include="..\..\Library\Ext\NetworkComms\NetworkComms.Net\NetworkCommsDotNet\NetworkCommsDotNet.csproj">
       <Project>{7db00305-f5ed-4545-9d83-542132c8177e}</Project>
       <Name>NetworkCommsDotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\PiLang\PiLang.csproj">
+      <Project>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</Project>
+      <Name>PiLang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
+      <Project>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</Project>
+      <Name>RhoLang</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Network\Network.csproj">
       <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>

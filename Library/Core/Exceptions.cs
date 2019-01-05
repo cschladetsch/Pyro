@@ -25,71 +25,56 @@ namespace Diver
 
     public class ContextStackEmptyException : Exception
     {
-        public override string ToString()
+        public ContextStackEmptyException() : base("Empty ContextStack")
         {
-            return "Context stack empty";
         }
     }
 
     public class DebugBreakException : Exception
     {
-        public override string ToString()
+        public DebugBreakException() : base("DebugBreak")
         {
-            return "DebugBreak";
         }
     }
 
     public class NullValueException : Exception
     {
-        public override string ToString()
+        public NullValueException() : base("Null value")
         {
-            return "Unexpected Null";
         }
     }
 
     public class AssertionFailedException : Exception
     {
-        public override string ToString()
+        public AssertionFailedException() : base("Assertion failed")
         {
-            return "Assertion Failed";
         }
     }
 
     public class DataStackEmptyException : Exception
     {
-        public override string ToString()
+        public DataStackEmptyException() : base("Empty Stack")
         {
-            return "Empty stack";
         }
     }
 
     public class UnknownIdentifierException : Exception
     {
         public object What;
-
-        public UnknownIdentifierException(object obj)
+        public UnknownIdentifierException(object obj) : base($"Unknown object '{obj}'")
         {
             What = obj;
-        }
-
-        public override string ToString()
-        {
-            return $"Unknown object '{What}'";
         }
     }
 
     public class CannotCompareEnumerationsException : Exception
     {
         public object Left, Right;
-        public CannotCompareEnumerationsException(object o, object o1)
+        public CannotCompareEnumerationsException(object left, object right)
+            : base( $"Cannot enumerate {left.GetType().Name} with {right.GetType().Name}")
         {
-            Left = o;
-            Right = o1;
-        }
-
-        public override string ToString()
-        {
-            return $"Cannot enumerate {Left.GetType().Name} with {Right.GetType().Name}";
+            Left = left;
+            Right = right;
         }
     }
 
@@ -99,19 +84,15 @@ namespace Diver
         {
         }
     }
+
     public class TypeMismatchError : Exception
     {
         public Type Expected, Got;
 
-        public TypeMismatchError(Type expected, Type got) : base()
+        public TypeMismatchError(Type expected, Type got) : base($"Expected {expected}, got {got}")
         {
             Expected = expected;
             Got = got;
-        }
-
-        public override string ToString()
-        {
-            return $"Expected {Expected}, got {Got}";
         }
     }
 }

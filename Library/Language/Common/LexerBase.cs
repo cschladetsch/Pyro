@@ -38,8 +38,12 @@ namespace Diver.Language
             return _lines[slice.LineNumber].Substring(slice.Start, slice.Length);
         }
 
+        // PERF
         protected void CreateLines()
         {
+            if (string.IsNullOrEmpty(_input))
+                return;
+
             var newLine = '\n';
             if (_input[_input.Length - 1] != newLine)
                 _input += newLine;
@@ -52,7 +56,6 @@ namespace Diver.Language
                     _lines.Add(_input.Substring(lineStart, n - lineStart + 1));
                     lineStart = n + 1;
                 }
-
                 ++n;
             }
         }

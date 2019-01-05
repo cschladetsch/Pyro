@@ -46,11 +46,9 @@ namespace Diver.Test
             Time("Exec took ", () => _exec.Continue(_continuation = RhoTranslate(text, trace, st)));
         }
 
-        private void Time(string label, Action action)
+        protected void Time(string label, Action action)
         {
-            var start = DateTime.Now;
-            action();
-            WriteLine($"{label} {(DateTime.Now - start).TotalMilliseconds}ms");
+            WriteLine(Timer.Time("\t" + label, action));
         }
 
         protected Continuation PiTranslate(string text)
@@ -78,35 +76,34 @@ namespace Diver.Test
             return _continuation = trans.Result();
         }
 
-        protected string GetFullScriptPathname(string scriptName)
-        {
-            return Path.Combine(GetScriptsPath(), scriptName);
-        }
-
         protected bool RunScript(string scriptName)
         {
             return RunScriptPathname(GetFullScriptPathname(scriptName));
         }
 
-        // TODO: overkill at the moment
-        //protected ITranslator MakeTranslator(string scriptName)
-        //{
-        //    //new PiTranslator(_reg, text)t;
-        //    object klass = null;
-        //    switch (Path.GetExtension(scriptName))
-        //    {
-        //        case ".pi":
-        //            klass = typeof(PiTranslator);
-        //            break;
-        //        case ".rho":
-        //            klass = typeof(RhoTranslator);
-        //            break;
-        //        case ".tau":
-        //            klass = typeof(TauTranslator);
-        //            break;
-        //    }
-        //    return Activator.CreateInstance(type, _reg, text)
-        //}
+        protected string GetFullScriptPathname(string scriptName)
+        {
+            return Path.Combine(GetScriptsPath(), scriptName);
+        }
+
+        protected TranslatorCommon MakeTranslator(string scriptName)
+        {
+            Type klass = null;
+            switch (Path.GetExtension(scriptName))
+            {
+                case ".pi":
+                    klass = typeof(PiTranslator);
+                    break;
+                case ".rho":
+                    klass = typeof(RhoTranslator);
+                    break;
+                //case ".tau":
+                //    klass = typeof(TauTranslator);
+                //    break;
+            }
+
+            return Activator.CreateInstance(klass, _reg) as TranslatorCommon;
+        }
 
         protected bool RunScriptPathname(string filePath)
         {
@@ -116,14 +113,12 @@ namespace Diver.Test
                 WriteLine($"Running {fileName}");
                 _exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
-                var trans = new PiTranslator(_reg);
+                var trans = MakeTranslator(filePath);
                 trans.Translate(text);
-                if (Verbose)
-                    WriteLine($"Translator for {filePath}: {trans}");
                 if (trans.Failed)
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                _exec.Continue(trans.Result());
+                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result()));
             }
             catch (Exception e)
             {
@@ -173,20 +168,20 @@ namespace Diver.Test
 
         protected void WriteLine(string fmt, params object[] args)
         {
-            string text = fmt;
+            var text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);
-            //System.Diagnostics.Trace.WriteLine(text);
             TestContext.Out.WriteLine(text);
+            //System.Diagnostics.Trace.WriteLine(text);
             //Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)
         {
             var lex = new PiLexer(input);
-            Assert.IsTrue(lex.Process());
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
+            Assert.IsTrue(lex.Process());
             return lex;
         }
 
@@ -235,6 +230,11 @@ namespace Diver.Test
             }
 
             return false;
+        }
+
+        protected void TestScript(string scriptName)
+        {
+            Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
         }
     }
 }

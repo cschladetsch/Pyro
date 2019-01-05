@@ -20,7 +20,7 @@ fun infinite_mutual_recurse()
     assert(foo(bar, 0) == count)    
 
 fun embed_pi()
-    a = { 1 2 + }       // a is a coroutinr
+    a = { 1 2 + }       // a is a coroutine
     assert(a() == 3)    // invoke it with (), which is like a subroutine call. invoke with !() to replace current context instead
     fun spam(x,y)
         x*y
