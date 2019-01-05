@@ -17,7 +17,6 @@ namespace Console
     class Program
     {
         public const int ListenPort = 9999;
-        private static bool _cancelled;
         private static Program _self;
         
         static void Main(string[] args)
@@ -44,7 +43,6 @@ namespace Console
         {
             // don't cancel immediately; let the app have a chance to close down gracefully
             e.Cancel = true;
-            _cancelled = true;
             _self.Shutdown();
         }
 
@@ -91,6 +89,7 @@ namespace Console
             if (_serverThread.IsAlive)
                 _serverThread.Join(TimeSpan.FromSeconds(2));
             Error("Done");
+            Con.ForegroundColor = ConsoleColor.White;
             Environment.Exit(0);
         }
 

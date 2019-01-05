@@ -17,6 +17,11 @@ namespace Diver.Language
 
         public override bool Translate(string input, EStructure st = EStructure.Program)
         {
+            _continuation = new Continuation(new List<object>());
+
+            if (string.IsNullOrEmpty(input))
+                return true;
+
             _lexer = new PiLexer(input);
             
             if (!_lexer.Process())
@@ -25,8 +30,6 @@ namespace Diver.Language
             _parser = new PiParser(_lexer);
             if (!Parser.Process(_lexer, EStructure.Program))
                 return Fail($"ParserError: {Parser.Error}");
-
-            _continuation = new Continuation(new List<object>());
 
             return TranslateNode(Parser.Root, _continuation.Code);
         }
