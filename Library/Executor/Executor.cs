@@ -162,7 +162,10 @@ namespace Diver.Exec
             {
                 var item = Resolve(next);
                 if (item == null)
+                {
+                    item = Resolve(next);
                     throw new UnknownIdentifierException(next);
+                }
                 _data.Push(item);
             }
         }

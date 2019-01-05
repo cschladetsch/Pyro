@@ -18,7 +18,7 @@ assert(c == 1 + 2 + 3)
             
         }
 
-        [Test]
+        //[Test]
         public void TestForEachLoop()
         {
             RhoRun(@"

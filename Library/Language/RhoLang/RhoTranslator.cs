@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
@@ -326,7 +327,14 @@ namespace Diver.Language
 
         private void TranslateList(RhoAstNode node)
         {
-            Append(node.Children);
+            PushNew();
+            foreach (var ch in node.Children)
+            {
+                TranslateNode(ch);
+            }
+
+            var top = Pop();
+            Append(top.Code);
         }
 
         private void TranslateBlock(RhoAstNode node)

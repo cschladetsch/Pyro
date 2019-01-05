@@ -78,16 +78,33 @@ namespace Diver.Exec
         private void ForEachIn()
         {
             var block = Pop<Continuation>();
-            var obj = RPop() as IEnumerable;
-            if (obj == null)
+            var obj = RPop();
+            var en = obj as IEnumerable;
+            if (en == null)
                 throw new CannotEnumerate(obj);
             var label = Pop<Label>();
             block.SetScopeObject(label.Text, null);
+            foreach (var _ in ForEachInLoop(block, en, label.Text))
+            {
+                //Break();
+                //_context.Pop();
+            }
+        }
+
+        IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)
+        {
+            _context.Push(_current);
             foreach (var a in obj)
             {
-                Context().SetScopeObject(label.Text, a);
-                Continue(block);
+                block.SetScopeObject(label, a);
+                _current = block;
+                _break = false;
+                Execute(block);
+
+                yield return 0;
             }
+
+            _context.Pop();
         }
 
         private void OpNew()
@@ -149,9 +166,22 @@ namespace Diver.Exec
 
         private void Assign()
         {
-            var ident = Pop<Label>();
+            var ident = Pop<Label>().Text;
             var val = RPop();
-            _current.SetScopeObject(ident.Text, val);
+            // first, search context for an object with
+            // matching name and use that
+            foreach (var c in _context)
+            {
+                if (c.HasScopeObject(ident))
+                {
+                    _current.SetScopeObject(ident, val);
+                    return;
+                }
+            }
+
+            // if nothing found in context stack,
+            // make new object in current scope
+            _current.SetScopeObject(ident, val);
         }
 
         private void IfElse()
