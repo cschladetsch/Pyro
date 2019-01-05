@@ -1,9 +1,11 @@
 #!/bin/sh
 
-./runtests || exit
+set -e
+
+./runtests || echo "Tests failed - no commit"
 
 # git add all changes, then make a new commit and push it
-git add * 
+git add --update * 
 git commit -m "$*" 
 git push
 
