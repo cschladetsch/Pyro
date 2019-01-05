@@ -28,6 +28,11 @@ namespace Console
         private Program(string[] args)
         {
             WriteHeader();
+
+            var port = ListenPort;
+            if (args.Length == 1)
+                port = int.Parse(args[0]);
+
             Con.CancelKeyPress += Cancel;
             _registry = new Registry();
             _exec = new Executor(_registry);
@@ -35,8 +40,8 @@ namespace Console
             _rhoTranslator = new RhoTranslator(_registry);
             AddTypes(_registry);
 
-            _serverThread = new Thread(() => _peer = new Peer(_exec, ListenPort));
-            _serverThread.Start();
+            _peerThread = new Thread(() => _peer = new Peer(_exec, port));
+            _peerThread.Start();
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -84,11 +89,12 @@ namespace Console
 
         private void Shutdown()
         {
-            Error("Shutting down...");
+            var color = ConsoleColor.Magenta;
+            Error("Shutting down...", color);
             _peer?.Close();
-            if (_serverThread.IsAlive)
-                _serverThread.Join(TimeSpan.FromSeconds(2));
-            Error("Done");
+            if (_peerThread.IsAlive)
+                _peerThread.Join(TimeSpan.FromSeconds(2));
+            Error("Done", color);
             Con.ForegroundColor = ConsoleColor.White;
             Environment.Exit(0);
         }
@@ -133,9 +139,9 @@ namespace Console
             Con.ForegroundColor = ConsoleColor.White;
         }
 
-        void Error(string text)
+        void Error(string text, ConsoleColor color = ConsoleColor.Red)
         {
-            Con.ForegroundColor = ConsoleColor.Red;
+            Con.ForegroundColor = color;
             Con.WriteLine(text);
         }
 
@@ -188,7 +194,7 @@ namespace Console
         private readonly IRegistry _registry;
         private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
-        private readonly Thread _serverThread;
+        private readonly Thread _peerThread;
         private RhoTranslator _rhoTranslator;
         private Peer _peer;
     }
