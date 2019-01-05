@@ -48,7 +48,7 @@ namespace Diver.Test
 
         protected void Time(string label, Action action)
         {
-            WriteLine(Timer.Time(label, action));
+            WriteLine(Timer.Time("\t" + label, action));
         }
 
         protected Continuation PiTranslate(string text)
@@ -118,7 +118,7 @@ namespace Diver.Test
                 if (trans.Failed)
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script {fileName}", () => _exec.Continue(trans.Result()));
+                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result()));
             }
             catch (Exception e)
             {
