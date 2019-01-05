@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Activities.Expressions;
-using System.Activities.Statements;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 
 namespace Diver.Exec
 {
@@ -84,11 +80,8 @@ namespace Diver.Exec
                 throw new CannotEnumerate(obj);
             var label = Pop<Label>();
             block.SetScopeObject(label.Text, null);
-            foreach (var _ in ForEachInLoop(block, en, label.Text))
-            {
-                //Break();
-                //_context.Pop();
-            }
+
+            foreach (var _ in ForEachInLoop(block, en, label.Text)) { }
         }
 
         IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)
@@ -97,14 +90,13 @@ namespace Diver.Exec
             foreach (var a in obj)
             {
                 block.SetScopeObject(label, a);
+                WriteLine($"{label}={a}");
                 _current = block;
                 _break = false;
                 Execute(block);
-
                 yield return 0;
             }
-
-            _context.Pop();
+            Break();
         }
 
         private void OpNew()
@@ -174,7 +166,7 @@ namespace Diver.Exec
             {
                 if (c.HasScopeObject(ident))
                 {
-                    _current.SetScopeObject(ident, val);
+                    c.SetScopeObject(ident, val);
                     return;
                 }
             }
