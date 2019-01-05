@@ -43,7 +43,14 @@ namespace Diver.Test
         protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             _exec.Clear();
-            _exec.Continue(_continuation = RhoTranslate(text, trace, st));
+            Time("Exec took ", () => _exec.Continue(_continuation = RhoTranslate(text, trace, st)));
+        }
+
+        private void Time(string label, Action action)
+        {
+            var start = DateTime.Now;
+            action();
+            WriteLine($"{label} {(DateTime.Now - start).TotalMilliseconds}ms");
         }
 
         protected Continuation PiTranslate(string text)
@@ -169,9 +176,9 @@ namespace Diver.Test
             string text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);
-            System.Diagnostics.Trace.WriteLine(text);
+            //System.Diagnostics.Trace.WriteLine(text);
             TestContext.Out.WriteLine(text);
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)

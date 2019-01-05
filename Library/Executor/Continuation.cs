@@ -14,6 +14,7 @@ namespace Diver.Exec
         public IList<object> Code => _code;//{ get => _code; set => _code = value; }
         public IDictionary<string, object> Scope => _scope;//{ get => _scope; set => _scope = value; }
         public IList<string> Args => _args;
+        public int Ip => _next;
 
         public Continuation(List<object> code)
         {

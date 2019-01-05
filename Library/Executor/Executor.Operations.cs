@@ -78,24 +78,46 @@ namespace Diver.Exec
             var en = obj as IEnumerable;
             if (en == null)
                 throw new CannotEnumerate(obj);
-            var label = Pop<Label>();
-            block.SetScopeObject(label.Text, null);
-
-            foreach (var _ in ForEachInLoop(block, en, label.Text)) { }
+            var label = Pop<Label>().Text;
+            block.SetScopeObject(label, null);
+            foreach (var _ in ForEachInLoop(block, en, label))
+            {
+            }
         }
+
+        private bool _leaveForEach;
 
         IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)
         {
+            var next = obj.GetEnumerator();
+            if (!next.MoveNext())
+                yield break;
             _context.Push(_current);
-            foreach (var a in obj)
+            
+            // we need to ensure that when an inner loop ends,
+            // the outer loop doesn't move to next value in the
+            // enumeration.
+            //
+            // this is what _leaveForEach is used for. It's
+            // a bit complicated, sorry.
+            while (true)
             {
-                block.SetScopeObject(label, a);
-                WriteLine($"{label}={a}");
+                var val = next.Current;
+                block.SetScopeObject(label, val);
                 _current = block;
                 _break = false;
                 Execute(block);
-                yield return 0;
+                if (!_leaveForEach && !next.MoveNext())
+                {
+                    _leaveForEach = true;
+                    break;
+                }
+
+                _leaveForEach = false;
+                yield return val;
             }
+
+            _context.Pop();
             Break();
         }
 
