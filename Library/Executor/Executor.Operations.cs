@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Activities.Expressions;
 using System.Activities.Statements;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -36,7 +38,7 @@ namespace Diver.Exec
             _actions[EOperation.Assert] = Assert;
             _actions[EOperation.Equiv] = Equiv;
             _actions[EOperation.NotEquiv] = NotEquiv;
-            _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
+            _actions[EOperation.Not] = () => Push(!RPop<bool>());
             _actions[EOperation.LogicalAnd] = LogicalAnd;
             _actions[EOperation.LogicalOr] = LogicalOr;
             _actions[EOperation.LogicalXor] = LogicalXor;
@@ -64,6 +66,37 @@ namespace Diver.Exec
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
+            _actions[EOperation.ForEachIn] = ForEachIn;
+            _actions[EOperation.ForLoop] = ForLoop;
+        }
+
+        private void ForLoop()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ForEachIn()
+        {
+            var block = Pop<Continuation>();
+            var obj = RPop() as IEnumerable;
+            if (obj == null)
+                throw new CannotEnumerate(obj);
+            var label = Pop<Label>();
+            block.SetScopeObject(label.Text, null);
+            foreach (var a in obj)
+            {
+                Context().SetScopeObject(label.Text, a);
+                Continue(block);
+            }
+        }
+
+        private void OpNew()
+        {
+            var obj = RPop();
+            var @class = ConstRef<IClassBase>(RPop());
+            if (@class == null)
+                throw new Exception($"Couldn't get class from {obj}");
+            Push(_registry.New(@class, DataStack));
         }
 
         private void GetMember()
@@ -71,28 +104,39 @@ namespace Diver.Exec
             var obj = Pop();
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
-
-            var pi = type.GetProperty(member);
-            if (pi != null)
-            {
-                Push(pi.GetValue(obj));
-                return;
-            }
-
             var @class = _registry.GetClass(type);
-            if (@class == null)
-            {
-                var mi = type.GetMethod(member);
-                var numArgs = mi.GetParameters().Length;
-                var args = DataStack.Take(numArgs).ToArray();
-                Push(mi.Invoke(obj, args));
+            if (GetProperty(type, member, obj)) 
                 return;
-            }
+            if (GetMethod(type, member, obj, @class))
+                return;
+            GetCallable(@class, member, obj);
+        }
 
+        private bool GetProperty(Type type, string member, dynamic obj)
+        {
+            var pi = type.GetProperty(member);
+            if (pi == null)
+                return false;
+            Push(pi.GetValue(obj));
+            return true;
+        }
+
+        private bool GetMethod(Type type, string member, dynamic obj, IClassBase @class)
+        {
+            if (@class != null)
+                return false;
+            var mi = type.GetMethod(member);
+            var numArgs = mi.GetParameters().Length;
+            var args = DataStack.Take(numArgs).ToArray();
+            Push(mi.Invoke(obj, args));
+            return true;
+        }
+
+        private void GetCallable(IClassBase @class, string member, dynamic obj)
+        {
             var callable = @class.GetCallable(member);
             if (callable == null)
                 throw new MemberNotFoundException(obj.GetType(), member);
-
             Push(obj);
             Push(callable);
         }
@@ -145,12 +189,18 @@ namespace Diver.Exec
             Push(a && b);
         }
 
+        private void Divide()
+        {
+            var a = RPop();
+            var b = RPop();
+            Push(b / a);
+        }
+
         private void LogicalOr()
         {
             var a = RPop();
             var b = RPop();
-            var c = a || b;
-            Push(c);
+            Push(a || b);
         }
 
         private void DebugPrintContextStack()
@@ -174,9 +224,7 @@ namespace Diver.Exec
             var count = RPop<int>();
             var set = new HashSet<object>();
             while (count-- > 0)
-            {
                 set.Add(RPop());
-            }
 
             Push(set);
         }
@@ -276,9 +324,7 @@ namespace Diver.Exec
             else
             {
                 foreach (var obj in cont)
-                {
                     Push(obj);
-                }
             }
 
             // finally, push size of container
@@ -351,13 +397,6 @@ namespace Diver.Exec
 
             list.Reverse();
             Push(list);
-        }
-
-        private void Divide()
-        {
-            var a = RPop();
-            var b = RPop();
-            Push(b / a);
         }
 
         private void Equiv()

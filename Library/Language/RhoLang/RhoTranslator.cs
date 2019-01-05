@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
+using NUnit.Framework;
 
 namespace Diver.Language
 {
@@ -12,21 +14,27 @@ namespace Diver.Language
         {
         }
 
+        void ShowTime(string name, Action action)
+        {
+            var start = DateTime.Now;
+            action();
+            WriteLine($"{name} took {(DateTime.Now - start).TotalMilliseconds}");
+        }
+
         public override bool Translate(string text, EStructure st = EStructure.Program)
         {
             _lexer = new RhoLexer(text);
-            _lexer.Process();
+            ShowTime("Lexer", () => _lexer.Process());
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
             _parser = new RhoParser(_lexer, _reg, st);
-            _parser.Process();
+            ShowTime("Parser", () => _parser.Process());
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
-            WriteLine(_parser.PrintTree());
-
-            TranslateNode(_parser.Result);
+            //ShowTime("PrintTree", () => WriteLine(_parser.PrintTree()));
+            ShowTime("Translator", () => TranslateNode(_parser.Result));
 
             return !Failed;
         }
@@ -98,7 +106,7 @@ namespace Diver.Language
 
                 case ERhoToken.Assign:
                     TranslateNode(node.GetChild(0));
-                    AddQuoted(node.GetChild(1));
+                    AppendQuoted(node.GetChild(1));
                     Append(EOperation.Assign);
                     return;
 
@@ -194,12 +202,15 @@ namespace Diver.Language
                         TranslateNode(ch);
                     Append(EOperation.Resume);
                     return;
+                case ERhoToken.For:
+                    TranslateFor(node);
+                    return;
             }
 
-            Fail($"Unsupported node {node}");
+            Fail($"Unsupported Token {node.Token.Type}");
         }
 
-        private void AddQuoted(RhoAstNode node)
+        private void AppendQuoted(RhoAstNode node)
         {
             Append(new Label(node.Text, true));
         }
@@ -259,7 +270,7 @@ namespace Diver.Language
                     // like a binary op, but argument order is reversed
                     //TranslateNode(node.GetChild(1));
                     TranslateNode(node.GetChild(0));
-                    AddQuoted(node.GetChild(1));
+                    AppendQuoted(node.GetChild(1));
                     Append(EOperation.Store);
                     return;
 
@@ -295,8 +306,7 @@ namespace Diver.Language
                     return;
 
                 case ERhoAst.List:
-                    //KAI_NOT_IMPLEMENTED();
-                    throw new NotImplementedException();
+                    TranslateList(node);
                     return;
 
                 case ERhoAst.For:
@@ -312,6 +322,11 @@ namespace Diver.Language
             }
 
             Fail($"Unsupported node {node}");
+        }
+
+        private void TranslateList(RhoAstNode node)
+        {
+            Append(node.Children);
         }
 
         private void TranslateBlock(RhoAstNode node)
@@ -361,8 +376,7 @@ namespace Diver.Language
             var ch = node.Children;
             var subject = ch[0];
             var member = ch[1];
-            var ident = new Label(member.Text, true);
-            Append(ident);
+            AppendQuoted(member);
             TranslateNode(subject);
             Append(EOperation.GetMember);
         }
@@ -385,9 +399,25 @@ namespace Diver.Language
             Append(EOperation.Suspend);
         }
 
-        static void TranslateFor(RhoAstNode node)
+        private void TranslateFor(RhoAstNode node)
         {
-            throw new NotImplementedException("for loops");
+            var ch = node.Children;
+            if (ch.Count == 3)
+            {
+                // for (a in b) ...
+                AppendQuoted(ch[0]);
+                TranslateNode(ch[1]);
+                TranslateNode(ch[2]);
+                Append(EOperation.ForEachIn);
+                return;
+            }
+
+            // for (a = 0; a < 10; ++a) ...
+            TranslateNode(ch[0]);
+            TranslateNode(ch[1]);
+            TranslateNode(ch[2]);
+            TranslateNode(ch[3]);
+            Append(EOperation.ForLoop);
         }
 
         static void TranslateWhile(RhoAstNode node)
@@ -397,7 +427,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return $"=== RhoTranslator:\nInput: {_lexer.Input}Lexer: {_lexer}\nParser: {_parser}\nCode: {Result().ToString()}";
+            return $"=== RhoTranslator:\n--- Input: {_lexer.Input}--- Lexer: {_lexer}\n--- Parser: {_parser}\n--- Code: {Result().ToString()}";
         }
     }
 }

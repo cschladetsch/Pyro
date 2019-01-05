@@ -8,7 +8,7 @@ namespace Diver.Language
     {
         public RhoToken()
         {
-            _type = ERhoToken.None;
+            _type = ERhoToken.Nop;
         }
 
         public RhoToken(ERhoToken type, Slice slice)

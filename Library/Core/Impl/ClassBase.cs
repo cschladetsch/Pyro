@@ -23,24 +23,29 @@ namespace Diver.Impl
             _callables[name] = callable;
         }
 
-        public virtual void Create(IRegistry reg, Id id, out IRefBase refBase)
+        public virtual void NewRef(Id id, out IRefBase refBase)
         {
-            refBase = new RefBase(reg, this, id);
+            refBase = new RefBase(_registry, this, id);
         }
 
-        public IRefBase Create(IRegistry reg, Id id, object value)
+        public IRefBase Create(Id id, object value)
         {
-            return new RefBase(reg, this, id, value);
+            return new RefBase(_registry, this, id, value);
         }
 
-        public IConstRefBase CreateConst(IRegistry reg, Id id)
+        public IConstRefBase CreateConst(Id id)
         {
-            return new ConstRefBase(reg, this, id);
+            return new ConstRefBase(_registry, this, id);
         }
 
-        public IConstRefBase CreateConst(IRegistry reg, Id id, object value)
+        public IConstRefBase CreateConst(Id id, object value)
         {
-            return new ConstRefBase(reg, this, id, value);
+            return new ConstRefBase(_registry, this, id, value);
+        }
+
+        public virtual object NewInstance(Stack<object> dataStack)
+        {
+            throw new NotImplementedException();
         }
 
         private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();

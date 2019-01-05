@@ -11,6 +11,7 @@ namespace Diver.Exec
         public Stack<object> DataStack => _data;
         public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
+        public int NumOps => _numOps;
 
         public Executor(IRegistry reg)
         {
@@ -34,11 +35,12 @@ namespace Diver.Exec
             _context = new Stack<Continuation>();
             _break = false;
             _current = null;
+            _numOps = 0;
         }
 
         void Assert()
         {
-            WriteLine("--- Asserting ---");
+            //WriteLine("--- Asserting ---");
             if (!Pop<bool>())
                 throw new AssertionFailedException();
         }
@@ -144,6 +146,7 @@ namespace Diver.Exec
 
         private void Perform(object next)
         {
+            ++_numOps;
             if (next == null)
                 throw new NullValueException();
 
@@ -176,12 +179,12 @@ namespace Diver.Exec
         private object Resolve(IdentBase identBase)
         {
             if (identBase is Label label)
-                return ResolveContextually(label);
+                return _registry.GetClass(label.Text) ?? ResolveContextually(label);
 
             if (identBase is Pathname path)
                 return ResolvePath(path);
 
-            throw new NotImplementedException($"Cannot resolve {identBase}");
+            throw new CannotResolve($"{identBase}");
         }
 
         private object ResolvePath(Pathname path)
@@ -223,11 +226,19 @@ namespace Diver.Exec
         /// </summary>
         private void Resume()
         {
-            var next = Pop();
-            if (next is ICallable call)
-                call.Invoke(_registry, DataStack);
-            else
-                _context.Push(next);
+            var next = RPop();
+            switch (next)
+            {
+                case ICallable call:
+                    call.Invoke(_registry, DataStack);
+                    break;
+                case IClassBase @class:
+                    Push(@class.NewInstance(DataStack));
+                    break;
+                default:
+                    _context.Push(next);
+                    break;
+            }
             Break();
         }
 
@@ -275,5 +286,6 @@ namespace Diver.Exec
         private Stack<Continuation> _context = new Stack<Continuation>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry;
+        private int _numOps;
     }
 }

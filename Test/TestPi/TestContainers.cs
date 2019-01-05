@@ -10,20 +10,20 @@ namespace Diver.Test
         public void TestMap()
         {
             var makeMap = "1 2 \"foo\" \"bar\" 2 tomap";
-            Run(makeMap);
+            PiRun(makeMap);
 
             TestMapContents();
             AssertEmpty();
 
             // expand map to the stack
-            Run(makeMap + " expand");
+            PiRun(makeMap + " expand");
             _exec.WriteDataStack(10);
             AssertPop(2);
             Assert.AreEqual(4, DataStack.Count);
             DataStack.Clear();
 
             // remake map from stack contents
-            Run(makeMap + " expand tomap");
+            PiRun(makeMap + " expand tomap");
             TestMapContents();
             AssertEmpty();
         }
@@ -40,18 +40,18 @@ namespace Diver.Test
         [Test]
         public void TestArray()
         {
-            Run("[] [] == assert");
+            PiRun("[] [] == assert");
 
-            Run("[1 2 3]");
+            PiRun("[1 2 3]");
             TestListContents();
 
-            Run("1 2 3 3 tolist");
+            PiRun("1 2 3 3 tolist");
             TestListContents();
 
-            Run("1 2 3 3 tolist expand tolist");
+            PiRun("1 2 3 3 tolist expand tolist");
             TestListContents();
 
-            //Assert.Throws<>(() =? Run("["));
+            //Assert.Throws<>(() =? PiRun("["));
         }
 
         private void TestListContents()

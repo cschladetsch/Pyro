@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace Diver.Impl
 {
+    /// <summary>
+    /// Common for all instance types
+    /// </summary>
     public class StructBase : IStructBase
     {
         public Type InstanceType { get; }
@@ -75,7 +78,7 @@ namespace Diver.Impl
         private readonly Version _version;
         private readonly Type _type;
         private readonly string _typeName;
-        private readonly IRegistry _registry;
+        protected readonly IRegistry _registry;
 
         private readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
         private readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();

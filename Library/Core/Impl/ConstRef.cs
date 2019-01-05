@@ -1,6 +1,7 @@
 ﻿namespace Diver.Impl
 {
-    internal class ConstRef<T> : ConstRefBase, IConstRef<T>
+    internal class ConstRef<T>
+        : ConstRefBase, IConstRef<T>
     {
         public T Value => _registry.GetRef<T>(_id).Value;
 
