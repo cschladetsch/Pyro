@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Diver;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
-
 using Con = System.Console;
 
 namespace Console
@@ -21,6 +23,8 @@ namespace Console
 
         static void Main(string[] args)
         {
+            Con.WriteLine("Console V0.1a\n");
+
             new Program(args).Repl();
         }
 
@@ -34,7 +38,7 @@ namespace Console
                 }
                 catch (Exception e)
                 {
-                    Error($"Exception: {e.Message})");
+                    Error($"{e.Message}");
                 }
             }
         }
@@ -45,7 +49,7 @@ namespace Console
             var input = Con.ReadLine();
             if (!_piTranslator.Translate(input))
             {
-                Error($"Error: {_piTranslator.Error}");
+                Error($"{_piTranslator.Error}");
                 return;
             }
 
@@ -68,10 +72,43 @@ namespace Console
 
         private void WriteDataStack()
         {
-            var str = new StringBuilder();
+            WriteDataStackContents();
+        }
+
+        public void WriteDataStackContents(int max = 20)
+        {
             Con.ForegroundColor = ConsoleColor.Yellow;
-            _exec.WriteDataStack(str, 20);
+            var str = new StringBuilder();
+            var data = _exec.DataStack.ToArray();
+            max = Math.Min(data.Length, max);
+            for (var n = max - 1; n >= 0; --n)
+            {
+                var obj = data[n];
+                str.AppendLine($"{n}: {Print(obj)}");
+            }
             Con.WriteLine(str.ToString());
+        }
+
+        private string Print(object obj)
+        {
+            switch (obj)
+            {
+                case string str:
+                    return $"\"{str}\"";
+                case List<object> list:
+                    var sb = new StringBuilder();
+                    sb.Append('[');
+                    var comma = "";
+                    foreach (var elem in list)
+                    {
+                        sb.Append(comma + Print(elem));
+                        comma = ", ";
+                    }
+                    sb.Append(']');
+                    return sb.ToString();
+            }
+
+            return obj.ToString();
         }
 
         private string MakePrompt()
