@@ -134,8 +134,11 @@ namespace Diver.Exec
                 {
                     if (!string.IsNullOrEmpty(SourceFilename))
                         WriteLine($"While executing {SourceFilename}:");
-                    WriteLine(DebugWrite());
-                    WriteLine($"Exception: {e}");
+                    if (TraceLevel > 10)
+                    {
+                        WriteLine(DebugWrite());
+                        WriteLine($"Exception: {e}");
+                    }
                     throw;
                 }
 

@@ -57,6 +57,10 @@ namespace Diver
 
     public class DataStackEmptyException : Exception
     {
+        public DataStackEmptyException() : base("Empty Stack")
+        {
+        }
+
         public override string ToString()
         {
             return "Empty stack";
