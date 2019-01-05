@@ -1,31 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 using System.Text;
+
 using Diver;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
+
 using Con = System.Console;
 
 namespace Console
 {
     class Program
     {
+        static void Main(string[] args)
+        {
+            new Program(args).Repl();
+        }
+
+        string GetVersion()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return fvi.FileVersion;
+        }
+
         private Program(string[] args)
         {
+            WriteHeader();
+
             _registry = new Registry();
             _exec = new Executor(_registry);
             _piTranslator = new PiTranslator(_registry);
             _rhoTranslator = new RhoTranslator(_registry);
+            AddTypes(_registry);
         }
 
-        static void Main(string[] args)
+        private void WriteHeader()
         {
-            Con.WriteLine("Console V0.1a\n");
+            Con.ForegroundColor = ConsoleColor.DarkGray;
+            Con.WriteLine($"Console {GetVersion()}\n");
+        }
 
-            new Program(args).Repl();
+        private void AddTypes(IRegistry registry)
+        {
         }
 
         private void Repl()
@@ -113,7 +132,7 @@ namespace Console
 
         private string MakePrompt()
         {
-            return "> ";
+            return "pi> ";
         }
 
         private readonly IRegistry _registry;
