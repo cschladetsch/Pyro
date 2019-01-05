@@ -7,34 +7,45 @@ using Diver;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
-
+using System.Threading;
+using Flow.Impl;
+using NetworkCommsDotNet;
 using Con = System.Console;
 
 namespace Console
 {
     class Program
     {
+        public const int ListenPort = 9999;
+        private static bool _cancelled;
+        private static Program _self;
+        
         static void Main(string[] args)
         {
-            new Program(args).Repl();
-        }
-
-        string GetVersion()
-        {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.FileVersion;
+            _self = new Program(args);
+            _self.Repl();
         }
 
         private Program(string[] args)
         {
             WriteHeader();
-
+            Con.CancelKeyPress += Cancel;
             _registry = new Registry();
             _exec = new Executor(_registry);
             _piTranslator = new PiTranslator(_registry);
             _rhoTranslator = new RhoTranslator(_registry);
             AddTypes(_registry);
+
+            _serverThread = new Thread(() => _peer = new Peer(_exec, ListenPort));
+            _serverThread.Start();
+        }
+
+        private static void Cancel(object sender, ConsoleCancelEventArgs e)
+        {
+            // don't cancel immediately; let the app have a chance to close down gracefully
+            e.Cancel = true;
+            _cancelled = true;
+            _self.Shutdown();
         }
 
         private void WriteHeader()
@@ -43,8 +54,19 @@ namespace Console
             Con.WriteLine($"Console {GetVersion()}\n");
         }
 
+        private static string GetVersion()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return fvi.FileVersion;
+        }
+
         private void AddTypes(IRegistry registry)
         {
+            registry.Register(new ClassBuilder<Program>(registry)
+                .Methods
+                    .Add<string, bool>("Execute", (q, s) => q.Execute(s))
+                .Class);
         }
 
         private void Repl()
@@ -62,18 +84,47 @@ namespace Console
             }
         }
 
+        private void Shutdown()
+        {
+            Error("Shutting down...");
+            _peer?.Close();
+            if (_serverThread.IsAlive)
+                _serverThread.Join(TimeSpan.FromSeconds(2));
+            Error("Done");
+            Environment.Exit(0);
+        }
+
         private void Process()
         {
             WritePrompt();
             var input = Con.ReadLine();
-            if (!_piTranslator.Translate(input))
-            {
-                Error($"{_piTranslator.Error}");
+            if (!Execute(input))
                 return;
+            WriteDataStack();
+        }
+
+        public bool Execute(string input)
+        {
+            if (input == null)
+                return false;
+
+            try
+            {
+                if (!_piTranslator.Translate(input))
+                {
+                    Error($"{_piTranslator.Error}");
+                    return false;
+                }
+
+                _exec.Continue(_piTranslator.Result());
+                return true;
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
             }
 
-            _exec.Continue(_piTranslator.Result());
-            WriteDataStack();
+            return false;
         }
 
         private void WritePrompt()
@@ -138,6 +189,8 @@ namespace Console
         private readonly IRegistry _registry;
         private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
+        private readonly Thread _serverThread;
         private RhoTranslator _rhoTranslator;
+        private Peer _peer;
     }
 }
