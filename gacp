@@ -1,5 +1,7 @@
 #!/bin/sh
 
+./runtests || exit
+
 # git add all changes, then make a new commit and push it
 git add * 
 git commit -m "$*" 
