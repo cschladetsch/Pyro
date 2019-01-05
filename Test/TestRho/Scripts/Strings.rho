@@ -1,0 +1,8 @@
+﻿// test strings
+
+assert("foo" + "bar" == "foobar")
+s = "spam"
+assert(s.Length == 4)
+assert(s.Substring(0, 2) == "sp")
+assert(s.Substring(2, 2) == "am")
+assert(s.Substring1(2) == "am")

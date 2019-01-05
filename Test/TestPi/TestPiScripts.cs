@@ -16,8 +16,8 @@ namespace Diver.Test
             TestScript("Array.pi");
             TestScript("Conditionals.pi");
             TestScript("Continuations.pi");
+            TestScript("Strings.pi");
             //TestScript("Relational.pi");
-
         }
 
         private void TestScript(string scriptName)

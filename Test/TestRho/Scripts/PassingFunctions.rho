@@ -1,13 +1,13 @@
 ﻿// test creating and passing, and calling, functions
 
 fun plus(a, b)
-    a + b
+	a + b
 
 fun mul(a, b)
-    a * b
+	a * b
 
 fun compound(f0, f1, a, b)
-    f0(a, f1(a, b))
+	f0(a, f1(a, b))
 
 r = compound(plus, mul, 2, 3)
 writeln(r)

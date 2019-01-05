@@ -1,7 +1,23 @@
 ﻿// test nested functions and name lookup
-
 fun foo(a)
-    fun bar(b)
-        a + b
-    bar(2)
+	fun bar(b)
+		a + b
+	bar(2)
 assert(foo(3) == 5)
+
+// note: we can over-ride variables/functions
+fun foo()
+	1
+fun bar(f, n)
+	n + f()
+assert(bar(foo, 1) == 2)
+assert(bar(foo, 2) == 3)
+
+// multiple nested ffunctions
+fun foo()
+	fun bar(f, num)
+		1 + f(num)
+	fun spam(num)
+		num + 2
+	bar(spam, 3)
+assert(foo() == 6)
