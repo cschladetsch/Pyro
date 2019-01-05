@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
+using NUnit.Framework;
 
 namespace Diver.Language
 {
@@ -104,7 +106,7 @@ namespace Diver.Language
 
                 case ERhoToken.Assign:
                     TranslateNode(node.GetChild(0));
-                    AddQuoted(node.GetChild(1));
+                    AppendQuoted(node.GetChild(1));
                     Append(EOperation.Assign);
                     return;
 
@@ -200,12 +202,15 @@ namespace Diver.Language
                         TranslateNode(ch);
                     Append(EOperation.Resume);
                     return;
+                case ERhoToken.For:
+                    TranslateFor(node);
+                    return;
             }
 
-            Fail($"Unsupported node {node}");
+            Fail($"Unsupported Token {node.Token.Type}");
         }
 
-        private void AddQuoted(RhoAstNode node)
+        private void AppendQuoted(RhoAstNode node)
         {
             Append(new Label(node.Text, true));
         }
@@ -265,7 +270,7 @@ namespace Diver.Language
                     // like a binary op, but argument order is reversed
                     //TranslateNode(node.GetChild(1));
                     TranslateNode(node.GetChild(0));
-                    AddQuoted(node.GetChild(1));
+                    AppendQuoted(node.GetChild(1));
                     Append(EOperation.Store);
                     return;
 
@@ -301,8 +306,7 @@ namespace Diver.Language
                     return;
 
                 case ERhoAst.List:
-                    //KAI_NOT_IMPLEMENTED();
-                    throw new NotImplementedException();
+                    TranslateList(node);
                     return;
 
                 case ERhoAst.For:
@@ -318,6 +322,11 @@ namespace Diver.Language
             }
 
             Fail($"Unsupported node {node}");
+        }
+
+        private void TranslateList(RhoAstNode node)
+        {
+            Append(node.Children);
         }
 
         private void TranslateBlock(RhoAstNode node)
@@ -367,8 +376,7 @@ namespace Diver.Language
             var ch = node.Children;
             var subject = ch[0];
             var member = ch[1];
-            var ident = new Label(member.Text, true);
-            Append(ident);
+            AppendQuoted(member);
             TranslateNode(subject);
             Append(EOperation.GetMember);
         }
@@ -391,9 +399,25 @@ namespace Diver.Language
             Append(EOperation.Suspend);
         }
 
-        static void TranslateFor(RhoAstNode node)
+        private void TranslateFor(RhoAstNode node)
         {
-            throw new NotImplementedException("for loops");
+            var ch = node.Children;
+            if (ch.Count == 3)
+            {
+                // for (a in b) ...
+                AppendQuoted(ch[0]);
+                TranslateNode(ch[1]);
+                TranslateNode(ch[2]);
+                Append(EOperation.ForEachIn);
+                return;
+            }
+
+            // for (a = 0; a < 10; ++a) ...
+            TranslateNode(ch[0]);
+            TranslateNode(ch[1]);
+            TranslateNode(ch[2]);
+            TranslateNode(ch[3]);
+            Append(EOperation.ForLoop);
         }
 
         static void TranslateWhile(RhoAstNode node)

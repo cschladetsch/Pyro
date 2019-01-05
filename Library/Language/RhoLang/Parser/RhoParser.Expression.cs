@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using System;
+
+namespace Diver.Language
 {
     /// <summary>
     /// Functions that deal only with parsing expressions.
@@ -155,25 +157,25 @@
                 return Push(exp);
             }
 
-            if (Try(ERhoToken.OpenSquareBracket))
+            if (TryConsume(ERhoToken.OpenSquareBracket))
             {
                 var list = NewNode(ERhoAst.List);
-                do
+                while (true)
                 {
-                    Consume();
-                    if (Try(ERhoToken.CloseSquareBracket))
+                    if (TryConsume(ERhoToken.CloseSquareBracket))
                         break;
                     if (Expression())
                         list.Add(Pop());
                     else
-                    {
-                        Fail("Badly formed array");
-                        return false;
-                    }
+                        return FailWith("Expressions required within array");
+                    if (!TryConsume(ERhoToken.Comma))
+                        break;
                 }
-                while (Try(ERhoToken.Comma));
 
                 Expect(ERhoToken.CloseSquareBracket);
+                if (Failed)
+                    return FailWith("Closing bracked expected for array");
+
                 return Push(list);
             }
 

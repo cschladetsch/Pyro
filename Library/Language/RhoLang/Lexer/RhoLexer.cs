@@ -30,6 +30,7 @@ namespace Diver.Language
             _keyWords.Add("writeln", ERhoToken.WriteLine);
             _keyWords.Add("write", ERhoToken.Write);
             _keyWords.Add("new", ERhoToken.New);
+            _keyWords.Add("in", ERhoToken.In);
         }
 
         protected override bool NextToken()
