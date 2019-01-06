@@ -20,11 +20,6 @@ namespace Diver.Test
             //TestScript("Relational.pi");
         }
 
-        private void TestScript(string scriptName)
-        {
-            Assert.IsTrue(RunScript(scriptName));
-        }
-
         //[Test]
         public void RunAllScripts()
         {

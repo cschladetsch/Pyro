@@ -112,13 +112,41 @@ namespace Console
             Environment.Exit(0);
         }
 
+        private bool IsPi => _translator == _piTranslator;
+        private bool IsRho => _translator == _rhoTranslator;
+
         private void Process()
         {
             WritePrompt();
-            var input = Con.ReadLine();
-            if (!Execute(input))
+            if (!Execute(GetInput()))
                 return;
             WriteDataStack();
+        }
+
+        private string GetInput()
+        {
+            var input = "";
+            //if (IsRho)
+            //{
+            //    while (true)
+            //    {
+            //        var ch = Con.ReadKey(true);
+            //        var ctrl = (ch.Modifiers & ConsoleModifiers.Control) != 0;
+            //        if (ch.Key == ConsoleKey.Enter)
+            //        {
+            //            Con.WriteLine();
+            //            if (ctrl)
+            //                break;
+            //        }
+
+            //        input += ch.KeyChar;
+            //        Con.Write(ch.KeyChar);
+            //    }
+            //}
+            //else
+                input = Con.ReadLine();
+
+            return input;
         }
 
         public bool Execute(string input)
