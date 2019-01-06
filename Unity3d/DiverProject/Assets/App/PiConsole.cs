@@ -3,6 +3,7 @@ using Diver;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
+using Diver.Network;
 using UIWidgets;
 using UnityEngine;
 
@@ -11,16 +12,21 @@ namespace App
     public class PiConsole : MonoBehaviour
     {
         public TreeView TreeView;
+        public int ListenPort;
+
         protected internal ObservableList<ListNode<TreeViewItem>> _treeViewDataSource;
         private PiTranslator _pi;
         private IRegistry _registry;
         private Executor _exec;
+        private Peer _peer;
 
         void Awake()
         {
             _registry = new Registry();
             _pi = new PiTranslator(_registry);
             _exec = new Executor(_registry);
+            _peer = new Peer(ListenPort);
+            _peer.Start();
 
             TreeView.Init();
             _treeViewDataSource = new ObservableList<ListNode<TreeViewItem>>();

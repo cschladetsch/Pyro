@@ -5,6 +5,7 @@ using Diver;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
+using Diver.Network;
 using UIWidgets;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace App
         public TreeView TreeView;
         public TMPro.TMP_InputField PiScript;
         public TMPro.TMP_InputField RhoScript;
+        public int ListenPort;
 
         protected internal ObservableList<ListNode<TreeViewItem>> _treeViewDataSource;
 
@@ -24,6 +26,8 @@ namespace App
             _rho = new RhoTranslator(_reg);
             _pi = new PiTranslator(_reg);
             _exec = new Executor(_reg);
+            _peer = new Peer(ListenPort);
+            _peer.Start();
 
             SetupStackView();
         }
@@ -98,5 +102,6 @@ namespace App
         private PiTranslator _pi;
         private IRegistry _reg;
         private Executor _exec;
+        private Peer _peer;
     }
 }
