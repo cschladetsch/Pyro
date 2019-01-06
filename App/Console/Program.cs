@@ -6,8 +6,8 @@ using System.Text;
 
 using Diver;
 using Diver.Exec;
-using Diver.Impl;
 using Diver.Language;
+using Diver.Network;
 using Con = System.Console;
 
 namespace Console
@@ -32,7 +32,7 @@ namespace Console
                 port = int.Parse(args[0]);
 
             Con.CancelKeyPress += Cancel;
-            _registry = new Registry();
+            _registry = new Diver.Impl.Registry();
             _exec = new Executor(_registry);
             _piTranslator = new PiTranslator(_registry);
             _rhoTranslator = new RhoTranslator(_registry);

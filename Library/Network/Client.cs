@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using Diver.Exec;
 
-namespace Console
+namespace Diver.Network
 {
     public class Client : NetCommon
     {

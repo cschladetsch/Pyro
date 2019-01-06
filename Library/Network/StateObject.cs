@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 
-namespace Console
+namespace Diver.Network
 {
     public class StateObject
     {

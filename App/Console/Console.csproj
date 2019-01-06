@@ -49,14 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="NetworkConsoleWriter.cs" />
-    <Compile Include="NetCommon.cs" />
-    <Compile Include="Peer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="StateObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

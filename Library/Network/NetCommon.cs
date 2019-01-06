@@ -1,7 +1,7 @@
 ﻿
 using Diver.Exec;
 
-namespace Console
+namespace Diver.Network
 {
     public class NetCommon : NetworkConsoleWriter
     {

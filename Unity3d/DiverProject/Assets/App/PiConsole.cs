@@ -20,7 +20,7 @@ namespace App
         {
             _registry = new Registry();
             _pi = new PiTranslator(_registry);
-            _exec = new Executor();
+            _exec = new Executor(_registry);
 
             TreeView.Init();
             _treeViewDataSource = new ObservableList<ListNode<TreeViewItem>>();
