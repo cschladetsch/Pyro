@@ -34,5 +34,10 @@ namespace Diver.Language
         }
 
         protected readonly IRegistry _reg;
+
+        protected new void Reset()
+        {
+            base.Reset();
+        }
     }
 }

@@ -45,6 +45,8 @@ namespace Console
             _exec.Scope["con"] = this;
             _piTranslator.Translate(@"9999 ""192.168.56.1"" 'Connect peer .@ &");
             _exec.Scope["connect"] = _piTranslator.Result();
+
+            _translator = _rhoTranslator;
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -57,7 +59,7 @@ namespace Console
         private void WriteHeader()
         {
             Con.ForegroundColor = ConsoleColor.DarkGray;
-            Con.WriteLine($"Console {GetVersion()}\n");
+            Con.WriteLine($"Console {GetVersion()}");
         }
 
         private static string GetVersion()
@@ -78,6 +80,11 @@ namespace Console
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
                     .Add<Socket, bool>("Disconnect", (q, s) => q.Disconnect(s))
                 .Class);
+            registry.Register(new ClassBuilder<Client>(registry)
+                .Methods
+                    .Add<string, bool>("SendString", (q, s) => q.SendString(s))
+                    .Add<Continuation, bool>("SendPi", (q, s) => q.SendPi(s))
+                .Class);
         }
 
         private void Repl()
@@ -97,7 +104,7 @@ namespace Console
 
         private void Shutdown()
         {
-            var color = ConsoleColor.Magenta;
+            var color = ConsoleColor.DarkGray;
             Error("Shutting down...", color);
             _peer?.Stop();
             Error("Done", color);
@@ -121,13 +128,25 @@ namespace Console
 
             try
             {
-                if (!_piTranslator.Translate(input))
+                if (input == "rho")
                 {
-                    Error($"{_piTranslator.Error}");
+                    _translator = _rhoTranslator;
+                    return true;
+                }
+
+                if (input == "pi")
+                {
+                    _translator = _piTranslator;
+                    return true;
+                }
+
+                if (!_translator.Translate(input))
+                {
+                    Error($"{_translator.Error}");
                     return false;
                 }
 
-                _exec.Continue(_piTranslator.Result());
+                _exec.Continue(_translator.Result());
                 return true;
             }
             catch (Exception e)
@@ -145,7 +164,7 @@ namespace Console
             Con.ForegroundColor = ConsoleColor.White;
         }
 
-        void Error(string text, ConsoleColor color = ConsoleColor.Red)
+        void Error(string text, ConsoleColor color = ConsoleColor.Green)
         {
             Con.ForegroundColor = color;
             Con.WriteLine(text);
@@ -194,13 +213,15 @@ namespace Console
 
         private string MakePrompt()
         {
-            return "pi> ";
+            var lang = _translator == _piTranslator ? "pi" : "rho";
+            return $"{lang}> ";
         }
 
         private readonly IRegistry _registry;
         private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
         private RhoTranslator _rhoTranslator;
+        private TranslatorCommon _translator;
         private Peer _peer;
     }
 }

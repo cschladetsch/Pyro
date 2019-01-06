@@ -1,9 +1,6 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.Linq;
 using Diver.Exec;
-using NUnit.Framework;
 
 namespace Diver.Language
 {
@@ -24,18 +21,23 @@ namespace Diver.Language
 
         public override bool Translate(string text, EStructure st = EStructure.Program)
         {
+            Reset();
+
+            if (string.IsNullOrEmpty(text))
+                return true;
+
             _lexer = new RhoLexer(text);
-            ShowTime("Lexer", () => _lexer.Process());
+            _lexer.Process();
             if (_lexer.Failed)
                 return Fail(_lexer.Error);
 
             _parser = new RhoParser(_lexer, _reg, st);
-            ShowTime("Parser", () => _parser.Process());
+            _parser.Process();
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
-            //ShowTime("PrintTree", () => WriteLine(_parser.PrintTree()));
-            ShowTime("Translator", () => TranslateNode(_parser.Result));
+            //WriteLine(_parser.PrintTree());
+            TranslateNode(_parser.Result);
 
             return !Failed;
         }

@@ -105,5 +105,6 @@ namespace Console
         private readonly PiTranslator _piTranslator;
         private readonly List<Socket> _connections = new List<Socket>();
         private readonly List<Client> _clients = new List<Client>();
+
     }
 }
