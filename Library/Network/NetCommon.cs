@@ -8,6 +8,9 @@ using Diver.Exec;
 
 namespace Diver.Network
 {
+    /// <summary>
+    /// Functionality common to both Client and Server aspects of a Peer
+    /// </summary>
     public class NetCommon : NetworkConsoleWriter
     {
         protected Peer _peer;
@@ -35,27 +38,43 @@ namespace Diver.Network
             if (_stopping)
                 return;
 
-            var state = (StateObject)ar.AsyncState;
-            var socket = state.workSocket;
-
-            var bytesRead = socket.EndReceive(ar);
-            if (bytesRead <= 0) 
-                return;
-
-            state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-
-            var content = state.sb.ToString();
-            var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere.
-            if (end >= 0)
+            try
             {
-                var code = content.Substring(0, end);
-                _peer.Execute(code);
-                // TODO: Maybe: send _exec.Datastack back?
-                state.sb.Clear();
-                state.sb.Append(content.Substring(end + 1));
-            }
+                var state = (StateObject)ar.AsyncState;
+                var socket = state.workSocket;
 
-            socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+                var bytesRead = socket.EndReceive(ar);
+                if (bytesRead <= 0) 
+                    return;
+
+                state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+
+                var content = state.sb.ToString();
+                var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere.
+                if (end >= 0)
+                {
+                    var code = content.Substring(0, end);
+                    try
+                    {
+                        _peer.Execute(code);
+                        // TODO: Send _exec.DataStack back
+                    }
+                    catch (Exception e)
+                    {
+                        Error($"Exec: {e.Message}");
+                    }
+
+                    // reset from end of last continuation
+                    state.sb.Clear();
+                    state.sb.Append(content.Substring(end + 1));
+                }
+
+                socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+            }
+            catch (Exception e)
+            {
+                Error($"{e.Message}");
+            }
         }
 
         protected bool _stopping;

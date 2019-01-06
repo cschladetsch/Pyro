@@ -73,6 +73,14 @@ namespace Diver.Exec
             _actions[EOperation.Pick] = Pick;
             _actions[EOperation.Rot] = Rot;
             _actions[EOperation.Over] = Over;
+            _actions[EOperation.Dup] = Dup;
+        }
+
+        private void Dup()
+        {
+            var a = Pop();
+            Push(a);
+            Push(a);
         }
 
         private void Over()

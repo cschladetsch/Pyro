@@ -32,11 +32,17 @@ namespace Diver.Network
 
         private void ConnectCallback(IAsyncResult ar)
         {
-            _socket = (Socket)ar.AsyncState;
-            _socket.EndConnect(ar);
-            _peer.NewConnection(_socket);
-
-            Receive(_socket);
+            try
+            {
+                _socket = (Socket)ar.AsyncState;
+                _socket.EndConnect(ar);
+                _peer.NewConnection(_socket);
+                Receive(_socket);
+            }
+            catch (Exception e)
+            {
+                Error($"{e.Message}");
+            }
         }
 
         public bool SendPi(string text)

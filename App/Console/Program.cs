@@ -46,7 +46,7 @@ namespace Console
             _piTranslator.Translate(@"""192.168.56.1"" 'Connect peer .@ &");
             _exec.Scope["connect"] = _piTranslator.Result();
 
-            _translator = _rhoTranslator;
+            _translator = _piTranslator;
 
             _hostPort = 0;
             _hostName = _peer.GetLocalHostname();
@@ -226,7 +226,7 @@ Press Ctrl-C to quit.
                 var obj = data[n];
                 str.AppendLine($"{n}: {Print(obj)}");
             }
-            Con.WriteLine(str.ToString());
+            Con.Write(str.ToString());
         }
 
         private string Print(object obj)

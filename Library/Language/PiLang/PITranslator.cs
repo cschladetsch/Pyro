@@ -75,6 +75,9 @@ namespace Diver.Language
         private void AddToken(PiAstNode node, IList<object> objects)
         {
             var token = node.PiToken;
+            // TODO: use a map or even have the Executor execute Pi tokens to avoid this pointless duplication.
+            // There just ended up being a huge amount of pi tokens that simply map directly to operations.
+            // This wasn't obvious at first, and is not true in most languages!
             switch (token.Type)
             {
                 case EPiToken.GetMember:
@@ -103,6 +106,18 @@ namespace Diver.Language
                     break;
                 case EPiToken.Drop:
                     objects.Add(EOperation.Drop);
+                    break;
+                case EPiToken.DropN:
+                    objects.Add(EOperation.DropN);
+                    break;
+                case EPiToken.Rot:
+                    objects.Add(EOperation.Rot);
+                    break;
+                case EPiToken.Pick:
+                    objects.Add(EOperation.Pick);
+                    break;
+                case EPiToken.Over:
+                    objects.Add(EOperation.Over);
                     break;
                 case EPiToken.Clear:
                     objects.Add(EOperation.Clear);
