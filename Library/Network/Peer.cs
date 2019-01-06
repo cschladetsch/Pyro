@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using Diver;
 using Diver.Exec;
@@ -80,14 +81,14 @@ namespace Diver.Network
             _connections.Add(socket);
         }
 
-        public void Execute(string content)
+        public bool Execute(string content)
         {
             try
             {
                 if (!_piTranslator.Translate(content))
                 {
                     Error($"Failed to translate {content}");
-                    return;
+                    return false;
                 }
 
                 _exec.Continue(_piTranslator.Result());
@@ -95,7 +96,10 @@ namespace Diver.Network
             catch (Exception e)
             {
                 Error($"Exec: {e.Message}");
+                return false;
             }
+
+            return true;
         }
 
         private readonly Flow.IKernel _kernel;
@@ -106,5 +110,10 @@ namespace Diver.Network
         private readonly List<Socket> _connections = new List<Socket>();
         private readonly List<Client> _clients = new List<Client>();
 
+        public string GetLocalHostname()
+        {
+            var address = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+            return address == null ? "localhost" : address.ToString();
+        }
     }
 }

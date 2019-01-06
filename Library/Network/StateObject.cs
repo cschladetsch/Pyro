@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Diver.Network
 {
-    public class StateObject
+    internal class StateObject
     {
         public Socket workSocket = null;
         public const int BufferSize = 1024;

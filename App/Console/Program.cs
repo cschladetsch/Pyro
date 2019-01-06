@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -42,10 +43,13 @@ namespace Console
 
             _exec.Scope["peer"] = _peer;
             _exec.Scope["con"] = this;
-            _piTranslator.Translate(@"9999 ""192.168.56.1"" 'Connect peer .@ &");
+            _piTranslator.Translate(@"""192.168.56.1"" 'Connect peer .@ &");
             _exec.Scope["connect"] = _piTranslator.Result();
 
             _translator = _rhoTranslator;
+
+            _hostPort = 0;
+            _hostName = _peer.GetLocalHostname();
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -80,8 +84,7 @@ namespace Console
                 .Class);
             registry.Register(new ClassBuilder<Client>(registry)
                 .Methods
-                    .Add<string, bool>("SendString", (q, s) => q.SendString(s))
-                    .Add<Continuation, bool>("SendPi", (q, s) => q.SendPi(s))
+                    .Add<string, bool>("SendPi", (q, s) => q.SendPi(s))
                 .Class);
         }
 
@@ -130,6 +133,9 @@ namespace Console
 
             try
             {
+                if (input == "help" || input == "?")
+                    return ShowHelp();
+
                 if (input == "rho")
                 {
                     _translator = _rhoTranslator;
@@ -159,8 +165,34 @@ namespace Console
             return false;
         }
 
+        private bool ShowHelp()
+        {
+            Con.WriteLine(
+@"
+Before the prompt is printed, the data-stack of the 
+contextual executor is printed. Operations you perform act on this
+data-stack.
+
+The prompt shows the current executing context and language.
+When you type at the prompt, your text is translated to Pi script
+and executed in current context.
+
+To connect to a remote node, type:
+...> peer.Connect(""_hostName"", port)
+
+To switch execution context, type:
+...> peer.Switch(""hostname"")
+
+Press Ctrl-C to quit.
+"
+                );
+            return true;
+        }
+
         private void WritePrompt()
         {
+            Con.ForegroundColor = ConsoleColor.DarkGray;
+            Con.Write($"{_hostName}:{_hostPort} ");
             Con.ForegroundColor = ConsoleColor.Gray;
             Con.Write(MakePrompt());
             Con.ForegroundColor = ConsoleColor.White;
@@ -228,5 +260,8 @@ namespace Console
         private bool IsPi => _translator == _piTranslator;
         private bool IsRho => _translator == _rhoTranslator;
         private static Program _self;
+
+        private string _hostName;
+        private int _hostPort;
     }
 }
