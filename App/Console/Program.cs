@@ -15,7 +15,6 @@ namespace Console
     class Program
     {
         public const int ListenPort = 9999;
-        private static Program _self;
         
         static void Main(string[] args)
         {
@@ -51,7 +50,6 @@ namespace Console
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
         {
-            // don't cancel immediately; let the app have a chance to close down gracefully
             e.Cancel = true;
             _self.Shutdown();
         }
@@ -112,9 +110,6 @@ namespace Console
             Environment.Exit(0);
         }
 
-        private bool IsPi => _translator == _piTranslator;
-        private bool IsRho => _translator == _rhoTranslator;
-
         private void Process()
         {
             WritePrompt();
@@ -125,28 +120,7 @@ namespace Console
 
         private string GetInput()
         {
-            var input = "";
-            //if (IsRho)
-            //{
-            //    while (true)
-            //    {
-            //        var ch = Con.ReadKey(true);
-            //        var ctrl = (ch.Modifiers & ConsoleModifiers.Control) != 0;
-            //        if (ch.Key == ConsoleKey.Enter)
-            //        {
-            //            Con.WriteLine();
-            //            if (ctrl)
-            //                break;
-            //        }
-
-            //        input += ch.KeyChar;
-            //        Con.Write(ch.KeyChar);
-            //    }
-            //}
-            //else
-                input = Con.ReadLine();
-
-            return input;
+            return Con.ReadLine();
         }
 
         public bool Execute(string input)
@@ -190,6 +164,12 @@ namespace Console
             Con.ForegroundColor = ConsoleColor.Gray;
             Con.Write(MakePrompt());
             Con.ForegroundColor = ConsoleColor.White;
+        }
+
+        private string MakePrompt()
+        {
+            var lang = _translator == _piTranslator ? "pi" : "rho";
+            return $"{lang}> ";
         }
 
         void Error(string text, ConsoleColor color = ConsoleColor.Green)
@@ -239,17 +219,14 @@ namespace Console
             return obj.ToString();
         }
 
-        private string MakePrompt()
-        {
-            var lang = _translator == _piTranslator ? "pi" : "rho";
-            return $"{lang}> ";
-        }
-
         private readonly IRegistry _registry;
         private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
         private RhoTranslator _rhoTranslator;
         private TranslatorCommon _translator;
         private Peer _peer;
+        private bool IsPi => _translator == _piTranslator;
+        private bool IsRho => _translator == _rhoTranslator;
+        private static Program _self;
     }
 }
