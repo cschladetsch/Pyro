@@ -23,7 +23,7 @@ namespace App
             _reg = new Registry();
             _rho = new RhoTranslator(_reg);
             _pi = new PiTranslator(_reg);
-            _exec = new Executor();
+            _exec = new Executor(_reg);
 
             SetupStackView();
         }
