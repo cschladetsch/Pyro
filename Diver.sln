@@ -56,6 +56,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkCommsDotNet", "Library\Ext\NetworkComms\NetworkComms.Net\NetworkCommsDotNet\NetworkCommsDotNet.csproj", "{7DB00305-F5ED-4545-9D83-542132C8177E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity3d", "Unity3d", "{D1E3528C-178C-48E2-96AC-738FD2EBA27F}"
+	ProjectSection(SolutionItems) = preProject
+		Unity3d\Readme.md = Unity3d\Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Library\Core\Core.csproj", "{575091D8-A55C-4794-9F15-120E927C3305}"
 EndProject
@@ -75,7 +78,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPi", "Test\TestPi\TestP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "App\Console\Console.csproj", "{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DriverProject", "DriverProject", "{2F68091D-B2C5-42AB-9436-E62AB147912C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiverProjectFolder", "DiverProjectFolder", "{2F68091D-B2C5-42AB-9436-E62AB147912C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		Unity3d\DriverProject\.gitignore = Unity3d\DriverProject\.gitignore
@@ -87,6 +90,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{60581136-811F-494B-8673-936DBACC7570}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{CCE8DD57-FCD8-493F-968F-398C0E5EA5A0}"
+	ProjectSection(SolutionItems) = preProject
+		Unity3d\DiverProject\Assets\App\Enter.cs = Unity3d\DiverProject\Assets\App\Enter.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Liminal", "Liminal", "{1D2DF0BC-1801-4C5A-86E5-01B9A92A1B29}"
 EndProject
@@ -120,6 +126,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauLang", "Library\Language\Tau\TauLang.csproj", "{BA0FB904-B750-4C6A-93B0-44265B4408E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyLight", "App\SkyLight\SkyLight.csproj", "{7B2108B3-DB19-49D5-A402-045A4E776114}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiverProject", "Unity3d\DiverProject\DiverProject.csproj", "{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -561,6 +569,25 @@ Global
 		{7B2108B3-DB19-49D5-A402-045A4E776114}.Release|x86.ActiveCfg = Release|x86
 		{7B2108B3-DB19-49D5-A402-045A4E776114}.Release|x86.Build.0 = Release|x86
 		{7B2108B3-DB19-49D5-A402-045A4E776114}.Release|x86.Deploy.0 = Release|x86
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|x64.Build.0 = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Debug|x86.Build.0 = Debug|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|ARM.Build.0 = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|ARM64.Build.0 = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|x64.ActiveCfg = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|x64.Build.0 = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|x86.ActiveCfg = Release|Any CPU
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -595,6 +622,7 @@ Global
 		{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10} = {789EF740-5925-4AF1-9E55-3315E731EE8A}
 		{BA0FB904-B750-4C6A-93B0-44265B4408E8} = {789EF740-5925-4AF1-9E55-3315E731EE8A}
 		{7B2108B3-DB19-49D5-A402-045A4E776114} = {7E50329A-E782-4AF6-B6BE-E0AB3FF26C82}
+		{8DADA47F-D404-6F95-F3B6-9DE2B84B5EFB} = {D1E3528C-178C-48E2-96AC-738FD2EBA27F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B78CF9FE-EE87-47B6-99F7-300B5AEFB5BC}

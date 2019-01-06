@@ -5,9 +5,10 @@ namespace Console
 {
     public class NetworkConsoleWriter
     {
-        protected static void Error(string text)
+        protected static bool Error(string text)
         {
             WriteLine($"Error: {text}");
+            return false;
         }
 
         protected static void WriteLine(string text)

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text;
 
 using Diver;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
-using System.Threading;
-using Flow.Impl;
-using NetworkCommsDotNet;
 using Con = System.Console;
 
 namespace Console
@@ -40,8 +38,13 @@ namespace Console
             _rhoTranslator = new RhoTranslator(_registry);
             AddTypes(_registry);
 
-            _peerThread = new Thread(() => _peer = new Peer(_exec, port));
-            _peerThread.Start();
+            _peer = new Peer(port);
+            _peer.Start();
+
+            _exec.Scope["peer"] = _peer;
+            _exec.Scope["con"] = this;
+            _piTranslator.Translate(@"9999 ""192.168.56.1"" 'Connect peer .@ &");
+            _exec.Scope["connect"] = _piTranslator.Result();
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -70,6 +73,11 @@ namespace Console
                 .Methods
                     .Add<string, bool>("Execute", (q, s) => q.Execute(s))
                 .Class);
+            registry.Register(new ClassBuilder<Peer>(registry)
+                .Methods
+                    .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
+                    .Add<Socket, bool>("Disconnect", (q, s) => q.Disconnect(s))
+                .Class);
         }
 
         private void Repl()
@@ -91,9 +99,7 @@ namespace Console
         {
             var color = ConsoleColor.Magenta;
             Error("Shutting down...", color);
-            _peer?.Close();
-            if (_peerThread.IsAlive)
-                _peerThread.Join(TimeSpan.FromSeconds(2));
+            _peer?.Stop();
             Error("Done", color);
             Con.ForegroundColor = ConsoleColor.White;
             Environment.Exit(0);
@@ -194,7 +200,6 @@ namespace Console
         private readonly IRegistry _registry;
         private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
-        private readonly Thread _peerThread;
         private RhoTranslator _rhoTranslator;
         private Peer _peer;
     }

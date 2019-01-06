@@ -1,23 +1,72 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
-using System.Threading;
+using Diver;
 using Diver.Exec;
+using Diver.Impl;
+using Diver.Language;
 
 namespace Console
 {
+    /// <summary>
+    /// A Peer listens to incoming connections, and can connect to other peers.
+    /// </summary>
     public class Peer : NetworkConsoleWriter
     {
         public Flow.IKernel Kernel => _kernel;
         public Flow.IFactory Factory => _kernel.Factory;
         public Executor Executor => _exec;
+        public List<Socket> Connections => _connections;
+        public List<Client> Clients => _clients;
+        public Server Server => _server;
 
-        public Peer(Executor exec, int listenPort)
+        public Peer(int listenPort)
         {
-            _exec = exec;
             _kernel = Flow.Create.Kernel();
-            _server = new Server(this);
-            _serverThread = new Thread(() => _server.Start(listenPort));
-            _serverThread.Start();
+            _registry = new Registry();
+            _exec = new Executor(_registry);
+            _piTranslator = new PiTranslator(_registry);
+            _server = new Server(this, listenPort);
+        }
+
+        public void Start()
+        {
+            _server.Start();
+        }
+
+        public bool Connect(string hostName, int port)
+        {
+            var client = new Client(this);
+            if (client.Connect(hostName, port))
+            {
+                _clients.Add(client);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Disconnect(Socket socket)
+        {
+            if (!_connections.Contains(socket))
+                return Error($"Not connected to {socket.RemoteEndPoint}");
+
+            socket.Close();
+            _connections.Remove(socket);
+            return true;
+        }
+
+        public void Stop()
+        {
+            WriteLine($"Closing {_connections.Count} connections");
+            foreach (var socket in _connections)
+                socket.Close();
+
+            _connections.Clear();
+            _clients.Clear();
+            _server.Stop();
+            _server = null;
         }
 
         public void Update()
@@ -25,21 +74,36 @@ namespace Console
             _kernel.Step();
         }
 
-        public void Close()
+        public void NewConnection(Socket socket)
         {
-            if (_serverThread.IsAlive)
-                _serverThread.Join(TimeSpan.FromSeconds(2));
-            _server.Stop();
+            WriteLine($"Connected to {socket.RemoteEndPoint}");
+            _connections.Add(socket);
         }
 
-        public void NewConnection(Socket listener)
+        public void Execute(string content)
         {
+            try
+            {
+                if (!_piTranslator.Translate(content))
+                {
+                    Error($"Failed to translate {content}");
+                    return;
+                }
+
+                _exec.Continue(_piTranslator.Result());
+            }
+            catch (Exception e)
+            {
+                Error($"Exec: {e.Message}");
+            }
         }
 
         private readonly Flow.IKernel _kernel;
-        private readonly Server _server;
+        private Server _server;
+        private IRegistry _registry;
         private readonly Executor _exec;
-        private Client _client;
-        private readonly Thread _serverThread;
+        private readonly PiTranslator _piTranslator;
+        private readonly List<Socket> _connections = new List<Socket>();
+        private readonly List<Client> _clients = new List<Client>();
     }
 }

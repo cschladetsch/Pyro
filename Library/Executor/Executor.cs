@@ -12,6 +12,7 @@ namespace Diver.Exec
         public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
         public int NumOps => _numOps;
+        public Dictionary<string, object> Scope = new Dictionary<string, object>();
 
         public Executor(IRegistry reg)
         {
@@ -209,6 +210,9 @@ namespace Diver.Exec
                 if (cont.HasScopeObject(ident))
                     return cont.Scope[ident];
             }
+
+            if (Scope.TryGetValue(ident, out var obj))
+                return obj;
 
             return null;
         }
