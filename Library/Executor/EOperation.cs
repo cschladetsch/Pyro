@@ -112,5 +112,8 @@
         SetMemberValue,
         ForEachIn,
         ForLoop,
+        Drop,
+        DropN,
+
     }
 }

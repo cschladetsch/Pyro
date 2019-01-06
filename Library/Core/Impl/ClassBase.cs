@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Diver.Impl
 {
     public class ClassBase : StructBase, IClassBase
     {
-        internal ClassBase(IRegistry reg, Type type) 
+        public int TypeNumber { get; set; }
+
+        internal ClassBase(IRegistry reg, Type type)
             : base(reg, type)
         {
         }
@@ -18,7 +21,7 @@ namespace Diver.Impl
         public void AddCallable(string name, ICallable callable)
         {
             if (_callables.ContainsKey(name))
-                throw new Exception("Duplicate callabled added to class");
+                throw new Exception("Duplicate callable added to class");
 
             _callables[name] = callable;
         }
@@ -46,6 +49,11 @@ namespace Diver.Impl
         public virtual object NewInstance(Stack<object> dataStack)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual void Append(StringBuilder str, object rbBaseValue)
+        {
+            str.Append(rbBaseValue);
         }
 
         private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();

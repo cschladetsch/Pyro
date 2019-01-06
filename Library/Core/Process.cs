@@ -27,6 +27,12 @@ namespace Diver
             return Fail(string.Format(fmt, args));
         }
 
+        protected void Reset()
+        {
+            _failed = false;
+            _error = "";
+        }
+
         private bool _failed;
         protected string _error;
     }

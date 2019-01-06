@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities.Statements;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,65 @@ namespace Diver.Exec
             _actions[EOperation.GetMember] = GetMember;
             _actions[EOperation.ForEachIn] = ForEachIn;
             _actions[EOperation.ForLoop] = ForLoop;
+            _actions[EOperation.Freeze] = Freeze;
+            _actions[EOperation.Thaw] = Thaw;
+            _actions[EOperation.Drop] = () => Pop();
+            _actions[EOperation.DropN] = DropN;
+            _actions[EOperation.Swap] = Swap;
+            _actions[EOperation.Pick] = Pick;
+            _actions[EOperation.Rot] = Rot;
+            _actions[EOperation.Over] = Over;
+        }
+
+        private void Over()
+        {
+            var a = Pop();
+            var b = Pop();
+            Push(b);
+            Push(a);
+            Push(b);
+        }
+
+        private void Rot()
+        {
+            // 1 2 3 rot => 3 1 2
+            var a = Pop();
+            var b = Pop();
+            var c = Pop();
+            Push(a);
+            Push(c);
+            Push(b);
+        }
+
+        private void DropN()
+        {
+            var n = Pop<int>();
+            while (n-- > 0)
+                Pop();
+        }
+
+        private void Pick()
+        {
+            var n = Pop<int>();
+            Push(_data.ToArray()[n]);
+        }
+
+        private void Swap()
+        {
+            var a = Pop();
+            var b = Pop();
+            Push(a);
+            Push(b);
+        }
+
+        private void Thaw()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Freeze()
+        {
+            Push(_current.Serialise());
         }
 
         private void ForLoop()

@@ -27,6 +27,9 @@ for (a in [1,2,3,4])
 	c = c + a
 writeln(c)
 ");
+			var str = _continuation.ToString();
+			//var str = _continuation.Serialise();
+
 	        var c = 0;
 	        for (var a = 1; a < 5; ++a)
 	        {

@@ -10,6 +10,8 @@ namespace Diver.Language
     public class TranslatorCommon
         : ProcessCommon
     {
+        public int TraceLevel;
+
         protected TranslatorCommon(IRegistry r)
             : base(r)
         {
@@ -19,6 +21,13 @@ namespace Diver.Language
         public virtual bool Translate(string text, EStructure st = EStructure.Program)
         {
             return false;
+        }
+
+        protected new void Reset()
+        {
+            base.Reset();
+            _stack.Clear();
+            _stack.Push(new Continuation(new List<object>()));
         }
 
         public override string ToString()
@@ -34,7 +43,7 @@ namespace Diver.Language
 
         public virtual Continuation Result()
         {
-            return Top();
+            return _stack.Count == 0 ? null : Top();
         }
 
         protected void PushNew()

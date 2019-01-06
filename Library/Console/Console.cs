@@ -15,6 +15,6 @@ namespace Diver
         {
         }
 
-        private IRegistry _registry;
+        //private IRegistry _registry;
     }
 }
