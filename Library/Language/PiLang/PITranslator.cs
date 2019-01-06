@@ -101,6 +101,9 @@ namespace Diver.Language
                 case EPiToken.Dup:
                     objects.Add(EOperation.Dup);
                     break;
+                case EPiToken.Drop:
+                    objects.Add(EOperation.Drop);
+                    break;
                 case EPiToken.Clear:
                     objects.Add(EOperation.Clear);
                     break;

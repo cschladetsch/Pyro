@@ -21,6 +21,68 @@ namespace Diver.Exec
             _code = code;
         }
 
+        public string Serialise()
+        {
+            var str = new StringBuilder();
+            Serialise(str, this);
+            return str.ToString();
+        }
+
+        public string Serialise(StringBuilder str)
+        {
+            str.Append('{');
+            foreach (var elem in Code)
+            {
+                Serialise(str, elem);
+                str.Append(' ');
+            }
+            str.Append('}');
+
+            return str.ToString();
+        }
+
+        void Serialise(StringBuilder str, object obj)
+        {
+            switch (obj)
+            {
+                case Continuation cont:
+                    Serialise(str);
+                    break;
+                case EOperation op:
+                    str.Append(OpToString(op));
+                    break;
+                case IRefBase rb:
+                    rb.Class.Append(str, rb.BaseValue);
+                    break;
+                case int n:
+                    str.Append(n);
+                    break;
+                case string s:
+                    str.Append('"');
+                    str.Append(s);
+                    str.Append('"');
+                    break;
+                case List<object> list:
+                    str.Append('[');
+                    var sp = ' ';
+                    foreach (var elem in list)
+                    {
+                        Serialise(str, elem);
+                        str.Append(sp);
+                    }
+                    str.Append("] ");
+                    break;
+                default:
+                    str.Append(obj);
+                    break;
+            }
+        }
+
+        private string OpToString(EOperation op)
+        {
+            return "`" + ((int)op).ToString();
+        }
+
         public override string ToString()
         {
             var str = new StringBuilder();

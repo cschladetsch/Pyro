@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using Diver.Impl;
 
 namespace Diver
@@ -15,6 +16,7 @@ namespace Diver
         Version Version { get; }
         string TypeName { get; } 
         Type Type { get; }
+        int TypeNumber { get; }
 
         ICallable GetCallable(string name);
         void AddCallable(string name, ICallable callable);
@@ -32,8 +34,9 @@ namespace Diver
         IRefBase Create(Id id, object value);
         IConstRefBase CreateConst(Id id, object value);
         object NewInstance(Stack<object> dataStack);
+
+        void Append(StringBuilder str, object rbBaseValue);
     }
 }
 
 //EOF
-
