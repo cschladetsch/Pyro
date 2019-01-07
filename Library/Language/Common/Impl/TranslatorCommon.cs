@@ -2,15 +2,17 @@
 using System.Text;
 using Diver.Exec;
 
-namespace Diver.Language
+namespace Diver.Language.Impl
 {
     /// <summary>
     /// Common to all processes that translate an AST to Pi code sequences.
     /// </summary>
     public class TranslatorCommon
         : ProcessCommon
+        , ITranslator
     {
         public int TraceLevel;
+        public virtual Continuation Result => _stack.Count == 0 ? null : Top();
 
         protected TranslatorCommon(IRegistry r)
             : base(r)
@@ -23,7 +25,7 @@ namespace Diver.Language
             return false;
         }
 
-        protected new void Reset()
+        public new void Reset()
         {
             base.Reset();
             _stack.Clear();
@@ -39,11 +41,6 @@ namespace Diver.Language
             }
 
             return str.ToString();
-        }
-
-        public virtual Continuation Result()
-        {
-            return _stack.Count == 0 ? null : Top();
         }
 
         protected void PushNew()
@@ -68,4 +65,5 @@ namespace Diver.Language
 
         private readonly Stack<Continuation> _stack = new Stack<Continuation>();
     }
+
 }

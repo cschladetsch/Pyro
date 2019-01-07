@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Diver.Language
+namespace Diver.Language.Impl
 {
     public class TokenBase<ETokenType>
         : ITokenBase<ETokenType>

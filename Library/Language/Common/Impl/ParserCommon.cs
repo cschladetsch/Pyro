@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
-namespace Diver.Language
+namespace Diver.Language.Impl
 {
     // common for all parsers.
     // iterate over a stream of tokens to produce an abstract syntax tree

@@ -5,6 +5,7 @@ using System.Linq;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
+using Diver.Language.Impl;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -58,7 +59,7 @@ namespace Diver.Test
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Result();
+            return _continuation = trans.Result;
         }
 
         protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
@@ -66,14 +67,14 @@ namespace Diver.Test
             var trans = new RhoTranslator(_reg);
             trans.Translate(text, st);
 
-            if (trans.Result() == null)
+            if (trans.Result == null)
                 WriteLine($"No output generated");
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             if (trace)
                 WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Result();
+            return _continuation = trans.Result;
         }
 
         protected bool RunScript(string scriptName)
@@ -86,7 +87,7 @@ namespace Diver.Test
             return Path.Combine(GetScriptsPath(), scriptName);
         }
 
-        protected TranslatorCommon MakeTranslator(string scriptName)
+        protected ITranslator MakeTranslator(string scriptName)
         {
             Type klass = null;
             switch (Path.GetExtension(scriptName))
@@ -102,7 +103,7 @@ namespace Diver.Test
                 //    break;
             }
 
-            return Activator.CreateInstance(klass, _reg) as TranslatorCommon;
+            return Activator.CreateInstance(klass, _reg) as ITranslator;
         }
 
         protected bool RunScriptPathname(string filePath)
@@ -118,7 +119,7 @@ namespace Diver.Test
                 if (trans.Failed)
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result()));
+                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result));
             }
             catch (Exception e)
             {

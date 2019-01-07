@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using Diver.Language.Impl;
+
+namespace Diver.Language
 {
     /// <summary>
     /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.

@@ -1,4 +1,5 @@
-﻿using Diver.RhoLang;
+﻿using Diver.Language.Impl;
+using Diver.RhoLang;
 
 namespace Diver.Language
 {

@@ -91,7 +91,7 @@ namespace Diver.Network
                     return false;
                 }
 
-                _exec.Continue(_piTranslator.Result());
+                _exec.Continue(_piTranslator.Result);
             }
             catch (Exception e)
             {

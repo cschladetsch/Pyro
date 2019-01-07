@@ -44,7 +44,7 @@ namespace Console
             _exec.Scope["peer"] = _peer;
             _exec.Scope["con"] = this;
             _piTranslator.Translate(@"""192.168.56.1"" 'Connect peer .@ &");
-            _exec.Scope["connect"] = _piTranslator.Result();
+            _exec.Scope["connect"] = _piTranslator.Result;
 
             _translator = _piTranslator;
 
@@ -154,7 +154,7 @@ namespace Console
                     return false;
                 }
 
-                _exec.Continue(_translator.Result());
+                _exec.Continue(_translator.Result);
                 return true;
             }
             catch (Exception e)
@@ -255,7 +255,7 @@ Press Ctrl-C to quit.
         private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
         private RhoTranslator _rhoTranslator;
-        private TranslatorCommon _translator;
+        private ITranslator _translator;
         private Peer _peer;
         private bool IsPi => _translator == _piTranslator;
         private bool IsRho => _translator == _rhoTranslator;

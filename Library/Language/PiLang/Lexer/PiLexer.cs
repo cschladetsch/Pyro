@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Diver.Exec;
+using Diver.Language.Impl;
 
 namespace Diver.Language
 {
     public class PiLexer
-        : LexerCommon<EPiToken, PiToken, PiTokenFactory>
+        : LexerCommon<EPiToken, PiToken, PiTokenFactory>, ILexer
     {
         public PiLexer(string input)
             : base(input)

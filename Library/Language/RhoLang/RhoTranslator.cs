@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Diver.Exec;
+using Diver.Language.Impl;
 
 namespace Diver.Language
 {
@@ -437,7 +438,7 @@ namespace Diver.Language
 
         public override string ToString()
         {
-            return $"=== RhoTranslator:\n--- Input: {_lexer.Input}--- Lexer: {_lexer}\n--- Parser: {_parser}\n--- Code: {Result().ToString()}";
+            return $"=== RhoTranslator:\n--- Input: {_lexer.Input}--- Lexer: {_lexer}\n--- Parser: {_parser}\n--- Code: {Result}";
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Diver.Exec;
+using Diver.Language.Impl;
 
 namespace Diver.Language
 {
@@ -11,6 +12,8 @@ namespace Diver.Language
     /// </summary>
     public class PiTranslator : TranslatorBase<PiLexer, PiParser>
     {
+        public override Continuation Result => _continuation;
+
         public PiTranslator(IRegistry reg) : base(reg)
         {
         }
@@ -32,11 +35,6 @@ namespace Diver.Language
                 return Fail($"ParserError: {Parser.Error}");
 
             return TranslateNode(Parser.Root, _continuation.Code);
-        }
-
-        public override Continuation Result()
-        {
-            return _continuation;
         }
 
         public override string ToString()
