@@ -83,6 +83,11 @@ namespace Diver.Exec
             return "`" + ((int)op).ToString();
         }
 
+        public object Deserialise(string str)
+        {
+            return str;
+        }
+
         public override string ToString()
         {
             var str = new StringBuilder();
@@ -171,5 +176,6 @@ namespace Diver.Exec
         private List<string> _args;
         private readonly List<object> _code;
         private readonly Dictionary<string, object> _scope = new Dictionary<string, object>();
+
     }
 }

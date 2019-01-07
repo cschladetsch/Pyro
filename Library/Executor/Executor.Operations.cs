@@ -74,6 +74,7 @@ namespace Diver.Exec
             _actions[EOperation.Rot] = Rot;
             _actions[EOperation.Over] = Over;
             _actions[EOperation.Dup] = Dup;
+            _actions[EOperation.Clear] = () => DataStack.Clear();
         }
 
         private void Dup()
