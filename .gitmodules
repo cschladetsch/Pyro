@@ -1,6 +1,3 @@
 [submodule "Library/Ext/Flow"]
 	path = Library/Ext/Flow
 	url = git@github.com:cschladetsch/Flow.git
-[submodule "Library/Ext/NetworkComms/NetworkComms.Net"]
-	path = Library/Ext/NetworkComms/NetworkComms.Net
-	url = git@github.com:cschladetsch/NetworkComms.Net.git
