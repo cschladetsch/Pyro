@@ -12,7 +12,7 @@ namespace Diver.Test
     public class TestPiFreezeThaw : TestCommon
     {
         private new IRegistry _reg;
-        private new Executor _exec;
+        //private new Executor _exec;
         private ITranslator _pi;
         private ITranslator _rho;
 
@@ -22,7 +22,8 @@ namespace Diver.Test
             _reg = new Registry();
             _pi = new PiTranslator(_reg);
             _rho = new PiTranslator(_reg);
-            _exec = new Executor(_reg);
+            //_exec = new Executor(_reg);
+            _exec.Rethrows = true;
         }
 
         [Test]
@@ -34,14 +35,14 @@ namespace Diver.Test
             TestFreezeThawPi("{1 2 +} &");
             AssertPop(3);
 
-            TestFreezeThawPi(@"""foo"" ""bar"" +");
-            AssertPop("foobar");
+            //TestFreezeThawPi(@"""foo"" ""bar"" +");
+            //AssertPop("foobar");
 
-            TestFreezeThawPi(@"""foo"" ""bar"" +");
-            AssertPop("foobar");
+            //TestFreezeThawPi(@"""foo"" ""bar"" +");
+            //AssertPop("foobar");
 
-            TestFreezeThawPi(@"""foo"" ""bar"" +");
-            AssertPop("foobar");
+            //TestFreezeThawPi(@"""foo"" ""bar"" +");
+            //AssertPop("foobar");
         }
 
         protected void TestFreezeThawPi(string text)
@@ -51,11 +52,12 @@ namespace Diver.Test
 
         protected void TestFreezeThawRho(string text)
         {
-            throw new NotImplementedException();
+            Assert.IsTrue(Continue(FreezeThaw(_rho, text)));            
         }
 
         protected bool Continue(Continuation cont)
         {
+            Assert.IsNotNull(cont);
             try
             {
                 _exec.Continue(cont);
@@ -70,9 +72,15 @@ namespace Diver.Test
 
         protected Continuation FreezeThaw(ITranslator trans, string text)
         {
+            WriteLine("--- Input:");
+            WriteLine(text);
             var cont = PiTranslate(text);
+
+            WriteLine("--- Serialised:");
             var str = cont.Serialise();
+            WriteLine(str);
             Assert.IsNotEmpty(str);
+
             var thawed = PiTranslate(str);
             Assert.IsNotNull(thawed);
             var rb = thawed.Code[0] as IRefBase;

@@ -12,6 +12,8 @@ namespace Diver.Exec
         public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
         public int NumOps => _numOps;
+        public bool Rethrows { get; set; }
+
         public Dictionary<string, object> Scope = new Dictionary<string, object>();
 
         public Executor(IRegistry reg)
@@ -126,7 +128,7 @@ namespace Diver.Exec
                     {
                         if (next is EOperation op)
                         {
-                            Write("leads to-->");
+                            Write($"{op} -->");
                             WriteDataStack();
                         }
                     }
