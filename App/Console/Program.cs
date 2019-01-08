@@ -178,10 +178,10 @@ When you type at the prompt, your text is translated to Pi script
 and executed in current context.
 
 To connect to a remote node, type:
-...> peer.Connect(""_hostName"", port)
+...rho> peer.Connect(""_hostName"", port)
 
 To switch execution context, type:
-...> peer.Switch(""hostname"")
+...rho> peer.Switch(""hostname"")
 
 Press Ctrl-C to quit.
 "
