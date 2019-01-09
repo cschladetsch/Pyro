@@ -1,10 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Diver.Exec;
+using Diver.Impl;
+using Diver.Language;
 
 namespace Diver.Network
 {
@@ -14,12 +15,27 @@ namespace Diver.Network
     public class NetCommon : NetworkConsoleWriter
     {
         protected Peer _peer;
-        protected Flow.IFactory _factory => _peer.Factory;
-        protected Executor _exec => _peer.Executor;
+        protected PiTranslator _pi;
+        protected IRegistry _reg;
+        protected Executor _exec;
 
         public NetCommon(Peer peer)
         {
             _peer = peer;
+            _reg = new Registry();
+            _exec = _reg.Add(new Executor()).Value;
+            _pi = new PiTranslator(_reg);
+        }
+
+        protected Continuation TranslatePi(string text)
+        {
+            if (!_pi.Translate(text))
+            {
+                Error(_pi.Error);
+                return null;
+            }
+
+            return _pi.Result;
         }
 
         protected IPAddress GetAddress(string hostname)
@@ -31,6 +47,11 @@ namespace Diver.Network
         {
             var state = new StateObject {workSocket = socket};
             socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+        }
+
+        protected virtual void ProcessReceived(Socket sender, string text)
+        {
+            WriteLine($"Recv: {text}");
         }
 
         protected void ReadCallback(IAsyncResult ar)
@@ -56,8 +77,7 @@ namespace Diver.Network
                     var code = content.Substring(0, end);
                     try
                     {
-                        _peer.Execute(code);
-                        // TODO: Send _exec.DataStack back
+                        ProcessReceived(socket, code);
                     }
                     catch (Exception e)
                     {

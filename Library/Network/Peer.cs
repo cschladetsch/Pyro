@@ -17,18 +17,35 @@ namespace Diver.Network
     {
         public Flow.IKernel Kernel => _kernel;
         public Flow.IFactory Factory => _kernel.Factory;
-        public Executor Executor => _exec;
+        public IRegistry Registry => _registry;
         public List<Socket> Connections => _connections;
         public List<Client> Clients => _clients;
         public Server Server => _server;
+        public Client Remote => _remote;
+        public string HostName => GetHostName();
+        public int HostPort => GetHostPort();
 
         public Peer(int listenPort)
         {
             _kernel = Flow.Create.Kernel();
             _registry = new Registry();
-            _exec = _registry.Add(new Executor()).Value;
             _piTranslator = new PiTranslator(_registry);
             _server = new Server(this, listenPort);
+        }
+
+        private IPEndPoint GetRemoteEndPoint()
+        {
+            return Remote?.Socket.RemoteEndPoint as IPEndPoint;
+        }
+
+        public string GetHostName()
+        {
+            return GetRemoteEndPoint()?.Address.ToString();
+        }
+
+        private int GetHostPort()
+        {
+            return GetRemoteEndPoint()?.Port ?? 0;
         }
 
         public void Start()
@@ -36,16 +53,29 @@ namespace Diver.Network
             _server.Start();
         }
 
+        public bool EnterRemote(Client client)
+        {
+            //WriteLine($"Remoting to {client.Socket.RemoteEndPoint}");
+            if (!_clients.Contains(client))
+                return false;
+            _remote = client;
+            return true;
+        }
+
+        public void Leave()
+        {
+            //WriteLine($"Going back to local host");
+            _remote = null;
+        }
+
         public bool Connect(string hostName, int port)
         {
             var client = new Client(this);
-            if (client.Connect(hostName, port))
-            {
-                _clients.Add(client);
-                return true;
-            }
+            if (!client.Connect(hostName, port)) 
+                return false;
 
-            return false;
+            _clients.Add(client);
+            return true;
         }
 
         public bool Disconnect(Socket socket)
@@ -91,7 +121,7 @@ namespace Diver.Network
                     return false;
                 }
 
-                _exec.Continue(_piTranslator.Result);
+                Continue(_piTranslator.Result);
             }
             catch (Exception e)
             {
@@ -102,18 +132,28 @@ namespace Diver.Network
             return true;
         }
 
-        private readonly Flow.IKernel _kernel;
-        private Server _server;
-        private IRegistry _registry;
-        private readonly Executor _exec;
-        private readonly PiTranslator _piTranslator;
-        private readonly List<Socket> _connections = new List<Socket>();
-        private readonly List<Client> _clients = new List<Client>();
-
         public string GetLocalHostname()
         {
             var address = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             return address == null ? "localhost" : address.ToString();
+        }
+
+        public void Continue(Continuation continuation)
+        {
+            _remote?.Continue(continuation);
+        }
+
+        private readonly Flow.IKernel _kernel;
+        private Server _server;
+        private readonly IRegistry _registry;
+        private readonly PiTranslator _piTranslator;
+        private readonly List<Socket> _connections = new List<Socket>();
+        private readonly List<Client> _clients = new List<Client>();
+        private Client _remote;
+
+        public Client GetClient(Socket sender)
+        {
+            return _clients.FirstOrDefault(c => c.Socket == sender);
         }
     }
 }

@@ -1,19 +1,27 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Diver.Exec;
+using Diver.Language;
+using Con = System.Console;
 
 namespace Diver.Network
 {
     public class Client : NetCommon
     {
         public Socket Socket => _socket;
+        private PiTranslator _pi;
 
         public Client(Peer peer)
             : base(peer)
         {
+        }
+
+        public void Continue(Continuation cont)
+        {
+            SendPi(cont?.ToText());
         }
 
         public bool Connect(string hostName, int port)
@@ -52,16 +60,55 @@ namespace Diver.Network
             return true;
         }
 
+        protected override void ProcessReceived(Socket sender, string text)
+        {
+            try
+            {
+                WriteLine($"Recv Stack: {text}");
+                if (!_pi.Translate(text))
+                {
+                    Error($"Failed to translate {text}");
+                    return;
+                }
+                _exec.Continue(_pi.Result);
+                _stack = _exec.Pop<List<object>>();
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+            }
+        }
+
+        // TODO: split out Client into Client and ConsoleClient : Client
+        public void WriteDataStackContents(int max = 20)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            var data = _stack;
+            if (data.Count > max)
+                Con.WriteLine("...");
+            max = Math.Min(data.Count, max);
+            for (var n = max - 1; n >= 0; --n)
+                str.AppendLine($"{n}: {Print(data[n])}");
+            Con.Write(str.ToString());
+        }
+
+        private string Print(object obj)
+        {
+            return _reg.ToText(obj);
+        }
+
         private void SendCallback(IAsyncResult ar)
         {
             _socket.EndSend(ar);
         }
 
-        public bool SendPi(Continuation continuation)
+        public bool Send(Continuation continuation)
         {
-            throw new NotImplementedException();
+            return SendPi(continuation.ToText());
         }
 
         private Socket _socket;
+        private List<object> _stack;
     }
 }

@@ -7,10 +7,57 @@ namespace Diver.Network
 {
     public class Server : NetCommon
     {
+        private const int BacklogCount = 50;
+
         public Server(Peer peer, int port)
             : base(peer)
         {
             _port = port;
+            AddTypes(_reg);
+            _exec.Scope["peer"] = _peer;
+            _exec.Scope["con"] = this;
+            _exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
+            _exec.Scope["clients"] = TranslatePi("'Clients peer .@");
+            _exec.Scope["test"] = TranslatePi("9998 connect & clients & 0 at 'Remote peer .@ &");
+        }
+
+        private void AddTypes(IRegistry registry)
+        {
+            Diver.Exec.RegisterTypes.Register(registry);
+
+            //registry.Register(new ClassBuilder<Program>(registry)
+            //    .Methods
+            //        .Add<string, bool>("Execute", (q, s) => q.Execute(s))
+            //    .Class);
+            registry.Register(new ClassBuilder<Peer>(registry)
+                .Methods
+                    .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
+                    .Add<Socket, bool>("Disconnect", (q, s) => q.Disconnect(s))
+                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
+                    .Add<Client>("Leave", (q, s) => q.Leave())
+                .Class);
+            registry.Register(new ClassBuilder<Client>(registry)
+                .Methods
+                    .Add<string, bool>("SendPi", (q, s) => q.SendPi(s))
+                .Class);
+        }
+
+        protected override void ProcessReceived(Socket sender, string text)
+        {
+            try
+            {
+                var cont = TranslatePi(text);
+                cont.Scope = _exec.Scope;
+                _exec.Continue(cont);
+                var stack = _exec.DataStack.ToList();
+                var response = _reg.ToText(stack);
+                //WriteLine($"Response: {response}");
+                _peer.GetClient(sender)?.SendPi(response);
+            }
+            catch (Exception e)
+            {
+                Error($"Exception: {e.Message}");
+            }
         }
 
         public bool Start()
@@ -24,7 +71,7 @@ namespace Diver.Network
             try
             {
                 _listener.Bind(endPoint);
-                _listener.Listen(100);
+                _listener.Listen(BacklogCount);
 
                 WriteLine($"Listening on {address}:{_port}");
                 Listen();

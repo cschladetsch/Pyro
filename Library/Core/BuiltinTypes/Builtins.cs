@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Diver.Impl;
+using NUnit.Framework;
 
 namespace Diver
 {
@@ -25,7 +27,7 @@ namespace Diver
                 .Class);
         }
 
-        private static void ListToText(IRegistry reg, StringBuilder arg1, List<object> arg2)
+        private static void ListToText(IRegistry reg, StringBuilder arg1, IList arg2)
         {
             arg1.Append('[');
             foreach (var obj in arg2)

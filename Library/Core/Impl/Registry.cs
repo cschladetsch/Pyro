@@ -96,6 +96,13 @@ namespace Diver.Impl
                 stringBuilder.Append(obj);
         }
 
+        public string ToText(object obj)
+        {
+            var str = new StringBuilder();
+            AppendText(str, obj);
+            return str.ToString();
+        }
+
         public IRef<T> GetRef<T>(Id id)
         {
             return _instances[id].BaseValue as IRef<T>;

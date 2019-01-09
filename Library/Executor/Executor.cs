@@ -281,7 +281,7 @@ namespace Diver.Exec
             return data.Value;
         }
 
-        private dynamic Pop()
+        public dynamic Pop()
         {
             if (_data.Count == 0)
                 throw new DataStackEmptyException();

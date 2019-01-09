@@ -412,14 +412,14 @@ namespace Diver.Exec
 
         private void At()
         {
-            var cont = RPop();
             var index = RPop();
+            var cont = RPop();
             switch (cont)
             {
-                case List<object> list:
+                case IList list:
                     Push(list[ConstRef<int>(index)]);
                     break;
-                case Dictionary<object,object> dict:
+                case IDictionary dict:
                     Push(dict[RPop()]);
                     break;
                 default:
@@ -505,7 +505,7 @@ namespace Diver.Exec
             var cont = RPop();
             switch (cont)
             {
-                case List<object> list:
+                case IList list:
                     Push(list.Count);
                     return;
                 case Dictionary<object, object> dict:

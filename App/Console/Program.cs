@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-
+using System.Reflection;
 using Diver;
-using Diver.Exec;
+using Diver.Impl;
 using Diver.Language;
 using Diver.Network;
 using Con = System.Console;
 
 namespace Console
 {
-    class Program
+    internal class Program
     {
         public const int ListenPort = 9999;
-        
-        static void Main(string[] args)
+
+        private static void Main(string[] args)
         {
             _self = new Program(args);
             _self.Repl();
@@ -27,29 +23,32 @@ namespace Console
         {
             WriteHeader();
 
+            Con.CancelKeyPress += Cancel;
+
             var port = ListenPort;
             if (args.Length == 1)
                 port = int.Parse(args[0]);
 
-            Con.CancelKeyPress += Cancel;
-            _registry = new Diver.Impl.Registry();
-            _exec = _registry.Add(new Executor()).Value;
-            _piTranslator = new PiTranslator(_registry);
-            _rhoTranslator = new RhoTranslator(_registry);
-            AddTypes(_registry);
-
             _peer = new Peer(port);
             _peer.Start();
+            if (!_peer.Connect(_peer.GetLocalHostname(), ListenPort))
+            {
+                Error("Couldn't connect to local host");
+                Environment.Exit(1);
+            }
 
-            _exec.Scope["peer"] = _peer;
-            _exec.Scope["con"] = this;
-            _piTranslator.Translate(@"""192.168.56.1"" 'Connect peer .@ &");
-            _exec.Scope["connect"] = _piTranslator.Result;
+            if (!_peer.EnterRemote(_peer.Clients[0]))
+            {
+                Error("Couldn't shell to local");
+                Environment.Exit(1);
+            }
+
+            // needed to generate code locally for sending
+            _registry = new Registry();
+            _piTranslator = new PiTranslator(_registry);
+            _rhoTranslator = new RhoTranslator(_registry);
 
             _translator = _piTranslator;
-
-            _hostPort = 0;
-            _hostName = _peer.GetLocalHostname();
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -66,28 +65,10 @@ namespace Console
 
         private static string GetVersion()
         {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.FileVersion;
-        }
-
-        private void AddTypes(IRegistry registry)
-        {
-            Diver.Exec.RegisterTypes.Register(registry);
-
-            registry.Register(new ClassBuilder<Program>(registry)
-                .Methods
-                    .Add<string, bool>("Execute", (q, s) => q.Execute(s))
-                .Class);
-            registry.Register(new ClassBuilder<Peer>(registry)
-                .Methods
-                    .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
-                    .Add<Socket, bool>("Disconnect", (q, s) => q.Disconnect(s))
-                .Class);
-            registry.Register(new ClassBuilder<Client>(registry)
-                .Methods
-                    .Add<string, bool>("SendPi", (q, s) => q.SendPi(s))
-                .Class);
+            var name = Assembly.GetExecutingAssembly().GetName();
+            var version = name.Version;
+            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
+            return $"{name} {version} built {built}";
         }
 
         private void Repl()
@@ -157,8 +138,7 @@ namespace Console
                 }
 
                 var continuation = _translator.Result;
-                continuation.Scope = _exec.Scope;
-                _exec.Continue(continuation);
+                _peer.Continue(continuation);
                 return true;
             }
             catch (Exception e)
@@ -169,7 +149,7 @@ namespace Console
             return false;
         }
 
-        private bool ShowHelp()
+        private static bool ShowHelp()
         {
             Con.WriteLine(
 @"
@@ -208,7 +188,7 @@ Press Ctrl-C to quit.
             return $"{lang}> ";
         }
 
-        void Error(string text, ConsoleColor color = ConsoleColor.Green)
+        private static void Error(string text, ConsoleColor color = ConsoleColor.Green)
         {
             Con.ForegroundColor = color;
             Con.WriteLine(text);
@@ -216,56 +196,19 @@ Press Ctrl-C to quit.
 
         private void WriteDataStack()
         {
-            WriteDataStackContents();
+            _peer.Remote?.WriteDataStackContents();
         }
 
-        public void WriteDataStackContents(int max = 20)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            var data = _exec.DataStack.ToArray();
-            max = Math.Min(data.Length, max);
-            for (var n = max - 1; n >= 0; --n)
-            {
-                var obj = data[n];
-                str.AppendLine($"{n}: {Print(obj)}");
-            }
-            Con.Write(str.ToString());
-        }
-
-        private string Print(object obj)
-        {
-            switch (obj)
-            {
-                case string str:
-                    return $"\"{str}\"";
-                case List<object> list:
-                    var sb = new StringBuilder();
-                    sb.Append('[');
-                    var comma = "";
-                    foreach (var elem in list)
-                    {
-                        sb.Append(comma + Print(elem));
-                        comma = ", ";
-                    }
-                    sb.Append(']');
-                    return sb.ToString();
-            }
-
-            return obj.ToString();
-        }
-
-        private readonly IRegistry _registry;
-        private readonly Executor _exec;
         private readonly PiTranslator _piTranslator;
-        private RhoTranslator _rhoTranslator;
+        private readonly RhoTranslator _rhoTranslator;
+        private readonly Peer _peer;
         private ITranslator _translator;
-        private Peer _peer;
         private bool IsPi => _translator == _piTranslator;
         private bool IsRho => _translator == _rhoTranslator;
+        private IRegistry _registry;
+        //private Executor _exec => _peer.Executor;
+        private string _hostName => _peer.HostName;
+        private int _hostPort => _peer.HostPort;
         private static Program _self;
-
-        private string _hostName;
-        private int _hostPort;
     }
 }
