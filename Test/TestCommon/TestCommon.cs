@@ -106,6 +106,18 @@ namespace Diver.Test
             return Activator.CreateInstance(klass, _reg) as ITranslator;
         }
 
+        protected string LoadScript(string fileName)
+        {
+            return File.ReadAllText(GetFullScriptPathname(fileName));
+        }
+
+        protected Continuation TranslateScript(string fileName)
+        {
+            var trans = MakeTranslator(fileName);
+            Assert.IsTrue(trans.Translate(LoadScript(fileName)));
+            return trans.Result;
+        }
+
         protected bool RunScriptPathname(string filePath)
         {
             var fileName = Path.GetFileName(filePath);

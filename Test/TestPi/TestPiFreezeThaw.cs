@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
@@ -33,14 +34,35 @@ namespace Diver.Test
             TestFreezeThawPi("{1 2 +} &");
             AssertPop(3);
 
-            //TestFreezeThawPi(@"""foo"" ""bar"" +");
-            //AssertPop("foobar");
+            TestFreezeThawPi(@"""foo"" ""bar"" +");
+            AssertPop("foobar");
 
-            //TestFreezeThawPi(@"""foo"" ""bar"" +");
-            //AssertPop("foobar");
+            TestFreezeThawPi("[1 2 3]");
+            var list = Pop<List<object>>();
+            Assert.AreEqual(3, list.Count);
+            Assert.AreEqual(1, list[0]);
+            Assert.AreEqual(2, list[1]);
+            Assert.AreEqual(3, list[2]);
 
-            //TestFreezeThawPi(@"""foo"" ""bar"" +");
-            //AssertPop("foobar");
+            TestFreezeThawScript("Comments.pi");
+            TestFreezeThawScript("Arithmetic.pi");
+            TestFreezeThawScript("Boolean.pi");
+            TestFreezeThawScript("Array.pi");
+            TestFreezeThawScript("Conditionals.pi");
+            TestFreezeThawScript("Continuations.pi");
+            TestFreezeThawScript("Strings.pi");
+        }
+
+        private void TestFreezeThawScript(string fileName)
+        {
+            var text = TranslateScript(fileName).ToText();
+            TestFreezeThawPi(text);
+        }
+
+        protected void TestFreezeThaw(Continuation cont)
+        {
+            var text = cont.ToText();
+            
         }
 
         protected void TestFreezeThawPi(string text)

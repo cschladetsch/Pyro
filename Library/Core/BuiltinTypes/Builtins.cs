@@ -15,19 +15,13 @@ namespace Diver
             reg.Register(new Class<Void>(reg));
             reg.Register(new Class<bool>(reg));
             reg.Register(new Class<int>(reg));
-            RegisterString(reg);
-            reg.Register(new Class<float>(reg));
-            reg.Register(new Class<List<object>>(reg));
-        }
-
-        internal static void RegisterString(IRegistry reg)
-        {
-            reg.Register(new ClassBuilder<List<object>>(reg, ListToText)
-                .Class);
             reg.Register(new ClassBuilder<string>(reg, StringToText)
                 .Methods
                     .Add<int,int,string>("Substring", (s,n,m) => s.Substring(n,m))
                     .Add<int,string>("Substring1", (s,n) => s.Substring(n))
+                .Class);
+            reg.Register(new Class<float>(reg));
+            reg.Register(new ClassBuilder<List<object>>(reg, ListToText)
                 .Class);
         }
 
@@ -37,6 +31,7 @@ namespace Diver
             foreach (var obj in arg2)
             {
                 reg.AppendText(arg1, obj);
+                arg1.Append(' ');
             }
             arg1.Append(']');
         }
