@@ -51,7 +51,7 @@ namespace Diver.Network
                 _exec.Continue(cont);
                 var stack = _exec.DataStack.ToList();
                 var response = _reg.ToText(stack);
-                //WriteLine($"Response: {response}");
+                WriteLine($"Response: {response}");
                 _peer.GetClient(sender)?.SendPi(response);
             }
             catch (Exception e)

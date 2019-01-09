@@ -84,12 +84,15 @@ namespace Diver.Network
         {
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
-            var data = _stack;
-            if (data.Count > max)
-                Con.WriteLine("...");
-            max = Math.Min(data.Count, max);
-            for (var n = max - 1; n >= 0; --n)
-                str.AppendLine($"{n}: {Print(data[n])}");
+            if (_stack != null)
+            {
+                var data = _stack;
+                if (data.Count > max)
+                    Con.WriteLine("...");
+                max = Math.Min(data.Count, max);
+                for (var n = max - 1; n >= 0; --n)
+                    str.AppendLine($"{n}: {Print(data[n])}");
+            }
             Con.Write(str.ToString());
         }
 

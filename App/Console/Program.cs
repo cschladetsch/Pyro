@@ -60,7 +60,7 @@ namespace Console
         private void WriteHeader()
         {
             Con.ForegroundColor = ConsoleColor.DarkGray;
-            Con.WriteLine($"Console {GetVersion()}");
+            Con.WriteLine($"{GetVersion()}");
         }
 
         private static string GetVersion()
@@ -68,7 +68,7 @@ namespace Console
             var name = Assembly.GetExecutingAssembly().GetName();
             var version = name.Version;
             var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            return $"{name} {version} built {built}";
+            return $"{name.Name} {version} built {built}";
         }
 
         private void Repl()
