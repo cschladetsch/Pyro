@@ -2,7 +2,7 @@
 {
     internal class RefBase : ConstRefBase, IRefBase
     {
-        public new static RefBase None = new RefBase();
+        //public new static RefBase None = new RefBase(null, null, Id.None);
 
         public new bool IsConst => false;
 
@@ -12,14 +12,14 @@
             set => base._baseValue = value;
         }
 
-        private RefBase()
-        {
-        }
+        //private RefBase()
+        //{
+        //}
 
-        internal RefBase(Id id)
-            : base(id)
-        {
-        }
+        //internal RefBase(Id id)
+        //    : base(id)
+        //{
+        //}
 
         internal RefBase(IRegistry reg, IClassBase @class, Id id)
             : base(reg, @class, id)

@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Diver.Impl
 {
-    public class ClassBase : StructBase, IClassBase
+    public class ClassBase
+        : StructBase
+        , IClassBase
     {
         public int TypeNumber { get; set; }
 
@@ -51,9 +53,9 @@ namespace Diver.Impl
             throw new NotImplementedException();
         }
 
-        public virtual void Append(StringBuilder str, object rbBaseValue)
+        public virtual void AppendText(StringBuilder str, object value)
         {
-            str.Append(rbBaseValue);
+            str.Append(value);
         }
 
         private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();

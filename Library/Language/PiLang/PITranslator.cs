@@ -20,7 +20,7 @@ namespace Diver.Language
 
         public override bool Translate(string input, EStructure st = EStructure.Program)
         {
-            _continuation = new Continuation(new List<object>());
+            _continuation = Continuation.New(_reg);
 
             if (string.IsNullOrEmpty(input))
                 return true;
@@ -250,8 +250,8 @@ namespace Diver.Language
 
         private bool TranslateContinuation(PiAstNode piAstNode, IList<object> objects)
         {
-            var cont = New(new Continuation(new List<object>()));
-            if (!TranslateNode(piAstNode, cont.Value.Code))
+            var cont = Continuation.New(_reg);
+            if (!TranslateNode(piAstNode, cont.Code))
                 return Fail($"Failed to translate ${piAstNode}");
             objects.Add(cont);
             return true;

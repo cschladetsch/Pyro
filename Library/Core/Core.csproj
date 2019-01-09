@@ -58,7 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuiltinTypes\Array.cs" />
     <Compile Include="BuiltinTypes\Builtins.cs" />
     <Compile Include="Impl\Callable.cs" />
     <Compile Include="Impl\CallableBase.cs" />
@@ -102,6 +101,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Reflected.cs" />
     <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>

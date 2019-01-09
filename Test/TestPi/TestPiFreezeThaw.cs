@@ -2,9 +2,7 @@
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
-using Diver.Language.Impl;
 using NUnit.Framework;
-using Newtonsoft.Json;
 
 namespace Diver.Test
 {
@@ -77,15 +75,15 @@ namespace Diver.Test
             var cont = PiTranslate(text);
 
             WriteLine("--- Serialised:");
-            var str = cont.Serialise();
+            var str = cont.ToText();
             WriteLine(str);
             Assert.IsNotEmpty(str);
 
             var thawed = PiTranslate(str);
             Assert.IsNotNull(thawed);
-            var rb = thawed.Code[0] as IRefBase;
-            Assert.IsNotNull(rb);
-            return rb.BaseValue as Continuation;
+            var continuation = thawed.Code[0] as Continuation;
+            Assert.IsNotNull(continuation);
+            return continuation;
         }
     }
 }

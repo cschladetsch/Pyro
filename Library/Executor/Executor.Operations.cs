@@ -132,7 +132,7 @@ namespace Diver.Exec
 
         private void Freeze()
         {
-            Push(_current.Serialise());
+            Push(_current.ToText());
         }
 
         private void ForLoop()

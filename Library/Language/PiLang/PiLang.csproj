@@ -8,7 +8,7 @@
     <ProjectGuid>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.Language.PiLang</RootNamespace>
+    <RootNamespace>Diver.Language</RootNamespace>
     <AssemblyName>PiLang</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lexer\RegisterTypes.cs" />
     <Compile Include="Parser\AstFactory.cs" />
     <Compile Include="Parser\PiAstNode.cs" />
     <Compile Include="Parser\EPiAst.cs" />

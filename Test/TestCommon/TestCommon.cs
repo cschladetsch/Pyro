@@ -25,14 +25,14 @@ namespace Diver.Test
         protected Stack<object> DataStack => _exec.DataStack;
         protected IRegistry _reg;
         protected IRef<Executor> _executor;
-        protected Executor _exec;
+        protected Executor _exec => _executor.Value;
 
         [SetUp]
         public void Setup()
         {
             _reg = new Registry();
-            _executor = _reg.Add(new Executor(_reg));
-            _exec = _executor.Value;
+            _executor = _reg.Add(new Executor());
+            Exec.RegisterTypes.Register(_reg);
         }
 
         protected void PiRun(string text)

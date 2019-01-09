@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Diver.Impl;
 
 namespace Diver
@@ -9,10 +10,21 @@ namespace Diver
     /// <typeparam name="T"></typeparam>
     public class ClassBuilder<T> where T : class//, new()
     {
+        public IClass<T> Class => _class;
+        public AddMethod Methods;
+        public AddProperty Properties;
+
         public ClassBuilder(IRegistry reg)
         {
             _registry = reg;
-            _class = new Impl.Class<T>(reg);
+            _class = new Class<T>(reg);
+            Methods = new AddMethod(this);
+        }
+
+        public ClassBuilder(IRegistry reg, Action<IRegistry, StringBuilder, T> toText)
+        {
+            _registry = reg;
+            _class = new Class<T>(reg, toText);
             Methods = new AddMethod(this);
         }
 
@@ -25,9 +37,9 @@ namespace Diver
                 _builder = builder;
             }
 
-            public A Get<A>(object obj)
+            public TA Get<TA>(object obj)
             {
-                return _builder._registry.Get<A>(obj);
+                return _builder._registry.Get<TA>(obj);
             }
 
             public IClass<T> Class => _builder._class;
@@ -55,11 +67,6 @@ namespace Diver
         public class AddProperty
         {
         }
-
-        public IClass<T> Class => _class;
-
-        public AddMethod Methods;
-        public AddProperty Property;
 
         private readonly IClass<T> _class;
         private readonly IRegistry _registry;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Diver.Impl
 {
@@ -9,7 +10,7 @@ namespace Diver.Impl
 
         public Registry()
         {
-            BuiltinTypes.Builtins.Register(this);
+            BuiltinTypes.Register(this);
         }
 
         public bool Register(IClassBase @class)
@@ -30,21 +31,30 @@ namespace Diver.Impl
 
         public T Get<T>(object obj)
         {
+            if (!TryGet<T>(obj, out T val))
+                throw new TypeMismatchError(typeof(T), obj?.GetType());
+            return val;
+        }
+
+        public bool TryGet<T>(object obj, out T val)
+        {
             switch (obj)
             {
-                case T _:
-                    return (T)obj;
+                case T value:
+                    val = value;
+                    return true;
                 case IRefBase rb:
-                    return GetRef<T>(rb.Id).Value;
+                    val = GetRef<T>(rb.Id).Value;
+                    return true;
             }
-
-            throw new TypeMismatchError(typeof(T), obj?.GetType());
+            val = default(T);
+            return false;
         }
 
         public IRefBase Add(object value)
         {
             var klass = GetClass(value?.GetType());
-            return klass == null ? RefBase.None : AddNew(klass, value);
+            return klass == null ? null : AddNew(klass, value);
         }
 
         public IClass<T> GetClass<T>()
@@ -71,6 +81,19 @@ namespace Diver.Impl
         public IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack)
         {
             throw new NotImplementedException();
+        }
+
+        public void AppendText(StringBuilder stringBuilder, object obj)
+        {
+            if (obj is IConstRefBase rb)
+                obj = rb.BaseValue;
+            var type = obj?.GetType();
+            if (type == null)
+                return;
+            if (_classes.TryGetValue(type, out var @class))
+                @class.AppendText(stringBuilder, obj);
+            else
+                stringBuilder.Append(obj);
         }
 
         public IRef<T> GetRef<T>(Id id)
@@ -132,7 +155,8 @@ namespace Diver.Impl
         {
             var id = NextId();
             classBase.NewRef(id, out var refBase);
-            _instances.Add(id, refBase);
+            Reflect(classBase, refBase);
+            AddNewInstance(classBase, refBase, id);
             return refBase as IRef<T>;
         }
 
@@ -140,6 +164,7 @@ namespace Diver.Impl
         {
             var val = AddNew<T>(classBase);
             val.Value = value;
+            Reflect(classBase, val);
             return val;
         }
 
@@ -147,8 +172,27 @@ namespace Diver.Impl
         {
             var id = NextId();
             var refBase = classBase.Create(id, value);
-            _instances.Add(id, refBase);
+            AddNewInstance(classBase, refBase, id);
             return refBase;
+        }
+
+        private void AddNewInstance(IClassBase classBase, IRefBase refBase, Id id)
+        {
+            Reflect(classBase, refBase);
+
+            _instances.Add(id, refBase);
+        }
+
+        private void Reflect(IClassBase classBase, IRefBase refBase)
+        {
+            if (!(refBase.BaseValue is IReflected reflected)) 
+                return;
+
+            reflected.SelfBase = refBase;
+            if (!(refBase is ConstRefBase self))
+                throw new Exception("Internal error: IRef is not a ConstRef");
+            self.Registry = this;
+            self.Class = classBase;
         }
 
         private void AddClass(Type type, IClassBase @class)

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Odbc;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace Diver.Exec
@@ -9,10 +6,10 @@ namespace Diver.Exec
     /// <summary>
     /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.
     /// </summary>
-    public partial class Continuation : Reflected<Continuation>
+    public partial class Continuation
+        : Reflected<Continuation>
     {
-        public IList<object> Code => _code;//{ get => _code; set => _code = value; }
-        public IDictionary<string, object> Scope => _scope;//{ get => _scope; set => _scope = value; }
+        public IList<object> Code => _code;
         public IList<string> Args => _args;
         public int Ip => _next;
 
@@ -21,73 +18,41 @@ namespace Diver.Exec
             _code = code;
         }
 
-        public string Serialise()
+        public static Continuation New(IRegistry reg)
         {
-            var str = new StringBuilder();
-            Serialise(str, this);
-            return str.ToString();
+            var code = reg.Add(new List<object>());
+            return reg.Add(new Continuation(code.Value)).Value;
         }
 
-        public string Serialise(StringBuilder str)
+        public static void ToText(IRegistry reg, StringBuilder str, Continuation cont)
         {
             str.Append('{');
-            foreach (var elem in Code)
+            foreach (var elem in cont.Code)
             {
-                Serialise(str, elem);
+                var isOp = elem is EOperation;
+                if (isOp)
+                {
+                    var op = (EOperation) elem;
+                    str.Append('`');
+                    str.Append((int) op);
+                }
+                else
+                {
+                    reg.AppendText(str, elem);
+                }
+
                 str.Append(' ');
             }
             str.Append('}');
-
-            return str.ToString();
         }
 
-        void Serialise(StringBuilder str, object obj)
+        public static void Register(IRegistry reg)
         {
-            switch (obj)
-            {
-                case Continuation cont:
-                    Serialise(str);
-                    break;
-                case EOperation op:
-                    str.Append(OpToString(op));
-                    break;
-                case IRefBase rb:
-                    rb.Class.Append(str, rb.BaseValue);
-                    break;
-                case int n:
-                    str.Append(n);
-                    break;
-                case string s:
-                    str.Append('"');
-                    str.Append(s);
-                    str.Append('"');
-                    break;
-                case List<object> list:
-                    str.Append('[');
-                    var sp = ' ';
-                    foreach (var elem in list)
-                    {
-                        Serialise(str, elem);
-                        str.Append(sp);
-                    }
-                    str.Append("] ");
-                    break;
-                default:
-                    str.Append(obj);
-                    break;
-            }
+            reg.Register(new ClassBuilder<Continuation>(reg, ToText)
+                .Class);
         }
 
-        private string OpToString(EOperation op)
-        {
-            return "`" + ((int)op).ToString();
-        }
-
-        public object Deserialise(string str)
-        {
-            return str;
-        }
-
+        // this is human-readable version. for transmission/persistence, use ToText()
         public override string ToString()
         {
             var str = new StringBuilder();
@@ -114,6 +79,7 @@ namespace Diver.Exec
             str.Append('}');
 
             return str.ToString();
+            //return $"#{_next}/{_code.Count}:{ToText()}";
         }
 
         public void AddArg(string ident)
@@ -175,7 +141,6 @@ namespace Diver.Exec
         private int _next;
         private List<string> _args;
         private readonly List<object> _code;
-        private readonly Dictionary<string, object> _scope = new Dictionary<string, object>();
-
+        private IDictionary<string, object> _scope => Scope;
     }
 }

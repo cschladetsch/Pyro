@@ -8,7 +8,7 @@
     <ProjectGuid>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.Executor</RootNamespace>
+    <RootNamespace>Diver.Exec</RootNamespace>
     <AssemblyName>Executor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -60,7 +60,7 @@
     <Compile Include="Executor.Debug.cs" />
     <Compile Include="Executor.Operations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflected.cs" />
+    <Compile Include="RegisterTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

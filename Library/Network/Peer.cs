@@ -26,7 +26,7 @@ namespace Diver.Network
         {
             _kernel = Flow.Create.Kernel();
             _registry = new Registry();
-            _exec = new Executor(_registry);
+            _exec = _registry.Add(new Executor()).Value;
             _piTranslator = new PiTranslator(_registry);
             _server = new Server(this, listenPort);
         }

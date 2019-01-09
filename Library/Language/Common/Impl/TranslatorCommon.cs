@@ -17,7 +17,7 @@ namespace Diver.Language.Impl
         protected TranslatorCommon(IRegistry r)
             : base(r)
         {
-            _stack.Push(new Continuation(new List<object>()));
+            _stack.Push(Continuation.New(r));
         }
 
         public virtual bool Translate(string text, EStructure st = EStructure.Program)
@@ -29,7 +29,7 @@ namespace Diver.Language.Impl
         {
             base.Reset();
             _stack.Clear();
-            _stack.Push(new Continuation(new List<object>()));
+            _stack.Push(Continuation.New(_reg));
         }
 
         public override string ToString()
@@ -45,7 +45,7 @@ namespace Diver.Language.Impl
 
         protected void PushNew()
         {
-            _stack.Push(new Continuation(new List<object>()));
+            _stack.Push(Continuation.New(_reg));
         }
 
         protected Continuation Pop()
