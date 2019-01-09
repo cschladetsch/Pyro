@@ -9,4 +9,3 @@
 0 [1 2 3] remove [2 3] == assert
 1 2 3 3 toarray [1 2 3] == assert
 debug_datastack
-depth 0 == assert

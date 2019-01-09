@@ -1,18 +1,13 @@
 ﻿// test stack operations
 
-// helper to avoid having to type `== assert` a lot
-{ == assert } 'equals #
-
-clear depth 0 equals!
-1 2 3 depth 3 equals! clear
-1 2 3 data_stack [1 2 3] equals!
-1 2 swap 1 equals& 2 equals!
-1 2 3 rot 2 3 1 3 toarray data_stack equals!
-1 2 3 2 pick 1 equals!
-1 2 3 1 pick 2 equals!
-1 2 3 0 pick 3 equals!
-1 dup 2 + 3 equals!
-1 2 3 4 depth 4 equals!
-1 2 over 3 to_array [1 2 1] equals!
-
+clear depth 0 == assert
+1 2 3 depth 3 == assert clear
+1 2 swap 1 == assert 2 == assert
+1 2 3 rot 2 == assert 1 == assert  3 == assert
+1 2 3 2 pick 1 == assert clear
+1 2 3 1 pick 2 == assert clear
+1 2 3 0 pick 3 == assert clear
+1 dup 2 + 3 == assert clear
+1 2 3 4 depth 4 == assert clear
+1 2 over 3 toarray [1 2 1] == assert
 

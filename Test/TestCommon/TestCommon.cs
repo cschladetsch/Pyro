@@ -248,6 +248,7 @@ namespace Diver.Test
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
+            Assert.AreEqual(0, _exec.DataStack.Count);
         }
     }
 }

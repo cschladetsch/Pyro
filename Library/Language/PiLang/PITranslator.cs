@@ -78,6 +78,21 @@ namespace Diver.Language
             // This wasn't obvious at first, and is not true in most languages!
             switch (token.Type)
             {
+                case EPiToken.NotEquiv:
+                    objects.Add(EOperation.NotEquiv);
+                    break;
+                case EPiToken.Less:
+                    objects.Add(EOperation.Less);
+                    break;
+                case EPiToken.LessEquiv:
+                    objects.Add(EOperation.LessOrEquiv);
+                    break;
+                case EPiToken.Greater:
+                    objects.Add(EOperation.Greater);
+                    break;
+                case EPiToken.GreaterEquiv:
+                    objects.Add(EOperation.GreaterOrEquiv);
+                    break;
                 case EPiToken.GetMember:
                     objects.Add(EOperation.GetMember);
                     break;
