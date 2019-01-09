@@ -26,11 +26,15 @@ namespace Diver.Test
         protected IRegistry _reg;
         protected IRef<Executor> _executor;
         protected Executor _exec => _executor.Value;
+        private ITranslator _pi;
+        private ITranslator _rho;
 
         [SetUp]
         public void Setup()
         {
             _reg = new Registry();
+            _pi = new PiTranslator(_reg);
+            _rho = new PiTranslator(_reg);
             _executor = _reg.Add(new Executor());
             Exec.RegisterTypes.Register(_reg);
         }
@@ -249,6 +253,56 @@ namespace Diver.Test
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
             Assert.AreEqual(0, _exec.DataStack.Count);
+        }
+
+        protected void TestFreezeThawScript(string fileName)
+        {
+            var text = TranslateScript(fileName).ToText();
+            WriteLine(text);
+            TestFreezeThawPi(text);
+        }
+
+        protected void TestFreezeThawPi(string text)
+        {
+            Assert.IsTrue(Continue(FreezeThaw(_pi, text)));            
+        }
+
+        protected void TestFreezeThawRho(string text)
+        {
+            Assert.IsTrue(Continue(FreezeThaw(_rho, text)));            
+        }
+
+        protected bool Continue(Continuation cont)
+        {
+            Assert.IsNotNull(cont);
+            try
+            {
+                _exec.Continue(cont);
+                return true;
+            }
+            catch (Exception e)
+            {
+                WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        protected Continuation FreezeThaw(ITranslator trans, string text)
+        {
+            WriteLine("--- Input:");
+            WriteLine(text);
+            var cont = PiTranslate(text);
+
+            WriteLine("--- Serialised:");
+            var str = cont.ToText();
+            WriteLine(str);
+            Assert.IsNotEmpty(str);
+
+            var thawed = PiTranslate(str);
+            Assert.IsNotNull(thawed);
+            var continuation = thawed.Code[0] as Continuation;
+            Assert.IsNotNull(continuation);
+            return continuation;
         }
     }
 }
