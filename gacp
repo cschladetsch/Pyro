@@ -2,7 +2,7 @@
 
 set -e
 
-./runtests || echo "Tests failed - no commit"
+./runtests || (echo "Tests failed - no commit"  && exit 1)
 
 # git add all changes, then make a new commit and push it
 git add --update * 
