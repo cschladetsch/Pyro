@@ -32,7 +32,11 @@ namespace Diver
             }
         }
 
-        public IDictionary<string, object> Scope => _scope ?? (_scope = new Dictionary<string, object>());
+        public IDictionary<string, object> Scope
+        {
+            get => _scope ?? (_scope = new Dictionary<string, object>());
+            set => _scope = value;
+        }
 
         public string ToText()
         {

@@ -73,6 +73,8 @@ namespace Console
 
         private void AddTypes(IRegistry registry)
         {
+            Diver.Exec.RegisterTypes.Register(registry);
+
             registry.Register(new ClassBuilder<Program>(registry)
                 .Methods
                     .Add<string, bool>("Execute", (q, s) => q.Execute(s))
@@ -154,7 +156,9 @@ namespace Console
                     return false;
                 }
 
-                _exec.Continue(_translator.Result);
+                var continuation = _translator.Result;
+                continuation.Scope = _exec.Scope;
+                _exec.Continue(continuation);
                 return true;
             }
             catch (Exception e)
