@@ -51,6 +51,23 @@ namespace Diver
             {
             }
 
+            public AddMethod Add<A,B>(string name, Action<T,A,B> fun)
+            {
+                _builder._class.AddCallable(name, new VoidCallable<T,A,B>(fun));
+                return this;
+            }
+
+            public AddMethod Add<A>(string name, Action<T, A> fun)
+            {
+                _builder._class.AddCallable(name, new VoidCallable<T,A>(fun));
+                return this;
+            }
+
+            public AddMethod Add(string name, Action<T> fun)
+            {
+                _builder._class.AddCallable(name, new VoidCallable<T>(fun));
+                return this;
+            }
             public AddMethod Add<A,B,R>(string name, Func<T,A,B,R> fun)
             {
                 _builder._class.AddCallable(name, new Callable<T,A,B,R>(fun));
@@ -60,6 +77,12 @@ namespace Diver
             public AddMethod Add<A, R>(string name, Func<T, A, R> fun)
             {
                 _builder._class.AddCallable(name, new Callable<T,A,R>(fun));
+                return this;
+            }
+
+            public AddMethod Add<R>(string name, Func<T, R> fun)
+            {
+                _builder._class.AddCallable(name, new Callable<T,R>(fun));
                 return this;
             }
         }

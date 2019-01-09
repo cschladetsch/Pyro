@@ -77,6 +77,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="IConstRef.cs" />
     <Compile Include="Impl\RefBase.cs" />
+    <Compile Include="Impl\VoidCallable.cs" />
     <Compile Include="IProcess.cs" />
     <Compile Include="IStructBase.cs" />
     <Compile Include="ITypeBase.cs" />
