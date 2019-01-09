@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Diver
 {
@@ -18,6 +19,7 @@ namespace Diver
         IClassBase GetClass(string name);
 
         T Get<T>(object obj);
+        bool TryGet<T>(object obj, out T val);
 
         IRefBase Add(object value);
         IRef<T> Add<T>(T value);
@@ -32,5 +34,6 @@ namespace Diver
         object New(IClassBase @class, Stack<object> dataStack);
         IRefBase NewRef(IClassBase @class, Stack<object> dataStack);
         IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack);
+        void AppendText(StringBuilder stringBuilder, object o);
     }
 }

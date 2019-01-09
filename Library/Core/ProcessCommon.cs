@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Diver.Language
+namespace Diver
 {
     public class ProcessCommon : Process
     {

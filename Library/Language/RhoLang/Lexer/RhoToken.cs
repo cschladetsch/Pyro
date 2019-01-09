@@ -1,4 +1,5 @@
 ﻿using System.Security.Permissions;
+using Diver.Language.Impl;
 
 namespace Diver.Language
 {

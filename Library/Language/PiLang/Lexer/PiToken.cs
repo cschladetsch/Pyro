@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using Diver.Language.Impl;
+
+namespace Diver.Language
 {
     public class PiToken 
         : TokenBase<EPiToken>

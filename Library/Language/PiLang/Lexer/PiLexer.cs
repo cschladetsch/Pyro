@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Diver.Exec;
+using Diver.Language.Impl;
 
 namespace Diver.Language
 {
     public class PiLexer
-        : LexerCommon<EPiToken, PiToken, PiTokenFactory>
+        : LexerCommon<EPiToken, PiToken, PiTokenFactory>, ILexer
     {
         public PiLexer(string input)
             : base(input)
@@ -119,6 +120,7 @@ namespace Diver.Language
             _keyWords.Add("over", EPiToken.Over);
             _keyWords.Add("swap", EPiToken.Swap);
             _keyWords.Add("rot", EPiToken.Rot);
+            _keyWords.Add("pick", EPiToken.Pick);
             _keyWords.Add("rotn", EPiToken.RotN);
             _keyWords.Add("gc", EPiToken.GarbageCollect);
             _keyWords.Add("clear", EPiToken.Clear);
@@ -179,7 +181,7 @@ namespace Diver.Language
             case '[': return Add(EPiToken.OpenSquareBracket);
             case ']': return Add(EPiToken.CloseSquareBracket);
             case '=': return AddIfNext('=', EPiToken.Equiv, EPiToken.Assign);
-            case '!': return Add(EPiToken.Replace);
+            case '!': return AddIfNext('=', EPiToken.NotEquiv, EPiToken.Replace);
             case '&': return AddIfNext('&', EPiToken.And, EPiToken.Suspend);
             case '|': return AddIfNext('|', EPiToken.Or, EPiToken.BitOr);
             case '<': return AddIfNext('=', EPiToken.LessEquiv, EPiToken.LessEquiv);

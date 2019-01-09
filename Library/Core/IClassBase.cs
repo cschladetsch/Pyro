@@ -1,9 +1,7 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using Diver.Impl;
 
 namespace Diver
 {
@@ -35,7 +33,7 @@ namespace Diver
         IConstRefBase CreateConst(Id id, object value);
         object NewInstance(Stack<object> dataStack);
 
-        void Append(StringBuilder str, object rbBaseValue);
+        void AppendText(StringBuilder str, object value);
     }
 }
 

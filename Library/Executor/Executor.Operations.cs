@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities.Expressions;
 using System.Activities.Statements;
 using System.Collections;
 using System.Collections.Generic;
@@ -75,6 +76,39 @@ namespace Diver.Exec
             _actions[EOperation.Over] = Over;
             _actions[EOperation.Dup] = Dup;
             _actions[EOperation.Clear] = () => DataStack.Clear();
+
+            _actions[EOperation.Less] = Less;
+            _actions[EOperation.LessOrEquiv] = LessEquiv;
+            _actions[EOperation.Greater] = Greater;
+            _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+        }
+
+        private void GreaterEquiv()
+        {
+            var b = Pop();
+            var a = Pop();
+            Push(a >= b);
+        }
+
+        private void Greater()
+        {
+            var b = Pop();
+            var a = Pop();
+            Push(a > b);
+        }
+
+        private void LessEquiv()
+        {
+            var b = Pop();
+            var a = Pop();
+            Push(a <= b);
+        }
+
+        private void Less()
+        {
+            var b = Pop();
+            var a = Pop();
+            Push(a < b);
         }
 
         private void Dup()
@@ -132,7 +166,7 @@ namespace Diver.Exec
 
         private void Freeze()
         {
-            Push(_current.Serialise());
+            Push(_current.ToText());
         }
 
         private void ForLoop()

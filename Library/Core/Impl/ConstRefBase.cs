@@ -7,29 +7,28 @@ namespace Diver.Impl
     /// </summary>
     internal class ConstRefBase : IConstRefBase
     {
-        public static ConstRefBase None = new ConstRefBase(Diver.Id.None);
+        public static ConstRefBase None = new ConstRefBase(null, null, Id.None);
         public Id Id => _id;
-        public IRegistry Registry => _registry;
+        public IRegistry Registry { get; internal set; }
         public Type ValueType => BaseValue?.GetType();
-        public IClassBase Class => _classBase;
+        public IClassBase Class { get; internal set; }
         public bool IsConst => true;
         public object BaseValue => _baseValue;
 
-        public T Get<T>()
-        {
-            return (T) _baseValue;
-        }
+        //protected ConstRefBase()
+        //{
+        //}
 
-        public ConstRefBase(Id id)
-        {
-            _id = id;
-        }
+        //public ConstRefBase(Id id)
+        //{
+        //    _id = id;
+        //}
 
         public ConstRefBase(IRegistry reg, IClassBase klass, Id id)
         {
             _id = id;
-            _registry = reg;
-            _classBase = klass;
+            Registry = reg;
+            Class = klass;
         }
 
         public ConstRefBase(IRegistry reg, IClassBase @class, Id id, object val)
@@ -38,13 +37,12 @@ namespace Diver.Impl
             reg.AddConst(val);
         }
 
-        protected ConstRefBase()
+        public T Get<T>()
         {
+            return (T) _baseValue;
         }
+
         protected readonly Id _id;
         protected object _baseValue;
-        protected readonly IRegistry _registry;
-        protected readonly IClassBase _classBase;
-
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Diver.Language
 {
+    /// <inheritdoc cref="Process" />
     /// <summary>
     /// Common to all lexers. Provides basic lexing functionality that is not specific to
     /// any token-type.
@@ -21,11 +22,6 @@ namespace Diver.Language
         public LexerBase(string input)
         {
             _input = UnfuckNewLines(input);
-        }
-
-        private string UnfuckNewLines(string input)
-        {
-            return input.Replace("\r", "");
         }
 
         public string GetLine(int lineNumber)
@@ -176,9 +172,13 @@ namespace Diver.Language
             return char.IsWhiteSpace(arg);
         }
 
+        private string UnfuckNewLines(string input)
+        {
+            return input.Replace("\r", "");
+        }
 
-        private readonly  List<string> _lines = new List<string>();
         protected string _input;
         protected int _offset, _lineNumber;
+        private readonly  List<string> _lines = new List<string>();
     }
 }

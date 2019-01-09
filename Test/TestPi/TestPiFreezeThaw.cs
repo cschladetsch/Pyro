@@ -1,27 +1,47 @@
-﻿using Diver.Exec;
+﻿using System;
+using System.Collections.Generic;
+using Diver.Exec;
+using Diver.Impl;
+using Diver.Language;
 using NUnit.Framework;
-using Newtonsoft.Json;
 
 namespace Diver.Test
 {
     [TestFixture]
     public class TestPiFreezeThaw : TestCommon
     {
+        [SetUp]
+        public new void Setup()
+        {
+            _exec.Rethrows = true;
+        }
+
         [Test]
         public void TestFreezeThaw()
         {
-            //Continue(FreezeThaw())
-        }
+            TestFreezeThawPi("1 2 +");
+            AssertPop(3);
 
-        protected Continuation FreezeThaw(string text)
-        {
-            var cont = PiTranslate(text);
-            var str = cont.Serialise();
-            Assert.IsNotEmpty(str);
-            var thawed = PiTranslate(str);
-            Assert.IsNotNull(thawed);
-            var rb = thawed.Code[0] as IRefBase;
-            return rb.BaseValue as Continuation;
+            TestFreezeThawPi("{1 2 +} &");
+            AssertPop(3);
+
+            TestFreezeThawPi(@"""foo"" ""bar"" +");
+            AssertPop("foobar");
+
+            TestFreezeThawPi("[1 2 3]");
+            var list = Pop<List<object>>();
+            Assert.AreEqual(3, list.Count);
+            Assert.AreEqual(1, list[0]);
+            Assert.AreEqual(2, list[1]);
+            Assert.AreEqual(3, list[2]);
+
+            TestFreezeThawScript("Comments.pi");
+            TestFreezeThawScript("Arithmetic.pi");
+            TestFreezeThawScript("Boolean.pi");
+            TestFreezeThawScript("Array.pi");
+            TestFreezeThawScript("Conditionals.pi");
+            TestFreezeThawScript("Continuations.pi");
+            TestFreezeThawScript("Strings.pi");
         }
     }
 }

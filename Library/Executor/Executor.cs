@@ -6,17 +6,17 @@ namespace Diver.Exec
     /// <summary>
     /// Processes a sequence of Continuations.
     /// </summary>
-    public partial class Executor : Reflected<Executor>
+    public partial class Executor
+        : Reflected<Executor>
     {
         public Stack<object> DataStack => _data;
         public Stack<Continuation> ContextStack => _context;
         public string SourceFilename;
         public int NumOps => _numOps;
-        public Dictionary<string, object> Scope = new Dictionary<string, object>();
+        public bool Rethrows { get; set; }
 
-        public Executor(IRegistry reg)
+        public Executor()
         {
-            _registry = reg;
             AddOperations();
         }
 
@@ -126,7 +126,7 @@ namespace Diver.Exec
                     {
                         if (next is EOperation op)
                         {
-                            Write("leads to-->");
+                            Write($"{op} -->");
                             WriteDataStack();
                         }
                     }
@@ -295,7 +295,7 @@ namespace Diver.Exec
         private Continuation _current;
         private Stack<Continuation> _context = new Stack<Continuation>();
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
-        private IRegistry _registry;
+        private IRegistry _registry => Self.Registry;
         private int _numOps;
     }
 }

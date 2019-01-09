@@ -5,6 +5,7 @@ using System.Linq;
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
+using Diver.Language.Impl;
 using NUnit.Framework;
 
 namespace Diver.Test
@@ -24,14 +25,18 @@ namespace Diver.Test
         protected Stack<object> DataStack => _exec.DataStack;
         protected IRegistry _reg;
         protected IRef<Executor> _executor;
-        protected Executor _exec;
+        protected Executor _exec => _executor.Value;
+        private ITranslator _pi;
+        private ITranslator _rho;
 
         [SetUp]
         public void Setup()
         {
             _reg = new Registry();
-            _executor = _reg.Add(new Executor(_reg));
-            _exec = _executor.Value;
+            _pi = new PiTranslator(_reg);
+            _rho = new PiTranslator(_reg);
+            _executor = _reg.Add(new Executor());
+            Exec.RegisterTypes.Register(_reg);
         }
 
         protected void PiRun(string text)
@@ -58,7 +63,7 @@ namespace Diver.Test
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Result();
+            return _continuation = trans.Result;
         }
 
         protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
@@ -66,14 +71,14 @@ namespace Diver.Test
             var trans = new RhoTranslator(_reg);
             trans.Translate(text, st);
 
-            if (trans.Result() == null)
+            if (trans.Result == null)
                 WriteLine($"No output generated");
             if (trans.Failed)
                 WriteLine($"Error: {trans.Error}");
             if (trace)
                 WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Result();
+            return _continuation = trans.Result;
         }
 
         protected bool RunScript(string scriptName)
@@ -86,7 +91,7 @@ namespace Diver.Test
             return Path.Combine(GetScriptsPath(), scriptName);
         }
 
-        protected TranslatorCommon MakeTranslator(string scriptName)
+        protected ITranslator MakeTranslator(string scriptName)
         {
             Type klass = null;
             switch (Path.GetExtension(scriptName))
@@ -102,7 +107,19 @@ namespace Diver.Test
                 //    break;
             }
 
-            return Activator.CreateInstance(klass, _reg) as TranslatorCommon;
+            return Activator.CreateInstance(klass, _reg) as ITranslator;
+        }
+
+        protected string LoadScript(string fileName)
+        {
+            return File.ReadAllText(GetFullScriptPathname(fileName));
+        }
+
+        protected Continuation TranslateScript(string fileName)
+        {
+            var trans = MakeTranslator(fileName);
+            Assert.IsTrue(trans.Translate(LoadScript(fileName)));
+            return trans.Result;
         }
 
         protected bool RunScriptPathname(string filePath)
@@ -118,7 +135,7 @@ namespace Diver.Test
                 if (trans.Failed)
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result()));
+                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result));
             }
             catch (Exception e)
             {
@@ -235,6 +252,57 @@ namespace Diver.Test
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
+            Assert.AreEqual(0, _exec.DataStack.Count);
+        }
+
+        protected void TestFreezeThawScript(string fileName)
+        {
+            var text = TranslateScript(fileName).ToText();
+            WriteLine(text);
+            TestFreezeThawPi(text);
+        }
+
+        protected void TestFreezeThawPi(string text)
+        {
+            Assert.IsTrue(Continue(FreezeThaw(_pi, text)));            
+        }
+
+        protected void TestFreezeThawRho(string text)
+        {
+            Assert.IsTrue(Continue(FreezeThaw(_rho, text)));            
+        }
+
+        protected bool Continue(Continuation cont)
+        {
+            Assert.IsNotNull(cont);
+            try
+            {
+                _exec.Continue(cont);
+                return true;
+            }
+            catch (Exception e)
+            {
+                WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        protected Continuation FreezeThaw(ITranslator trans, string text)
+        {
+            WriteLine("--- Input:");
+            WriteLine(text);
+            var cont = PiTranslate(text);
+
+            WriteLine("--- Serialised:");
+            var str = cont.ToText();
+            WriteLine(str);
+            Assert.IsNotEmpty(str);
+
+            var thawed = PiTranslate(str);
+            Assert.IsNotNull(thawed);
+            var continuation = thawed.Code[0] as Continuation;
+            Assert.IsNotNull(continuation);
+            return continuation;
         }
     }
 }

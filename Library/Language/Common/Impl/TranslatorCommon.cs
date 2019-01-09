@@ -2,20 +2,22 @@
 using System.Text;
 using Diver.Exec;
 
-namespace Diver.Language
+namespace Diver.Language.Impl
 {
     /// <summary>
     /// Common to all processes that translate an AST to Pi code sequences.
     /// </summary>
     public class TranslatorCommon
         : ProcessCommon
+        , ITranslator
     {
         public int TraceLevel;
+        public virtual Continuation Result => _stack.Count == 0 ? null : Top();
 
         protected TranslatorCommon(IRegistry r)
             : base(r)
         {
-            _stack.Push(new Continuation(new List<object>()));
+            _stack.Push(Continuation.New(r));
         }
 
         public virtual bool Translate(string text, EStructure st = EStructure.Program)
@@ -23,11 +25,11 @@ namespace Diver.Language
             return false;
         }
 
-        protected new void Reset()
+        public new void Reset()
         {
             base.Reset();
             _stack.Clear();
-            _stack.Push(new Continuation(new List<object>()));
+            _stack.Push(Continuation.New(_reg));
         }
 
         public override string ToString()
@@ -41,14 +43,9 @@ namespace Diver.Language
             return str.ToString();
         }
 
-        public virtual Continuation Result()
-        {
-            return _stack.Count == 0 ? null : Top();
-        }
-
         protected void PushNew()
         {
-            _stack.Push(new Continuation(new List<object>()));
+            _stack.Push(Continuation.New(_reg));
         }
 
         protected Continuation Pop()
@@ -68,4 +65,5 @@ namespace Diver.Language
 
         private readonly Stack<Continuation> _stack = new Stack<Continuation>();
     }
+
 }

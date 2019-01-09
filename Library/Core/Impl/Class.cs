@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Diver.Impl
 {
@@ -9,6 +10,12 @@ namespace Diver.Impl
         internal Class(IRegistry reg)
             : base(reg, typeof(T))
         {
+        }
+
+        public Class(IRegistry reg, Action<IRegistry, StringBuilder, T> toText)
+            : base(reg, typeof(T))
+        {
+            this._toText = toText;
         }
 
         public override object NewInstance(Stack<object> stack)
@@ -30,5 +37,20 @@ namespace Diver.Impl
         {
             return new ConstRef<T>(_registry, this, id, value);
         }
+
+        public override void AppendText(StringBuilder str, object obj)
+        {
+            AppendText(str, _registry.Get<T>(obj));
+        }
+
+        public void AppendText(StringBuilder str, T obj)
+        {
+            if (_toText != null)
+                _toText(_registry, str, obj);
+            else
+                str.Append(obj.ToString());
+        }
+
+        private readonly Action<IRegistry, StringBuilder, T> _toText;
     }
 }

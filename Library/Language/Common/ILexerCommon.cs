@@ -7,6 +7,9 @@
 
     public interface ILexer : IProcess
     {
+    }
 
+    public interface ILexer<in TToken> : ILexer, ILexerCommon<TToken>
+    {
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Diver.Exec;
 
-namespace Diver.Language
+namespace Diver.Language.Impl
 {
     public class TranslatorBase<TLexer, TParser>
         : TranslatorCommon
@@ -27,9 +27,5 @@ namespace Diver.Language
         protected TLexer _lexer;
         protected TParser _parser;
         protected Executor _executor;
-    }
-
-    public interface IParser
-    {
     }
 }
