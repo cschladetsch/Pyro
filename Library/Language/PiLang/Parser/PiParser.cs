@@ -72,7 +72,7 @@ namespace Diver.Language
                     return ParseCompound(context, EPiAst.Continuation, EPiToken.CloseBrace);
                 case EPiToken.CloseSquareBracket:
                 case EPiToken.CloseBrace:
-                    return FailLocation("%s", "Unopened compound");
+                    return FailLocation("Unopened compound");
                 case EPiToken.None:
                     return false;
                 // most pi tokens just fall through to being passed to translator
@@ -136,11 +136,6 @@ namespace Diver.Language
             return true;
         }
 
-        bool FailLocation(string fmt, params object[] args)
-        {
-            return Fail(_lexer.CreateErrorMessage(Current(), fmt, args));
-        }
-
         private static PiAstNode AddValue(PiAstNode node)
         {
             var token = node.PiToken;
@@ -165,17 +160,17 @@ namespace Diver.Language
         {
             Consume();
             var node = NewNode(type);
-            while (!Empty() && !Failed && !Try(end))
+            while (!Empty() && !Try(end))
             {
                 if (!NextSingle(node))
-                    return Fail(_lexer.CreateErrorMessage(Current(), "Malformed compound %s", type.ToString()));
+                    return FailLocation($"Malformed compound {type}");
+
+                if (Failed)
+                    return false;
             }
 
             if (Empty())
-                return Fail("Malformed compound");
-
-            if (Failed)
-                return false;
+                return FailLocation($"Malformed compound {type}");
 
             Consume();
             root.Add(node);

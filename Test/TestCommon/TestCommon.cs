@@ -34,7 +34,7 @@ namespace Diver.Test
         {
             _reg = new Registry();
             _pi = new PiTranslator(_reg);
-            _rho = new PiTranslator(_reg);
+            _rho = new RhoTranslator(_reg);
             _executor = _reg.Add(new Executor());
             Exec.RegisterTypes.Register(_reg);
         }
@@ -61,7 +61,7 @@ namespace Diver.Test
             var trans = new PiTranslator(_reg);
             if (!trans.Translate(text, out var cont))
                 WriteLine($"Error: {trans.Error}");
-            Assert.IsFalse(trans.Failed);
+            Assert.IsFalse(trans.Failed, trans.Error);
             return _continuation = cont;
         }
 
@@ -251,9 +251,17 @@ namespace Diver.Test
 
         protected void TestFreezeThawScript(string fileName)
         {
-            var text = TranslateScript(fileName).ToText();
-            WriteLine(text);
-            TestFreezeThawPi(text);
+            var script = LoadScript(fileName);
+            switch (Path.GetExtension(fileName))
+            {
+                case ".pi":
+                    TestFreezeThawPi(script);
+                    return;
+                case ".rho":
+                    TestFreezeThawRho(script);
+                    return;
+            }
+            Assert.Fail($"Unsupported extension {fileName}");
         }
 
         protected void TestFreezeThawPi(string text)
@@ -285,7 +293,7 @@ namespace Diver.Test
         {
             WriteLine("--- Input:");
             WriteLine(text);
-            var cont = PiTranslate(text);
+            Assert.IsTrue(trans.Translate(text, out var cont));
 
             WriteLine("--- Serialised:");
             var str = cont.ToText();

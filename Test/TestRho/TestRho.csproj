@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Add.rho" />
     <Compile Include="TestRhoFreezeThaw.cs" />
     <Compile Include="TestRhoLoops.cs" />
     <Compile Include="TestRhoBasic.cs" />

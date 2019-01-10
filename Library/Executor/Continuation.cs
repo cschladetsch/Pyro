@@ -35,16 +35,18 @@ namespace Diver.Exec
             str.Append('{');
             foreach (var elem in cont.Code)
             {
-                var isOp = elem is EOperation;
-                if (isOp)
+                switch (elem)
                 {
-                    var op = (EOperation) elem;
-                    str.Append('`');
-                    str.Append((int) op);
-                }
-                else
-                {
-                    reg.AppendText(str, elem);
+                    case EOperation op:
+                        str.Append('`');
+                        str.Append((int) op);
+                        break;
+                    case bool val:
+                        str.Append(val ? "true" : "false");
+                        break;
+                    default:
+                        reg.AppendText(str, elem);
+                        break;
                 }
 
                 str.Append(' ');

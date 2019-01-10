@@ -54,7 +54,7 @@
             }
 
             if (!Expression())
-                return FailWith("Expression expected");
+                return FailLocation("Expression expected");
 
             return Append(Pop()) && !Try(ERhoToken.Nop);
         }
@@ -77,7 +77,7 @@
             Expect(ERhoToken.NewLine);
 
             if (!Block())
-                return FailWith("Block expected");
+                return FailLocation("Block expected");
 
             // make the continuation
             var block = Pop();
@@ -98,13 +98,13 @@
             var @while = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
-                return FailWith("While what?");
+                return FailLocation("While what?");
 
             Expect(ERhoToken.CloseParan);
             @while.Add(Pop());
 
             if (!Block())
-                return FailWith("No While body");
+                return FailLocation("No While body");
 
             @while.Add(Pop());
             return Append(@while);
@@ -115,7 +115,7 @@
             var assert = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
-                return FailWith("Assert needs an expression to test");
+                return FailLocation("Assert needs an expression to test");
             Expect(ERhoToken.CloseParan);
 
             assert.Add(Pop());
@@ -127,7 +127,7 @@
             var write = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
-                return FailWith("Write what?");
+                return FailLocation("Write what?");
             Expect(ERhoToken.CloseParan);
 
             write.Add(Pop());
@@ -138,12 +138,12 @@
         {
             var @if = NewNode(Consume());
             if (!Expression())
-                return FailWith("If what?");
+                return FailLocation("If what?");
             @if.Add(Pop());
 
             // get the true-clause
             if (!Block())
-                return FailWith("If needs a block");
+                return FailLocation("If needs a block");
             @if.Add(Pop());
 
             // if there's an else-clause, add it as well
@@ -151,7 +151,7 @@
             if (TryConsume(ERhoToken.Else))
             {
                 if (!Block())
-                    return FailWith("No else block");
+                    return FailLocation("No else block");
                 @if.Add(Pop());
             }
 
@@ -203,7 +203,7 @@
 
             // add the iteration block
             if (!Block())
-                return FailWith("For block expected");
+                return FailLocation("For block expected");
 
             @for.Add(Pop());
 
@@ -215,7 +215,7 @@
         private bool ForEach(RhoAstNode @for)
         {
             if (!Expression())
-                return FailWith("For each in what?");
+                return FailLocation("For each in what?");
 
             return true;
         }
@@ -229,13 +229,13 @@
                 return false;
 
             if (!Logical())
-                return FailWith("When does the for statement stop?");
+                return FailLocation("When does the for statement stop?");
 
             @for.Add(Pop());
             Expect(ERhoToken.Semi);
 
             if (!Expression())
-                return FailWith("What happens when the for statement loops?");
+                return FailLocation("What happens when the for statement loops?");
 
             return true;
         }

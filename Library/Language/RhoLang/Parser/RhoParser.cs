@@ -55,7 +55,7 @@ namespace Diver.Language
             ConsumeNewLines();
 
             if (!Try(ERhoToken.Nop))
-                return FailWith("Unexpected extra stuff found");
+                return FailLocation("Unexpected extra stuff found");
 
             return _stack.Count == 1 || Fail("Stack not empty after parsing");
         }
@@ -87,7 +87,7 @@ namespace Diver.Language
                     return true;
 
                 if (!Statement())
-                    return FailWith("Statement expected");
+                    return FailLocation("Statement expected");
 
                 ConsumeNewLines();
 
@@ -103,7 +103,7 @@ namespace Diver.Language
                 }
 
                 if (level != indent)
-                    return FailWith("Mismatch block indent");
+                    return FailLocation("Mismatch block indent");
             }
 
             return false;

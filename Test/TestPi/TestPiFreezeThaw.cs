@@ -19,6 +19,9 @@ namespace Diver.Test
         [Test]
         public void TestFreezeThaw()
         {
+            TestFreezeThawPi("true assert");
+            TestFreezeThawScript("Boolean.pi");
+
             TestFreezeThawPi("1 2 +");
             AssertPop(3);
 
@@ -37,7 +40,6 @@ namespace Diver.Test
 
             TestFreezeThawScript("Comments.pi");
             TestFreezeThawScript("Arithmetic.pi");
-            TestFreezeThawScript("Boolean.pi");
             TestFreezeThawScript("Array.pi");
             TestFreezeThawScript("Conditionals.pi");
             TestFreezeThawScript("Continuations.pi");

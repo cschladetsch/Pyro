@@ -30,10 +30,14 @@ namespace Diver
         private static void ListToText(IRegistry reg, StringBuilder arg1, IList arg2)
         {
             arg1.Append('[');
+            var first = true;
             foreach (var obj in arg2)
             {
+                if (first)
+                    first = false;
+                else
+                    arg1.Append(' ');
                 reg.AppendText(arg1, obj);
-                arg1.Append(' ');
             }
             arg1.Append(']');
         }

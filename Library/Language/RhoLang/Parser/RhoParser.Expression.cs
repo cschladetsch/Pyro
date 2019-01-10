@@ -24,7 +24,7 @@ namespace Diver.Language
                 var assign = NewNode(Consume());
                 var ident = Pop();
                 if (!Logical())
-                    return FailWith("Assignment requires an expression");
+                    return FailLocation("Assignment requires an expression");
 
                 assign.Add(Pop());
                 assign.Add(ident);
@@ -44,7 +44,7 @@ namespace Diver.Language
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
-                    return FailWith("Relational component expected");
+                    return FailLocation("Relational component expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -69,7 +69,7 @@ namespace Diver.Language
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Additive())
-                    return FailWith("Additive component expected");
+                    return FailLocation("Additive component expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -85,7 +85,7 @@ namespace Diver.Language
             {
                 var signed = NewNode(Consume());
                 if (!Term())
-                    return FailWith("Term expected");
+                    return FailLocation("Term expected");
 
                 signed.Add(Pop());
                 return Push(signed);
@@ -95,7 +95,7 @@ namespace Diver.Language
             {
                 var negate = NewNode(Consume());
                 if (!Additive())
-                    return FailWith("Additive component expected");
+                    return FailLocation("Additive component expected");
 
                 negate.Add(Pop());
                 return Push(negate);
@@ -109,7 +109,7 @@ namespace Diver.Language
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Term())
-                    return FailWith("Term expected");
+                    return FailLocation("Term expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -128,7 +128,7 @@ namespace Diver.Language
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Factor())
-                    return FailWith("Factor expected with a term");
+                    return FailLocation("Factor expected with a term");
 
                 node.Add(Pop());
                 Push(node);
@@ -150,7 +150,7 @@ namespace Diver.Language
             {
                 var exp = NewNode(Consume());
                 if (!Expression())
-                    return FailWith("Expected an expression");
+                    return FailLocation("Expected an expression");
 
                 Expect(ERhoToken.CloseParan);
                 exp.Add(Pop());
@@ -167,14 +167,14 @@ namespace Diver.Language
                     if (Expression())
                         list.Add(Pop());
                     else
-                        return FailWith("Expressions required within array");
+                        return FailLocation("Expressions required within array");
                     if (!TryConsume(ERhoToken.Comma))
                         break;
                 }
 
                 Expect(ERhoToken.CloseSquareBracket);
                 if (Failed)
-                    return FailWith("Closing bracked expected for array");
+                    return FailLocation("Closing bracked expected for array");
 
                 return Push(list);
             }
@@ -263,7 +263,7 @@ namespace Diver.Language
                 {
                     Consume();
                     if (!Expression())
-                        return FailWith("What is the next argument?");
+                        return FailLocation("What is the next argument?");
 
                     args.Add(Pop());
                 }
@@ -278,7 +278,7 @@ namespace Diver.Language
             var index = PushConsume();
             index.Add(Pop());
             if (!Expression())
-                return FailWith("Index what?");
+                return FailLocation("Index what?");
             index.Add(Pop());
 
             Expect(ERhoToken.CloseSquareBracket);

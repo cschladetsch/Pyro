@@ -83,6 +83,9 @@ namespace Diver.Language
             // This wasn't obvious at first, and is not true in most languages!
             switch (token.Type)
             {
+                case EPiToken.Assign:
+                    objects.Add(EOperation.Assign);
+                    break;
                 case EPiToken.NotEquiv:
                     objects.Add(EOperation.NotEquiv);
                     break;

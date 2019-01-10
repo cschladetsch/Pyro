@@ -66,7 +66,7 @@ namespace Diver.Language.Impl
         protected bool Append(TAstNode obj)
         {
             if (obj == null)
-                return FailWith("Cannot add Null object to internal parse stack");
+                return FailLocation("Cannot add Null object to internal parse stack");
             
             _astFactory.AddChild(Top(), obj);
             return true;
@@ -84,7 +84,7 @@ namespace Diver.Language.Impl
 
         private bool CheckStackExists()
         {
-            return _stack.Count > 0 || FailWith("Empty context stack");
+            return _stack.Count > 0 || FailLocation("Empty context stack");
         }
 
         protected TAstNode PushConsume()
@@ -104,7 +104,7 @@ namespace Diver.Language.Impl
         {
             if (_current == _tokens.Count)
             {
-                FailWith("Expected more");
+                FailLocation("Expected more");
                 throw new Exception("Expected more");
             }
 
@@ -120,7 +120,7 @@ namespace Diver.Language.Impl
         {
             if (!Has())
             {
-                FailWith("Expected something more");
+                Fail("Expected something more");
                 throw new Exception("Expected something");
             }
 
@@ -174,9 +174,7 @@ namespace Diver.Language.Impl
         {
             if (_current == _tokens.Count)
             {
-                //KAI_TRACE_ERROR_1(Fail("Unexpected end of file"));
-                //KAI_THROW_1(LogicError, "Expected something");
-                FailWith("Expected something more");
+                FailLocation("Expected something more");
                 throw new NotImplementedException("Expected something");
             }
 
@@ -193,9 +191,9 @@ namespace Diver.Language.Impl
             return !Empty() && Current().Type.Equals(type);
         }
 
-        protected bool FailWith(string text)
+        protected bool FailLocation(string text)
         {
-            return Fail(_lexer.CreateErrorMessage(Current(), text));
+            return Fail(!Has() ? text : _lexer.CreateErrorMessage(Current(), text));
         }
 
         protected TAstNode Expect(ETokenEnum type)
@@ -203,7 +201,7 @@ namespace Diver.Language.Impl
             var tok = Current();
             if (!tok.Type.Equals(type))
             {
-                FailWith($"Expected {type}, have {tok}");
+                FailLocation($"Expected {type}, have {tok}");
             }
 
             Next();
