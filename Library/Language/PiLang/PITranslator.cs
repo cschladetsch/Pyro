@@ -12,15 +12,13 @@ namespace Diver.Language
     /// </summary>
     public class PiTranslator : TranslatorBase<PiLexer, PiParser>
     {
-        public override Continuation Result => _continuation;
-
         public PiTranslator(IRegistry reg) : base(reg)
         {
         }
 
-        public override bool Translate(string input, EStructure st = EStructure.Program)
+        public override bool Translate(string input, out Continuation result, EStructure st = EStructure.Program)
         {
-            if (!base.Translate(input, st))
+            if (!base.Translate(input, out result, st))
                 return false;
 
             _continuation = Continuation.New(_reg);
@@ -37,7 +35,11 @@ namespace Diver.Language
             if (!Parser.Process(_lexer, EStructure.Program))
                 return Fail($"ParserError: {Parser.Error}");
 
-            return TranslateNode(Parser.Root, _continuation.Code);
+            if (!TranslateNode(Parser.Root, _continuation.Code))
+                return false;
+
+            result = _continuation;
+            return result != null;
         }
 
         public override string ToString()

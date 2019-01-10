@@ -14,7 +14,7 @@ namespace Diver.Test
     /// Common to most unit tests in the system
     /// </summary>
     [TestFixture]
-    public class TestCommon
+    public class TestCommon : Process
     {
         public bool Verbose = true;
         public const string ScriptsFolder = "Scripts";
@@ -59,26 +59,21 @@ namespace Diver.Test
         protected Continuation PiTranslate(string text)
         {
             var trans = new PiTranslator(_reg);
-            trans.Translate(text);
-            if (trans.Failed)
+            if (!trans.Translate(text, out var cont))
                 WriteLine($"Error: {trans.Error}");
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Result;
+            return _continuation = cont;
         }
 
         protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_reg);
-            trans.Translate(text, st);
-
-            if (trans.Result == null)
-                WriteLine($"No output generated");
-            if (trans.Failed)
+            if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
             if (trace)
                 WriteLine(trans.ToString());
             Assert.IsFalse(trans.Failed);
-            return _continuation = trans.Result;
+            return _continuation = cont;
         }
 
         protected bool RunScript(string scriptName)
@@ -118,8 +113,8 @@ namespace Diver.Test
         protected Continuation TranslateScript(string fileName)
         {
             var trans = MakeTranslator(fileName);
-            Assert.IsTrue(trans.Translate(LoadScript(fileName)));
-            return trans.Result;
+            Assert.IsTrue(trans.Translate(LoadScript(fileName), out var cont));
+            return cont;
         }
 
         protected bool RunScriptPathname(string filePath)
@@ -131,11 +126,10 @@ namespace Diver.Test
                 _exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = MakeTranslator(filePath);
-                trans.Translate(text);
-                if (trans.Failed)
+                if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script `{fileName}`", () => _exec.Continue(trans.Result));
+                Time($"Exec script `{fileName}`", () => _exec.Continue(cont));
             }
             catch (Exception e)
             {

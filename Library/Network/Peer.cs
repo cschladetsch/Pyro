@@ -15,9 +15,6 @@ namespace Diver.Network
     /// </summary>
     public class Peer : NetworkConsoleWriter
     {
-        public Flow.IKernel Kernel => _kernel;
-        public Flow.IFactory Factory => _kernel.Factory;
-        public IRegistry Registry => _registry;
         public List<Socket> Connections => _connections;
         public List<Client> Clients => _clients;
         public Server Server => _server;
@@ -27,9 +24,6 @@ namespace Diver.Network
 
         public Peer(int listenPort)
         {
-            _kernel = Flow.Create.Kernel();
-            _registry = new Registry();
-            _piTranslator = new PiTranslator(_registry);
             _server = new Server(this, listenPort);
         }
 
@@ -64,7 +58,7 @@ namespace Diver.Network
 
         public void Leave()
         {
-            //WriteLine($"Going back to local host");
+            // TODO: maybe? keep a stack of remotes to pop from
             _remote = null;
         }
 
@@ -93,6 +87,8 @@ namespace Diver.Network
             WriteLine($"Closing {_connections.Count} connections");
             foreach (var socket in _connections)
                 socket.Close();
+            foreach (var client in _clients)
+                client.Stop();
 
             _connections.Clear();
             _clients.Clear();
@@ -102,7 +98,6 @@ namespace Diver.Network
 
         public void Update()
         {
-            _kernel.Step();
         }
 
         public void NewConnection(Socket socket)
@@ -114,25 +109,9 @@ namespace Diver.Network
             }
         }
 
-        public bool Execute(string content)
+        public bool Execute(string script)
         {
-            try
-            {
-                if (!_piTranslator.Translate(content))
-                {
-                    Error($"Failed to translate {content}");
-                    return false;
-                }
-
-                Continue(_piTranslator.Result);
-            }
-            catch (Exception e)
-            {
-                Error($"Exec: {e.Message}");
-                return false;
-            }
-
-            return true;
+            return _server.Execute(script);
         }
 
         public string GetLocalHostname()
@@ -141,9 +120,11 @@ namespace Diver.Network
             return address?.ToString() ?? "localhost";
         }
 
-        public void Continue(Continuation continuation)
+        public bool Continue(Continuation continuation)
         {
-            _remote?.Continue(continuation);
+            if (_remote == null)
+                return Error("Not connected");
+            return _remote.Continue(continuation);
         }
 
         private IPEndPoint GetRemoteEndPoint()
@@ -152,10 +133,7 @@ namespace Diver.Network
             return socket?.RemoteEndPoint as IPEndPoint;
         }
 
-        private readonly Flow.IKernel _kernel;
         private Server _server;
-        private readonly IRegistry _registry;
-        private readonly PiTranslator _piTranslator;
         private readonly List<Socket> _connections = new List<Socket>();
         private readonly List<Client> _clients = new List<Client>();
         private Client _remote;

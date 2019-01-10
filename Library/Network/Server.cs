@@ -13,12 +13,12 @@ namespace Diver.Network
             : base(peer)
         {
             _port = port;
-            AddTypes(_reg);
-            _exec.Scope["peer"] = _peer;
-            _exec.Scope["con"] = this;
-            _exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
-            _exec.Scope["clients"] = TranslatePi("'Clients peer .@");
-            _exec.Scope["test"] = TranslatePi("9998 connect & clients & 0 at 'Remote peer .@ &");
+            AddTypes(_Context.Registry);
+            _Exec.Scope["peer"] = _Peer;
+            _Exec.Scope["con"] = this;
+            _Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
+            _Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
+            _Exec.Scope["test"] = TranslatePi("9998 connect & clients & 0 at 'Remote peer .@ &");
         }
 
         private void AddTypes(IRegistry registry)
@@ -47,12 +47,12 @@ namespace Diver.Network
             try
             {
                 var cont = TranslatePi(text);
-                cont.Scope = _exec.Scope;
-                _exec.Continue(cont);
-                var stack = _exec.DataStack.ToList();
-                var response = _reg.ToText(stack);
+                cont.Scope = _Exec.Scope;
+                _Exec.Continue(cont);
+                var stack = _Exec.DataStack.ToList();
+                var response = _Registry.ToText(stack);
                 WriteLine($"Response: {response}");
-                _peer.GetClient(sender)?.SendPi(response);
+                _Peer.GetClient(sender)?.SendPi(response);
             }
             catch (Exception e)
             {
@@ -106,7 +106,7 @@ namespace Diver.Network
 
             var listener = (Socket)ar.AsyncState;
             var socket = listener.EndAccept(ar);
-            _peer.NewConnection(socket);
+            _Peer.NewConnection(socket);
             Receive(socket);
             Listen();
         }
@@ -125,5 +125,10 @@ namespace Diver.Network
 
         private Socket _listener;
         private readonly int _port;
+
+        public bool Execute(string script)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

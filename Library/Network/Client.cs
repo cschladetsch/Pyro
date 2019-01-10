@@ -8,18 +8,26 @@ using Con = System.Console;
 
 namespace Diver.Network
 {
+    /// <summary>
+    /// A connection to a remote server. Can send executable script, and receive
+    /// results that are also executable scripts.
+    /// </summary>
     public class Client : NetCommon
     {
-        public Socket Socket => _socket;
+        public Socket Socket
+        {
+            get => _socket;
+            set => _socket = value;
+        }
 
         public Client(Peer peer)
             : base(peer)
         {
         }
 
-        public void Continue(Continuation cont)
+        public bool Continue(Continuation cont)
         {
-            SendPi(cont?.ToText());
+            return SendPi(cont?.ToText());
         }
 
         public bool Connect(string hostName, int port)
@@ -36,19 +44,15 @@ namespace Diver.Network
             return true;
         }
 
-        private void ConnectCallback(IAsyncResult ar)
+        public bool Send(Continuation continuation)
         {
-            try
-            {
-                _socket = (Socket)ar.AsyncState;
-                _socket.EndConnect(ar);
-                //_peer.NewConnection(_socket);
-                Receive(_socket);
-            }
-            catch (Exception e)
-            {
-                Error($"{e.Message}");
-            }
+            return SendPi(continuation.ToText());
+        }
+
+        public void Stop()
+        {
+            _socket.Close();
+            _socket = null;
         }
 
         public bool SendPi(string text)
@@ -58,18 +62,34 @@ namespace Diver.Network
             return true;
         }
 
+        private void ConnectCallback(IAsyncResult ar)
+        {
+            try
+            {
+                _socket = (Socket)ar.AsyncState;
+                _socket.EndConnect(ar);
+                Receive(_socket);
+            }
+            catch (Exception e)
+            {
+                Error($"{e.Message}");
+            }
+        }
+
         protected override void ProcessReceived(Socket sender, string text)
         {
             try
             {
                 WriteLine($"Recv Stack: {text}");
-                if (!_pi.Translate(text))
+                if (!_Context.Translate(text, out var cont))
                 {
                     Error($"Failed to translate {text}");
                     return;
                 }
-                _exec.Continue(_pi.Result);
-                _stack = _exec.Pop<List<object>>();
+
+                cont.Scope = _Exec.Scope;
+                _Exec.Continue(cont);
+                _stack = _Exec.Pop<List<object>>();
             }
             catch (Exception e)
             {
@@ -96,17 +116,12 @@ namespace Diver.Network
 
         private string Print(object obj)
         {
-            return _reg.ToText(obj);
+            return _Registry.ToText(obj);
         }
 
         private void SendCallback(IAsyncResult ar)
         {
-            _socket.EndSend(ar);
-        }
-
-        public bool Send(Continuation continuation)
-        {
-            return SendPi(continuation.ToText());
+            _socket?.EndSend(ar);
         }
 
         private Socket _socket;

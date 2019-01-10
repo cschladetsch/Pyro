@@ -20,9 +20,9 @@ namespace Diver.Language
             WriteLine($"{name} took {(DateTime.Now - start).TotalMilliseconds}");
         }
 
-        public override bool Translate(string text, EStructure st = EStructure.Program)
+        public override bool Translate(string text, out Continuation result, EStructure st = EStructure.Program)
         {
-            if (!base.Translate(text, st))
+            if (!base.Translate(text, out result, st))
                 return false;
 
             if (string.IsNullOrEmpty(text))

@@ -14,9 +14,9 @@ namespace Diver.Language.Impl
         {
         }
 
-        public override bool Translate(string text, EStructure st = EStructure.Program)
+        public override bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program)
         {
-            return base.Translate(text, st);
+            return base.Translate(text, out cont, st);
         }
 
         protected TLexer _lexer;

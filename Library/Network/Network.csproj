@@ -39,12 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
@@ -70,21 +65,13 @@
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ext\Flow\Flow2.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Language\PiLang\PiLang.csproj">
-      <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
-      <Name>PiLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Language\RhoLang\RhoLang.csproj">
-      <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
-      <Name>RhoLang</Name>
+    <ProjectReference Include="..\Language\ExecutionContext\ExecutionContext.csproj">
+      <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
+      <Name>ExecutionContext</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

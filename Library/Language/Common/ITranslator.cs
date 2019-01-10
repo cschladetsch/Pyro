@@ -4,8 +4,7 @@ namespace Diver.Language
 {
     public interface ITranslator : IProcess
     {
-        Continuation Result { get; }
-        bool Translate(string text, EStructure st = EStructure.Program);
-        void Reset();
+        int TraceLevel { get; set; }
+        bool Translate(string text, out Continuation result, EStructure st = EStructure.Program);
     }
 }

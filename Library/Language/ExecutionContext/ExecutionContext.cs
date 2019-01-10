@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
 using Diver;
 using Diver.Exec;
 using Diver.Impl;
@@ -64,27 +65,25 @@ namespace Pyro.ExecutionContext
             return _translator == null ? Fail("No translator") : Exec(_translator, text);
         }
 
-        public Continuation Translate(string text)
+        public bool Translate(string text, out Continuation result)
         {
-            return Translate(_translator, text);
+            return Translate(_translator, out result, text);
         }
 
-        private Continuation Translate(ITranslator translator, string text)
+        private bool Translate(ITranslator translator, out Continuation result, string text)
         {
-            if (translator.Translate(text)) 
-                return translator.Result;
-
-            Fail(translator.Error);
-            return null;
+            result = null;
+            return translator.Translate(text, out result) || Fail(translator.Error);
         }
 
         private bool Exec(ITranslator translator, string text)
         {
             try
             {
-                var cont = Translate(translator, text);
+                if (!Translate(translator, out var cont, text))
+                    return Fail(translator.Error);
                 cont.Scope = _exec.Scope;
-                _exec.Continue(translator.Result);
+                _exec.Continue(cont);
             }
             catch (Exception e)
             {
@@ -121,7 +120,7 @@ namespace Pyro.ExecutionContext
             }
         }
 
-        private bool Exec(ELanguage lang, string text)
+        public bool Exec(ELanguage lang, string text)
         {
             switch (lang)
             {

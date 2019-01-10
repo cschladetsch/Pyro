@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
+
 using Diver.Exec;
-using Diver.Impl;
-using Diver.Language;
+using Pyro.ExecutionContext;
 
 namespace Diver.Network
 {
@@ -14,28 +15,25 @@ namespace Diver.Network
     /// </summary>
     public class NetCommon : NetworkConsoleWriter
     {
-        protected Peer _peer;
-        protected PiTranslator _pi;
-        protected IRegistry _reg;
-        protected Executor _exec;
+        protected Peer _Peer;
+        protected Context _Context;
+        protected Executor _Exec => _Context.Executor;
+        protected IRegistry _Registry => _Context.Registry;
 
         public NetCommon(Peer peer)
         {
-            _peer = peer;
-            _reg = new Registry();
-            _exec = _reg.Add(new Executor()).Value;
-            _pi = new PiTranslator(_reg);
+            _Peer = peer;
+            _Context = new Context();
+            Diver.Exec.RegisterTypes.Register(_Context.Registry);
         }
 
         protected Continuation TranslatePi(string text)
         {
-            if (!_pi.Translate(text))
-            {
-                Error(_pi.Error);
-                return null;
-            }
+            if (_Context.Translate(text, out var cont)) 
+                return cont;
 
-            return _pi.Result;
+            Error(_Context.Error);
+            return null;
         }
 
         protected IPAddress GetAddress(string hostname)

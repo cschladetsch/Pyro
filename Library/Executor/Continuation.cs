@@ -11,13 +11,19 @@ namespace Diver.Exec
     {
         public IList<object> Code => _code;
         public IList<string> Args => _args;
+        /// <summary>
+        /// The 'instruction pointer', or the thing to execute next in list of objects in code block
+        /// </summary>
         public int Ip => _next;
 
-        public Continuation(List<object> code)
+        public Continuation(IList<object> code)
         {
             _code = code;
         }
 
+        /// <summary>
+        /// Helper to make a new continuation, which also uses a referenced list for scope
+        /// </summary>
         public static Continuation New(IRegistry reg)
         {
             var code = reg.Add(new List<object>());
@@ -139,8 +145,8 @@ namespace Diver.Exec
         }
 
         private int _next;
-        private List<string> _args;
-        private readonly List<object> _code;
+        private IList<string> _args;
+        private readonly IList<object> _code;
         private IDictionary<string, object> _scope => Scope;
     }
 }

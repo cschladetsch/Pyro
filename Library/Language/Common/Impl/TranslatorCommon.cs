@@ -11,8 +11,9 @@ namespace Diver.Language.Impl
         : ProcessCommon
         , ITranslator
     {
-        public int TraceLevel;
-        public virtual Continuation Result => _stack.Count == 0 ? null : Top();
+        public int TraceLevel { get; set; }
+
+        protected virtual Continuation Result => _stack.Count == 0 ? null : Top();
 
         protected TranslatorCommon(IRegistry r)
             : base(r)
@@ -20,9 +21,10 @@ namespace Diver.Language.Impl
             _stack.Push(Continuation.New(r));
         }
 
-        public virtual bool Translate(string text, EStructure st = EStructure.Program)
+        public virtual bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program)
         {
             Reset();
+            cont = null;
             return !string.IsNullOrEmpty(text) || Fail("Empty input");
         }
 
@@ -66,5 +68,4 @@ namespace Diver.Language.Impl
 
         private readonly Stack<Continuation> _stack = new Stack<Continuation>();
     }
-
 }

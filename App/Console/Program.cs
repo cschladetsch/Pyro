@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Diver;
-using Diver.Impl;
-using Diver.Language;
 using Diver.Network;
 using Pyro.ExecutionContext;
 using Con = System.Console;
@@ -119,11 +116,10 @@ namespace Console
                         return true;
                 }
 
-                var continuation = _context.Translate(input);
-                if (continuation == null)
+                if (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
 
-                _peer.Continue(continuation);
+                _peer.Continue(cont);
                 return true;
             }
             catch (Exception e)
@@ -185,7 +181,7 @@ Press Ctrl-C to quit.
         }
 
         private readonly Peer _peer;
-        private readonly Pyro.ExecutionContext.Context _context;
+        private readonly Context _context;
         private string _hostName => _peer.HostName;
         private int _hostPort => _peer.HostPort;
         private static Program _self;

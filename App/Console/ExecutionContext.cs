@@ -67,11 +67,10 @@ namespace Console
         {
             try
             {
-                if (!translator.Translate(text))
+                if (!translator.Translate(text, out var cont))
                     return Fail(translator.Error);
-                var cont = translator.Result;
                 cont.Scope = _exec.Scope;
-                _exec.Continue(translator.Result);
+                _exec.Continue(cont);
             }
             catch (Exception e)
             {
