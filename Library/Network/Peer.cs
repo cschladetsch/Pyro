@@ -42,9 +42,9 @@ namespace Diver.Network
             return GetRemoteEndPoint()?.Port ?? 0;
         }
 
-        public void Start()
+        public bool Start()
         {
-            _server.Start();
+            return _server.Start();
         }
 
         public bool EnterRemote(Client client)

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using System.Text;
+
 using Diver.Network;
 using Pyro.ExecutionContext;
+
 using Con = System.Console;
 
 namespace Console
@@ -20,45 +21,39 @@ namespace Console
         private Program(string[] args)
         {
             _originalColor = Con.ForegroundColor;
-
+            _context = new Context();
             Con.CancelKeyPress += Cancel;
 
             WriteHeader();
+            if (!StartPeer(args))
+                Exit(1);
 
+            RunInitialisationScripts();
+        }
+
+        private bool StartPeer(string[] args)
+        {
             var port = ListenPort;
-            if (args.Length == 1)
-                port = int.Parse(args[0]);
+            if (args.Length == 1 && !int.TryParse(args[0], out port))
+                return Error("Local server listen port number expected as argument");
 
             _peer = new Peer(port);
-            _peer.Start();
-            if (!_peer.Connect(_peer.GetLocalHostname(), ListenPort))
-            {
-                Error("Couldn't connect to local host");
-                Exit(1);
-            }
+            if (!_peer.Start())
+                return Error("Failed to start local server");
 
-            //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            if (!_peer.Connect(_peer.GetLocalHostname(), port)) 
+                return Error("Couldn't connect to localhost");
 
-            if (!_peer.EnterRemote(_peer.Clients[0]))
-            {
-                Error("Couldn't shell to local");
-                Exit(1);
-            }
+            // unsure if truly needed, but this Sleep is to give a little time for local
+            // client to connect to local server via Tcp
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.2));
 
-            _context = new Context();
+            return _peer.EnterRemote(_peer.Clients[0]) || Error("Couldn't shell to localhost");
         }
 
-        private void Exit(int result = 0)
+        private void RunInitialisationScripts()
         {
-            Con.ForegroundColor = _originalColor;
-            Environment.Exit(result);
-        }
-
-        private static void Cancel(object sender, ConsoleCancelEventArgs e)
-        {
-            // don't exit immediately - shut down networking gracefully first
-            e.Cancel = true;
-            _self.Shutdown();
+            // TODO: run things like ~/.pyro-start.{pi|rho}
         }
 
         private void WriteHeader()
@@ -71,7 +66,7 @@ namespace Console
             var name = Assembly.GetExecutingAssembly().GetName();
             var version = name.Version;
             var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            return $"{name.Name} {version} built {built}";
+            return $"Pyro {name.Name} {version} built {built}";
         }
 
         private void Repl()
@@ -92,16 +87,6 @@ namespace Console
             }
         }
 
-        private void Shutdown()
-        {
-            var color = ConsoleColor.DarkGray;
-            Error("Shutting down...", color);
-            _peer?.Stop();
-            Error("Done", color);
-            Con.ForegroundColor = ConsoleColor.White;
-            Exit();
-        }
-
         private string GetInput()
         {
             return Con.ReadLine();
@@ -120,8 +105,7 @@ namespace Console
                 if (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
 
-                _peer.Continue(cont);
-                return true;
+                return _peer.Continue(cont);
             }
             catch (Exception e)
             {
@@ -156,6 +140,12 @@ namespace Console
             Con.ForegroundColor = ConsoleColor.White;
         }
 
+        private void Exit(int result = 0)
+        {
+            Con.ForegroundColor = _originalColor;
+            Environment.Exit(result);
+        }
+
         private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
         {
             Write(text, color);
@@ -181,19 +171,22 @@ namespace Console
         {
             Con.WriteLine(
 @"
-Before the prompt is printed, the data-stack of the 
-contextual executor is printed. Operations you perform act on this
-data-stack.
-
 The prompt shows the current executing context and language.
-When you type at the prompt, your text is translated to Pi script
-and executed in current context.
+
+When you type at the prompt, your text is executed in the current context - which could be local (default) or remote.
+
+Before the prompt is printed, the data-stack of the current server is printed. Operations you perform act on this data-stack. Each connection to a remote server has its own private context.
 
 To connect to a remote node, type:
-...rho> peer.Connect(""_hostName"", port)
+...rho> connect(""_hostName""[, port])
 
-To switch execution context, type:
-...rho> peer.Switch(""hostname"")
+To then switch execution context, type:
+...rho> enter(""hostname"")
+
+To do both consequetively:
+...rho> join(""hostname""[, port])
+
+For help on syntax for Pi/Rho languages, see the corresponding documentation.
 
 Press Ctrl-C to quit.
 "
@@ -201,10 +194,27 @@ Press Ctrl-C to quit.
             return true;
         }
 
-        private readonly Peer _peer;
+        private static void Cancel(object sender, ConsoleCancelEventArgs e)
+        {
+            // don't exit immediately - shut down networking gracefully first
+            e.Cancel = true;
+            _self.Shutdown();
+        }
+
+        private void Shutdown()
+        {
+            var color = ConsoleColor.DarkGray;
+            Error("Shutting down...", color);
+            _peer?.Stop();
+            Error("Done", color);
+            Con.ForegroundColor = ConsoleColor.White;
+            Exit();
+        }
+
+        private Peer _peer;
         private readonly Context _context;
-        private static Program _self;
         private readonly ConsoleColor _originalColor;
+        private static Program _self;
         private string HostName => _peer.HostName;
         private int HostPort => _peer.HostPort;
     }

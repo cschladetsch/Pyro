@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Text;
 
 using Diver.Exec;
 using Pyro.ExecutionContext;
@@ -20,11 +19,11 @@ namespace Diver.Network
         protected Executor _Exec => _Context.Executor;
         protected IRegistry _Registry => _Context.Registry;
 
-        public NetCommon(Peer peer)
+        protected NetCommon(Peer peer)
         {
             _Peer = peer;
             _Context = new Context();
-            Diver.Exec.RegisterTypes.Register(_Context.Registry);
+            RegisterTypes.Register(_Context.Registry);
         }
 
         protected Continuation TranslatePi(string text)
@@ -54,40 +53,14 @@ namespace Diver.Network
 
         protected void ReadCallback(IAsyncResult ar)
         {
-            if (_stopping)
-                return;
-
             try
             {
-                var state = (StateObject)ar.AsyncState;
-                var socket = state.workSocket;
-
-                var bytesRead = socket.EndReceive(ar);
-                if (bytesRead <= 0) 
-                    return;
-
-                state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-
-                var content = state.sb.ToString();
-                var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere.
-                if (end >= 0)
-                {
-                    var code = content.Substring(0, end);
-                    try
-                    {
-                        ProcessReceived(socket, code);
-                    }
-                    catch (Exception e)
-                    {
-                        Error($"ProcessReceived: {e.Message}");
-                    }
-
-                    // reset from end of last continuation
-                    state.sb.Clear();
-                    state.sb.Append(content.Substring(end + 1));
-                }
-
-                socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+                ProcessAccept(ar);
+            }
+            catch (ObjectDisposedException)
+            {
+                if (!_Stopping)
+                    throw;
             }
             catch (Exception e)
             {
@@ -95,6 +68,60 @@ namespace Diver.Network
             }
         }
 
-        protected bool _stopping;
+        private void ProcessAccept(IAsyncResult ar)
+        {
+            var state = (StateObject) ar.AsyncState;
+            var socket = state.workSocket;
+
+            var bytesRead = socket.EndReceive(ar);
+            if (bytesRead <= 0)
+                return;
+
+            EndAccept(state, bytesRead, socket);
+        }
+
+        private void EndAccept(StateObject state, int bytesRead, Socket socket)
+        {
+            state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+            ProcessInput(state, socket);
+            socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+        }
+
+        private void ProcessInput(StateObject state, Socket socket)
+        {
+            var content = state.sb.ToString();
+            var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere in scripts!
+            if (end < 0) 
+                return;
+
+            try
+            {
+                ProcessReceived(socket, content.Substring(0, end));
+            }
+            catch (Exception e)
+            {
+                Error($"ProcessInput Error: {e.Message}");
+            }
+
+            ResetState(state, content, end);
+        }
+
+        private static void ResetState(StateObject state, string content, int end)
+        {
+            state.sb.Clear();
+            state.sb.Append(content.Substring(end + 1));
+        }
+
+        protected IPEndPoint GetLocalEndPoint(int port)
+        {
+            var address = GetAddress(Dns.GetHostName());
+            if (address != null) 
+                return new IPEndPoint(address, port);
+
+            Error("Couldn't find suitable host address");
+            return null;
+        }
+
+        protected bool _Stopping;
     }
 }
