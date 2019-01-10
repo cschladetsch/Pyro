@@ -51,8 +51,14 @@ namespace Diver.Network
                 _Exec.Continue(cont);
                 var stack = _Exec.DataStack.ToList();
                 var response = _Registry.ToText(stack);
-                WriteLine($"Response: {response}");
-                _Peer.GetClient(sender)?.SendPi(response);
+                WriteLine($"Server: {response}");
+                var client = _Peer.GetClient(sender);
+                if (client == null)
+                {
+                    Error($"No client to respond to for socket {sender.RemoteEndPoint}");
+                    return;
+                }
+                client.SendPi(response);
             }
             catch (Exception e)
             {

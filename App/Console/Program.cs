@@ -31,16 +31,23 @@ namespace Console
             if (!_peer.Connect(_peer.GetLocalHostname(), ListenPort))
             {
                 Error("Couldn't connect to local host");
-                Environment.Exit(1);
+                Exit(1);
             }
+
+            //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
 
             if (!_peer.EnterRemote(_peer.Clients[0]))
             {
                 Error("Couldn't shell to local");
-                Environment.Exit(1);
+                Exit(1);
             }
 
             _context = new Context();
+        }
+
+        private static void Exit(int result = 0)
+        {
+            Environment.Exit(result);
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -71,7 +78,7 @@ namespace Console
                 {
                     WritePrompt();
                     if (!Execute(GetInput()))
-                        return;
+                        continue;
                     WriteDataStack();
                 }
                 catch (Exception e)
@@ -98,8 +105,8 @@ namespace Console
 
         public bool Execute(string input)
         {
-            if (input == null)
-                return false;
+            if (string.IsNullOrEmpty(input))
+                return true;
 
             try
             {

@@ -79,7 +79,7 @@ namespace Diver.Network
                     }
                     catch (Exception e)
                     {
-                        Error($"Exec: {e.Message}");
+                        Error($"ProcessReceived: {e.Message}");
                     }
 
                     // reset from end of last continuation

@@ -83,6 +83,7 @@ namespace Diver.Network
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
+                WriteLine($"Client connected via socket {_socket.RemoteEndPoint}");
                 Receive(_socket);
             }
             catch (Exception e)
