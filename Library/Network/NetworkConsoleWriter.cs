@@ -14,8 +14,8 @@ namespace Diver.Network
 
         protected new bool Error(string text)
         {
-            Fail(text);
             WriteLine($"Error: {text}");
+            base.Error = text;
             return false;
         }
 

@@ -9,7 +9,11 @@ namespace Diver
     public class Process : IProcess
     {
         public bool Failed => _failed;
-        public string Error => _error;
+        public string Error
+        {
+            get => _error;
+            protected set => _error = value;
+        }
 
         protected Process()
         {
