@@ -15,14 +15,14 @@ namespace Diver
         {
         }
 
-        public bool Fail(string err)
+        public virtual bool Fail(string err)
         {
             _failed = true;
             _error = err;
             return false;
         }
 
-        public bool Fail(string fmt, params object[] args)
+        public virtual bool Fail(string fmt, params object[] args)
         {
             return Fail(string.Format(fmt, args));
         }

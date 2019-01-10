@@ -75,7 +75,7 @@ namespace Diver.Network
         public bool Disconnect(Socket socket)
         {
             if (!_connections.Contains(socket))
-                return Error($"Not connected to {socket.RemoteEndPoint}");
+                return Fail($"Not connected to {socket.RemoteEndPoint}");
 
             socket.Close();
             _connections.Remove(socket);
@@ -122,9 +122,7 @@ namespace Diver.Network
 
         public bool Continue(Continuation continuation)
         {
-            if (_remote == null)
-                return Error("Not connected");
-            return _remote.Continue(continuation);
+            return _remote?.Continue(continuation) ?? Fail("Not connected");
         }
 
         private IPEndPoint GetRemoteEndPoint()

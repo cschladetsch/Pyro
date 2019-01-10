@@ -3,12 +3,18 @@ using Con = System.Console;
 
 namespace Diver.Network
 {
-    public class NetworkConsoleWriter
+    public class NetworkConsoleWriter : Process
     {
-        protected static bool Error(string text)
+        public override bool Fail(string text)
+        {
+            base.Fail(text);
+            Error(text);
+            return false;
+        }
+
+        protected new static void Error(string text)
         {
             WriteLine($"Error: {text}");
-            return false;
         }
 
         protected static void WriteLine(string text)

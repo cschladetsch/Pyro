@@ -64,7 +64,7 @@ namespace Diver.Network
         {
             var endPoint = GetLocalEndPoint(_port);
             if (endPoint == null)
-                return Error($"Couldn't find suitable local endpoint using {_port}");
+                return Fail($"Couldn't find suitable local endpoint using {_port}");
 
             var address = endPoint.Address;
             _listener = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);

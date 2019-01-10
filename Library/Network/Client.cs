@@ -34,12 +34,11 @@ namespace Diver.Network
         {
             var address = GetAddress(hostName);
             if (address == null)
-                return Error($"Couldn't find Ip4 address for {hostName}");
+                return Fail($"Couldn't find Ip4 address for {hostName}");
             
             var endPoint = new IPEndPoint(address, port);
             var client = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            client.BeginConnect(endPoint, ConnectCallback, client);
+            client.BeginConnect(endPoint, Connected, client);
 
             return true;
         }
@@ -58,11 +57,27 @@ namespace Diver.Network
         public bool SendPi(string text)
         {
             var byteData = Encoding.ASCII.GetBytes(text + '~');
-            _socket.BeginSend(byteData, 0, byteData.Length, 0, SendCallback, _socket);
+            _socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, _socket);
             return true;
         }
 
-        private void ConnectCallback(IAsyncResult ar)
+        public void WriteDataStackContents(int max = 20)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            if (_stack != null)
+            {
+                var data = _stack;
+                if (data.Count > max)
+                    Con.WriteLine("...");
+                max = Math.Min(data.Count, max);
+                for (var n = max - 1; n >= 0; --n)
+                    str.AppendLine($"{n}: {Print(data[n])}");
+            }
+            Con.Write(str.ToString());
+        }
+
+        private void Connected(IAsyncResult ar)
         {
             try
             {
@@ -98,28 +113,13 @@ namespace Diver.Network
         }
 
         // TODO: split out Client into Client and ConsoleClient : Client
-        public void WriteDataStackContents(int max = 20)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            if (_stack != null)
-            {
-                var data = _stack;
-                if (data.Count > max)
-                    Con.WriteLine("...");
-                max = Math.Min(data.Count, max);
-                for (var n = max - 1; n >= 0; --n)
-                    str.AppendLine($"{n}: {Print(data[n])}");
-            }
-            Con.Write(str.ToString());
-        }
 
         private string Print(object obj)
         {
             return _Registry.ToText(obj);
         }
 
-        private void SendCallback(IAsyncResult ar)
+        private void Sent(IAsyncResult ar)
         {
             _socket?.EndSend(ar);
         }

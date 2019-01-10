@@ -41,6 +41,8 @@ namespace Diver.Language
             //WriteLine(_parser.PrintTree());
             TranslateNode(_parser.Result);
 
+            result = Result;
+
             return !Failed;
         }
 

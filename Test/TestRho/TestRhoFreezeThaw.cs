@@ -14,6 +14,5 @@ namespace Diver.Test
             TestFreezeThawScript("Variables.rho");
             TestFreezeThawScript("Arithmetic.rho");
         }
-        
     }
 }
