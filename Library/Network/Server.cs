@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 
 namespace Diver.Network
@@ -38,32 +37,37 @@ namespace Diver.Network
                 .Class);
             registry.Register(new ClassBuilder<Client>(registry)
                 .Methods
-                    .Add<string, bool>("SendPi", (q, s) => q.SendPi(s))
+                    .Add<string, bool>("Receive", (q, s) => q.Receive(s))
                 .Class);
         }
 
-        protected override void ProcessReceived(Socket sender, string text)
+        protected override bool ProcessReceived(Socket sender, string pi)
         {
             try
             {
-                var cont = TranslatePi(text);
-                cont.Scope = _Exec.Scope;
-                _Exec.Continue(cont);
-                var stack = _Exec.DataStack.ToList();
-                var response = _Registry.ToText(stack);
-                WriteLine($"Server: {response}");
-                var client = _Peer.GetClient(sender);
-                if (client == null)
-                {
-                    Error($"No client to respond to for socket {sender.RemoteEndPoint}");
-                    return;
-                }
-                client.SendPi(response);
+                RunLocally(pi);
+                return SendResponse(sender);
             }
             catch (Exception e)
             {
-                Error($"Exception: {e.Message}");
+                return Error($"ProcessReceived: {e.Message}");
             }
+        }
+
+        private void RunLocally(string pi)
+        {
+            var cont = TranslatePi(pi);
+            cont.Scope = _Exec.Scope;
+            _Exec.Continue(cont);
+        }
+
+        private bool SendResponse(Socket sender)
+        {
+            // TODO: Also send _Exec.Scope (?)
+            var response = _Registry.ToText(_Exec.DataStack.ToList());
+            WriteLine($"Server sends reponse: {response}");
+            var client = _Peer.GetClient(sender);
+            return client?.Receive(response) ?? Error($"No client to respond to for socket {sender.RemoteEndPoint}");
         }
 
         public bool Start()

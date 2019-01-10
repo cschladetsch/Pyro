@@ -27,7 +27,7 @@ namespace Diver.Network
 
         public bool Continue(Continuation cont)
         {
-            return SendPi(cont?.ToText());
+            return Receive(cont?.ToText());
         }
 
         public bool Connect(string hostName, int port)
@@ -43,9 +43,9 @@ namespace Diver.Network
             return true;
         }
 
-        public bool Send(Continuation continuation)
+        public bool Receive(Continuation continuation)
         {
-            return SendPi(continuation.ToText());
+            return Receive(continuation.ToText());
         }
 
         public void Stop()
@@ -54,7 +54,7 @@ namespace Diver.Network
             _socket = null;
         }
 
-        public bool SendPi(string text)
+        public bool Receive(string text)
         {
             var byteData = Encoding.ASCII.GetBytes(text + '~');
             _socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, _socket);
@@ -92,16 +92,13 @@ namespace Diver.Network
             }
         }
 
-        protected override void ProcessReceived(Socket sender, string text)
+        protected override bool ProcessReceived(Socket sender, string pi)
         {
             try
             {
-                WriteLine($"Recv Stack: {text}");
-                if (!_Context.Translate(text, out var cont))
-                {
-                    Error($"Failed to translate {text}");
-                    return;
-                }
+                WriteLine($"Recv Stack: {pi}");
+                if (!_Context.Translate(pi, out var cont))
+                    return Error($"Failed to translate {pi}");
 
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
@@ -110,7 +107,10 @@ namespace Diver.Network
             catch (Exception e)
             {
                 Error(e.Message);
+                return false;
             }
+
+            return true;
         }
 
         // TODO: split out Client into Client and ConsoleClient : Client

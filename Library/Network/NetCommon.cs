@@ -22,13 +22,13 @@ namespace Diver.Network
         protected NetCommon(Peer peer)
         {
             _Peer = peer;
-            _Context = new Context();
+            _Context = new Context {Language = ELanguage.Pi};
             RegisterTypes.Register(_Context.Registry);
         }
 
-        protected Continuation TranslatePi(string text)
+        protected Continuation TranslatePi(string pi)
         {
-            if (_Context.Translate(text, out var cont)) 
+            if (_Context.Translate(pi, out var cont)) 
                 return cont;
 
             Error(_Context.Error);
@@ -46,9 +46,9 @@ namespace Diver.Network
             socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
         }
 
-        protected virtual void ProcessReceived(Socket sender, string text)
+        protected virtual bool ProcessReceived(Socket sender, string pi)
         {
-            WriteLine($"Recv: {text}");
+            return WriteLine($"Recv: {pi}");
         }
 
         protected void ReadCallback(IAsyncResult ar)
