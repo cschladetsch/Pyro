@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Text;
 using Diver.Network;
 using Pyro.ExecutionContext;
 using Con = System.Console;
@@ -18,9 +19,11 @@ namespace Console
 
         private Program(string[] args)
         {
-            WriteHeader();
+            _originalColor = Con.ForegroundColor;
 
             Con.CancelKeyPress += Cancel;
+
+            WriteHeader();
 
             var port = ListenPort;
             if (args.Length == 1)
@@ -45,21 +48,22 @@ namespace Console
             _context = new Context();
         }
 
-        private static void Exit(int result = 0)
+        private void Exit(int result = 0)
         {
+            Con.ForegroundColor = _originalColor;
             Environment.Exit(result);
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
         {
+            // don't exit immediately - shut down networking gracefully first
             e.Cancel = true;
             _self.Shutdown();
         }
 
         private void WriteHeader()
         {
-            Con.ForegroundColor = ConsoleColor.DarkGray;
-            Con.WriteLine($"{GetVersion()}");
+            Write($"{GetVersion()}\n", ConsoleColor.DarkGray);
         }
 
         private static string GetVersion()
@@ -95,7 +99,7 @@ namespace Console
             _peer?.Stop();
             Error("Done", color);
             Con.ForegroundColor = ConsoleColor.White;
-            Environment.Exit(0);
+            Exit();
         }
 
         private string GetInput()
@@ -110,18 +114,8 @@ namespace Console
 
             try
             {
-                switch (input)
-                {
-                    case "help":
-                    case "?":
-                        return ShowHelp();
-                    case "rho":
-                        _context.Language = Pyro.ExecutionContext.ELanguage.Rho;
-                        return true;
-                    case "pi":
-                        _context.Language = Pyro.ExecutionContext.ELanguage.Pi;
-                        return true;
-                }
+                if (PreProcess(input))
+                    return true;
 
                 if (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
@@ -135,6 +129,52 @@ namespace Console
             }
 
             return false;
+        }
+
+        private bool PreProcess(string input)
+        {
+            switch (input)
+            {
+                case "help":
+                case "?":
+                    return ShowHelp();
+                case "rho":
+                    _context.Language = ELanguage.Rho;
+                    return true;
+                case "pi":
+                    _context.Language = ELanguage.Pi;
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void WritePrompt()
+        {
+            Write($"{HostName}:{HostPort} ", ConsoleColor.DarkGray);
+            Write($"{_context.Language}> ", ConsoleColor.Gray);
+            Con.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
+        {
+            Write(text, color);
+            return false;
+        }
+
+        private static void Write(string text, ConsoleColor color = ConsoleColor.White)
+        {
+            var current = Con.ForegroundColor;
+            Con.ForegroundColor = color;
+            Con.Write(text);
+            Con.ForegroundColor = current;
+        }
+
+        private void WriteDataStack()
+        {
+            var current = Con.ForegroundColor;
+            _peer.Remote?.WriteDataStackContents();
+            Con.ForegroundColor = current;
         }
 
         private static bool ShowHelp()
@@ -157,40 +197,15 @@ To switch execution context, type:
 
 Press Ctrl-C to quit.
 "
-                );
+            );
             return true;
-        }
-
-        private void WritePrompt()
-        {
-            Con.ForegroundColor = ConsoleColor.DarkGray;
-            Con.Write($"{_hostName}:{_hostPort} ");
-            Con.ForegroundColor = ConsoleColor.Gray;
-            Con.Write(MakePrompt());
-            Con.ForegroundColor = ConsoleColor.White;
-        }
-
-        private string MakePrompt()
-        {
-            return $"{_context.Language}> ";
-        }
-
-        private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
-        {
-            Con.ForegroundColor = color;
-            Con.WriteLine(text);
-            return false;
-        }
-
-        private void WriteDataStack()
-        {
-            _peer.Remote?.WriteDataStackContents();
         }
 
         private readonly Peer _peer;
         private readonly Context _context;
-        private string _hostName => _peer.HostName;
-        private int _hostPort => _peer.HostPort;
         private static Program _self;
+        private readonly ConsoleColor _originalColor;
+        private string HostName => _peer.HostName;
+        private int HostPort => _peer.HostPort;
     }
 }
