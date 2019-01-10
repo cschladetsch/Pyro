@@ -33,9 +33,9 @@ namespace Diver.Network
             _server = new Server(this, listenPort);
         }
 
-        private IPEndPoint GetRemoteEndPoint()
+        public Client GetClient(Socket sender)
         {
-            return Remote?.Socket.RemoteEndPoint as IPEndPoint;
+            return _clients.FirstOrDefault(c => c.Socket == sender);
         }
 
         public string GetHostName()
@@ -109,6 +109,9 @@ namespace Diver.Network
         {
             WriteLine($"Connected to {socket.RemoteEndPoint}");
             _connections.Add(socket);
+            foreach (var client in _clients)
+            {
+            }
         }
 
         public bool Execute(string content)
@@ -135,12 +138,18 @@ namespace Diver.Network
         public string GetLocalHostname()
         {
             var address = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
-            return address == null ? "localhost" : address.ToString();
+            return address?.ToString() ?? "localhost";
         }
 
         public void Continue(Continuation continuation)
         {
             _remote?.Continue(continuation);
+        }
+
+        private IPEndPoint GetRemoteEndPoint()
+        {
+            var socket = Remote?.Socket;
+            return socket?.RemoteEndPoint as IPEndPoint;
         }
 
         private readonly Flow.IKernel _kernel;
@@ -150,10 +159,5 @@ namespace Diver.Network
         private readonly List<Socket> _connections = new List<Socket>();
         private readonly List<Client> _clients = new List<Client>();
         private Client _remote;
-
-        public Client GetClient(Socket sender)
-        {
-            return _clients.FirstOrDefault(c => c.Socket == sender);
-        }
     }
 }

@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Diver.Exec;
-using Diver.Language;
 using Con = System.Console;
 
 namespace Diver.Network
@@ -12,7 +11,6 @@ namespace Diver.Network
     public class Client : NetCommon
     {
         public Socket Socket => _socket;
-        private PiTranslator _pi;
 
         public Client(Peer peer)
             : base(peer)
@@ -44,7 +42,7 @@ namespace Diver.Network
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
-                _peer.NewConnection(_socket);
+                //_peer.NewConnection(_socket);
                 Receive(_socket);
             }
             catch (Exception e)
