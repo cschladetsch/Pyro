@@ -2,89 +2,13 @@
 using System.Reflection;
 using Diver;
 using Diver.Impl;
-using Diver.Exec;
 using Diver.Language;
 using Diver.Network;
+using Pyro.ExecutionContext;
 using Con = System.Console;
 
 namespace Console
 {
-    public enum ELanguage
-    {
-        None,
-        Pi,
-        Rho,
-    }
-
-    public class ExecutionContext : Process
-    {
-        public IRegistry Registry => _registry;
-        public ITranslator Ttranslator => _translator;
-        public Executor Executor => _exec;
-        public ELanguage Language
-        {
-            get
-            {
-                if (_translator == _pi)
-                    return ELanguage.Pi;
-                return _translator == _rho ? ELanguage.Rho : ELanguage.None;
-            }
-            set
-            {
-                switch (value)
-                {
-                    case ELanguage.None:
-                        _translator = null;
-                        return;
-                    case ELanguage.Pi:
-                        _translator = _pi;
-                        break;
-                    case ELanguage.Rho:
-                        _translator = _rho;
-                        break;
-                }
-            }
-        }
-
-        public ExecutionContext()
-        {
-            _registry = new Registry();
-            _exec = _registry.Add(new Diver.Exec.Executor()).Value;
-            _pi = new PiTranslator(_registry);
-            _rho = new RhoTranslator(_registry);
-        }
-
-        public bool Exec(string text)
-        {
-            if (_translator == null)
-                return Fail("No translator");
-            if (!_translator.Translate(text))
-                return Fail(_translator.Error);
-            try
-            {
-                var cont = _translator.Result;
-                cont.Scope = _exec.Scope;
-                _exec.Continue(_translator.Result);
-            }
-            catch (Exception e)
-            {
-                return Fail(e.Message);
-            }
-            return true;
-        }
-
-        public bool ExecFile(string fileName)
-        {
-            return Fail("Not Implemented");
-        }
-
-        private readonly IRegistry _registry;
-        private readonly Executor _exec;
-        private readonly PiTranslator _pi;
-        private readonly RhoTranslator _rho;
-        private ITranslator _translator;
-    }
-
     internal class Program
     {
         public const int ListenPort = 9999;
@@ -119,12 +43,7 @@ namespace Console
                 Environment.Exit(1);
             }
 
-            // needed to generate code locally for sending
-            _registry = new Registry();
-            _piTranslator = new PiTranslator(_registry);
-            _rhoTranslator = new RhoTranslator(_registry);
-
-            _translator = _piTranslator;
+            _context = new Context();
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
@@ -193,20 +112,17 @@ namespace Console
                     case "?":
                         return ShowHelp();
                     case "rho":
-                        _translator = _rhoTranslator;
+                        _context.Language = Pyro.ExecutionContext.ELanguage.Rho;
                         return true;
                     case "pi":
-                        _translator = _piTranslator;
+                        _context.Language = Pyro.ExecutionContext.ELanguage.Pi;
                         return true;
                 }
 
-                if (!_translator.Translate(input))
-                {
-                    Error($"{_translator.Error}");
-                    return false;
-                }
+                var continuation = _context.Translate(input);
+                if (continuation == null)
+                    return Error(_context.Error);
 
-                var continuation = _translator.Result;
                 _peer.Continue(continuation);
                 return true;
             }
@@ -253,14 +169,14 @@ Press Ctrl-C to quit.
 
         private string MakePrompt()
         {
-            var lang = _translator == _piTranslator ? "pi" : "rho";
-            return $"{lang}> ";
+            return $"{_context.Language}> ";
         }
 
-        private static void Error(string text, ConsoleColor color = ConsoleColor.Green)
+        private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
         {
             Con.ForegroundColor = color;
             Con.WriteLine(text);
+            return false;
         }
 
         private void WriteDataStack()
@@ -268,14 +184,8 @@ Press Ctrl-C to quit.
             _peer.Remote?.WriteDataStackContents();
         }
 
-        private readonly PiTranslator _piTranslator;
-        private readonly RhoTranslator _rhoTranslator;
         private readonly Peer _peer;
-        private ITranslator _translator;
-        private bool IsPi => _translator == _piTranslator;
-        private bool IsRho => _translator == _rhoTranslator;
-        private IRegistry _registry;
-        //private Executor _exec => _peer.Executor;
+        private readonly Pyro.ExecutionContext.Context _context;
         private string _hostName => _peer.HostName;
         private int _hostPort => _peer.HostPort;
         private static Program _self;

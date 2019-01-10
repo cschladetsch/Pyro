@@ -14,18 +14,12 @@ namespace Diver.Language.Impl
         {
         }
 
-        protected TranslatorBase(IRegistry reg, Executor exec) : this(reg)
-        {
-            _executor = exec;
-        }
-
         public override bool Translate(string text, EStructure st = EStructure.Program)
         {
-            return false;
+            return base.Translate(text, st);
         }
 
         protected TLexer _lexer;
         protected TParser _parser;
-        protected Executor _executor;
     }
 }

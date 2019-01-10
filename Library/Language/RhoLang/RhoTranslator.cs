@@ -22,7 +22,8 @@ namespace Diver.Language
 
         public override bool Translate(string text, EStructure st = EStructure.Program)
         {
-            Reset();
+            if (!base.Translate(text, st))
+                return false;
 
             if (string.IsNullOrEmpty(text))
                 return true;

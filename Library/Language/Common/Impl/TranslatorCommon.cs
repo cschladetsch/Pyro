@@ -22,7 +22,8 @@ namespace Diver.Language.Impl
 
         public virtual bool Translate(string text, EStructure st = EStructure.Program)
         {
-            return false;
+            Reset();
+            return !string.IsNullOrEmpty(text) || Fail("Empty input");
         }
 
         public new void Reset()

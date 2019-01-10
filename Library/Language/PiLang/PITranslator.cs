@@ -20,6 +20,9 @@ namespace Diver.Language
 
         public override bool Translate(string input, EStructure st = EStructure.Program)
         {
+            if (!base.Translate(input, st))
+                return false;
+
             _continuation = Continuation.New(_reg);
 
             if (string.IsNullOrEmpty(input))

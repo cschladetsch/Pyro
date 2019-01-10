@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ELanguage.cs" />
+    <Compile Include="ExecutionContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +82,10 @@
     <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\ExecutionContext\ExecutionContext.csproj">
+      <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
+      <Name>ExecutionContext</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\PiLang\PiLang.csproj">
       <Project>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</Project>
