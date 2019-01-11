@@ -7,12 +7,19 @@ namespace Diver.Network.Impl
     /// <summary>
     /// A server on the network executes incoming scripts and returns Executor data-stack to sender.
     /// </summary>
-    public class Server : NetCommon, IServer 
+    public class Server : NetCommon, IServer
     {
-        private const int RequestBacklogCount = 50;
+        public override Socket Socket
+        {
+            get => _listener;
+            set => _listener = value;
+        }
+
+        public int ListenPort => _port;
+
         public event ReceivedResponseHandler RecievedResponse;
 
-        public Server(IPeer peer, int port)
+        public Server(Peer peer, int port)
             : base(peer)
         {
             AddTypes(_Context.Registry);
@@ -37,7 +44,7 @@ namespace Diver.Network.Impl
                 .Class);
             registry.Register(new ClassBuilder<Client>(registry)
                 .Methods
-                    .Add<string, bool>("Receive", (q, s) => q.Receive(s))
+                    //.Add<string, bool>("Send", (q, s) => q.Send(s))
                 .Class);
         }
 
@@ -66,9 +73,8 @@ namespace Diver.Network.Impl
         {
             // TODO: Also send _Exec.Scope (?)
             var response = _Registry.ToText(_Exec.DataStack.ToList());
-            WriteLine($"Server sends reponse: {response}");
-            var client = _Peer.GetClient(sender);
-            return client?.Receive(response) ?? Error($"No client to respond to for socket {sender.RemoteEndPoint}");
+            WriteLine($"Server sends {response}");
+            return Send(sender, response);
         }
 
         public bool Start()
@@ -125,6 +131,7 @@ namespace Diver.Network.Impl
             Listen();
         }
 
+        private const int RequestBacklogCount = 50;
         private Socket _listener;
         private readonly int _port;
     }

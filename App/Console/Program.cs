@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
-
+using System.Text;
 using Diver.Network;
 using Pyro.ExecutionContext;
 
@@ -105,7 +107,7 @@ namespace Console
                 if (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
 
-                return _peer.Continue(cont);
+                return _peer.Execute(cont);
             }
             catch (Exception e)
             {
@@ -163,8 +165,26 @@ namespace Console
         private void WriteDataStack()
         {
             var current = Con.ForegroundColor;
-            _peer.Remote?.WriteDataStackContents();
+            WriteDataStackContents(_peer.Remote);
             Con.ForegroundColor = current;
+        }
+
+        public void WriteDataStackContents(IClient client, int max = 50)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            var results = client.Results().ToList();
+            var n = 0;
+            foreach (var result in results)
+            {
+                //var data = stack;
+                //if (data.Count > max)
+                //    Con.WriteLine("...");
+                //for (var n = max - 1; n >= 0; --n)
+                //    str.AppendLine($"{n}: {Print(data[n])}");
+                str.AppendLine($"{n++}: {result}");
+            }
+            Con.Write(str.ToString());
         }
 
         private static bool ShowHelp()

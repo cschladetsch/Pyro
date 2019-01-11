@@ -9,6 +9,7 @@ namespace Diver.Network.Impl
 {
     public class Peer : NetworkConsoleWriter, IPeer
     {
+        public string LocalHostName => GetLocalHostname();
         public event ReceivedResponseHandler OnReceivedResponse;
         public event ConnectedHandler OnConnected;
         public IList<object> Stack { get; }
@@ -53,7 +54,9 @@ namespace Diver.Network.Impl
 
         public bool Start()
         {
-            return _server.Start();
+            if (!_server.Start())
+                return Fail("Couldn't start server");
+            return SelfHost(_server.ListenPort);
         }
 
         public bool EnterRemote(Client client)
@@ -83,18 +86,14 @@ namespace Diver.Network.Impl
 
         public bool Enter(IClient client)
         {
-            return Fail("Not implemented");
+            if (client == null)
+                return Fail("Null client");
+            if (client.Socket == null || !client.Socket.Connected)
+                return Fail("Client not connected");
+
+            _remote = client;
+            return true;
         }
-
-        //public bool Disconnect(Socket socket)
-        //{
-        //    if (!_connections.Contains(socket))
-        //        return Fail($"Not connected to {socket.RemoteEndPoint}");
-
-        //    socket.Close();
-        //    _connections.Remove(socket);
-        //    return true;
-        //}
 
         public void Stop()
         {
@@ -114,20 +113,28 @@ namespace Diver.Network.Impl
         public void NewConnection(Socket socket)
         {
             WriteLine($"Connected to {socket.RemoteEndPoint}");
-            //_connections.Add(socket);
             var address = socket.RemoteEndPoint as IPEndPoint;
+            if (address == null)
+            {
+                Error($"{socket} is not an IPEndPoint");
+                return;
+            }
+
             foreach (var client in _clients)
             {
-                if (client.HostName == address.Address.ToString())
-                {
-                    client.CompleteConnect(socket);
-                }
+                if (client.HostName != address.Address.ToString()) 
+                    continue;
+                client.CompleteConnect(socket);
+                OnConnected?.Invoke(this, client);
+                return;
             }
+
+            Error($"Failed to find client for {socket.RemoteEndPoint}");
         }
 
         public bool Execute(string script)
         {
-            return _server.Execute(script);
+            return _remote?.Continue(script) ?? Fail("Not connected");
         }
 
         public string GetLocalHostname()
@@ -136,7 +143,7 @@ namespace Diver.Network.Impl
             return address?.ToString() ?? "localhost";
         }
 
-        public bool Continue(Continuation continuation)
+        public bool Execute(Continuation continuation)
         {
             return _remote?.Continue(continuation) ?? Fail("Not connected");
         }
@@ -147,7 +154,7 @@ namespace Diver.Network.Impl
             return socket?.RemoteEndPoint as IPEndPoint;
         }
 
-        private IServer _server;
+        private Server _server;
         private readonly List<Client> _clients = new List<Client>();
         private IClient _remote;
     }

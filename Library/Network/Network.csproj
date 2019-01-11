@@ -48,6 +48,7 @@
     <Compile Include="IAgentBase.cs" />
     <Compile Include="IClient.cs" />
     <Compile Include="IDomain.cs" />
+    <Compile Include="INetCommon.cs" />
     <Compile Include="IPeer.cs" />
     <Compile Include="IProxy.cs" />
     <Compile Include="IProxyBase.cs" />

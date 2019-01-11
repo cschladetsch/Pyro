@@ -14,6 +14,7 @@ namespace Diver.Network
         IServer Local { get; }
         IClient Remote { get; }
         IList<IClient> Clients { get; }
+        string LocalHostName { get; }
 
         event ReceivedResponseHandler OnReceivedResponse;
         event ConnectedHandler OnConnected;
@@ -21,7 +22,8 @@ namespace Diver.Network
         bool Start();
         bool Connect(string hostName, int port);
         bool Enter(IClient client);
-        bool Continue(Continuation continuation);
+        bool Execute(Continuation continuation);
+        bool Execute(string pi);
         void Leave();
         void Stop();
     }

@@ -12,8 +12,11 @@ namespace Diver.Network.Impl
     /// <summary>
     /// Functionality common to both Client and Server aspects of a Peer
     /// </summary>
-    public class NetCommon : NetworkConsoleWriter
+    public abstract class NetCommon : NetworkConsoleWriter, INetCommon
     {
+        public Context Context => _Context;
+        public abstract Socket Socket { get; set; }
+
         protected Peer _Peer;
         protected Context _Context;
         protected Executor _Exec => _Context.Executor;
@@ -33,6 +36,27 @@ namespace Diver.Network.Impl
 
             Error(_Context.Error);
             return null;
+        }
+
+        protected bool Send(string text)
+        {
+            return Send(Socket, text);
+        }
+
+        protected bool Send(Socket socket, string text)
+        {
+            if (socket == null)
+                return Fail("No socket to send with");
+
+            var byteData = Encoding.ASCII.GetBytes(text + '~');
+            socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, socket);
+            return true;
+        }
+
+        private void Sent(IAsyncResult ar)
+        {
+            var socket = ar.AsyncState as Socket;
+            socket?.EndSend(ar);
         }
 
         protected IPAddress GetAddress(string hostname)
@@ -55,7 +79,7 @@ namespace Diver.Network.Impl
         {
             try
             {
-                ProcessAccept(ar);
+                ProcessRead(ar);
             }
             catch (ObjectDisposedException)
             {
@@ -68,7 +92,7 @@ namespace Diver.Network.Impl
             }
         }
 
-        private void ProcessAccept(IAsyncResult ar)
+        private void ProcessRead(IAsyncResult ar)
         {
             var state = (StateObject) ar.AsyncState;
             var socket = state.workSocket;
@@ -77,10 +101,10 @@ namespace Diver.Network.Impl
             if (bytesRead <= 0)
                 return;
 
-            EndAccept(state, bytesRead, socket);
+            EndReceive(state, bytesRead, socket);
         }
 
-        private void EndAccept(StateObject state, int bytesRead, Socket socket)
+        private void EndReceive(StateObject state, int bytesRead, Socket socket)
         {
             state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
             ProcessInput(state, socket);

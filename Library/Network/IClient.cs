@@ -1,15 +1,16 @@
-﻿using System.Net.Sockets;
+﻿using System.Collections.Generic;
 using Diver.Exec;
 
 namespace Diver.Network
 {
-    public interface IClient : IProcess
+    public interface IClient : INetCommon
     {
         string HostName { get; }
         int HostPort { get; }
-        Socket Socket { get; }
 
+        IEnumerable<string> Results();
         bool Continue(Continuation continuation);
+        bool Continue(string script);
         void Close();
     }
 }

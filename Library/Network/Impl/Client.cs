@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using Diver.Exec;
@@ -15,10 +17,10 @@ namespace Diver.Network.Impl
     /// </summary>
     public class Client : NetCommon, IClient
     {
-        public string HostName { get; }
-        public int HostPort { get; }
+        public string HostName => GetHostName();
+        public int HostPort => GetHostPort();
 
-        public Socket Socket
+        public override Socket Socket
         {
             get => _socket;
             set => _socket = value;
@@ -29,9 +31,27 @@ namespace Diver.Network.Impl
         {
         }
 
+        public IEnumerable<string> Results()
+        {
+            foreach (var elem in _stack)
+            {
+                yield return _Context.Registry.ToText(elem);
+            }
+        }
+
+        public void CompleteConnect(Socket socket)
+        {
+            _socket = socket;
+        }
+
         public bool Continue(Continuation cont)
         {
-            return Receive(cont?.ToText());
+            return Send(cont?.ToText());
+        }
+
+        public bool Continue(string script)
+        {
+            return !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
         }
 
         public bool Connect(string hostName, int port)
@@ -47,9 +67,9 @@ namespace Diver.Network.Impl
             return true;
         }
 
-        public bool Receive(Continuation continuation)
+        public bool Send(Continuation continuation)
         {
-            return Receive(continuation.ToText());
+            return Send(continuation.ToText());
         }
 
         public void Close()
@@ -58,28 +78,11 @@ namespace Diver.Network.Impl
             _socket = null;
         }
 
-        public bool Receive(string text)
-        {
-            var byteData = Encoding.ASCII.GetBytes(text + '~');
-            _socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, _socket);
-            return true;
-        }
-
-        public void WriteDataStackContents(int max = 20)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            if (_stack != null)
-            {
-                var data = _stack;
-                if (data.Count > max)
-                    Con.WriteLine("...");
-                max = Math.Min(data.Count, max);
-                for (var n = max - 1; n >= 0; --n)
-                    str.AppendLine($"{n}: {Print(data[n])}");
-            }
-            Con.Write(str.ToString());
-        }
+        //public bool ProcessResponse(string response)
+        //{
+        //    WriteLine($"Recv: {response}");
+        //    return true;
+        //}
 
         private void Connected(IAsyncResult ar)
         {
@@ -106,7 +109,7 @@ namespace Diver.Network.Impl
 
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
-                _stack = _Exec.Pop<List<object>>();
+                _stack = _Exec.DataStack.ToList();
             }
             catch (Exception e)
             {
@@ -117,19 +120,20 @@ namespace Diver.Network.Impl
             return true;
         }
 
-        // TODO: split out Client into Client and ConsoleClient : Client
-
-        private string Print(object obj)
+        private int GetHostPort()
         {
-            return _Registry.ToText(obj);
+            var address = Socket?.RemoteEndPoint as IPEndPoint;
+            return address?.Port ?? 0;
         }
 
-        private void Sent(IAsyncResult ar)
+        private string GetHostName()
         {
-            _socket?.EndSend(ar);
+            var address = Socket?.RemoteEndPoint as IPEndPoint;
+            return address?.Address.ToString() ?? "none";
         }
 
         private Socket _socket;
         private IList<object> _stack;
+
     }
 }
