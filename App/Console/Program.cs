@@ -37,18 +37,18 @@ namespace Console
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error("Local server listen port number expected as argument");
 
-            _peer = new Peer(port);
+            _peer = Diver.Network.Create.NewPeer(port);
             if (!_peer.Start())
                 return Error("Failed to start local server");
 
-            if (!_peer.Connect(_peer.GetLocalHostname(), port)) 
+            if (!_peer.Connect(_peer.LocalHostName, port)) 
                 return Error("Couldn't connect to localhost");
 
             // unsure if truly needed, but this Sleep is to give a little time for local
             // client to connect to local server via Tcp
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.2));
 
-            return _peer.EnterRemote(_peer.Clients[0]) || Error("Couldn't shell to localhost");
+            return _peer.Enter(_peer.Clients[0]) || Error("Couldn't shell to localhost");
         }
 
         private void RunInitialisationScripts()
@@ -211,11 +211,11 @@ Press Ctrl-C to quit.
             Exit();
         }
 
-        private Peer _peer;
+        private IPeer _peer;
         private readonly Context _context;
         private readonly ConsoleColor _originalColor;
         private static Program _self;
-        private string HostName => _peer.HostName;
-        private int HostPort => _peer.HostPort;
+        private string HostName => _peer.Remote?.HostName;
+        private int HostPort => _peer.Remote?.HostPort ?? 0;
     }
 }

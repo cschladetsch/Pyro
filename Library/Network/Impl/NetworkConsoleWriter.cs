@@ -1,7 +1,7 @@
 ﻿using System;
 using Con = System.Console;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
     public class NetworkConsoleWriter : Process
     {

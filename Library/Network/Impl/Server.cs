@@ -2,16 +2,17 @@
 using System.Linq;
 using System.Net.Sockets;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
     /// <summary>
     /// A server on the network executes incoming scripts and returns Executor data-stack to sender.
     /// </summary>
-    public class Server : NetCommon
+    public class Server : NetCommon, IServer 
     {
         private const int RequestBacklogCount = 50;
+        public event ReceivedResponseHandler RecievedResponse;
 
-        public Server(Peer peer, int port)
+        public Server(IPeer peer, int port)
             : base(peer)
         {
             AddTypes(_Context.Registry);
@@ -31,7 +32,6 @@ namespace Diver.Network
             registry.Register(new ClassBuilder<Peer>(registry)
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
-                    .Add<Socket, bool>("Disconnect", (q, s) => q.Disconnect(s))
                     .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
                     .Add<Client>("Leave", (q, s) => q.Leave())
                 .Class);
@@ -45,6 +45,7 @@ namespace Diver.Network
         {
             try
             {
+                RecievedResponse?.Invoke(this, _Peer.GetClient(sender), pi);
                 RunLocally(pi);
                 return SendResponse(sender);
             }

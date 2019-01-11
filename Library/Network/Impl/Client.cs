@@ -6,14 +6,18 @@ using System.Text;
 using Diver.Exec;
 using Con = System.Console;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
+    /// <inheritdoc cref="NetCommon" />
     /// <summary>
     /// A connection to a remote server. Can send executable script, and receive
     /// results that are also executable scripts.
     /// </summary>
-    public class Client : NetCommon
+    public class Client : NetCommon, IClient
     {
+        public string HostName { get; }
+        public int HostPort { get; }
+
         public Socket Socket
         {
             get => _socket;
@@ -48,7 +52,7 @@ namespace Diver.Network
             return Receive(continuation.ToText());
         }
 
-        public void Stop()
+        public void Close()
         {
             _socket.Close();
             _socket = null;
@@ -126,6 +130,6 @@ namespace Diver.Network
         }
 
         private Socket _socket;
-        private List<object> _stack;
+        private IList<object> _stack;
     }
 }

@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using Diver.Exec;
 using Pyro.ExecutionContext;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
     /// <summary>
     /// Functionality common to both Client and Server aspects of a Peer
