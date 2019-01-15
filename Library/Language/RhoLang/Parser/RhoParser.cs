@@ -56,7 +56,7 @@ namespace Diver.Language
             if (!Try(ERhoToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _stack.Count == 1 || Fail("Stack not empty after parsing");
+            return _stack.Count == 1 || Fail("SYSTEM: Semantic stack not empty after parsing");
         }
 
         private bool Program()

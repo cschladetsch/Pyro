@@ -5,8 +5,17 @@ using System.Text;
 
 namespace Diver.Language.Impl
 {
-    // common for all parsers.
-    // iterate over a stream of tokens to produce an abstract syntax tree
+    /// <summary>
+    /// Common for all Parsers.
+    ///
+    /// Iterate over a stream of tokens to produce an abstract syntax tree
+    /// </summary>
+    /// <typeparam name="TLexer"></typeparam>
+    /// <typeparam name="TAstNode"></typeparam>
+    /// <typeparam name="TTokenNode"></typeparam>
+    /// <typeparam name="ETokenEnum"></typeparam>
+    /// <typeparam name="EAstEnum"></typeparam>
+    /// <typeparam name="AstFactory"></typeparam>
     public class ParserCommon<TLexer, TAstNode, TTokenNode, ETokenEnum, EAstEnum, AstFactory>
         : ProcessCommon
         where TLexer : ILexerCommon<TTokenNode>

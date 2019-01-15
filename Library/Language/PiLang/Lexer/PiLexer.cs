@@ -253,17 +253,14 @@ namespace Diver.Language
             Next();
             var num = int.Parse(Gather(char.IsDigit).Text);
             var op = (EOperation) num;
-            if (_opToToken.TryGetValue(op, out var tok))
-                return Add(tok);
-            return false;
+            return _opToToken.TryGetValue(op, out var tok) && Add(tok);
         }
 
         protected override void AddKeywordOrIdent(Slice slice)
         {
-            if (_keyWords.TryGetValue(slice.Text, out EPiToken tok))
-                _tokens.Add(_factory.NewToken(tok, slice));
-            else
-                _tokens.Add(_factory.NewTokenIdent(slice));
+            _tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
+                ? _factory.NewToken(tok, slice)
+                : _factory.NewTokenIdent(slice));
         }
 
         protected override void Terminate()

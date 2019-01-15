@@ -26,10 +26,10 @@
                 case ERhoToken.Resume:
                 case ERhoToken.Suspend:
                 {
-                    var ret = NewNode(Consume());
+                    var change = NewNode(Consume());
                     if (Expression())
-                        ret.Add(Pop());
-                    return Append(ret);
+                        change.Add(Pop());
+                    return Append(change);
                 }
 
                 case ERhoToken.While:
@@ -77,7 +77,7 @@
             Expect(ERhoToken.NewLine);
 
             if (!Block())
-                return FailLocation("Block expected");
+                return FailLocation("Function block expected");
 
             // make the continuation
             var block = Pop();
@@ -193,7 +193,9 @@
                     return false;
             }
 
-            // always add the final part of the for-loop
+            // always add the final part of the for-loop. for the moment,
+            // RhoTranslator determines which type of for-loop it is from
+            // the number of arguments in the 'for' ast-node
             @for.Add(Pop());
 
             // both for-loops ends with a closing paran and a block
