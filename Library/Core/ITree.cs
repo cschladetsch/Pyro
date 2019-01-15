@@ -11,7 +11,12 @@ namespace Diver
         object Resolve(IPathname path);
     }
 
-    public interface IPathname
+    public interface IIdentifer : ITextSerialise
+    {
+        bool Quoted { get; set; }
+    }
+
+    public interface IPathname : ITextSerialise
     {
     }
 }

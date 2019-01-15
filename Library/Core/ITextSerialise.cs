@@ -20,8 +20,6 @@
         /// <returns>true if the conversion succeeded</returns>
         bool FromText(string s, IRegistry reg);
 
-        bool FromText(StringSlice s, IRegistry reg);
+        bool FromText(IStringSlice s, IRegistry reg);
     }
-
-    // like a Language.Slice, but not based on a Lexer
 }
