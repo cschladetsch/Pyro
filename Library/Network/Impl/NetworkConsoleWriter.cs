@@ -1,7 +1,7 @@
 ﻿using System;
 using Con = System.Console;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
     public class NetworkConsoleWriter : Process
     {
@@ -12,18 +12,21 @@ namespace Diver.Network
             return false;
         }
 
-        protected new static void Error(string text)
+        protected new bool Error(string text)
         {
             WriteLine($"Error: {text}");
+            base.Error = text;
+            return false;
         }
 
-        protected static void WriteLine(string text)
+        protected static bool WriteLine(string text)
         {
             var color = Con.ForegroundColor;
             Con.ForegroundColor = ConsoleColor.Cyan;
             Con.WriteLine();
             Con.WriteLine(text);
             Con.ForegroundColor = color;
+            return true;
         }
     }
 }

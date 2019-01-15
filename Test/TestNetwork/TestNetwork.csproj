@@ -5,29 +5,27 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Console</RootNamespace>
-    <AssemblyName>Console</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <ProjectGuid>{E8BEDE94-9066-4113-BF03-CA02BACCDC39}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestNetwork</RootNamespace>
+    <AssemblyName>TestNetwork</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>false</Deterministic>
+    <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -49,11 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="TestNetworkPeer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -61,45 +58,25 @@
       <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
       <Name>CoreNetwork</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Console\Console.csproj">
-      <Project>{d3a3e0ba-decb-4301-83e0-dee41942c2a4}</Project>
-      <Name>Console</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
-      <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
+      <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
       <Name>Executor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Ext\Flow\Flow2.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
-      <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
-      <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\ExecutionContext\ExecutionContext.csproj">
       <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
       <Name>ExecutionContext</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\PiLang\PiLang.csproj">
-      <Project>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</Project>
-      <Name>PiLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
-      <Project>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</Project>
-      <Name>RhoLang</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Network\Network.csproj">
       <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
       <Name>Network</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetworkGen\NetworkGen.csproj">
-      <Project>{e6cd36b6-157b-4b89-bca0-aaac0e56688a}</Project>
-      <Name>NetworkGen</Name>
+    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
+      <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
+      <Name>TestCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -109,8 +86,4 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.11.0\build\NUnit.props'))" />
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>

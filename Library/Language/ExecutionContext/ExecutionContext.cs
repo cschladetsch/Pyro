@@ -13,7 +13,8 @@ namespace Pyro.ExecutionContext
     /// Functionality to execute scripts in any system-supported language
     /// given text or a filename.
     /// </summary>
-    public class Context : Process
+    public class Context
+        : Process
     {
         public IRegistry Registry => _registry;
         public ITranslator Translator => _translator;
@@ -46,8 +47,6 @@ namespace Pyro.ExecutionContext
                         _translator = _rho;
                         break;
                 }
-
-                Language = value;
             }
         }
 
@@ -58,6 +57,7 @@ namespace Pyro.ExecutionContext
             Diver.Exec.RegisterTypes.Register(_registry);
             _pi = new PiTranslator(_registry);
             _rho = new RhoTranslator(_registry);
+            Language = ELanguage.Pi;
         }
 
         public bool Exec(string text)

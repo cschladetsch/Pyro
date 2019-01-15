@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using Diver.Exec;
 using Con = System.Console;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
+    /// <inheritdoc cref="NetCommon" />
     /// <summary>
     /// A connection to a remote server. Can send executable script, and receive
     /// results that are also executable scripts.
     /// </summary>
-    public class Client : NetCommon
+    public class Client : NetCommon, IClient
     {
-        public Socket Socket
+        public string HostName => GetHostName();
+        public int HostPort => GetHostPort();
+
+        public override Socket Socket
         {
             get => _socket;
             set => _socket = value;
@@ -25,9 +31,27 @@ namespace Diver.Network
         {
         }
 
+        public IEnumerable<string> Results()
+        {
+            foreach (var elem in _stack)
+            {
+                yield return _Context.Registry.ToText(elem);
+            }
+        }
+
+        public void CompleteConnect(Socket socket)
+        {
+            _socket = socket;
+        }
+
         public bool Continue(Continuation cont)
         {
-            return SendPi(cont?.ToText());
+            return Send(cont?.ToText());
+        }
+
+        public bool Continue(string script)
+        {
+            return !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
         }
 
         public bool Connect(string hostName, int port)
@@ -45,37 +69,20 @@ namespace Diver.Network
 
         public bool Send(Continuation continuation)
         {
-            return SendPi(continuation.ToText());
+            return Send(continuation.ToText());
         }
 
-        public void Stop()
+        public void Close()
         {
             _socket.Close();
             _socket = null;
         }
 
-        public bool SendPi(string text)
-        {
-            var byteData = Encoding.ASCII.GetBytes(text + '~');
-            _socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, _socket);
-            return true;
-        }
-
-        public void WriteDataStackContents(int max = 20)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            if (_stack != null)
-            {
-                var data = _stack;
-                if (data.Count > max)
-                    Con.WriteLine("...");
-                max = Math.Min(data.Count, max);
-                for (var n = max - 1; n >= 0; --n)
-                    str.AppendLine($"{n}: {Print(data[n])}");
-            }
-            Con.Write(str.ToString());
-        }
+        //public bool ProcessResponse(string response)
+        //{
+        //    WriteLine($"Recv: {response}");
+        //    return true;
+        //}
 
         private void Connected(IAsyncResult ar)
         {
@@ -83,6 +90,7 @@ namespace Diver.Network
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
+                WriteLine($"Client connected via socket {_socket.RemoteEndPoint}");
                 Receive(_socket);
             }
             catch (Exception e)
@@ -91,40 +99,41 @@ namespace Diver.Network
             }
         }
 
-        protected override void ProcessReceived(Socket sender, string text)
+        protected override bool ProcessReceived(Socket sender, string pi)
         {
             try
             {
-                WriteLine($"Recv Stack: {text}");
-                if (!_Context.Translate(text, out var cont))
-                {
-                    Error($"Failed to translate {text}");
-                    return;
-                }
+                WriteLine($"Recv Stack: {pi}");
+                if (!_Context.Translate(pi, out var cont))
+                    return Error($"Failed to translate {pi}");
 
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
-                _stack = _Exec.Pop<List<object>>();
+                _stack = _Exec.DataStack.ToList();
             }
             catch (Exception e)
             {
                 Error(e.Message);
+                return false;
             }
+
+            return true;
         }
 
-        // TODO: split out Client into Client and ConsoleClient : Client
-
-        private string Print(object obj)
+        private int GetHostPort()
         {
-            return _Registry.ToText(obj);
+            var address = Socket?.RemoteEndPoint as IPEndPoint;
+            return address?.Port ?? 0;
         }
 
-        private void Sent(IAsyncResult ar)
+        private string GetHostName()
         {
-            _socket?.EndSend(ar);
+            var address = Socket?.RemoteEndPoint as IPEndPoint;
+            return address?.Address.ToString() ?? "none";
         }
 
         private Socket _socket;
-        private List<object> _stack;
+        private IList<object> _stack;
+
     }
 }
