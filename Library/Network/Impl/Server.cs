@@ -1,19 +1,30 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 
-namespace Diver.Network
+namespace Diver.Network.Impl
 {
-    public class Server : NetCommon
+    /// <summary>
+    /// A server on the network executes incoming scripts and returns Executor data-stack to sender.
+    /// </summary>
+    public class Server : NetCommon, IServer
     {
-        private const int BacklogCount = 50;
+        public override Socket Socket
+        {
+            get => _listener;
+            set => _listener = value;
+        }
+
+        public int ListenPort => _port;
+
+        public event ReceivedResponseHandler RecievedResponse;
 
         public Server(Peer peer, int port)
             : base(peer)
         {
-            _port = port;
             AddTypes(_Context.Registry);
+
+            _port = port;
             _Exec.Scope["peer"] = _Peer;
             _Exec.Scope["con"] = this;
             _Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
@@ -23,41 +34,47 @@ namespace Diver.Network
 
         private void AddTypes(IRegistry registry)
         {
-            Diver.Exec.RegisterTypes.Register(registry);
+            Exec.RegisterTypes.Register(registry);
 
-            //registry.Register(new ClassBuilder<Program>(registry)
-            //    .Methods
-            //        .Add<string, bool>("Execute", (q, s) => q.Execute(s))
-            //    .Class);
             registry.Register(new ClassBuilder<Peer>(registry)
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
-                    .Add<Socket, bool>("Disconnect", (q, s) => q.Disconnect(s))
                     .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
                     .Add<Client>("Leave", (q, s) => q.Leave())
                 .Class);
             registry.Register(new ClassBuilder<Client>(registry)
                 .Methods
-                    .Add<string, bool>("SendPi", (q, s) => q.SendPi(s))
+                    //.Add<string, bool>("Send", (q, s) => q.Send(s))
                 .Class);
         }
 
-        protected override void ProcessReceived(Socket sender, string text)
+        protected override bool ProcessReceived(Socket sender, string pi)
         {
             try
             {
-                var cont = TranslatePi(text);
-                cont.Scope = _Exec.Scope;
-                _Exec.Continue(cont);
-                var stack = _Exec.DataStack.ToList();
-                var response = _Registry.ToText(stack);
-                WriteLine($"Response: {response}");
-                _Peer.GetClient(sender)?.SendPi(response);
+                RecievedResponse?.Invoke(this, _Peer.GetClient(sender), pi);
+                RunLocally(pi);
+                return SendResponse(sender);
             }
             catch (Exception e)
             {
-                Error($"Exception: {e.Message}");
+                return Error($"ProcessReceived: {e.Message}");
             }
+        }
+
+        private void RunLocally(string pi)
+        {
+            var cont = TranslatePi(pi);
+            cont.Scope = _Exec.Scope;
+            _Exec.Continue(cont);
+        }
+
+        private bool SendResponse(Socket sender)
+        {
+            // TODO: Also send _Exec.Scope (?)
+            var response = _Registry.ToText(_Exec.DataStack.ToList());
+            WriteLine($"Server sends {response}");
+            return Send(sender, response);
         }
 
         public bool Start()
@@ -71,7 +88,7 @@ namespace Diver.Network
             try
             {
                 _listener.Bind(endPoint);
-                _listener.Listen(BacklogCount);
+                _listener.Listen(RequestBacklogCount);
 
                 WriteLine($"Listening on {address}:{_port}");
                 Listen();
@@ -86,49 +103,36 @@ namespace Diver.Network
             return true;
         }
 
-        private void Listen()
-        {
-            _listener.BeginAccept(AcceptCallback, _listener);
-        }
-
         public void Stop()
         {
-            WriteLine("Server stop");
-            _stopping = true;
+            _Stopping = true;
             _listener?.Close();
             _listener = null;
         }
 
-        private void AcceptCallback(IAsyncResult ar)
+        public bool Execute(string script)
         {
-            if (_stopping)
+            return _Context.Exec(script);
+        }
+
+        private void Listen()
+        {
+            _listener.BeginAccept(ConnectRequest, null);
+        }
+
+        private void ConnectRequest(IAsyncResult ar)
+        {
+            if (_Stopping)
                 return;
 
-            var listener = (Socket)ar.AsyncState;
-            var socket = listener.EndAccept(ar);
+            var socket = _listener.EndAccept(ar);
             _Peer.NewConnection(socket);
             Receive(socket);
             Listen();
         }
 
-        private IPEndPoint GetLocalEndPoint(int port)
-        {
-            var address = GetAddress(Dns.GetHostName());
-            if (address == null)
-            {
-                Error("Couldn't find suitable host address");
-                return null;
-            }
-
-            return new IPEndPoint(address, port);
-        }
-
+        private const int RequestBacklogCount = 50;
         private Socket _listener;
         private readonly int _port;
-
-        public bool Execute(string script)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

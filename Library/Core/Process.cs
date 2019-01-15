@@ -1,15 +1,20 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.Win32;
-
-namespace Diver
+﻿namespace Diver
 {
     /// <summary>
-    /// Common to all custom language's Lexer, Parser, and Translator processes
+    /// This is a simple class which works in various contexts.
+    /// It is common to all things that preservce state over time, or `Processes`.
+    /// Notablety each language's Lexer, Parser, and Translator are all Proceses's.
+    /// The base of all netork classes are also Process's.
     /// </summary>
     public class Process : IProcess
     {
-        public bool Failed => _failed;
-        public string Error => _error;
+        public bool Failed { get; private set; }
+
+        public string Error
+        {
+            get => _error;
+            protected set => _error = value;
+        }
 
         protected Process()
         {
@@ -17,23 +22,17 @@ namespace Diver
 
         public virtual bool Fail(string err)
         {
-            _failed = true;
+            Failed = true;
             _error = err;
             return false;
         }
 
-        public virtual bool Fail(string fmt, params object[] args)
-        {
-            return Fail(string.Format(fmt, args));
-        }
-
         protected void Reset()
         {
-            _failed = false;
+            Failed = false;
             _error = "";
         }
 
-        private bool _failed;
         protected string _error;
     }
 }
