@@ -18,7 +18,6 @@ namespace Diver.Language.Impl
             : base(reg)
         {
             _current = 0;
-            _indent = 0;
             _lexer = lexer;
         }
 
@@ -225,8 +224,15 @@ namespace Diver.Language.Impl
 
         protected List<TTokenNode> _tokens = new List<TTokenNode>();
         protected readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
+
+        /// <summary>
+        /// The current offset into the input string that is being Tokenised
+        /// </summary>
         protected int _current;
-        protected int _indent;
+
+        /// <summary>
+        /// The Lexer to use. TODO: Use interfaces instead?
+        /// </summary>
         protected TLexer _lexer;
         protected AstFactory _astFactory = new AstFactory();
     }

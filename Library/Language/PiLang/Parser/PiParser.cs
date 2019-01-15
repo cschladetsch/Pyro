@@ -19,7 +19,6 @@ namespace Diver.Language
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
             _current = 0;
-            _indent = 0;
             _lexer = lex;
 
             if (_lexer.Failed)

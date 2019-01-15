@@ -15,7 +15,6 @@ namespace Diver.Language
             : base(lexer, reg)
         {
             _current = 0;
-            _indent = 0;
             _structure = st;
         }
 
