@@ -79,7 +79,10 @@
     <Compile Include="Impl\RefBase.cs" />
     <Compile Include="Impl\VoidCallable.cs" />
     <Compile Include="IProcess.cs" />
+    <Compile Include="IStringSlice.cs" />
     <Compile Include="IStructBase.cs" />
+    <Compile Include="ITextSerialise.cs" />
+    <Compile Include="ITree.cs" />
     <Compile Include="ITypeBase.cs" />
     <Compile Include="IStruct.cs" />
     <Compile Include="Impl\Ref.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="BuiltinTypes\Map.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="Pair.cs" />
+    <Compile Include="PathElement.cs" />
     <Compile Include="Pathname.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="ProcessCommon.cs" />
@@ -103,6 +107,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Reflected.cs" />
+    <Compile Include="Impl\StringSlice.cs" />
     <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>
