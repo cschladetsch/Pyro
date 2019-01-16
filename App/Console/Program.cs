@@ -77,10 +77,13 @@ namespace Console
                 try
                 {
                     WritePrompt();
-                    if (!Execute(GetInput()))
+                    var input = GetInput();
+                    if (string.IsNullOrEmpty(input))
+                        _peer.Remote.Continue("1 drop");    // hack to force stack refresh!
+                    else if (!Execute(input))
                         continue;
                     
-                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
 
                     WriteDataStack();
                 }
@@ -205,7 +208,7 @@ To connect to a remote node, type:
 To then switch execution context, type:
 ...rho> enter(""hostname"")
 
-To do both consequetively:
+To do both:
 ...rho> join(""hostname""[, port])
 
 For help on syntax for Pi/Rho languages, see the corresponding documentation.
@@ -216,7 +219,7 @@ Press Ctrl-C to quit.
             return true;
         }
 
-        private static void Cancel(object sender, ConsoleCancelEventArgs e)
+        private void Cancel(object sender, ConsoleCancelEventArgs e)
         {
             // don't exit immediately - shut down networking gracefully first
             e.Cancel = true;
