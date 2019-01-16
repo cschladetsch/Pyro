@@ -1,11 +1,9 @@
 using System;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using Pyro.AppCommon;
 using Pyro.ExecutionContext;
 using static System.Console;
-using Con = System.Console;
 
 namespace Pyro.Limuty
 {
