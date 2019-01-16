@@ -18,7 +18,7 @@ namespace Diver.Language.Impl
         protected TranslatorCommon(IRegistry r)
             : base(r)
         {
-            _stack.Push(Continuation.New(r));
+            Reset();
         }
 
         public virtual bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program)
@@ -39,9 +39,7 @@ namespace Diver.Language.Impl
         {
             var str = new StringBuilder();
             foreach (var cont in _stack)
-            {
-                str.Append(cont.ToString());
-            }
+                str.Append(cont);
 
             return str.ToString();
         }
