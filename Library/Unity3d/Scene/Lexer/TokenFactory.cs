@@ -1,6 +1,6 @@
 using Diver.Language;
 
-namespace Pyro.Unity
+namespace Pyro.Unity.Scene
 {
     public class TokenFactory
         : ITokenFactory<EToken, Token>

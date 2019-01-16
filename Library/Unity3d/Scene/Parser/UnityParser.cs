@@ -2,7 +2,7 @@ using Diver;
 using Diver.Language;
 using Diver.Language.Impl;
 
-namespace Pyro.Unity
+namespace Pyro.Unity.Scene
 {
     public class UnityParser
         : ParserCommon<UnityLexer, AstNode, Token, EToken, EAst, AstFactory>

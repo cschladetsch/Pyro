@@ -1,7 +1,7 @@
 using Diver.Language;
 using Diver.Language.Impl;
 
-namespace Pyro.Unity
+namespace Pyro.Unity.Scene
 {
     public class Token : TokenBase<EToken>, ITokenNode<EToken>
     {
