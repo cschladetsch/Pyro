@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component.cs" />
+    <Compile Include="Element.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="IHasFileId.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Scene\Lexer\EToken.cs" />
     <Compile Include="Scene\Lexer\Token.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="Scene\Parser\AstFactory.cs" />
     <Compile Include="Scene\Parser\AstNode.cs" />
     <Compile Include="Scene\Parser\EAst.cs" />
+    <Compile Include="Scene\Parser\IdToType.cs" />
     <Compile Include="Scene\Parser\UnityParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Primitives.cs" />
@@ -61,6 +65,7 @@
     <Compile Include="Scene\SceneInstance.cs" />
     <Compile Include="Scene\Translator.cs" />
     <Compile Include="Scene\UnityScene.cs" />
+    <Compile Include="Transform.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

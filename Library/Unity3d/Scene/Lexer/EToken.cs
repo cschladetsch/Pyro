@@ -30,7 +30,9 @@ namespace Pyro.Unity3d.Scene
         OpenSquareBracket,
         CloseSquareBracket,
         OpenParan,
-        CloseParan
-
+        CloseParan,
+        Document,
+        TAG,
+        YAML
     }
 }
