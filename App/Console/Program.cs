@@ -26,7 +26,6 @@ namespace Console
         {
             _context = new Context();
 
-            WriteHeader();
             if (!StartPeer(args))
                 Exit(1);
 

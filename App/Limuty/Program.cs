@@ -2,9 +2,10 @@ using Pyro.AppCommon;
 
 namespace Pyro.Limuty
 {
-    class Program : AppCommonBase
+    class Program
+        : AppCommonBase
     {
-        static void Main(string[] args)
+        static void Main(object[] args)
         {
             new Program(args).Run();
         }
@@ -21,6 +22,7 @@ namespace Pyro.Limuty
 
         protected override void Shutdown()
         {
+            Error("Ctrl-C");
         }
     }
 }

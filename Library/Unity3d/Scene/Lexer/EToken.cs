@@ -24,8 +24,13 @@ namespace Pyro.Unity3d.Scene
         Bang,
         Ampersand,
         Comma,
+
         OpenBrace,
         CloseBrace,
+        OpenSquareBracket,
+        CloseSquareBracket,
+        OpenParan,
+        CloseParan
 
     }
 }
