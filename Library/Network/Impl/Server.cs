@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
+using Diver.Exec;
 
 namespace Diver.Network.Impl
 {
@@ -64,7 +65,7 @@ namespace Diver.Network.Impl
 
         private void RunLocally(string pi)
         {
-            var cont = TranslatePi(pi);
+            var cont = TranslatePi(pi).Code[0] as Continuation;
             cont.Scope = _Exec.Scope;
             _Exec.Continue(cont);
         }
@@ -73,7 +74,7 @@ namespace Diver.Network.Impl
         {
             // TODO: Also send _Exec.Scope (?)
             var response = _Registry.ToText(_Exec.DataStack.ToList());
-            WriteLine($"Server sends {response}");
+            //WriteLine($"Server sends {response}");
             return Send(sender, response);
         }
 

@@ -33,10 +33,11 @@ namespace Diver.Network.Impl
 
         public IEnumerable<string> Results()
         {
+            if (_stack == null)
+                yield break;
+
             foreach (var elem in _stack)
-            {
                 yield return _Context.Registry.ToText(elem);
-            }
         }
 
         public void CompleteConnect(Socket socket)
@@ -74,6 +75,7 @@ namespace Diver.Network.Impl
 
         public void Close()
         {
+            _Stopping = true;
             _socket.Close();
             _socket = null;
         }
@@ -90,7 +92,7 @@ namespace Diver.Network.Impl
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
-                WriteLine($"Client connected via socket {_socket.RemoteEndPoint}");
+                WriteLine($"Client connected to {_socket.RemoteEndPoint}");
                 Receive(_socket);
             }
             catch (Exception e)
@@ -103,13 +105,13 @@ namespace Diver.Network.Impl
         {
             try
             {
-                WriteLine($"Recv Stack: {pi}");
+                //WriteLine($"Recv Stack: {pi}");
                 if (!_Context.Translate(pi, out var cont))
                     return Error($"Failed to translate {pi}");
 
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
-                _stack = _Exec.DataStack.ToList();
+                _stack = _Exec.Pop<List<object>>();
             }
             catch (Exception e)
             {

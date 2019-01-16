@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Diver.Language;
 using Diver.Network;
 using Pyro.ExecutionContext;
 
@@ -40,17 +40,16 @@ namespace Console
                 return Error("Local server listen port number expected as argument");
 
             _peer = Diver.Network.Create.NewPeer(port);
-            if (!_peer.Start())
-                return Error("Failed to start local server");
+            return _peer.Start() || Error("Failed to start local server");
 
-            if (!_peer.Connect(_peer.LocalHostName, port)) 
-                return Error("Couldn't connect to localhost");
+            //if (!_peer.Connect(_peer.LocalHostName, port)) 
+            //    return Error("Couldn't connect to localhost");
 
-            // unsure if truly needed, but this Sleep is to give a little time for local
-            // client to connect to local server via Tcp
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.2));
+            //// unsure if truly needed, but this Sleep is to give a little time for local
+            //// client to connect to local server via Tcp
+            //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.2));
 
-            return _peer.Enter(_peer.Clients[0]) || Error("Couldn't shell to localhost");
+            //return _peer.Enter(_peer.Clients[0]) || Error("Couldn't shell to localhost");
         }
 
         private void RunInitialisationScripts()
@@ -80,6 +79,9 @@ namespace Console
                     WritePrompt();
                     if (!Execute(GetInput()))
                         continue;
+                    
+                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(100));
+
                     WriteDataStack();
                 }
                 catch (Exception e)

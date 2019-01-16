@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ELanguage.cs" />
     <Compile Include="ExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,10 +64,6 @@
     <ProjectReference Include="..\RhoLang\RhoLang.csproj">
       <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
       <Name>RhoLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tau\TauLang.csproj">
-      <Project>{ba0fb904-b750-4c6a-93b0-44265b4408e8}</Project>
-      <Name>TauLang</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

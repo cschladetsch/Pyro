@@ -124,7 +124,7 @@ namespace Diver.Network.Impl
             {
                 if (client.HostName != address.Address.ToString()) 
                     continue;
-                client.CompleteConnect(socket);
+                //client.CompleteConnect(socket);
                 OnConnected?.Invoke(this, client);
                 return;
             }

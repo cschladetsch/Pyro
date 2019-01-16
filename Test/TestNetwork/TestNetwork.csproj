@@ -66,6 +66,10 @@
       <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
+      <Project>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\ExecutionContext\ExecutionContext.csproj">
       <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
       <Name>ExecutionContext</Name>
