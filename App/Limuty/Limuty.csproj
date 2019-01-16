@@ -70,6 +70,10 @@
       <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
       <Name>ExecutionContext</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Unity3d\Unity3d.csproj">
+      <Project>{35c70bec-d08c-430d-bfcf-264a3879104f}</Project>
+      <Name>Unity3d</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
