@@ -61,6 +61,10 @@
       <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
       <Name>CoreNetwork</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\AppCommon\AppCommon.csproj">
+      <Project>{fd200c39-038b-4f39-a7a8-249b6ece6921}</Project>
+      <Name>AppCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Console\Console.csproj">
       <Project>{d3a3e0ba-decb-4301-83e0-dee41942c2a4}</Project>
       <Name>Console</Name>

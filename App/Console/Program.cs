@@ -2,29 +2,29 @@
 using System.Linq;
 using System.Reflection;
 using System.Text;
+
 using Diver.Language;
 using Diver.Network;
+
 using Pyro.ExecutionContext;
 
 using Con = System.Console;
 
 namespace Console
 {
-    internal class Program
+    internal class Program : Pyro.AppCommon.AppCommonBase
     {
         public const int ListenPort = 9999;
 
         private static void Main(string[] args)
         {
-            _self = new Program(args);
-            _self.Repl();
+            new Program(args).Repl();
         }
 
         private Program(string[] args)
+            : base(args)
         {
-            _originalColor = Con.ForegroundColor;
             _context = new Context();
-            Con.CancelKeyPress += Cancel;
 
             WriteHeader();
             if (!StartPeer(args))
@@ -144,25 +144,19 @@ namespace Console
             Con.ForegroundColor = ConsoleColor.White;
         }
 
-        private void Exit(int result = 0)
-        {
-            Con.ForegroundColor = _originalColor;
-            Environment.Exit(result);
-        }
+        //private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
+        //{
+        //    Write(text, color);
+        //    return false;
+        //}
 
-        private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
-        {
-            Write(text, color);
-            return false;
-        }
-
-        private static void Write(string text, ConsoleColor color = ConsoleColor.White)
-        {
-            var current = Con.ForegroundColor;
-            Con.ForegroundColor = color;
-            Con.Write(text);
-            Con.ForegroundColor = current;
-        }
+        //private static void Write(string text, ConsoleColor color = ConsoleColor.White)
+        //{
+        //    var current = Con.ForegroundColor;
+        //    Con.ForegroundColor = color;
+        //    Con.Write(text);
+        //    Con.ForegroundColor = current;
+        //}
 
         private void WriteDataStack()
         {
@@ -216,14 +210,7 @@ Press Ctrl-C to quit.
             return true;
         }
 
-        private static void Cancel(object sender, ConsoleCancelEventArgs e)
-        {
-            // don't exit immediately - shut down networking gracefully first
-            e.Cancel = true;
-            _self.Shutdown();
-        }
-
-        private void Shutdown()
+        protected override void Shutdown()
         {
             var color = ConsoleColor.DarkGray;
             Error("Shutting down...", color);
@@ -235,8 +222,6 @@ Press Ctrl-C to quit.
 
         private IPeer _peer;
         private readonly Context _context;
-        private readonly ConsoleColor _originalColor;
-        private static Program _self;
         private string HostName => _peer.Remote?.HostName;
         private int HostPort => _peer.Remote?.HostPort ?? 0;
     }
