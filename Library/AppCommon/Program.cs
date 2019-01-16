@@ -6,7 +6,7 @@ namespace Pyro.AppCommon
 {
     public abstract class AppCommonBase
     {
-        protected AppCommonBase(params object[] args)
+        protected AppCommonBase(string[] args)
         {
             Con.CancelKeyPress += Cancel;
             _originalColor = Con.ForegroundColor;

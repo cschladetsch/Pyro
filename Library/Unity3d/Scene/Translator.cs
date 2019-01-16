@@ -10,4 +10,17 @@ namespace Pyro.Unity3d.Scene
         {
         }
     }
+
+    public static class Translate
+    {
+        public static GameObject From(string pathName)
+        {
+            return null;
+        }
+
+        public static string To(GameObject root)
+        {
+            return null;
+        }
+    }
 }

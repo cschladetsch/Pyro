@@ -15,7 +15,7 @@ namespace Pyro.Limuty
             new Program(args).Run();
         }
 
-        public Program(object[] args)
+        public Program(string[] args)
             : base(args)
         {
             _ctx = new Context();

@@ -1,8 +1,8 @@
 using NUnit.Framework;
 
-namespace Tests
+namespace Pyro.Tests
 {
-    public class Tests
+    public class TestUnity3dScene
     {
         [SetUp]
         public void Setup()
@@ -10,8 +10,10 @@ namespace Tests
         }
 
         [Test]
-        public void Test1()
+        public void TestLoad()
         {
+            var scenePathname = @"c:\users\chris\work\TemplateUnityProject\NewProject\Assets\Scenes\Main.unity";
+            //var trans = new Unity3d.Scene.Translator();
             Assert.Pass();
         }
     }
