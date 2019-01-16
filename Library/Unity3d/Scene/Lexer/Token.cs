@@ -1,16 +1,19 @@
 using Diver.Language;
 using Diver.Language.Impl;
 
-namespace Pyro.Unity.Scene
+namespace Pyro.Unity3d.Scene
 {
-    public class Token : TokenBase<EToken>, ITokenNode<EToken>
+    public class Token
+        : TokenBase<EToken>
+        , ITokenNode<EToken>
     {
-        public Token(EToken tok, Slice slice)
-            : base(tok, slice)
+        public Token()
         {
+            _type = EToken.None;
         }
 
-        public Token()
+        public Token(EToken tok, Slice slice)
+            : base(tok, slice)
         {
         }
     }

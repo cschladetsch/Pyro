@@ -1,13 +1,24 @@
-namespace Pyro.Unity.Scene
+namespace Pyro.Unity3d.Scene
 {
     public enum EToken
     {
+        None,
+
+        Space,
+        Indent,
+        NewLine,
+        Return,
+        Tab,
+
         Bool,
         Int,
         Float,
         String,
+        Ident,
 
-        DocumentStart,
+        Percent,
+        Dash,
+        DashDashDash,
         Colon,
         Tag,
         Bang,
@@ -15,5 +26,6 @@ namespace Pyro.Unity.Scene
         Comma,
         OpenBrace,
         CloseBrace,
+
     }
 }

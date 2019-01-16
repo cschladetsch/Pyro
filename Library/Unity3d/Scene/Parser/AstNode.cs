@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Pyro.Unity.Scene
+namespace Pyro.Unity3d.Scene
 {
     public class AstNode
     {

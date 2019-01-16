@@ -1,6 +1,6 @@
 using Diver.Language;
 
-namespace Pyro.Unity.Scene
+namespace Pyro.Unity3d.Scene
 {
     public class TokenFactory
         : ITokenFactory<EToken, Token>
@@ -12,22 +12,24 @@ namespace Pyro.Unity.Scene
 
         public Token NewTokenIdent(Slice slice)
         {
-            throw new System.NotImplementedException();
+            return NewToken(EToken.Ident, slice);
         }
 
         public Token NewTokenString(Slice slice)
         {
-            throw new System.NotImplementedException();
+            return NewToken(EToken.String, slice);
         }
 
         public Token NewEmptyToken(Slice slice)
         {
-            return new Token(slice);
+            return new Token(EToken.None, slice);
         }
 
         public void SetLexer(LexerBase lexer)
         {
-            throw new System.NotImplementedException();
+            _lexer = lexer;
         }
+
+        private LexerBase _lexer;
     }
 }
