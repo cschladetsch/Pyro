@@ -30,7 +30,7 @@ namespace Diver.Network.Impl
             _Exec.Scope["con"] = this;
             _Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
             _Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
-            _Exec.Scope["test"] = TranslatePi("9998 connect & clients & 0 at 'Remote peer .@ &");
+            _Exec.Scope["test"] = TranslatePi("9999 connect & 1 'RemoteAt peer .@ &");
         }
 
         private void AddTypes(IRegistry registry)
@@ -41,6 +41,7 @@ namespace Diver.Network.Impl
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
                     .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
+                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
                     .Add<Client>("Leave", (q, s) => q.Leave())
                 .Class);
             registry.Register(new ClassBuilder<Client>(registry)
@@ -127,6 +128,7 @@ namespace Diver.Network.Impl
                 return;
 
             var socket = _listener.EndAccept(ar);
+            WriteLine($"Serving {socket.RemoteEndPoint}");
             _Peer.NewConnection(socket);
             Receive(socket);
             Listen();

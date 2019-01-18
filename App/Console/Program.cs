@@ -107,10 +107,13 @@
                 try
                 {
                     WritePrompt();
-                    if (!Execute(GetInput()))
+                    var input = GetInput();
+                    if (string.IsNullOrEmpty(input))
+                        _peer.Remote.Continue("1 drop");    // hack to force stack refresh!
+                    else if (!Execute(input))
                         continue;
                     
-                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
 
                     WriteDataStack();
                 }

@@ -112,7 +112,7 @@ namespace Diver.Network.Impl
 
         public void NewConnection(Socket socket)
         {
-            WriteLine($"Connected to {socket.RemoteEndPoint}");
+            //WriteLine($"Connected to {socket.RemoteEndPoint}");
             var address = socket.RemoteEndPoint as IPEndPoint;
             if (address == null)
             {
@@ -148,6 +148,11 @@ namespace Diver.Network.Impl
             return _remote?.Continue(continuation) ?? Fail("Not connected");
         }
 
+        public bool EnterRemoteAt(int index)
+        {
+            return index >= _clients.Count ? Fail("No such client id") : EnterRemote(_clients[index]);
+        }
+
         private IPEndPoint GetRemoteEndPoint()
         {
             var socket = Remote?.Socket;
@@ -155,7 +160,9 @@ namespace Diver.Network.Impl
         }
 
         private Server _server;
+
         private readonly List<Client> _clients = new List<Client>();
+
         private IClient _remote;
     }
 }
