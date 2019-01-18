@@ -4,7 +4,7 @@ using Diver.Language.Impl;
 namespace Pyro.Unity3d.Scene
 {
     public class UnityLexer
-        : LexerCommon<EToken, Token, TokenFactory>, ILexer
+        : LexerCommon<EToken, Token, TokenFactory>
     {
         public UnityLexer(string input)
             : base(input)
@@ -24,9 +24,8 @@ namespace Pyro.Unity3d.Scene
             if (char.IsLetter(current) || current == '_')
                 return IdentOrKeyword();
 
-            // TODO: guids
-            if (char.IsDigit(current))
-                return AddSlice(EToken.Int, Gather(char.IsDigit));
+            //if (char.IsDigit(current))
+            //    return AddSlice(EToken.Int, Gather(char.IsDigit));
 
             switch (current)
             {
