@@ -1,20 +1,60 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-
-using Diver.Language;
-using Diver.Network;
-
-using Pyro.ExecutionContext;
-
-using Con = System.Console;
-
-namespace Console
+﻿namespace Console
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+
+    using Diver.Language;
+    using Diver.Network;
+
+    using Pyro.ExecutionContext;
+
+    using Con = System.Console;
+
     internal class Program : Pyro.AppCommon.AppCommonBase
     {
         public const int ListenPort = 9999;
+
+        private readonly Context _context;
+        private IPeer _peer;
+        private string HostName => _peer.Remote?.HostName;
+        private int HostPort => _peer.Remote?.HostPort ?? 0;
+
+        public bool Execute(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return true;
+
+            try
+            {
+                if (PreProcess(input))
+                    return true;
+
+                if (!_context.Translate(input, out var cont))
+                    return Error(_context.Error);
+
+                return _peer.Execute(cont);
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+            }
+
+            return false;
+        }
+
+        public void WriteDataStackContents(IClient client, int max = 50)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            var results = client.Results().ToList();
+            var n = 0;
+            foreach (var result in results)
+                str.AppendLine($"{n++}: {result}");
+
+            Con.Write(str.ToString());
+        }
 
         private static void Main(string[] args)
         {
@@ -32,6 +72,14 @@ namespace Console
             RunInitialisationScripts();
         }
 
+        private static string GetVersion()
+        {
+            var name = Assembly.GetExecutingAssembly().GetName();
+            var version = name.Version;
+            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
+            return $"Pyro {name.Name} {version} built {built}";
+        }
+
         private bool StartPeer(string[] args)
         {
             var port = ListenPort;
@@ -40,15 +88,6 @@ namespace Console
 
             _peer = Diver.Network.Create.NewPeer(port);
             return _peer.Start() || Error("Failed to start local server");
-
-            //if (!_peer.Connect(_peer.LocalHostName, port)) 
-            //    return Error("Couldn't connect to localhost");
-
-            //// unsure if truly needed, but this Sleep is to give a little time for local
-            //// client to connect to local server via Tcp
-            //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.2));
-
-            //return _peer.Enter(_peer.Clients[0]) || Error("Couldn't shell to localhost");
         }
 
         private void RunInitialisationScripts()
@@ -59,14 +98,6 @@ namespace Console
         private void WriteHeader()
         {
             Write($"{GetVersion()}\n", ConsoleColor.DarkGray);
-        }
-
-        private static string GetVersion()
-        {
-            var name = Assembly.GetExecutingAssembly().GetName();
-            var version = name.Version;
-            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            return $"Pyro {name.Name} {version} built {built}";
         }
 
         private void Repl()
@@ -95,29 +126,6 @@ namespace Console
             return Con.ReadLine();
         }
 
-        public bool Execute(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return true;
-
-            try
-            {
-                if (PreProcess(input))
-                    return true;
-
-                if (!_context.Translate(input, out var cont))
-                    return Error(_context.Error);
-
-                return _peer.Execute(cont);
-            }
-            catch (Exception e)
-            {
-                Error(e.Message);
-            }
-
-            return false;
-        }
-
         private bool PreProcess(string input)
         {
             switch (input)
@@ -143,43 +151,11 @@ namespace Console
             Con.ForegroundColor = ConsoleColor.White;
         }
 
-        //private static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
-        //{
-        //    Write(text, color);
-        //    return false;
-        //}
-
-        //private static void Write(string text, ConsoleColor color = ConsoleColor.White)
-        //{
-        //    var current = Con.ForegroundColor;
-        //    Con.ForegroundColor = color;
-        //    Con.Write(text);
-        //    Con.ForegroundColor = current;
-        //}
-
         private void WriteDataStack()
         {
             var current = Con.ForegroundColor;
             WriteDataStackContents(_peer.Remote);
             Con.ForegroundColor = current;
-        }
-
-        public void WriteDataStackContents(IClient client, int max = 50)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            var results = client.Results().ToList();
-            var n = 0;
-            foreach (var result in results)
-            {
-                //var data = stack;
-                //if (data.Count > max)
-                //    Con.WriteLine("...");
-                //for (var n = max - 1; n >= 0; --n)
-                //    str.AppendLine($"{n}: {Print(data[n])}");
-                str.AppendLine($"{n++}: {result}");
-            }
-            Con.Write(str.ToString());
         }
 
         private static bool ShowHelp()
@@ -198,14 +174,13 @@ To connect to a remote node, type:
 To then switch execution context, type:
 ...rho> enter(""hostname"")
 
-To do both consequetively:
+To do both:
 ...rho> join(""hostname""[, port])
 
 For help on syntax for Pi/Rho languages, see the corresponding documentation.
 
 Press Ctrl-C to quit.
-"
-            );
+");
             return true;
         }
 
@@ -218,10 +193,5 @@ Press Ctrl-C to quit.
             Con.ForegroundColor = ConsoleColor.White;
             Exit();
         }
-
-        private IPeer _peer;
-        private readonly Context _context;
-        private string HostName => _peer.Remote?.HostName;
-        private int HostPort => _peer.Remote?.HostPort ?? 0;
     }
 }
