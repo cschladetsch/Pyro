@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+using NUnit.Framework;
+
 using Diver.Exec;
 using Diver.Impl;
 using Diver.Language;
-using Diver.Language.Impl;
-using NUnit.Framework;
 
 namespace Diver.Test
 {

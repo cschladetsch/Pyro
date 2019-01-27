@@ -14,13 +14,14 @@ namespace Diver.Test.Rho
             TestScript("PassingFunctions.rho");
             TestScript("Variables.rho");
             TestScript("Arithmetic.rho");
+            TestScript("Array.rho");
             //TestScript("FreezeThaw.rho");
         }
 
         //[Test]
         public void RunAllScripts()
         {
-            foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.pi"))
+            foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.rho"))
                 Assert.IsTrue(RunScriptPathname(file));
         }
     }
