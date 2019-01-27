@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Pryo;
 using Pyro.Exec;
 using Pyro.Language.Impl;
@@ -11,8 +12,6 @@ namespace Pyro.Language.Lexer
         public PiLexer(string input)
             : base(input)
         {
-            //var factory = new PiTokenFactory();
-            //factory.SetLexer(this);
             CreateOpToToken();
         }
 
