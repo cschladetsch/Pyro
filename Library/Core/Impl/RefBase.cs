@@ -1,4 +1,4 @@
-﻿namespace Diver.Impl
+﻿namespace Pryo.Impl
 {
     internal class RefBase : ConstRefBase, IRefBase
     {

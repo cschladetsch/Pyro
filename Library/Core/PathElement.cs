@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Pryo
 {
     /// <summary>
     /// A part of a pathname, which is a sequence of PathElements

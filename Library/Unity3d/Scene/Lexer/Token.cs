@@ -1,7 +1,7 @@
-using Diver.Language;
-using Diver.Language.Impl;
+using Pyro.Language;
+using Pyro.Language.Impl;
 
-namespace Pyro.Unity3d.Scene
+namespace Pyro.Unity3d.Scene.Lexer
 {
     public class Token
         : TokenBase<EToken>

@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 
-namespace Diver.Network.Impl
+namespace Pyro.Network.Impl
 {
     internal class StateObject
     {

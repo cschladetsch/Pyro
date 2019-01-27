@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace NetworkGen
+namespace Pyro.NetworkGen
 {
     enum EBuildType
     {

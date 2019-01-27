@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{FD200C39-038B-4F39-A7A8-249B6ECE6921}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>AppCommon</RootNamespace>
-    <AssemblyName>AppCommon</AssemblyName>
+    <RootNamespace>Pyro.AppCommon</RootNamespace>
+    <AssemblyName>Pyro.AppCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

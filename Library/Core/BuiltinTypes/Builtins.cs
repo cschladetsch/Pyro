@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Diver.Impl;
-using NUnit.Framework;
+using Pryo.Impl;
 
-namespace Diver
+namespace Pryo.BuiltinTypes
 {
     public class Void
     {

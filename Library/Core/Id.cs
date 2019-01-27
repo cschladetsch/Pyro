@@ -1,4 +1,4 @@
-namespace Diver
+namespace Pryo
 {
     /// <summary>
     /// Every object in a Registry has a unique Id.

@@ -1,6 +1,6 @@
-﻿using Diver.Language;
+﻿using Pyro.Language;
 
-namespace Diver.RhoLang
+namespace Pyro.RhoLang.Lexer
 {
     public class RhoTokenFactory
         : ITokenFactory<ERhoToken, RhoToken>

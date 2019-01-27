@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Pryo;
 
-namespace Diver.Exec
+namespace Pyro.Exec
 {
     /// <summary>
     /// Processes a sequence of Continuations.

@@ -1,4 +1,4 @@
-﻿namespace Diver.Language
+﻿namespace Pyro.RhoLang.Parser
 {
     public enum ERhoAst
     {

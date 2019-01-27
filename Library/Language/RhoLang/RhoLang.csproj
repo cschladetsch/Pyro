@@ -8,8 +8,8 @@
     <ProjectGuid>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.RhoLang</RootNamespace>
-    <AssemblyName>RhoLang</AssemblyName>
+    <RootNamespace>Pyro.RhoLang</RootNamespace>
+    <AssemblyName>Pyro.RhoLang</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

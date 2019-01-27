@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Contexts;
-using Diver.Exec;
-using Diver.Language;
+using System.Text;
+using Pryo;
+using Pyro.Exec;
 using Context = Pyro.ExecutionContext.Context;
-using ELanguage = Diver.Language.ELanguage;
+using ELanguage = Pyro.Language.ELanguage;
 
-namespace Diver.Network.Impl
+namespace Pyro.Network.Impl
 {
     /// <summary>
     /// Functionality common to both Client and Server aspects of a Peer

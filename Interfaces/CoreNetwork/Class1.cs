@@ -1,7 +1,8 @@
 ﻿using System;
-using Diver.Exec;
+using Pryo;
+using Pyro.Exec;
 
-namespace Diver.Core.Network
+namespace Pyro.Core.Network.Interfaces
 {
     public enum EResponseType
     {

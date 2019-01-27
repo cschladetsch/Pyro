@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Diver.Language
+namespace Pyro.Language
 {
     /// <summary>
     /// Due to the limit that C# generic types can only have

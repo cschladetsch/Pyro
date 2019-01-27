@@ -8,8 +8,8 @@
     <ProjectGuid>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.Language</RootNamespace>
-    <AssemblyName>LanguageCommon</AssemblyName>
+    <RootNamespace>Pyro.Language</RootNamespace>
+    <AssemblyName>Pyro.LanguageCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Linq;
-using Diver.Exec;
-using Diver.Language.Impl;
+using Pryo;
+using Pyro.Exec;
+using Pyro.Language;
+using Pyro.Language.Impl;
+using Pyro.RhoLang.Lexer;
+using Pyro.RhoLang.Parser;
 
-namespace Diver.Language
+namespace Pyro.RhoLang
 {
     public class RhoTranslator 
         : TranslatorBase<RhoLexer, RhoParser>

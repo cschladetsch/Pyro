@@ -1,6 +1,4 @@
-﻿using System.Net.Mime;
-
-namespace Diver.Language
+﻿namespace Pyro.Language
 {
     /// <summary>
     /// A segment in a lexer

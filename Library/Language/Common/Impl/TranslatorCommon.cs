@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Diver.Exec;
+using Pryo;
+using Pyro.Exec;
 
-namespace Diver.Language.Impl
+namespace Pyro.Language.Impl
 {
     /// <summary>
     /// Common to all processes that translate an AST to Pi code sequences.

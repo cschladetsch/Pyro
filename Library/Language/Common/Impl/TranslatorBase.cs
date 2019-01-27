@@ -1,6 +1,7 @@
-﻿using Diver.Exec;
+﻿using Pryo;
+using Pyro.Exec;
 
-namespace Diver.Language.Impl
+namespace Pyro.Language.Impl
 {
     public class TranslatorBase<TLexer, TParser>
         : TranslatorCommon

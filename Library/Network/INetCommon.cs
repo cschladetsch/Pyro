@@ -1,7 +1,8 @@
 ﻿using System.Net.Sockets;
+using Pryo;
 using Pyro.ExecutionContext;
 
-namespace Diver.Network
+namespace Pyro.Network
 {
     public interface INetCommon : IProcess
     {

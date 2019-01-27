@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Pryo
 {
     public interface IFactory
     {

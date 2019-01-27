@@ -1,4 +1,4 @@
-﻿namespace Diver.Network
+﻿namespace Pyro.Network
 {
     public interface IAgentBase
     {

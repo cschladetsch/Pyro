@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
-using Diver.Language;
 using NUnit.Framework;
+using Pyro.Language.Lexer;
 
 namespace Diver.Test
 {

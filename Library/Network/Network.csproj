@@ -8,8 +8,8 @@
     <ProjectGuid>{CDF87E43-0A6B-48E4-BD94-C44E35592AD4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.Network</RootNamespace>
-    <AssemblyName>Network</AssemblyName>
+    <RootNamespace>Pyro.Network</RootNamespace>
+    <AssemblyName>Pyro.Network</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

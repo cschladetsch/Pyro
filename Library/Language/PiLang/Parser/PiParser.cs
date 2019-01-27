@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
-using Diver.Language.Impl;
+using Pryo;
+using Pyro.Language.Impl;
+using Pyro.Language.Lexer;
 
-namespace Diver.Language
+namespace Pyro.Language.Parser
 {
     /// <summary>
     /// PiParser for the Pi language. It's quite simple.

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pryo;
 
-namespace Diver.Exec
+namespace Pyro.Exec
 {
     public static class RegisterTypes
     {

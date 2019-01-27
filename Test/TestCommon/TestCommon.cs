@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 
 using NUnit.Framework;
-
-using Diver.Exec;
-using Diver.Impl;
-using Diver.Language;
+using Pryo;
+using Pryo.Impl;
+using Pyro.Exec;
+using Pyro.Language;
+using Pyro.Language.Lexer;
+using Pyro.RhoLang;
+using RegisterTypes = Pyro.Exec.RegisterTypes;
 
 namespace Diver.Test
 {
@@ -37,7 +40,7 @@ namespace Diver.Test
             _pi = new PiTranslator(_reg);
             _rho = new RhoTranslator(_reg);
             _executor = _reg.Add(new Executor());
-            Exec.RegisterTypes.Register(_reg);
+            RegisterTypes.Register(_reg);
         }
 
         protected void PiRun(string text)

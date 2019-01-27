@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 
-using Diver;
-using Diver.Exec;
-using Diver.Impl;
-using Diver.Language;
+using Pryo;
+using Pryo.Impl;
+using Pyro.Exec;
+using Pyro.Language;
+using Pyro.RhoLang;
 
 namespace Pyro.ExecutionContext
 {
@@ -54,7 +55,7 @@ namespace Pyro.ExecutionContext
         {
             _registry = new Registry();
             _exec = _registry.Add(new Executor()).Value;
-            Diver.Exec.RegisterTypes.Register(_registry);
+            RegisterTypes.Register(_registry);
             _pi = new PiTranslator(_registry);
             _rho = new RhoTranslator(_registry);
             Language = ELanguage.Pi;

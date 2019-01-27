@@ -1,6 +1,7 @@
 ﻿using System;
+using Pryo;
 
-namespace Diver.Network
+namespace Pyro.Network
 {
     /// <summary>
     /// Identifies an object in a Domain

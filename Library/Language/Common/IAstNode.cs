@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Diver.Language
+namespace Pyro.Language
 {
     public interface IAstNode<T>
     {

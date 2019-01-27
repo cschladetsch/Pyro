@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Pryo
 {
     /// <summary>
     /// An interface to an object created by a registry.

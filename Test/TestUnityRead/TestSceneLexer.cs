@@ -1,5 +1,6 @@
 using Diver.Test;
 using NUnit.Framework;
+using Pyro.Unity3d.Scene.Lexer;
 
 namespace Pyro.Tests
 {
@@ -13,7 +14,7 @@ namespace Pyro.Tests
             var local = MakeLocalPath(scenePathname);
             var text = System.IO.File.ReadAllText(local);
             Assert.IsNotEmpty(text, $"Couldn't read {local}");
-            var lexer = new Unity3d.Scene.UnityLexer(text);
+            var lexer = new UnityLexer(text);
             Assert.IsTrue(lexer.Process(), lexer.Error);
         }
     }

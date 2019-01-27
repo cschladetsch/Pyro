@@ -1,7 +1,8 @@
 ﻿using System;
+using Pryo;
 using Con = System.Console;
 
-namespace Diver.Network.Impl
+namespace Pyro.Network.Impl
 {
     public class NetworkConsoleWriter : Process
     {

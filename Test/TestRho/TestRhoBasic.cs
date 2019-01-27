@@ -1,6 +1,6 @@
-﻿using Diver.Exec;
-using Diver.Language;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using Pryo;
+using Pyro.Exec;
 
 namespace Diver.Test.Rho
 {

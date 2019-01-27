@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Runtime.Serialization;
 
-namespace Diver.Exec
+namespace Pyro.Exec
 {
     [Serializable]
     internal class CannotEnumerate : Exception

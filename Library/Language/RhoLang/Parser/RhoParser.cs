@@ -1,6 +1,9 @@
-﻿using Diver.Language.Impl;
+﻿using Pryo;
+using Pyro.Language;
+using Pyro.Language.Impl;
+using Pyro.RhoLang.Lexer;
 
-namespace Diver.Language
+namespace Pyro.RhoLang.Parser
 {
     /// <summary>
     /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.

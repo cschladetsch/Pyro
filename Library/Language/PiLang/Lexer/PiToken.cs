@@ -1,6 +1,6 @@
-﻿using Diver.Language.Impl;
+﻿using Pyro.Language.Impl;
 
-namespace Diver.Language
+namespace Pyro.Language.Lexer
 {
     public class PiToken 
         : TokenBase<EPiToken>

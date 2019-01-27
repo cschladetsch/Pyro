@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using Diver.Impl;
+using Pryo.Impl;
 
-namespace Diver
+namespace Pryo
 {
     /// <summary>
     /// Make a new class that can added to a Registry. This isn't always necessary, unless there are overloaded methods in the class.

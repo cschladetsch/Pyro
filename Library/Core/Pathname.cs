@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Diver
+namespace Pryo
 {
     public class Pathname : IdentBase
     {

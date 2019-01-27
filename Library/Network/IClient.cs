@@ -1,8 +1,8 @@
-﻿namespace Diver.Network
-{
-    using System.Collections.Generic;
-    using Diver.Exec;
+﻿using System.Collections.Generic;
+using Pyro.Exec;
 
+namespace Pyro.Network
+{
     /// <summary>
     /// The Client interface.
     /// </summary>

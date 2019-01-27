@@ -1,4 +1,4 @@
-namespace Pyro.Unity3d.Scene
+namespace Pyro.Unity3d.Scene.Parser
 {
     public enum EAst
     {

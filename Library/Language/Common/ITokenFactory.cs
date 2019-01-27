@@ -1,4 +1,4 @@
-﻿namespace Diver.Language
+﻿namespace Pyro.Language
 {
     /// <summary>
     /// Required to make tokens based on different enumeration types.

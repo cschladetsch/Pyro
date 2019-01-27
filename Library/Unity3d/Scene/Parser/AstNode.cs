@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Pyro.Unity3d.Scene.Lexer;
 
-namespace Pyro.Unity3d.Scene
+namespace Pyro.Unity3d.Scene.Parser
 {
     public class AstNode
     {

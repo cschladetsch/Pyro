@@ -8,8 +8,8 @@
     <ProjectGuid>{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Diver.Language</RootNamespace>
-    <AssemblyName>PiLang</AssemblyName>
+    <RootNamespace>Pyro.Language</RootNamespace>
+    <AssemblyName>Pyro.PiLang</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

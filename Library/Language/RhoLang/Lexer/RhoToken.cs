@@ -1,7 +1,7 @@
-﻿using System.Security.Permissions;
-using Diver.Language.Impl;
+﻿using Pyro.Language;
+using Pyro.Language.Impl;
 
-namespace Diver.Language
+namespace Pyro.RhoLang.Lexer
 {
     public class RhoToken
         : TokenBase<ERhoToken>

@@ -1,4 +1,4 @@
-﻿namespace Diver.Language
+﻿namespace Pyro.Language.Lexer
 {
     public enum EPiToken
     {

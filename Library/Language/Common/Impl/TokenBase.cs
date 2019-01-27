@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Diver.Language.Impl
+namespace Pyro.Language.Impl
 {
     public class TokenBase<ETokenType>
         : ITokenBase<ETokenType>

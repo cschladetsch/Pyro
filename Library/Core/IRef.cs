@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Diver
+﻿namespace Pryo
 {
     public interface IRef<T>
         : IConstRef<T>

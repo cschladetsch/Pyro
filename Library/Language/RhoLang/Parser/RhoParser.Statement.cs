@@ -1,4 +1,6 @@
-﻿namespace Diver.Language
+﻿using Pyro.RhoLang.Lexer;
+
+namespace Pyro.RhoLang.Parser
 {
     /// <summary>
     /// Rho statements are stand-alone components made of sub-expressions.

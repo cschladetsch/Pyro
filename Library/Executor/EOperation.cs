@@ -1,4 +1,4 @@
-﻿namespace Diver.Exec
+﻿namespace Pyro.Exec
 {
     /// <summary>
     /// Operations that can be performed by an Executor.

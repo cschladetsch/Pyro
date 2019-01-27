@@ -1,4 +1,4 @@
-﻿namespace Diver.Network
+﻿namespace Pyro.Network
 {
     /// <summary>
     /// Common to all network Proxy's

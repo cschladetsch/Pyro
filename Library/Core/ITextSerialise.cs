@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Pryo
 {
     /// <summary>
     /// Can be serialised to/from strings.

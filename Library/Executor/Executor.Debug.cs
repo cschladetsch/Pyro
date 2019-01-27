@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Diver.Exec
+namespace Pyro.Exec
 {
     /// <summary>
     /// Debug methods for executor. Removed from main implementation for clarity.

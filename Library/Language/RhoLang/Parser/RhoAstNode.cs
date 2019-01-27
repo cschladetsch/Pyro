@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Pyro.RhoLang.Lexer;
 
-namespace Diver.Language
+namespace Pyro.RhoLang.Parser
 {
     /// <summary>
     /// A node in the Rho Abstract Syntax Tree

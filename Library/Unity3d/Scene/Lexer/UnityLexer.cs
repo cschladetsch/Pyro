@@ -1,7 +1,6 @@
-using Diver.Language;
-using Diver.Language.Impl;
+using Pyro.Language.Impl;
 
-namespace Pyro.Unity3d.Scene
+namespace Pyro.Unity3d.Scene.Lexer
 {
     public class UnityLexer
         : LexerCommon<EToken, Token, TokenFactory>

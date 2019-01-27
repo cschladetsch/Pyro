@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     internal class Ref<T> : ConstRef<T>, IRef<T>
     {

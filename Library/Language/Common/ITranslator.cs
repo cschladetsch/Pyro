@@ -1,6 +1,6 @@
-﻿using Diver.Exec;
+﻿using Pyro.Exec;
 
-namespace Diver.Language
+namespace Pyro.Language
 {
     public interface ITranslator : IProcess
     {

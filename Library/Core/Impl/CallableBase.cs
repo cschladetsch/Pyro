@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     public class CallableBase : ICallable
     {

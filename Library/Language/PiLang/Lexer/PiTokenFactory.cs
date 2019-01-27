@@ -1,4 +1,4 @@
-﻿namespace Diver.Language
+﻿namespace Pyro.Language.Lexer
 {
     /// <summary>
     /// Makes Tokens because C# doesn't allow for constructors that take arguments on generic types

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     public class Struct<T> : StructBase, IStruct<T>
     {

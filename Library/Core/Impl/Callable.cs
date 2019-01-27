@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework.Interfaces;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     public class Callable<T, A, B, R> : CallableBase, ICallable<T> where T : class
     {

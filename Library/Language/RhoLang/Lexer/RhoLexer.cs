@@ -1,7 +1,8 @@
-﻿using Diver.Language.Impl;
-using Diver.RhoLang;
+﻿using Pryo;
+using Pyro.Language;
+using Pyro.Language.Impl;
 
-namespace Diver.Language
+namespace Pyro.RhoLang.Lexer
 {
     /// <summary>
     /// Lexer for the Rho language

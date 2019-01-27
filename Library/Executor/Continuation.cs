@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Pryo;
 
-namespace Diver.Exec
+namespace Pyro.Exec
 {
     /// <summary>
     /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.

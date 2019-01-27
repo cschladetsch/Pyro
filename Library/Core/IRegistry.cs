@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Diver
+namespace Pryo
 {
     /// <summary>
     /// A mapping of id to object.

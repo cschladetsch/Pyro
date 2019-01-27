@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Diver
+namespace Pryo
 {
     /// <summary>
     /// Common interface for all Dive system classes.

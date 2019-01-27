@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Pryo;
 
-namespace Diver.Language
+namespace Pyro.Language
 {
     /// <inheritdoc cref="Process" />
     /// <summary>

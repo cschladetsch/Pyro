@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Pyro.Language.Lexer;
 
-namespace Diver.Language
+namespace Pyro.Language.Parser
 {
     /// <summary>
     /// Ast node factory for Pi lang

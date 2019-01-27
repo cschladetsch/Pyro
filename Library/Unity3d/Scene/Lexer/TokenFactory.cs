@@ -1,6 +1,6 @@
-using Diver.Language;
+using Pyro.Language;
 
-namespace Pyro.Unity3d.Scene
+namespace Pyro.Unity3d.Scene.Lexer
 {
     public class TokenFactory
         : ITokenFactory<EToken, Token>

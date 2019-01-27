@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Diver
+namespace Pryo.BuiltinTypes
 {
     public class Map : Dictionary<object, object>
     {

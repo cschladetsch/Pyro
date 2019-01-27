@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pyro.Unity3d</RootNamespace>
-    <AssemblyName>PyroUnity3d</AssemblyName>
+    <AssemblyName>Pyro.Unity3d</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -1,4 +1,4 @@
-﻿namespace BuiltinTypes
+﻿namespace Pryo
 {
     public class Pair
     {

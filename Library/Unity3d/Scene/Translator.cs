@@ -1,5 +1,7 @@
-﻿using Diver;
-using Diver.Language.Impl;
+﻿using Pryo;
+using Pyro.Language.Impl;
+using Pyro.Unity3d.Scene.Lexer;
+using Pyro.Unity3d.Scene.Parser;
 
 namespace Pyro.Unity3d.Scene
 {

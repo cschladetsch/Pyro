@@ -1,15 +1,13 @@
-﻿namespace Console
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using Pyro.ExecutionContext;
+using Pyro.Language;
+using Pyro.Network;
+
+namespace Pyro.Console
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
-
-    using Diver.Language;
-    using Diver.Network;
-
-    using Pyro.ExecutionContext;
-
     using Con = System.Console;
 
     internal class Program : Pyro.AppCommon.AppCommonBase
@@ -86,7 +84,7 @@
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error("Local server listen port number expected as argument");
 
-            _peer = Diver.Network.Create.NewPeer(port);
+            _peer = Create.NewPeer(port);
             return _peer.Start() || Error("Failed to start local server");
         }
 

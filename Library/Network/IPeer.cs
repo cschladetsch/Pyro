@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using Diver.Exec;
+using Pryo;
+using Pyro.Exec;
 
-namespace Diver.Network
+namespace Pyro.Network
 {
     public delegate void ReceivedResponseHandler(IServer server, IClient client, string text);
     public delegate void ConnectedHandler(IPeer peer, IClient client);

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using Diver.Exec;
+using Pyro.Exec;
 
-namespace Diver.Network.Impl
+namespace Pyro.Network.Impl
 {
     public class Peer : NetworkConsoleWriter, IPeer
     {

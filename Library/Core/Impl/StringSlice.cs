@@ -1,4 +1,4 @@
-﻿namespace Diver.Impl
+﻿namespace Pryo.Impl
 {
     /// <summary>
     /// Useful for text persistence systems, and language systems.

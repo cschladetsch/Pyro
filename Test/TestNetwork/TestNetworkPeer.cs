@@ -1,9 +1,9 @@
 ﻿using System;
-using Diver.Language;
-using Diver.Network;
 using Diver.Test;
 using NUnit.Framework;
 using Pyro.ExecutionContext;
+using Pyro.Language;
+using Pyro.Network;
 
 namespace Pyro.Test
 {

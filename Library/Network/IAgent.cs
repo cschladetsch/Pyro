@@ -1,4 +1,4 @@
-﻿namespace Diver.Network
+﻿namespace Pyro.Network
 {
     /// <summary>
     /// Local representation of a network-visible object.

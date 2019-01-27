@@ -1,7 +1,6 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
-namespace Diver
+namespace Pryo
 {
     public interface IClass<T> : IClassBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Diver.Language.Impl
+namespace Pyro.Language.Impl
 {
     public abstract class LexerCommon<TEnum, TToken, TTokenFactory> 
         : LexerBase, ILexerCommon<TToken>

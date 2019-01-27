@@ -7,7 +7,7 @@
     <ProjectGuid>{12D6B57A-F6FA-4DEB-8151-E5668A8AB4D5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Pyro.Limuty</RootNamespace>
-    <AssemblyName>Limuty</AssemblyName>
+    <AssemblyName>Pyro.Limuty</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

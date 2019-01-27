@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     public class ClassBase
         : StructBase

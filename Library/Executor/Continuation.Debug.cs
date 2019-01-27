@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using Diver.Exec;
+using Pryo;
 
-namespace Diver.Exec
+namespace Pyro.Exec
 {
     public partial class Continuation : Reflected<Continuation>
     {

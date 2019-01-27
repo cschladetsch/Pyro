@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Diver.Exec;
-using Diver.Impl;
-using Diver.Language;
 using NUnit.Framework;
 
 namespace Diver.Test

@@ -1,4 +1,4 @@
-﻿namespace Diver
+﻿namespace Pryo
 {
     internal interface IStruct<T> : IStructBase
     {

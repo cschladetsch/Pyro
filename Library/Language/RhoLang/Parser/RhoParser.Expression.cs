@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Pyro.RhoLang.Lexer;
 
-namespace Diver.Language
+namespace Pyro.RhoLang.Parser
 {
     /// <summary>
     /// Functions that deal only with parsing expressions.

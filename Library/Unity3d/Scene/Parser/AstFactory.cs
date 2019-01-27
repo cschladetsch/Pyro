@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Diver.Language;
+using Pyro.Language;
+using Pyro.Unity3d.Scene.Lexer;
 
-namespace Pyro.Unity3d.Scene
+namespace Pyro.Unity3d.Scene.Parser
 {
     public class AstFactory : IAstFactory<Token, AstNode, EAst>
     {

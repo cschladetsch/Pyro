@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Diver
+namespace Pryo
 {
     public static class Timer
     {

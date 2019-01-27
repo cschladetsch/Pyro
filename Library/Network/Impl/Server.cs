@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
-using Diver.Exec;
+using Pryo;
+using Pyro.Exec;
 
-namespace Diver.Network.Impl
+namespace Pyro.Network.Impl
 {
     /// <summary>
     /// A server on the network executes incoming scripts and returns Executor data-stack to sender.

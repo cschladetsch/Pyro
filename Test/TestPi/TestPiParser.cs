@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using NUnit.Framework;
-
-using Diver.Language;
+using Pryo;
+using Pyro.Language;
+using Pyro.Language.Lexer;
+using Pyro.Language.Parser;
 
 namespace Diver.Test
 {

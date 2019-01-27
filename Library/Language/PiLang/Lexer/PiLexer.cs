@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using Diver.Exec;
-using Diver.Language.Impl;
+using Pryo;
+using Pyro.Exec;
+using Pyro.Language.Impl;
 
-namespace Diver.Language
+namespace Pyro.Language.Lexer
 {
     public class PiLexer
         : LexerCommon<EPiToken, PiToken, PiTokenFactory>, ILexer

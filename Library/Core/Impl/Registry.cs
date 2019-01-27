@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     public class Registry : IRegistry
     {
@@ -10,7 +10,7 @@ namespace Diver.Impl
 
         public Registry()
         {
-            BuiltinTypes.Register(this);
+            BuiltinTypes.BuiltinTypes.Register(this);
         }
 
         public bool Register(IClassBase @class)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Diver.Impl
+namespace Pryo.Impl
 {
     /// <summary>
     /// Common for all instance types

@@ -1,4 +1,4 @@
-﻿namespace Diver.Language
+﻿namespace Pyro.Language
 {
     public interface ITokenNode<out TEnum>
     {

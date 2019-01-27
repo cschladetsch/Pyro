@@ -1,4 +1,4 @@
-﻿namespace Diver.Language
+﻿namespace Pyro.RhoLang.Lexer
 {
     /// <summary>
     /// Tokens used by the Rho language.
