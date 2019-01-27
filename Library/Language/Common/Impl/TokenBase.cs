@@ -29,9 +29,7 @@ namespace Pyro.Language.Impl
             var text = GetText();
             str.Append(ty);
             if (ty != text && !string.IsNullOrEmpty(text))
-            {
                 str.Append($" '{text}'");
-            }
 
             return str.ToString();
         }
@@ -41,13 +39,10 @@ namespace Pyro.Language.Impl
             if (Lexer == null)
                 return "";
 
-            if (_slice.Length == 0)
-                return "";
-
-            return Lexer.GetLine(LineNumber).Substring(_slice.Start, _slice.Length);
+            return _slice.Length == 0 ? "" : Lexer.GetLine(LineNumber).Substring(_slice.Start, _slice.Length);
         }
 
         public ETokenType _type;
-        private readonly Slice _slice;
+        public readonly Slice _slice;
     }
 }

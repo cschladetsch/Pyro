@@ -5,7 +5,7 @@ using Pyro.Language.Impl;
 
 namespace Pyro.Language.Lexer
 {
-    public class PiLexer
+    public partial class PiLexer
         : LexerCommon<EPiToken, PiToken, PiTokenFactory>, ILexer
     {
         public PiLexer(string input)
@@ -14,143 +14,6 @@ namespace Pyro.Language.Lexer
             //var factory = new PiTokenFactory();
             //factory.SetLexer(this);
             CreateOpToToken();
-        }
-
-        private void CreateOpToToken()
-        {
-            //_opToToken[EOperation.Nop] = EPiToken.Nop;
-            //_opToToken[EOperation.HasType] = EPiToken.HasType;
-            _opToToken[EOperation.GarbageCollect] = EPiToken.GarbageCollect;
-            _opToToken[EOperation.Plus] = EPiToken.Plus;
-            _opToToken[EOperation.Minus] = EPiToken.Minus;
-            _opToToken[EOperation.Multiply] = EPiToken.Multiply;
-            _opToToken[EOperation.Divide] = EPiToken.Divide;
-            //_opToToken[EOperation.Modulo] = EPiToken.Modulo;
-            _opToToken[EOperation.Store] = EPiToken.Store;
-            _opToToken[EOperation.Has] = EPiToken.Has;
-            _opToToken[EOperation.Retrieve] = EPiToken.Retrieve;
-            _opToToken[EOperation.Assign] = EPiToken.Assign;
-            //_opToToken[EOperation.GetPath] = EPiToken.GetPath;
-            _opToToken[EOperation.Suspend] = EPiToken.Suspend;
-            _opToToken[EOperation.Resume] = EPiToken.Resume;
-            _opToToken[EOperation.Replace] = EPiToken.Replace;
-            _opToToken[EOperation.Assert] = EPiToken.Assert;
-            _opToToken[EOperation.Write] = EPiToken.Write;
-            _opToToken[EOperation.WriteLine] = EPiToken.WriteLine;
-            _opToToken[EOperation.If] = EPiToken.If;
-            _opToToken[EOperation.IfElse] = EPiToken.IfElse;
-            //_opToToken[EOperation.StackToList] = EPiToken.StackToList;
-            //_opToToken[EOperation.ListToStack] = EPiToken.ListToStack;
-            _opToToken[EOperation.Depth] = EPiToken.Depth;
-            _opToToken[EOperation.Dup] = EPiToken.Dup;
-            _opToToken[EOperation.Clear] = EPiToken.Clear;
-            _opToToken[EOperation.Swap] = EPiToken.Swap;
-            _opToToken[EOperation.Break] = EPiToken.Break;
-            _opToToken[EOperation.Rot] = EPiToken.Rot;
-            //_opToToken[EOperation.Roll] = EPiToken.Roll;
-            _opToToken[EOperation.RotN] = EPiToken.RotN;
-            //_opToToken[EOperation.RollN] = EPiToken.RollN;
-            _opToToken[EOperation.Pick] = EPiToken.Pick;
-            _opToToken[EOperation.Over] = EPiToken.Over;
-            _opToToken[EOperation.Freeze] = EPiToken.Freeze;
-            _opToToken[EOperation.Thaw] = EPiToken.Thaw;
-            //_opToToken[EOperation.FreezeText] = EPiToken.FreezeText;
-            //_opToToken[EOperation.ThawText] = EPiToken.ThawText;
-            //_opToToken[EOperation.FreezeYaml] = EPiToken.FreezeYaml;
-            //_opToToken[EOperation.ThawYaml] = EPiToken.ThawYaml;
-            _opToToken[EOperation.Not] = EPiToken.Not;
-            _opToToken[EOperation.Equiv] = EPiToken.Equiv;
-            _opToToken[EOperation.LogicalAnd] = EPiToken.And;
-            _opToToken[EOperation.LogicalOr] = EPiToken.Or;
-            _opToToken[EOperation.LogicalXor] = EPiToken.Xor;
-            _opToToken[EOperation.Less] = EPiToken.Less;
-            _opToToken[EOperation.Greater] = EPiToken.Greater;
-            _opToToken[EOperation.GreaterOrEquiv] = EPiToken.GreaterEquiv;
-            _opToToken[EOperation.LessOrEquiv] = EPiToken.LessEquiv;
-            _opToToken[EOperation.NotEquiv] = EPiToken.NotEquiv;
-            _opToToken[EOperation.Expand] = EPiToken.Expand;
-            _opToToken[EOperation.ToArray] = EPiToken.ToArray;
-            _opToToken[EOperation.ToMap] = EPiToken.ToMap;
-            _opToToken[EOperation.ToSet] = EPiToken.ToSet;
-            //_opToToken[EOperation.ToPair] = EPiToken.ToPair;
-            _opToToken[EOperation.Size] = EPiToken.Size;
-            _opToToken[EOperation.GetBack] = EPiToken.GetBack;
-            _opToToken[EOperation.PushBack] = EPiToken.PushBack;
-            _opToToken[EOperation.PushFront] = EPiToken.PushFront;
-            _opToToken[EOperation.ToList] = EPiToken.ToList;
-            _opToToken[EOperation.Remove] = EPiToken.Remove;
-            _opToToken[EOperation.Insert] = EPiToken.Insert;
-            _opToToken[EOperation.At] = EPiToken.At;
-            _opToToken[EOperation.DebugPrintDataStack] = EPiToken.DebugPrintDataStack;
-            _opToToken[EOperation.DebugPrintContextStack] = EPiToken.DebugPrintContextStack;
-            _opToToken[EOperation.DebugPrint] = EPiToken.DebugPrint;
-            _opToToken[EOperation.DebugPrintContinuation] = EPiToken.DebugPrintContinuation;
-            //_opToToken[EOperation.DebugSetLevel] = EPiToken.DebugSetLevel;
-            _opToToken[EOperation.SetFloatPrecision] = EPiToken.SetFloatPrecision;
-            _opToToken[EOperation.Self] = EPiToken.Self;
-            _opToToken[EOperation.GetMember] = EPiToken.GetMember;
-            //_opToToken[EOperation.SetMember] = EPiToken.SetMember;
-            //_opToToken[EOperation.SetMemberValue] = EPiToken.SetMemberValue;
-            //_opToToken[EOperation.ForEachIn] = EPiToken.ForEachIn;
-            //_opToToken[EOperation.ForLoop] = EPiToken.ForLoop;
-            _opToToken[EOperation.Drop] = EPiToken.Drop;
-            _opToToken[EOperation.DropN] = EPiToken.DropN;
-        }
-
-        protected override void AddKeyWords()
-        {
-            _keyWords.Add("break", EPiToken.Break);
-            _keyWords.Add("if", EPiToken.If);
-            _keyWords.Add("ife", EPiToken.IfElse);
-            _keyWords.Add("for", EPiToken.For);
-            _keyWords.Add("true", EPiToken.True);
-            _keyWords.Add("false", EPiToken.False);
-            _keyWords.Add("self", EPiToken.Self);
-            _keyWords.Add("while", EPiToken.While);
-            _keyWords.Add("assert", EPiToken.Assert);
-            _keyWords.Add("div", EPiToken.Divide);
-            _keyWords.Add("rho", EPiToken.ToRho);
-            _keyWords.Add("rho{", EPiToken.ToRhoSequence);
-            _keyWords.Add("not", EPiToken.Not);
-            _keyWords.Add("and", EPiToken.And);
-            _keyWords.Add("or", EPiToken.Or);
-            _keyWords.Add("xor", EPiToken.Xor);
-            _keyWords.Add("exists", EPiToken.Exists);
-            _keyWords.Add("drop", EPiToken.Drop);
-            _keyWords.Add("dup", EPiToken.Dup);
-            _keyWords.Add("over", EPiToken.Over);
-            _keyWords.Add("swap", EPiToken.Swap);
-            _keyWords.Add("rot", EPiToken.Rot);
-            _keyWords.Add("pick", EPiToken.Pick);
-            _keyWords.Add("rotn", EPiToken.RotN);
-            _keyWords.Add("gc", EPiToken.GarbageCollect);
-            _keyWords.Add("clear", EPiToken.Clear);
-            _keyWords.Add("cd", EPiToken.ChangeFolder);
-            _keyWords.Add("pwd", EPiToken.PrintFolder);
-            _keyWords.Add("type", EPiToken.GetType);
-            _keyWords.Add("depth", EPiToken.Depth);
-            _keyWords.Add("new", EPiToken.New);
-            _keyWords.Add("dropn", EPiToken.DropN);
-            _keyWords.Add("noteq", EPiToken.NotEquiv);
-            _keyWords.Add("lls", EPiToken.Contents);
-            _keyWords.Add("ls", EPiToken.GetContents);
-            _keyWords.Add("freeze", EPiToken.Freeze);
-            _keyWords.Add("thaw", EPiToken.Thaw);
-            _keyWords.Add("size", EPiToken.Size);
-            _keyWords.Add("tomap", EPiToken.ToMap);
-            _keyWords.Add("toset", EPiToken.ToSet);
-            _keyWords.Add("tolist", EPiToken.ToList);
-            _keyWords.Add("toarray", EPiToken.ToArray);
-            _keyWords.Add("expand", EPiToken.Expand);
-            _keyWords.Add("remove", EPiToken.Remove);
-            _keyWords.Add("push_front", EPiToken.PushFront);
-            _keyWords.Add("push_back", EPiToken.PushBack);
-            _keyWords.Add("back", EPiToken.GetBack);
-            _keyWords.Add("at", EPiToken.At);
-            _keyWords.Add("insert", EPiToken.Insert);
-            _keyWords.Add("has", EPiToken.Has);
-            _keyWords.Add("debug_datastack", EPiToken.DebugPrintDataStack);
-            _keyWords.Add("set_float_precision", EPiToken.SetFloatPrecision);
         }
 
         protected override bool NextToken()
@@ -234,10 +97,10 @@ namespace Pyro.Language.Lexer
                     while (Next() != '\n')
                         ;
 
-                    var comment = _factory.NewToken(
+                    var comment = _Factory.NewToken(
                         EPiToken.Comment,
                         new Slice(this, start, _offset));
-                    _tokens.Add(comment);
+                    _Tokens.Add(comment);
                     return true;
                 }
 
@@ -259,9 +122,9 @@ namespace Pyro.Language.Lexer
 
         protected override void AddKeywordOrIdent(Slice slice)
         {
-            _tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
-                ? _factory.NewToken(tok, slice)
-                : _factory.NewTokenIdent(slice));
+            _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
+                ? _Factory.NewToken(tok, slice)
+                : _Factory.NewTokenIdent(slice));
         }
 
         protected override void Terminate()
@@ -269,5 +132,145 @@ namespace Pyro.Language.Lexer
         }
 
         public static Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
+    }
+
+    public partial class PiLexer
+    {
+        protected override void AddKeyWords()
+        {
+            _KeyWords.Add("break", EPiToken.Break);
+            _KeyWords.Add("if", EPiToken.If);
+            _KeyWords.Add("ife", EPiToken.IfElse);
+            _KeyWords.Add("for", EPiToken.For);
+            _KeyWords.Add("true", EPiToken.True);
+            _KeyWords.Add("false", EPiToken.False);
+            _KeyWords.Add("self", EPiToken.Self);
+            _KeyWords.Add("while", EPiToken.While);
+            _KeyWords.Add("assert", EPiToken.Assert);
+            _KeyWords.Add("div", EPiToken.Divide);
+            _KeyWords.Add("rho", EPiToken.ToRho);
+            _KeyWords.Add("rho{", EPiToken.ToRhoSequence);
+            _KeyWords.Add("not", EPiToken.Not);
+            _KeyWords.Add("and", EPiToken.And);
+            _KeyWords.Add("or", EPiToken.Or);
+            _KeyWords.Add("xor", EPiToken.Xor);
+            _KeyWords.Add("exists", EPiToken.Exists);
+            _KeyWords.Add("drop", EPiToken.Drop);
+            _KeyWords.Add("dup", EPiToken.Dup);
+            _KeyWords.Add("over", EPiToken.Over);
+            _KeyWords.Add("swap", EPiToken.Swap);
+            _KeyWords.Add("rot", EPiToken.Rot);
+            _KeyWords.Add("pick", EPiToken.Pick);
+            _KeyWords.Add("rotn", EPiToken.RotN);
+            _KeyWords.Add("gc", EPiToken.GarbageCollect);
+            _KeyWords.Add("clear", EPiToken.Clear);
+            _KeyWords.Add("cd", EPiToken.ChangeFolder);
+            _KeyWords.Add("pwd", EPiToken.PrintFolder);
+            _KeyWords.Add("type", EPiToken.GetType);
+            _KeyWords.Add("depth", EPiToken.Depth);
+            _KeyWords.Add("new", EPiToken.New);
+            _KeyWords.Add("dropn", EPiToken.DropN);
+            _KeyWords.Add("noteq", EPiToken.NotEquiv);
+            _KeyWords.Add("lls", EPiToken.Contents);
+            _KeyWords.Add("ls", EPiToken.GetContents);
+            _KeyWords.Add("freeze", EPiToken.Freeze);
+            _KeyWords.Add("thaw", EPiToken.Thaw);
+            _KeyWords.Add("size", EPiToken.Size);
+            _KeyWords.Add("tomap", EPiToken.ToMap);
+            _KeyWords.Add("toset", EPiToken.ToSet);
+            _KeyWords.Add("tolist", EPiToken.ToList);
+            _KeyWords.Add("toarray", EPiToken.ToArray);
+            _KeyWords.Add("expand", EPiToken.Expand);
+            _KeyWords.Add("remove", EPiToken.Remove);
+            _KeyWords.Add("push_front", EPiToken.PushFront);
+            _KeyWords.Add("push_back", EPiToken.PushBack);
+            _KeyWords.Add("back", EPiToken.GetBack);
+            _KeyWords.Add("at", EPiToken.At);
+            _KeyWords.Add("insert", EPiToken.Insert);
+            _KeyWords.Add("has", EPiToken.Has);
+            _KeyWords.Add("debug_datastack", EPiToken.DebugPrintDataStack);
+            _KeyWords.Add("set_float_precision", EPiToken.SetFloatPrecision);
+        }
+
+        private void CreateOpToToken()
+        {
+            //_opToToken[EOperation.Nop] = EPiToken.Nop;
+            //_opToToken[EOperation.HasType] = EPiToken.HasType;
+            _opToToken[EOperation.GarbageCollect] = EPiToken.GarbageCollect;
+            _opToToken[EOperation.Plus] = EPiToken.Plus;
+            _opToToken[EOperation.Minus] = EPiToken.Minus;
+            _opToToken[EOperation.Multiply] = EPiToken.Multiply;
+            _opToToken[EOperation.Divide] = EPiToken.Divide;
+            //_opToToken[EOperation.Modulo] = EPiToken.Modulo;
+            _opToToken[EOperation.Store] = EPiToken.Store;
+            _opToToken[EOperation.Has] = EPiToken.Has;
+            _opToToken[EOperation.Retrieve] = EPiToken.Retrieve;
+            _opToToken[EOperation.Assign] = EPiToken.Assign;
+            //_opToToken[EOperation.GetPath] = EPiToken.GetPath;
+            _opToToken[EOperation.Suspend] = EPiToken.Suspend;
+            _opToToken[EOperation.Resume] = EPiToken.Resume;
+            _opToToken[EOperation.Replace] = EPiToken.Replace;
+            _opToToken[EOperation.Assert] = EPiToken.Assert;
+            _opToToken[EOperation.Write] = EPiToken.Write;
+            _opToToken[EOperation.WriteLine] = EPiToken.WriteLine;
+            _opToToken[EOperation.If] = EPiToken.If;
+            _opToToken[EOperation.IfElse] = EPiToken.IfElse;
+            //_opToToken[EOperation.StackToList] = EPiToken.StackToList;
+            //_opToToken[EOperation.ListToStack] = EPiToken.ListToStack;
+            _opToToken[EOperation.Depth] = EPiToken.Depth;
+            _opToToken[EOperation.Dup] = EPiToken.Dup;
+            _opToToken[EOperation.Clear] = EPiToken.Clear;
+            _opToToken[EOperation.Swap] = EPiToken.Swap;
+            _opToToken[EOperation.Break] = EPiToken.Break;
+            _opToToken[EOperation.Rot] = EPiToken.Rot;
+            //_opToToken[EOperation.Roll] = EPiToken.Roll;
+            _opToToken[EOperation.RotN] = EPiToken.RotN;
+            //_opToToken[EOperation.RollN] = EPiToken.RollN;
+            _opToToken[EOperation.Pick] = EPiToken.Pick;
+            _opToToken[EOperation.Over] = EPiToken.Over;
+            _opToToken[EOperation.Freeze] = EPiToken.Freeze;
+            _opToToken[EOperation.Thaw] = EPiToken.Thaw;
+            //_opToToken[EOperation.FreezeText] = EPiToken.FreezeText;
+            //_opToToken[EOperation.ThawText] = EPiToken.ThawText;
+            //_opToToken[EOperation.FreezeYaml] = EPiToken.FreezeYaml;
+            //_opToToken[EOperation.ThawYaml] = EPiToken.ThawYaml;
+            _opToToken[EOperation.Not] = EPiToken.Not;
+            _opToToken[EOperation.Equiv] = EPiToken.Equiv;
+            _opToToken[EOperation.LogicalAnd] = EPiToken.And;
+            _opToToken[EOperation.LogicalOr] = EPiToken.Or;
+            _opToToken[EOperation.LogicalXor] = EPiToken.Xor;
+            _opToToken[EOperation.Less] = EPiToken.Less;
+            _opToToken[EOperation.Greater] = EPiToken.Greater;
+            _opToToken[EOperation.GreaterOrEquiv] = EPiToken.GreaterEquiv;
+            _opToToken[EOperation.LessOrEquiv] = EPiToken.LessEquiv;
+            _opToToken[EOperation.NotEquiv] = EPiToken.NotEquiv;
+            _opToToken[EOperation.Expand] = EPiToken.Expand;
+            _opToToken[EOperation.ToArray] = EPiToken.ToArray;
+            _opToToken[EOperation.ToMap] = EPiToken.ToMap;
+            _opToToken[EOperation.ToSet] = EPiToken.ToSet;
+            //_opToToken[EOperation.ToPair] = EPiToken.ToPair;
+            _opToToken[EOperation.Size] = EPiToken.Size;
+            _opToToken[EOperation.GetBack] = EPiToken.GetBack;
+            _opToToken[EOperation.PushBack] = EPiToken.PushBack;
+            _opToToken[EOperation.PushFront] = EPiToken.PushFront;
+            _opToToken[EOperation.ToList] = EPiToken.ToList;
+            _opToToken[EOperation.Remove] = EPiToken.Remove;
+            _opToToken[EOperation.Insert] = EPiToken.Insert;
+            _opToToken[EOperation.At] = EPiToken.At;
+            _opToToken[EOperation.DebugPrintDataStack] = EPiToken.DebugPrintDataStack;
+            _opToToken[EOperation.DebugPrintContextStack] = EPiToken.DebugPrintContextStack;
+            _opToToken[EOperation.DebugPrint] = EPiToken.DebugPrint;
+            _opToToken[EOperation.DebugPrintContinuation] = EPiToken.DebugPrintContinuation;
+            //_opToToken[EOperation.DebugSetLevel] = EPiToken.DebugSetLevel;
+            _opToToken[EOperation.SetFloatPrecision] = EPiToken.SetFloatPrecision;
+            _opToToken[EOperation.Self] = EPiToken.Self;
+            _opToToken[EOperation.GetMember] = EPiToken.GetMember;
+            //_opToToken[EOperation.SetMember] = EPiToken.SetMember;
+            //_opToToken[EOperation.SetMemberValue] = EPiToken.SetMemberValue;
+            //_opToToken[EOperation.ForEachIn] = EPiToken.ForEachIn;
+            //_opToToken[EOperation.ForLoop] = EPiToken.ForLoop;
+            _opToToken[EOperation.Drop] = EPiToken.Drop;
+            _opToToken[EOperation.DropN] = EPiToken.DropN;
+        }
     }
 }

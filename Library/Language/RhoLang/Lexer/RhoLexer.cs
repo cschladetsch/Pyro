@@ -17,22 +17,22 @@ namespace Pyro.RhoLang.Lexer
 
         protected override void AddKeyWords()
         {
-            _keyWords.Add("break", ERhoToken.Break);
-            _keyWords.Add("if", ERhoToken.If);
-            _keyWords.Add("else", ERhoToken.Else);
-            _keyWords.Add("for", ERhoToken.For);
-            _keyWords.Add("true", ERhoToken.True);
-            _keyWords.Add("false", ERhoToken.False);
-            _keyWords.Add("yield", ERhoToken.Yield);
-            _keyWords.Add("fun", ERhoToken.Fun);
-            _keyWords.Add("return", ERhoToken.Return);
-            _keyWords.Add("self", ERhoToken.Self);
-            _keyWords.Add("while", ERhoToken.While);
-            _keyWords.Add("assert", ERhoToken.Assert);
-            _keyWords.Add("writeln", ERhoToken.WriteLine);
-            _keyWords.Add("write", ERhoToken.Write);
-            _keyWords.Add("new", ERhoToken.New);
-            _keyWords.Add("in", ERhoToken.In);
+            _KeyWords.Add("break", ERhoToken.Break);
+            _KeyWords.Add("if", ERhoToken.If);
+            _KeyWords.Add("else", ERhoToken.Else);
+            _KeyWords.Add("for", ERhoToken.For);
+            _KeyWords.Add("true", ERhoToken.True);
+            _KeyWords.Add("false", ERhoToken.False);
+            _KeyWords.Add("yield", ERhoToken.Yield);
+            _KeyWords.Add("fun", ERhoToken.Fun);
+            _KeyWords.Add("return", ERhoToken.Return);
+            _KeyWords.Add("self", ERhoToken.Self);
+            _KeyWords.Add("while", ERhoToken.While);
+            _KeyWords.Add("assert", ERhoToken.Assert);
+            _KeyWords.Add("writeln", ERhoToken.WriteLine);
+            _KeyWords.Add("write", ERhoToken.Write);
+            _KeyWords.Add("new", ERhoToken.New);
+            _KeyWords.Add("in", ERhoToken.In);
         }
 
         protected override bool NextToken()
@@ -113,10 +113,10 @@ namespace Pyro.RhoLang.Lexer
                     while (Next() != '\n')
                         ;
 
-                    var comment = _factory.NewToken(
+                    var comment = _Factory.NewToken(
                         ERhoToken.Comment,
                         new Slice(this, start, _offset));
-                    _tokens.Add(comment);
+                    _Tokens.Add(comment);
                     return true;
                 }
 
@@ -131,15 +131,15 @@ namespace Pyro.RhoLang.Lexer
 
         protected override void AddKeywordOrIdent(Slice slice)
         {
-            if (_keyWords.TryGetValue(slice.Text, out var tok))
-                _tokens.Add(_factory.NewToken(tok, slice));
+            if (_KeyWords.TryGetValue(slice.Text, out var tok))
+                _Tokens.Add(_Factory.NewToken(tok, slice));
             else
-                _tokens.Add(_factory.NewTokenIdent(slice));
+                _Tokens.Add(_Factory.NewTokenIdent(slice));
         }
 
         protected override void Terminate()
         {
-            _tokens.Add(_factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
+            _Tokens.Add(_Factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
         }
     }
 }

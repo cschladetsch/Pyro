@@ -22,7 +22,7 @@ namespace Pyro.Language.Impl
         where TLexer : ILexerCommon<TTokenNode>
         where AstFactory : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
         where TTokenNode : class, ITokenNode<ETokenEnum>
-        where TAstNode : class//, IAstNode<TAstNode>
+        where TAstNode : class
     {
         protected ParserCommon(TLexer lexer, IRegistry reg)
             : base(reg)

@@ -1,19 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Pyro.Language.Impl
 {
-    public abstract class LexerCommon<TEnum, TToken, TTokenFactory> 
-        : LexerBase, ILexerCommon<TToken>
+    /// <summary>
+    /// Common to all Lexers
+    /// </summary>
+    /// <typeparam name="TEnum">The enumeration type for tokens in the language</typeparam>
+    /// <typeparam name="TToken">The token type to use</typeparam>
+    /// <typeparam name="TTokenFactory">How to make Tokens</typeparam>
+    public abstract class LexerCommon<TEnum, TToken, TTokenFactory>
+        : LexerBase
+        , ILexerCommon<TToken>
         where TToken : class, ITokenBase<TEnum>, new()
         where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new()
     {
-        public IList<TToken> Tokens => _tokens;
+        public IList<TToken> Tokens => _Tokens;
 
         protected LexerCommon(string input) : base(input)
         {
-            _factory.SetLexer(this);
+            _Factory.SetLexer(this);
         }
 
         public bool Process()
@@ -26,10 +33,9 @@ namespace Pyro.Language.Impl
         public override string ToString()
         {
             var str = new StringBuilder();
-            foreach (var tok in _tokens)
-            {
+            foreach (var tok in _Tokens)
                 str.Append($"{tok}, ");
-            }
+            
             return str.ToString();
         }
 
@@ -61,9 +67,8 @@ namespace Pyro.Language.Impl
 
         protected TToken LexAlpha()
         {
-            TToken tok = _factory.NewTokenIdent(Gather(char.IsLetter));
-            TEnum en;
-            if (_keyWords.TryGetValue(tok.ToString(), out en))
+            var tok = _Factory.NewTokenIdent(Gather(char.IsLetter));
+            if (_KeyWords.TryGetValue(tok.ToString(), out var en))
                 tok.Type = en;
 
             return tok;
@@ -76,12 +81,12 @@ namespace Pyro.Language.Impl
 
         protected override void AddStringToken(Slice slice)
         {
-            _tokens.Add(_factory.NewTokenString(slice));
+            _Tokens.Add(_Factory.NewTokenString(slice));
         }
 
         protected bool AddSlice(TEnum type, Slice slice)
         {
-            _tokens.Add(_factory.NewToken(type, slice));
+            _Tokens.Add(_Factory.NewToken(type, slice));
             return true;
         }
 
@@ -96,14 +101,12 @@ namespace Pyro.Language.Impl
 
         protected bool AddIfNext(char ch, TEnum thenType, TEnum elseType)
         {
-            if (Peek() == ch)
-            {
-                Add(thenType, 2);
-                Next();
-                return true;
-            }
+            if (Peek() != ch) 
+                return Add(elseType, 1);
 
-            return Add(elseType, 1);
+            Add(thenType, 2);
+            Next();
+            return true;
         }
 
         protected bool AddTwoCharOp(TEnum ty)
@@ -125,22 +128,22 @@ namespace Pyro.Language.Impl
 
         protected bool LexError(string text)
         {
-            return Fail(CreateErrorMessage(_factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
+            return Fail(CreateErrorMessage(_Factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
         }
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args)
         {
             var buff = $"({tok.LineNumber}):[{tok.Slice.Start}]: {string.Format(fmt, args)}";
-            int beforeContext = 2;
-            int afterContext = 2;
+            const int beforeContext = 2;
+            const int afterContext = 2;
 
             var lex = tok.Lexer;
-            int start = Math.Max(0, tok.LineNumber - beforeContext);
-            int end = Math.Min(lex.Lines.Count - 1, tok.LineNumber + afterContext);
+            var start = Math.Max(0, tok.LineNumber - beforeContext);
+            var end = Math.Min(lex.Lines.Count - 1, tok.LineNumber + afterContext);
 
             var str = new StringBuilder();
             str.AppendLine(buff);
-            for (int n = start; n <= end; ++n)
+            for (var n = start; n <= end; ++n)
             {
                 foreach (var ch in lex.GetLine(n))
                 {
@@ -150,30 +153,30 @@ namespace Pyro.Language.Impl
                         str.Append(ch);
                 }
 
-                if (n == tok.LineNumber)
-                {
-                    for (int ch = 0; ch < (int)lex.GetLine(n).Length; ++ch)
-                    {
-                        if (ch == tok.Slice.Start)
-                        {
-                            str.Append('^');
-                            break;
-                        }
+                if (n != tok.LineNumber) 
+                    continue;
 
-                        var c = lex.GetLine(tok.LineNumber)[ch];
-                        if (c == '\t')
-                            str.Append("    ");
-                        else
-                            str.Append(' ');
+                for (var ch = 0; ch < lex.GetLine(n).Length; ++ch)
+                {
+                    if (ch == tok.Slice.Start)
+                    {
+                        str.Append('^');
+                        break;
                     }
+
+                    var c = lex.GetLine(tok.LineNumber)[ch];
+                    if (c == '\t')
+                        str.Append("    ");
+                    else
+                        str.Append(' ');
                 }
             }
 
             return str.ToString();
         }
 
-        protected List<TToken> _tokens = new List<TToken>();
-        protected Dictionary<string, TEnum> _keyWords = new Dictionary<string, TEnum>();
-        protected TTokenFactory _factory = new TTokenFactory();
+        protected List<TToken> _Tokens = new List<TToken>();
+        protected Dictionary<string, TEnum> _KeyWords = new Dictionary<string, TEnum>();
+        protected TTokenFactory _Factory = new TTokenFactory();
     }
 }
