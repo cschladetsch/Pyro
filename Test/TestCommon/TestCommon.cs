@@ -142,8 +142,17 @@ namespace Diver.Test
 
         protected string GetScriptsPath()
         {
-            var root = TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
-            return Path.Combine(root, ScriptsFolder);
+            return MakeLocalPath(ScriptsFolder);
+        }
+
+        protected string MakeLocalPath(string relative)
+        {
+            return Path.Combine(GetFolderRoot(), relative);
+        }
+
+        private static string GetFolderRoot()
+        {
+            return TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
         }
 
         protected void AssertEmpty()
@@ -158,7 +167,7 @@ namespace Diver.Test
 
         protected object Pop()
         {
-            Assert.Greater(DataStack.Count, 0);
+            Assert.Greater(DataStack.Count, 0, "Empty Datastack");
             return DataStack.Pop();
         }
 
@@ -182,9 +191,15 @@ namespace Diver.Test
             var text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);
+
+            DebugTraceLine(text);
+        }
+
+        private static void DebugTraceLine(string text)
+        {
             TestContext.Out.WriteLine(text);
-            //System.Diagnostics.Trace.WriteLine(text);
-            //Console.WriteLine(text);
+            System.Diagnostics.Trace.WriteLine(text);
+            Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)
@@ -192,7 +207,7 @@ namespace Diver.Test
             var lex = new PiLexer(input);
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
-            Assert.IsTrue(lex.Process());
+            Assert.IsTrue(lex.Process(), lex.Error);
             return lex;
         }
 
@@ -203,7 +218,7 @@ namespace Diver.Test
 
         protected void AssertVarEquals<T>(string ident, T val)
         {
-            Assert.IsTrue(_scope.ContainsKey(ident));
+            Assert.IsTrue(_scope.ContainsKey(ident), $"{ident} not found");
             var obj = _scope[ident];
             switch (obj)
             {

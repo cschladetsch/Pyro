@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
-using Diver.Exec;
-
-namespace Diver.Network
+﻿namespace Diver.Network
 {
+    using System.Collections.Generic;
+    using Diver.Exec;
+
+    /// <summary>
+    /// The Client interface.
+    /// </summary>
     public interface IClient : INetCommon
     {
         string HostName { get; }

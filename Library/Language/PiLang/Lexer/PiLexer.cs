@@ -10,8 +10,8 @@ namespace Diver.Language
         public PiLexer(string input)
             : base(input)
         {
-            var factory = new PiTokenFactory();
-            factory.SetLexer(this);
+            //var factory = new PiTokenFactory();
+            //factory.SetLexer(this);
             CreateOpToToken();
         }
 

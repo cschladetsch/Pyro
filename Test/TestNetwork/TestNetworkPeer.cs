@@ -32,9 +32,9 @@ namespace Pyro.Test
 
             //Assert.IsTrue(peer.Execute("true assert"), peer.Error);
             Assert.IsTrue(peer.Execute("1 2 +"), peer.Error);
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.1f));
             peer.Stop();
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.1f));
         }
 
         private void Connected(IPeer peer, IClient client)

@@ -123,14 +123,23 @@ namespace Diver.Language
             return len == 0 || Offset == len - 1;
         }
 
-        protected char Peek()
+        /// <summary>
+        /// Peek N glyphs ahead on current line
+        /// </summary>
+        /// <param name="n">The number of glyphs to look ahead</param>
+        /// <returns>(char)0 if cannot peek, else the char peeked</returns>
+        protected char Peek(int n = 1)
         {
-            if (Current() == 0)
-                return (char) 0;
-            if (EndOfLine())
-                return (char) 0;
+            const char end = (char) 0;
 
-            return Line[_offset + 1];
+            if (Current() == 0)
+                return end;
+            if (EndOfLine())
+                return end;
+            if (_offset + n >= Line.Length)
+                return end;
+
+            return Line[_offset + n];
         }
 
         protected Slice Gather(Func<char, bool> filter)

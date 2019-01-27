@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unity
+namespace Pyro.Unity3d.Scene
 {
-    public class Class1
+    class UnityScene
     {
+        public GameObject Root;
     }
 }
