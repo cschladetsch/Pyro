@@ -53,8 +53,6 @@ namespace Diver.Impl
 
         public IRef<T> GetProperty<T>(IRefBase obj, string name)
         {
-            //var prop = GetProperty(obj, name) as IRef<T>;
-            //return prop.Value;
             // TODO: only store IRef<T> properties and fields.
             return null;
         }

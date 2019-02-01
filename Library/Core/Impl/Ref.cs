@@ -28,7 +28,6 @@ namespace Diver.Impl
 
         public void Set(object value)
         {
-            //Value = value as T;
             throw new NotImplementedException();
         }
     }

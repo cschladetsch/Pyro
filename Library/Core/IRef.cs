@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Diver
+﻿namespace Diver
 {
     public interface IRef<T>
         : IConstRef<T>

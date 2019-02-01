@@ -7,5 +7,4 @@
             return new Registry();
         }
     }
-
 }

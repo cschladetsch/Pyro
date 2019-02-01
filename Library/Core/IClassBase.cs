@@ -36,5 +36,3 @@ namespace Diver
         void AppendText(StringBuilder str, object value);
     }
 }
-
-//EOF
