@@ -1,4 +1,4 @@
-﻿namespace Pryo
+namespace Pryo
 {
     public interface IRef<T>
         : IConstRef<T>

@@ -36,5 +36,3 @@ namespace Pryo
         void AppendText(StringBuilder str, object value);
     }
 }
-
-//EOF

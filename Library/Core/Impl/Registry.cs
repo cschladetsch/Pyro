@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Pryo.Impl
 {
+    /// <summary>
+    /// Store of instances, and a mapping of types to facrtories.
+    /// </summary>
     public class Registry : IRegistry
     {
         public Guid Guid { get; }

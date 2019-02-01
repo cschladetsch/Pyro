@@ -15,15 +15,6 @@ namespace Pryo.Impl
         public bool IsConst => true;
         public object BaseValue => _baseValue;
 
-        //protected ConstRefBase()
-        //{
-        //}
-
-        //public ConstRefBase(Id id)
-        //{
-        //    _id = id;
-        //}
-
         public ConstRefBase(IRegistry reg, IClassBase klass, Id id)
         {
             _id = id;
