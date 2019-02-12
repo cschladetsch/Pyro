@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pryo
+namespace Pyro
 {
     public interface ICallable
     {

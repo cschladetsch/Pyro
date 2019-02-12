@@ -1,4 +1,4 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
     public static class Create
     {

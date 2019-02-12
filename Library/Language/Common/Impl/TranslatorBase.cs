@@ -1,5 +1,4 @@
-﻿using Pryo;
-using Pyro.Exec;
+﻿using Pyro.Exec;
 
 namespace Pyro.Language.Impl
 {

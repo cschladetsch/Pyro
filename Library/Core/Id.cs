@@ -1,4 +1,4 @@
-namespace Pryo
+namespace Pyro
 {
     /// <summary>
     /// Every object in a Registry has a unique Id.

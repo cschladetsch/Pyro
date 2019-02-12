@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
     public class ClassBase
         : StructBase

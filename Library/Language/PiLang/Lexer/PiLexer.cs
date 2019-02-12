@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-
-using Pryo;
 using Pyro.Exec;
 using Pyro.Language.Impl;
 

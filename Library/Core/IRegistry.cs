@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pryo
+namespace Pyro
 {
     /// <summary>
     /// A mapping of id to object.

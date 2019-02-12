@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
     internal class Ref<T> : ConstRef<T>, IRef<T>
     {

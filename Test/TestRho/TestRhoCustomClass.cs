@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Pryo;
+using Pyro;
 
 namespace Diver.Test.Rho
 {

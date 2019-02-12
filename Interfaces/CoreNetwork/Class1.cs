@@ -1,5 +1,4 @@
 ﻿using System;
-using Pryo;
 using Pyro.Exec;
 
 namespace Pyro.Core.Network.Interfaces

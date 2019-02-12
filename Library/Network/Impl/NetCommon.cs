@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Pryo;
 using Pyro.Exec;
 using Context = Pyro.ExecutionContext.Context;
 using ELanguage = Pyro.Language.ELanguage;

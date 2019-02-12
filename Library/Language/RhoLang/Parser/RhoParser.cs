@@ -1,5 +1,4 @@
-﻿using Pryo;
-using Pyro.Language;
+﻿using Pyro.Language;
 using Pyro.Language.Impl;
 using Pyro.RhoLang.Lexer;
 

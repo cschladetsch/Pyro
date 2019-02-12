@@ -1,6 +1,4 @@
-﻿using Pryo;
-
-namespace Pyro.Language.Lexer
+﻿namespace Pyro.Language.Lexer
 {
     public static class RegisterTypes
     {

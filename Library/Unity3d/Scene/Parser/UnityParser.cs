@@ -1,4 +1,3 @@
-using Pryo;
 using Pyro.Language;
 using Pyro.Language.Impl;
 using Pyro.Unity3d.Scene.Lexer;

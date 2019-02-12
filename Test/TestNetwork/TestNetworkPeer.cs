@@ -23,7 +23,7 @@ namespace Pyro.Test
         [Test]
         public void TestSelfHosting()
         {
-            var peer = Create.NewPeer(ListenPort);
+            var peer = Network.Create.NewPeer(ListenPort);
             peer.OnConnected += Connected;
             peer.OnReceivedResponse += Received;
 

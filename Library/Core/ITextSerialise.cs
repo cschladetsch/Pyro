@@ -1,4 +1,4 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
     /// <summary>
     /// Can be serialised to/from strings.

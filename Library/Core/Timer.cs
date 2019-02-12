@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pryo
+namespace Pyro
 {
     public static class Timer
     {

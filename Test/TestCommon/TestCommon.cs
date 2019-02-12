@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 
 using NUnit.Framework;
-using Pryo;
-using Pryo.Impl;
+using Pyro;
 using Pyro.Exec;
+using Pyro.Impl;
 using Pyro.Language;
 using Pyro.Language.Lexer;
 using Pyro.RhoLang;

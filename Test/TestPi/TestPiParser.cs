@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using NUnit.Framework;
-using Pryo;
+using Pyro;
 using Pyro.Language;
 using Pyro.Language.Lexer;
 using Pyro.Language.Parser;

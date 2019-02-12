@@ -1,4 +1,4 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
     /// <summary>
     /// A part of a pathname, which is a sequence of PathElements

@@ -1,4 +1,4 @@
-﻿namespace Pryo.Impl
+﻿namespace Pyro.Impl
 {
     internal class RefBase : ConstRefBase, IRefBase
     {

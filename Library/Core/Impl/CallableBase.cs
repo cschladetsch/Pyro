@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
     public class CallableBase : ICallable
     {

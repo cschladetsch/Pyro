@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Pryo;
 
 namespace Pyro.Exec
 {
@@ -261,7 +260,7 @@ namespace Pyro.Exec
             _break = true;
         }
 
-        private void Push(object obj)
+        public void Push(object obj)
         {
             if (obj == null)
                 throw new NullValueException();

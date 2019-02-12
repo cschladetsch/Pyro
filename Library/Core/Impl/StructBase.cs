@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
     /// <summary>
     /// Common for all instance types

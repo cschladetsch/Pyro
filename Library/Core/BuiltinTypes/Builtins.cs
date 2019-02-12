@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Pryo.Impl;
+using Pyro.Impl;
 
-namespace Pryo.BuiltinTypes
+namespace Pyro.BuiltinTypes
 {
     public class Void
     {

@@ -1,5 +1,4 @@
 ﻿using System.Net.Sockets;
-using Pryo;
 using Pyro.ExecutionContext;
 
 namespace Pyro.Network

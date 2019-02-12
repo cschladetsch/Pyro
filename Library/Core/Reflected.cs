@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pryo
+namespace Pyro
 {
     public interface IReflected
     {

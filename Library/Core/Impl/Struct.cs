@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
     public class Struct<T> : StructBase, IStruct<T>
     {

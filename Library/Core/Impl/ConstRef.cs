@@ -1,4 +1,4 @@
-﻿namespace Pryo.Impl
+﻿namespace Pyro.Impl
 {
     internal class ConstRef<T>
         : ConstRefBase, IConstRef<T>

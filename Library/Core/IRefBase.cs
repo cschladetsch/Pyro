@@ -1,4 +1,4 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
     /// <summary>
     /// An interface to an object created by a registry.

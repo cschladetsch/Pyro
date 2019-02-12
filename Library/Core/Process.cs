@@ -1,4 +1,4 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
     /// <summary>
     /// This is a simple class which works in various contexts.

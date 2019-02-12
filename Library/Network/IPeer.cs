@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Pryo;
 using Pyro.Exec;
 
 namespace Pyro.Network

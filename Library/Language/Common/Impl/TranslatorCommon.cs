@@ -1,7 +1,5 @@
 ﻿using System.Text;
 using System.Collections.Generic;
-
-using Pryo;
 using Pyro.Exec;
 
 namespace Pyro.Language.Impl

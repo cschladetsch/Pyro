@@ -1,5 +1,4 @@
 ﻿using System;
-using Pryo;
 using Con = System.Console;
 
 namespace Pyro.Network.Impl

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Pryo;
 using Pyro.Language.Impl;
 using Pyro.Language.Lexer;
 

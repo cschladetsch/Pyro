@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Diver;
-using Diver.Exec;
-using Diver.Impl;
-using Diver.Language;
-using Diver.Network;
 using UIWidgets;
 using UnityEngine;
+
+using Pyro.Network;
+using Pyro.ExecutionContext;
 
 namespace App
 {
@@ -20,13 +18,13 @@ namespace App
 
         protected internal ObservableList<ListNode<TreeViewItem>> _treeViewDataSource;
 
+        private IPeer _peer;
+        private Context _context;
+
         private void Awake()
         {
-            _reg = new Registry();
-            _rho = new RhoTranslator(_reg);
-            _pi = new PiTranslator(_reg);
-            _exec = new Executor(_reg);
-            _peer = new Peer(ListenPort);
+            _context = new Context();
+            _peer = Pyro.Network.Create.NewPeer(ListenPort);
             _peer.Start();
 
             SetupStackView();
@@ -41,38 +39,26 @@ namespace App
 
         private void Start()
         {
+            PiScript.onEndEdit.AddListener(PiScriptSubmit);
+            RhoScript.onEndEdit.AddListener(RhoScriptSubmit);
         }
 
-        private void Update()
+        private void RhoScriptSubmit(string text)
         {
-            ProcessScrpipts();
+            Process(Pyro.Language.ELanguage.Rho, text);
         }
 
-        private void ProcessScrpipts()
+        private void PiScriptSubmit(string text)
         {
-            var enter = Input.GetKeyDown(KeyCode.Return);
-            var control = Input.GetKey(KeyCode.LeftControl);
-            if (!enter) 
-                return;
-
-            if (PiScript.isFocused)
-            {
-                Process(_pi, PiScript.text);
-            }
-            else if (RhoScript.isFocused && control)
-            {
-                Process(_rho, RhoScript.text);
-            }
+            Process(Pyro.Language.ELanguage.Pi, text);
         }
 
-        public void Process(TranslatorCommon trans, string text)
+        public void Process(Pyro.Language.ELanguage lang, string text)
         {
             try
             {
-                if (trans.Translate(text))
-                    _exec.Continue(trans.Result());
-                else
-                    AddOutputItem(trans.Error);
+                if (!_context.Exec(lang, text))
+                    _context.Executor.Push($"Error: {_context.Error}");
             }
             catch (Exception e)
             {
@@ -87,7 +73,7 @@ namespace App
         {
             var index = 0;
             _treeViewDataSource.Clear();
-            foreach (var obj in _exec.DataStack)
+            foreach (var obj in _context.Executor.DataStack)
                 AddOutputItem($"[{index++}]: {obj}");
         }
 
@@ -98,10 +84,5 @@ namespace App
             _treeViewDataSource.Add(new ListNode<TreeViewItem>(treeNode, 0));
         }
 
-        private RhoTranslator _rho;
-        private PiTranslator _pi;
-        private IRegistry _reg;
-        private Executor _exec;
-        private Peer _peer;
     }
 }

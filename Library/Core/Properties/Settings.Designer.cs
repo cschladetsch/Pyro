@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Pryo.Properties {
+namespace Pyro.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

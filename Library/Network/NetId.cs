@@ -1,5 +1,4 @@
 ﻿using System;
-using Pryo;
 
 namespace Pyro.Network
 {

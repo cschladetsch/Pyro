@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using Pryo;
-using Pryo.Impl;
+using Pyro;
+using Pyro.Impl;
 
 namespace Diver.TestCore
 {

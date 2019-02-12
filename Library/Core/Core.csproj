@@ -8,8 +8,8 @@
     <ProjectGuid>{575091D8-A55C-4794-9F15-120E927C3305}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pryo</RootNamespace>
-    <AssemblyName>PyroCore</AssemblyName>
+    <RootNamespace>Pyro</RootNamespace>
+    <AssemblyName>Pyro.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -126,7 +126,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+    <PostBuildEvent>echo copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
 
 </PostBuildEvent>
   </PropertyGroup>

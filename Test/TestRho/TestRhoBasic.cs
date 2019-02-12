@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Pryo;
+using Pyro;
 using Pyro.Exec;
 
 namespace Diver.Test.Rho

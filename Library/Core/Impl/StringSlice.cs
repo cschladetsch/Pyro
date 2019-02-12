@@ -1,4 +1,4 @@
-﻿namespace Pryo.Impl
+﻿namespace Pyro.Impl
 {
     /// <summary>
     /// Useful for text persistence systems, and language systems.

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Pryo
+namespace Pyro
 {
     public interface IClass<T> : IClassBase
     {

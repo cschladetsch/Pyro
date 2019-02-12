@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using Pryo.Impl;
+using Pyro.Impl;
 
-namespace Pryo
+namespace Pyro
 {
     /// <summary>
     /// Make a new class that can added to a Registry. This isn't always necessary, unless there are overloaded methods in the class.

@@ -1,6 +1,4 @@
-﻿using Pryo;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
     public static class RegisterTypes
     {

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
-using Pryo;
-using Pryo.Impl;
 using Pyro.Exec;
+using Pyro.Impl;
 using Pyro.Language;
 using Pyro.RhoLang;
 

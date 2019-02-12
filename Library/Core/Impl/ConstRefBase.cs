@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
     /// <summary>
     /// Common implementation behind all type-specific objects in the Dive system.

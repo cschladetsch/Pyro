@@ -10,7 +10,7 @@ namespace Pyro.Console
 {
     using Con = System.Console;
 
-    internal class Program : Pyro.AppCommon.AppCommonBase
+    internal class Program : AppCommon.AppCommonBase
     {
         public const int ListenPort = 9999;
 
@@ -84,7 +84,7 @@ namespace Pyro.Console
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error("Local server listen port number expected as argument");
 
-            _peer = Create.NewPeer(port);
+            _peer = Network.Create.NewPeer(port);
             return _peer.Start() || Error("Failed to start local server");
         }
 
