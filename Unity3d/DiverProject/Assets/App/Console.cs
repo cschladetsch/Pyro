@@ -12,6 +12,7 @@ namespace App
     public class Console : MonoBehaviour
     {
         public TreeView TreeView;
+        public TmpDropShadowText IpAddress;
         public TMPro.TMP_InputField PiScript;
         public TMPro.TMP_InputField RhoScript;
         public int ListenPort;
@@ -26,8 +27,15 @@ namespace App
             _context = new Context();
             _peer = Pyro.Network.Create.NewPeer(ListenPort);
             _peer.Start();
+            _peer.OnReceivedResponse += NetworkResponse;
+            IpAddress.Text = $"{_peer.LocalHostName.Replace('.', '-')}:{ListenPort}";
 
             SetupStackView();
+        }
+
+        private void NetworkResponse(IServer server, IClient client, string text)
+        {
+            AddOutputItem($"Net: {text}");
         }
 
         private void SetupStackView()

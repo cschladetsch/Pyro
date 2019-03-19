@@ -68,6 +68,8 @@ namespace Pyro.Console
                 Exit(1);
 
             RunInitialisationScripts();
+
+            _peer.OnReceivedResponse += (server, client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
         private static string GetVersion()
