@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
+using Flow;
 using Pyro.Exec;
 
 namespace Pyro.Network.Impl
 {
-    public class Peer : NetworkConsoleWriter, IPeer
+    public class Peer
+        : NetworkConsoleWriter
+        , IPeer
     {
         public string LocalHostName => GetLocalHostname();
         public event ReceivedResponseHandler OnReceivedResponse;
@@ -19,6 +23,10 @@ namespace Pyro.Network.Impl
         public IClient Remote => _remote;
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
+
+        private Server _server;
+        private readonly List<Client> _clients = new List<Client>();
+        private IClient _remote;
 
         public Peer(int listenPort)
         {
@@ -108,6 +116,31 @@ namespace Pyro.Network.Impl
             _server = null;
         }
 
+        public TIAgent NewAgent<TIAgent>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IFuture<TIProxy> NewProxy<TIProxy>(Guid agentNetId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IFuture<TR> RemoteCall<TR>(NetId agentId, string methodName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IFuture<TR> RemoteCall<TR, T0>(NetId agentId, string methodName, T0 t0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IFuture<TR> RemoteCall<TR, T0, T1>(NetId agentId, string methodName, T0 t0, T1 t1)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update()
         {
         }
@@ -161,10 +194,5 @@ namespace Pyro.Network.Impl
             return socket?.RemoteEndPoint as IPEndPoint;
         }
 
-        private Server _server;
-
-        private readonly List<Client> _clients = new List<Client>();
-
-        private IClient _remote;
     }
 }

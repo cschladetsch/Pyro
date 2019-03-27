@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Flow;
 using Pyro.Exec;
 
 namespace Pyro.Network
@@ -26,5 +29,19 @@ namespace Pyro.Network
         bool Execute(string pi);
         void Leave();
         void Stop();
+
+        /// <summary>
+        /// Make a new local Agent
+        /// </summary>
+        TIAgent NewAgent<TIAgent>();
+
+        /// <summary>
+        /// Make a local proxy to a remote Agent
+        /// </summary>
+        IFuture<TIProxy> NewProxy<TIProxy>(Guid agentNetId);
+
+        IFuture<TR> RemoteCall<TR>(NetId agentId, string methodName);
+        IFuture<TR> RemoteCall<TR, T0>(NetId agentId, string methodName, T0 t0);
+        IFuture<TR> RemoteCall<TR, T0, T1>(NetId agentId, string methodName, T0 t0, T1 t1);
     }
 }
