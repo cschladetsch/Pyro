@@ -2,6 +2,9 @@
 
 namespace Pyro
 {
+    /// <summary>
+    /// Common to all types that provide const-only access to underlying value.
+    /// </summary>
     public interface IConstRefBase
     {
         Id Id { get; }

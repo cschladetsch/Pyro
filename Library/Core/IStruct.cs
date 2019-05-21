@@ -1,6 +1,7 @@
 ﻿namespace Pyro
 {
-    internal interface IStruct<T> : IStructBase
+    internal interface IStruct<T>
+        : IStructBase
     {
     }
 }

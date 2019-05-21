@@ -10,6 +10,8 @@
     {
         public bool Failed { get; private set; }
 
+        protected string _error;
+        
         public string Error
         {
             get => _error;
@@ -32,7 +34,5 @@
             Failed = false;
             _error = "";
         }
-
-        protected string _error;
     }
 }

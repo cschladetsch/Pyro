@@ -2,6 +2,9 @@
 
 namespace Pyro
 {
+    /// <summary>
+    /// Given member (field, property, method, inner class etc) not found.
+    /// </summary>
     public class MemberNotFoundException : Exception
     {
         public MemberNotFoundException(Type type, string member)
@@ -15,6 +18,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// Couldn't find class to make in Registry.
+    /// </summary>
     public class CouldNotMakeClass : Exception
     {
         public CouldNotMakeClass(Type type)
@@ -23,6 +29,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// The context stack was empty, and yet was attempted to be popp'ed
+    /// </summary>
     public class ContextStackEmptyException : Exception
     {
         public ContextStackEmptyException() : base("Empty ContextStack")
@@ -30,6 +39,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// Used for debugging.
+    /// </summary>
     public class DebugBreakException : Exception
     {
         public DebugBreakException() : base("DebugBreak")
@@ -37,6 +49,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// Thrown when an unexpected null reference was found
+    /// </summary>
     public class NullValueException : Exception
     {
         public NullValueException() : base("Null value")
@@ -44,6 +59,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// An Assertion failed.
+    /// </summary>
     public class AssertionFailedException : Exception
     {
         public AssertionFailedException() : base("Assertion failed")
@@ -51,6 +69,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// An attempt was made to access the contents of and empty data-stack in an Executor.
+    /// </summary>
     public class DataStackEmptyException : Exception
     {
         public DataStackEmptyException() : base("Empty Stack")
@@ -58,6 +79,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// Given identifier could not be resolved locally, in the context stack, or in the tree.
+    /// </summary>
     public class UnknownIdentifierException : Exception
     {
         public object What;
@@ -67,6 +91,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// Invalid comparisons between two different enumeration types.
+    /// </summary>
     public class CannotCompareEnumerationsException : Exception
     {
         public object Left, Right;
@@ -78,6 +105,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// Cannot resolve given identifier.
+    /// </summary>
     public class CannotResolve : Exception
     {
         public CannotResolve(string ident) : base($"Couldn't resolve {ident}")
@@ -85,6 +115,9 @@ namespace Pyro
         }
     }
 
+    /// <summary>
+    /// There was a mis-match in types for a given binary operation.
+    /// </summary>
     public class TypeMismatchError : Exception
     {
         public Type Expected, Got;

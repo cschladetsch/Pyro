@@ -2,7 +2,11 @@
 
 namespace Pyro
 {
-    public class ProcessCommon : Process
+    /// <summary>
+    /// Common to all processes.
+    /// </summary>
+    public class ProcessCommon
+        : Process
     {
         protected ProcessCommon(IRegistry r)
         {
@@ -11,7 +15,7 @@ namespace Pyro
 
         protected IRef<T> New<T>()
         {
-            return _reg.Add<T>(default(T));
+            return _reg.Add<T>(default);
         }
 
         protected IRef<T> New<T>(T val)

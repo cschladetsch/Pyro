@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Pyro
 {
+    /// <summary>
+    /// A partial or fully-qualified path name.
+    /// </summary>
     public class Pathname : IdentBase
     {
         public enum EElementType
