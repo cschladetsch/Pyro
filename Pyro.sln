@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{633E509A-26A0-410E-BF83-91201ECBB488}"
 	ProjectSection(SolutionItems) = preProject
@@ -68,7 +68,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPi", "Test\TestPi\TestP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "App\Console\Console.csproj", "{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiverProjectFolder", "DiverProjectFolder", "{2F68091D-B2C5-42AB-9436-E62AB147912C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PyroProject", "PyroProject", "{2F68091D-B2C5-42AB-9436-E62AB147912C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		Unity3d\DriverProject\.gitignore = Unity3d\DriverProject\.gitignore
