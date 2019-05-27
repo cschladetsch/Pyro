@@ -3,4 +3,6 @@ Contains source for applications used by _Pyro_.
 
 ## Contents
 1. **Console** Interactive Repl Console.
-2. **WinForms** WinForms-based interaction with Pyro.
+1. **WinForms** WinForms-based interaction with Pyro.
+1. **NetworkGen** Generates _Proxies_ and _Agents_ for Pyro networking.
+
