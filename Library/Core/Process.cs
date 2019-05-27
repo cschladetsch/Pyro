@@ -29,7 +29,7 @@
             return false;
         }
 
-        protected void Reset()
+        public void Reset()
         {
             Failed = false;
             _error = "";

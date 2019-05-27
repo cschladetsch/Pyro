@@ -25,6 +25,7 @@ namespace WinForms
             _context = new Context();
             Perform(EOperation.Clear);
             output.Text = "Pyro 0.4a";
+            mainTabControl.SelectedIndex = 1;
         }
 
         private void RhoTextKeyDown(object sender, KeyEventArgs e)
@@ -50,12 +51,13 @@ namespace WinForms
 
         private void TimeTaken(Action action)
         {
-            var start = DateTime.Now;
             try
             {
+                _context.Reset();
+                var start = DateTime.Now;
                 action();
                 var span = DateTime.Now - start;
-                var text = $"Took {span.TotalMilliseconds:0.##}ms";
+                var text = $"Took {span.TotalMilliseconds:0.00}ms";
                 Console.WriteLine(text);
                 toolStripStatusLabel1.Text = text;
                 output.Text = _context.Error;
@@ -101,6 +103,12 @@ namespace WinForms
 
         private void StackOverClick(object sender, EventArgs e)
             => Perform(EOperation.Over);
+
+        private void Exit(object sender, EventArgs e)
+            => Application.Exit();
+
+        private void ShowAboutBox(object sender, EventArgs e)
+            => new AboutBox().ShowDialog();
     }
 }
 

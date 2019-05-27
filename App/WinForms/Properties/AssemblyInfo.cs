@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WinForms")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PyroTool")]
+[assembly: AssemblyDescription("Interactive Pyro")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WinForms")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("LiminalVR Pty Ltd")]
+[assembly: AssemblyProduct("Pyro Tool")]
+[assembly: AssemblyCopyright("Copyright © Christian Schladetsch 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

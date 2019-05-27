@@ -63,9 +63,9 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.mainTabControl = new System.Windows.Forms.TabControl();
+            this.piConsole = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.rhoText = new System.Windows.Forms.RichTextBox();
-            this.piConsole = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.stackView = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -123,7 +123,7 @@
             this.rhoToolStripMenuItem,
             this.piToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newToolStripMenuItem.Text = "&New";
             // 
             // rhoToolStripMenuItem
@@ -141,31 +141,32 @@
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.closeToolStripMenuItem.Text = "C&lose";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveAsToolStripMenuItem.Text = "S&ave As...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.Exit);
             // 
             // viewToolStripMenuItem
             // 
@@ -214,8 +215,9 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ShowAboutBox);
             // 
             // toolStrip1
             // 
@@ -282,14 +284,24 @@
             // 
             // mainTabControl
             // 
-            this.mainTabControl.Controls.Add(this.tabPage1);
             this.mainTabControl.Controls.Add(this.piConsole);
+            this.mainTabControl.Controls.Add(this.tabPage1);
             this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTabControl.Location = new System.Drawing.Point(0, 0);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
             this.mainTabControl.Size = new System.Drawing.Size(379, 348);
             this.mainTabControl.TabIndex = 0;
+            // 
+            // piConsole
+            // 
+            this.piConsole.Location = new System.Drawing.Point(4, 22);
+            this.piConsole.Name = "piConsole";
+            this.piConsole.Padding = new System.Windows.Forms.Padding(3);
+            this.piConsole.Size = new System.Drawing.Size(371, 322);
+            this.piConsole.TabIndex = 1;
+            this.piConsole.Text = "Pi";
+            this.piConsole.UseVisualStyleBackColor = true;
             // 
             // tabPage1
             // 
@@ -314,16 +326,6 @@
             this.rhoText.TabIndex = 0;
             this.rhoText.Text = "";
             this.rhoText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RhoTextKeyDown);
-            // 
-            // piConsole
-            // 
-            this.piConsole.Location = new System.Drawing.Point(4, 22);
-            this.piConsole.Name = "piConsole";
-            this.piConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.piConsole.Size = new System.Drawing.Size(371, 322);
-            this.piConsole.TabIndex = 1;
-            this.piConsole.Text = "Pi";
-            this.piConsole.UseVisualStyleBackColor = true;
             // 
             // splitContainer2
             // 
