@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Pyro;
+
 using Pyro.Exec;
 using Pyro.ExecutionContext;
 
@@ -22,9 +22,9 @@ namespace WinForms
         public MainForm()
         {
             InitializeComponent();
-
             _context = new Context();
             Perform(EOperation.Clear);
+            output.Text = "Pyro 0.4a";
         }
 
         private void RhoTextKeyDown(object sender, KeyEventArgs e)
@@ -34,8 +34,10 @@ namespace WinForms
                 case Keys.Enter:
                 {
                     if (e.Control)
+                    {
                         ExecuteRho();
-                    e.Handled = true;
+                        e.Handled = true;
+                    }
                     break;
                 }
             }
@@ -43,19 +45,27 @@ namespace WinForms
 
         private void ExecuteRho()
         {
+            TimeTaken(() => _context.ExecRho(rhoText.Text));
+        }
+
+        private void TimeTaken(Action action)
+        {
+            var start = DateTime.Now;
             try
             {
-                _context.ExecRho(rhoText.Text);
+                action();
+                var span = DateTime.Now - start;
+                var text = $"Took {span.TotalMilliseconds:0.##}ms";
+                Console.WriteLine(text);
+                toolStripStatusLabel1.Text = text;
                 output.Text = _context.Error;
+                UpdateStackView();
             }
             catch (Exception e)
             {
                 output.Text = $"Exception: {e.Message} ({_context.Error})";
                 Console.WriteLine(e);
-                throw;
             }
-
-            UpdateStackView();
         }
 
         private void UpdateStackView()
@@ -74,23 +84,11 @@ namespace WinForms
             return row;
         }
 
-        private void Perform(EOperation op)
-        {
-            try
-            {
-                Exec.Perform(op);
-                output.Text = _context.Error;
-                UpdateStackView();
-            }
-            catch (Exception e)
-            {
-                output.Text = $"Exception: {e.Message} ({_context.Error})";
-                Console.WriteLine(e);
-            }
-        }
-
         private static void AddSubItem(ListViewItem row, string text)
             => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
+
+        private void Perform(EOperation op)
+            => TimeTaken(() => Exec.Perform(op));
 
         private void ExecuteClick(object sender, EventArgs e)
             => ExecuteRho();
