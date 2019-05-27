@@ -199,7 +199,7 @@ namespace Pyro.RhoLang
                 case ERhoToken.Pathname:
                     //Append(new Pathname(node.Token.Text));
                     throw new NotImplementedException("Translate pathname");
-                    return;
+                    //return;
 
                 case ERhoToken.Yield:
                     //for (var ch : node.Children)
