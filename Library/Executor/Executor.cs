@@ -148,7 +148,7 @@ namespace Pyro.Exec
             }
         }
 
-        private void Perform(object next)
+        public void Perform(object next)
         {
             ++_numOps;
             if (next == null)
