@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using Pyro.ExecutionContext;
 
 namespace WinForms
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// The main form for the application.
+    /// </summary>
     public partial class MainForm : Form
     {
         private readonly Context _context;
@@ -22,44 +20,23 @@ namespace WinForms
             _context = new Context();
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rhoText_KeyDown(object sender, KeyEventArgs e)
+        private void RhoTextKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
-            case Keys.Enter:
-            {
-                if (e.Control)
-                    ExecuteRho();
-                break;
+                case Keys.Enter:
+                {
+                    if (e.Control)
+                        ExecuteRho();
+                    e.Handled = true;
+                    break;
+                }
             }
-
-            case Keys.Tab:
-                if (e.Shift == true)
-                    UnIndent();
-                else
-                    Indent();
-                e.Handled = true;
-                break;
-            }
-        }
-
-        private void UnIndent()
-        {
-        }
-
-        private void Indent()
-        {
         }
 
         private void ExecuteRho()
         {
-            var script = rhoText.Text;
-            _context.ExecRho(script);
+            _context.ExecRho(rhoText.Text);
             output.Text = _context.Error;
 
             UpdateStackView();
@@ -70,26 +47,22 @@ namespace WinForms
             stackView.Items.Clear();
             var n = 0;
             foreach (var item in _context.Executor.DataStack)
-            {
-                var row = MakeStackViewItem(n++, item);
-                stackView.Items.Add(row);
-            }
+                stackView.Items.Add(MakeStackViewItem(n++, item));
         }
 
         private ListViewItem MakeStackViewItem(int n, object item)
         {
             var row = new ListViewItem();
-            var num = new ListViewItem.ListViewSubItem(row, n.ToString());
-            var text = new ListViewItem.ListViewSubItem(row, _context.Registry.ToText(item));
-            row.SubItems.Add(num);
-            row.SubItems.Add(text);
+            AddSubItem(row, n.ToString());
+            AddSubItem(row, _context.Registry.ToText(item));
             return row;
         }
 
-        private void execute_Click(object sender, EventArgs e)
-        {
-            ExecuteRho();
-        }
+        private static void AddSubItem(ListViewItem row, string text)
+            => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
+
+        private void ExecuteClick(object sender, EventArgs e)
+            => ExecuteRho();
     }
 }
 

@@ -236,7 +236,7 @@
             this.execute.Name = "execute";
             this.execute.Size = new System.Drawing.Size(23, 22);
             this.execute.Text = "toolStripButton5";
-            this.execute.Click += new System.EventHandler(this.execute_Click);
+            this.execute.Click += new System.EventHandler(this.ExecuteClick);
             // 
             // syntaxCheck
             // 
@@ -313,7 +313,7 @@
             this.rhoText.Size = new System.Drawing.Size(365, 316);
             this.rhoText.TabIndex = 0;
             this.rhoText.Text = "";
-            this.rhoText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rhoText_KeyDown);
+            this.rhoText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RhoTextKeyDown);
             // 
             // piConsole
             // 
@@ -367,7 +367,6 @@
             this.stackView.TabIndex = 1;
             this.stackView.UseCompatibleStateImageBehavior = false;
             this.stackView.View = System.Windows.Forms.View.Details;
-            this.stackView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // columnHeader2
             // 
