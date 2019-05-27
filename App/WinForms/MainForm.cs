@@ -46,10 +46,10 @@ namespace WinForms
 
         private void ExecuteRho()
         {
-            TimeTaken(() => _context.ExecRho(rhoText.Text));
+            Perform(() => _context.ExecRho(rhoText.Text));
         }
 
-        private void TimeTaken(Action action)
+        private void Perform(Action action)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace WinForms
             => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
 
         private void Perform(EOperation op)
-            => TimeTaken(() => Exec.Perform(op));
+            => Perform(() => Exec.Perform(op));
 
         private void ExecuteClick(object sender, EventArgs e)
             => ExecuteRho();
