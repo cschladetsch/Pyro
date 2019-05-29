@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 using Pyro.Exec;
@@ -21,7 +20,6 @@ namespace WinForms
         private Executor Exec => _context.Executor;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
-        private string piFile, rhoFile;
 
         public MainForm()
         {
@@ -32,6 +30,17 @@ namespace WinForms
             mainTabControl.SelectedIndex = 1;
             mainTabControl.SelectedIndexChanged += ChangedTab;
 
+            LoadPrevious();
+
+            Closing += (a,b) =>
+            {
+                SaveFile("pi", piInput.Text);
+                SaveFile("rho", rhoInput.Text);
+            };
+        }
+
+        private void LoadPrevious()
+        {
             try
             {
                 piInput.Text = LoadFile("pi");
@@ -41,12 +50,6 @@ namespace WinForms
             {
                 Console.WriteLine(e);
             }
-
-            Closing += (a,b) =>
-            {
-                SaveFile("pi", piInput.Text);
-                SaveFile("rho", rhoInput.Text);
-            };
         }
 
         private static string LoadFile(string name)
@@ -69,6 +72,11 @@ namespace WinForms
             UpdatePiContext();
         }
 
+        public static void GoToSite(string url)
+        {
+            System.Diagnostics.Process.Start(url);
+        }
+
         private void UpdatePiContext()
         {
             // TODO: Add concept of a `tree`
@@ -84,6 +92,12 @@ namespace WinForms
         {
             switch (e.KeyCode)
             {
+                //case Keys.Tab:
+                //{
+                //    ChangeTab(e.Control, e.Shift);
+                //    break;
+                //}
+
                 case Keys.Enter:
                 {
                     if (e.Control)
@@ -94,6 +108,20 @@ namespace WinForms
                     break;
                 }
             }
+        }
+
+        private void ChangeTab(bool ctrl, bool shift)
+        {
+            int Next(int cur, int tot) => (cur + 1) % tot;
+            int Prev(int cur, int tot) => (cur + tot - 1) % tot;
+            NextTab(ctrl ? (Func<int, int, int>) Prev : Next);
+        }
+
+        private void NextTab(Func<int, int, int> act)
+        {
+            var numTabs = mainTabControl.TabPages.Count;
+            var curTab = mainTabControl.SelectedIndex;
+            mainTabControl.SelectedIndex = act(curTab, numTabs);
         }
 
         private void piInput_KeyDown(object sender, KeyEventArgs e)
@@ -128,7 +156,7 @@ namespace WinForms
 
         private void Perform(Action action)
         {
-            // TODO: CopyStack();
+            // TODO: CopyStack(); for `get last stack` request.
 
             try
             {
@@ -136,8 +164,7 @@ namespace WinForms
                 var start = DateTime.Now;
                 action();
                 var span = DateTime.Now - start;
-                var text = $"Took {span.TotalMilliseconds:0.00}ms";
-                toolStripStatusLabel1.Text = text;
+                toolStripStatusLabel1.Text = $"Took {span.TotalMilliseconds:0.00}ms";
                 output.Text = _context.Error;
                 UpdateStackView();
             }
@@ -199,15 +226,26 @@ namespace WinForms
         private void StackOverClick(object sender, EventArgs e)
             => Perform(EOperation.Over);
 
-        private void Exit(object sender, EventArgs e)
-            => Application.Exit();
+        private void StackDupClick(object sender, EventArgs e)
+            => Perform(EOperation.Dup);
+
+        private void StackSwapClick(object sender, EventArgs e)
+            => Perform(EOperation.Swap);
+
+        private void StackDropClick(object sender, EventArgs e)
+            => Perform(EOperation.Drop);
+
+        private void GotoSourceClick(object sender, EventArgs e)
+            => System.Diagnostics.Process.Start(@"https://www.github.com/cschladetsch/pyro");
 
         private void ShowAboutBox(object sender, EventArgs e)
             => new AboutBox().ShowDialog();
 
+        private void Exit(object sender, EventArgs e)
+            => Application.Exit();
+
         private void piConsole_Click(object sender, EventArgs e)
         {
-
         }
 
         private void stackToolStripMenuItem_Click(object sender, EventArgs e)
@@ -216,11 +254,6 @@ namespace WinForms
             //output.Dock = DockStyle.Fill;
             //stackView.Enabled = !stackView.Enabled;
             //if (stackView.Is)
-        }
-
-        private void DropClick(object sender, EventArgs e)
-        {
-            Perform(EOperation.Drop);
         }
 
         private bool PiSelected => mainTabControl.SelectedIndex == 0;

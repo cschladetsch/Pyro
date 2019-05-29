@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "1",
             "foo",
             "htpl"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "2",
             "bar"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,6 +58,7 @@
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -78,9 +79,14 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.output = new System.Windows.Forms.RichTextBox();
             this.savePiDialog = new System.Windows.Forms.SaveFileDialog();
             this.saveRhoDialog = new System.Windows.Forms.SaveFileDialog();
+            this.listenPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -134,18 +140,21 @@
             // 
             // rhoToolStripMenuItem
             // 
+            this.rhoToolStripMenuItem.Enabled = false;
             this.rhoToolStripMenuItem.Name = "rhoToolStripMenuItem";
-            this.rhoToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.rhoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rhoToolStripMenuItem.Text = "&Rho";
             // 
             // piToolStripMenuItem
             // 
+            this.piToolStripMenuItem.Enabled = false;
             this.piToolStripMenuItem.Name = "piToolStripMenuItem";
-            this.piToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.piToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.piToolStripMenuItem.Text = "&Pi";
             // 
             // closeToolStripMenuItem
             // 
+            this.closeToolStripMenuItem.Enabled = false;
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.closeToolStripMenuItem.Text = "C&lose";
@@ -194,7 +203,7 @@
             this.toolstripToolStripMenuItem.Checked = true;
             this.toolstripToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolstripToolStripMenuItem.Name = "toolstripToolStripMenuItem";
-            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.toolstripToolStripMenuItem.Text = "&Toolstrip";
             // 
             // stackToolStripMenuItem
@@ -202,7 +211,7 @@
             this.stackToolStripMenuItem.Checked = true;
             this.stackToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stackToolStripMenuItem.Name = "stackToolStripMenuItem";
-            this.stackToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.stackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stackToolStripMenuItem.Text = "&Stack";
             this.stackToolStripMenuItem.Click += new System.EventHandler(this.stackToolStripMenuItem_Click);
             // 
@@ -211,42 +220,55 @@
             this.outputToolStripMenuItem.Checked = true;
             this.outputToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.outputToolStripMenuItem.Text = "&Output";
             // 
             // networkToolStripMenuItem
             // 
             this.networkToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
-            this.disconnectToolStripMenuItem});
+            this.disconnectToolStripMenuItem,
+            this.listenPortToolStripMenuItem,
+            this.stopToolStripMenuItem});
             this.networkToolStripMenuItem.Name = "networkToolStripMenuItem";
             this.networkToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.networkToolStripMenuItem.Text = "&Network";
             // 
             // connectToolStripMenuItem
             // 
+            this.connectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem1});
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.connectToolStripMenuItem.Text = "&Connect...";
             // 
             // disconnectToolStripMenuItem
             // 
+            this.disconnectToolStripMenuItem.Enabled = false;
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.disconnectToolStripMenuItem.Text = "&Disconnect";
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.disconnectToolStripMenuItem.Text = "&Disconnect...";
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sourceToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
+            // sourceToolStripMenuItem
+            // 
+            this.sourceToolStripMenuItem.Name = "sourceToolStripMenuItem";
+            this.sourceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sourceToolStripMenuItem.Text = "&Source";
+            this.sourceToolStripMenuItem.Click += new System.EventHandler(this.GotoSourceClick);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ShowAboutBox);
             // 
@@ -385,10 +407,10 @@
             this.stackView.GridLines = true;
             this.stackView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.stackView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4});
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8});
             this.stackView.Location = new System.Drawing.Point(0, 25);
             this.stackView.MultiSelect = false;
             this.stackView.Name = "stackView";
@@ -418,7 +440,9 @@
             this.toolStripButton1,
             this.toolStripButton2,
             this.toolStripButton3,
-            this.toolStripButton4});
+            this.toolStripButton4,
+            this.toolStripButton5,
+            this.toolStripButton6});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(230, 25);
@@ -433,7 +457,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "Drop";
-            this.toolStripButton1.Click += new System.EventHandler(this.DropClick);
+            this.toolStripButton1.Click += new System.EventHandler(this.StackDropClick);
             // 
             // toolStripButton2
             // 
@@ -465,6 +489,26 @@
             this.toolStripButton4.Text = "Over";
             this.toolStripButton4.Click += new System.EventHandler(this.StackOverClick);
             // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.Click += new System.EventHandler(this.StackSwapClick);
+            // 
+            // toolStripButton6
+            // 
+            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
+            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Name = "toolStripButton6";
+            this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton6.Text = "toolStripButton6";
+            this.toolStripButton6.Click += new System.EventHandler(this.StackDupClick);
+            // 
             // output
             // 
             this.output.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -486,6 +530,25 @@
             // 
             this.saveRhoDialog.Filter = "Rho files|*.rho";
             this.saveRhoDialog.Title = "Save Rho Script";
+            // 
+            // listenPortToolStripMenuItem
+            // 
+            this.listenPortToolStripMenuItem.Name = "listenPortToolStripMenuItem";
+            this.listenPortToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.listenPortToolStripMenuItem.Text = "&Listen...";
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stopToolStripMenuItem.Text = "&Stop";
+            // 
+            // newToolStripMenuItem1
+            // 
+            this.newToolStripMenuItem1.Enabled = false;
+            this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
+            this.newToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem1.Text = "&New";
             // 
             // MainForm
             // 
@@ -565,6 +628,12 @@
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog savePiDialog;
         private System.Windows.Forms.SaveFileDialog saveRhoDialog;
+        private System.Windows.Forms.ToolStripMenuItem sourceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton5;
+        private System.Windows.Forms.ToolStripButton toolStripButton6;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem listenPortToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
     }
 }
 
