@@ -44,13 +44,41 @@ namespace WinForms
             }
         }
 
+        private void piInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                {
+                    if (e.Control)
+                    {
+                        ExecutePi();
+                        e.Handled = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void ExecutePi()
+        {
+            var ln = piInput.GetLineFromCharIndex(piInput.SelectionStart);
+            var ip = piInput.Lines[ln];
+            Perform(() => _context.ExecPi(ip));
+        }
+
         private void ExecuteRho()
         {
-            Perform(() => _context.ExecRho(rhoText.Text));
+            var script = rhoText.SelectedText.Length > 0 ? rhoText.SelectedText : rhoText.Text;
+            Perform(() => _context.ExecRho(script));
         }
+
+        private List<object> _last;
 
         private void Perform(Action action)
         {
+            //CopyStack();
+
             try
             {
                 _context.Reset();
@@ -62,6 +90,23 @@ namespace WinForms
                 toolStripStatusLabel1.Text = text;
                 output.Text = _context.Error;
                 UpdateStackView();
+            }
+            catch (Exception e)
+            {
+                output.Text = $"Exception: {e.Message} ({_context.Error})";
+                Console.WriteLine(e);
+            }
+        }
+
+        private void CopyStack()
+        {
+            try
+            {
+                _last = new List<object>();
+                foreach (var obj in Exec.DataStack)
+                {
+                    _last.Add(_context.Registry.Duplicate(obj));
+                }
             }
             catch (Exception e)
             {
@@ -109,6 +154,12 @@ namespace WinForms
 
         private void ShowAboutBox(object sender, EventArgs e)
             => new AboutBox().ShowDialog();
+
+        private void piConsole_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
 

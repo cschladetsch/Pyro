@@ -4,10 +4,12 @@ using System.Text;
 
 namespace Pyro.Impl
 {
+    /// <inheritdoc />
     /// <summary>
     /// Store of instances, and a mapping of types to facrtories.
     /// </summary>
-    public class Registry : IRegistry
+    public class Registry
+        : IRegistry
     {
         public Guid Guid { get; }
 
@@ -73,7 +75,7 @@ namespace Pyro.Impl
 
         public object New(IClassBase @class, Stack<object> dataStack)
         {
-            return @class.NewInstance(dataStack);
+            return @class.NewInstance();//dataStack);
         }
 
         public IRefBase NewRef(IClassBase @class, Stack<object> dataStack)
@@ -104,6 +106,17 @@ namespace Pyro.Impl
             var str = new StringBuilder();
             AppendText(str, obj);
             return str.ToString();
+        }
+
+        public object Duplicate(object obj)
+        {
+            if (obj.GetType().IsValueType)
+                return Activator.CreateInstance(obj.GetType(), obj);
+
+            if (obj is IRefBase model)
+                return model.Class.Duplicate(obj);
+
+            return null;
         }
 
         public IRef<T> GetRef<T>(Id id)

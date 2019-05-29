@@ -74,7 +74,6 @@ namespace Pyro.Exec
             _actions[EOperation.Over] = Over;
             _actions[EOperation.Dup] = Dup;
             _actions[EOperation.Clear] = () => DataStack.Clear();
-
             _actions[EOperation.Less] = Less;
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
@@ -111,9 +110,15 @@ namespace Pyro.Exec
 
         private void Dup()
         {
-            var a = Pop();
-            Push(a);
-            Push(a);
+            var top = Pop();
+            var dup = top;//Duplicate(top); // TODO: copy-on-write duplication
+            Push(top);
+            Push(dup);
+        }
+
+        private object Duplicate(object obj)
+        {
+            return _registry.Duplicate(obj);
         }
 
         private void Over()

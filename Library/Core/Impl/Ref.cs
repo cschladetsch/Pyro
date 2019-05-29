@@ -2,7 +2,10 @@
 
 namespace Pyro.Impl
 {
-    internal class Ref<T> : ConstRef<T>, IRef<T>
+    /// <inheritdoc cref="IRef{T}" />
+    internal class Ref<T>
+        : ConstRef<T>
+        , IRef<T>
     {
         public Ref(IRegistry reg, IClass<T> @class, Id id)
             : base(reg, @class, id)

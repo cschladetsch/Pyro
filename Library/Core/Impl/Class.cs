@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Pyro.Impl
 {
     public class Class<T>
-        : ClassBase, IClass<T> 
+        : ClassBase
+        , IClass<T> 
     {
         internal Class(IRegistry reg)
             : base(reg, typeof(T))
@@ -18,7 +18,7 @@ namespace Pyro.Impl
             this._toText = toText;
         }
 
-        public override object NewInstance(Stack<object> stack)
+        public override object NewInstance()
         {
             return Activator.CreateInstance(Type);
         }

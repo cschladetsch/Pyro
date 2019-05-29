@@ -243,7 +243,7 @@ namespace Pyro.Exec
                     call.Invoke(_registry, DataStack);
                     break;
                 case IClassBase @class:
-                    Push(@class.NewInstance(DataStack));
+                    Push(@class.NewInstance());//DataStack));
                     break;
                 default:
                     _context.Push(next);

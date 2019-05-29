@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Pyro.Exec
@@ -38,8 +39,9 @@ namespace Pyro.Exec
                 switch (elem)
                 {
                     case EOperation op:
-                        str.Append('`');
-                        str.Append((int) op);
+                        //str.Append('`');
+                        //str.Append((int) op);
+                        str.Append(OpToText(op));
                         break;
                     case bool val:
                         str.Append(val ? "true" : "false");
@@ -52,6 +54,169 @@ namespace Pyro.Exec
                 str.Append(' ');
             }
             str.Append('}');
+        }
+
+        private static string OpToText(EOperation op)
+        {
+            switch (op)
+            {
+            case EOperation.Nop:
+                return "nop";
+            case EOperation.HasType:
+                break;
+            case EOperation.GarbageCollect:
+                return "garbage_collect";
+            case EOperation.Plus:
+                return "+";
+            case EOperation.Minus:
+                return "-";
+            case EOperation.Multiply:
+                return "*";
+            case EOperation.Divide:
+                return "/";
+            case EOperation.Modulo:
+                return "%";
+            case EOperation.Store:
+                return "#";
+            case EOperation.Has:
+                return "has";
+            case EOperation.Retrieve:
+                return "@";
+            case EOperation.Assign:
+                break;
+            case EOperation.GetPath:
+                break;
+            case EOperation.Suspend:
+                return "&";
+            case EOperation.Resume:
+                return "...";
+            case EOperation.Replace:
+                return "!";
+            case EOperation.Assert:
+                return "assert";
+            case EOperation.Write:
+                return "write";
+            case EOperation.WriteLine:
+                return "writeln";
+            case EOperation.If:
+                return "?";
+            case EOperation.IfElse:
+                break;
+            case EOperation.StackToList:
+                break;
+            case EOperation.ListToStack:
+                break;
+            case EOperation.Depth:
+                break;
+            case EOperation.Dup:
+                return "dup";
+            case EOperation.Clear:
+                return "clear";
+            case EOperation.Swap:
+                return "swap";
+            case EOperation.Break:
+                return "break";
+            case EOperation.Rot:
+                break;
+            case EOperation.Roll:
+                break;
+            case EOperation.RotN:
+                break;
+            case EOperation.RollN:
+                break;
+            case EOperation.Pick:
+                break;
+            case EOperation.Over:
+                break;
+            case EOperation.Freeze:
+                break;
+            case EOperation.Thaw:
+                break;
+            case EOperation.FreezeText:
+                break;
+            case EOperation.ThawText:
+                break;
+            case EOperation.FreezeYaml:
+                break;
+            case EOperation.ThawYaml:
+                break;
+            case EOperation.Not:
+                break;
+            case EOperation.Equiv:
+                break;
+            case EOperation.LogicalAnd:
+                break;
+            case EOperation.LogicalOr:
+                break;
+            case EOperation.LogicalXor:
+                break;
+            case EOperation.Less:
+                break;
+            case EOperation.Greater:
+                break;
+            case EOperation.GreaterOrEquiv:
+                break;
+            case EOperation.LessOrEquiv:
+                break;
+            case EOperation.NotEquiv:
+                break;
+            case EOperation.Expand:
+                break;
+            case EOperation.ToArray:
+                break;
+            case EOperation.ToMap:
+                break;
+            case EOperation.ToSet:
+                break;
+            case EOperation.ToPair:
+                break;
+            case EOperation.Size:
+                break;
+            case EOperation.GetBack:
+                break;
+            case EOperation.PushBack:
+                break;
+            case EOperation.PushFront:
+                break;
+            case EOperation.ToList:
+                break;
+            case EOperation.Remove:
+                break;
+            case EOperation.Insert:
+                break;
+            case EOperation.At:
+                break;
+            case EOperation.DebugPrintDataStack:
+                break;
+            case EOperation.DebugPrintContextStack:
+                break;
+            case EOperation.DebugPrint:
+                break;
+            case EOperation.DebugPrintContinuation:
+                break;
+            case EOperation.DebugSetLevel:
+                break;
+            case EOperation.SetFloatPrecision:
+                break;
+            case EOperation.Self:
+                break;
+            case EOperation.GetMember:
+                break;
+            case EOperation.SetMember:
+                break;
+            case EOperation.SetMemberValue:
+                break;
+            case EOperation.ForEachIn:
+                break;
+            case EOperation.ForLoop:
+                break;
+            case EOperation.Drop:
+                break;
+            case EOperation.DropN:
+                break;
+            }
+
+            return $"`{(int) op}";
         }
 
         public static void Register(IRegistry reg)

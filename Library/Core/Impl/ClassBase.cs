@@ -15,6 +15,11 @@ namespace Pyro.Impl
         {
         }
 
+        public object Duplicate(object obj)
+        {
+            return null;
+        }
+
         public ICallable GetCallable(string name)
         {
             return _callables.TryGetValue(name, out var call) ? call : null;
@@ -46,6 +51,11 @@ namespace Pyro.Impl
         public IConstRefBase CreateConst(Id id, object value)
         {
             return new ConstRefBase(_registry, this, id, value);
+        }
+
+        public virtual object NewInstance()
+        {
+            throw new NotImplementedException();
         }
 
         public virtual object NewInstance(Stack<object> dataStack)

@@ -4,11 +4,14 @@ using System.Collections.Generic;
 namespace Pyro.Language
 {
     /// <inheritdoc cref="Process" />
+    /// <inheritdoc cref="ILexer" />
     /// <summary>
     /// Common to all lexers. Provides basic lexing functionality that is not specific to
     /// any token-type.
     /// </summary>
-    public class LexerBase : Process, ILexer
+    public class LexerBase
+        : Process
+        , ILexer
     {
         public string Input => _input;
         public int Offset => _offset;

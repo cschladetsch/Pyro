@@ -1,9 +1,9 @@
 namespace Pyro
 {
     /// <summary>
-    /// A reference to another value.
+    /// A mutable reference to an instance of type &lt;T&gt;
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The instane type.</typeparam>>
     public interface IRef<T>
         : IConstRef<T>
         , IRefBase

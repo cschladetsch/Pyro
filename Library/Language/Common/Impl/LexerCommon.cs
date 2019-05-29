@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Pyro.Language.Impl
 {
+    /// <inheritdoc cref="LexerBase" />
     /// <summary>
     /// Common to all Lexers
     /// </summary>
@@ -21,6 +22,19 @@ namespace Pyro.Language.Impl
         protected LexerCommon(string input) : base(input)
         {
             _Factory.SetLexer(this);
+        }
+
+        public TEnum StringToEnum(string str)
+        {
+            return _KeyWords.TryGetValue(str, out var e) ? e : default;
+        }
+
+        public string EnumToString(TEnum e)
+        {
+            if (_KeyWordsInvert.TryGetValue(e, out var str))
+                return str;
+            //return $"`{(int) e}"; // TODO: get numeric value of e
+            return e.ToString();
         }
 
         public bool Process()
@@ -177,6 +191,7 @@ namespace Pyro.Language.Impl
 
         protected List<TToken> _Tokens = new List<TToken>();
         protected Dictionary<string, TEnum> _KeyWords = new Dictionary<string, TEnum>();
+        protected Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
         protected TTokenFactory _Factory = new TTokenFactory();
     }
 }

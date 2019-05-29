@@ -5,7 +5,7 @@ using Pyro.Language.Impl;
 namespace Pyro.Language.Lexer
 {
     public partial class PiLexer
-        : LexerCommon<EPiToken, PiToken, PiTokenFactory>, ILexer
+        : LexerCommon<EPiToken, PiToken, PiTokenFactory>
     {
         public PiLexer(string input)
             : base(input)
@@ -90,9 +90,9 @@ namespace Pyro.Language.Lexer
                 if (Peek() == '/')
                 {
                     Next();
-                    int start = _offset + 1;
+                    var start = _offset + 1;
                     while (Next() != '\n')
-                        ;
+                        /* skip to eol*/;
 
                     var comment = _Factory.NewToken(
                         EPiToken.Comment,
@@ -101,7 +101,7 @@ namespace Pyro.Language.Lexer
                     return true;
                 }
 
-                return Add(EPiToken.Separator);
+                return Add(EPiToken.Divide);
             }
 
             LexError($"Unrecognised '{current}'");
@@ -135,61 +135,67 @@ namespace Pyro.Language.Lexer
     {
         protected override void AddKeyWords()
         {
-            _KeyWords.Add("break", EPiToken.Break);
-            _KeyWords.Add("if", EPiToken.If);
-            _KeyWords.Add("ife", EPiToken.IfElse);
-            _KeyWords.Add("for", EPiToken.For);
-            _KeyWords.Add("true", EPiToken.True);
-            _KeyWords.Add("false", EPiToken.False);
-            _KeyWords.Add("self", EPiToken.Self);
-            _KeyWords.Add("while", EPiToken.While);
-            _KeyWords.Add("assert", EPiToken.Assert);
-            _KeyWords.Add("div", EPiToken.Divide);
-            _KeyWords.Add("rho", EPiToken.ToRho);
-            _KeyWords.Add("rho{", EPiToken.ToRhoSequence);
-            _KeyWords.Add("not", EPiToken.Not);
-            _KeyWords.Add("and", EPiToken.And);
-            _KeyWords.Add("or", EPiToken.Or);
-            _KeyWords.Add("xor", EPiToken.Xor);
-            _KeyWords.Add("exists", EPiToken.Exists);
-            _KeyWords.Add("drop", EPiToken.Drop);
-            _KeyWords.Add("dup", EPiToken.Dup);
-            _KeyWords.Add("over", EPiToken.Over);
-            _KeyWords.Add("swap", EPiToken.Swap);
-            _KeyWords.Add("rot", EPiToken.Rot);
-            _KeyWords.Add("pick", EPiToken.Pick);
-            _KeyWords.Add("rotn", EPiToken.RotN);
-            _KeyWords.Add("gc", EPiToken.GarbageCollect);
-            _KeyWords.Add("clear", EPiToken.Clear);
-            _KeyWords.Add("cd", EPiToken.ChangeFolder);
-            _KeyWords.Add("pwd", EPiToken.PrintFolder);
-            _KeyWords.Add("type", EPiToken.GetType);
-            _KeyWords.Add("depth", EPiToken.Depth);
-            _KeyWords.Add("new", EPiToken.New);
-            _KeyWords.Add("dropn", EPiToken.DropN);
-            _KeyWords.Add("noteq", EPiToken.NotEquiv);
-            _KeyWords.Add("lls", EPiToken.Contents);
-            _KeyWords.Add("ls", EPiToken.GetContents);
-            _KeyWords.Add("freeze", EPiToken.Freeze);
-            _KeyWords.Add("thaw", EPiToken.Thaw);
-            _KeyWords.Add("size", EPiToken.Size);
-            _KeyWords.Add("tomap", EPiToken.ToMap);
-            _KeyWords.Add("toset", EPiToken.ToSet);
-            _KeyWords.Add("tolist", EPiToken.ToList);
-            _KeyWords.Add("toarray", EPiToken.ToArray);
-            _KeyWords.Add("expand", EPiToken.Expand);
-            _KeyWords.Add("remove", EPiToken.Remove);
-            _KeyWords.Add("push_front", EPiToken.PushFront);
-            _KeyWords.Add("push_back", EPiToken.PushBack);
-            _KeyWords.Add("back", EPiToken.GetBack);
-            _KeyWords.Add("at", EPiToken.At);
-            _KeyWords.Add("insert", EPiToken.Insert);
-            _KeyWords.Add("has", EPiToken.Has);
-            _KeyWords.Add("debug_datastack", EPiToken.DebugPrintDataStack);
-            _KeyWords.Add("set_float_precision", EPiToken.SetFloatPrecision);
+            AddKeyword("break", EPiToken.Break);
+            AddKeyword("if", EPiToken.If);
+            AddKeyword("ife", EPiToken.IfElse);
+            AddKeyword("for", EPiToken.For);
+            AddKeyword("true", EPiToken.True);
+            AddKeyword("false", EPiToken.False);
+            AddKeyword("self", EPiToken.Self);
+            AddKeyword("while", EPiToken.While);
+            AddKeyword("assert", EPiToken.Assert);
+            AddKeyword("div", EPiToken.Divide);
+            AddKeyword("rho", EPiToken.ToRho);
+            AddKeyword("rho{", EPiToken.ToRhoSequence);
+            AddKeyword("not", EPiToken.Not);
+            AddKeyword("and", EPiToken.And);
+            AddKeyword("or", EPiToken.Or);
+            AddKeyword("xor", EPiToken.Xor);
+            AddKeyword("exists", EPiToken.Exists);
+            AddKeyword("drop", EPiToken.Drop);
+            AddKeyword("dup", EPiToken.Dup);
+            AddKeyword("over", EPiToken.Over);
+            AddKeyword("swap", EPiToken.Swap);
+            AddKeyword("rot", EPiToken.Rot);
+            AddKeyword("pick", EPiToken.Pick);
+            AddKeyword("rotn", EPiToken.RotN);
+            AddKeyword("gc", EPiToken.GarbageCollect);
+            AddKeyword("clear", EPiToken.Clear);
+            AddKeyword("cd", EPiToken.ChangeFolder);
+            AddKeyword("pwd", EPiToken.PrintFolder);
+            AddKeyword("type", EPiToken.GetType);
+            AddKeyword("depth", EPiToken.Depth);
+            AddKeyword("new", EPiToken.New);
+            AddKeyword("dropn", EPiToken.DropN);
+            AddKeyword("noteq", EPiToken.NotEquiv);
+            AddKeyword("lls", EPiToken.Contents);
+            AddKeyword("ls", EPiToken.GetContents);
+            AddKeyword("freeze", EPiToken.Freeze);
+            AddKeyword("thaw", EPiToken.Thaw);
+            AddKeyword("size", EPiToken.Size);
+            AddKeyword("tomap", EPiToken.ToMap);
+            AddKeyword("toset", EPiToken.ToSet);
+            AddKeyword("tolist", EPiToken.ToList);
+            AddKeyword("toarray", EPiToken.ToArray);
+            AddKeyword("expand", EPiToken.Expand);
+            AddKeyword("remove", EPiToken.Remove);
+            AddKeyword("push_front", EPiToken.PushFront);
+            AddKeyword("push_back", EPiToken.PushBack);
+            AddKeyword("back", EPiToken.GetBack);
+            AddKeyword("at", EPiToken.At);
+            AddKeyword("insert", EPiToken.Insert);
+            AddKeyword("has", EPiToken.Has);
+            AddKeyword("debug_datastack", EPiToken.DebugPrintDataStack);
+            AddKeyword("set_float_precision", EPiToken.SetFloatPrecision);
         }
 
-        private void CreateOpToToken()
+        private void AddKeyword(string str, EPiToken tok)
+        {
+            _KeyWords.Add(str, tok);
+            _KeyWordsInvert.Add(tok, str);
+        }
+
+        private static void CreateOpToToken()
         {
             //_opToToken[EOperation.Nop] = EPiToken.Nop;
             //_opToToken[EOperation.HasType] = EPiToken.HasType;

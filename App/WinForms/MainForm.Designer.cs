@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "1",
             "foo",
             "htpl"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "2",
             "bar"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,14 +56,10 @@
             this.outputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.execute = new System.Windows.Forms.ToolStripButton();
-            this.syntaxCheck = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.mainTabControl = new System.Windows.Forms.TabControl();
-            this.piConsole = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.rhoText = new System.Windows.Forms.RichTextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -76,8 +72,10 @@
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.output = new System.Windows.Forms.RichTextBox();
+            this.piConsole = new System.Windows.Forms.TabPage();
+            this.piStatus = new System.Windows.Forms.RichTextBox();
+            this.piInput = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -90,6 +88,7 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
+            this.piConsole.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -123,7 +122,7 @@
             this.rhoToolStripMenuItem,
             this.piToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "&New";
             // 
             // rhoToolStripMenuItem
@@ -141,30 +140,30 @@
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.closeToolStripMenuItem.Text = "C&lose";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveAsToolStripMenuItem.Text = "S&ave As...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.Exit);
             // 
@@ -215,39 +214,9 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ShowAboutBox);
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.execute,
-            this.syntaxCheck});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(707, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // execute
-            // 
-            this.execute.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.execute.Image = ((System.Drawing.Image)(resources.GetObject("execute.Image")));
-            this.execute.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.execute.Name = "execute";
-            this.execute.Size = new System.Drawing.Size(23, 22);
-            this.execute.Text = "toolStripButton5";
-            this.execute.Click += new System.EventHandler(this.ExecuteClick);
-            // 
-            // syntaxCheck
-            // 
-            this.syntaxCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.syntaxCheck.Image = ((System.Drawing.Image)(resources.GetObject("syntaxCheck.Image")));
-            this.syntaxCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.syntaxCheck.Name = "syntaxCheck";
-            this.syntaxCheck.Size = new System.Drawing.Size(23, 22);
-            this.syntaxCheck.Text = "toolStripButton1";
             // 
             // statusStrip1
             // 
@@ -268,7 +237,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 49);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -278,8 +247,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(707, 348);
-            this.splitContainer1.SplitterDistance = 379;
+            this.splitContainer1.Size = new System.Drawing.Size(707, 373);
+            this.splitContainer1.SplitterDistance = 473;
             this.splitContainer1.TabIndex = 3;
             // 
             // mainTabControl
@@ -290,18 +259,8 @@
             this.mainTabControl.Location = new System.Drawing.Point(0, 0);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(379, 348);
+            this.mainTabControl.Size = new System.Drawing.Size(473, 373);
             this.mainTabControl.TabIndex = 0;
-            // 
-            // piConsole
-            // 
-            this.piConsole.Location = new System.Drawing.Point(4, 22);
-            this.piConsole.Name = "piConsole";
-            this.piConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.piConsole.Size = new System.Drawing.Size(371, 322);
-            this.piConsole.TabIndex = 1;
-            this.piConsole.Text = "Pi";
-            this.piConsole.UseVisualStyleBackColor = true;
             // 
             // tabPage1
             // 
@@ -342,8 +301,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.output);
-            this.splitContainer2.Size = new System.Drawing.Size(324, 348);
-            this.splitContainer2.SplitterDistance = 246;
+            this.splitContainer2.Size = new System.Drawing.Size(230, 373);
+            this.splitContainer2.SplitterDistance = 263;
             this.splitContainer2.TabIndex = 0;
             // 
             // stackView
@@ -358,14 +317,14 @@
             this.stackView.GridLines = true;
             this.stackView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.stackView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4});
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8});
             this.stackView.Location = new System.Drawing.Point(0, 25);
             this.stackView.MultiSelect = false;
             this.stackView.Name = "stackView";
-            this.stackView.Size = new System.Drawing.Size(324, 221);
+            this.stackView.Size = new System.Drawing.Size(230, 238);
             this.stackView.TabIndex = 1;
             this.stackView.UseCompatibleStateImageBehavior = false;
             this.stackView.View = System.Windows.Forms.View.Details;
@@ -393,7 +352,7 @@
             this.toolStripButton4});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(324, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(230, 25);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -434,9 +393,44 @@
             this.output.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.output.Location = new System.Drawing.Point(0, 0);
             this.output.Name = "output";
-            this.output.Size = new System.Drawing.Size(324, 98);
+            this.output.Size = new System.Drawing.Size(230, 106);
             this.output.TabIndex = 0;
             this.output.Text = "";
+            // 
+            // piConsole
+            // 
+            this.piConsole.Controls.Add(this.piInput);
+            this.piConsole.Controls.Add(this.piStatus);
+            this.piConsole.Location = new System.Drawing.Point(4, 22);
+            this.piConsole.Name = "piConsole";
+            this.piConsole.Padding = new System.Windows.Forms.Padding(3);
+            this.piConsole.Size = new System.Drawing.Size(465, 347);
+            this.piConsole.TabIndex = 1;
+            this.piConsole.Text = "Pi";
+            this.piConsole.UseVisualStyleBackColor = true;
+            this.piConsole.Click += new System.EventHandler(this.piConsole_Click);
+            // 
+            // piStatus
+            // 
+            this.piStatus.Dock = System.Windows.Forms.DockStyle.Top;
+            this.piStatus.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.piStatus.Location = new System.Drawing.Point(3, 3);
+            this.piStatus.Name = "piStatus";
+            this.piStatus.Size = new System.Drawing.Size(459, 27);
+            this.piStatus.TabIndex = 0;
+            this.piStatus.Text = "";
+            // 
+            // piInput
+            // 
+            this.piInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.piInput.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.piInput.ForeColor = System.Drawing.Color.Navy;
+            this.piInput.Location = new System.Drawing.Point(3, 30);
+            this.piInput.Name = "piInput";
+            this.piInput.Size = new System.Drawing.Size(459, 314);
+            this.piInput.TabIndex = 1;
+            this.piInput.Text = "";
+            this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.piInput_KeyDown);
             // 
             // MainForm
             // 
@@ -445,7 +439,6 @@
             this.ClientSize = new System.Drawing.Size(707, 419);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -453,8 +446,6 @@
             this.Text = "Pyro";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -470,6 +461,7 @@
             this.splitContainer2.ResumeLayout(false);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.piConsole.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -479,14 +471,11 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton syntaxCheck;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TabControl mainTabControl;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage piConsole;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ListView stackView;
         private System.Windows.Forms.ToolStrip toolStrip2;
@@ -494,7 +483,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.RichTextBox output;
-        private System.Windows.Forms.ToolStripButton execute;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -513,6 +501,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolstripToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
+        private System.Windows.Forms.TabPage piConsole;
+        private System.Windows.Forms.RichTextBox piInput;
+        private System.Windows.Forms.RichTextBox piStatus;
     }
 }
 
