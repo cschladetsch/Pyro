@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 
 using Pyro.Exec;
@@ -18,6 +20,7 @@ namespace WinForms
         private readonly Context _context;
         private Executor Exec => _context.Executor;
         private Stack<object> DataStack => Exec.DataStack;
+        private List<object> _last;
 
         public MainForm()
         {
@@ -26,6 +29,54 @@ namespace WinForms
             Perform(EOperation.Clear);
             output.Text = "Pyro 0.4a";
             mainTabControl.SelectedIndex = 1;
+            mainTabControl.SelectedIndexChanged += ChangedTab;
+
+            try
+            {
+                piInput.Text = LoadFile("pi");
+                rhoInput.Text = LoadFile("rho");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            Closing += (a,b) =>
+            {
+                SaveFile("pi", piInput.Text);
+                SaveFile("rho", rhoInput.Text);
+            };
+        }
+
+        private static string LoadFile(string name)
+            => File.ReadAllText(TmpFile(name));
+
+        private static void SaveFile(string name, string contents)
+            => File.WriteAllText(TmpFile(name), contents);
+
+        private static string TmpFile(string name)
+            => Path.Combine(GetFolderPath(), $"last.{name}");
+
+        private static string GetFolderPath()
+            => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+        private void ChangedTab(object sender, EventArgs e)
+        {
+            var isPi = mainTabControl.SelectedIndex == 0;
+            if (!isPi)
+                return;
+            UpdatePiContext();
+        }
+
+        private void UpdatePiContext()
+        {
+            // TODO: Add concept of a `tree`
+            piStatus.Text = "/home λ";
+            //var stack = _context.Executor.ContextStack;
+            //if (stack.Count == 0)
+            //    return;
+            //var top = stack.Peek();
+            //piStatus.Text = $"{
         }
 
         private void RhoTextKeyDown(object sender, KeyEventArgs e)
@@ -64,20 +115,19 @@ namespace WinForms
         {
             var ln = piInput.GetLineFromCharIndex(piInput.SelectionStart);
             var ip = piInput.Lines[ln];
+            Console.WriteLine(ip);
             Perform(() => _context.ExecPi(ip));
         }
 
         private void ExecuteRho()
         {
-            var script = rhoText.SelectedText.Length > 0 ? rhoText.SelectedText : rhoText.Text;
+            var script = rhoInput.SelectedText.Length > 0 ? rhoInput.SelectedText : rhoInput.Text;
             Perform(() => _context.ExecRho(script));
         }
 
-        private List<object> _last;
-
         private void Perform(Action action)
         {
-            //CopyStack();
+            // TODO: CopyStack();
 
             try
             {
@@ -105,7 +155,7 @@ namespace WinForms
                 _last = new List<object>();
                 foreach (var obj in Exec.DataStack)
                 {
-                    _last.Add(_context.Registry.Duplicate(obj));
+                    _last.Add(_context.Registry.Duplicate(obj)); // TODO: copy-on-write duplicates
                 }
             }
             catch (Exception e)
@@ -160,6 +210,13 @@ namespace WinForms
 
         }
 
+        private void stackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //stackView.
+            //output.Dock = DockStyle.Fill;
+            //stackView.Enabled = !stackView.Enabled;
+            //if (stackView.Is)
+        }
     }
 }
 

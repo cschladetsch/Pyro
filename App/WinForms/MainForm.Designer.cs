@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "1",
             "foo",
             "htpl"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "2",
             "bar"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,8 +60,11 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.mainTabControl = new System.Windows.Forms.TabControl();
+            this.piConsole = new System.Windows.Forms.TabPage();
+            this.piInput = new System.Windows.Forms.RichTextBox();
+            this.piStatus = new System.Windows.Forms.RichTextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.rhoText = new System.Windows.Forms.RichTextBox();
+            this.rhoInput = new System.Windows.Forms.RichTextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.stackView = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -72,9 +75,6 @@
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.output = new System.Windows.Forms.RichTextBox();
-            this.piConsole = new System.Windows.Forms.TabPage();
-            this.piStatus = new System.Windows.Forms.RichTextBox();
-            this.piInput = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -82,13 +82,13 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
+            this.piConsole.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
-            this.piConsole.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -184,7 +184,7 @@
             this.toolstripToolStripMenuItem.Checked = true;
             this.toolstripToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolstripToolStripMenuItem.Name = "toolstripToolStripMenuItem";
-            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.toolstripToolStripMenuItem.Text = "&Toolstrip";
             // 
             // stackToolStripMenuItem
@@ -192,15 +192,16 @@
             this.stackToolStripMenuItem.Checked = true;
             this.stackToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stackToolStripMenuItem.Name = "stackToolStripMenuItem";
-            this.stackToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.stackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stackToolStripMenuItem.Text = "&Stack";
+            this.stackToolStripMenuItem.Click += new System.EventHandler(this.stackToolStripMenuItem_Click);
             // 
             // outputToolStripMenuItem
             // 
             this.outputToolStripMenuItem.Checked = true;
             this.outputToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.outputToolStripMenuItem.Text = "&Output";
             // 
             // helpToolStripMenuItem
@@ -262,29 +263,65 @@
             this.mainTabControl.Size = new System.Drawing.Size(473, 373);
             this.mainTabControl.TabIndex = 0;
             // 
+            // piConsole
+            // 
+            this.piConsole.Controls.Add(this.piInput);
+            this.piConsole.Controls.Add(this.piStatus);
+            this.piConsole.Location = new System.Drawing.Point(4, 22);
+            this.piConsole.Name = "piConsole";
+            this.piConsole.Padding = new System.Windows.Forms.Padding(3);
+            this.piConsole.Size = new System.Drawing.Size(465, 347);
+            this.piConsole.TabIndex = 1;
+            this.piConsole.Text = "Pi";
+            this.piConsole.UseVisualStyleBackColor = true;
+            this.piConsole.Click += new System.EventHandler(this.piConsole_Click);
+            // 
+            // piInput
+            // 
+            this.piInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.piInput.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.piInput.ForeColor = System.Drawing.Color.Navy;
+            this.piInput.Location = new System.Drawing.Point(3, 30);
+            this.piInput.Name = "piInput";
+            this.piInput.Size = new System.Drawing.Size(459, 314);
+            this.piInput.TabIndex = 1;
+            this.piInput.Text = "";
+            this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.piInput_KeyDown);
+            // 
+            // piStatus
+            // 
+            this.piStatus.Dock = System.Windows.Forms.DockStyle.Top;
+            this.piStatus.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.piStatus.Location = new System.Drawing.Point(3, 3);
+            this.piStatus.Name = "piStatus";
+            this.piStatus.ReadOnly = true;
+            this.piStatus.Size = new System.Drawing.Size(459, 27);
+            this.piStatus.TabIndex = 0;
+            this.piStatus.Text = "";
+            // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.rhoText);
+            this.tabPage1.Controls.Add(this.rhoInput);
             this.tabPage1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(371, 322);
+            this.tabPage1.Size = new System.Drawing.Size(465, 347);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Rho";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // rhoText
+            // rhoInput
             // 
-            this.rhoText.AcceptsTab = true;
-            this.rhoText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rhoText.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rhoText.Location = new System.Drawing.Point(3, 3);
-            this.rhoText.Name = "rhoText";
-            this.rhoText.Size = new System.Drawing.Size(365, 316);
-            this.rhoText.TabIndex = 0;
-            this.rhoText.Text = "";
-            this.rhoText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RhoTextKeyDown);
+            this.rhoInput.AcceptsTab = true;
+            this.rhoInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rhoInput.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rhoInput.Location = new System.Drawing.Point(3, 3);
+            this.rhoInput.Name = "rhoInput";
+            this.rhoInput.Size = new System.Drawing.Size(459, 341);
+            this.rhoInput.TabIndex = 0;
+            this.rhoInput.Text = "";
+            this.rhoInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RhoTextKeyDown);
             // 
             // splitContainer2
             // 
@@ -317,10 +354,10 @@
             this.stackView.GridLines = true;
             this.stackView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.stackView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5,
-            listViewItem6,
-            listViewItem7,
-            listViewItem8});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4});
             this.stackView.Location = new System.Drawing.Point(0, 25);
             this.stackView.MultiSelect = false;
             this.stackView.Name = "stackView";
@@ -397,41 +434,6 @@
             this.output.TabIndex = 0;
             this.output.Text = "";
             // 
-            // piConsole
-            // 
-            this.piConsole.Controls.Add(this.piInput);
-            this.piConsole.Controls.Add(this.piStatus);
-            this.piConsole.Location = new System.Drawing.Point(4, 22);
-            this.piConsole.Name = "piConsole";
-            this.piConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.piConsole.Size = new System.Drawing.Size(465, 347);
-            this.piConsole.TabIndex = 1;
-            this.piConsole.Text = "Pi";
-            this.piConsole.UseVisualStyleBackColor = true;
-            this.piConsole.Click += new System.EventHandler(this.piConsole_Click);
-            // 
-            // piStatus
-            // 
-            this.piStatus.Dock = System.Windows.Forms.DockStyle.Top;
-            this.piStatus.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.piStatus.Location = new System.Drawing.Point(3, 3);
-            this.piStatus.Name = "piStatus";
-            this.piStatus.Size = new System.Drawing.Size(459, 27);
-            this.piStatus.TabIndex = 0;
-            this.piStatus.Text = "";
-            // 
-            // piInput
-            // 
-            this.piInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.piInput.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.piInput.ForeColor = System.Drawing.Color.Navy;
-            this.piInput.Location = new System.Drawing.Point(3, 30);
-            this.piInput.Name = "piInput";
-            this.piInput.Size = new System.Drawing.Size(459, 314);
-            this.piInput.TabIndex = 1;
-            this.piInput.Text = "";
-            this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.piInput_KeyDown);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -453,6 +455,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.mainTabControl.ResumeLayout(false);
+            this.piConsole.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
@@ -461,7 +464,6 @@
             this.splitContainer2.ResumeLayout(false);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
-            this.piConsole.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -486,7 +488,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.RichTextBox rhoText;
+        private System.Windows.Forms.RichTextBox rhoInput;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
