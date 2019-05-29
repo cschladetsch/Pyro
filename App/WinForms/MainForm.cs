@@ -21,6 +21,7 @@ namespace WinForms
         private Executor Exec => _context.Executor;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
+        private string piFile, rhoFile;
 
         public MainForm()
         {
@@ -136,7 +137,6 @@ namespace WinForms
                 action();
                 var span = DateTime.Now - start;
                 var text = $"Took {span.TotalMilliseconds:0.00}ms";
-                Console.WriteLine(text);
                 toolStripStatusLabel1.Text = text;
                 output.Text = _context.Error;
                 UpdateStackView();
@@ -216,6 +216,25 @@ namespace WinForms
             //output.Dock = DockStyle.Fill;
             //stackView.Enabled = !stackView.Enabled;
             //if (stackView.Is)
+        }
+
+        private void DropClick(object sender, EventArgs e)
+        {
+            Perform(EOperation.Drop);
+        }
+
+        private bool PiSelected => mainTabControl.SelectedIndex == 0;
+
+        private void SaveAsFile(object sender, EventArgs e)
+        {
+            var isPi = PiSelected;
+            var save = isPi ? savePiDialog : saveRhoDialog;
+            if (save.ShowDialog() == DialogResult.OK)
+                File.WriteAllText(save.FileName, isPi ? piInput.Text : rhoInput.Text);
+        }
+
+        private void SaveFile(object sender, EventArgs e)
+        {
         }
     }
 }
