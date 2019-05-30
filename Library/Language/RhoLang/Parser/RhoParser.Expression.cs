@@ -173,10 +173,9 @@ namespace Pyro.RhoLang.Parser
                 }
 
                 Expect(ERhoToken.CloseSquareBracket);
-                if (Failed)
-                    return FailLocation("Closing bracked expected for array");
-
-                return Push(list);
+                return Failed 
+                    ? FailLocation("Closing bracked expected for array")
+                    : Push(list);
             }
 
             if (   Try(ERhoToken.Int) 

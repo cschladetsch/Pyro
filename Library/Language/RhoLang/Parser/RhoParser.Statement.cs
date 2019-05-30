@@ -170,7 +170,7 @@ namespace Pyro.RhoLang.Parser
         /// These are stored in the same Ast node. The way to tell the
         /// difference is by the number of children in the node.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if parsing succeeded.</returns>
         private bool For()
         {
             var @for = NewNode(Consume());

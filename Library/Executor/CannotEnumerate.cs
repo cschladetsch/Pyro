@@ -5,16 +5,17 @@ namespace Pyro.Exec
     [Serializable]
     internal class CannotEnumerate : Exception
     {
-        private object obj;
+        private readonly object _obj;
 
         public CannotEnumerate(object obj)
         {
-            this.obj = obj;
+            _obj = obj;
         }
 
         public override string ToString()
         {
-            return $"Cannot enumerate over {obj.GetType().Name}";
+            return $"Cannot enumerate over {_obj.GetType().Name}";
         }
     }
 }
+

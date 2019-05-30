@@ -1,21 +1,27 @@
-﻿using System;
+﻿using System.Text;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Pyro.Exec
 {
     /// <summary>
-    /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.
+    /// Also known as a co-routine.
+    ///
+    /// Can be interrupted mid-execution and later resumed.
     /// </summary>
     public partial class Continuation
-        : Reflected<Continuation>
     {
-        public IList<object> Code => _code;
-        public IList<string> Args => _args;
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block
         /// </summary>
         public int Ip => _next;
+
+        public IList<object> Code => _code;
+        public IList<string> Args => _args;
+
+        private int _next;
+        private IList<string> _args;
+        private readonly IList<object> _code;
+        private IDictionary<string, object> _scope => Scope;
 
         public Continuation(IList<object> code)
         {
@@ -39,8 +45,6 @@ namespace Pyro.Exec
                 switch (elem)
                 {
                     case EOperation op:
-                        //str.Append('`');
-                        //str.Append((int) op);
                         str.Append(OpToText(op));
                         break;
                     case bool val:
@@ -53,6 +57,7 @@ namespace Pyro.Exec
 
                 str.Append(' ');
             }
+
             str.Append('}');
         }
 
@@ -119,101 +124,101 @@ namespace Pyro.Exec
             case EOperation.Rot:
                 break;
             case EOperation.Roll:
-                break;
+                return "roll";
             case EOperation.RotN:
-                break;
+                return "rotn";
             case EOperation.RollN:
-                break;
+                return "rolln";
             case EOperation.Pick:
-                break;
+                return "pick";
             case EOperation.Over:
-                break;
+                return "over";
             case EOperation.Freeze:
-                break;
+                return "freeze";
             case EOperation.Thaw:
-                break;
+                return "thaw";
             case EOperation.FreezeText:
-                break;
+                return "freezet";
             case EOperation.ThawText:
-                break;
+                return "thawt";
             case EOperation.FreezeYaml:
-                break;
+                return "freezey";
             case EOperation.ThawYaml:
-                break;
+                return "thawt";
             case EOperation.Not:
-                break;
+                return "!";
             case EOperation.Equiv:
-                break;
+                return "==";
             case EOperation.LogicalAnd:
-                break;
+                return "&%";
             case EOperation.LogicalOr:
-                break;
+                return "||";
             case EOperation.LogicalXor:
-                break;
+                return "^";
             case EOperation.Less:
-                break;
+                return "<";
             case EOperation.Greater:
-                break;
+                return ">";
             case EOperation.GreaterOrEquiv:
-                break;
+                return ">=";
             case EOperation.LessOrEquiv:
-                break;
+                return "<=";
             case EOperation.NotEquiv:
-                break;
+                return "!=";
             case EOperation.Expand:
-                break;
+                return "expand";
             case EOperation.ToArray:
-                break;
+                return "to_array";
             case EOperation.ToMap:
-                break;
+                return "to_map";
             case EOperation.ToSet:
-                break;
+                return "to_set";
             case EOperation.ToPair:
-                break;
+                return "to_pair";
             case EOperation.Size:
-                break;
+                return "size";
             case EOperation.GetBack:
-                break;
+                return "back";
             case EOperation.PushBack:
-                break;
+                return "push_back";
             case EOperation.PushFront:
-                break;
+                return "push_front";
             case EOperation.ToList:
-                break;
+                return "to_list";
             case EOperation.Remove:
-                break;
+                return "remove";
             case EOperation.Insert:
-                break;
+                return "insert";
             case EOperation.At:
-                break;
+                return "@";
             case EOperation.DebugPrintDataStack:
-                break;
+                return "debug_print_data";
             case EOperation.DebugPrintContextStack:
-                break;
+                return "debug_print_context";
             case EOperation.DebugPrint:
-                break;
+                return "debug_print";
             case EOperation.DebugPrintContinuation:
-                break;
+                return "debug_print_cont";
             case EOperation.DebugSetLevel:
-                break;
+                return "set_debug_level";
             case EOperation.SetFloatPrecision:
-                break;
+                return "set_float_precision";
             case EOperation.Self:
-                break;
+                return "self";
             case EOperation.GetMember:
-                break;
+                return "get_member";
             case EOperation.SetMember:
-                break;
+                return "set_member";
             case EOperation.SetMemberValue:
-                break;
+                return "set_member_value";
             case EOperation.ForEachIn:
-                break;
+                return "for_each";
             case EOperation.ForLoop:
-                break;
+                return "for";
             case EOperation.Drop:
-                break;
+                return "drop";
             case EOperation.DropN:
-                break;
+                return "dropn";
             }
 
             return $"`{(int) op}";
@@ -229,7 +234,6 @@ namespace Pyro.Exec
         public override string ToString()
         {
             var str = new StringBuilder();
-            //str.Append($"Continuation: {_scope.Count} args, {_code.Count} instructions:\n\t");
             str.Append('{');
             str.Append($"#{_next}/{_code.Count} ");
             if (_args != null)
@@ -252,7 +256,6 @@ namespace Pyro.Exec
             str.Append('}');
 
             return str.ToString();
-            //return $"#{_next}/{_code.Count}:{ToText()}";
         }
 
         public void AddArg(string ident)
@@ -310,10 +313,6 @@ namespace Pyro.Exec
             //_scope.Clear();
             _next = 0;
         }
-
-        private int _next;
-        private IList<string> _args;
-        private readonly IList<object> _code;
-        private IDictionary<string, object> _scope => Scope;
     }
 }
+
