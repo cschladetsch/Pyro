@@ -56,7 +56,10 @@
             this.outputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.networkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listenPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,9 +87,6 @@
             this.output = new System.Windows.Forms.RichTextBox();
             this.savePiDialog = new System.Windows.Forms.SaveFileDialog();
             this.saveRhoDialog = new System.Windows.Forms.SaveFileDialog();
-            this.listenPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -135,54 +135,54 @@
             this.rhoToolStripMenuItem,
             this.piToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "&New";
             // 
             // rhoToolStripMenuItem
             // 
             this.rhoToolStripMenuItem.Enabled = false;
             this.rhoToolStripMenuItem.Name = "rhoToolStripMenuItem";
-            this.rhoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rhoToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.rhoToolStripMenuItem.Text = "&Rho";
             // 
             // piToolStripMenuItem
             // 
             this.piToolStripMenuItem.Enabled = false;
             this.piToolStripMenuItem.Name = "piToolStripMenuItem";
-            this.piToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.piToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.piToolStripMenuItem.Text = "&Pi";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Enabled = false;
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.closeToolStripMenuItem.Text = "C&lose";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveFile);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveAsToolStripMenuItem.Text = "S&ave As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsFile);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.Exit);
             // 
@@ -203,7 +203,7 @@
             this.toolstripToolStripMenuItem.Checked = true;
             this.toolstripToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolstripToolStripMenuItem.Name = "toolstripToolStripMenuItem";
-            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.toolstripToolStripMenuItem.Text = "&Toolstrip";
             // 
             // stackToolStripMenuItem
@@ -211,7 +211,7 @@
             this.stackToolStripMenuItem.Checked = true;
             this.stackToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stackToolStripMenuItem.Name = "stackToolStripMenuItem";
-            this.stackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stackToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.stackToolStripMenuItem.Text = "&Stack";
             this.stackToolStripMenuItem.Click += new System.EventHandler(this.stackToolStripMenuItem_Click);
             // 
@@ -220,7 +220,7 @@
             this.outputToolStripMenuItem.Checked = true;
             this.outputToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.outputToolStripMenuItem.Text = "&Output";
             // 
             // networkToolStripMenuItem
@@ -242,12 +242,31 @@
             this.connectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.connectToolStripMenuItem.Text = "&Connect...";
             // 
+            // newToolStripMenuItem1
+            // 
+            this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
+            this.newToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem1.Text = "&New";
+            this.newToolStripMenuItem1.Click += new System.EventHandler(this._NetworkConnect);
+            // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Enabled = false;
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
             this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.disconnectToolStripMenuItem.Text = "&Disconnect...";
+            // 
+            // listenPortToolStripMenuItem
+            // 
+            this.listenPortToolStripMenuItem.Name = "listenPortToolStripMenuItem";
+            this.listenPortToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.listenPortToolStripMenuItem.Text = "&Listen...";
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stopToolStripMenuItem.Text = "&Stop";
             // 
             // helpToolStripMenuItem
             // 
@@ -268,7 +287,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ShowAboutBox);
             // 
@@ -530,25 +549,6 @@
             // 
             this.saveRhoDialog.Filter = "Rho files|*.rho";
             this.saveRhoDialog.Title = "Save Rho Script";
-            // 
-            // listenPortToolStripMenuItem
-            // 
-            this.listenPortToolStripMenuItem.Name = "listenPortToolStripMenuItem";
-            this.listenPortToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.listenPortToolStripMenuItem.Text = "&Listen...";
-            // 
-            // stopToolStripMenuItem
-            // 
-            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.stopToolStripMenuItem.Text = "&Stop";
-            // 
-            // newToolStripMenuItem1
-            // 
-            this.newToolStripMenuItem1.Enabled = false;
-            this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
-            this.newToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.newToolStripMenuItem1.Text = "&New";
             // 
             // MainForm
             // 

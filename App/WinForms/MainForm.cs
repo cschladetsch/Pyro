@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using Pyro.Core.Network.Interfaces;
 using Pyro.Exec;
 using Pyro.ExecutionContext;
 
@@ -18,6 +18,7 @@ namespace WinForms
     {
         private readonly Context _context;
         private Executor Exec => _context.Executor;
+        private IPeer _peer;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
 
@@ -268,6 +269,12 @@ namespace WinForms
 
         private void SaveFile(object sender, EventArgs e)
         {
+        }
+
+        private void _NetworkConnect(object sender, EventArgs e)
+        {
+            var dlg = new NetworkConnect(_peer);
+            dlg.Show();
         }
     }
 }
