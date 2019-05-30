@@ -4,9 +4,10 @@ using Pyro.Language.Lexer;
 namespace Pyro.Language.Parser
 {
     /// <summary>
-    /// Ast node factory for Pi lang
+    /// Ast node factory for Pi-lang.
     /// </summary>
-    public class PiAstFactory : IAstFactory<PiToken, PiAstNode, EPiAst>
+    public class PiAstFactory
+        : IAstFactory<PiToken, PiAstNode, EPiAst>
     {
         public void AddChild(PiAstNode parent, PiAstNode node)
         {

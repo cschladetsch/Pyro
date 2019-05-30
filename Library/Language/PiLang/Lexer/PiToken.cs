@@ -2,7 +2,10 @@
 
 namespace Pyro.Language.Lexer
 {
-    public class PiToken 
+    /// <summary>
+    /// A Pi-lang token.
+    /// </summary>
+    public class PiToken
         : TokenBase<EPiToken>
         , ITokenNode<EPiToken>
     {

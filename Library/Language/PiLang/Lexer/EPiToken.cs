@@ -1,5 +1,8 @@
 ﻿namespace Pyro.Language.Lexer
 {
+    /// <summary>
+    /// A Pi-lang token type.
+    /// </summary>
     public enum EPiToken
     {
         None,

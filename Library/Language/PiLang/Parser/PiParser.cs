@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Pyro.Language.Impl;
 using Pyro.Language.Lexer;
 
@@ -96,11 +97,13 @@ namespace Pyro.Language.Parser
                             goto done;
                         quoted = true;
                         break;
+
                     case EPiToken.Separator:
                         if (prev == EPiToken.Separator)
                             return FailLocation("Malformed pathname");
                         elements.Add(new Pathname.Element(Pathname.EElementType.Separator));
                         break;
+
                     case EPiToken.Ident:
                         // we can have an ident after an optional initial quote, or after a separator
                         var start = prev == EPiToken.None || prev == EPiToken.Quote;
@@ -109,6 +112,7 @@ namespace Pyro.Language.Parser
                         else
                             goto done;
                         break;
+
                     default:
                         goto done;
                 }

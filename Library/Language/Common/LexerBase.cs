@@ -37,7 +37,6 @@ namespace Pyro.Language
             return _lines[slice.LineNumber].Substring(slice.Start, slice.Length);
         }
 
-        // PERF
         protected void CreateLines()
         {
             if (string.IsNullOrEmpty(_input))
@@ -63,13 +62,13 @@ namespace Pyro.Language
         {
             int start = _offset;
             Next();
-            while (!Failed && Current() != '"') // "
+            while (!Failed && Current() != '"')
             {
                 if (Current() == '\\')
                 {
                     switch (Next())
                     {
-                    case '"':    // "
+                    case '"':
                     case 'n':
                     case 't':
                         break;
@@ -149,7 +148,7 @@ namespace Pyro.Language
         {
             var start = _offset;
             while (filter(Next()))
-                ;
+                /* skip */;
 
             return new Slice(this, start, _offset);
         }

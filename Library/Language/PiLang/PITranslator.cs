@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Pyro.Exec;
 using Pyro.Language.Impl;
 using Pyro.Language.Lexer;
@@ -9,15 +10,19 @@ using Pyro.Language.Parser;
 namespace Pyro.Language
 {
     /// <summary>
-    /// Translates input Pi text source code to an executable Continuation
+    /// Translates input Pi text source code to an executable Continuation.
     /// </summary>
-    public class PiTranslator : TranslatorBase<PiLexer, PiParser>
+    public class PiTranslator
+        : TranslatorBase<PiLexer, PiParser>
     {
         public PiTranslator(IRegistry reg) : base(reg)
         {
         }
 
-        public override bool Translate(string input, out Continuation result, EStructure st = EStructure.Program)
+        public override bool Translate(
+            string input, 
+            out Continuation result, 
+            EStructure st = EStructure.Program)
         {
             if (!base.Translate(input, out result, st))
                 return false;
@@ -76,7 +81,7 @@ namespace Pyro.Language
             return true;
         }
 
-        private void AddToken(PiAstNode node, IList<object> objects)
+        private static void AddToken(PiAstNode node, ICollection<object> objects)
         {
             var token = node.PiToken;
             // TODO: use a map or even have the Executor execute Pi tokens to avoid this pointless duplication.
@@ -258,7 +263,7 @@ namespace Pyro.Language
             }
         }
 
-        private bool TranslateMap(PiAstNode piAst, IList<object> objects)
+        private static bool TranslateMap(PiAstNode piAst, IList<object> objects)
         {
             throw new NotImplementedException("TranslateMap");
         }

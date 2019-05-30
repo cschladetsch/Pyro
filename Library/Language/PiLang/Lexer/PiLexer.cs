@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+
 using Pyro.Exec;
 using Pyro.Language.Impl;
 
 namespace Pyro.Language.Lexer
 {
+    /// <summary>
+    /// A Pi-lang lexer. Converts a string to a sequence of Pi tokens.
+    /// </summary>
     public partial class PiLexer
         : LexerCommon<EPiToken, PiToken, PiTokenFactory>
     {
@@ -15,7 +19,7 @@ namespace Pyro.Language.Lexer
 
         protected override bool NextToken()
         {
-            char current = Current();
+            var current = Current();
             if (current == 0)
                 return false;
 

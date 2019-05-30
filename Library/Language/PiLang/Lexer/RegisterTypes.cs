@@ -4,8 +4,6 @@
     {
         public static void Register(IRegistry reg)
         {
-            //reg.Register(new ClassBuilder<EOperation>(reg, PiLexer.OpToString)
-            //    .Class);
         }
     }
 }

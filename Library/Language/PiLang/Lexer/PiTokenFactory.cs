@@ -1,11 +1,15 @@
 ﻿namespace Pyro.Language.Lexer
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Makes Tokens because C# doesn't allow for constructors that take arguments on generic types
+    /// Makes Tokens because C# doesn't allow for constructors that take arguments
+    /// on generic types.
     /// </summary>
     public class PiTokenFactory
         : ITokenFactory<EPiToken, PiToken>
     {
+        private LexerBase _lexer;
+
         public PiToken NewToken(EPiToken en, Slice slice)
         {
             return new PiToken(en, slice);
@@ -30,7 +34,5 @@
         {
             _lexer = lexer;
         }
-
-        private LexerBase _lexer;
     }
 }
