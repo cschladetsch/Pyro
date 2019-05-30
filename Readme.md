@@ -25,8 +25,8 @@ Installation of the software is straight-forward, with the addition of having so
 $ git clone git@github.com:cschladetsch/Pyro.git
 $ git submodule init
 $ git submodule update
-$ git lfs init
-$ git flow init .
+$ git lfs install
+$ git flow init
 ```
 
 ## Building
