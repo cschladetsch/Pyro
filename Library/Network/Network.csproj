@@ -76,7 +76,7 @@
       <Name>Executor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ext\Flow\Flow.csproj">
-      <Project>{a83f7b03-c388-4428-b200-f96b02cf3f23}</Project>
+      <Project>{da87a965-0077-4af8-986b-3934f186125e}</Project>
       <Name>Flow</Name>
     </ProjectReference>
     <ProjectReference Include="..\Language\Common\Common.csproj">
