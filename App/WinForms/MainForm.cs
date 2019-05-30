@@ -2,34 +2,45 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
+
 using Pyro.Exec;
 using Pyro.ExecutionContext;
 using Pyro.Network;
+using Pyro.Network.Impl;
 
 namespace WinForms
 {
-    /// <inheritdoc />
     /// <summary>
     /// The main form for the application.
     ///
     /// TODO: Make DataStack redraw Reactive
     /// </summary>
-    public partial class MainForm : Form
+    public partial class MainForm
+        : Form
     {
+        public int ListenPort = 7777;
+
         private readonly Context _context;
+        private readonly IPeer _peer;
         private Executor Exec => _context.Executor;
-        private IPeer _peer;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
 
         public MainForm()
         {
             InitializeComponent();
+
             _context = new Context();
+
+            // clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
-            output.Text = "Pyro 0.4a";
+
+            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
             mainTabControl.SelectedIndex = 1;
             mainTabControl.SelectedIndexChanged += ChangedTab;
+
+            // TODO: listen port number from config
+            _peer = new Peer(ListenPort);
 
             LoadPrevious();
 

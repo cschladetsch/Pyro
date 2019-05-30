@@ -53,7 +53,7 @@ namespace Pyro.RhoLang.Parser
             return true;
         }
 
-        bool Relational()
+        private bool Relational()
         {
             if (!Additive())
                 return false;
@@ -78,7 +78,7 @@ namespace Pyro.RhoLang.Parser
             return true;
         }
 
-        bool Additive()
+        private bool Additive()
         {
             // unary +/- operator
             if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
@@ -279,6 +279,7 @@ namespace Pyro.RhoLang.Parser
             index.Add(Pop());
             if (!Expression())
                 return FailLocation("Index what?");
+
             index.Add(Pop());
 
             Expect(ERhoToken.CloseSquareBracket);
@@ -286,3 +287,4 @@ namespace Pyro.RhoLang.Parser
         }
     }
 }
+

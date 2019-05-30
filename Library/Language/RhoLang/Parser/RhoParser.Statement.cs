@@ -218,10 +218,7 @@ namespace Pyro.RhoLang.Parser
         //      block
         private bool ForEach(RhoAstNode @for)
         {
-            if (!Expression())
-                return FailLocation("For each in what?");
-
-            return true;
+            return Expression() || FailLocation("For each in what?");
         }
 
         // for (a = 0; a < 10; ++a)
@@ -238,10 +235,8 @@ namespace Pyro.RhoLang.Parser
             @for.Add(Pop());
             Expect(ERhoToken.Semi);
 
-            if (!Expression())
-                return FailLocation("What happens when the for statement loops?");
-
-            return true;
+            return Expression() || FailLocation("What happens when the for statement loops?");
         }
     }
 }
+

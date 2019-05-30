@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Reflection;
+
 using Con = System.Console;
 
 namespace Pyro.AppCommon
 {
+    /// <summary>
+    /// Functionality that is common to all Apps that use Pyro libraries.
+    /// </summary>
     public abstract class AppCommonBase
     {
+        private static AppCommonBase _self;
+        private readonly ConsoleColor _originalColor;
+
         protected AppCommonBase(string[] args)
         {
             Con.CancelKeyPress += Cancel;
@@ -14,14 +21,18 @@ namespace Pyro.AppCommon
             WriteHeader();
         }
 
-        private void WriteHeader()
+        protected virtual void ProcessArgs(string[] args)
         {
-            Write($"{GetVersion()}\n", ConsoleColor.DarkGray);
         }
 
-        private static string GetVersion()
+        private static void WriteHeader()
         {
-            var name = Assembly.GetEntryAssembly().GetName();
+            WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
+        }
+
+        public static string GetVersion()
+        {
+            var name = Assembly.GetEntryAssembly()?.GetName();
             var version = name.Version;
             var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
             return $"Pyro {name.Name} {version} built {built}";
@@ -41,20 +52,25 @@ namespace Pyro.AppCommon
 
         protected static void Write(string text, ConsoleColor color = ConsoleColor.White)
         {
-            var current = Con.ForegroundColor;
-            Con.ForegroundColor = color;
-            Con.Write(text);
-            Con.ForegroundColor = current;
+            ConWrite(text, color, Con.Write);
         }
 
         protected static void WriteLine(string text, ConsoleColor color = ConsoleColor.White)
         {
-            var current = Con.ForegroundColor;
-            Con.ForegroundColor = color;
-            Con.WriteLine(text);
-            Con.ForegroundColor = current;
+            ConWrite(text, color, Con.WriteLine);
         }
         
+        /// <summary>
+        /// Save/restore current foreground color while writing a string to the console.
+        /// </summary>
+        private static void ConWrite(string text, ConsoleColor color, Action<string> write)
+        {
+            var current = Con.ForegroundColor;
+            Con.ForegroundColor = color;
+            write(text);
+            Con.ForegroundColor = current;
+        }
+
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
         {
             // don't exit immediately - shut down networking gracefully first
@@ -63,8 +79,6 @@ namespace Pyro.AppCommon
         }
 
         protected abstract void Shutdown();
-
-        private static AppCommonBase _self;
-        private readonly ConsoleColor _originalColor;
     }
 }
+
