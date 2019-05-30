@@ -2,9 +2,9 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Pyro.Core.Network.Interfaces;
 using Pyro.Exec;
 using Pyro.ExecutionContext;
+using Pyro.Network;
 
 namespace WinForms
 {

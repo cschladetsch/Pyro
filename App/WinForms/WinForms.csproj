@@ -98,10 +98,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Interfaces\CoreNetwork\CoreNetwork.csproj">
-      <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
-      <Name>CoreNetwork</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\AppCommon\AppCommon.csproj">
       <Project>{fd200c39-038b-4f39-a7a8-249b6ece6921}</Project>
       <Name>AppCommon</Name>
@@ -129,6 +125,10 @@
     <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
       <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
       <Name>RhoLang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Network\Network.csproj">
+      <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
+      <Name>Network</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
