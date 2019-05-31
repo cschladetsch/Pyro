@@ -20,17 +20,27 @@ namespace WinForms
     {
         public int ListenPort = 7777;
 
-        private readonly Context _context;
         private readonly IPeer _peer;
+        private readonly Context _context;
         private Executor Exec => _context.Executor;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
+
+        private bool _single = false;
 
         public MainForm()
         {
             InitializeComponent();
 
             _context = new Context();
+            _peer = Create.NewPeer(ListenPort);
+            _peer.OnConnected += Connected;
+            _peer.OnReceivedResponse += Received;
+            if (!_peer.Start())
+            {
+                Console.WriteLine(_peer.Error);
+                _single = true;
+            }
 
             // clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
@@ -39,9 +49,6 @@ namespace WinForms
             mainTabControl.SelectedIndex = 1;
             mainTabControl.SelectedIndexChanged += ChangedTab;
 
-            // TODO: listen port number from config
-            _peer = new Peer(ListenPort);
-
             LoadPrevious();
 
             Closing += (a,b) =>
@@ -49,6 +56,35 @@ namespace WinForms
                 SaveFile("pi", piInput.Text);
                 SaveFile("rho", rhoInput.Text);
             };
+        }
+
+        private void Connected(IPeer peer, IClient client)
+        {
+            Console.WriteLine($"Connected: {peer} {client}");
+        }
+
+        private void Received(IServer server, IClient client, string text)
+        {
+            if (InvokeRequired)
+            {
+                var del = new ReceivedResponseHandler(Received);
+                Invoke(del, server, client, text);
+                return;
+            }
+            Console.WriteLine($"Recv: {text}");
+            if (_context.Translate(text, out var cont))
+            {
+                try
+                {
+                    Exec.Continue(cont.Code[0] as Continuation);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    output.Text = $"Exception: {e.Message}";
+                }
+            }
+            UpdateStackView();
         }
 
         private void LoadPrevious()
@@ -157,13 +193,17 @@ namespace WinForms
             var ln = piInput.GetLineFromCharIndex(piInput.SelectionStart);
             var ip = piInput.Lines[ln];
             Console.WriteLine(ip);
-            Perform(() => _context.ExecPi(ip));
+            if (_single)
+                Perform(() => _context.ExecPi(ip));
+            else
+                Perform(() => _peer.Execute(ip));
         }
 
         private void ExecuteRho()
         {
             var script = rhoInput.SelectedText.Length > 0 ? rhoInput.SelectedText : rhoInput.Text;
-            Perform(() => _context.ExecRho(script));
+            if (_single)
+                Perform(() => _context.ExecRho(script));
         }
 
         private void Perform(Action action)
@@ -224,7 +264,14 @@ namespace WinForms
             => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
 
         private void Perform(EOperation op)
-            => Perform(() => Exec.Perform(op));
+        {
+            if (_single)
+                Perform(() => Exec.Perform(op));
+            else
+            {
+                // ....
+            }
+        }
 
         private void ExecuteClick(object sender, EventArgs e)
             => ExecuteRho();

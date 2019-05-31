@@ -30,13 +30,14 @@ namespace Pyro.Test
             peer.OnReceivedResponse += Received;
 
             Assert.IsTrue(peer.Start(), peer.Error);
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             //Assert.IsTrue(peer.Execute("pi"), peer.Error);
 
             //Assert.IsTrue(peer.Execute("true assert"), peer.Error);
             Assert.IsTrue(peer.Execute("1 2 +"), peer.Error);
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.1f));
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             peer.Stop();
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.1f));
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 
         private void Connected(IPeer peer, IClient client)
@@ -48,8 +49,10 @@ namespace Pyro.Test
         {
             Assert.IsNotEmpty(response);
             _context.Language = ELanguage.Pi;
+            WriteLine($"Recv: {response}");
             Assert.IsTrue(_context.Exec(response));
             var stack = _context.Executor.DataStack;
+            WriteLine($"Recv: {stack}");
             Assert.AreEqual(1, stack.Count);
             Assert.AreEqual(3, stack.Pop());
         }
