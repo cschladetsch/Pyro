@@ -45,9 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="AboutBox.cs" />
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
@@ -57,9 +55,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetworkConnect.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="NetworkConnect.cs" />
     <Compile Include="NetworkConnect.Designer.cs">
       <DependentUpon>NetworkConnect.cs</DependentUpon>
     </Compile>
