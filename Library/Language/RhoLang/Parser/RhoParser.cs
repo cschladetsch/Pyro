@@ -1,9 +1,10 @@
-﻿using Pyro.Language;
-using Pyro.Language.Impl;
-using Pyro.RhoLang.Lexer;
-
-namespace Pyro.RhoLang.Parser
+﻿namespace Pyro.RhoLang.Parser
 {
+    using Language;
+    using Language.Impl;
+    using Lexer;
+
+    /// <inheritdoc cref="IParser" />
     /// <summary>
     /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.
     /// </summary>
@@ -11,19 +12,19 @@ namespace Pyro.RhoLang.Parser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
         , IParser
     {
-        public RhoAstNode Result => _stack.Peek();
+        public RhoAstNode Result => _Stack.Peek();
 
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
             : base(lexer, reg)
         {
-            _current = 0;
+            _Current = 0;
             _structure = st;
         }
 
         public bool Process()
         {
-            if (_lexer.Failed)
-                return Fail(_lexer.Error);
+            if (_Lexer.Failed)
+                return Fail(_Lexer.Error);
 
             RemoveWhitespace();
 
@@ -32,7 +33,7 @@ namespace Pyro.RhoLang.Parser
 
         private bool Parse(EStructure st)
         {
-            _stack.Push(NewNode(ERhoAst.Program));
+            _Stack.Push(NewNode(ERhoAst.Program));
 
             var result = false;
             switch (st)
@@ -58,7 +59,7 @@ namespace Pyro.RhoLang.Parser
             if (!Try(ERhoToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _stack.Count == 1 || Fail("SYSTEM: Semantic stack not empty after parsing");
+            return _Stack.Count == 1 || Fail("SYSTEM: Semantic stack not empty after parsing");
         }
 
         private bool Program()
@@ -99,7 +100,7 @@ namespace Pyro.RhoLang.Parser
                 if (level < indent)
                 {
                     // return to start so top block can continue
-                    _current -= indent;
+                    _Current -= indent;
                     return true;
                 }
 
@@ -115,14 +116,16 @@ namespace Pyro.RhoLang.Parser
             ConsumeNewLines();
             if (!Try(token))
                 return false;
+
             Consume();
+
             return true;
         }
 
         private void RemoveWhitespace()
         {
             var prevNl = true;
-            foreach (var tok in _lexer.Tokens)
+            foreach (var tok in _Lexer.Tokens)
             {
                 // remove useless consecutive newlines
                 var nl = tok.Type == ERhoToken.NewLine;
@@ -139,7 +142,7 @@ namespace Pyro.RhoLang.Parser
                         continue;
                 }
 
-                _tokens.Add(tok);
+                _Tokens.Add(tok);
             }
         }
 
@@ -152,3 +155,4 @@ namespace Pyro.RhoLang.Parser
         private readonly EStructure _structure;
     }
 }
+

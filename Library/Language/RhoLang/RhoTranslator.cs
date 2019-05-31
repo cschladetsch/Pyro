@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Pyro.Exec;
-using Pyro.Language;
-using Pyro.Language.Impl;
-using Pyro.RhoLang.Lexer;
-using Pyro.RhoLang.Parser;
 
 namespace Pyro.RhoLang
 {
+    using Exec;
+    using Lexer;
+    using Parser;
+
+    using Language;
+    using Language.Impl;
+
     public class RhoTranslator 
         : TranslatorBase<RhoLexer, RhoParser>
     {
@@ -16,7 +18,7 @@ namespace Pyro.RhoLang
         {
         }
 
-        void ShowTime(string name, Action action)
+        private void ShowTime(string name, Action action)
         {
             var start = DateTime.Now;
             action();
@@ -31,27 +33,25 @@ namespace Pyro.RhoLang
             if (string.IsNullOrEmpty(text))
                 return true;
 
-            _lexer = new RhoLexer(text);
-            _lexer.Process();
-            if (_lexer.Failed)
-                return Fail(_lexer.Error);
+            _Lexer = new RhoLexer(text);
+            _Lexer.Process();
+            if (_Lexer.Failed)
+                return Fail(_Lexer.Error);
 
-            _parser = new RhoParser(_lexer, _reg, st);
-            _parser.Process();
-            if (_parser.Failed)
-                return Fail(_parser.Error);
+            _Parser = new RhoParser(_Lexer, _reg, st);
+            _Parser.Process();
+            if (_Parser.Failed)
+                return Fail(_Parser.Error);
 
-            WriteLine(_parser.PrintTree());
-            TranslateNode(_parser.Result);
+            WriteLine(_Parser.PrintTree());
+            TranslateNode(_Parser.Result);
 
             result = Result;
-
-            WriteLine($"{this}");
-
+            //WriteLine($"{this}");
             return !Failed;
         }
 
-        void TranslateToken(RhoAstNode node)
+        private void TranslateToken(RhoAstNode node)
         {
             switch (node.RhoToken.Type)
             {
@@ -199,13 +199,9 @@ namespace Pyro.RhoLang
                     return;
 
                 case ERhoToken.Pathname:
-                    //Append(new Pathname(node.Token.Text));
                     throw new NotImplementedException("Translate pathname");
-                    //return;
 
                 case ERhoToken.Yield:
-                    //for (var ch : node.Children)
-                    //    Translate(ch);
                     Append(EOperation.Suspend);
                     return;
 
@@ -214,6 +210,7 @@ namespace Pyro.RhoLang
                         TranslateNode(ch);
                     Append(EOperation.Resume);
                     return;
+
                 case ERhoToken.For:
                     TranslateFor(node);
                     return;
@@ -223,9 +220,7 @@ namespace Pyro.RhoLang
         }
 
         private void AppendQuoted(RhoAstNode node)
-        {
-            Append(new Label(node.Text, true));
-        }
+            => Append(new Label(node.Text, true));
 
         void TranslateBinaryOp(RhoAstNode node, EOperation op)
         {
@@ -290,14 +285,6 @@ namespace Pyro.RhoLang
                     TranslateBinaryOp(node, EOperation.At);
                     return;
 
-                //case ERhoAst.Assignment:
-                //    // like a binary op, but argument order is reversed
-                //    //TranslateNode(node.GetChild(1));
-                //    TranslateNode(node.GetChild(0));
-                //    Append(node.GetChild(1).Value);
-                //    Append(EOperation.Store);
-                //    return;
-
                 case ERhoAst.Call:
                     TranslateCall(node);
                     return;
@@ -333,19 +320,16 @@ namespace Pyro.RhoLang
                     return;
             }
 
-            Fail($"Unsupported node {node}");
+            Fail($"Unsupported RhoAstNode {node}");
         }
 
         private void TranslateList(RhoAstNode node)
         {
             PushNew();
             foreach (var ch in node.Children)
-            {
                 TranslateNode(ch);
-            }
 
-            var top = Pop();
-            Append(top.Code);
+            Append(Pop().Code);
         }
 
         private void TranslateBlock(RhoAstNode node)
@@ -357,17 +341,18 @@ namespace Pyro.RhoLang
         private void TranslateFunction(RhoAstNode node)
         {
             var ch = node.Children;
-            var ident = ch[0].Value;
+            //var ident = ch[0].Value;
             var args = ch[1].Children;
             var block = ch[2].Children;
 
-            // write the body
+            // Write the body.
             PushNew();
             foreach (var obj in block)
                 TranslateNode(obj);
+
             var cont = Pop();
 
-            // add the args
+            // Add the args.
             foreach (var arg in args)
                 cont.AddArg(arg.Token.Text);
 
@@ -395,6 +380,7 @@ namespace Pyro.RhoLang
             var ch = node.Children;
             var subject = ch[0];
             var member = ch[1];
+            
             AppendQuoted(member);
             TranslateNode(subject);
             Append(EOperation.GetMember);
@@ -411,6 +397,7 @@ namespace Pyro.RhoLang
             TranslateNode(thenBlock);
             if (hasElse)
                 TranslateNode(elseBlock);
+
             TranslateNode(test);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
 
@@ -439,14 +426,11 @@ namespace Pyro.RhoLang
             Append(EOperation.ForLoop);
         }
 
-        static void TranslateWhile(RhoAstNode node)
-        {
-            throw new NotImplementedException("while loops");
-        }
+        private static void TranslateWhile(RhoAstNode node)
+            => throw new NotImplementedException("while loops");
 
         public override string ToString()
-        {
-            return $"=== RhoTranslator:\n--- Input: {_lexer.Input}--- Lexer: {_lexer}\n--- Parser: {_parser}\n--- Code: {Result}";
-        }
+            => $"=== RhoTranslator:\n--- Input: {_Lexer.Input}--- Lexer: {_Lexer}\n--- Parser: {_Parser}\n--- Code: {Result}";
     }
 }
+

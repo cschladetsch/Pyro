@@ -1,13 +1,13 @@
-﻿using Pyro.RhoLang.Lexer;
-
-namespace Pyro.RhoLang.Parser
+﻿namespace Pyro.RhoLang.Parser
 {
-    /// <summary>
-    /// Rho statements are stand-alone components made of sub-expressions.
-    ///
-    /// NOTE that Statements do not leave anything on the parsing stack:
-    /// They either succeed or leave a decent contextual lexical+semantic error message.
-    /// </summary>
+    using Lexer;
+
+    /// <inheritdoc cref="IProcess" />
+    ///  <summary>
+    ///  Rho statements are stand-alone components made of sub-expressions.
+    ///  NOTE that Statements do not leave anything on the parsing stack:
+    ///  They either succeed or leave a decent contextual lexical+semantic error message.
+    ///  </summary>
     public partial class RhoParser
     {
         private bool Statement()
@@ -118,6 +118,7 @@ namespace Pyro.RhoLang.Parser
             Expect(ERhoToken.OpenParan);
             if (!Expression())
                 return FailLocation("Assert needs an expression to test");
+
             Expect(ERhoToken.CloseParan);
 
             assert.Add(Pop());
@@ -130,6 +131,7 @@ namespace Pyro.RhoLang.Parser
             Expect(ERhoToken.OpenParan);
             if (!Expression())
                 return FailLocation("Write what?");
+
             Expect(ERhoToken.CloseParan);
 
             write.Add(Pop());
@@ -141,11 +143,13 @@ namespace Pyro.RhoLang.Parser
             var @if = NewNode(Consume());
             if (!Expression())
                 return FailLocation("If what?");
+
             @if.Add(Pop());
 
             // get the true-clause
             if (!Block())
                 return FailLocation("If needs a block");
+
             @if.Add(Pop());
 
             // if there's an else-clause, add it as well
@@ -154,6 +158,7 @@ namespace Pyro.RhoLang.Parser
             {
                 if (!Block())
                     return FailLocation("No else block");
+
                 @if.Add(Pop());
             }
 
@@ -216,10 +221,8 @@ namespace Pyro.RhoLang.Parser
 
         // for (a in [1 2 3])
         //      block
-        private bool ForEach(RhoAstNode @for)
-        {
-            return Expression() || FailLocation("For each in what?");
-        }
+        private bool ForEach(RhoAstNode @for) =>
+            Expression() || FailLocation("For each in what?");
 
         // for (a = 0; a < 10; ++a)
         //      block

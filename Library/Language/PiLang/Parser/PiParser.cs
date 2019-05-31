@@ -16,15 +16,15 @@ namespace Pyro.Language.Parser
         {
         }
 
-        public PiAstNode Root => _stack.Peek();
+        public PiAstNode Root => _Stack.Peek();
 
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
-            _current = 0;
-            _lexer = lex;
+            _Current = 0;
+            _Lexer = lex;
 
-            if (_lexer.Failed)
-                return Fail(_lexer.Error);
+            if (_Lexer.Failed)
+                return Fail(_Lexer.Error);
 
             RemoveWhitespace();
 
@@ -33,7 +33,7 @@ namespace Pyro.Language.Parser
 
         private void RemoveWhitespace()
         {
-            foreach (var tok in _lexer.Tokens)
+            foreach (var tok in _Lexer.Tokens)
             {
                 switch (tok.Type)
                 {
@@ -44,13 +44,13 @@ namespace Pyro.Language.Parser
                         continue;
                 }
 
-                _tokens.Add(tok);
+                _Tokens.Add(tok);
             }
         }
 
         private bool Run(EStructure st)
         {
-            _stack.Push(_astFactory.New(EPiAst.Continuation));
+            _Stack.Push(_AstFactory.New(EPiAst.Continuation));
             while (!Failed && NextSingle(Top()))
                 ;
             return !Failed;
@@ -78,7 +78,7 @@ namespace Pyro.Language.Parser
                     return false;
                 // most pi tokens just fall through to being passed to translator
                 default:
-                    context.Add(AddValue(_astFactory.New(Consume())));
+                    context.Add(AddValue(_AstFactory.New(Consume())));
                     return true;
             }
         }

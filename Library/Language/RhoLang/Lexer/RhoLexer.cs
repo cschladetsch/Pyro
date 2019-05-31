@@ -110,7 +110,7 @@ namespace Pyro.RhoLang.Lexer
                     Next();
                     var start = _offset + 1;
                     while (Next() != '\n')
-                        ;
+                        /* skip comment */;
 
                     var comment = _Factory.NewToken(
                         ERhoToken.Comment,
@@ -130,10 +130,9 @@ namespace Pyro.RhoLang.Lexer
 
         protected override void AddKeywordOrIdent(Slice slice)
         {
-            if (_KeyWords.TryGetValue(slice.Text, out var tok))
-                _Tokens.Add(_Factory.NewToken(tok, slice));
-            else
-                _Tokens.Add(_Factory.NewTokenIdent(slice));
+            _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
+                ? _Factory.NewToken(tok, slice)
+                : _Factory.NewTokenIdent(slice));
         }
 
         protected override void Terminate()
@@ -142,3 +141,4 @@ namespace Pyro.RhoLang.Lexer
         }
     }
 }
+

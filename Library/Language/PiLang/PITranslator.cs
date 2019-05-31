@@ -32,13 +32,13 @@ namespace Pyro.Language
             if (string.IsNullOrEmpty(input))
                 return true;
 
-            _lexer = new PiLexer(input);
+            _Lexer = new PiLexer(input);
             
-            if (!_lexer.Process())
-                return Fail($"LexerError: {_lexer.Error}");
+            if (!_Lexer.Process())
+                return Fail($"LexerError: {_Lexer.Error}");
 
-            _parser = new PiParser(_lexer);
-            if (!Parser.Process(_lexer, EStructure.Program))
+            _Parser = new PiParser(_Lexer);
+            if (!Parser.Process(_Lexer, EStructure.Program))
                 return Fail($"ParserError: {Parser.Error}");
 
             if (!TranslateNode(Parser.Root, _continuation.Code))
@@ -50,7 +50,7 @@ namespace Pyro.Language
 
         public override string ToString()
         {
-            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}\nCode: {_continuation}\n";
+            return $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
         }
 
         private bool TranslateNode(PiAstNode node, IList<object> objects)
