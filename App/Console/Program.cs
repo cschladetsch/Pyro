@@ -87,7 +87,7 @@ namespace Pyro.Console
                 return Error("Local server listen port number expected as argument");
 
             _peer = Network.Create.NewPeer(port);
-            return _peer.Start() || Error("Failed to start local server");
+            return _peer.StartSelfHosting() || Error("Failed to start local server");
         }
 
         private void RunInitialisationScripts()

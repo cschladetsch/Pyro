@@ -30,7 +30,7 @@ namespace Pyro.Network.Impl
         public Peer(int listenPort)
         {
             _server = new Server(this, listenPort);
-            _server.RecievedResponse += (server, client, text) =>
+            _server.ReceivedResponse += (server, client, text) =>
             {
                 OnReceivedResponse?.Invoke(server, client, text);
             };
@@ -63,7 +63,7 @@ namespace Pyro.Network.Impl
             return GetRemoteEndPoint()?.Port ?? 0;
         }
 
-        public bool Start()
+        public bool StartSelfHosting()
         {
             return !_server.Start() ? Fail("Couldn't start server") : SelfHost(_server.ListenPort);
         }

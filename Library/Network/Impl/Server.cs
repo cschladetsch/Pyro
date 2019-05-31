@@ -6,7 +6,8 @@ using Pyro.Exec;
 namespace Pyro.Network.Impl
 {
     /// <summary>
-    /// A server on the network executes incoming scripts and returns Executor data-stack to sender.
+    /// A server on the network executes incoming scripts and returns Executor data-stack
+    /// to sender.
     /// </summary>
     public class Server : NetCommon, IServer
     {
@@ -18,7 +19,11 @@ namespace Pyro.Network.Impl
 
         public int ListenPort => _port;
 
-        public event ReceivedResponseHandler RecievedResponse;
+        public event ReceivedResponseHandler ReceivedResponse;
+
+        private const int RequestBacklogCount = 50;
+        private Socket _listener;
+        private readonly int _port;
 
         public Server(Peer peer, int port)
             : base(peer)
@@ -35,7 +40,7 @@ namespace Pyro.Network.Impl
 
         private void AddTypes(IRegistry registry)
         {
-            Exec.RegisterTypes.Register(registry);
+            RegisterTypes.Register(registry);
 
             registry.Register(new ClassBuilder<Peer>(registry)
                 .Methods
@@ -54,7 +59,7 @@ namespace Pyro.Network.Impl
         {
             try
             {
-                RecievedResponse?.Invoke(this, _Peer.GetClient(sender), pi);
+                ReceivedResponse?.Invoke(this, _Peer.GetClient(sender), pi);
                 RunLocally(pi);
                 return SendResponse(sender);
             }
@@ -66,9 +71,11 @@ namespace Pyro.Network.Impl
 
         private void RunLocally(string pi)
         {
-            var cont = TranslatePi(pi).Code[0] as Continuation;
-            cont.Scope = _Exec.Scope;
-            _Exec.Continue(cont);
+            if (TranslatePi(pi).Code[0] is Continuation cont)
+            {
+                cont.Scope = _Exec.Scope;
+                _Exec.Continue(cont);
+            }
         }
 
         private bool SendResponse(Socket sender)
@@ -133,9 +140,5 @@ namespace Pyro.Network.Impl
             Receive(socket);
             Listen();
         }
-
-        private const int RequestBacklogCount = 50;
-        private Socket _listener;
-        private readonly int _port;
     }
 }

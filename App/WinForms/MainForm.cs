@@ -26,21 +26,21 @@ namespace WinForms
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
 
-        private bool _single = false;
+        private bool _single = true;
 
         public MainForm()
         {
             InitializeComponent();
 
             _context = new Context();
-            _peer = Create.NewPeer(ListenPort);
-            _peer.OnConnected += Connected;
-            _peer.OnReceivedResponse += Received;
-            if (!_peer.Start())
-            {
-                Console.WriteLine(_peer.Error);
-                _single = true;
-            }
+            //_peer = Create.NewPeer(ListenPort);
+            //_peer.OnConnected += Connected;
+            //_peer.OnReceivedResponse += Received;
+            //if (!_peer.StartSelfHosting())
+            //{
+            //    Console.WriteLine(_peer.Error);
+            //    _single = true;
+            //}
 
             // clear the data stack from any design-time junk.
             Perform(EOperation.Clear);

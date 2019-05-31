@@ -144,7 +144,7 @@ namespace Pyro.Exec
             case EOperation.FreezeYaml:
                 return "freezey";
             case EOperation.ThawYaml:
-                return "thawt";
+                return "thawy";
             case EOperation.Not:
                 return "!";
             case EOperation.Equiv:
@@ -184,7 +184,7 @@ namespace Pyro.Exec
             case EOperation.PushFront:
                 return "push_front";
             case EOperation.ToList:
-                return "to_list";
+                return "tolist";
             case EOperation.Remove:
                 return "remove";
             case EOperation.Insert:

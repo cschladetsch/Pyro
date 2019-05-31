@@ -29,7 +29,7 @@ namespace Pyro.Test
             peer.OnConnected += Connected;
             peer.OnReceivedResponse += Received;
 
-            Assert.IsTrue(peer.Start(), peer.Error);
+            Assert.IsTrue(peer.StartSelfHosting(), peer.Error);
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             //Assert.IsTrue(peer.Execute("pi"), peer.Error);
 
@@ -92,7 +92,7 @@ namespace Pyro.Test
         public void TestAgents()
         {
             var peer = Network.Create.NewPeer(ListenPort);
-            Assert.IsTrue(peer.Start(), peer.Error);
+            Assert.IsTrue(peer.StartSelfHosting(), peer.Error);
 
             IAgent007 agent = peer.NewAgent<IAgent007>();
 

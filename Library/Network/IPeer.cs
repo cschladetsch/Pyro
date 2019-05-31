@@ -21,7 +21,7 @@ namespace Pyro.Network
         event ReceivedResponseHandler OnReceivedResponse;
         event ConnectedHandler OnConnected;
 
-        bool Start();
+        bool StartSelfHosting();
         bool Connect(string hostName, int port);
         bool Enter(IClient client);
         bool Execute(Continuation continuation);
