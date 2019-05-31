@@ -86,6 +86,10 @@
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Ext\CliWrap\CliWrap\CliWrap.csproj">
+      <Project>{6a524d8f-bb5f-47b5-8983-524480a6f860}</Project>
+      <Name>CliWrap</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>

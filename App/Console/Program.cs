@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Configuration;
+using System.Security.Principal;
 using System.Text;
-using Pyro.Exec;
 
 namespace Pyro.Console
 {
@@ -31,10 +35,30 @@ namespace Pyro.Console
             new Program(args).Repl();
         }
 
+        private Program(string[] args)
+            : base(args)
+        {
+            _context = new Context();
+            RegisterTypes.Register(_context.Registry);
+
+            if (_useLoopback && !StartPeer(args))
+                Exit(1);
+
+            RunInitialisationScripts();
+
+            if (_peer != null)
+                _peer.OnReceivedResponse += (server, client, text) => WriteLine(text, ConsoleColor.Magenta);
+        }
+
+
         public bool Execute(string input)
         {
             if (string.IsNullOrEmpty(input))
+            {
+                if (_peer != null)
+                    WriteLocalDataStack();
                 return true;
+            }
 
             try
             {
@@ -84,20 +108,6 @@ namespace Pyro.Console
             Con.Write(str.ToString());
         }
 
-        private Program(string[] args)
-            : base(args)
-        {
-            _context = new Context();
-
-            if (_useLoopback && !StartPeer(args))
-                Exit(1);
-
-            RunInitialisationScripts();
-
-            if (_peer != null)
-                _peer.OnReceivedResponse += (server, client, text) => WriteLine(text, ConsoleColor.Magenta);
-        }
-
         private bool StartPeer(string[] args)
         {
             var port = ListenPort;
@@ -126,14 +136,15 @@ namespace Pyro.Console
                 {
                     WritePrompt();
                     var input = GetInput();
-                    if (string.IsNullOrEmpty(input) && _peer != null)
+                    if (string.IsNullOrEmpty(input))
                     {
-                        _peer.Remote.Continue("1 drop");    // hack to force stack refresh!
+                        _peer?.Remote?.Continue("1 drop");    // hack to force stack refresh!
                         System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
-                        WriteDataStack();
                     }
                     else if (!Execute(input))
                         continue;
+
+                    WriteDataStack();
                 }
                 catch (Exception e)
                 {
@@ -142,13 +153,35 @@ namespace Pyro.Console
             }
         }
 
-        private string GetInput()
+        private static string GetInput()
         {
             return Con.ReadLine();
         }
 
         private bool PreProcess(string input)
         {
+            //if (!string.IsNullOrEmpty(input))
+            //{
+            //    if (input.StartsWith("."))
+            //    {
+            //        //var cmd = input.Substring(1);
+            //        var bash = @"C:\Program Files\Git\git-bash.exe";
+            //        var proc = new System.Diagnostics.Process();
+            //        proc.OutputDataReceived += (sender, args) => WriteLine(args.Data);
+            //        ProcessStartInfo si = new ProcessStartInfo();
+            //        si.RedirectStandardOutput = true;
+            //        si.UseShellExecute = false;
+            //        si.CreateNoWindow = true;
+            //        si.RedirectStandardOutput = true;
+            //        si.FileName = bash;
+            //        //si.Arguments = cmd;
+            //        proc.StartInfo = si;
+            //        var sr = 
+            //        proc.StandardOutput = 
+            //        return true;
+            //    }
+            //}
+
             switch (input)
             {
                 case "?":
@@ -175,7 +208,10 @@ namespace Pyro.Console
         private void WriteDataStack()
         {
             var current = Con.ForegroundColor;
-            WriteDataStackContents(_peer.Remote);
+            if (_peer != null)
+                WriteDataStackContents(_peer.Remote);
+            else
+                WriteLocalDataStack();
             Con.ForegroundColor = current;
         }
 

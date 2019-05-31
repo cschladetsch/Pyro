@@ -65,6 +65,7 @@ namespace Pyro.AppCommon
         /// </summary>
         private static void ConWrite(string text, ConsoleColor color, Action<string> write)
         {
+            //System.Console.WriteLine(text);
             var current = Con.ForegroundColor;
             Con.ForegroundColor = color;
             write(text);
