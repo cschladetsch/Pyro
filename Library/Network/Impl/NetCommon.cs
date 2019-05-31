@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+
 using Pyro.Exec;
 using Context = Pyro.ExecutionContext.Context;
 using ELanguage = Pyro.Language.ELanguage;
@@ -12,7 +13,9 @@ namespace Pyro.Network.Impl
     /// <summary>
     /// Functionality common to both Client and Server aspects of a Peer
     /// </summary>
-    public abstract class NetCommon : NetworkConsoleWriter, INetCommon
+    public abstract class NetCommon
+        : NetworkConsoleWriter
+        , INetCommon
     {
         public Context Context => _Context;
         public abstract Socket Socket { get; set; }
@@ -21,6 +24,7 @@ namespace Pyro.Network.Impl
         protected Context _Context;
         protected Executor _Exec => _Context.Executor;
         protected IRegistry _Registry => _Context.Registry;
+        protected bool _Stopping;
 
         protected NetCommon(Peer peer)
         {
@@ -53,7 +57,7 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        private void Sent(IAsyncResult ar)
+        private static void Sent(IAsyncResult ar)
         {
             var socket = ar.AsyncState as Socket;
             socket?.EndSend(ar);
@@ -61,6 +65,7 @@ namespace Pyro.Network.Impl
 
         protected IPAddress GetAddress(string hostname)
         {
+            // TODO: search for Ip6 address first
             return Dns.GetHostAddresses(hostname).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
         }
 
@@ -73,6 +78,16 @@ namespace Pyro.Network.Impl
         protected virtual bool ProcessReceived(Socket sender, string pi)
         {
             return WriteLine($"Recv: {pi}");
+        }
+
+        protected IPEndPoint GetLocalEndPoint(int port)
+        {
+            var address = GetAddress(Dns.GetHostName());
+            if (address != null) 
+                return new IPEndPoint(address, port);
+
+            Error("Couldn't find suitable localhost address");
+            return null;
         }
 
         protected void ReadCallback(IAsyncResult ar)
@@ -135,17 +150,6 @@ namespace Pyro.Network.Impl
             state.sb.Clear();
             state.sb.Append(content.Substring(end + 1));
         }
-
-        protected IPEndPoint GetLocalEndPoint(int port)
-        {
-            var address = GetAddress(Dns.GetHostName());
-            if (address != null) 
-                return new IPEndPoint(address, port);
-
-            Error("Couldn't find suitable host address");
-            return null;
-        }
-
-        protected bool _Stopping;
     }
 }
+

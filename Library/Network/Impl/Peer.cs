@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+
 using Flow;
 using Pyro.Exec;
 
@@ -24,18 +25,51 @@ namespace Pyro.Network.Impl
         public int HostPort => GetHostPort();
 
         private Server _server;
-        private readonly List<Client> _clients = new List<Client>();
         private IClient _remote;
+        private readonly List<Client> _clients = new List<Client>();
+
+        public Peer()
+        {
+        }
 
         public Peer(int listenPort)
         {
-            _server = new Server(this, listenPort);
-            _server.ReceivedResponse += (server, client, text) =>
-            {
-                OnReceivedResponse?.Invoke(server, client, text);
-            };
+            StartServer(listenPort);
         }
 
+        public override string ToString()
+        {
+            var text = $"Peer: {Clients.Count} clients, ";
+            if (_server != null)
+                text += $"{_server}";
+            else
+                text += "no server";
+            return text;
+        }
+
+        public static void Register(IRegistry reg)
+        {
+            reg.Register(new ClassBuilder<Peer>(reg)
+                .Methods
+                    .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
+                    .Add<int>("StartServer", (q, s) => q.StartServer(s))
+                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
+                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
+                    .Add<Client>("Leave", (q, s) => q.Leave())
+                .Class);
+        }
+
+        public void StartServer(int listenPort)
+        {
+            _server = new Server(this, listenPort);
+            _server.ReceivedResponse += (server, client, text) => { OnReceivedResponse?.Invoke(server, client, text); };
+        }
+
+        /// <summary>
+        /// Connect to local loopback address.
+        /// </summary>
+        /// <param name="port">The port to connect to.</param>
+        /// <returns>True if connection made,</returns>
         public bool SelfHost(int port)
         {
             if (!Connect(GetLocalHostname(), port))
@@ -97,6 +131,7 @@ namespace Pyro.Network.Impl
         {
             if (client == null)
                 return Fail("Null client");
+
             if (client.Socket == null || !client.Socket.Connected)
                 return Fail("Client not connected");
 
@@ -147,8 +182,7 @@ namespace Pyro.Network.Impl
         public void NewConnection(Socket socket)
         {
             //WriteLine($"Connected to {socket.RemoteEndPoint}");
-            var address = socket.RemoteEndPoint as IPEndPoint;
-            if (address == null)
+            if (!(socket.RemoteEndPoint is IPEndPoint address))
             {
                 Error($"{socket} is not an IPEndPoint");
                 return;
@@ -158,7 +192,6 @@ namespace Pyro.Network.Impl
             {
                 if (client.HostName != address.Address.ToString()) 
                     continue;
-                //client.CompleteConnect(socket);
                 OnConnected?.Invoke(this, client);
                 return;
             }
@@ -184,14 +217,12 @@ namespace Pyro.Network.Impl
 
         public bool EnterRemoteAt(int index)
         {
-            return index >= _clients.Count ? Fail("No such client id") : EnterRemote(_clients[index]);
+            return index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);
         }
 
         private IPEndPoint GetRemoteEndPoint()
         {
-            var socket = Remote?.Socket;
-            return socket?.RemoteEndPoint as IPEndPoint;
+            return Remote?.Socket?.RemoteEndPoint as IPEndPoint;
         }
-
     }
 }

@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using Pyro.Exec;
 
 namespace Pyro.Network.Impl
 {
+    using Exec;
+
+    /// <inheritdoc cref="IClient" />
     /// <inheritdoc cref="NetCommon" />
     /// <summary>
     /// A connection to a remote server. Can send executable script, and receive
     /// results that are also executable scripts.
     /// </summary>
-    public class Client : NetCommon, IClient
+    public class Client
+        : NetCommon
+        , IClient
     {
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
@@ -37,25 +41,19 @@ namespace Pyro.Network.Impl
         }
 
         public void CompleteConnect(Socket socket)
-        {
-            _socket = socket;
-        }
-
-        public bool Continue(Continuation cont)
-        {
-            return Send(cont?.ToText());
-        }
-
-        public bool Continue(string script)
-        {
-            return !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
-        }
+            => _socket = socket;
+        
+        public bool Continue(Continuation cont) 
+            => Send(cont?.ToText());
+        
+        public bool Continue(string script) 
+            => !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
 
         public bool Connect(string hostName, int port)
         {
             var address = GetAddress(hostName);
             if (address == null)
-                return Fail($"Couldn't find Ip4 address for {hostName}");
+                return Fail($"Couldn't find address for {hostName}");
             
             var endPoint = new IPEndPoint(address, port);
             var client = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -64,10 +62,7 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        public bool Send(Continuation continuation)
-        {
-            return Send(continuation.ToText());
-        }
+        public bool Send(Continuation continuation) => Send(continuation.ToText());
 
         public void Close()
         {
@@ -75,12 +70,6 @@ namespace Pyro.Network.Impl
             _socket.Close();
             _socket = null;
         }
-
-        //public bool ProcessResponse(string response)
-        //{
-        //    WriteLine($"Recv: {response}");
-        //    return true;
-        //}
 
         private void Connected(IAsyncResult ar)
         {
@@ -132,6 +121,5 @@ namespace Pyro.Network.Impl
 
         private Socket _socket;
         private IList<object> _stack;
-
     }
 }

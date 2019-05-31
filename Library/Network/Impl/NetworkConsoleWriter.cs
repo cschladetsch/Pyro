@@ -3,7 +3,11 @@ using Con = System.Console;
 
 namespace Pyro.Network.Impl
 {
-    public class NetworkConsoleWriter : Process
+    /// <summary>
+    /// Base for Peer, Client and Server.
+    /// </summary>
+    public class NetworkConsoleWriter
+        : Process
     {
         public override bool Fail(string text)
         {
@@ -30,3 +34,4 @@ namespace Pyro.Network.Impl
         }
     }
 }
+
