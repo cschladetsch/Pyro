@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lexer\PiLexer.Operations.cs" />
     <Compile Include="Lexer\RegisterTypes.cs" />
     <Compile Include="Parser\AstFactory.cs" />
     <Compile Include="Parser\PiAstNode.cs" />

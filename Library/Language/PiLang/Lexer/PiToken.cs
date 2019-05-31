@@ -1,7 +1,8 @@
-﻿using Pyro.Language.Impl;
-
-namespace Pyro.Language.Lexer
+﻿namespace Pyro.Language.Lexer
 {
+    using Impl;
+
+    /// <inheritdoc cref="ITokenBase{TEnum}" />
     /// <summary>
     /// A Pi-lang token.
     /// </summary>
@@ -9,10 +10,7 @@ namespace Pyro.Language.Lexer
         : TokenBase<EPiToken>
         , ITokenNode<EPiToken>
     {
-        public PiToken()
-        {
-            _type = EPiToken.None;
-        }
+        public PiToken() => _type = EPiToken.None;
 
         public PiToken(EPiToken type, Slice slice)
             : base(type, slice)
@@ -20,3 +18,4 @@ namespace Pyro.Language.Lexer
         }
     }
 }
+
