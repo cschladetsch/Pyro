@@ -69,17 +69,14 @@ namespace Pyro.Language.Lexer
                 if (Peek() == '.')
                 {
                     Next();
-                    if (Peek() == '.')
-                    {
-                        Next();
-                        return Add(EPiToken.Resume, 3);
-                    }
-                    return Fail("Two dots doesn't work");
+                    if (Peek() != '.')
+                        return Fail("Two dots doesn't work");
+
+                    Next();
+                    return Add(EPiToken.Resume, 3);
                 }
                 else if (Peek() == '@')
-                {
                     return AddTwoCharOp(EPiToken.GetMember);
-                }
 
                 return Add(EPiToken.Dot);
 
@@ -91,26 +88,22 @@ namespace Pyro.Language.Lexer
                 return Add(EPiToken.Plus);
 
             case '/':
-                if (Peek() == '/')
-                {
-                    Next();
-                    var start = _offset + 1;
-                    while (Next() != '\n')
-                        /* skip to eol*/;
+                if (Peek() != '/')
+                    return Add(EPiToken.Divide);
 
-                    var comment = _Factory.NewToken(
-                        EPiToken.Comment,
-                        new Slice(this, start, _offset));
-                    _Tokens.Add(comment);
-                    return true;
-                }
+                Next();
+                var start = _offset + 1;
+                while (Next() != '\n')
+                    /* skip to eol*/;
 
-                return Add(EPiToken.Divide);
+                _Tokens.Add(_Factory.NewToken(
+                    EPiToken.Comment,
+                    new Slice(this, start, _offset)));
+
+                return true;
             }
 
-            LexError($"Unrecognised '{current}'");
-
-            return false;
+            return LexError($"Unrecognised '{current}'");
         }
 
         private bool AddQuotedOperation()
