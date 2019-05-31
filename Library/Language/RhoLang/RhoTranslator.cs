@@ -41,10 +41,12 @@ namespace Pyro.RhoLang
             if (_parser.Failed)
                 return Fail(_parser.Error);
 
-            //WriteLine(_parser.PrintTree());
+            WriteLine(_parser.PrintTree());
             TranslateNode(_parser.Result);
 
             result = Result;
+
+            WriteLine($"{this}");
 
             return !Failed;
         }
