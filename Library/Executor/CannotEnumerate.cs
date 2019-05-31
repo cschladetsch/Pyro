@@ -3,7 +3,8 @@
 namespace Pyro.Exec
 {
     [Serializable]
-    internal class CannotEnumerate : Exception
+    internal class CannotEnumerate
+        : Exception
     {
         private readonly object _obj;
 

@@ -1,12 +1,14 @@
 ﻿using System.Linq;
-using System.Reflection;
-using NUnit.Framework;
-using Pyro.Language.Lexer;
 
-namespace Diver.Test
+using NUnit.Framework;
+
+namespace Pyro.Test
 {
+    using Language.Lexer;
+
     [TestFixture]
-    public class TestPiLexer : TestCommon
+    public class TestPiLexer
+        : TestCommon
     {
         [Test]
         public void TestIdents()
@@ -56,3 +58,4 @@ namespace Diver.Test
         }
     }
 }
+

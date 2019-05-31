@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 
-using Pyro;
-
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
     [TestFixture]
     public class TestRhoCustomClass

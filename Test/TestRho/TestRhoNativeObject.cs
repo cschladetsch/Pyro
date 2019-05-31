@@ -1,9 +1,10 @@
 ﻿using NUnit.Framework;
 
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
     [TestFixture]
-    public class TestRhoNativeObject : TestCommon
+    public class TestRhoNativeObject
+        : TestCommon
     {
         [Test]
         public void TestString()

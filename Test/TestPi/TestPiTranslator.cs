@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using Pyro;
-using Pyro.Exec;
 
-namespace Diver.Test
+using NUnit.Framework;
+
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestPiTranslator : TestCommon
+    public class TestPiTranslator
+        : TestCommon
     {
         [Test]
         public void TestContinuations()
@@ -185,3 +185,4 @@ namespace Diver.Test
         }
     }
 }
+

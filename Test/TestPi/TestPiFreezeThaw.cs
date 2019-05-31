@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestPiFreezeThaw : TestCommon
+    public class TestPiFreezeThaw
+        : TestCommon
     {
         [SetUp]
         public new void Setup()

@@ -1,5 +1,6 @@
 ﻿namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// An interface to an object created by a registry.
     /// </summary>

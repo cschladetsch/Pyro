@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Pyro;
 using Pyro.Language.Lexer;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     public class UserModel
     {
@@ -11,7 +11,8 @@ namespace Diver.Test
     }
 
     [TestFixture]
-    public class TestNativeObjects : TestCommon
+    public class TestNativeObjects
+        : TestCommon
     {
         [Test]
         public void TestNew()

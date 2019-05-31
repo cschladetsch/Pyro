@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Pyro.Exec
 {
+    /// <inheritdoc />
     /// <summary>
     /// Debug methods for executor. Removed from main implementation for clarity.
     /// </summary>
@@ -10,23 +11,23 @@ namespace Pyro.Exec
     {
         public int TraceLevel;
 
-        void Write(object obj)
+        private void Write(object obj)
         {
             Write($"{obj}");
         }
 
-        void WriteLine(object obj)
+        private void WriteLine(object obj)
         {
             WriteLine($"{obj}");
         }
 
-        void Write(string text, params object[] args)
+        static void Write(string text, params object[] args)
         {
             System.Diagnostics.Debug.Write(text);
             Console.Write(text);
         }
-        
-        void WriteLine(string fmt, params object[] args)
+
+        private void WriteLine(string fmt, params object[] args)
         {
             if (args == null || args.Length == 0)
                 Write(fmt + '\n');
@@ -73,9 +74,9 @@ namespace Pyro.Exec
         public void WriteDataStack(StringBuilder str, int max = 4)
         {
             str.AppendLine("Data:");
-            var data = _data.ToArray();
+            var data = DataStack.ToArray();
             max = Math.Min(data.Length, max);
-            for (int n = max - 1; n >= 0; --n)
+            for (var n = max - 1; n >= 0; --n)
             {
                 var obj = data[n];
                 str.AppendLine($"    [{n}]: {GetTyped(obj)}");
@@ -102,3 +103,4 @@ namespace Pyro.Exec
         }
     }
 }
+

@@ -105,3 +105,4 @@ namespace Pyro
         object Duplicate(object obj);
     }
 }
+

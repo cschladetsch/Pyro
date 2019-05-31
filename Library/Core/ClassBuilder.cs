@@ -9,11 +9,15 @@ namespace Pyro
     /// Make a new class that can added to a Registry. This isn't always necessary, unless there are overloaded methods in the class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ClassBuilder<T> where T : class//, new()
+    public class ClassBuilder<T>
+        where T : class
     {
         public IClass<T> Class => _class;
         public AddMethod Methods;
         public AddProperty Properties;
+
+        private readonly IClass<T> _class;
+        private readonly IRegistry _registry;
 
         public ClassBuilder(IRegistry reg)
         {
@@ -91,8 +95,6 @@ namespace Pyro
         public class AddProperty
         {
         }
-
-        private readonly IClass<T> _class;
-        private readonly IRegistry _registry;
     }
 }
+

@@ -13,6 +13,11 @@ namespace Pyro.Impl
     {
         public Guid Guid { get; }
 
+        private int _nextId;
+        private readonly Dictionary<string, IClassBase> _classNames = new Dictionary<string, IClassBase>();
+        private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
+        private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
+
         public Registry()
         {
             BuiltinTypes.BuiltinTypes.Register(this);
@@ -52,7 +57,7 @@ namespace Pyro.Impl
                     val = GetRef<T>(rb.Id).Value;
                     return true;
             }
-            val = default(T);
+            val = default;
             return false;
         }
 
@@ -92,9 +97,11 @@ namespace Pyro.Impl
         {
             if (obj is IConstRefBase rb)
                 obj = rb.BaseValue;
+
             var type = obj?.GetType();
             if (type == null)
                 return;
+
             if (_classes.TryGetValue(type, out var @class))
                 @class.AppendText(stringBuilder, obj);
             else
@@ -129,6 +136,7 @@ namespace Pyro.Impl
             var klass = GetClass<T>();
             if (klass == null)
                 throw new CouldNotMakeClass(value.GetType());
+
             return AddNew<T>(klass, value);
         }
 
@@ -137,6 +145,7 @@ namespace Pyro.Impl
             var klass = GetClass<T>();
             if (klass == null)
                 throw new CouldNotMakeClass(typeof(T));
+
             return AddNew<T>(klass);
         }
 
@@ -146,6 +155,7 @@ namespace Pyro.Impl
             var classBase = GetClass(type);
             if (classBase == null)
                 throw new CouldNotMakeClass(value?.GetType());
+
             return classBase.Create(NextId(), value);
         }
 
@@ -163,9 +173,11 @@ namespace Pyro.Impl
         {
             if (type == null)
                 type = typeof(void);
+
             var klass = FindClass(type);
             if (klass != null)
                 return klass;
+
             return _classes[type] = new ClassBase(this, type);
         }
 
@@ -202,7 +214,6 @@ namespace Pyro.Impl
         private void AddNewInstance(IClassBase classBase, IRefBase refBase, Id id)
         {
             Reflect(classBase, refBase);
-
             _instances.Add(id, refBase);
         }
 
@@ -214,6 +225,7 @@ namespace Pyro.Impl
             reflected.SelfBase = refBase;
             if (!(refBase is ConstRefBase self))
                 throw new Exception("Internal error: IRef is not a ConstRef");
+
             self.Registry = this;
             self.Class = classBase;
         }
@@ -228,10 +240,5 @@ namespace Pyro.Impl
         {
             return new Id(++_nextId);
         }
-
-        private int _nextId;
-        private readonly Dictionary<string, IClassBase> _classNames = new Dictionary<string, IClassBase>();
-        private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
-        private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
     }
 }

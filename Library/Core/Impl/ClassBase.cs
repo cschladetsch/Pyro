@@ -4,11 +4,18 @@ using System.Text;
 
 namespace Pyro.Impl
 {
+    /// <inheritdoc cref="IClassBase" />
+    /// <inheritdoc cref="StructBase" />
+    /// <summary>
+    /// Common to all Class types used by a Registry.
+    /// </summary>
     public class ClassBase
         : StructBase
         , IClassBase
     {
         public int TypeNumber { get; set; }
+
+        private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();
 
         internal ClassBase(IRegistry reg, Type type)
             : base(reg, type)
@@ -67,7 +74,6 @@ namespace Pyro.Impl
         {
             str.Append(value);
         }
-
-        private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();
     }
 }
+

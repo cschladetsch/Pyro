@@ -5,37 +5,36 @@ namespace Pyro
     /// </summary>
     public class Id
     {
-        public int Value => _value;
+        public int Value { get; }
 
         internal static Id None = new Id(0);
 
         internal Id(int start = 0)
         {
-            _value = start;
+            Value = start;
         }
 
         public Id(Id prev)
-            : this(prev._value + 1)
+            : this(prev.Value + 1)
         {
         }
 
         public override string ToString()
         {
-            return $"#{_value}";
+            return $"#{Value}";
         }
 
         public override int GetHashCode()
         {
-            return _value;
+            return Value;
         }
 
         public override bool Equals(object obj)
         {
             if (!(obj is Id id))
                 return false;
-            return id._value == _value;
+            return id.Value == Value;
         }
-
-        private readonly int _value;
     }
 }
+

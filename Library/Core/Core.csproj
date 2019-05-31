@@ -78,6 +78,7 @@
     <Compile Include="Impl\Factory.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="IConstRef.cs" />
+    <Compile Include="IReflected.cs" />
     <Compile Include="Impl\RefBase.cs" />
     <Compile Include="Impl\VoidCallable.cs" />
     <Compile Include="IProcess.cs" />
@@ -108,8 +109,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reflected.cs" />
+    <Compile Include="Impl\Reflected.cs" />
     <Compile Include="Impl\StringSlice.cs" />
+    <Compile Include="ReflectedBase.cs" />
     <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>

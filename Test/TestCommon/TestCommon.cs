@@ -4,21 +4,24 @@ using System.IO;
 using System.Linq;
 
 using NUnit.Framework;
-using Pyro;
-using Pyro.Exec;
-using Pyro.Impl;
-using Pyro.Language;
-using Pyro.Language.Lexer;
-using Pyro.RhoLang;
-using RegisterTypes = Pyro.Exec.RegisterTypes;
 
-namespace Diver.Test
+
+namespace Pyro.Test
 {
+    using Exec;
+    using Impl;
+    using Language;
+    using Language.Lexer;
+    using RhoLang;
+    using RegisterTypes = Exec.RegisterTypes;
+
+    /// <inheritdoc />
     /// <summary>
     /// Common to most unit tests in the system
     /// </summary>
     [TestFixture]
-    public class TestCommon : Process
+    public class TestCommon
+        : Process
     {
         public bool Verbose = true;
         public const string ScriptsFolder = "Scripts";
@@ -30,6 +33,7 @@ namespace Diver.Test
         protected IRegistry _reg;
         protected IRef<Executor> _executor;
         protected Executor _exec => _executor.Value;
+
         private ITranslator _pi;
         private ITranslator _rho;
 
@@ -40,6 +44,7 @@ namespace Diver.Test
             _pi = new PiTranslator(_reg);
             _rho = new RhoTranslator(_reg);
             _executor = _reg.Add(new Executor());
+
             RegisterTypes.Register(_reg);
         }
 
@@ -65,6 +70,7 @@ namespace Diver.Test
             var trans = new PiTranslator(_reg);
             if (!trans.Translate(text, out var cont))
                 WriteLine($"Error: {trans.Error}");
+
             Assert.IsFalse(trans.Failed, trans.Error);
             return _continuation = cont;
         }
@@ -74,8 +80,10 @@ namespace Diver.Test
             var trans = new RhoTranslator(_reg);
             if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
+
             if (trace)
                 WriteLine(trans.ToString());
+
             Assert.IsFalse(trans.Failed);
             return _continuation = cont;
         }
@@ -132,6 +140,7 @@ namespace Diver.Test
                 var trans = MakeTranslator(filePath);
                 if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
+
                 Assert.IsFalse(trans.Failed);
                 Time($"Exec script `{fileName}`", () => _exec.Continue(cont));
             }
@@ -178,9 +187,9 @@ namespace Diver.Test
         protected T Pop<T>()
         {
             var top = Pop();
-            if (top is T result) // deal with unwrapped values
+            if (top is T result)                // Deal with unwrapped values.
                 return result;
-            var typed = top as IConstRef<T>; // deal with boxed values
+            var typed = top as IConstRef<T>;    // Deal with boxed values.
             Assert.IsNotNull(typed);
             return typed.Value;
         }
@@ -276,10 +285,12 @@ namespace Diver.Test
                 case ".pi":
                     TestFreezeThawPi(script);
                     return;
+
                 case ".rho":
                     TestFreezeThawRho(script);
                     return;
             }
+
             Assert.Fail($"Unsupported extension {fileName}");
         }
 
@@ -327,3 +338,4 @@ namespace Diver.Test
         }
     }
 }
+

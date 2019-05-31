@@ -7,16 +7,6 @@ namespace Pyro.Impl
         : ConstRef<T>
         , IRef<T>
     {
-        public Ref(IRegistry reg, IClass<T> @class, Id id)
-            : base(reg, @class, id)
-        {
-        }
-
-        public Ref(IRegistry reg, IClass<T> class1, Id id, T value)
-            : base(reg, class1, id, value)
-        {
-        }
-
         public new T Value
         {
             get => (T) BaseValue;
@@ -27,6 +17,16 @@ namespace Pyro.Impl
         {
             get => _baseValue;
             set => _baseValue = value;
+        }
+
+        public Ref(IRegistry reg, IClass<T> @class, Id id)
+            : base(reg, @class, id)
+        {
+        }
+
+        public Ref(IRegistry reg, IClass<T> class1, Id id, T value)
+            : base(reg, class1, id, value)
+        {
         }
 
         public void Set(object value)

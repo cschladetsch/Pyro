@@ -16,17 +16,31 @@ namespace Pyro.Impl
         public string RealTypeName => Type.FullName;
         public Type Type => _type;
 
+        protected readonly IRegistry _registry;
+
+        private readonly AssemblyName _assembly;
+        private readonly Version _version;
+        private readonly Type _type;
+        private readonly string _typeName;
+
+        private readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
+        private readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
+        private readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
+
         internal StructBase(IRegistry reg, Type type)
         {
             _type = type;
             _registry = reg;
             InstanceType = type;
             _typeName = type.FullName;
+
             foreach (var prop in type.GetProperties())
                 _properties[prop.Name] = prop;
+
             foreach (var method in type.GetMethods())
                 _methods[method.Name] = method;
-            foreach (var ev in type.GetEvents())
+
+             foreach (var ev in type.GetEvents())
                 _events[ev.Name] = ev;
         }
 
@@ -34,6 +48,7 @@ namespace Pyro.Impl
         {
             if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
+
             pi.SetValue(obj, value);
         }
 
@@ -41,6 +56,7 @@ namespace Pyro.Impl
         {
             if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
+
             return pi.GetValue(obj);
         }
 
@@ -48,6 +64,7 @@ namespace Pyro.Impl
         {
             if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
+
             pi.SetValue(obj, value);
         }
 
@@ -71,15 +88,5 @@ namespace Pyro.Impl
         {
             throw new System.NotImplementedException();
         }
-
-        private readonly AssemblyName _assembly;
-        private readonly Version _version;
-        private readonly Type _type;
-        private readonly string _typeName;
-        protected readonly IRegistry _registry;
-
-        private readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
-        private readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
-        private readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
     }
 }

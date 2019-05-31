@@ -23,3 +23,4 @@
         bool FromText(IStringSlice s, IRegistry reg);
     }
 }
+

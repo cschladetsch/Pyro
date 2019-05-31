@@ -1,10 +1,12 @@
 ﻿using System.IO;
+
 using NUnit.Framework;
 
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
     [TestFixture]
-    public class TestRhoScripts : TestCommon
+    public class TestRhoScripts
+        : TestCommon
     {
         [Test]
         public void RunSomeScripts()

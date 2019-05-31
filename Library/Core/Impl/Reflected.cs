@@ -4,23 +4,17 @@ using System.Text;
 
 namespace Pyro
 {
-    public interface IReflected
+    /// <inheritdoc cref="IReflected{T}" />
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class Reflected<T>
+        : ReflectedBase
+        , IReflected<T>
     {
-        IRefBase SelfBase { get; set; }
-    }
+        private IDictionary<string, object> _scope;
 
-    public interface IReflected<T>
-    {
-        IRef<T> Self { get; }
-    }
-
-    public class ReflectedBase : IReflected
-    {
-        public IRefBase SelfBase { get; set; }
-    }
-
-    public class Reflected<T> : ReflectedBase, IReflected<T>
-    {
         public IRef<T> Self
         {
             get => SelfBase as IRef<T>;
@@ -44,7 +38,5 @@ namespace Pyro
             Self.Class.AppendText(str, Self.Value);
             return str.ToString();
         }
-
-        private IDictionary<string, object> _scope;
     }
 }

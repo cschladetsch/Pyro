@@ -1,9 +1,10 @@
 ﻿using NUnit.Framework;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestRhoFreezeThaw : TestCommon
+    public class TestRhoFreezeThaw
+        : TestCommon
     {
         [Test]
         public void TestFreezeThaw()

@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using NUnit.Framework;
-using Pyro;
-using Pyro.Language;
-using Pyro.Language.Lexer;
-using Pyro.Language.Parser;
 
-namespace Diver.Test
+using NUnit.Framework;
+
+namespace Pyro.Test
 {
+    using Language;
+    using Language.Lexer;
+    using Language.Parser;
+
     [TestFixture()]
-    class TestPiParser : TestCommon
+    class TestPiParser
+        : TestCommon
     {
         protected internal PiParser PiParser;
         protected internal IList<PiAstNode> Sequence => PiParser.Root.Children;
@@ -87,3 +89,4 @@ namespace Diver.Test
         }
     }
 }
+

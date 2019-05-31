@@ -2,7 +2,8 @@
 
 namespace Pyro.BuiltinTypes
 {
-    public class Map : Dictionary<object, object>
+    public class Map
+        : Dictionary<object, object>
     {
         public Map()
             : base(new CustomMapComparer())
@@ -10,7 +11,8 @@ namespace Pyro.BuiltinTypes
         }
     }
 
-    public class CustomMapComparer : IEqualityComparer<object>
+    public class CustomMapComparer
+        : IEqualityComparer<object>
     {
         public new bool Equals(object x, object y)
         {

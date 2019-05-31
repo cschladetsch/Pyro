@@ -1,5 +1,6 @@
 ﻿namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// A singular label (part of a path)
     /// </summary>
@@ -23,3 +24,4 @@
         }
     }
 }
+

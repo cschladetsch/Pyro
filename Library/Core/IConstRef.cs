@@ -1,5 +1,6 @@
 ﻿namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// A constant-reference to a value.
     /// </summary>

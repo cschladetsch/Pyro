@@ -13,3 +13,4 @@ namespace Pyro
         void AppendText(StringBuilder str, T obj);
     }
 }
+

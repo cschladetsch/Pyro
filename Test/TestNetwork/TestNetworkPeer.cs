@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections;
-using Diver.Test;
-using Flow;
+
 using NUnit.Framework;
-using Pyro.ExecutionContext;
-using Pyro.Language;
-using Pyro.Network;
+
+using Flow;
 
 namespace Pyro.Test
 {
+    using ExecutionContext;
+    using Language;
+    using Network;
+
     [TestFixture]
     public class TestNetworkPeer : TestCommon
     {
@@ -114,3 +116,4 @@ namespace Pyro.Test
         }
     }
 }
+

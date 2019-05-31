@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestContainers : TestCommon
+    public class TestContainers
+        : TestCommon
     {
         [Test]
         public void TestMap()

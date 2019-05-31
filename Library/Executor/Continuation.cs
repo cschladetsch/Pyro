@@ -13,19 +13,15 @@ namespace Pyro.Exec
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block
         /// </summary>
-        public int Ip => _next;
+        public int Ip { get; private set; }
+        public IList<object> Code { get; }
+        public IList<string> Args { get; private set; }
 
-        public IList<object> Code => _code;
-        public IList<string> Args => _args;
-
-        private int _next;
-        private IList<string> _args;
-        private readonly IList<object> _code;
         private IDictionary<string, object> _scope => Scope;
 
         public Continuation(IList<object> code)
         {
-            _code = code;
+            Code = code;
         }
 
         /// <summary>
@@ -47,9 +43,11 @@ namespace Pyro.Exec
                     case EOperation op:
                         str.Append(OpToText(op));
                         break;
+
                     case bool val:
                         str.Append(val ? "true" : "false");
                         break;
+
                     default:
                         reg.AppendText(str, elem);
                         break;
@@ -237,12 +235,12 @@ namespace Pyro.Exec
         {
             var str = new StringBuilder();
             str.Append('{');
-            str.Append($"#{_next}/{_code.Count} ");
-            if (_args != null)
+            str.Append($"#{Ip}/{Code.Count} ");
+            if (Args != null)
             {
                 str.Append('(');
                 var comma = "";
-                foreach (var a in _args)
+                foreach (var a in Args)
                 {
                     str.Append($"{a}{comma}");
                     comma = ", ";
@@ -250,7 +248,7 @@ namespace Pyro.Exec
                 str.Append(") ");
             }
 
-            foreach (var c in _code)
+            foreach (var c in Code)
             {
                 str.Append(c);
                 str.Append(", ");
@@ -262,27 +260,29 @@ namespace Pyro.Exec
 
         public void AddArg(string ident)
         {
-            if (_args == null)
-                _args = new List<string>();
-            _args.Add(ident);
+            if (Args == null)
+                Args = new List<string>();
+
+            Args.Add(ident);
         }
 
         public void Enter(Executor exec)
         {
-            if (_args == null)
+            // Nothing to do if no args to pull.
+            if (Args == null)
                 return;
 
-            // already entered
-            if (_next != 0)
+            // Already entered; we may be re-entering, which is fine.
+            if (Ip != 0)
                 return;
 
-            if (exec.DataStack.Count < _args.Count)
+            if (exec.DataStack.Count < Args.Count)
                 throw new DataStackEmptyException();
             
-            foreach (var arg in _args)
+            foreach (var arg in Args)
                 _scope[arg] = exec.DataStack.Pop();
 
-            _next = 0;
+            Ip = 0;
         }
 
         public bool HasScopeObject(string label)
@@ -302,8 +302,8 @@ namespace Pyro.Exec
 
         public bool Next(out object next)
         {
-            var has = _next < _code.Count;
-            next = has ? _code[_next++] : null;
+            var has = Ip < Code.Count;
+            next = has ? Code[Ip++] : null;
             if (!has)
                 Reset();
             return has;
@@ -313,7 +313,7 @@ namespace Pyro.Exec
         {
             // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
             //_scope.Clear();
-            _next = 0;
+            Ip = 0;
         }
     }
 }

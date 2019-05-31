@@ -1,10 +1,11 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Constraints;
+//using NUnit.Framework.Constraints;
 
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
     [TestFixture]
-    public class TestRhoLoops : TestCommon
+    public class TestRhoLoops
+	    : TestCommon
     {
 	    [Test]
 	    public void TestForEachIn()

@@ -9,6 +9,7 @@ using Pyro.RhoLang;
 
 namespace Pyro.ExecutionContext
 {
+    /// <inheritdoc />
     /// <summary>
     /// Functionality to execute scripts in any system-supported language
     /// given text or a filename.
@@ -16,58 +17,68 @@ namespace Pyro.ExecutionContext
     public class Context
         : Process
     {
-        public IRegistry Registry => _registry;
-        public ITranslator Translator => _translator;
-        public Executor Executor => _exec;
+        public IRegistry Registry { get; }
+        public ITranslator Translator { get; private set; }
+        public Executor Executor { get; }
+
+        private readonly PiTranslator _pi;
+        private readonly RhoTranslator _rho;
+
         public IDictionary<string, object> Scope
         {
-            get => _exec.Scope;
-            set => _exec.Scope = value;
+            get => Executor.Scope;
+            set => Executor.Scope = value;
         }
 
         public ELanguage Language
         {
             get
             {
-                if (_translator == _pi)
+                if (Translator == _pi)
                     return ELanguage.Pi;
-                return _translator == _rho ? ELanguage.Rho : ELanguage.None;
+                return Translator == _rho ? ELanguage.Rho : ELanguage.None;
             }
             set
             {
                 switch (value)
                 {
                     case ELanguage.None:
-                        _translator = null;
+                        Translator = null;
                         return;
+
                     case ELanguage.Pi:
-                        _translator = _pi;
+                        Translator = _pi;
                         break;
+
                     case ELanguage.Rho:
-                        _translator = _rho;
+                        Translator = _rho;
                         break;
+
+                    case ELanguage.Tau:
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(value), value, null);
                 }
             }
         }
 
         public Context()
         {
-            _registry = new Registry();
-            _exec = _registry.Add(new Executor()).Value;
-            RegisterTypes.Register(_registry);
-            _pi = new PiTranslator(_registry);
-            _rho = new RhoTranslator(_registry);
+            Registry = new Registry();
+            Executor = Registry.Add(new Executor()).Value;
+            RegisterTypes.Register(Registry);
+            _pi = new PiTranslator(Registry);
+            _rho = new RhoTranslator(Registry);
             Language = ELanguage.Pi;
         }
 
         public bool Exec(string text)
         {
-            return _translator == null ? Fail("No translator") : Exec(_translator, text);
+            return Translator == null ? Fail("No translator") : Exec(Translator, text);
         }
 
         public bool Translate(string text, out Continuation result)
         {
-            return Translate(_translator, out result, text);
+            return Translate(Translator, out result, text);
         }
 
         private bool Translate(ITranslator translator, out Continuation result, string text)
@@ -82,25 +93,23 @@ namespace Pyro.ExecutionContext
             {
                 if (!Translate(translator, out var cont, text))
                     return Fail(translator.Error);
-                cont.Scope = _exec.Scope;
-                _exec.Continue(cont);
+
+                cont.Scope = Executor.Scope;
+                Executor.Continue(cont);
             }
             catch (Exception e)
             {
                 return Fail(e.Message);
             }
+
             return true;
         }
 
         public bool ExecRho(string text)
-        {
-            return Exec(ELanguage.Rho, text);
-        }
+            => Exec(ELanguage.Rho, text);
 
         public bool ExecPi(string text)
-        {
-            return Exec(ELanguage.Pi, text);
-        }
+            => Exec(ELanguage.Pi, text);
 
         public bool ExecFile(string fileName)
         {
@@ -134,11 +143,6 @@ namespace Pyro.ExecutionContext
                     throw new ArgumentOutOfRangeException(nameof(lang), lang, null);
             }
         }
-
-        private readonly IRegistry _registry;
-        private readonly Executor _exec;
-        private readonly PiTranslator _pi;
-        private readonly RhoTranslator _rho;
-        private ITranslator _translator;
     }
 }
+

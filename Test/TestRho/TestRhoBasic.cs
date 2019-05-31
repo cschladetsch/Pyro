@@ -1,11 +1,12 @@
 ﻿using NUnit.Framework;
-using Pyro;
-using Pyro.Exec;
 
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
+    using Exec;
+
     [TestFixture]
-    public class TestRhoBasic : TestCommon
+    public class TestRhoBasic
+        : TestCommon
     {
         [Test]
         public void TestBoolean()

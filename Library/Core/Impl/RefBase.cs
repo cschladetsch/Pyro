@@ -1,6 +1,8 @@
 ﻿namespace Pyro.Impl
 {
-    internal class RefBase : ConstRefBase, IRefBase
+    internal class RefBase
+        : ConstRefBase
+        , IRefBase
     {
         public new bool IsConst => false;
 

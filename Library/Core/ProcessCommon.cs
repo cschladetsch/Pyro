@@ -2,12 +2,15 @@
 
 namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// Common to all processes.
     /// </summary>
     public class ProcessCommon
         : Process
     {
+        protected readonly IRegistry _reg;
+
         protected ProcessCommon(IRegistry r)
         {
             _reg = r;
@@ -30,14 +33,13 @@ namespace Pyro
 
         protected void WriteLine(string fmt, params object[] args)
         {
-            string text = fmt;
+            var text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);
+
             System.Diagnostics.Trace.WriteLine(text);
             Console.WriteLine(text);
         }
-
-        protected readonly IRegistry _reg;
 
         protected new void Reset()
         {

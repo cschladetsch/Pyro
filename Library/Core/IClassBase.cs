@@ -37,3 +37,4 @@ namespace Pyro
         void AppendText(StringBuilder str, object value);
     }
 }
+

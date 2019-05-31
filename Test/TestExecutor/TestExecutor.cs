@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+
 using NUnit.Framework;
+
 using Pyro.Exec;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestExecutor : TestCommon
+    public class TestExecutor
+        : TestCommon
     {
         [Test]
         public void TestAddIntegers()
