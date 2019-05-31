@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net.Configuration;
-using System.Security.Principal;
 using System.Text;
 
 namespace Pyro.Console
@@ -187,9 +182,11 @@ namespace Pyro.Console
                 case "?":
                 case "help":
                     return ShowHelp();
+
                 case "rho":
                     _context.Language = ELanguage.Rho;
                     return true;
+
                 case "pi":
                     _context.Language = ELanguage.Pi;
                     return true;
@@ -243,7 +240,7 @@ Press Ctrl-C to quit.
 
         protected override void Shutdown()
         {
-            var color = ConsoleColor.DarkGray;
+            const ConsoleColor color = ConsoleColor.DarkGray;
             Error("Shutting down...", color);
             _peer?.Stop();
             Error("Done", color);
@@ -252,3 +249,4 @@ Press Ctrl-C to quit.
         }
     }
 }
+
