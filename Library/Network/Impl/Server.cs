@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
+
 using Pyro.Exec;
 
 namespace Pyro.Network.Impl
 {
+    /// <inheritdoc cref="IServer" />
     /// <summary>
     /// A server on the network executes incoming scripts and returns Executor data-stack
     /// to sender.
     /// </summary>
-    public class Server : NetCommon, IServer
+    public class Server
+        : NetCommon
+        , IServer
     {
         public override Socket Socket
         {
@@ -18,7 +22,6 @@ namespace Pyro.Network.Impl
         }
 
         public int ListenPort => _port;
-
         public event ReceivedResponseHandler ReceivedResponse;
 
         private const int RequestBacklogCount = 50;
@@ -28,7 +31,7 @@ namespace Pyro.Network.Impl
         public Server(Peer peer, int port)
             : base(peer)
         {
-            AddTypes(_Context.Registry);
+            RegisterTypes.Register(_Context.Registry);
 
             _port = port;
             _Exec.Scope["peer"] = _Peer;
@@ -36,23 +39,6 @@ namespace Pyro.Network.Impl
             _Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
             _Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
             _Exec.Scope["test"] = TranslatePi("9999 connect & 1 'RemoteAt peer .@ &");
-        }
-
-        private void AddTypes(IRegistry registry)
-        {
-            RegisterTypes.Register(registry);
-
-            registry.Register(new ClassBuilder<Peer>(registry)
-                .Methods
-                    .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
-                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
-                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
-                    .Add<Client>("Leave", (q, s) => q.Leave())
-                .Class);
-            registry.Register(new ClassBuilder<Client>(registry)
-                .Methods
-                    //.Add<string, bool>("Send", (q, s) => q.Send(s))
-                .Class);
         }
 
         protected override bool ProcessReceived(Socket sender, string pi)
