@@ -11,7 +11,7 @@
         Nop,
 
         // instances
-        //New,
+        New,
         //Delete,
         HasType,
         //Exists,

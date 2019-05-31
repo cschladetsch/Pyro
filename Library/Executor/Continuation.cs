@@ -189,6 +189,8 @@ namespace Pyro.Exec
                 return "remove";
             case EOperation.Insert:
                 return "insert";
+            case EOperation.New:
+                return "new";
             case EOperation.At:
                 return "@";
             case EOperation.DebugPrintDataStack:

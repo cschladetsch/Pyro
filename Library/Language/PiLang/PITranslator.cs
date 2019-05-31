@@ -200,6 +200,9 @@ namespace Pyro.Language
                 case EPiToken.Insert:
                     objects.Add(EOperation.Insert);
                     break;
+                case EPiToken.New:
+                    objects.Add(EOperation.New);
+                    break;
                 case EPiToken.Remove:
                     objects.Add(EOperation.Remove);
                     break;

@@ -33,6 +33,8 @@ namespace WinForms
             InitializeComponent();
 
             _context = new Context();
+            Pyro.Network.RegisterTypes.Register(_context.Registry);
+
             //_peer = Create.NewPeer(ListenPort);
             //_peer.OnConnected += Connected;
             //_peer.OnReceivedResponse += Received;
@@ -67,8 +69,7 @@ namespace WinForms
         {
             if (InvokeRequired)
             {
-                var del = new ReceivedResponseHandler(Received);
-                Invoke(del, server, client, text);
+                Invoke(new ReceivedResponseHandler(Received), server, client, text);
                 return;
             }
             Console.WriteLine($"Recv: {text}");

@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Pyro;
+using Pyro.Exec;
 
 namespace Diver.Test
 {

@@ -1,12 +1,30 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using Pyro;
 using Pyro.Language.Lexer;
 
 namespace Diver.Test
 {
+    public class UserModel
+    {
+        public string Name { get; set; }
+    }
+
     [TestFixture]
     public class TestNativeObjects : TestCommon
     {
+        [Test]
+        public void TestNew()
+        {
+            AssertSameTokens("new", EPiToken.New);
+            _reg.Register(new ClassBuilder<UserModel>(_reg)
+                .Class);
+
+            PiRun("'UserModel new");
+            var user = Pop<UserModel>();
+            Assert.IsNotNull(user);
+        }
+
         [Test]
         public void TestString()
         {

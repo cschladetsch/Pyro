@@ -48,6 +48,7 @@ namespace Pyro.Exec
             _actions[EOperation.Remove] = Remove;
             _actions[EOperation.Expand] = Expand;
             _actions[EOperation.Insert] = Insert;
+            _actions[EOperation.New] = New;
             _actions[EOperation.At] = At;
             _actions[EOperation.Has] = Has;
             _actions[EOperation.DebugPrintDataStack] = DebugPrintDataStack;
@@ -437,6 +438,15 @@ namespace Pyro.Exec
             if (obj is IConstRef<T> cref)
                 return cref.Value;
             throw new CannotConvertException(obj, typeof(T));
+        }
+
+        private void New()
+        {
+            var typeName = Pop<Label>();
+            var klass = _registry.GetClass(typeName.Text);
+            if (klass == null)
+                throw new UnknownIdentifierException(typeName);
+            Push(_registry.New(klass, _data));
         }
 
         private void Insert()
