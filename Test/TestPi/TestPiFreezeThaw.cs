@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using NUnit.Framework;
 
 namespace Pyro.Test
@@ -17,7 +18,6 @@ namespace Pyro.Test
         public void TestFreezeThaw()
         {
             TestFreezeThawPi("true assert");
-            TestFreezeThawScript("Boolean.pi");
 
             TestFreezeThawPi("1 2 +");
             AssertPop(3);
@@ -35,6 +35,7 @@ namespace Pyro.Test
             Assert.AreEqual(2, list[1]);
             Assert.AreEqual(3, list[2]);
 
+            TestFreezeThawScript("Boolean.pi");
             TestFreezeThawScript("Comments.pi");
             TestFreezeThawScript("Arithmetic.pi");
             TestFreezeThawScript("Array.pi");
@@ -44,3 +45,4 @@ namespace Pyro.Test
         }
     }
 }
+

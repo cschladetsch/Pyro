@@ -1,19 +1,18 @@
-﻿using System.Linq;
-using NUnit.Framework;
-using Pyro;
-using Pyro.Language.Lexer;
+﻿using NUnit.Framework;
 
 namespace Pyro.Test
 {
-    public class UserModel
-    {
-        public string Name { get; set; }
-    }
+    using Language.Lexer;
 
     [TestFixture]
     public class TestNativeObjects
         : TestCommon
     {
+        public class UserModel
+        {
+            public string Name { get; set; }
+        }
+
         [Test]
         public void TestNew()
         {
@@ -44,12 +43,16 @@ namespace Pyro.Test
 
             PiRun(length);
             AssertPop(6);
+
             PiRun(sub0);
             AssertPop("foo");
+
             PiRun(sub1);
             AssertPop("bar");
+
             PiRun(sub2);
             AssertPop("ar");
         }
     }
 }
+
