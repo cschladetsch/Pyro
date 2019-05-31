@@ -32,7 +32,7 @@ namespace Pyro.AppCommon
 
         public static string GetVersion()
         {
-            var name = Assembly.GetEntryAssembly()?.GetName();
+            var name = Assembly.GetExecutingAssembly().GetName();
             var version = name.Version;
             var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
             return $"Pyro {name.Name} {version} built {built}";
@@ -46,7 +46,7 @@ namespace Pyro.AppCommon
 
         protected static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
         {
-            Write(text, color);
+            WriteLine(text, color);
             return false;
         }
 
