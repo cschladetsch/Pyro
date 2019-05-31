@@ -5,10 +5,11 @@ using System.Net;
 using System.Net.Sockets;
 
 using Flow;
-using Pyro.Exec;
 
 namespace Pyro.Network.Impl
 {
+    using Exec;
+
     public class Peer
         : NetworkConsoleWriter
         , IPeer
@@ -44,6 +45,7 @@ namespace Pyro.Network.Impl
                 text += $"{_server}";
             else
                 text += "no server";
+
             return text;
         }
 
@@ -75,9 +77,9 @@ namespace Pyro.Network.Impl
             if (!Connect(GetLocalHostname(), port))
                 return Error("Couldn't connect to localhost");
 
-            // unsure if truly needed, but this Sleep is to give a little time for local
-            // client to connect to local server via Tcp
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(.2));
+            // Unsure if truly needed, but this Sleep is to give a little time for local
+            // client to connect to local server via Tcp.
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(150));
 
             return Enter(Clients[0]) || Error("Couldn't shell to localhost");
         }
@@ -104,9 +106,10 @@ namespace Pyro.Network.Impl
 
         public bool EnterRemote(Client client)
         {
-            //WriteLine($"Remoting to {client.Socket.RemoteEndPoint}");
+            WriteLine($"Remoting into {client.Socket.RemoteEndPoint}");
             if (!_clients.Contains(client))
                 return false;
+
             _remote = client;
             return true;
         }
@@ -226,3 +229,4 @@ namespace Pyro.Network.Impl
         }
     }
 }
+

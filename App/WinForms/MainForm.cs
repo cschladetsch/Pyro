@@ -26,7 +26,7 @@ namespace WinForms
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
 
-        private bool _single = true;
+        private bool _local = true;
 
         public MainForm()
         {
@@ -41,7 +41,7 @@ namespace WinForms
             //if (!_peer.StartSelfHosting())
             //{
             //    Console.WriteLine(_peer.Error);
-            //    _single = true;
+            //    _local = true;
             //}
 
             // clear the data stack from any design-time junk.
@@ -57,6 +57,7 @@ namespace WinForms
             {
                 SaveFile("pi", piInput.Text);
                 SaveFile("rho", rhoInput.Text);
+                _peer?.Stop();
             };
         }
 
@@ -194,7 +195,7 @@ namespace WinForms
             var ln = piInput.GetLineFromCharIndex(piInput.SelectionStart);
             var ip = piInput.Lines[ln];
             Console.WriteLine(ip);
-            if (_single)
+            if (_local)
                 Perform(() => _context.ExecPi(ip));
             else
                 Perform(() => _peer.Execute(ip));
@@ -203,7 +204,7 @@ namespace WinForms
         private void ExecuteRho()
         {
             var script = rhoInput.SelectedText.Length > 0 ? rhoInput.SelectedText : rhoInput.Text;
-            if (_single)
+            if (_local)
                 Perform(() => _context.ExecRho(script));
         }
 
@@ -266,7 +267,7 @@ namespace WinForms
 
         private void Perform(EOperation op)
         {
-            if (_single)
+            if (_local)
                 Perform(() => Exec.Perform(op));
             else
             {
