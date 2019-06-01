@@ -1,10 +1,11 @@
 ﻿using NUnit.Framework;
-using Pyro.Language.Lexer;
 
 namespace Pyro.TestPi
 {
     using Test;
+    using Language.Lexer;
 
+    /// <inheritdoc />
     /// <summary>
     /// Test floating-point tokenising, parsing and arithmetic.
     /// </summary>
