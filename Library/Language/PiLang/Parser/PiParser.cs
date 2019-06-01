@@ -149,6 +149,9 @@ namespace Pyro.Language.Parser
                 case EPiToken.Int:
                     node.Value = int.Parse(text);
                     break;
+                case EPiToken.Float:
+                    node.Value = float.Parse(text);
+                    break;
                 case EPiToken.String:
                     node.Value = text;
                     break;

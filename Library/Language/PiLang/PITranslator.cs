@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Pyro.Exec;
-using Pyro.Language.Impl;
-using Pyro.Language.Lexer;
-using Pyro.Language.Parser;
-
 namespace Pyro.Language
 {
+    using Exec;
+    using Impl;
+    using Lexer;
+    using Parser;
+
+    /// <inheritdoc />
     /// <summary>
     /// Translates input Pi text source code to an executable Continuation.
     /// </summary>

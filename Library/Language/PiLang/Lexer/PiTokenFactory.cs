@@ -2,7 +2,7 @@
 {
     /// <inheritdoc />
     /// <summary>
-    /// Makes Tokens because C# doesn't allow for constructors that take arguments
+    /// How to make new Pi token nodes given slices and/or token types.
     /// on generic types.
     /// </summary>
     public class PiTokenFactory

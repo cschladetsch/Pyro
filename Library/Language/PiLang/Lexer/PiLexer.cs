@@ -78,6 +78,19 @@ namespace Pyro.Language.Lexer
                 else if (Peek() == '@')
                     return AddTwoCharOp(EPiToken.GetMember);
 
+                // test for floating-point numbers
+                var prev = PrevToken();
+                if (prev.Type == EPiToken.Int)
+                {
+                    // remove the previously added int
+                    // TODO: should really do this before adding the first int...
+                    _Tokens.RemoveAt(_Tokens.Count - 1);
+                    var slice = Gather(char.IsDigit);
+                    return AddSlice(
+                        EPiToken.Float, 
+                        new Slice(this, prev.LineNumber, prev.Slice.Start, _offset));
+                }
+
                 return Add(EPiToken.Dot);
 
             case '+':
@@ -104,6 +117,12 @@ namespace Pyro.Language.Lexer
             }
 
             return LexError($"Unrecognised '{current}'");
+        }
+
+        private PiToken PrevToken()
+        {
+            var count = _Tokens.Count;
+            return count >= 1 ? _Tokens[count - 1] : new PiToken(EPiToken.None, new Slice());
         }
 
         private bool AddQuotedOperation()
