@@ -5,7 +5,6 @@ using System.Linq;
 
 using NUnit.Framework;
 
-
 namespace Pyro.Test
 {
     using Exec;
@@ -13,7 +12,6 @@ namespace Pyro.Test
     using Language;
     using Language.Lexer;
     using RhoLang;
-    using RegisterTypes = Exec.RegisterTypes;
 
     /// <inheritdoc />
     /// <summary>
@@ -45,7 +43,7 @@ namespace Pyro.Test
             _rho = new RhoTranslator(_reg);
             _executor = _reg.Add(new Executor());
 
-            RegisterTypes.Register(_reg);
+            Exec.RegisterTypes.Register(_reg);
         }
 
         protected void PiRun(string text)
@@ -58,11 +56,6 @@ namespace Pyro.Test
         {
             _exec.Clear();
             Time("Exec took ", () => _exec.Continue(_continuation = RhoTranslate(text, trace, st)));
-        }
-
-        protected void Time(string label, Action action)
-        {
-            WriteLine(Timer.Time("\t" + label, action));
         }
 
         protected Continuation PiTranslate(string text)
@@ -88,20 +81,11 @@ namespace Pyro.Test
             return _continuation = cont;
         }
 
-        protected bool RunScript(string scriptName)
-        {
-            return RunScriptPathname(GetFullScriptPathname(scriptName));
-        }
-
-        protected string GetFullScriptPathname(string scriptName)
-        {
-            return Path.Combine(GetScriptsPath(), scriptName);
-        }
-
         protected ITranslator MakeTranslator(string scriptName)
         {
             Type klass = null;
-            switch (Path.GetExtension(scriptName))
+            var extension = Path.GetExtension(scriptName);
+            switch (extension)
             {
                 case ".pi":
                     klass = typeof(PiTranslator);
@@ -114,12 +98,7 @@ namespace Pyro.Test
                 //    break;
             }
 
-            return Activator.CreateInstance(klass, _reg) as ITranslator;
-        }
-
-        protected string LoadScript(string fileName)
-        {
-            return File.ReadAllText(GetFullScriptPathname(fileName));
+            throw new NotImplementedException($"Unsupported script {extension}");
         }
 
         protected Continuation TranslateScript(string fileName)
@@ -153,30 +132,44 @@ namespace Pyro.Test
             return true;
         }
 
+        protected void Time(string label, Action action) 
+            => WriteLine(Timer.Time("\t" + label, action));
+
+        protected string LoadScript(string fileName)
+            => File.ReadAllText(GetFullScriptPathname(fileName));
+
+        protected bool RunScript(string scriptName)
+            => RunScriptPathname(GetFullScriptPathname(scriptName));
+
+        protected string GetFullScriptPathname(string scriptName)
+            => Path.Combine(GetScriptsPath(), scriptName);
+
         protected string GetScriptsPath()
-        {
-            return MakeLocalPath(ScriptsFolder);
-        }
+            => MakeLocalPath(ScriptsFolder);
 
         protected string MakeLocalPath(string relative)
-        {
-            return Path.Combine(GetFolderRoot(), relative);
-        }
+            => Path.Combine(GetFolderRoot(), relative);
 
         private static string GetFolderRoot()
-        {
-            return TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
-        }
+            => TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
 
         protected void AssertEmpty()
-        {
-            Assert.AreEqual(0, DataStack.Count);
-        }
+            => Assert.AreEqual(0, DataStack.Count);
 
         protected void AssertPop<T>(T val)
-        {
-            Assert.AreEqual(val, Pop<T>());
-        }
+            => Assert.AreEqual(val, Pop<T>());
+
+        protected void WriteLine(object obj)
+            => WriteLine($"{obj}");
+
+        protected T ConstRef<T>(object o)
+            => Executor.ConstRef<T>(o);
+
+        protected void TestFreezeThawPi(string text)
+            => Assert.IsTrue(Continue(FreezeThaw(_pi, text)));
+
+        protected void TestFreezeThawRho(string text)
+            => Assert.IsTrue(Continue(FreezeThaw(_rho, text)));
 
         protected object Pop()
         {
@@ -192,11 +185,6 @@ namespace Pyro.Test
             var typed = top as IConstRef<T>;    // Deal with boxed values.
             Assert.IsNotNull(typed);
             return typed.Value;
-        }
-
-        protected void WriteLine(object obj)
-        {
-            WriteLine($"{obj}");
         }
 
         protected void WriteLine(string fmt, params object[] args)
@@ -222,11 +210,6 @@ namespace Pyro.Test
                 WriteLine("LexerFailed: {0}", lex.Error);
             Assert.IsTrue(lex.Process(), lex.Error);
             return lex;
-        }
-
-        protected T ConstRef<T>(object o)
-        {
-            return Executor.ConstRef<T>(o);
         }
 
         protected void AssertVarEquals<T>(string ident, T val)
@@ -292,16 +275,6 @@ namespace Pyro.Test
             }
 
             Assert.Fail($"Unsupported extension {fileName}");
-        }
-
-        protected void TestFreezeThawPi(string text)
-        {
-            Assert.IsTrue(Continue(FreezeThaw(_pi, text)));            
-        }
-
-        protected void TestFreezeThawRho(string text)
-        {
-            Assert.IsTrue(Continue(FreezeThaw(_rho, text)));            
         }
 
         protected bool Continue(Continuation cont)

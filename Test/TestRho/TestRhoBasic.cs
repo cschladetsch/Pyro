@@ -4,10 +4,29 @@ namespace Pyro.Test.Rho
 {
     using Exec;
 
+    /// <inheritdoc />
+    /// <summary>
+    /// Test basic Rho functionality: boolean logic, arithmetic, strings, conditionals.
+    /// </summary>
     [TestFixture]
     public class TestRhoBasic
         : TestCommon
     {
+        [Test]
+        public void TestFloats()
+        {
+            AssertEqual("1.1 + 2.2", 1.1f + 2.2f);
+            AssertEqual("1.1 - 2.2", 1.1f - 2.2f);
+            AssertEqual("1.1*2.2", 1.1f * 2.2f);
+            AssertEqual("1.1/2.2", 1.1f / 2.2f);
+        }
+
+        private void AssertEqual(string rho, object val)
+        {
+            RhoRun(rho);
+            Assert.AreEqual(val, Pop());
+        }
+
         [Test]
         public void TestBoolean()
         {
@@ -37,14 +56,10 @@ namespace Pyro.Test.Rho
         }
 
         private void False(string text)
-        {
-            Assert.Throws<AssertionFailedException>(() => True(text));
-        }
+            => Assert.Throws<AssertionFailedException>(() => True(text));
 
         private void True(string text)
-        {
-            RhoRun($"assert({text})");
-        }
+            => RhoRun($"assert({text})");
 
         [Test]
         public void TestArithmetic()

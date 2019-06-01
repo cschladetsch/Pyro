@@ -43,8 +43,19 @@ namespace Pyro.RhoLang.Lexer
             if (char.IsLetter(current) || current == '_')
                 return IdentOrKeyword();
 
+            // TODO: this handled differently (and poorly) in PiLexer.
             if (char.IsDigit(current))
-                return AddSlice(ERhoToken.Int, Gather(char.IsDigit));
+            {
+                var start = Gather(char.IsDigit);
+                if (Current() == '.')
+                {
+                    Next();
+                    var frac = Gather(char.IsDigit);
+                    AddSlice(ERhoToken.Float, new Slice(this, start.Start, frac.End));
+                }
+                else
+                    AddSlice(ERhoToken.Int, start);
+            }
 
             switch (current)
             {

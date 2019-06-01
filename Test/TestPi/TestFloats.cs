@@ -32,7 +32,7 @@ namespace Pyro.TestPi
             Assert.AreEqual(1.1f - 2.2f, Pop<float>());
 
             PiRun("1.1 2.2 div");
-            Assert.AreEqual(1.1f / 2.2f, Pop<float>());
+            Assert.AreEqual(1.1f/2.2f, Pop<float>());
         }
     }
 }
