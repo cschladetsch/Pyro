@@ -159,9 +159,6 @@ namespace Pyro.Test
         protected void AssertPop<T>(T val)
             => Assert.AreEqual(val, Pop<T>());
 
-        protected void WriteLine(object obj)
-            => WriteLine($"{obj}");
-
         protected T ConstRef<T>(object o)
             => Executor.ConstRef<T>(o);
 
@@ -182,6 +179,7 @@ namespace Pyro.Test
             var top = Pop();
             if (top is T result)                // Deal with unwrapped values.
                 return result;
+
             var typed = top as IConstRef<T>;    // Deal with boxed values.
             Assert.IsNotNull(typed);
             return typed.Value;
@@ -208,6 +206,7 @@ namespace Pyro.Test
             var lex = new PiLexer(input);
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
+
             Assert.IsTrue(lex.Process(), lex.Error);
             return lex;
         }
