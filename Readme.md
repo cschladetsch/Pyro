@@ -1,4 +1,4 @@
-# Pyro
+# Pyro :sun_with_face:
 
 *Pyro* provides a framework for distrubuted, interactive virtual reality experiences.
 
