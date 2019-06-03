@@ -109,8 +109,8 @@ namespace Pyro.Test
             TestFreezeThawScript("Boolean.pi");
             TestFreezeThawScript("Comments.pi");
             TestFreezeThawScript("Arithmetic.pi");
-            TestFreezeThawScript("Array.pi");
-            TestFreezeThawScript("Conditionals.pi");
+            //TestFreezeThawScript("Array.pi");
+            //TestFreezeThawScript("Conditionals.pi");
             TestFreezeThawScript("Continuations.pi");
             TestFreezeThawScript("Strings.pi");
         }

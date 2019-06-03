@@ -46,6 +46,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Scripts\Add.rho" />
+    <Compile Include="TestRhoClass.cs" />
     <Compile Include="TestRhoFreezeThaw.cs" />
     <Compile Include="TestRhoLoops.cs" />
     <Compile Include="TestRhoBasic.cs" />
@@ -57,7 +58,8 @@
   <ItemGroup>
     <None Include="Readme.md" />
     <None Include="Scripts\Array.rho" />
-    <None Include="Scripts\Classes.rho" />
+    <None Include="Scripts\Class.rho" />
+    <None Include="Scripts\TemplateClasses.rho" />
     <None Include="Scripts\FreezeThaw.rho" />
     <None Include="Scripts\Loops.rho" />
     <None Include="Scripts\NestedFunctions.rho" />
