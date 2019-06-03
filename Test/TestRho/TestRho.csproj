@@ -46,6 +46,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Scripts\Add.rho" />
+    <None Include="Scripts\Import.rho" />
     <Compile Include="TestRhoClass.cs" />
     <Compile Include="TestRhoFreezeThaw.cs" />
     <Compile Include="TestRhoLoops.cs" />
