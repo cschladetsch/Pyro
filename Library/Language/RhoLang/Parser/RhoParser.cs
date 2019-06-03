@@ -33,7 +33,8 @@
 
         private bool Parse(EStructure st)
         {
-            _Stack.Push(NewNode(ERhoAst.Program));
+            if (st != EStructure.Expression)
+                _Stack.Push(NewNode(ERhoAst.Program));
 
             var result = false;
             switch (st)
@@ -59,7 +60,7 @@
             if (!Try(ERhoToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _Stack.Count == 1 || Fail("SYSTEM: Semantic stack not empty after parsing");
+            return _Stack.Count == 1 || Fail("Semantic stack not empty after parsing");
         }
 
         private bool Program()

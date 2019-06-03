@@ -77,7 +77,7 @@ namespace Pyro.Test
             if (trace)
                 WriteLine(trans.ToString());
 
-            Assert.IsFalse(trans.Failed);
+            Assert.IsFalse(trans.Failed, trans.Error);
             return _continuation = cont;
         }
 
@@ -96,9 +96,11 @@ namespace Pyro.Test
                 //case ".tau":
                 //    klass = typeof(TauTranslator);
                 //    break;
+                default:
+                    throw new NotImplementedException($"Unsupported script {extension}");
             }
 
-            throw new NotImplementedException($"Unsupported script {extension}");
+            return Activator.CreateInstance(klass, _reg) as ITranslator;
         }
 
         protected Continuation TranslateScript(string fileName)

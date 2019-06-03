@@ -168,13 +168,13 @@ namespace Pyro.RhoLang.Parser
                         list.Add(Pop());
                     else
                         return FailLocation("Expressions required within array");
-                    if (!TryConsume(ERhoToken.Comma))
-                        break;
+                    //if (!TryConsume(ERhoToken.Comma))
+                    //    break;
                 }
 
-                Expect(ERhoToken.CloseSquareBracket);
+                //Expect(ERhoToken.CloseSquareBracket);
                 return Failed 
-                    ? FailLocation("Closing bracked expected for array")
+                    ? FailLocation("Closing bracket expected for array")
                     : Push(list);
             }
 

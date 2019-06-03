@@ -110,7 +110,7 @@ namespace Pyro.Network.Impl
         private bool SendResponse(Socket sender)
         {
             // TODO: Also send _Exec.Scope (?)
-            var response = _Registry.ToText(_Exec.DataStack.ToList());
+            var response = _Registry.ToPiScript(_Exec.DataStack.ToList());
             //WriteLine($"Server sends {response}");
             return Send(sender, response);
         }

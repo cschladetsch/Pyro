@@ -47,14 +47,18 @@ namespace Pyro.RhoLang.Lexer
             if (char.IsDigit(current))
             {
                 var start = Gather(char.IsDigit);
-                if (Current() == '.')
-                {
-                    Next();
-                    var frac = Gather(char.IsDigit);
-                    AddSlice(ERhoToken.Float, new Slice(this, start.Start, frac.End));
-                }
-                else
-                    AddSlice(ERhoToken.Int, start);
+
+                // TODO: floating point numbers
+                //if (Current() == '.')
+                //{
+                //    Next();
+                //    var frac = Gather(char.IsDigit);
+                //    AddSlice(ERhoToken.Float, new Slice(this, start.Start, frac.End));
+                //}
+                //else
+                //    AddSlice(ERhoToken.Int, start);
+
+                return AddSlice(ERhoToken.Int, start);
             }
 
             switch (current)

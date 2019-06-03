@@ -11,7 +11,7 @@ namespace Pyro.Test
     using Language;
     using Network;
 
-    [TestFixture]
+    //[TestFixture]
     public class TestNetworkPeer : TestCommon
     {
         public const int ListenPort = 8888;

@@ -108,7 +108,7 @@ namespace Pyro.Impl
                 stringBuilder.Append(obj);
         }
 
-        public string ToText(object obj)
+        public string ToPiScript(object obj)
         {
             var str = new StringBuilder();
             AppendText(str, obj);

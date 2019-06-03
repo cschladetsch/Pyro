@@ -37,7 +37,7 @@ namespace Pyro.Network.Impl
                 yield break;
 
             foreach (var elem in _stack)
-                yield return _Context.Registry.ToText(elem);
+                yield return _Context.Registry.ToPiScript(elem);
         }
 
         public void CompleteConnect(Socket socket)

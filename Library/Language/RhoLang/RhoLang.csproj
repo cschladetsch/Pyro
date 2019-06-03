@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class.cs" />
     <Compile Include="Lexer\ERhoToken.cs" />
     <Compile Include="Lexer\RhoLexer.cs" />
     <Compile Include="Lexer\RhoToken.cs" />

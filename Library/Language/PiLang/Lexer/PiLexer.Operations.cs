@@ -56,6 +56,8 @@
             AddKeyword("at", EPiToken.At);
             AddKeyword("insert", EPiToken.Insert);
             AddKeyword("has", EPiToken.Has);
+            AddKeyword("write", EPiToken.Write);
+            AddKeyword("writeln", EPiToken.WriteLine);
             AddKeyword("debug_datastack", EPiToken.DebugPrintDataStack);
             AddKeyword("set_float_precision", EPiToken.SetFloatPrecision);
         }

@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+using Pyro.Language;
 
 namespace Pyro.Test.Rho
 {
@@ -13,6 +15,17 @@ namespace Pyro.Test.Rho
         : TestCommon
     {
         [Test]
+        public void TestArrays()
+        {
+            RhoRun("[1 2 3]", true, EStructure.Expression);
+            var list = Pop<List<object>>();
+            Assert.AreEqual(list.Count, 3);
+            Assert.AreEqual(list[0], 1);
+            Assert.AreEqual(list[1], 2);
+            Assert.AreEqual(list[2], 3);
+        }
+
+        //[Test]
         public void TestFloats()
         {
             AssertEqual("1.1 + 2.2", 1.1f + 2.2f);

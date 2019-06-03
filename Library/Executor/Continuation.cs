@@ -102,9 +102,9 @@ namespace Pyro.Exec
             case EOperation.WriteLine:
                 return "writeln";
             case EOperation.If:
-                return "?";
+                return "if";
             case EOperation.IfElse:
-                break;
+                return "ife";
             case EOperation.StackToList:
                 break;
             case EOperation.ListToStack:
@@ -148,7 +148,7 @@ namespace Pyro.Exec
             case EOperation.Equiv:
                 return "==";
             case EOperation.LogicalAnd:
-                return "&%";
+                return "&&";
             case EOperation.LogicalOr:
                 return "||";
             case EOperation.LogicalXor:
@@ -230,7 +230,7 @@ namespace Pyro.Exec
                 .Class);
         }
 
-        // this is human-readable version. for transmission/persistence, use ToText()
+        // this is human-readable version. for transmission/persistence, use ToPiScript()
         public override string ToString()
         {
             var str = new StringBuilder();

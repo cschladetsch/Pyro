@@ -86,7 +86,7 @@ namespace Pyro.Console
             var results = _context.Executor.DataStack;
             var n = 0;
             foreach (var result in results)
-                str.AppendLine($"{n++}: {_context.Registry.ToText(result)}");
+                str.AppendLine($"{n++}: {_context.Registry.ToPiScript(result)}");
 
             Con.Write(str.ToString());
         }

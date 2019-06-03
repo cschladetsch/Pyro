@@ -1,4 +1,6 @@
-﻿namespace Pyro.Network
+﻿using Flow;
+
+namespace Pyro.Network
 {
     /// <summary>
     /// A collection of objects that spatially coherent across the network.

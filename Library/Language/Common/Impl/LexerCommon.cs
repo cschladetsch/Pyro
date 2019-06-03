@@ -28,7 +28,7 @@ namespace Pyro.Language.Impl
             : base(input)
             => _Factory.SetLexer(this);
 
-        protected override void LexError(string fmt, params object[] args) => _error = string.Format(fmt, args);
+        protected override void LexError(string fmt, params object[] args) => Error = string.Format(fmt, args);
         protected override void AddStringToken(Slice slice) => _Tokens.Add(_Factory.NewTokenString(slice));
         protected virtual bool NextToken() => false;
         protected virtual void Terminate() { }

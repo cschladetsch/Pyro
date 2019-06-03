@@ -34,7 +34,8 @@ namespace Pyro.Test
             var map = Pop<Dictionary<object, object>>();
             Assert.IsTrue(map.ContainsKey(1));
             Assert.IsTrue(map.ContainsKey("foo"));
-            Assert.IsTrue(map.ContainsValue(2));
+
+            Assert.AreEqual(2, map[1]);
             Assert.AreEqual("bar", map["foo"]);
         }
 

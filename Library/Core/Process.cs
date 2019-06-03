@@ -12,13 +12,7 @@
     {
         public bool Failed { get; private set; }
 
-        protected string _error;
-        
-        public string Error
-        {
-            get => _error;
-            protected set => _error = value;
-        }
+        public string Error { get; protected set; }
 
         protected Process()
         {
@@ -27,14 +21,14 @@
         public virtual bool Fail(string err)
         {
             Failed = true;
-            _error = err;
+            Error = err;
             return false;
         }
 
         public void Reset()
         {
             Failed = false;
-            _error = "";
+            Error = "";
         }
     }
 }

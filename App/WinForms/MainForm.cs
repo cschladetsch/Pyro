@@ -258,7 +258,7 @@ namespace WinForms
         {
             var row = new ListViewItem();
             AddSubItem(row, n.ToString());
-            AddSubItem(row, _context.Registry.ToText(item));
+            AddSubItem(row, _context.Registry.ToPiScript(item));
             return row;
         }
 
