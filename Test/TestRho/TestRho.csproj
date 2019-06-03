@@ -60,7 +60,7 @@
     <None Include="Readme.md" />
     <None Include="Scripts\Array.rho" />
     <None Include="Scripts\Class.rho" />
-    <None Include="Scripts\TemplateClasses.rho" />
+    <None Include="Scripts\TemplateClass.rho" />
     <None Include="Scripts\FreezeThaw.rho" />
     <None Include="Scripts\Loops.rho" />
     <None Include="Scripts\NestedFunctions.rho" />

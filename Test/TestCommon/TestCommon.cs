@@ -261,7 +261,7 @@ namespace Pyro.Test
             Assert.AreEqual(0, _exec.DataStack.Count);
         }
 
-        protected void TestFreezeThawScript(string fileName)
+        protected void FreezeThaw(string fileName)
         {
             var script = LoadScript(fileName);
             switch (Path.GetExtension(fileName))

@@ -19,7 +19,7 @@ namespace Pyro.Test
         {
             PiRun("[1 2 3]");
             var list = Pop<List<object>>();
-            var list2 = ObjectToPiToObject(list);
+            var list2 = FullCircle(list);
             Assert.AreEqual(list, list2);
         }
 
@@ -29,7 +29,7 @@ namespace Pyro.Test
             var makeMap = "1 2 \"foo\" \"bar\" 2 tomap";
             PiRun(makeMap);
             var dict = Pop<Dictionary<object, object>>();
-            var dict2 = ObjectToPiToObject(dict);
+            var dict2 = FullCircle(dict);
             foreach (var kv in dict)
             {
                 Assert.IsTrue(dict2.ContainsKey(kv.Key));
@@ -106,22 +106,21 @@ namespace Pyro.Test
             Assert.AreEqual(2, list[1]);
             Assert.AreEqual(3, list[2]);
 
-            TestFreezeThawScript("Boolean.pi");
-            TestFreezeThawScript("Comments.pi");
-            TestFreezeThawScript("Arithmetic.pi");
-            //TestFreezeThawScript("Array.pi");
-            //TestFreezeThawScript("Conditionals.pi");
-            TestFreezeThawScript("Continuations.pi");
-            TestFreezeThawScript("Strings.pi");
+            FreezeThaw("Boolean.pi");
+            FreezeThaw("Comments.pi");
+            FreezeThaw("Arithmetic.pi");
+            //FreezeThaw("Array.pi");
+            //FreezeThaw("Conditionals.pi");
+            FreezeThaw("Continuations.pi");
+            FreezeThaw("Strings.pi");
         }
 
-        private T ObjectToPiToObject<T>(T obj)
+        private T FullCircle<T>(T obj)
         {
             var pi = _reg.ToPiScript(obj);
             PiRun(pi);
             return Pop<T>();
         }
-
     }
 }
 
