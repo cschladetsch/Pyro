@@ -1,0 +1,6 @@
+﻿fun foo `'bar +`(n)
+	n + 1
+
+assert(foobar(1) == 2)
+
+

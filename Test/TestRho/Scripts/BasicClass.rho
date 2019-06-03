@@ -1,0 +1,10 @@
+﻿class Foo()
+	Name = "bar"
+	fun spam(n)
+		41 + n
+
+foo = Foo()
+assert(foo.Name == "bar")
+assert(foo.spam(1) == 42)
+
+
