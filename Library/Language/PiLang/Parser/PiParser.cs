@@ -12,11 +12,13 @@ namespace Pyro.Language.Parser
         : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
         , IParser
     {
-        public PiParser(PiLexer lexer) : base(lexer, null)
+        public PiParser(PiLexer lexer)
+            : base(lexer, null)
         {
         }
 
-        public PiAstNode Root => _Stack.Peek();
+        public PiAstNode Root
+            => _Stack.Peek();
 
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {

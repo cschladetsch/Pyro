@@ -1,5 +1,6 @@
 ﻿using Pyro.Language;
 using Pyro.Language.Impl;
+using Pyro.Language.Lexer;
 
 namespace Pyro.RhoLang.Lexer
 {
@@ -64,6 +65,8 @@ namespace Pyro.RhoLang.Lexer
             switch (current)
             {
             case Pathname.Quote: return Add(ERhoToken.Quote);
+            // TODO: This means we can't use ` at all in embedded Pi code.
+            case '`': return AddEmbeddedPi();
             case '{': return Add(ERhoToken.OpenBrace);
             case '}': return Add(ERhoToken.CloseBrace);
             case '(': return Add(ERhoToken.OpenParan);
@@ -141,6 +144,14 @@ namespace Pyro.RhoLang.Lexer
             LexError($"Unrecognised '{current}'");
 
             return false;
+        }
+
+        private bool AddEmbeddedPi()
+        {
+            Next();
+            AddSlice(ERhoToken.PiSlice, Gather(c => c != '`'));
+            Next();
+            return true;
         }
 
         protected override void AddKeywordOrIdent(Slice slice)

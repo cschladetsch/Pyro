@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Pyro.Language;
 
 namespace Pyro.Test
 {
@@ -13,7 +14,7 @@ namespace Pyro.Test
         [Test]
         public void TestBasic()
         {
-            RhoRun("`1`");
+            RhoRun("`1`", true, EStructure.Expression);
             Assert.AreEqual(1, Pop());
 
             RhoRun("`1 2 +`");

@@ -54,7 +54,7 @@ namespace Pyro.Language
             return $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
         }
 
-        private bool TranslateNode(PiAstNode node, IList<object> objects)
+        public bool TranslateNode(PiAstNode node, IList<object> objects)
         {
             return node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
         }

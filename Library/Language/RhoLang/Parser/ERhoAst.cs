@@ -26,6 +26,7 @@
         Pathname,
         GetMember,
         Assignment,
-        Suspend
+        Suspend,
+        PiSlice,
     }
 }

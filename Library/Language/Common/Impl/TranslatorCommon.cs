@@ -1,9 +1,11 @@
 ﻿using System.Text;
 using System.Collections.Generic;
-using Pyro.Exec;
 
 namespace Pyro.Language.Impl
 {
+    using Exec;
+
+    /// <inheritdoc cref="ITranslator" />
     /// <summary>
     /// Common to all processes that translate an AST to Pi code sequences.
     /// </summary>
@@ -14,6 +16,8 @@ namespace Pyro.Language.Impl
         public int TraceLevel { get; set; }
 
         protected virtual Continuation Result => _stack.Count == 0 ? null : Top();
+
+        private readonly Stack<Continuation> _stack = new Stack<Continuation>();
 
         protected TranslatorCommon(IRegistry r)
             : base(r)
@@ -63,7 +67,6 @@ namespace Pyro.Language.Impl
         {
             Top().Code.Add(obj);
         }
-
-        private readonly Stack<Continuation> _stack = new Stack<Continuation>();
     }
 }
+

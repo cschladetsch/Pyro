@@ -79,6 +79,8 @@
         Class,
         Constructor,
         Destructor,
+        BackTic,
+        PiSlice, // hah!
     }
 }
 

@@ -15,7 +15,8 @@ namespace Pyro.Language.Lexer
         public static Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
 
         public PiLexer(string input)
-            : base(input) => CreateOpToToken();
+            : base(input)
+            => CreateOpToToken();
 
         protected override bool NextToken()
         {

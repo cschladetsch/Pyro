@@ -70,6 +70,9 @@
 
         private static void CreateOpToToken()
         {
+            if (_opToToken.Count > 0)
+                return;
+
             //_opToToken[EOperation.Nop] = EPiToken.Nop;
             //_opToToken[EOperation.HasType] = EPiToken.HasType;
             _opToToken[EOperation.GarbageCollect] = EPiToken.GarbageCollect;

@@ -1,4 +1,7 @@
-﻿using Pyro.RhoLang.Lexer;
+﻿using System.Diagnostics.Eventing.Reader;
+using Pyro.Language.Lexer;
+using Pyro.Language.Parser;
+using Pyro.RhoLang.Lexer;
 
 namespace Pyro.RhoLang.Parser
 {
@@ -11,6 +14,22 @@ namespace Pyro.RhoLang.Parser
     {
         private bool Expression()
         {
+            if (Try(ERhoToken.PiSlice))
+            {
+                var lexer = new PiLexer(Current().Text);
+                if (!lexer.Process())
+                    return Fail("Failed to lex embedded pi");
+
+                var parser = new PiParser(lexer);
+                if (!parser.Process(lexer))
+                    return Fail(parser.Error);
+
+                var pi = NewNode(Consume());
+                pi.Value = parser.Root;
+                Push(pi);
+                return true;
+            }
+
             if (!Logical())
                 return false;
 
