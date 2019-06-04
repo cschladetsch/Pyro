@@ -195,18 +195,6 @@ namespace Pyro.RhoLang
             return Fail($"Unsupported RhoToken {node.Token.Type}");
         }
 
-        private bool Assign(RhoAstNode node)
-        {
-            var ch = node.Children;
-            if (ch.Count != 2)
-                return InternalFail("Assignment needs two children");
-            if (!Generate(ch[0]))
-                return InternalFail("Failed to generate code for Rho assignee");
-            return !AppendQuoted(ch[1])
-                ? InternalFail("Failed to generate code for Rho value")
-                : Append(EOperation.Assign);
-        }
-
         private bool PiSlice(RhoAstNode rhoNode)
         {
             if (!(rhoNode.Value is PiAstNode piNode))
@@ -261,8 +249,7 @@ namespace Pyro.RhoLang
                     return If(node);
 
                 case ERhoAst.Block:
-                    PushNew();
-                    return Block(node) && Append(Pop());
+                    return PushNew() && Block(node) && Append(Pop());
 
                 case ERhoAst.List:
                     return List(node);
@@ -280,26 +267,24 @@ namespace Pyro.RhoLang
 
         private bool List(RhoAstNode node)
         {
-            PushNew();
-            return GenerateChildren(node) && Append(Pop().Code);
+            return PushNew() && GenerateChildren(node) && Append(Pop().Code);
         }
 
-        private bool Block(RhoAstNode node)
-        {
-            return GenerateChildren(node);
-        }
+        private bool Block(RhoAstNode node) => GenerateChildren(node);
 
         private bool GenerateChildren(RhoAstNode node)
         {
-            if (node == null)
-                return InternalFail("Null in Rho Ast");
-
-            // do NOT convert this to LINQ
             foreach (var st in node.Children)
                 if (!Generate(st))
                     return InternalFail($"Failed to generate code for '{st}' from {node}");
 
             return true;
+        }
+
+        private bool Assign(RhoAstNode node)
+        {
+            var ch = node.Children;
+            return Generate(ch[0]) && AppendQuoted(ch[1]) && Append(EOperation.Assign);
         }
 
         private bool Function(RhoAstNode node)

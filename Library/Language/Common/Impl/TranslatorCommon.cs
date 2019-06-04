@@ -42,7 +42,12 @@ namespace Pyro.Language.Impl
             return str.ToString();
         }
 
-        protected void PushNew() => _stack.Push(Continuation.New(_reg));
+        protected bool PushNew()
+        {
+            _stack.Push(Continuation.New(_reg));
+            return true;
+        }
+
         protected Continuation Pop() => _stack.Pop();
         protected Continuation Top() => _stack.Peek();
         protected bool Append(object obj)
