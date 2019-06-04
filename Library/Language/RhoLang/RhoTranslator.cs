@@ -255,10 +255,7 @@ namespace Pyro.RhoLang
             }
         }
 
-        private bool List(RhoAstNode node)
-        {
-            return PushNew() && GenerateChildren(node) && Append(Pop().Code);
-        }
+        private bool List(RhoAstNode node) => PushNew() && GenerateChildren(node) && Append(Pop().Code);
 
         private bool Block(RhoAstNode node) => GenerateChildren(node);
 
