@@ -15,22 +15,11 @@ namespace Pyro.RhoLang.Parser
     public class RhoAstFactory
         : IAstFactory<RhoToken, RhoAstNode, ERhoAst>
     {
-        public void AddChild(RhoAstNode parent, RhoAstNode node)
-            => parent.Children.Add(node);
-
-        public void AddChild(RhoAstNode parent, RhoToken node)
-            => parent.Children.Add(new RhoAstNode(ERhoAst.TokenType, node));
-
-        public RhoAstNode New(RhoToken t)
-            => new RhoAstNode(ERhoAst.TokenType, t);
-
-        public RhoAstNode New(ERhoAst e, RhoToken t)
-            => new RhoAstNode(e, t);
-
-        public RhoAstNode New(ERhoAst t)
-            => new RhoAstNode(t);
-
-        public IList<RhoAstNode> GetChildren(RhoAstNode node)
-            => node.Children;
+        public void AddChild(RhoAstNode parent, RhoAstNode node) => parent.Children.Add(node);
+        public RhoAstNode New(RhoToken t) => new RhoAstNode(ERhoAst.TokenType, t);
+        public RhoAstNode New(ERhoAst e, RhoToken t) => new RhoAstNode(e, t);
+        public RhoAstNode New(ERhoAst t) => new RhoAstNode(t);
+        public IList<RhoAstNode> GetChildren(RhoAstNode node) => node.Children;
     }
 }
+
