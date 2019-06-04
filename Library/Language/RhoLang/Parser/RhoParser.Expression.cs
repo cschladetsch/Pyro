@@ -14,22 +14,6 @@ namespace Pyro.RhoLang.Parser
     {
         private bool Expression()
         {
-            if (Try(ERhoToken.PiSlice))
-            {
-                var lexer = new PiLexer(Current().Text);
-                if (!lexer.Process())
-                    return Fail("Failed to lex embedded pi");
-
-                var parser = new PiParser(lexer);
-                if (!parser.Process(lexer))
-                    return Fail(parser.Error);
-
-                var pi = NewNode(Consume());
-                pi.Value = parser.Root;
-                Push(pi);
-                return true;
-            }
-
             if (!Logical())
                 return false;
 
@@ -174,6 +158,22 @@ namespace Pyro.RhoLang.Parser
                 Expect(ERhoToken.CloseParan);
                 exp.Add(Pop());
                 return Push(exp);
+            }
+
+            if (Try(ERhoToken.PiSlice))
+            {
+                var lexer = new PiLexer(Current().Text);
+                if (!lexer.Process())
+                    return Fail("Failed to lex embedded pi");
+
+                var parser = new PiParser(lexer);
+                if (!parser.Process(lexer))
+                    return Fail(parser.Error);
+
+                var pi = NewNode(Consume());
+                pi.Value = parser.Root;
+                Push(pi);
+                return true;
             }
 
             if (TryConsume(ERhoToken.OpenSquareBracket))

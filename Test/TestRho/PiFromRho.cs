@@ -22,6 +22,9 @@ namespace Pyro.Test
 
             Assert.AreEqual(_exec.ContextStack.Count, 0);
             Assert.AreEqual(_exec.DataStack.Count, 0);
+
+            RhoRun("assert(`1 1 +` == 2)");
+            RhoRun("assert(`1 2 {+} &` == 3)");
         }
 
         [Test]
