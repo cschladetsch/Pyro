@@ -44,22 +44,10 @@ namespace Pyro.RhoLang
                 return Fail(_Parser.Error);
 
             if (!Generate(_Parser.Result))
-                return Fail($"Rho Translation failed: {Error}");
+                return false;
 
             result = Result;
             return !Failed;
-        }
-
-        private void ShowTime(string name, Action action)
-        {
-            var start = DateTime.Now;
-            action();
-            WriteLine($"{name} took {(DateTime.Now - start).TotalMilliseconds}");
-        }
-
-        private bool AppendChildOp(RhoAstNode node, EOperation op)
-        {
-            return Generate(node.GetChild(0)) && Append(op);
         }
 
         /// <summary>
@@ -194,6 +182,8 @@ namespace Pyro.RhoLang
 
             return Fail($"Unsupported RhoToken {node.Token.Type}");
         }
+
+        private bool AppendChildOp(RhoAstNode node, EOperation op) => Generate(node.GetChild(0)) && Append(op);
 
         private bool PiSlice(RhoAstNode rhoNode)
         {
