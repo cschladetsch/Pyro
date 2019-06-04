@@ -18,8 +18,7 @@ namespace Pyro.RhoLang.Parser
 
         private readonly List<RhoAstNode> _children = new List<RhoAstNode>();
 
-        public RhoAstNode(ERhoAst type)
-            => Type = type;
+        public RhoAstNode(ERhoAst type) => Type = type;
 
         public RhoAstNode(ERhoToken type)
         {
@@ -53,17 +52,10 @@ namespace Pyro.RhoLang.Parser
             return $"{type}{val} {text}";
         }
 
-        public void Add(RhoAstNode node)
-            => _children.Add(node);
-
-        public void Add(RhoToken token)
-            => _children.Add(new RhoAstNode(ERhoAst.TokenType, token));
-
-        public void Add(ERhoToken piToken)
-            => _children.Add(new RhoAstNode(piToken));
-
-        public RhoAstNode GetChild(int n)
-            => Children[n];
+        public void Add(RhoAstNode node) => _children.Add(node);
+        public void Add(RhoToken token) => _children.Add(new RhoAstNode(ERhoAst.TokenType, token)); 
+        public void Add(ERhoToken piToken) => _children.Add(new RhoAstNode(piToken));
+        public RhoAstNode GetChild(int n) => Children[n];
     }
 }
 

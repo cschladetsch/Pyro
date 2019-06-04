@@ -45,7 +45,11 @@ namespace Pyro.Language.Impl
         protected void PushNew() => _stack.Push(Continuation.New(_reg));
         protected Continuation Pop() => _stack.Pop();
         protected Continuation Top() => _stack.Peek();
-        protected void Append(object obj) => Top().Code.Add(obj);
+        protected bool Append(object obj)
+        {
+            Top().Code.Add(obj);
+            return true;
+        }
     }
 }
 
