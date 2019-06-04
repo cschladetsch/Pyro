@@ -3,13 +3,14 @@ using Con = System.Console;
 
 namespace Pyro.Network.Impl
 {
+    /// <inheritdoc />
     /// <summary>
     /// Base for Peer, Client and Server.
     /// </summary>
     public class NetworkConsoleWriter
         : Process
     {
-        public override bool Fail(string text)
+        protected override bool Fail(string text)
         {
             base.Fail(text);
             Error(text);

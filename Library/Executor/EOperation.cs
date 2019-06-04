@@ -125,6 +125,10 @@
 
         // Global State
         SetFloatPrecision,
+        DivEquals,
+        MulEquals,
+        MinusEquals,
+        PlusEquals
     }
 }
 

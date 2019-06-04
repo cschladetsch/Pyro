@@ -62,7 +62,7 @@
             if (!Try(ERhoToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _Stack.Count == 1 || Fail("INTERNAL: Semantic stack not empty after parsing");
+            return _Stack.Count == 1 || InternalFail("Semantic stack not empty after parsing");
         }
 
         private bool Program()

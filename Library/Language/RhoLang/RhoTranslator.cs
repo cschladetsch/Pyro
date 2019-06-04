@@ -12,7 +12,7 @@ namespace Pyro.RhoLang
     using Language.Impl;
 
     /// <summary>
-    /// Translate from text to an executable Continuation.
+    /// Translate from Rho script to an executable Continuation.
     /// </summary>
     public class RhoTranslator 
         : TranslatorBase<RhoLexer, RhoParser>
@@ -43,11 +43,10 @@ namespace Pyro.RhoLang
             if (_Parser.Failed)
                 return Fail(_Parser.Error);
 
-            WriteLine(_Parser.PrintTree());
-            Node(_Parser.Result);
+            if (!Generate(_Parser.Result))
+                return Fail($"Rho Translation failed: {Error}");
 
             result = Result;
-            //WriteLine($"{this}");
             return !Failed;
         }
 
@@ -58,34 +57,41 @@ namespace Pyro.RhoLang
             WriteLine($"{name} took {(DateTime.Now - start).TotalMilliseconds}");
         }
 
+        private bool AppendChildOp(RhoAstNode node, EOperation op)
+        {
+            return Generate(node.GetChild(0)) && Append(op);
+        }
+
+        /// <summary>
+        /// Translate given node into pi-code.
+        /// </summary>
         private bool Token(RhoAstNode node)
         {
             switch (node.RhoToken.Type)
             {
+                case ERhoToken.Assign:
+                    return Assign(node);
+
                 case ERhoToken.Fun:
                     return Function(node);
 
                 case ERhoToken.Assert:
-                    Node(node.GetChild(0));
-                    return Append(EOperation.Assert);
+                    return AppendChildOp(node, EOperation.Assert);
 
                  case ERhoToken.If:
                      return If(node);
 
                 case ERhoToken.Write:
-                    Node(node.GetChild(0));
-                    return Append(EOperation.Write);
+                    return AppendChildOp(node, EOperation.Write);
 
                 case ERhoToken.WriteLine:
-                    Node(node.GetChild(0));
-                    return Append(EOperation.WriteLine);
+                    return AppendChildOp(node, EOperation.WriteLine);
 
                 case ERhoToken.OpenParan:
-                    return node.Children.All(Node);
+                    return node.Children.All(Generate);
 
                 case ERhoToken.Not:
-                    Node(node.GetChild(0));
-                    return Append(EOperation.Not);
+                    return AppendChildOp(node, EOperation.Not);
 
                 case ERhoToken.True:
                     return Append(true);
@@ -96,26 +102,17 @@ namespace Pyro.RhoLang
                 case ERhoToken.While:
                     return While(node);
 
-                //case ERhoToken.DivAssign:
-                //    TranslateBinaryOp(node, EOperation.DivEquals);
-                //    return;
+                case ERhoToken.DivAssign:
+                    return BinaryOp(node, EOperation.DivEquals);
 
-                //case ERhoToken.MulAssign:
-                //    TranslateBinaryOp(node, EOperation.MulEquals);
-                //    return;
+                case ERhoToken.MulAssign:
+                    return BinaryOp(node, EOperation.MulEquals);
 
-                //case ERhoToken.MinusAssign:
-                //    TranslateBinaryOp(node, EOperation.MinusEquals);
-                //    return;
+                case ERhoToken.MinusAssign:
+                    return BinaryOp(node, EOperation.MinusEquals);
 
-                //case ERhoToken.PlusAssign:
-                //    TranslateBinaryOp(node, EOperation.PlusEquals);
-                //    return;
-
-                case ERhoToken.Assign:
-                    Node(node.GetChild(0));
-                    AppendQuoted(node.GetChild(1));
-                    return Append(EOperation.Assign);
+                case ERhoToken.PlusAssign:
+                    return BinaryOp(node, EOperation.PlusEquals);
 
                 case ERhoToken.Retrieve:
                     return Append(EOperation.Retrieve);
@@ -181,8 +178,11 @@ namespace Pyro.RhoLang
                     return Append(EOperation.Suspend);
 
                 case ERhoToken.Return:
-                    foreach (var ch in node.Children)
-                        Node(ch);
+                    // DO NOT REFACTOR INTO LINQ.
+                    // In fact, don't use Linq anywhere in this library.
+                    foreach (var child in node.Children)
+                        if (!Generate(child))
+                            return false;
                     return Append(EOperation.Resume);
 
                 case ERhoToken.For:
@@ -192,60 +192,48 @@ namespace Pyro.RhoLang
                     return PiSlice(node);
             }
 
-            return Fail($"Unsupported Token {node.Token.Type}");
+            return Fail($"Unsupported RhoToken {node.Token.Type}");
+        }
+
+        private bool Assign(RhoAstNode node)
+        {
+            var ch = node.Children;
+            if (ch.Count != 2)
+                return InternalFail("Assignment needs two children");
+            if (!Generate(ch[0]))
+                return InternalFail("Failed to generate code for Rho assignee");
+            return !AppendQuoted(ch[1])
+                ? InternalFail("Failed to generate code for Rho value")
+                : Append(EOperation.Assign);
         }
 
         private bool PiSlice(RhoAstNode rhoNode)
         {
             if (!(rhoNode.Value is PiAstNode piNode))
-                return Fail("Internal error: PiAstNode type expected");
+                return InternalFail("PiAstNode type expected");
 
             // TODO: store a private _piTranslator that is re-used
             return new PiTranslator(_reg).TranslateNode(piNode, Top().Code)
                 || Fail("Couldn't translate pi");
         }
 
-        private void AppendQuoted(RhoAstNode node)
-            => Append(new Label(node.Text, true));
+        private bool AppendQuoted(RhoAstNode node) => Append(new Label(node.Text, true));
 
         private bool BinaryOp(RhoAstNode node, EOperation op)
         {
-            Node(node.GetChild(0));
-            Node(node.GetChild(1));
+            Generate(node.GetChild(0));
+            Generate(node.GetChild(1));
 
             return Append(op);
         }
 
-        //void TranslatePathname(RhoAstNode node)
-        //{
-        //    Pathname::Elements elements;
-        //    typedef Pathname::Element El;
-        //
-        //    for (var ch : node.GetChildren())
-        //    {
-        //        switch (ch.GetToken().type)
-        //        {
-        //        case RhoTokenEnumType::Quote:
-        //            elements.push_back(El::Quote);
-        //            break;
-        //        case RhoTokenEnumType::Sep:
-        //            elements.push_back(El::Separator);
-        //            break;
-        //        case RhoTokenEnumType::Ident:
-        //            elements.push_back(Label(ch.GetTokenText()));
-        //            break;
-        //        }
-        //    }
-        //
-        //    AppendNew(Pathname(move(elements)));
-        //}
-
-
-        // TODO: have Append() etc, and this method, return bool
-        protected bool Node(RhoAstNode node)
+        /// <summary>
+        /// Generate executable pi-code from given node.
+        /// </summary>
+        protected bool Generate(RhoAstNode node)
         {
             if (node == null)
-                return Fail("INTERNAL: Unexpected empty node");
+                return InternalFail("Unexpected empty RhoAstNode");
 
             switch (node.Type)
             {
@@ -256,7 +244,7 @@ namespace Pyro.RhoLang
                     return Token(node);
 
                 case ERhoAst.Assignment:
-                    Node(node.GetChild(0));
+                    Generate(node.GetChild(0));
                     AppendQuoted(node.GetChild(1));
                     return Append(EOperation.Store);
 
@@ -274,8 +262,7 @@ namespace Pyro.RhoLang
 
                 case ERhoAst.Block:
                     PushNew();
-                    Block(node);
-                    return Append(Pop());
+                    return Block(node) && Append(Pop());
 
                 case ERhoAst.List:
                     return List(node);
@@ -289,23 +276,28 @@ namespace Pyro.RhoLang
                 default:
                     return Token(node);
             }
-
-            //return Fail($"Unsupported RhoAstNode {node}");
         }
 
         private bool List(RhoAstNode node)
         {
             PushNew();
-            foreach (var ch in node.Children)
-                Node(ch);
-
-            return Append(Pop().Code);
+            return GenerateChildren(node) && Append(Pop().Code);
         }
 
         private bool Block(RhoAstNode node)
         {
+            return GenerateChildren(node);
+        }
+
+        private bool GenerateChildren(RhoAstNode node)
+        {
+            if (node == null)
+                return InternalFail("Null in Rho Ast");
+
+            // do NOT convert this to LINQ
             foreach (var st in node.Children)
-                Node(st);
+                if (!Generate(st))
+                    return InternalFail($"Failed to generate code for '{st}' from {node}");
 
             return true;
         }
@@ -318,7 +310,7 @@ namespace Pyro.RhoLang
 
             PushNew();
             foreach (var obj in block)
-                Node(obj);
+                Generate(obj);
 
             var cont = Pop();
             foreach (var arg in args)
@@ -333,9 +325,10 @@ namespace Pyro.RhoLang
             var args = children[1].Children;
             var name = children[0];
             foreach (var a in args.Reverse())
-                Node(a);
+                Generate(a);
 
-            Node(name);
+            Generate(name);
+
             // TODO: add Replace/Suspend/Resume to children
             if (children.Count > 2 && children[2].Token.Type == ERhoToken.Replace)
                 Append(EOperation.Replace);
@@ -352,7 +345,7 @@ namespace Pyro.RhoLang
             var member = ch[1];
             
             AppendQuoted(member);
-            Node(subject);
+            Generate(subject);
 
             return Append(EOperation.GetMember);
         }
@@ -365,11 +358,11 @@ namespace Pyro.RhoLang
             var elseBlock = ch.Count > 2 ? ch[2] : null;
             var hasElse = elseBlock != null;
 
-            Node(thenBlock);
+            Generate(thenBlock);
             if (hasElse)
-                Node(elseBlock);
+                Generate(elseBlock);
 
-            Node(test);
+            Generate(test);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
 
             // TODO: Allow for if! and if... as well as if&
@@ -383,16 +376,16 @@ namespace Pyro.RhoLang
             {
                 // for (a in b) ...
                 AppendQuoted(ch[0]);
-                Node(ch[1]);
-                Node(ch[2]);
+                Generate(ch[1]);
+                Generate(ch[2]);
                 return Append(EOperation.ForEachIn);
             }
 
             // for (a = 0; a < 10; ++a) ...
-            Node(ch[0]);
-            Node(ch[1]);
-            Node(ch[2]);
-            Node(ch[3]);
+            Generate(ch[0]);
+            Generate(ch[1]);
+            Generate(ch[2]);
+            Generate(ch[3]);
             return Append(EOperation.ForLoop);
         }
 
