@@ -1,5 +1,5 @@
 ﻿// returns many things on the stack
-fun (b)
+fun foo(b)
 	b + 2
 	b + 1
  	b
@@ -8,7 +8,5 @@ fun (b)
 fun(1)
 assert(`depth` == 3)
 `clear`
-assert(`depth` == 0)
-assert(fun(1) `+ +` == 1 + 2 + 3)
 assert(`depth` == 0)
 

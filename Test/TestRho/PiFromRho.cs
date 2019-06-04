@@ -30,9 +30,9 @@ namespace Pyro.Test
         [Test]
         public void RunScripts()
         {
-            RunScript("pyro/PiFromRho0.rho");
-            RunScript("pyro/PiFromRho1.rho");
-            RunScript("pyro/PiFromRho2.rho");
+            RunScript("PiRho/PiFromRho0.rho");
+            RunScript("PiRho/PiFromRho1.rho");
+            RunScript("PiRho/PiFromRho2.rho");
         }
     }
 }

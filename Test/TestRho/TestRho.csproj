@@ -48,9 +48,8 @@
     <None Include="Scripts\Add.rho" />
     <None Include="Scripts\Coments.rho" />
     <None Include="Scripts\Import.rho" />
-    <None Include="Scripts\pyro\PiFromRho2.rho" />
-    <None Include="Scripts\pyro\PiFromRho1.rho" />
-    <None Include="Scripts\pyro\PiFromRho0.rho" />
+    <None Include="Scripts\PiRho\PiFromRho1.rho" />
+    <None Include="Scripts\PiRho\PiFromRho0.rho" />
     <Compile Include="PiFromRho.cs" />
     <Compile Include="TestRhoClass.cs" />
     <Compile Include="TestRhoFreezeThaw.cs" />
