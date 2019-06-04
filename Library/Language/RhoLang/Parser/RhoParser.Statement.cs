@@ -3,11 +3,11 @@
     using Lexer;
 
     /// <inheritdoc cref="IProcess" />
-    ///  <summary>
-    ///  Rho statements are stand-alone components made of sub-expressions.
-    ///  NOTE that Statements do not leave anything on the parsing stack:
-    ///  They either succeed or leave a decent contextual lexical+semantic error message.
-    ///  </summary>
+    /// <summary>
+    /// Rho statements are stand-alone components made of sub-expressions.
+    /// NOTE that Statements do not leave anything on the parsing stack:
+    /// They either succeed or leave a decent contextual lexical+semantic error message.
+    /// </summary>
     public partial class RhoParser
     {
         private bool Statement()

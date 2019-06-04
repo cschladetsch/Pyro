@@ -14,16 +14,10 @@ namespace Pyro.Language.Impl
         , ITranslator
     {
         public int TraceLevel { get; set; }
-
         protected virtual Continuation Result => _stack.Count == 0 ? null : Top();
-
         private readonly Stack<Continuation> _stack = new Stack<Continuation>();
 
-        protected TranslatorCommon(IRegistry r)
-            : base(r)
-        {
-            Reset();
-        }
+        protected TranslatorCommon(IRegistry r) : base(r) => Reset();
 
         public virtual bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program)
         {
@@ -36,7 +30,7 @@ namespace Pyro.Language.Impl
         {
             base.Reset();
             _stack.Clear();
-            _stack.Push(Continuation.New(_reg));
+            PushNew();
         }
 
         public override string ToString()
@@ -48,25 +42,10 @@ namespace Pyro.Language.Impl
             return str.ToString();
         }
 
-        protected void PushNew()
-        {
-            _stack.Push(Continuation.New(_reg));
-        }
-
-        protected Continuation Pop()
-        {
-            return _stack.Pop();
-        }
-
-        protected Continuation Top()
-        {
-            return _stack.Peek();
-        }
-
-        protected void Append(object obj)
-        {
-            Top().Code.Add(obj);
-        }
+        protected void PushNew() => _stack.Push(Continuation.New(_reg));
+        protected Continuation Pop() => _stack.Pop();
+        protected Continuation Top() => _stack.Peek();
+        protected void Append(object obj) => Top().Code.Add(obj);
     }
 }
 

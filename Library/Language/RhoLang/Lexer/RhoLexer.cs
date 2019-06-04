@@ -1,9 +1,9 @@
-﻿using Pyro.Language;
-using Pyro.Language.Impl;
-using Pyro.Language.Lexer;
-
-namespace Pyro.RhoLang.Lexer
+﻿namespace Pyro.RhoLang.Lexer
 {
+    using Language;
+    using Pyro.Language.Impl;
+
+    /// <inheritdoc />
     /// <summary>
     /// Lexer for the Rho language
     /// </summary>
@@ -37,7 +37,7 @@ namespace Pyro.RhoLang.Lexer
 
         protected override bool NextToken()
         { 
-            char current = Current();
+            var current = Current();
             if (current == 0)
                 return false;
 

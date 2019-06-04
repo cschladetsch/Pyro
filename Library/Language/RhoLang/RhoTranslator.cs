@@ -11,6 +11,9 @@ namespace Pyro.RhoLang
     using Language;
     using Language.Impl;
 
+    /// <summary>
+    /// Translate from text to an executable Continuation.
+    /// </summary>
     public class RhoTranslator 
         : TranslatorBase<RhoLexer, RhoParser>
     {
@@ -232,13 +235,15 @@ namespace Pyro.RhoLang
             if (!(rhoNode.Value is PiAstNode piNode))
                 return Fail("Internal error: PiAstNode type expected");
 
-            return new PiTranslator(_reg).TranslateNode(piNode, Top().Code) || Fail("Couldn't translate pi");
+            // TODO: store a private _piTranslator that is re-used
+            return new PiTranslator(_reg).TranslateNode(piNode, Top().Code)
+                || Fail("Couldn't translate pi");
         }
 
         private void AppendQuoted(RhoAstNode node)
             => Append(new Label(node.Text, true));
 
-        void TranslateBinaryOp(RhoAstNode node, EOperation op)
+        private void TranslateBinaryOp(RhoAstNode node, EOperation op)
         {
             TranslateNode(node.GetChild(0));
             TranslateNode(node.GetChild(1));
@@ -308,7 +313,6 @@ namespace Pyro.RhoLang
                     TranslateGetMember(node);
                     return;
 
-
                 case ERhoAst.Conditional:
                     TranslateIf(node);
                     return;
@@ -330,6 +334,7 @@ namespace Pyro.RhoLang
                 case ERhoAst.Program:
                     TranslateBlock(node);
                     return;
+
                 default:
                     TranslateToken(node);
                     return;

@@ -143,59 +143,22 @@ namespace Pyro.RhoLang.Parser
         private bool Factor()
         {
             if (Try(ERhoToken.New))
-            {
-                var @new = NewNode(Consume());
-                @new.Add(Pop());
-                return Push(@new);
-            }
+                return New();
 
             if (Try(ERhoToken.OpenParan))
-            {
-                var exp = NewNode(Consume());
-                if (!Expression())
-                    return FailLocation("Expected an expression");
-
-                Expect(ERhoToken.CloseParan);
-                exp.Add(Pop());
-                return Push(exp);
-            }
+                return Paran();
 
             if (Try(ERhoToken.PiSlice))
-            {
-                var lexer = new PiLexer(Current().Text);
-                if (!lexer.Process())
-                    return Fail("Failed to lex embedded pi");
-
-                var parser = new PiParser(lexer);
-                if (!parser.Process(lexer))
-                    return Fail(parser.Error);
-
-                var pi = NewNode(Consume());
-                pi.Value = parser.Root;
-                Push(pi);
-                return true;
-            }
+                return Pi();
 
             if (TryConsume(ERhoToken.OpenSquareBracket))
-            {
-                var list = NewNode(ERhoAst.List);
-                while (true)
-                {
-                    if (TryConsume(ERhoToken.CloseSquareBracket))
-                        break;
-                    if (Expression())
-                        list.Add(Pop());
-                    else
-                        return FailLocation("Expressions required within array");
-                    //if (!TryConsume(ERhoToken.Comma))
-                    //    break;
-                }
+                return Index();
 
-                //Expect(ERhoToken.CloseSquareBracket);
-                return Failed 
-                    ? FailLocation("Closing bracket expected for array")
-                    : Push(list);
-            }
+            if (Try(ERhoToken.Self))
+                return PushConsumed();
+
+            if (Try(ERhoToken.Ident) || Try(ERhoToken.Pathname))
+                return FactorIdent();
 
             if (   Try(ERhoToken.Int) 
                 || Try(ERhoToken.Float) 
@@ -207,19 +170,65 @@ namespace Pyro.RhoLang.Parser
                 return PushConsumed();
             }
 
-            if (Try(ERhoToken.Self))
-                return PushConsumed();
-
-            if (Try(ERhoToken.Ident))
-                return ParseFactorIdent();
-
-            if (Try(ERhoToken.Pathname))
-                return ParseFactorIdent();
-
             return false;
         }
 
-        private bool ParseFactorIdent()
+        private bool New()
+        {
+            var @new = NewNode(Consume());
+            @new.Add(Pop());
+            return Push(@new);
+        }
+
+        private bool Index()
+        {
+            var list = NewNode(ERhoAst.List);
+            while (true)
+            {
+                if (TryConsume(ERhoToken.CloseSquareBracket))
+                    break;
+                if (Expression())
+                    list.Add(Pop());
+                else
+                    return FailLocation("Expressions required within array");
+                //if (!TryConsume(ERhoToken.Comma))
+                //    break;
+            }
+
+            //Expect(ERhoToken.CloseSquareBracket);
+            return Failed
+                ? FailLocation("Closing bracket expected for array")
+                : Push(list);
+        }
+
+        private bool Paran()
+        {
+            var exp = NewNode(Consume());
+            if (!Expression())
+                return FailLocation("Expected an expression");
+
+            Expect(ERhoToken.CloseParan);
+            exp.Add(Pop());
+            return Push(exp);
+        }
+
+        private bool Pi()
+        {
+            var lexer = new PiLexer(Current().Text);
+            if (!lexer.Process())
+                return Fail(lexer.Error);
+
+            var parser = new PiParser(lexer);
+            if (!parser.Process(lexer))
+                return Fail(parser.Error);
+
+            var pi = NewNode(Consume());
+            pi.Value = parser.Root;
+            Push(pi);
+            return true;
+        }
+
+        private bool FactorIdent()
         {
             PushConsume();
 
