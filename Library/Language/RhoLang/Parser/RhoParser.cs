@@ -14,6 +14,8 @@
     {
         public RhoAstNode Result => _Stack.Peek();
 
+        private readonly EStructure _structure;
+
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
             : base(lexer, reg)
         {
@@ -60,7 +62,7 @@
             if (!Try(ERhoToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _Stack.Count == 1 || Fail("Semantic stack not empty after parsing");
+            return _Stack.Count == 1 || Fail("INTERNAL: Semantic stack not empty after parsing");
         }
 
         private bool Program()
@@ -119,21 +121,20 @@
                 return false;
 
             Consume();
-
             return true;
         }
 
         private void RemoveWhitespace()
         {
-            var prevNl = true;
+            var prevNewLine = true;
             foreach (var tok in _Lexer.Tokens)
             {
                 // remove useless consecutive newlines
-                var nl = tok.Type == ERhoToken.NewLine;
-                if (prevNl && nl)
+                var newLine = tok.Type == ERhoToken.NewLine;
+                if (prevNewLine && newLine)
                     continue;
 
-                prevNl = nl;
+                prevNewLine = newLine;
 
                 switch (tok.Type)
                 {
@@ -152,8 +153,6 @@
             while (Try(ERhoToken.NewLine))
                 Consume();
         }
-
-        private readonly EStructure _structure;
     }
 }
 

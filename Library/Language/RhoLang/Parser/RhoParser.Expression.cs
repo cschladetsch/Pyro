@@ -1,14 +1,12 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using Pyro.Language.Lexer;
-using Pyro.Language.Parser;
-using Pyro.RhoLang.Lexer;
-
-namespace Pyro.RhoLang.Parser
+﻿namespace Pyro.RhoLang.Parser
 {
+    using Language.Lexer;
+    using Language.Parser;
+    using Lexer;
+
     /// <summary>
     /// Functions that deal only with parsing expressions.
-    ///
-    /// NOTE that in Rho, a statement can also be an expression.
+    /// <bold>NOTE</bold> that in Rho, a statement can also be an expression.
     /// </summary>
     public partial class RhoParser
     {
@@ -27,7 +25,7 @@ namespace Pyro.RhoLang.Parser
                 var assign = NewNode(Consume());
                 var ident = Pop();
                 if (!Logical())
-                    return FailLocation("Assignment requires an expression");
+                    return FailLocation("Logical sub-expression expected");
 
                 assign.Add(Pop());
                 assign.Add(ident);
@@ -47,7 +45,7 @@ namespace Pyro.RhoLang.Parser
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
-                    return FailLocation("Relational component expected");
+                    return FailLocation("Relational sub-expression expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -72,7 +70,7 @@ namespace Pyro.RhoLang.Parser
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Additive())
-                    return FailLocation("Additive component expected");
+                    return FailLocation("Additive sub-expression expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -98,7 +96,7 @@ namespace Pyro.RhoLang.Parser
             {
                 var negate = NewNode(Consume());
                 if (!Additive())
-                    return FailLocation("Additive component expected");
+                    return FailLocation("Additive sub-component expected");
 
                 negate.Add(Pop());
                 return Push(negate);
@@ -131,7 +129,7 @@ namespace Pyro.RhoLang.Parser
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Factor())
-                    return FailLocation("Factor expected with a term");
+                    return FailLocation("Term expected a factor");
 
                 node.Add(Pop());
                 Push(node);
@@ -187,10 +185,12 @@ namespace Pyro.RhoLang.Parser
             {
                 if (TryConsume(ERhoToken.CloseSquareBracket))
                     break;
+
                 if (Expression())
                     list.Add(Pop());
                 else
-                    return FailLocation("Expressions required within array");
+                    return FailLocation("Expression required within array");
+
                 //if (!TryConsume(ERhoToken.Comma))
                 //    break;
             }
@@ -216,11 +216,11 @@ namespace Pyro.RhoLang.Parser
         {
             var lexer = new PiLexer(Current().Text);
             if (!lexer.Process())
-                return Fail(lexer.Error);
+                return FailLocation(lexer.Error);
 
             var parser = new PiParser(lexer);
             if (!parser.Process(lexer))
-                return Fail(parser.Error);
+                return FailLocation(parser.Error);
 
             var pi = NewNode(Consume());
             pi.Value = parser.Root;
@@ -255,7 +255,7 @@ namespace Pyro.RhoLang.Parser
                 }
             }
 
-            return true;
+            return !Failed;
         }
 
         private bool GetMember()
@@ -265,8 +265,8 @@ namespace Pyro.RhoLang.Parser
             var get = NewNode(ERhoAst.GetMember);
             get.Add(Pop());
             get.Add(Expect(ERhoToken.Ident));
-            Push(get);
-            return true;
+
+            return Push(get);
         }
 
         private bool Call()
@@ -290,7 +290,7 @@ namespace Pyro.RhoLang.Parser
                 {
                     Consume();
                     if (!Expression())
-                        return FailLocation("What is the next argument?");
+                        return FailLocation("Argument expected");
 
                     args.Add(Pop());
                 }
@@ -305,7 +305,7 @@ namespace Pyro.RhoLang.Parser
             var index = PushConsume();
             index.Add(Pop());
             if (!Expression())
-                return FailLocation("Index what?");
+                return FailLocation("Indexing expression expected");
 
             index.Add(Pop());
 
