@@ -10,6 +10,8 @@ namespace Pyro.Test.Rho
         {
             public int Num => 42;
 
+            public string Str = "foobar";
+
             public int Sum(int a, int b)
             {
                 return a + b;
@@ -22,6 +24,14 @@ namespace Pyro.Test.Rho
                     str += a;
                 return str;
             }
+        }
+
+        [Test]
+        public void TestCustomClassSerialise()
+        {
+            var foo = _reg.Add<Foo>();
+            var text = _reg.ToPiScript(foo);
+            WriteLine(text);
         }
 
         [Test]

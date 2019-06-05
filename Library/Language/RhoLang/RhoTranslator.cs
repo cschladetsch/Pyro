@@ -184,6 +184,9 @@ namespace Pyro.RhoLang
         }
 
         private bool AppendChildOp(RhoAstNode node, EOperation op) => Generate(node.GetChild(0)) && Append(op);
+        private bool AppendQuoted(RhoAstNode node) => Append(new Label(node.Text, true));
+        private bool List(RhoAstNode node) => PushNew() && GenerateChildren(node) && Append(Pop().Code);
+        private bool Block(RhoAstNode node) => GenerateChildren(node);
 
         private bool PiSlice(RhoAstNode rhoNode)
         {
@@ -194,8 +197,6 @@ namespace Pyro.RhoLang
             return new PiTranslator(_reg).TranslateNode(piNode, Top().Code)
                 || Fail("Couldn't translate pi");
         }
-
-        private bool AppendQuoted(RhoAstNode node) => Append(new Label(node.Text, true));
 
         private bool BinaryOp(RhoAstNode node, EOperation op)
         {
@@ -254,10 +255,6 @@ namespace Pyro.RhoLang
                     return Token(node);
             }
         }
-
-        private bool List(RhoAstNode node) => PushNew() && GenerateChildren(node) && Append(Pop().Code);
-
-        private bool Block(RhoAstNode node) => GenerateChildren(node);
 
         private bool GenerateChildren(RhoAstNode node)
         {
