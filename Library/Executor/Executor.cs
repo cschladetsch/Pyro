@@ -170,7 +170,7 @@ namespace Pyro.Exec
                 break;
 
             case EOperation op:
-                throw new NotImplementedException($"Operation {op}");
+                throw new NotImplementedException($"Operation {op} not implemented");
 
             default:
                 var item = Resolve(next);

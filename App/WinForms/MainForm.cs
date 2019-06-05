@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Pyro;
@@ -52,7 +53,7 @@ namespace WinForms
             // clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
 
-            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
+            output.Text = GetVersion();
             mainTabControl.SelectedIndex = 0;
             mainTabControl.SelectedIndexChanged += ChangedTab;
 
@@ -203,22 +204,8 @@ namespace WinForms
                         e.Handled = true;
                     }
 
-                    // no re-color
-                    return;
+                    break;
                 }
-
-                // don't need to re-color for these keys
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Home:
-                case Keys.End:
-                case Keys.Insert:
-                case Keys.Control:
-                case Keys.Delete:
-                    e.Handled = false;
-                    return;
             }
         }
 

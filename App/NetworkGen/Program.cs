@@ -40,10 +40,16 @@ namespace Pyro.NetworkGen
         }
     }
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            if (args.Length != 3)
+            {
+                Console.WriteLine("Usage: NetworkGen {Proxy,Agent} inputDir outputDir");
+                return;
+            }
+
             var type = Enum.Parse(typeof(EBuildType), args[0]);
             var inputAsm = args[1];
             var outputDir = args[2];

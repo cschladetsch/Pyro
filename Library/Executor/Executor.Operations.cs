@@ -52,6 +52,7 @@ namespace Pyro.Exec
             _actions[EOperation.Expand] = Expand;
             _actions[EOperation.Insert] = Insert;
             _actions[EOperation.New] = New;
+            _actions[EOperation.GetType] = GetTypeOf;
             _actions[EOperation.At] = At;
             _actions[EOperation.Has] = Has;
             _actions[EOperation.DebugPrintDataStack] = DebugPrintDataStack;
@@ -82,6 +83,14 @@ namespace Pyro.Exec
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+        }
+
+        private void GetTypeOf()
+        {
+            var obj = Pop();
+            if (obj is IConstRefBase cref)
+                Push(cref.Class.TypeName);
+            Push(obj.GetType());
         }
 
         private void GreaterEquiv()

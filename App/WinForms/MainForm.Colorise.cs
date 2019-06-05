@@ -94,6 +94,8 @@ namespace WinForms
                 case EPiToken.Quote:
                     return Render(Color.Gray);
 
+                case EPiToken.New:
+                case EPiToken.Delete:
                 case EPiToken.Swap:
                 case EPiToken.Drop:
                 case EPiToken.DropN:
@@ -104,6 +106,7 @@ namespace WinForms
                 case EPiToken.Expand:
                 case EPiToken.Size:
                 case EPiToken.Dup:
+                case EPiToken.GetType:
                     return Render(Color.DarkOliveGreen);
 
                 case EPiToken.Comment:

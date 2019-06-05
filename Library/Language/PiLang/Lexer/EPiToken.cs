@@ -121,6 +121,7 @@
         Insert,
         GetBack,
         Has,
-        SetFloatPrecision
+        SetFloatPrecision,
+        Delete
     }
 }

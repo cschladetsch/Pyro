@@ -150,6 +150,9 @@ namespace Pyro.Language
                 case EPiToken.Clear:
                     objects.Add(EOperation.Clear);
                     break;
+                case EPiToken.GetType:
+                    objects.Add(EOperation.GetType);
+                    break;
                 case EPiToken.Swap:
                     objects.Add(EOperation.Swap);
                     break;
