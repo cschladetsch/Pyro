@@ -359,7 +359,7 @@
             this.piInput.Size = new System.Drawing.Size(459, 314);
             this.piInput.TabIndex = 1;
             this.piInput.Text = "";
-            this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.piInput_KeyDown);
+            this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PiInputKeyDown);
             // 
             // piStatus
             // 

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
+using Pyro;
 using Pyro.Exec;
 using Pyro.ExecutionContext;
+using Pyro.Language;
+using Pyro.Language.Lexer;
 using Pyro.Network;
 using Pyro.Network.Impl;
 
@@ -23,6 +27,7 @@ namespace WinForms
         private readonly IPeer _peer;
         private readonly Context _context;
         private Executor Exec => _context.Executor;
+        private IRegistry Reg => _context.Registry;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
 
@@ -48,17 +53,26 @@ namespace WinForms
             Perform(EOperation.Clear);
 
             output.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
-            mainTabControl.SelectedIndex = 1;
+            mainTabControl.SelectedIndex = 0;
             mainTabControl.SelectedIndexChanged += ChangedTab;
 
             LoadPrevious();
 
-            Closing += (a,b) =>
+            Closing += (a, b) =>
             {
                 SaveFile("pi", piInput.Text);
                 SaveFile("rho", rhoInput.Text);
                 _peer?.Stop();
             };
+
+            UpdatePiContext();
+            ColorisePi();
+            piInput.TextChanged += PiInputOnTextChanged;
+        }
+
+        private void PiInputOnTextChanged(object sender, EventArgs e)
+        {
+            ColorisePi();
         }
 
         private void Connected(IPeer peer, IClient client)
@@ -73,6 +87,7 @@ namespace WinForms
                 Invoke(new ReceivedResponseHandler(Received), server, client, text);
                 return;
             }
+
             Console.WriteLine($"Recv: {text}");
             if (_context.Translate(text, out var cont))
             {
@@ -86,6 +101,7 @@ namespace WinForms
                     output.Text = $"Exception: {e.Message}";
                 }
             }
+
             UpdateStackView();
         }
 
@@ -142,21 +158,22 @@ namespace WinForms
         {
             switch (e.KeyCode)
             {
-                //case Keys.Tab:
-                //{
-                //    ChangeTab(e.Control, e.Shift);
-                //    break;
-                //}
+            //case Keys.Tab:
+            //{
+            //    ChangeTab(e.Control, e.Shift);
+            //    break;
+            //}
 
-                case Keys.Enter:
+            case Keys.Enter:
+            {
+                if (e.Control)
                 {
-                    if (e.Control)
-                    {
-                        ExecuteRho();
-                        e.Handled = true;
-                    }
-                    break;
+                    ExecuteRho();
+                    e.Handled = true;
                 }
+
+                break;
+            }
             }
         }
 
@@ -174,7 +191,7 @@ namespace WinForms
             mainTabControl.SelectedIndex = act(curTab, numTabs);
         }
 
-        private void piInput_KeyDown(object sender, KeyEventArgs e)
+        private void PiInputKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -185,8 +202,23 @@ namespace WinForms
                         ExecutePi();
                         e.Handled = true;
                     }
-                    break;
+
+                    // no re-color
+                    return;
                 }
+
+                // don't need to re-color for these keys
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Insert:
+                case Keys.Control:
+                case Keys.Delete:
+                    e.Handled = false;
+                    return;
             }
         }
 
