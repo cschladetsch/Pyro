@@ -1,17 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
 using Pyro;
 using Pyro.Exec;
 using Pyro.ExecutionContext;
-using Pyro.Language;
-using Pyro.Language.Lexer;
 using Pyro.Network;
-using Pyro.Network.Impl;
 
 namespace WinForms
 {
@@ -31,8 +26,8 @@ namespace WinForms
         private IRegistry Reg => _context.Registry;
         private Stack<object> DataStack => Exec.DataStack;
         private List<object> _last;
-
         private bool _local = true;
+        private bool PiSelected => mainTabControl.SelectedIndex == 0;
 
         public MainForm()
         {
@@ -68,17 +63,8 @@ namespace WinForms
 
             UpdatePiContext();
             ColorisePi();
+
             piInput.TextChanged += PiInputOnTextChanged;
-        }
-
-        private void PiInputOnTextChanged(object sender, EventArgs e)
-        {
-            ColorisePi();
-        }
-
-        private void Connected(IPeer peer, IClient client)
-        {
-            Console.WriteLine($"Connected: {peer} {client}");
         }
 
         private void Received(IServer server, IClient client, string text)
@@ -119,40 +105,19 @@ namespace WinForms
             }
         }
 
-        private static string LoadFile(string name)
-            => File.ReadAllText(TmpFile(name));
-
-        private static void SaveFile(string name, string contents)
-            => File.WriteAllText(TmpFile(name), contents);
-
-        private static string TmpFile(string name)
-            => Path.Combine(GetFolderPath(), $"last.{name}");
-
-        private static string GetFolderPath()
-            => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
         private void ChangedTab(object sender, EventArgs e)
         {
             var isPi = mainTabControl.SelectedIndex == 0;
             if (!isPi)
                 return;
-            UpdatePiContext();
-        }
 
-        public static void GoToSite(string url)
-        {
-            System.Diagnostics.Process.Start(url);
+            UpdatePiContext();
         }
 
         private void UpdatePiContext()
         {
             // TODO: Add concept of a `tree`
             piStatus.Text = "/home λ";
-            //var stack = _context.Executor.ContextStack;
-            //if (stack.Count == 0)
-            //    return;
-            //var top = stack.Peek();
-            //piStatus.Text = $"{
         }
 
         private void RhoTextKeyDown(object sender, KeyEventArgs e)
@@ -165,21 +130,22 @@ namespace WinForms
             //    break;
             //}
 
-            case Keys.Enter:
-            {
-                if (e.Control)
+                case Keys.Enter:
                 {
-                    ExecuteRho();
-                    e.Handled = true;
-                }
+                    if (e.Control)
+                    {
+                        ExecuteRho();
+                        e.Handled = true;
+                    }
 
-                break;
-            }
+                    break;
+                }
             }
         }
 
         private void ChangeTab(bool ctrl, bool shift)
         {
+            // TODO: this is stupid
             int Next(int cur, int tot) => (cur + 1) % tot;
             int Prev(int cur, int tot) => (cur + tot - 1) % tot;
             NextTab(ctrl ? (Func<int, int, int>) Prev : Next);
@@ -211,13 +177,11 @@ namespace WinForms
 
         private void ExecutePi()
         {
-            var ln = piInput.GetLineFromCharIndex(piInput.SelectionStart);
-            var ip = piInput.Lines[ln];
-            Console.WriteLine(ip);
+            var pi = piInput.Lines[piInput.GetLineFromCharIndex(piInput.SelectionStart)];
             if (_local)
-                Perform(() => _context.ExecPi(ip));
+                Perform(() => _context.ExecPi(pi));
             else
-                Perform(() => _peer.Execute(ip));
+                Perform(() => _peer.Execute(pi));
         }
 
         private void ExecuteRho()
@@ -229,8 +193,7 @@ namespace WinForms
 
         private void Perform(Action action)
         {
-            // TODO: CopyStack(); for `get last stack` request.
-
+            // TODO: CopyStack(); to answer `get last stack` request.
             try
             {
                 _context.Reset();
@@ -281,21 +244,25 @@ namespace WinForms
             return row;
         }
 
-        private static void AddSubItem(ListViewItem row, string text)
-            => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
-
         private void Perform(EOperation op)
         {
             if (_local)
                 Perform(() => Exec.Perform(op));
             else
-            {
-                // ....
-            }
+                // TODO
+                ;
         }
 
-        private void ExecuteClick(object sender, EventArgs e)
-            => ExecuteRho();
+        private void SaveAsFile(object sender, EventArgs e)
+        {
+            var isPi = PiSelected;
+            var save = isPi ? savePiDialog : saveRhoDialog;
+            if (save.ShowDialog() == DialogResult.OK)
+                File.WriteAllText(save.FileName, isPi ? piInput.Text : rhoInput.Text);
+        }
+
+        private static void AddSubItem(ListViewItem row, string text)
+            => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
 
         private void StackClearClick(object sender, EventArgs e)
             => Perform(EOperation.Clear);
@@ -324,37 +291,30 @@ namespace WinForms
         private void Exit(object sender, EventArgs e)
             => Application.Exit();
 
-        private void piConsole_Click(object sender, EventArgs e)
-        {
-        }
+        private static string LoadFile(string name)
+            => File.ReadAllText(TmpFile(name));
 
-        private void stackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //stackView.
-            //output.Dock = DockStyle.Fill;
-            //stackView.Enabled = !stackView.Enabled;
-            //if (stackView.Is)
-        }
+        private static void SaveFile(string name, string contents)
+            => File.WriteAllText(TmpFile(name), contents);
 
-        private bool PiSelected => mainTabControl.SelectedIndex == 0;
+        private static string TmpFile(string name)
+            => Path.Combine(GetFolderPath(), $"last.{name}");
 
-        private void SaveAsFile(object sender, EventArgs e)
-        {
-            var isPi = PiSelected;
-            var save = isPi ? savePiDialog : saveRhoDialog;
-            if (save.ShowDialog() == DialogResult.OK)
-                File.WriteAllText(save.FileName, isPi ? piInput.Text : rhoInput.Text);
-        }
+        private static string GetFolderPath()
+            => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
         private void SaveFile(object sender, EventArgs e)
-        {
-        }
+            => throw new NotImplementedException();
 
-        private void _NetworkConnect(object sender, EventArgs e)
-        {
-            var dlg = new NetworkConnect(_peer);
-            dlg.Show();
-        }
+        private void NetworkConnect(object sender, EventArgs e)
+            => new NetworkConnect(_peer).Show();
+
+        private void PiInputOnTextChanged(object sender, EventArgs e)
+            => ColorisePi();
+
+        private void Connected(IPeer peer, IClient client)
+            => Console.WriteLine($"Connected: {peer} {client}");
     }
 }
+
 

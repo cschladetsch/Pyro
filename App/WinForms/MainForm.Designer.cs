@@ -214,7 +214,6 @@
             this.stackToolStripMenuItem.Name = "stackToolStripMenuItem";
             this.stackToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.stackToolStripMenuItem.Text = "&Stack";
-            this.stackToolStripMenuItem.Click += new System.EventHandler(this.stackToolStripMenuItem_Click);
             // 
             // outputToolStripMenuItem
             // 
@@ -248,7 +247,7 @@
             this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
             this.newToolStripMenuItem1.Size = new System.Drawing.Size(98, 22);
             this.newToolStripMenuItem1.Text = "&New";
-            this.newToolStripMenuItem1.Click += new System.EventHandler(this._NetworkConnect);
+            this.newToolStripMenuItem1.Click += new System.EventHandler(this.NetworkConnect);
             // 
             // disconnectToolStripMenuItem
             // 
@@ -347,7 +346,6 @@
             this.piConsole.TabIndex = 1;
             this.piConsole.Text = "Pi";
             this.piConsole.UseVisualStyleBackColor = true;
-            this.piConsole.Click += new System.EventHandler(this.piConsole_Click);
             // 
             // piInput
             // 

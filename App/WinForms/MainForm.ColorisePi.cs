@@ -50,7 +50,6 @@ namespace WinForms
 
         private bool ColorisePiToken(PiToken tok, Slice slice)
         {
-            //Console.WriteLine($"{slice}, {tok.Type}");
             if (slice.Length < 0)
                 return false;
 
@@ -81,7 +80,6 @@ namespace WinForms
                     // color the quotes too
                     var expanded = new Slice(slice.Lexer, slice.LineNumber, slice.Start - 1, slice.End + 1);
                     return Colorise(expanded, Color.Blue, _boldFont);
-                    //return Render(Color.Coral);
 
                 case EPiToken.Int:
                     return Render(Color.Brown);
@@ -91,6 +89,7 @@ namespace WinForms
 
                 case EPiToken.Ident:
                     return RenderBold(Color.DarkSlateBlue);
+
                 case EPiToken.Quote:
                     return Render(Color.Gray);
 
@@ -156,25 +155,26 @@ namespace WinForms
         }
 
         #region Native
-        private const int WM_USER = 0x0400;
-        private const int EM_SETEVENTMASK = (WM_USER + 69);
-        private const int WM_SETREDRAW = 0x0b;
-        private IntPtr OldEventMask;
+        private const int WmUser = 0x0400;
+        private const int EmSeteventmask = (WmUser + 69);
+        private const int WmSetredraw = 0x0b;
+        private IntPtr _oldEventMask;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         public void BeginUpdate(Control control)
         {
-            SendMessage(control.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
-            OldEventMask = SendMessage(control.Handle, EM_SETEVENTMASK, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(control.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
+            _oldEventMask = SendMessage(control.Handle, EmSeteventmask, IntPtr.Zero, IntPtr.Zero);
         }
 
         public void EndUpdate(Control control)
         {
-            SendMessage(control.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
-            SendMessage(control.Handle, EM_SETEVENTMASK, IntPtr.Zero, OldEventMask);
+            SendMessage(control.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
+            SendMessage(control.Handle, EmSeteventmask, IntPtr.Zero, _oldEventMask);
         }
         #endregion
     }
 }
+
