@@ -79,8 +79,9 @@ namespace WinForms
 
                 case EPiToken.String:
                     // color the quotes too
-                    //return Colorise(new Slice(slice.Lexer, slice.Start - 1, slice.End + 1), Color.Blue);
-                    return Render(Color.Coral);
+                    var expanded = new Slice(slice.Lexer, slice.LineNumber, slice.Start - 1, slice.End + 1);
+                    return Colorise(expanded, Color.Blue, _boldFont);
+                    //return Render(Color.Coral);
 
                 case EPiToken.Int:
                     return Render(Color.Brown);
