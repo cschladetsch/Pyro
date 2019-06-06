@@ -236,7 +236,8 @@ namespace Pyro.Exec
                 yield return val;
             }
 
-            ContextStack.Pop();
+            // TODO: pop or not?!?
+            C ontextStack.Pop();
             Break();
         }
 

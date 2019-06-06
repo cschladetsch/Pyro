@@ -1,12 +1,14 @@
-﻿namespace WinForms
+﻿using Pyro;
+
+namespace WinForms
 {
     class UserModel
     {
         public string Email { get; set; }
-        private Orgnisation Organisation { get; set; }
+        private IConstRef<Organisation> Organisation { get; set; }
     }
 
-    class Orgnisation
+    class Organisation
     {
         public string Name { get; set; }
     }

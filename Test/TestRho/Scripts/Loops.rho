@@ -12,3 +12,19 @@ for (a in [1 2 3 4])
 	c = c + a
 assert(c == 98)
 
+fun foo()
+	writeln("start")
+	c = 0
+	for (a in [1 2 3 4])
+		writeln("a:" + a)
+		for (b in [4 5 6 7])
+			writeln("b:" + b)
+			c = c + b
+		c = c + a
+		writeln("c:" + c)
+	writeln("end")
+	c
+
+foo()
+
+assert(foo() == 102)
