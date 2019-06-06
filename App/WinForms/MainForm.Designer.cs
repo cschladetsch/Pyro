@@ -377,7 +377,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(465, 347);
+            this.tabPage1.Size = new System.Drawing.Size(540, 332);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Rho";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -389,7 +389,7 @@
             this.rhoInput.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rhoInput.Location = new System.Drawing.Point(3, 3);
             this.rhoInput.Name = "rhoInput";
-            this.rhoInput.Size = new System.Drawing.Size(459, 341);
+            this.rhoInput.Size = new System.Drawing.Size(534, 326);
             this.rhoInput.TabIndex = 0;
             this.rhoInput.Text = "";
             this.rhoInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RhoTextKeyDown);
