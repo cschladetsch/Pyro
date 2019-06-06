@@ -116,9 +116,15 @@ namespace Pyro.Exec
             }
         }
 
-        private void Execute(Continuation cont)
+        public bool Step()
         {
-            while (cont.Next(out var next))
+            if (_current == null)
+                _current = ContextStack.Pop();
+
+            if (_current == null)
+                return false;
+
+            if (_current.Next(out var next))
             {
                 // unbox reference types
                 if (next is IRefBase refBase)
@@ -127,7 +133,7 @@ namespace Pyro.Exec
                 try
                 {
                     Perform(next);
-                    
+
                     if (TraceLevel > 5)
                     {
                         if (next is EOperation op)
@@ -150,10 +156,17 @@ namespace Pyro.Exec
 
                     throw;
                 }
+            }
 
+            return true;
+        }
+
+        private void Execute(Continuation cont)
+        {
+            ContextStack.Push(cont);
+            while (Step())
                 if (_break)
                     break;
-            }
         }
 
         public void Perform(object next)
