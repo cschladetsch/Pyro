@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Flow;
-using Pyro.Exec;
 
 namespace Pyro.Network
 {
+    using Exec;
+
     public delegate void ReceivedResponseHandler(IServer server, IClient client, string text);
     public delegate void ConnectedHandler(IPeer peer, IClient client);
 
+    /// <inheritdoc />
     /// <summary>
     /// A Peer listens to incoming connections, and can connect to other peers.
     /// </summary>
-    public interface IPeer : IProcess
+    public interface IPeer
+        : IProcess
     {
         IServer Local { get; }
         IClient Remote { get; }
