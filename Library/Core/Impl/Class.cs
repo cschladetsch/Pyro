@@ -27,7 +27,11 @@ namespace Pyro.Impl
         }
 
         public override object NewInstance()
-            => Activator.CreateInstance(Type);
+        {
+            var instance = Activator.CreateInstance(Type);
+            AddRefFields(instance);
+            return instance;
+        }
 
         public override void NewRef(Id id, out IRefBase refBase)
             => refBase = new Ref<T>(_registry, this, id);
@@ -38,7 +42,7 @@ namespace Pyro.Impl
         public IConstRef<T> CreateConst(Id id, T value)
             => new ConstRef<T>(_registry, this, id, value);
 
-        public override void AppendText(StringBuilder str, object obj)
+        public override void ToPiScript(StringBuilder str, object obj)
             => AppendText(str, _registry.Get<T>(obj));
 
         public void AppendText(StringBuilder str, T obj)

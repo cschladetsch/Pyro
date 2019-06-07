@@ -42,7 +42,7 @@ namespace Pyro.Console
             RunInitialisationScripts();
 
             if (_peer != null)
-                _peer.OnReceivedResponse += (server, client, text) => WriteLine(text, ConsoleColor.Magenta);
+                _peer.OnReceivedRequest += (server, client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
 
@@ -110,7 +110,7 @@ namespace Pyro.Console
                 return Error("Local server listen port number expected as argument");
 
             _peer = Create.NewPeer(port);
-            return _peer.StartSelfHosting() || Error("Failed to start local server");
+            return _peer.SelfHost() || Error("Failed to start local server");
         }
 
         private void RunInitialisationScripts()

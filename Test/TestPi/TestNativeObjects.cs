@@ -11,6 +11,8 @@ namespace Pyro.Test
         public class UserModel
         {
             public string Name { get; set; }
+            public string Email { get; set; }
+            public int Age { get; set; }
         }
 
         [Test]
@@ -24,6 +26,7 @@ namespace Pyro.Test
             var user = Pop<UserModel>();
             Assert.IsNotNull(user);
         }
+
 
         [Test]
         public void TestString()

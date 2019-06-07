@@ -35,7 +35,7 @@ namespace Pyro
         public string ToText()
         {
             var str = new StringBuilder();
-            Self.Class.AppendText(str, Self.Value);
+            Self.Class.ToPiScript(str, Self.Value);
             return str.ToString();
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Collections.Generic;
 
 namespace Pyro.Network.Impl
 {
@@ -20,15 +20,19 @@ namespace Pyro.Network.Impl
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
 
-        public override Socket Socket
-        {
-            get => _socket;
-            set => _socket = value;
-        }
+        private Socket _socket;
+        private IList<object> _stack;
+
+        public override Socket Socket { get => _socket; set => _socket = value; }
 
         public Client(Peer peer)
             : base(peer)
         {
+        }
+
+        public override string ToString()
+        {
+            return $"Client: connected to {HostName}:{HostPort}";
         }
 
         public IEnumerable<string> Results()
@@ -62,7 +66,8 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        public bool Send(Continuation continuation) => Send(continuation.ToText());
+        public bool Send(Continuation continuation)
+            => Send(continuation.ToText());
 
         public void Close()
         {
@@ -77,7 +82,7 @@ namespace Pyro.Network.Impl
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
-                WriteLine($"Client connected to {_socket.RemoteEndPoint}");
+                WriteLine($"Client: connected to {_socket.RemoteEndPoint} using {_socket.LocalEndPoint}");
                 Receive(_socket);
             }
             catch (Exception e)
@@ -118,8 +123,5 @@ namespace Pyro.Network.Impl
             var address = Socket?.RemoteEndPoint as IPEndPoint;
             return address?.Address.ToString() ?? "none";
         }
-
-        private Socket _socket;
-        private IList<object> _stack;
     }
 }

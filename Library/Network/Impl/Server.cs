@@ -22,7 +22,7 @@ namespace Pyro.Network.Impl
         }
 
         public int ListenPort => _port;
-        public event ReceivedResponseHandler ReceivedResponse;
+        public event MessageHandler ReceivedRequest;
 
         private const int RequestBacklogCount = 50;
         private Socket _listener;
@@ -88,7 +88,7 @@ namespace Pyro.Network.Impl
         {
             try
             {
-                ReceivedResponse?.Invoke(this, _Peer.GetClient(sender), pi);
+                ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
                 RunLocally(pi);
                 return SendResponse(sender);
             }

@@ -7,7 +7,10 @@ namespace Pyro.Network
 {
     using Exec;
 
-    public delegate void ReceivedResponseHandler(IServer server, IClient client, string text);
+    /// <summary>
+    /// General message passed from client to server.
+    /// </summary>
+    public delegate void MessageHandler(IServer server, IClient client, string text);
     public delegate void ConnectedHandler(IPeer peer, IClient client);
 
     /// <inheritdoc />
@@ -22,10 +25,22 @@ namespace Pyro.Network
         IList<IClient> Clients { get; }
         string LocalHostName { get; }
 
-        event ReceivedResponseHandler OnReceivedResponse;
+        /// <summary>
+        /// Fires when we connect to a new client.
+        /// </summary>
         event ConnectedHandler OnConnected;
 
-        bool StartSelfHosting();
+        /// <summary>
+        /// Fires when we receive a new request to do some work.
+        /// </summary>
+        event MessageHandler OnReceivedRequest;
+
+        /// <summary>
+        /// Fires when we receive a response to some previous work.
+        /// </summary>
+        event MessageHandler OnReceivedResponse;
+
+        bool SelfHost();
         bool Connect(string hostName, int port);
         bool Enter(IClient client);
         bool Execute(Continuation continuation);
