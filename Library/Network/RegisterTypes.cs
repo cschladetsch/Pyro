@@ -1,7 +1,10 @@
-﻿using Pyro.Network.Impl;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using Impl;
+
+    /// <summary>
+    /// Add network-specific types to given registry.
+    /// </summary>
     public static class RegisterTypes
     {
         public static void Register(IRegistry registry)

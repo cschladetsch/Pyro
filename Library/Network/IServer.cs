@@ -1,6 +1,11 @@
 ﻿namespace Pyro.Network
 {
-    public interface IServer : INetCommon
+    /// <inheritdoc />
+    /// <summary>
+    /// Interface for a general server.
+    /// </summary>
+    public interface IServer
+        : INetCommon
     {
         int ListenPort { get; }
 
@@ -9,3 +14,4 @@
         void Stop();
     }
 }
+

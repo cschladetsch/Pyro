@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-using Pyro.Language.Impl;
-using Pyro.Language.Lexer;
-
 namespace Pyro.Language.Parser
 {
+    using Impl;
+    using Lexer;
+
     /// <summary>
     /// PiParser for the Pi language. It's quite simple.
     /// </summary>
@@ -22,7 +22,7 @@ namespace Pyro.Language.Parser
 
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
-            _Indent = 0;
+            _Current = 0;
             _Lexer = lex;
 
             if (_Lexer.Failed)
@@ -69,16 +69,20 @@ namespace Pyro.Language.Parser
                 case EPiToken.Separator:
                 case EPiToken.Ident:
                     return ParsePathname(context);
+
                 case EPiToken.OpenSquareBracket:
                     return ParseCompound(context, EPiAst.Array, EPiToken.CloseSquareBracket);
+
                 case EPiToken.OpenBrace:
                     return ParseCompound(context, EPiAst.Continuation, EPiToken.CloseBrace);
+
                 case EPiToken.CloseSquareBracket:
                 case EPiToken.CloseBrace:
-                    return FailLocation("Unopened compound");
+                    return FailLocation("Unopened compound.");
+
                 case EPiToken.None:
                     return false;
-                // most pi tokens just fall through to being passed to translator
+
                 default:
                     context.Add(AddValue(_AstFactory.New(Consume())));
                     return true;
@@ -187,3 +191,4 @@ namespace Pyro.Language.Parser
         }
     }
 }
+

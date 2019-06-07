@@ -1,7 +1,7 @@
 ﻿namespace Pyro.Network
 {
     /// <summary>
-    /// TODO
+    /// Factory for network objects.
     /// </summary>
     public static class Create
     {
@@ -11,3 +11,4 @@
         }
     }
 }
+

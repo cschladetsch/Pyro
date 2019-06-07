@@ -67,7 +67,7 @@ namespace Pyro.RhoLang
                 case ERhoToken.Assert:
                     return AppendChildOp(node, EOperation.Assert);
 
-                 case ERhoToken.If:
+                case ERhoToken.If:
                      return If(node);
 
                 case ERhoToken.Write:
