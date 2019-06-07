@@ -71,6 +71,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Continuation.OpToText.cs" />
     <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>
