@@ -36,7 +36,7 @@ namespace Pyro.BuiltinTypes
                     first = false;
                 else
                     arg1.Append(' ');
-                reg.AppendText(arg1, obj);
+                reg.ToPiScript(arg1, obj);
             }
             arg1.Append(']');
         }

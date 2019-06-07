@@ -23,9 +23,10 @@ namespace Pyro.Impl
         private readonly Type _type;
         private readonly string _typeName;
 
-        private readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
-        private readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
-        private readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
+        protected readonly Dictionary<string, FieldInfo> _fields = new Dictionary<string, FieldInfo>();
+        protected readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
+        protected readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
+        protected readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
 
         internal StructBase(IRegistry reg, Type type)
         {
@@ -33,6 +34,9 @@ namespace Pyro.Impl
             _registry = reg;
             InstanceType = type;
             _typeName = type.FullName;
+
+            foreach (var field in type.GetFields())
+                _fields[field.Name] = field;
 
             foreach (var prop in type.GetProperties())
                 _properties[prop.Name] = prop;

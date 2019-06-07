@@ -34,7 +34,7 @@ namespace Pyro
         IConstRefBase CreateConst(Id id, object value);
         object NewInstance();//Stack<object> dataStack);
 
-        void AppendText(StringBuilder str, object value);
+        void ToPiScript(StringBuilder str, object value);
     }
 }
 

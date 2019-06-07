@@ -38,26 +38,29 @@ namespace Pyro.Test
             }
         }
 
-        public class User : Reflected<User>
+        public class User
         {
             public string Name;
             public string Last;
             public int Age;
-            public IConstRef<Organisation> Org;
+            public IRef<Organisation> Org;
         }
 
-        public class Organisation : Reflected<Organisation>
+        public class Organisation
         {
             public string Email;
+            public IList<IRef<User>> Users;
         }
 
         [Test]
         public void TestPersistedInstances()
         {
             var user = _reg.Add<User>().Value;
+            var org = _reg.Add<Organisation>().Value;
             user.Name = "Freddy";
             user.Last = "Blogs";
             user.Age = 42;
+            user.Org.Value = org;
 
             var pi = _reg.ToPiScript(user);
             PiRun(pi);

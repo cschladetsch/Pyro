@@ -93,7 +93,7 @@ namespace Pyro.Impl
             throw new NotImplementedException();
         }
 
-        public void AppendText(StringBuilder stringBuilder, object obj)
+        public void ToPiScript(StringBuilder stringBuilder, object obj)
         {
             if (obj is IConstRefBase rb)
                 obj = rb.BaseValue;
@@ -103,7 +103,7 @@ namespace Pyro.Impl
                 return;
 
             if (_classes.TryGetValue(type, out var @class))
-                @class.AppendText(stringBuilder, obj);
+                @class.ToPiScript(stringBuilder, obj);
             else
                 stringBuilder.Append(obj);
         }
@@ -111,7 +111,7 @@ namespace Pyro.Impl
         public string ToPiScript(object obj)
         {
             var str = new StringBuilder();
-            AppendText(str, obj);
+            ToPiScript(str, obj);
             return str.ToString();
         }
 
@@ -188,19 +188,16 @@ namespace Pyro.Impl
 
         private IRef<T> AddNew<T>(IClassBase classBase)
         {
-            var id = NextId();
-            classBase.NewRef(id, out var refBase);
-            Reflect(classBase, refBase);
-            AddNewInstance(classBase, refBase, id);
-            return refBase as IRef<T>;
+            return AddNew<T>(classBase, (T)classBase.NewInstance());
         }
 
         private IRef<T> AddNew<T>(IClassBase classBase, T value)
         {
-            var val = AddNew<T>(classBase);
-            val.Value = value;
-            Reflect(classBase, val);
-            return val;
+            var id = NextId();
+            classBase.NewRef(id, out var refBase);
+            refBase.BaseValue = value;
+            AddNewInstance(classBase, refBase, id);
+            return refBase as IRef<T>;
         }
 
         private IRefBase AddNew(IClassBase classBase, object value)

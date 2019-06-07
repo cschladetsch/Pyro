@@ -237,7 +237,7 @@ namespace Pyro.Exec
             }
 
             // TODO: pop or not?!?
-            C ontextStack.Pop();
+            ContextStack.Pop();
             Break();
         }
 

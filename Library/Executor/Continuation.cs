@@ -49,7 +49,7 @@ namespace Pyro.Exec
                         break;
 
                     default:
-                        reg.AppendText(str, elem);
+                        reg.ToPiScript(str, elem);
                         break;
                 }
 

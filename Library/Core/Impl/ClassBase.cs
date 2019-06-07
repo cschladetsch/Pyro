@@ -45,6 +45,14 @@ namespace Pyro.Impl
             refBase = new RefBase(_registry, this, id);
         }
 
+        protected void AddRefFields(object instance)
+        {
+            foreach (var field in _fields)
+            {
+
+            }
+        }
+
         public IRefBase Create(Id id, object value)
         {
             return new RefBase(_registry, this, id, value);
@@ -70,7 +78,7 @@ namespace Pyro.Impl
             throw new NotImplementedException();
         }
 
-        public virtual void AppendText(StringBuilder str, object value)
+        public virtual void ToPiScript(StringBuilder str, object value)
         {
             str.Append(value);
         }

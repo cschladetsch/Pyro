@@ -100,7 +100,7 @@ namespace Pyro
         object New(IClassBase @class, Stack<object> dataStack);
         IRefBase NewRef(IClassBase @class, Stack<object> dataStack);
         IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack);
-        void AppendText(StringBuilder stringBuilder, object o);
+        void ToPiScript(StringBuilder stringBuilder, object o);
         string ToPiScript(object obj);
         object Duplicate(object obj);
     }
