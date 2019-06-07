@@ -61,6 +61,7 @@ namespace Pyro.RhoLang
                     return Assign(node);
 
                 case ERhoToken.Fun:
+                case ERhoToken.Class:
                     return Function(node);
 
                 case ERhoToken.Assert:

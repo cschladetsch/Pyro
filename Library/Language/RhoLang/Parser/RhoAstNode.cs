@@ -40,8 +40,6 @@ namespace Pyro.RhoLang.Parser
             var val = $"{Value}";
             var text = $"{Text}";
             var type = $"{Type}: ";
-            if (!string.IsNullOrEmpty(val))
-                val = $"{val}";
 
             if (Token?.Type == ERhoToken.String)
                 text = $"\"{text}\"";
