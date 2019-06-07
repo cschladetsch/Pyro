@@ -80,7 +80,8 @@
         Constructor,
         Destructor,
         BackTic,
-        PiSlice, // hah!
+        PiSlice,
+        Pass
     }
 }
 

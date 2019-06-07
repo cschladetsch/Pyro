@@ -22,7 +22,7 @@ namespace Pyro.Language.Parser
 
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
-            _Current = 0;
+            _Indent = 0;
             _Lexer = lex;
 
             if (_Lexer.Failed)

@@ -27,7 +27,7 @@ namespace Pyro.Test
             RhoRun("assert(`1 2 {+} &` == 3)");
         }
 
-        [Test]
+        //[Test]
         public void RunScripts()
         {
             RunScript("PiRho/PiFromRho0.rho");

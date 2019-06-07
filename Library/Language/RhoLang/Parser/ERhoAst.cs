@@ -28,5 +28,7 @@
         Assignment,
         Suspend,
         PiSlice,
+        Class,
     }
 }
+

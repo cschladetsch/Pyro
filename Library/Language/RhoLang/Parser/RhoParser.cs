@@ -88,7 +88,7 @@
             Push(NewNode(ERhoAst.Block));
             while (!Failed)
             {
-                if (Try(ERhoToken.Nop))
+                if (Try(ERhoToken.Pass))
                     return true;
 
                 if (!Statement())

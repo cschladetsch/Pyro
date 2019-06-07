@@ -5,7 +5,7 @@
     /// <inheritdoc cref="IProcess" />
     /// <summary>
     /// Rho statements are stand-alone components made of sub-expressions.
-    /// NOTE that Statements do not leave anything on the parsing stack:
+    /// <b>NOTE</b> that Statements do not leave anything on the parsing stack:
     /// They either succeed or leave a decent contextual lexical+semantic error message.
     /// </summary>
     public partial class RhoParser
@@ -43,27 +43,27 @@
                 case ERhoToken.If:
                     return If();
 
+                case ERhoToken.Class:
                 case ERhoToken.Fun:
-                    return Function();
+                    return NamedBlock();
 
-                // TODO: Need a 'pass' for empty blocks
-                //case ERhoToken.Pass:
-                //    Append(Current().Type);
-                //    return true;
+                case ERhoToken.Pass:
+                    PushConsume();
+                    return true;
 
                 case ERhoToken.Nop:
                     return false;
             }
 
             if (!Expression())
-                return FailLocation("Expression expected");
-
+                return FailLocation("Statement or expression expected.");
             return Append(Pop()) && !Try(ERhoToken.Nop);
         }
 
-        private bool Function()
-        {
-            var cont = NewNode(Consume());
+        private bool NamedBlock() => AddNamedBlock(NewNode(Consume()));
+
+        private bool AddNamedBlock(RhoAstNode cont)
+        { 
             var ident = Expect(ERhoToken.Ident);
 
             Expect(ERhoToken.OpenParan);

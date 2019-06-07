@@ -33,6 +33,7 @@
             _KeyWords.Add("write", ERhoToken.Write);
             _KeyWords.Add("new", ERhoToken.New);
             _KeyWords.Add("in", ERhoToken.In);
+            _KeyWords.Add("class", ERhoToken.Class);
         }
 
         protected override bool NextToken()
