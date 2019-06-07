@@ -15,7 +15,7 @@ namespace Pyro.Network.Impl
         , IPeer
     {
         public string LocalHostName => GetLocalHostname();
-        public event ReceivedResponseHandler OnReceivedResponse;
+        public event MessageHandler OnReceivedRequest;
         public event ConnectedHandler OnConnected;
         public IList<object> Stack { get; }
 
@@ -64,7 +64,9 @@ namespace Pyro.Network.Impl
         public void StartServer(int listenPort)
         {
             _server = new Server(this, listenPort);
-            _server.ReceivedResponse += (server, client, text) => { OnReceivedResponse?.Invoke(server, client, text); };
+            _server.ReceivedRequest 
+                += (server, client, text)
+                => OnReceivedRequest?.Invoke(server, client, text);
         }
 
         /// <summary>
@@ -77,9 +79,9 @@ namespace Pyro.Network.Impl
             if (!Connect(GetLocalHostname(), port))
                 return Error("Couldn't connect to localhost");
 
-            // Unsure if truly needed, but this Sleep is to give a little time for local
-            // client to connect to local server via Tcp.
-            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(150));
+            // This Sleep is to give a little time for local
+            // client to connect to local server via loopback Tcp.
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
 
             return Enter(Clients[0]) || Error("Couldn't shell to localhost");
         }
@@ -99,7 +101,7 @@ namespace Pyro.Network.Impl
             return GetRemoteEndPoint()?.Port ?? 0;
         }
 
-        public bool StartSelfHosting()
+        public bool SelfHost()
         {
             return !_server.Start() ? Fail("Couldn't start server") : SelfHost(_server.ListenPort);
         }

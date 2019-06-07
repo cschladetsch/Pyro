@@ -199,8 +199,8 @@ namespace Pyro.Test
         private static void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
-            System.Diagnostics.Trace.WriteLine(text);
-            Console.WriteLine(text);
+            //System.Diagnostics.Trace.WriteLine(text);
+            //Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)

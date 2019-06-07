@@ -71,7 +71,7 @@ namespace WinForms
         {
             if (InvokeRequired)
             {
-                Invoke(new ReceivedResponseHandler(Received), server, client, text);
+                Invoke(new MessageHandler(Received), server, client, text);
                 return;
             }
 
