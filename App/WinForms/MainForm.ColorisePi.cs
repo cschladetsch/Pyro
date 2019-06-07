@@ -8,18 +8,17 @@ using Pyro.Language.Lexer;
 
 namespace WinForms
 {
+    /// <summary>
+    /// Colorise Pi output according to token types.
+    /// </summary>
     partial class MainForm
     {
         private Font _defaultFont;
         private Font _boldFont;
 
-        private bool ColorisePi()
+        private void ColorisePi()
         {
-            if (_defaultFont == null)
-            {
-                _defaultFont = piInput.Font;
-                _boldFont = new Font(_defaultFont.FontFamily, _defaultFont.Size, FontStyle.Bold);
-            }
+            CheckFonts();
 
             var rtb = piInput;
             BeginUpdate(rtb);
@@ -28,10 +27,11 @@ namespace WinForms
             var lex = new PiLexer(input);
             try
             {
-                Colorise(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
+                // start by setting everything to default color and font
+                SetSliceColor(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
 
+                // don't care if lexing fails - we are generally mid-edit
                 lex.Process();
-                Console.WriteLine(lex.Error);
 
                 foreach (var tok in lex.Tokens)
                     ColorisePiToken(tok, tok.Slice);
@@ -44,8 +44,15 @@ namespace WinForms
             {
                 EndUpdate(rtb);
             }
+        }
 
-            return true;
+        private void CheckFonts()
+        {
+            if (_defaultFont != null)
+                return;
+
+            _defaultFont = piInput.Font;
+            _boldFont = new Font(_defaultFont.FontFamily, _defaultFont.Size, FontStyle.Bold);
         }
 
         private bool ColorisePiToken(PiToken tok, Slice slice)
@@ -53,8 +60,8 @@ namespace WinForms
             if (slice.Length < 0)
                 return false;
 
-            bool Render(Color color) => Colorise(slice, color, _defaultFont);
-            bool RenderBold(Color color) => Colorise(slice, color, _boldFont);
+            bool Render(Color color) => SetSliceColor(slice, color, _defaultFont);
+            bool RenderBold(Color color) => SetSliceColor(slice, color, _boldFont);
 
             switch (tok.Type)
             {
@@ -79,7 +86,7 @@ namespace WinForms
                 case EPiToken.String:
                     // color the quotes too
                     var expanded = new Slice(slice.Lexer, slice.LineNumber, slice.Start - 1, slice.End + 1);
-                    return Colorise(expanded, Color.Blue, _boldFont);
+                    return SetSliceColor(expanded, Color.Blue, _boldFont);
 
                 case EPiToken.Int:
                     return Render(Color.Brown);
@@ -122,7 +129,7 @@ namespace WinForms
             }
         }
 
-        private bool Colorise(Slice slice, Color color, Font font)
+        private bool SetSliceColor(Slice slice, Color color, Font font)
         {
             if (slice.Length < 0)
                 return false;

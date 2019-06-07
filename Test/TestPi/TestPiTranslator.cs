@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -165,6 +165,8 @@ namespace Pyro.Test
         {
             PiRun("\"foo\" \"bar\" +");
             Assert.AreEqual("foobar", Pop<string>());
+            PiRun("\"a\" \"b\" \"c\" + +");
+            Assert.AreEqual("abc", Pop<string>());
         }
 
         [Test]

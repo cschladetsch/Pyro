@@ -5,15 +5,13 @@ using System.Windows.Forms;
 
 using Pyro;
 using Pyro.Exec;
-using Pyro.ExecutionContext;
 using Pyro.Network;
+using Pyro.ExecutionContext;
 
 namespace WinForms
 {
     /// <summary>
     /// The main form for the application.
-    ///
-    /// TODO: Make DataStack redraw Reactive
     /// </summary>
     public partial class MainForm
         : Form
@@ -32,25 +30,21 @@ namespace WinForms
         public MainForm()
         {
             InitializeComponent();
-
             _context = new Context();
+
             Pyro.Network.RegisterTypes.Register(_context.Registry);
 
-            //_peer = Create.NewPeer(ListenPort);
-            //_peer.OnConnected += Connected;
-            //_peer.OnReceivedResponse += Received;
-            //if (!_peer.StartSelfHosting())
-            //{
-            //    Console.WriteLine(_peer.Error);
-            //    _local = true;
-            //}
+            _peer = Pyro.Network.Create.NewPeer(ListenPort);
+            _peer.OnConnected += Connected;
+            _peer.OnReceivedResponse += Received;
 
-            // clear the data stack from any design-time junk.
+            // Clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
 
             output.Text = GetVersion();
             mainTabControl.SelectedIndex = 0;
             mainTabControl.SelectedIndexChanged += ChangedTab;
+            piInput.TextChanged += PiInputOnTextChanged;
 
             LoadPrevious();
 
@@ -63,8 +57,6 @@ namespace WinForms
 
             UpdatePiContext();
             ColorisePi();
-
-            piInput.TextChanged += PiInputOnTextChanged;
         }
 
         private void Received(IServer server, IClient client, string text)
@@ -101,14 +93,13 @@ namespace WinForms
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
             }
         }
 
         private void ChangedTab(object sender, EventArgs e)
         {
-            var isPi = mainTabControl.SelectedIndex == 0;
-            if (!isPi)
+            if (mainTabControl.SelectedIndex != 0)
                 return;
 
             UpdatePiContext();
@@ -249,8 +240,7 @@ namespace WinForms
             if (_local)
                 Perform(() => Exec.Perform(op));
             else
-                // TODO
-                ;
+                _peer.Execute(_context.Registry.ToPiScript(op));
         }
 
         private void SaveAsFile(object sender, EventArgs e)
@@ -316,5 +306,4 @@ namespace WinForms
             => Console.WriteLine($"Connected: {peer} {client}");
     }
 }
-
 

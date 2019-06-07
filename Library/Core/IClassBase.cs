@@ -32,7 +32,8 @@ namespace Pyro
 
         IRefBase Create(Id id, object value);
         IConstRefBase CreateConst(Id id, object value);
-        object NewInstance();//Stack<object> dataStack);
+        object NewInstance();
+        object NewInstance(Stack<object> dataStack);
 
         void ToPiScript(StringBuilder str, object value);
     }

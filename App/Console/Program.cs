@@ -26,9 +26,7 @@ namespace Pyro.Console
         private bool _useLoopback = false;
 
         private static void Main(string[] args)
-        {
-            new Program(args).Repl();
-        }
+            => new Program(args).Repl();
 
         private Program(string[] args)
             : base(args)
@@ -42,7 +40,9 @@ namespace Pyro.Console
             RunInitialisationScripts();
 
             if (_peer != null)
-                _peer.OnReceivedRequest += (server, client, text) => WriteLine(text, ConsoleColor.Magenta);
+                _peer.OnReceivedRequest
+                    += (server, client, text) 
+                        => WriteLine(text, ConsoleColor.Magenta);
         }
 
 

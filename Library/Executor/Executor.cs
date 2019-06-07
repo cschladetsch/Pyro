@@ -5,7 +5,7 @@ namespace Pyro.Exec
 {
     /// <inheritdoc />
     /// <summary>
-    /// Processes a sequence of Continuations.
+    /// Processes a sequence of objects in a sequence of Continuations.
     /// </summary>
     public partial class Executor
         : Reflected<Executor>
@@ -21,55 +21,36 @@ namespace Pyro.Exec
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
 
-        public Executor()
-        {
-            AddOperations();
-        }
+        public Executor() => AddOperations();
+        public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
+        public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
+        public void Continue() => Continue(ContextStack.Pop());
 
-        public void PushContext(Continuation continuation)
-        {
-            ContextStack.Push(continuation);
-        }
+        private Continuation Context() => _current;
+        private dynamic RPop() => Resolve(Pop());
+        private dynamic RPop<T>() => ResolvePop<T>();
+        private dynamic ResolvePop<T>() => Resolve(Pop<T>());
+        private static void DebugBreak() => throw new DebugBreakException();
 
-        public void Continue()
-        {
-            Continue(ContextStack.Pop());
-        }
+        /// <summary>
+        /// Stop the current continuation and resume whatever is on the context stack
+        /// </summary>
+        private void Break() => _break = true;
 
         public void Clear()
         {
             DataStack = new Stack<object>();
             ContextStack = new Stack<Continuation>();
+            NumOps = 0;
+
             _break = false;
             _current = null;
-            NumOps = 0;
         }
 
         private void Assert()
         {
-            //WriteLine("--- Asserting ---");
             if (!Pop<bool>())
                 throw new AssertionFailedException();
-        }
-
-        private dynamic RPop()
-        {
-            return Resolve(Pop());
-        }
-
-        private dynamic RPop<T>()
-        {
-            return ResolvePop<T>();
-        }
-
-        private dynamic ResolvePop<T>()
-        {
-            return Resolve(Pop<T>());
-        }
-
-        private static void DebugBreak()
-        {
-            throw new DebugBreakException();
         }
 
         private void StoreValue()
@@ -77,12 +58,9 @@ namespace Pyro.Exec
             var name = Pop<IdentBase>();
             var val = Pop();
             if (name is Label label)
-            {
                 Context().SetScopeObject(label.Text, val);
-                return;
-            }
-
-            throw new NotImplementedException();
+            else
+                throw new Exception($"Can't store to {name}");
         }
 
         private void GetValue()
@@ -90,11 +68,6 @@ namespace Pyro.Exec
             var label = Pop<string>();
             var fromScope = Context().FromScope(label);
             Push(fromScope);
-        }
-
-        public void Continue(IRef<Continuation> continuation)
-        {
-            Continue(continuation.Value);
         }
 
         public void Continue(Continuation continuation)
@@ -173,7 +146,7 @@ namespace Pyro.Exec
         {
             ++NumOps;
             if (next == null)
-                throw new NullValueException();
+                throw new NullValueException("Cannot Perform null");
 
             PerformPrelude(next);
             switch (next)
@@ -235,17 +208,10 @@ namespace Pyro.Exec
                 return current.Scope[ident];
 
             foreach (var cont in ContextStack)
-            {
                 if (cont.HasScopeObject(ident))
                     return cont.Scope[ident];
-            }
 
             return Scope.TryGetValue(ident, out var obj) ? obj : null;
-        }
-
-        private Continuation Context()
-        {
-            return _current;
         }
 
         /// <summary>
@@ -270,7 +236,7 @@ namespace Pyro.Exec
                     break;
 
                 case IClassBase @class:
-                    Push(@class.NewInstance());//DataStack));
+                    Push(@class.NewInstance(DataStack));
                     break;
 
                 default:
@@ -279,14 +245,6 @@ namespace Pyro.Exec
             }
 
             Break();
-        }
-
-        /// <summary>
-        /// Stop the current continuation and resume whatever is on the context stack
-        /// </summary>
-        private void Break()
-        {
-            _break = true;
         }
 
         public void Push(object obj)

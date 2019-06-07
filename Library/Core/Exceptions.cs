@@ -61,8 +61,8 @@ namespace Pyro
     public class NullValueException
         : Exception
     {
-        public NullValueException()
-            : base("Null value")
+        public NullValueException(string text = "Null value")
+            : base(text)
         {
         }
     }
@@ -148,3 +148,4 @@ namespace Pyro
         }
     }
 }
+
