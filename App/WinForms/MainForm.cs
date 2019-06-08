@@ -1,14 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 using Pyro;
 using Pyro.Exec;
 using Pyro.Network;
 using Pyro.ExecutionContext;
-using Pyro.Language;
 
 namespace WinForms
 {
@@ -59,7 +57,9 @@ namespace WinForms
             };
 
             UpdatePiContext();
+
             ColorisePi();
+            ColoriseRho();
         }
 
         private void Received(IServer server, IClient client, string text)
