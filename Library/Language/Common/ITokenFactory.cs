@@ -5,7 +5,7 @@
     ///
     /// This is necessary, as each C# enum derives from System.Enum,
     /// so we cannot show enum values across different language token sets.
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEnum">The token types for the language</typeparam>
     /// <typeparam name="TToken">A token in the lexer</typeparam>

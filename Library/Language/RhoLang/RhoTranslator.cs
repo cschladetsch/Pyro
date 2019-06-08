@@ -14,7 +14,7 @@ namespace Pyro.RhoLang
     /// <summary>
     /// Translate from Rho script to an executable Continuation.
     /// </summary>
-    public class RhoTranslator 
+    public class RhoTranslator
         : TranslatorBase<RhoLexer, RhoParser>
     {
         public RhoTranslator(IRegistry r)
@@ -313,7 +313,7 @@ namespace Pyro.RhoLang
             var ch = node.Children;
             var subject = ch[0];
             var member = ch[1];
-            
+
             AppendQuoted(member);
             Generate(subject);
 

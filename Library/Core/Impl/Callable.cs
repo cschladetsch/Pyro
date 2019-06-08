@@ -11,7 +11,7 @@ namespace Pyro.Impl
     /// <typeparam name="B"></typeparam>
     /// <typeparam name="R"></typeparam>
     public class Callable<T, A, B, R>
-        : CallableBase, ICallable<T> 
+        : CallableBase, ICallable<T>
             where T : class
     {
         public Callable(Func<T, A, B, R> fun) : base(fun)
@@ -39,7 +39,7 @@ namespace Pyro.Impl
     /// <typeparam name="A"></typeparam>
     /// <typeparam name="R"></typeparam>
     public class Callable<T, A, R>
-        : CallableBase, ICallable<T> 
+        : CallableBase, ICallable<T>
             where T : class
     {
         private readonly Func<T, A, R> _fun;
@@ -65,7 +65,7 @@ namespace Pyro.Impl
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="R"></typeparam>
     public class Callable<T, R>
-        : CallableBase, ICallable<T> 
+        : CallableBase, ICallable<T>
             where T : class
     {
         private readonly Func<T, R> _fun;

@@ -12,7 +12,7 @@ namespace Diver.TestCore
     [TestFixture]
     public class TestRegistry
     {
-        [Test] 
+        [Test]
         public void TestValues()
         {
             var reg = new Registry();
@@ -31,7 +31,7 @@ namespace Diver.TestCore
             Assert.AreEqual(str.Value, "Foo");
         }
 
-        [Test] 
+        [Test]
         public void TestReferenceFields()
         {
             var reg = new Registry();

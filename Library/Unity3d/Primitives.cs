@@ -5,7 +5,7 @@
         public float x, y;
     }
 
-    public struct Vector3 
+    public struct Vector3
     {
         public float x, y, z;
     }

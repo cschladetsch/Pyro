@@ -55,7 +55,7 @@ namespace Pyro.Language.Impl
         }
 
         public string PrintTree()
-        { 
+        {
             var str = new StringBuilder();
             PrintTree(str, 0, _Stack.Peek());
             return str.ToString();
@@ -104,7 +104,7 @@ namespace Pyro.Language.Impl
         {
             if (obj == null)
                 return FailLocation("Cannot add Null object to internal parse stack");
-            
+
             _AstFactory.AddChild(Top(), obj);
             return true;
         }
@@ -124,7 +124,7 @@ namespace Pyro.Language.Impl
 
         protected TTokenNode Next()
         {
-            if (_Current != _Tokens.Count) 
+            if (_Current != _Tokens.Count)
                 return _Tokens[++_Current];
 
             FailLocation("Expected more");
@@ -142,7 +142,7 @@ namespace Pyro.Language.Impl
 
         protected TTokenNode Consume()
         {
-            if (_Current != _Tokens.Count) 
+            if (_Current != _Tokens.Count)
                 return _Tokens[_Current++];
 
             FailLocation("Expected something more");

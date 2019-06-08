@@ -59,7 +59,7 @@ namespace Pyro.AppCommon
         {
             ConWrite(text, color, Con.WriteLine);
         }
-        
+
         /// <summary>
         /// Save/restore current foreground color while writing a string to the console.
         /// </summary>

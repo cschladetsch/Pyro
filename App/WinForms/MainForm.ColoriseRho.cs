@@ -104,7 +104,7 @@ namespace WinForms
             }
         }
 
-        private bool SetRhoSliceColor(Slice slice, Color color, Font font) 
+        private bool SetRhoSliceColor(Slice slice, Color color, Font font)
             => SetSliceColor(rhoInput, slice, color, font);
     }
 }

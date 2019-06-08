@@ -41,7 +41,7 @@ namespace Pyro.Console
 
             if (_peer != null)
                 _peer.OnReceivedRequest
-                    += (server, client, text) 
+                    += (server, client, text)
                         => WriteLine(text, ConsoleColor.Magenta);
         }
 
@@ -171,8 +171,8 @@ namespace Pyro.Console
             //        si.FileName = bash;
             //        //si.Arguments = cmd;
             //        proc.StartInfo = si;
-            //        var sr = 
-            //        proc.StandardOutput = 
+            //        var sr =
+            //        proc.StandardOutput =
             //        return true;
             //    }
             //}

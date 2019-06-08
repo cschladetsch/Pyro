@@ -12,7 +12,7 @@ namespace Pyro
     {
         AssemblyName Assembly { get; }
         Version Version { get; }
-        string TypeName { get; } 
+        string TypeName { get; }
         Type Type { get; }
         int TypeNumber { get; }
 
@@ -21,7 +21,7 @@ namespace Pyro
         void AddCallable(string name, ICallable callable);
         void SetProperty(IRefBase obj, string name, object value);
         object GetProperty(IRefBase obj, string name);
-    
+
         void SetProperty<T>(IRefBase obj, string name, T value);
         IRef<T> GetProperty<T>(IRefBase obj, string name);
 

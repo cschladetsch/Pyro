@@ -52,7 +52,7 @@ namespace Pyro.Language.Impl
             var str = new StringBuilder();
             foreach (var tok in _Tokens)
                 str.Append($"{tok}, ");
-            
+
             return str.ToString();
         }
 
@@ -95,7 +95,7 @@ namespace Pyro.Language.Impl
 
         protected bool AddIfNext(char ch, TEnum thenType, TEnum elseType)
         {
-            if (Peek() != ch) 
+            if (Peek() != ch)
                 return Add(elseType, 1);
 
             Add(thenType, 2);
@@ -145,7 +145,7 @@ namespace Pyro.Language.Impl
                         str.Append(ch);
                 }
 
-                if (n != tok.LineNumber) 
+                if (n != tok.LineNumber)
                     continue;
 
                 for (var ch = 0; ch < lex.GetLine(n).Length; ++ch)

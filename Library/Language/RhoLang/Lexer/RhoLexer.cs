@@ -7,7 +7,7 @@
     /// <summary>
     /// Lexer for the Rho language
     /// </summary>
-    public class RhoLexer 
+    public class RhoLexer
         : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory>
     {
         public RhoLexer(string input)
@@ -37,7 +37,7 @@
         }
 
         protected override bool NextToken()
-        { 
+        {
             var current = Current();
             if (current == 0)
                 return false;
@@ -84,7 +84,7 @@
             case '|': return AddIfNext('|', ERhoToken.Or, ERhoToken.BitOr);
             case '<': return AddIfNext('=', ERhoToken.LessEquiv, ERhoToken.Less);
             case '>': return AddIfNext('=', ERhoToken.GreaterEquiv, ERhoToken.Greater);
-            case '"': return LexString(); 
+            case '"': return LexString();
             case '^': return Add(ERhoToken.Xor);
             case '\t': return Add(ERhoToken.Tab);
             case '\r':

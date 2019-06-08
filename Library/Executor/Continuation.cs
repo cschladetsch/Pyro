@@ -111,7 +111,7 @@ namespace Pyro.Exec
 
             if (exec.DataStack.Count < Args.Count)
                 throw new DataStackEmptyException();
-            
+
             foreach (var arg in Args)
                 _scope[arg] = exec.DataStack.Pop();
 

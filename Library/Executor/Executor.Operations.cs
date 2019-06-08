@@ -211,7 +211,7 @@ namespace Pyro.Exec
                 yield break;
 
             ContextStack.Push(_current);
-            
+
             // We need to ensure that when an inner loop ends,
             // the outer loop doesn't move to next value in the
             // enumeration.
@@ -257,7 +257,7 @@ namespace Pyro.Exec
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
             var @class = _registry.GetClass(type);
-            if (GetProperty(type, member, obj)) 
+            if (GetProperty(type, member, obj))
                 return;
 
             if (GetMethod(type, member, obj, @class))
@@ -547,7 +547,7 @@ namespace Pyro.Exec
                 default:
                     throw new NotImplementedException($"Cannot remove {index} from type {cont.GetType().Name}");
             }
- 
+
             Push(cont);
         }
 
@@ -621,7 +621,7 @@ namespace Pyro.Exec
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class CannotConvertException
         : Exception

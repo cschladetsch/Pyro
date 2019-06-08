@@ -21,8 +21,8 @@ namespace Pyro.Language
         }
 
         public override bool Translate(
-            string input, 
-            out Continuation result, 
+            string input,
+            out Continuation result,
             EStructure st = EStructure.Program)
         {
             if (!base.Translate(input, out result, st))
@@ -34,7 +34,7 @@ namespace Pyro.Language
                 return true;
 
             _Lexer = new PiLexer(input);
-            
+
             if (!_Lexer.Process())
                 return Fail($"LexerError: {_Lexer.Error}");
 

@@ -22,7 +22,7 @@
         /// The line number of the token in the input text range.
         /// </summary>
         int LineNumber { get; }
-        
+
         /// <summary>
         /// Where in the input text range this token exists.
         /// </summary>

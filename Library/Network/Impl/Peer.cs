@@ -65,7 +65,7 @@ namespace Pyro.Network.Impl
         public void StartServer(int listenPort)
         {
             _server = new Server(this, listenPort);
-            _server.ReceivedRequest 
+            _server.ReceivedRequest
                 += (server, client, text)
                 => OnReceivedRequest?.Invoke(server, client, text);
         }
@@ -126,7 +126,7 @@ namespace Pyro.Network.Impl
         public bool Connect(string hostName, int port)
         {
             var client = new Client(this);
-            if (!client.Connect(hostName, port)) 
+            if (!client.Connect(hostName, port))
                 return false;
 
             _clients.Add(client);
@@ -196,7 +196,7 @@ namespace Pyro.Network.Impl
 
             foreach (var client in _clients)
             {
-                if (client.HostName != address.Address.ToString()) 
+                if (client.HostName != address.Address.ToString())
                     continue;
                 OnConnected?.Invoke(this, client);
                 return;

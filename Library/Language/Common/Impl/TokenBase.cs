@@ -6,7 +6,7 @@ namespace Pyro.Language.Impl
         : ITokenBase<ETokenType>
     {
         public Slice Slice => _slice;
-        public ETokenType Type { get => _type; set => _type = value; } 
+        public ETokenType Type { get => _type; set => _type = value; }
         public int LineNumber => _slice.LineNumber;
         public LexerBase Lexer => _slice.Lexer;
         public string Text => Lexer.GetText(Slice);

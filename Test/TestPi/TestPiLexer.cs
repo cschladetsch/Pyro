@@ -23,8 +23,8 @@ namespace Pyro.Test
         public void TestNumbersAndOps()
         {
             AssertSameTokens(
-                "1 2 + 2 - 3 *", 
-                EPiToken.Int, EPiToken.Int, EPiToken.Plus, 
+                "1 2 + 2 - 3 *",
+                EPiToken.Int, EPiToken.Int, EPiToken.Plus,
                 EPiToken.Int, EPiToken.Minus, EPiToken.Int, EPiToken.Multiply
             );
         }

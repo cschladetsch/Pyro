@@ -15,10 +15,10 @@
             if (!Logical())
                 return false;
 
-            if (   Try(ERhoToken.Assign) 
-                || Try(ERhoToken.PlusAssign) 
-                || Try(ERhoToken.MinusAssign) 
-                || Try(ERhoToken.MulAssign) 
+            if (   Try(ERhoToken.Assign)
+                || Try(ERhoToken.PlusAssign)
+                || Try(ERhoToken.MinusAssign)
+                || Try(ERhoToken.MulAssign)
                 || Try(ERhoToken.DivAssign)
                )
             {
@@ -59,11 +59,11 @@
             if (!Additive())
                 return false;
 
-            while (   Try(ERhoToken.Less) 
-                   || Try(ERhoToken.Greater) 
-                   || Try(ERhoToken.Equiv) 
+            while (   Try(ERhoToken.Less)
+                   || Try(ERhoToken.Greater)
+                   || Try(ERhoToken.Equiv)
                    || Try(ERhoToken.NotEquiv)
-                   || Try(ERhoToken.LessEquiv) 
+                   || Try(ERhoToken.LessEquiv)
                    || Try(ERhoToken.GreaterEquiv)
                 )
             {
@@ -158,10 +158,10 @@
             if (Try(ERhoToken.Ident) || Try(ERhoToken.Pathname))
                 return FactorIdent();
 
-            if (   Try(ERhoToken.Int) 
-                || Try(ERhoToken.Float) 
-                || Try(ERhoToken.String) 
-                || Try(ERhoToken.True) 
+            if (   Try(ERhoToken.Int)
+                || Try(ERhoToken.Float)
+                || Try(ERhoToken.String)
+                || Try(ERhoToken.True)
                 || Try(ERhoToken.False)
                 )
             {
@@ -279,7 +279,7 @@
 
             // the thing to call is on the parse stack. It could be something like
             // `foo().bar.spam[4](a,b,c)`
-            call.Add(Pop()); 
+            call.Add(Pop());
             call.Add(args);
             Push(call);
 

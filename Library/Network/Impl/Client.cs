@@ -46,11 +46,11 @@ namespace Pyro.Network.Impl
 
         public void CompleteConnect(Socket socket)
             => _socket = socket;
-        
-        public bool Continue(Continuation cont) 
+
+        public bool Continue(Continuation cont)
             => Send(cont?.ToText());
-        
-        public bool Continue(string script) 
+
+        public bool Continue(string script)
             => !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
 
         public bool Connect(string hostName, int port)
@@ -58,7 +58,7 @@ namespace Pyro.Network.Impl
             var address = GetAddress(hostName);
             if (address == null)
                 return Fail($"Couldn't find address for {hostName}");
-            
+
             var endPoint = new IPEndPoint(address, port);
             var client = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             client.BeginConnect(endPoint, Connected, client);

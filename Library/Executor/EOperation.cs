@@ -47,7 +47,7 @@
         Break,
         DataToContext,
         ContextToData,
-        
+
         // Output
         Assert,
         Write,

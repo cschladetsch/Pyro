@@ -63,7 +63,7 @@
         private bool NamedBlock() => AddNamedBlock(NewNode(Consume()));
 
         private bool AddNamedBlock(RhoAstNode cont)
-        { 
+        {
             var ident = Expect(ERhoToken.Ident);
 
             Expect(ERhoToken.OpenParan);

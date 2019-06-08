@@ -216,7 +216,7 @@ namespace Pyro.Impl
 
         private void Reflect(IClassBase classBase, IRefBase refBase)
         {
-            if (!(refBase.BaseValue is IReflected reflected)) 
+            if (!(refBase.BaseValue is IReflected reflected))
                 return;
 
             reflected.SelfBase = refBase;

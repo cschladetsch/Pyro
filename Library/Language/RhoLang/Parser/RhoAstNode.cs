@@ -43,7 +43,7 @@ namespace Pyro.RhoLang.Parser
 
             if (Token?.Type == ERhoToken.String)
                 text = $"\"{text}\"";
- 
+
             if (type == "TokenType: ")
                 type = "";
 
@@ -51,7 +51,7 @@ namespace Pyro.RhoLang.Parser
         }
 
         public void Add(RhoAstNode node) => _children.Add(node);
-        public void Add(RhoToken token) => _children.Add(new RhoAstNode(ERhoAst.TokenType, token)); 
+        public void Add(RhoToken token) => _children.Add(new RhoAstNode(ERhoAst.TokenType, token));
         public void Add(ERhoToken piToken) => _children.Add(new RhoAstNode(piToken));
         public RhoAstNode GetChild(int n) => Children[n];
     }

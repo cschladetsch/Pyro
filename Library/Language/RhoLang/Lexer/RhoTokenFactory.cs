@@ -1,7 +1,7 @@
 ﻿namespace Pyro.RhoLang.Lexer
 {
     using Language;
-    
+
     /// <inheritdoc />
     /// <summary>
     /// How to make new Rho token nodes given slices and/or token types.

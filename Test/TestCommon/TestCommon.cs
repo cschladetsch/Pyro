@@ -134,7 +134,7 @@ namespace Pyro.Test
             return true;
         }
 
-        protected void Time(string label, Action action) 
+        protected void Time(string label, Action action)
             => WriteLine(Timer.Time("\t" + label, action));
 
         protected string LoadScript(string fileName)

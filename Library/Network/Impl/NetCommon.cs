@@ -35,7 +35,7 @@ namespace Pyro.Network.Impl
 
         protected Continuation TranslatePi(string pi)
         {
-            if (_Context.Translate(pi, out var cont)) 
+            if (_Context.Translate(pi, out var cont))
                 return cont;
 
             Error(_Context.Error);
@@ -83,7 +83,7 @@ namespace Pyro.Network.Impl
         protected IPEndPoint GetLocalEndPoint(int port)
         {
             var address = GetAddress(Dns.GetHostName());
-            if (address != null) 
+            if (address != null)
                 return new IPEndPoint(address, port);
 
             Error("Couldn't find suitable localhost address");
@@ -130,7 +130,7 @@ namespace Pyro.Network.Impl
         {
             var content = state.sb.ToString();
             var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere in scripts!
-            if (end < 0) 
+            if (end < 0)
                 return;
 
             try

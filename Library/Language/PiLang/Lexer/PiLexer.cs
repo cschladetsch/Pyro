@@ -52,10 +52,10 @@ namespace Pyro.Language.Lexer
             case '|': return AddIfNext('|', EPiToken.Or, EPiToken.BitOr);
             case '<': return AddIfNext('=', EPiToken.LessEquiv, EPiToken.LessEquiv);
             case '>': return AddIfNext('=', EPiToken.GreaterEquiv, EPiToken.Greater);
-            case '"': return LexString(); 
+            case '"': return LexString();
             case '^': return Add(EPiToken.Xor);
             case '\t': return Add(EPiToken.Tab);
-            case '\r': 
+            case '\r':
             case '\n': return Add(EPiToken.NewLine);
             case '-':
                 if (char.IsDigit(Peek()))
@@ -88,7 +88,7 @@ namespace Pyro.Language.Lexer
                     _Tokens.RemoveAt(_Tokens.Count - 1);
                     var slice = Gather(char.IsDigit);
                     return AddSlice(
-                        EPiToken.Float, 
+                        EPiToken.Float,
                         new Slice(this, prev.LineNumber, prev.Slice.Start, _offset));
                 }
 

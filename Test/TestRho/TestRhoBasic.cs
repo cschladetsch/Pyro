@@ -149,7 +149,7 @@ fun foo()
 @"fun foo()
 	1
 ");
-            
+
             RhoRun(
 @"fun foo()
 	1

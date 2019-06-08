@@ -7,7 +7,7 @@ namespace Pyro
     /// This is a simple class which works in various contexts.
     ///
     /// It is common to all things that preserve state over time.
-    /// 
+    ///
     /// Notably each language's Lexer, Parser, and Translator are all Proceses's.
     ///
     /// The base of all netork classes are also Process's.

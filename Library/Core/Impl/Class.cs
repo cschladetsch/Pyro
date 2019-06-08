@@ -11,7 +11,7 @@ namespace Pyro.Impl
     /// <typeparam name="T"></typeparam>
     public class Class<T>
         : ClassBase
-        , IClass<T> 
+        , IClass<T>
     {
         private readonly Action<IRegistry, StringBuilder, T> _toText;
 

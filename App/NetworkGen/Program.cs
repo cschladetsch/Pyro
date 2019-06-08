@@ -11,7 +11,7 @@ namespace Pyro.NetworkGen
 
     class AssemblyProcess
     {
-        protected static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger(); 
+        protected static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
         public AssemblyProcess(string asmName)
         {
