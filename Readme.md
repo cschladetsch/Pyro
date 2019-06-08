@@ -12,7 +12,8 @@ Each major component has its own project, and its own `Readme.md` file.
 
 The two key languages are:
 
-* **Pi**. A reverse-polish double stack-based language with fast lexing and parsing.
+* **Pi**. A reverse-polish double stack-based language with fast lexing and parsing. See [pi](https://github.com/cschladetsch/Pyro/wiki/Pi).
+
 * **Rho**. An infix language that looks a lot like Python. It translates to Pi code and shares the same *Executor*.
 
 From either *Pi* or *Rho* it is trivial to access all .Net objects, and also simple to add new custom types that you can expose to the runtime. 
