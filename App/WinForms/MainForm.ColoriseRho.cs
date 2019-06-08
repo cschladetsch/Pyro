@@ -6,6 +6,10 @@ using Pyro.RhoLang.Lexer;
 
 namespace WinForms
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Colorise Rho script.
+    /// </summary>
     public partial class MainForm
     {
         private void ColoriseRho()
@@ -19,10 +23,8 @@ namespace WinForms
             var lex = new RhoLexer(input);
             try
             {
-                // start by setting everything to default color and font
-                SetRhoSliceColor(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
+                DefaultColors(lex, input);
 
-                // don't care if lexing fails - we are generally mid-edit
                 lex.Process();
 
                 foreach (var tok in lex.Tokens)
@@ -36,6 +38,11 @@ namespace WinForms
             {
                 EndUpdate(rtb);
             }
+        }
+
+        private void DefaultColors(LexerBase lex, string input)
+        {
+            SetRhoSliceColor(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
         }
 
         private bool ColoriseRhoToken(RhoToken tok, Slice slice)

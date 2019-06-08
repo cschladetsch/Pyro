@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 using Pyro.Language;
 using Pyro.Language.Lexer;
@@ -9,13 +7,10 @@ using Pyro.Language.Lexer;
 namespace WinForms
 {
     /// <summary>
-    /// Colorise Pi output according to token types.
+    /// Colorise Pi script.
     /// </summary>
     partial class MainForm
     {
-        private Font _defaultFont;
-        private Font _boldFont;
-
         private bool ColorisePi()
         {
             CheckFonts();
@@ -30,7 +25,6 @@ namespace WinForms
                 // start by setting everything to default color and font
                 SetPiSliceColor(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
 
-                // don't care if lexing fails - we are generally mid-edit
                 lex.Process();
 
                 foreach (var tok in lex.Tokens)

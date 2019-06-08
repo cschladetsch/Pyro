@@ -42,7 +42,7 @@ namespace WinForms
             Perform(EOperation.Clear);
 
             output.Text = GetVersion();
-            mainTabControl.SelectedIndex = 0;
+            mainTabControl.SelectedIndex = 1;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;
             rhoInput.TextChanged += RhoInputOnTextChanged;
