@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 using Pyro;
 using Pyro.Exec;
 using Pyro.Network;
 using Pyro.ExecutionContext;
+using Pyro.Language;
 
 namespace WinForms
 {
@@ -45,6 +47,7 @@ namespace WinForms
             mainTabControl.SelectedIndex = 0;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;
+            rhoInput.TextChanged += RhoInputOnTextChanged;
 
             LoadPrevious();
 
@@ -302,7 +305,10 @@ namespace WinForms
         private void PiInputOnTextChanged(object sender, EventArgs e)
             => ColorisePi();
 
-        private void Connected(IPeer peer, IClient client)
+        private void RhoInputOnTextChanged(object sender, EventArgs e)
+            => ColoriseRho();
+
+        private static void Connected(IPeer peer, IClient client)
             => Console.WriteLine($"Connected: {peer} {client}");
     }
 }
