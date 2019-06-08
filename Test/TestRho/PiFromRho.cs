@@ -20,8 +20,8 @@ namespace Pyro.Test
             RhoRun("`1 2 +`");
             Assert.AreEqual(3, Pop());
 
-            Assert.AreEqual(_exec.ContextStack.Count, 0);
-            Assert.AreEqual(_exec.DataStack.Count, 0);
+            Assert.AreEqual(_Exec.ContextStack.Count, 0);
+            Assert.AreEqual(_Exec.DataStack.Count, 0);
 
             RhoRun("assert(`1 1 +` == 2)");
             RhoRun("assert(`1 2 {+} &` == 3)");

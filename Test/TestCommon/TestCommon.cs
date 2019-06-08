@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -24,13 +24,13 @@ namespace Pyro.Test
         public bool Verbose = true;
         public const string ScriptsFolder = "Scripts";
 
-        protected Continuation _continuation;
-        protected IDictionary<string, object> _scope => _continuation?.Scope;
-        protected IList<object> _code => _continuation?.Code;
-        protected Stack<object> DataStack => _exec.DataStack;
-        protected IRegistry _reg;
-        protected IRef<Executor> _executor;
-        protected Executor _exec => _executor.Value;
+        protected Continuation _Continuation;
+        protected IDictionary<string, object> _Scope => _Continuation?.Scope;
+        protected IList<object> _Code => _Continuation?.Code;
+        protected Stack<object> DataStack => _Exec.DataStack;
+        protected IRegistry _Registry;
+        protected IRef<Executor> _ExecutorRef;
+        protected Executor _Exec => _ExecutorRef.Value;
 
         private ITranslator _pi;
         private ITranslator _rho;
@@ -38,39 +38,39 @@ namespace Pyro.Test
         [SetUp]
         public void Setup()
         {
-            _reg = new Registry();
-            _pi = new PiTranslator(_reg);
-            _rho = new RhoTranslator(_reg);
-            _executor = _reg.Add(new Executor());
+            _Registry = new Registry();
+            _pi = new PiTranslator(_Registry);
+            _rho = new RhoTranslator(_Registry);
+            _ExecutorRef = _Registry.Add(new Executor());
 
-            Exec.RegisterTypes.Register(_reg);
+            Exec.RegisterTypes.Register(_Registry);
         }
 
         protected void PiRun(string text)
         {
-            _exec.Clear();
-            _exec.Continue(_continuation = PiTranslate(text));
+            _Exec.Clear();
+            _Exec.Continue(_Continuation = PiTranslate(text));
         }
 
         protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program)
         {
-            _exec.Clear();
-            Time("Exec took ", () => _exec.Continue(_continuation = RhoTranslate(text, trace, st)));
+            _Exec.Clear();
+            Time("Exec took ", () => _Exec.Continue(_Continuation = RhoTranslate(text, trace, st)));
         }
 
         protected Continuation PiTranslate(string text)
         {
-            var trans = new PiTranslator(_reg);
+            var trans = new PiTranslator(_Registry);
             if (!trans.Translate(text, out var cont))
                 WriteLine($"Error: {trans.Error}");
 
             Assert.IsFalse(trans.Failed, trans.Error);
-            return _continuation = cont;
+            return _Continuation = cont;
         }
 
         protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
         {
-            var trans = new RhoTranslator(_reg);
+            var trans = new RhoTranslator(_Registry);
             if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
 
@@ -78,7 +78,7 @@ namespace Pyro.Test
                 WriteLine(trans.ToString());
 
             Assert.IsFalse(trans.Failed, trans.Error);
-            return _continuation = cont;
+            return _Continuation = cont;
         }
 
         protected ITranslator MakeTranslator(string scriptName)
@@ -100,7 +100,7 @@ namespace Pyro.Test
                     throw new NotImplementedException($"Unsupported script {extension}");
             }
 
-            return Activator.CreateInstance(klass, _reg) as ITranslator;
+            return Activator.CreateInstance(klass, _Registry) as ITranslator;
         }
 
         protected Continuation TranslateScript(string fileName)
@@ -116,14 +116,14 @@ namespace Pyro.Test
             try
             {
                 WriteLine($"Running {fileName}");
-                _exec.SourceFilename = fileName;
+                _Exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = MakeTranslator(filePath);
                 if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
 
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script `{fileName}`", () => _exec.Continue(cont));
+                Time($"Exec script `{fileName}`", () => _Exec.Continue(cont));
             }
             catch (Exception e)
             {
@@ -215,8 +215,8 @@ namespace Pyro.Test
 
         protected void AssertVarEquals<T>(string ident, T val)
         {
-            Assert.IsTrue(_scope.ContainsKey(ident), $"{ident} not found");
-            var obj = _scope[ident];
+            Assert.IsTrue(_Scope.ContainsKey(ident), $"{ident} not found");
+            var obj = _Scope[ident];
             switch (obj)
             {
                 case T v:
@@ -258,7 +258,7 @@ namespace Pyro.Test
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
-            Assert.AreEqual(0, _exec.DataStack.Count);
+            Assert.AreEqual(0, _Exec.DataStack.Count);
         }
 
         protected void FreezeThaw(string fileName)
@@ -283,7 +283,7 @@ namespace Pyro.Test
             Assert.IsNotNull(cont);
             try
             {
-                _exec.Continue(cont);
+                _Exec.Continue(cont);
                 return true;
             }
             catch (Exception e)

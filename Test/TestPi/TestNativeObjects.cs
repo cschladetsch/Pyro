@@ -19,7 +19,7 @@ namespace Pyro.Test
         public void TestNew()
         {
             AssertSameTokens("new", EPiToken.New);
-            _reg.Register(new ClassBuilder<UserModel>(_reg)
+            _Registry.Register(new ClassBuilder<UserModel>(_Registry)
                 .Class);
 
             PiRun("'UserModel new");

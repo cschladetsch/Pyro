@@ -28,7 +28,7 @@ for (a in [1 2 3 4])
 	c = c + a
 writeln(c)
 ");
-			var str = _continuation.ToString();
+			var str = _Continuation.ToString();
 			//var str = _continuation.Serialise();
 
 	        var c = 0;

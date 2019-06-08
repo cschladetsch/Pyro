@@ -18,7 +18,7 @@ namespace Pyro.Test
 
             // expand map to the stack
             PiRun(makeMap + " expand");
-            _exec.WriteDataStack(10);
+            _Exec.WriteDataStack(10);
             AssertPop(2);
             Assert.AreEqual(4, DataStack.Count);
             DataStack.Clear();

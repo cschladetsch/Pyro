@@ -25,6 +25,8 @@ namespace Pyro.AppCommon
         {
         }
 
+        protected abstract void Shutdown();
+
         private static void WriteHeader()
         {
             WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
@@ -78,8 +80,6 @@ namespace Pyro.AppCommon
             e.Cancel = true;
             _self.Shutdown();
         }
-
-        protected abstract void Shutdown();
     }
 }
 

@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-
-using Pyro.Exec;
-using Pyro.Impl;
-using Pyro.Language;
-using Pyro.RhoLang;
+using System.Collections.Generic;
 
 namespace Pyro.ExecutionContext
 {
+    using Exec;
+    using Impl;
+    using Language;
+    using RhoLang;
+
     /// <inheritdoc />
     /// <summary>
     /// Functionality to execute scripts in any system-supported language
@@ -61,7 +61,7 @@ namespace Pyro.ExecutionContext
             }
         }
 
-        public Context()
+        public Context(bool runStartScripts = true)
         {
             Registry = new Registry();
             Executor = Registry.Add(new Executor()).Value;
@@ -69,17 +69,38 @@ namespace Pyro.ExecutionContext
             _pi = new PiTranslator(Registry);
             _rho = new RhoTranslator(Registry);
             Language = ELanguage.Pi;
+
+            if (runStartScripts)
+                RunStartScripts();
         }
+
+        private void RunStartScripts()
+        {
+            var pyroRoot = Path.Combine(HomePath(), ".pyro");
+            void Exec(string file) => ExecFile(Path.Combine(pyroRoot, file));
+            Exec("start.pi");
+            Exec("start.rho");
+        }
+
+        protected string HomePath()
+        {
+            return (Environment.OSVersion.Platform == PlatformID.Unix ||
+                Environment.OSVersion.Platform == PlatformID.MacOSX)
+                ? Environment.GetEnvironmentVariable("HOME")
+                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+        }
+
+        public bool ExecRho(string text)
+            => Exec(ELanguage.Rho, text);
+
+        public bool ExecPi(string text)
+            => Exec(ELanguage.Pi, text);
 
         public bool Exec(string text)
-        {
-            return Translator == null ? Fail("No translator") : Exec(Translator, text);
-        }
+            => Translator == null ? Fail("No translator") : Exec(Translator, text);
 
         public bool Translate(string text, out Continuation result)
-        {
-            return Translate(Translator, out result, text);
-        }
+            => Translate(Translator, out result, text);
 
         private bool Translate(ITranslator translator, out Continuation result, string text)
         {
@@ -105,18 +126,14 @@ namespace Pyro.ExecutionContext
             return true;
         }
 
-        public bool ExecRho(string text)
-            => Exec(ELanguage.Rho, text);
-
-        public bool ExecPi(string text)
-            => Exec(ELanguage.Pi, text);
-
         public bool ExecFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 return Fail("Empty filename");
+
             if (!File.Exists(fileName))
                 return Fail($"File {fileName} doesn't exist");
+
             var ext = Path.GetExtension(fileName);
             switch (ext)
             {

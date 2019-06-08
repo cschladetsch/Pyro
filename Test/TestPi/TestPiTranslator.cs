@@ -152,8 +152,8 @@ namespace Pyro.Test
         public void TestVars()
         {
             PiRun("1 'a # a 2 +");
-            Assert.IsTrue(_scope.ContainsKey("a"));
-            var a = _scope["a"];
+            Assert.IsTrue(_Scope.ContainsKey("a"));
+            var a = _Scope["a"];
             Assert.AreEqual(1, a);
             Assert.AreEqual(1, DataStack.Count);
             Assert.AreEqual(1 + 2, Pop<int>());

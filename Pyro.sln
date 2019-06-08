@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkGen", "App\NetworkGe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executor", "Library\Executor\Executor.csproj", "{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ext", "Ext", "{086669FE-817A-4BD2-84A4-E1D90C667250}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{086669FE-817A-4BD2-84A4-E1D90C667250}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{723E24B8-056B-4C33-9446-6777AC37FFA4}"
 	ProjectSection(SolutionItems) = preProject

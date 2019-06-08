@@ -29,8 +29,8 @@ namespace Pyro.Test.Rho
         [Test]
         public void TestCustomClassSerialise()
         {
-            var foo = _reg.Add<Foo>();
-            var text = _reg.ToPiScript(foo);
+            var foo = _Registry.Add<Foo>();
+            var text = _Registry.ToPiScript(foo);
             WriteLine(text);
         }
 
@@ -38,7 +38,7 @@ namespace Pyro.Test.Rho
         public void TestCustomClass()
         {
             // TODO: use reflection to find methods if not explicitly provided via ClassBuilder<> object
-            _reg.Register(new ClassBuilder<Foo>(_reg)
+            _Registry.Register(new ClassBuilder<Foo>(_Registry)
                 .Methods
                     .Add<int,int,int>("Sum", (q,a,b) => q.Sum(a,b))
                     .Add<string,int,string>("MulString", (q,a,b) => q.MulString(a,b))

@@ -11,7 +11,7 @@ namespace Pyro.Test
         [SetUp]
         public new void Setup()
         {
-            _exec.Rethrows = true;
+            _Exec.Rethrows = true;
         }
 
         [Test]
@@ -55,14 +55,14 @@ namespace Pyro.Test
         [Test]
         public void TestPersistedInstances()
         {
-            var user = _reg.Add<User>().Value;
-            var org = _reg.Add<Organisation>().Value;
+            var user = _Registry.Add<User>().Value;
+            var org = _Registry.Add<Organisation>().Value;
             user.Name = "Freddy";
             user.Last = "Blogs";
             user.Age = 42;
             user.Org.Value = org;
 
-            var pi = _reg.ToPiScript(user);
+            var pi = _Registry.ToPiScript(user);
             PiRun(pi);
             var user2 = Pop<User>();
             Assert.AreEqual(user.Name, user2.Name);
@@ -73,13 +73,13 @@ namespace Pyro.Test
         [Test]
         public void TestPersistentReferencedObjects()
         {
-            var org = _reg.Add<Organisation>();
+            var org = _Registry.Add<Organisation>();
             org.Value.Email = "foo@org.com";
-            var user = _reg.Add<User>();
+            var user = _Registry.Add<User>();
             user.Value.Name = "Freddy";
             user.Value.Org = org;
 
-            var pi = _reg.ToPiScript(user.Value);
+            var pi = _Registry.ToPiScript(user.Value);
             PiRun(pi);
 
             var user2 = Pop<User>();
@@ -120,7 +120,7 @@ namespace Pyro.Test
 
         private T FullCircle<T>(T obj)
         {
-            var pi = _reg.ToPiScript(obj);
+            var pi = _Registry.ToPiScript(obj);
             PiRun(pi);
             return Pop<T>();
         }
