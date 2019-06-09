@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Pyro
 {
@@ -7,8 +8,9 @@ namespace Pyro
     /// </summary>
     public interface ITree
     {
-        object Scope { get; set; }
-        List<object> SearchPath { get; set; }
+        IConstRefBase Scope { get; set; }
+        IConstRefBase Parent { get; }
+        IList<object> SearchPath { get; set; }
 
         object Resolve(IIdentifer ident);
         object Resolve(IPathname path);
@@ -21,7 +23,7 @@ namespace Pyro
     }
 
     public interface IPathname
-        : ITextSerialise
+        : IIdentifer
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Pyro.Impl
 {
@@ -16,9 +17,11 @@ namespace Pyro.Impl
         public IClassBase Class { get; internal set; }
         public bool IsConst => true;
         public object BaseValue => _baseValue;
+        public IDictionary<string, object> Scope => _scope ?? (_scope = new Dictionary<string, object>());
 
         protected readonly Id _id;
         protected object _baseValue;
+        private Dictionary<string, object> _scope;
 
         public ConstRefBase(IRegistry reg, IClassBase klass, Id id)
         {
@@ -39,3 +42,4 @@ namespace Pyro.Impl
         }
     }
 }
+
