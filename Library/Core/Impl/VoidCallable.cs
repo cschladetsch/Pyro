@@ -7,7 +7,8 @@ namespace Pyro.Impl
     /// A callable thing that doesn't return anything and takes two arguments.
     /// </summary>
     public class VoidCallable<T, A, B>
-        : CallableBase, ICallable<T>
+        : CallableBase
+        , ICallable<T>
             where T : class
     {
         private readonly Action<T, A, B> _fun;
@@ -25,7 +26,8 @@ namespace Pyro.Impl
     }
 
     public class VoidCallable<T, A>
-        : CallableBase, ICallable<T>
+        : CallableBase
+        , ICallable<T>
             where T : class
     {
         private readonly Action<T, A> _fun;
@@ -42,7 +44,8 @@ namespace Pyro.Impl
     }
 
     public class VoidCallable<T>
-        : CallableBase, ICallable<T>
+        : CallableBase
+        , ICallable<T>
             where T : class
     {
         private readonly Action<T> _fun;
