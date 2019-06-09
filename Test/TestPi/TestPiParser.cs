@@ -36,9 +36,9 @@ namespace Pyro.Test
             Assert.IsNotNull(ident);
             Assert.IsFalse(ident.Quoted);
 
-            Parse("s 's", true);
-            Parse("'s s", true);
-            Parse("'foo", true);
+            Parse("s 's");
+            Parse("'s s");
+            Parse("'foo");
             Assert.AreEqual(EPiAst.Ident, First.Type);
             var ident1 = (Label) First.Value;
             Assert.IsNotNull(ident1);

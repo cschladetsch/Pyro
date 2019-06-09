@@ -14,7 +14,7 @@ namespace Pyro.Test
         [Test]
         public void TestBasic()
         {
-            RhoRun("`1`", true, EStructure.Expression);
+            RhoRun("`1`", false, EStructure.Expression);
             Assert.AreEqual(1, Pop());
 
             RhoRun("`1 2 +`");

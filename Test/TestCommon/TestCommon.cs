@@ -39,11 +39,11 @@ namespace Pyro.Test
         public void Setup()
         {
             _Registry = new Registry();
+            Exec.RegisterTypes.Register(_Registry);
+
             _pi = new PiTranslator(_Registry);
             _rho = new RhoTranslator(_Registry);
             _ExecutorRef = _Registry.Add(new Executor());
-
-            Exec.RegisterTypes.Register(_Registry);
         }
 
         protected void PiRun(string text)
@@ -55,7 +55,7 @@ namespace Pyro.Test
         protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program)
         {
             _Exec.Clear();
-            Time("Exec took ", () => _Exec.Continue(_Continuation = RhoTranslate(text, trace, st)));
+            _Exec.Continue(_Continuation = RhoTranslate(text, trace, st));
         }
 
         protected Continuation PiTranslate(string text)
@@ -93,9 +93,6 @@ namespace Pyro.Test
                 case ".rho":
                     klass = typeof(RhoTranslator);
                     break;
-                //case ".tau":
-                //    klass = typeof(TauTranslator);
-                //    break;
                 default:
                     throw new NotImplementedException($"Unsupported script {extension}");
             }
@@ -115,7 +112,7 @@ namespace Pyro.Test
             var fileName = Path.GetFileName(filePath);
             try
             {
-                WriteLine($"Running {fileName}");
+                //WriteLine($"Running {fileName}");
                 _Exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = MakeTranslator(filePath);
@@ -123,7 +120,7 @@ namespace Pyro.Test
                     WriteLine($"Error: {trans.Error}");
 
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script `{fileName}`", () => _Exec.Continue(cont));
+                _Exec.Continue(cont);
             }
             catch (Exception e)
             {
@@ -133,9 +130,6 @@ namespace Pyro.Test
 
             return true;
         }
-
-        protected void Time(string label, Action action)
-            => WriteLine(Timer.Time("\t" + label, action));
 
         protected string LoadScript(string fileName)
             => File.ReadAllText(GetFullScriptPathname(fileName));
@@ -295,13 +289,18 @@ namespace Pyro.Test
 
         protected Continuation FreezeThaw(ITranslator trans, string text)
         {
-            WriteLine("--- Input:");
-            WriteLine(text);
+            void Noisey(string info)
+            {
+                //if (Verbose)
+                //    WriteLine(info);
+            }
+            Noisey("--- Input:");
+            Noisey(text);
             Assert.IsTrue(trans.Translate(text, out var cont));
 
-            WriteLine("--- Serialised:");
+            Noisey("--- Serialised:");
             var str = cont.ToText();
-            WriteLine(str);
+            Noisey(str);
             Assert.IsNotEmpty(str);
 
             var thawed = PiTranslate(str);

@@ -17,7 +17,7 @@ namespace Pyro.Test.Rho
         [Test]
         public void TestArrays()
         {
-            RhoRun("[1 2 3]", true, EStructure.Expression);
+            RhoRun("[1 2 3]", false, EStructure.Expression);
             var list = Pop<List<object>>();
             Assert.AreEqual(list.Count, 3);
             Assert.AreEqual(list[0], 1);
