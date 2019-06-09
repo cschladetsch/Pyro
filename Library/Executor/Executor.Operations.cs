@@ -85,6 +85,39 @@ namespace Pyro.Exec
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
         }
 
+        public void Clear()
+        {
+            DataStack = new Stack<object>();
+            ContextStack = new Stack<Continuation>();
+            NumOps = 0;
+
+            _break = false;
+            _current = null;
+        }
+
+        private void Assert()
+        {
+            if (!Pop<bool>())
+                throw new AssertionFailedException();
+        }
+
+        private void StoreValue()
+        {
+            var name = Pop<IdentBase>();
+            var val = Pop();
+            if (name is Label label)
+                Context().SetScopeObject(label.Text, val);
+            else
+                throw new Exception($"Can't store to {name}");
+        }
+
+        private void GetValue()
+        {
+            var label = Pop<string>();
+            var fromScope = Context().FromScope(label);
+            Push(fromScope);
+        }
+
         private void GetTypeOf()
         {
             var obj = Pop();

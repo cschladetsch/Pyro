@@ -61,7 +61,7 @@ namespace Pyro.ExecutionContext
             }
         }
 
-        public Context(bool runStartScripts = true)
+        public Context(bool runStartScripts = false)
         {
             Registry = new Registry();
             Executor = Registry.Add(new Executor()).Value;
@@ -139,8 +139,10 @@ namespace Pyro.ExecutionContext
             {
                 case ".rho":
                     return ExecPi(File.ReadAllText(fileName));
+
                 case ".pi":
                     return ExecRho(File.ReadAllText(fileName));
+
                 default:
                     return Fail($"Unrecognised extension {ext}");
             }
@@ -152,10 +154,13 @@ namespace Pyro.ExecutionContext
             {
                 case ELanguage.None:
                     return Fail("No language selected");
+
                 case ELanguage.Pi:
                     return Exec(_pi, text);
+
                 case ELanguage.Rho:
                     return Exec(_rho, text);
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lang), lang, null);
             }

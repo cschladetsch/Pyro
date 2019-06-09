@@ -92,7 +92,7 @@ namespace Pyro.Test
             }
         }
 
-        [Test]
+        //[Test]
         public void TestAgents()
         {
             var peer = Network.Create.NewPeer(ListenPort);
