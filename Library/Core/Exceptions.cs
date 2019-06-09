@@ -2,6 +2,7 @@
 
 namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// Given member (field, property, method, inner class etc) not found.
     /// </summary>

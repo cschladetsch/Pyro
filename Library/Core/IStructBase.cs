@@ -1,5 +1,6 @@
 ﻿namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// TODO
     /// </summary>
@@ -8,3 +9,4 @@
     {
     }
 }
+

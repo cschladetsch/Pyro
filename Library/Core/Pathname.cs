@@ -44,9 +44,7 @@ namespace Pyro
         public IList<Element> Elements { get; }
 
         public Pathname()
-        {
-            Elements = new List<Element>();
-        }
+            => Elements = new List<Element>();
 
         public Pathname(IList<Element> elements, bool quoted = false)
             : base(quoted)

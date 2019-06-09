@@ -19,9 +19,7 @@
         }
 
         public override string ToString()
-        {
-            return $"{(Quoted ? "\'" : "")}{Text}";
-        }
+            => $"{(Quoted ? "\'" : "")}{Text}";
     }
 }
 

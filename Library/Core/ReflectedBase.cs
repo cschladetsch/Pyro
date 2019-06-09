@@ -1,5 +1,6 @@
 ﻿namespace Pyro
 {
+    /// <inheritdoc />
     /// <summary>
     /// TODO
     /// </summary>
@@ -9,3 +10,4 @@
         public IRefBase SelfBase { get; set; }
     }
 }
+
