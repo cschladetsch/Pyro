@@ -78,6 +78,7 @@
     <Compile Include="Impl\Factory.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="IConstRef.cs" />
+    <Compile Include="Impl\Tree.cs" />
     <Compile Include="IReflected.cs" />
     <Compile Include="Impl\RefBase.cs" />
     <Compile Include="Impl\VoidCallable.cs" />

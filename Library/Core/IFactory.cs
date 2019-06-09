@@ -6,5 +6,6 @@
     public interface IFactory
     {
         IRegistry NewRegistry();
+        ITree NewTree();
     }
 }

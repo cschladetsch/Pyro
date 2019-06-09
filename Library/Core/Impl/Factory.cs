@@ -3,9 +3,7 @@
     internal class Factory
         : IFactory
     {
-        public IRegistry NewRegistry()
-        {
-            return new Registry();
-        }
+        public IRegistry NewRegistry() => new Registry();
+        public ITree NewTree() => new Tree();
     }
 }
