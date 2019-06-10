@@ -59,6 +59,7 @@ namespace Pyro.NetworkGen
                 case EBuildType.Agent:
                     BuildAgent(inputAsm, outputDir);
                     break;
+
                 case EBuildType.Proxy:
                     BuildProxy(inputAsm, outputDir);
                     break;

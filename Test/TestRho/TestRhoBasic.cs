@@ -17,7 +17,7 @@ namespace Pyro.Test.Rho
         [Test]
         public void TestArrays()
         {
-            RhoRun("[1 2 3]", false, EStructure.Expression);
+            RhoRun("[1 2 3]");
             var list = Pop<List<object>>();
             Assert.AreEqual(list.Count, 3);
             Assert.AreEqual(list[0], 1);
@@ -34,9 +34,9 @@ namespace Pyro.Test.Rho
             AssertEqual("1.1/2.2", 1.1f / 2.2f);
         }
 
-        private void AssertEqual(string rho, object val)
+        private void AssertEqual(string rho, object val, EStructure str = EStructure.Expression)
         {
-            RhoRun(rho);
+            RhoRun(rho, false, str);
             Assert.AreEqual(val, Pop());
         }
 

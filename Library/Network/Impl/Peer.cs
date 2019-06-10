@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
+using System.Linq;
 using System.Net.Sockets;
+using System.Collections.Generic;
 
 using Flow;
 
@@ -10,6 +10,10 @@ namespace Pyro.Network.Impl
 {
     using Exec;
 
+    /// <inheritdoc cref="IPeer" />
+    /// <summary>
+    /// A network peer. Contains a client and a server.
+    /// </summary>
     public class Peer
         : NetworkConsoleWriter
         , IPeer
@@ -70,6 +74,40 @@ namespace Pyro.Network.Impl
                 => OnReceivedRequest?.Invoke(server, client, text);
         }
 
+        public bool Execute(string script)
+            => _remote?.Continue(script) ?? Fail("Not connected");
+
+        public IClient GetClient(Socket sender)
+            => _clients.FirstOrDefault(c => c.Socket == sender);
+
+        public string GetHostName()
+            => GetRemoteEndPoint()?.Address.ToString();
+
+        public bool SelfHost()
+            => !_server.Start() ? Fail("Couldn't start server") : SelfHost(_server.ListenPort);
+
+        public bool Execute(Continuation continuation)
+            => _remote?.Continue(continuation) ?? Fail("Not connected");
+
+        public bool EnterRemoteAt(int index)
+            => index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);
+
+        private IPEndPoint GetRemoteEndPoint()
+            => Remote?.Socket?.RemoteEndPoint as IPEndPoint;
+
+        private int GetHostPort()
+            => GetRemoteEndPoint()?.Port ?? 0;
+
+        public bool EnterRemote(Client client)
+        {
+            WriteLine($"Remoting into {client.Socket.RemoteEndPoint}");
+            if (!_clients.Contains(client))
+                return false;
+
+            _remote = client;
+            return true;
+        }
+
         /// <summary>
         /// Connect to local loopback address.
         /// </summary>
@@ -85,36 +123,6 @@ namespace Pyro.Network.Impl
             System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
 
             return Enter(Clients[0]) || Error("Couldn't shell to localhost");
-        }
-
-        public IClient GetClient(Socket sender)
-        {
-            return _clients.FirstOrDefault(c => c.Socket == sender);
-        }
-
-        public string GetHostName()
-        {
-            return GetRemoteEndPoint()?.Address.ToString();
-        }
-
-        private int GetHostPort()
-        {
-            return GetRemoteEndPoint()?.Port ?? 0;
-        }
-
-        public bool SelfHost()
-        {
-            return !_server.Start() ? Fail("Couldn't start server") : SelfHost(_server.ListenPort);
-        }
-
-        public bool EnterRemote(Client client)
-        {
-            WriteLine($"Remoting into {client.Socket.RemoteEndPoint}");
-            if (!_clients.Contains(client))
-                return false;
-
-            _remote = client;
-            return true;
         }
 
         public void Leave()
@@ -158,6 +166,11 @@ namespace Pyro.Network.Impl
 
         public TIAgent NewAgent<TIAgent>()
         {
+            // TODO NEXT
+            //var agent = _server.NewAgent<TIAgent>();
+            //agent.Bind(this);
+            //
+            //return null;
             throw new NotImplementedException();
         }
 
@@ -205,30 +218,10 @@ namespace Pyro.Network.Impl
             Error($"Failed to find client for {socket.RemoteEndPoint}");
         }
 
-        public bool Execute(string script)
-        {
-            return _remote?.Continue(script) ?? Fail("Not connected");
-        }
-
         public string GetLocalHostname()
         {
             var address = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             return address?.ToString() ?? "localhost";
-        }
-
-        public bool Execute(Continuation continuation)
-        {
-            return _remote?.Continue(continuation) ?? Fail("Not connected");
-        }
-
-        public bool EnterRemoteAt(int index)
-        {
-            return index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);
-        }
-
-        private IPEndPoint GetRemoteEndPoint()
-        {
-            return Remote?.Socket?.RemoteEndPoint as IPEndPoint;
         }
     }
 }
