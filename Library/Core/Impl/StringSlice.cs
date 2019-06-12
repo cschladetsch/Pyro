@@ -8,8 +8,9 @@
     public class StringSlice
         : IStringSlice
     {
-        public string Text { get; }
+        public IString Text { get; }
         public int Start { get; }
         public int End { get; }
     }
 }
+

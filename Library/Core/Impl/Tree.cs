@@ -9,7 +9,7 @@ namespace Pyro.Impl
         public IConstRefBase Root { get; set; }
         public IConstRefBase Scope { get; set; }
         public IConstRefBase Parent { get; }
-        public IList<object> SearchPath { get; set; }
+        public IList<IConstRefBase> SearchPath { get; set; }
 
         private IConstRefBase _scope;
 
