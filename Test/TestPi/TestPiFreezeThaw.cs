@@ -24,7 +24,7 @@ namespace Pyro.Test
         }
 
         // TODO TEST
-        //[Test]
+        [Test]
         public void TestDict()
         {
             var makeMap = "1 2 \"foo\" \"bar\" 2 tomap";

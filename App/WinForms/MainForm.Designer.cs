@@ -113,7 +113,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(846, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1088, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             //
@@ -204,7 +204,7 @@
             this.toolstripToolStripMenuItem.Checked = true;
             this.toolstripToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolstripToolStripMenuItem.Name = "toolstripToolStripMenuItem";
-            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.toolstripToolStripMenuItem.Text = "&Toolstrip";
             //
             // stackToolStripMenuItem
@@ -212,7 +212,7 @@
             this.stackToolStripMenuItem.Checked = true;
             this.stackToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stackToolStripMenuItem.Name = "stackToolStripMenuItem";
-            this.stackToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.stackToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.stackToolStripMenuItem.Text = "&Stack";
             //
             // outputToolStripMenuItem
@@ -220,7 +220,7 @@
             this.outputToolStripMenuItem.Checked = true;
             this.outputToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.outputToolStripMenuItem.Text = "&Output";
             //
             // networkToolStripMenuItem
@@ -295,9 +295,9 @@
             //
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 382);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 591);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(846, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1088, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             //
@@ -320,8 +320,8 @@
             // splitContainer1.Panel2
             //
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(846, 358);
-            this.splitContainer1.SplitterDistance = 548;
+            this.splitContainer1.Size = new System.Drawing.Size(1088, 567);
+            this.splitContainer1.SplitterDistance = 599;
             this.splitContainer1.TabIndex = 3;
             //
             // mainTabControl
@@ -332,7 +332,7 @@
             this.mainTabControl.Location = new System.Drawing.Point(0, 0);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(548, 358);
+            this.mainTabControl.Size = new System.Drawing.Size(599, 567);
             this.mainTabControl.TabIndex = 0;
             //
             // piConsole
@@ -342,7 +342,7 @@
             this.piConsole.Location = new System.Drawing.Point(4, 22);
             this.piConsole.Name = "piConsole";
             this.piConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.piConsole.Size = new System.Drawing.Size(540, 332);
+            this.piConsole.Size = new System.Drawing.Size(591, 541);
             this.piConsole.TabIndex = 1;
             this.piConsole.Text = "Pi";
             this.piConsole.UseVisualStyleBackColor = true;
@@ -354,7 +354,7 @@
             this.piInput.ForeColor = System.Drawing.Color.Navy;
             this.piInput.Location = new System.Drawing.Point(3, 30);
             this.piInput.Name = "piInput";
-            this.piInput.Size = new System.Drawing.Size(534, 299);
+            this.piInput.Size = new System.Drawing.Size(585, 508);
             this.piInput.TabIndex = 1;
             this.piInput.Text = "";
             this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PiInputKeyDown);
@@ -366,7 +366,7 @@
             this.piStatus.Location = new System.Drawing.Point(3, 3);
             this.piStatus.Name = "piStatus";
             this.piStatus.ReadOnly = true;
-            this.piStatus.Size = new System.Drawing.Size(534, 27);
+            this.piStatus.Size = new System.Drawing.Size(585, 27);
             this.piStatus.TabIndex = 0;
             this.piStatus.Text = "";
             //
@@ -409,8 +409,8 @@
             // splitContainer2.Panel2
             //
             this.splitContainer2.Panel2.Controls.Add(this.output);
-            this.splitContainer2.Size = new System.Drawing.Size(294, 358);
-            this.splitContainer2.SplitterDistance = 252;
+            this.splitContainer2.Size = new System.Drawing.Size(485, 567);
+            this.splitContainer2.SplitterDistance = 399;
             this.splitContainer2.TabIndex = 0;
             //
             // stackView
@@ -424,6 +424,7 @@
             this.stackView.FullRowSelect = true;
             this.stackView.GridLines = true;
             this.stackView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.stackView.HideSelection = false;
             this.stackView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2,
@@ -432,7 +433,7 @@
             this.stackView.Location = new System.Drawing.Point(0, 25);
             this.stackView.MultiSelect = false;
             this.stackView.Name = "stackView";
-            this.stackView.Size = new System.Drawing.Size(294, 227);
+            this.stackView.Size = new System.Drawing.Size(485, 374);
             this.stackView.TabIndex = 1;
             this.stackView.UseCompatibleStateImageBehavior = false;
             this.stackView.View = System.Windows.Forms.View.Details;
@@ -450,7 +451,7 @@
             // columnHeader1
             //
             this.columnHeader1.Text = "Value";
-            this.columnHeader1.Width = 278;
+            this.columnHeader1.Width = 392;
             //
             // toolStrip2
             //
@@ -463,7 +464,7 @@
             this.toolStripButton6});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(294, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(485, 25);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             //
@@ -535,7 +536,7 @@
             this.output.Location = new System.Drawing.Point(0, 0);
             this.output.Name = "output";
             this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(294, 102);
+            this.output.Size = new System.Drawing.Size(485, 164);
             this.output.TabIndex = 0;
             this.output.Text = "";
             //
@@ -553,7 +554,7 @@
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(846, 404);
+            this.ClientSize = new System.Drawing.Size(1088, 613);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
