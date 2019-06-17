@@ -21,45 +21,10 @@ namespace Pyro.Exec
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
 
-        public Executor()
-        {
-            AddOperations();
-        }
-
-        public void PushContext(Continuation continuation)
-        {
-            ContextStack.Push(continuation);
-        }
-
-        public void Continue()
-        {
-            Continue(ContextStack.Pop());
-        }
-
-        private dynamic RPop()
-        {
-            return Resolve(Pop());
-        }
-
-        private dynamic RPop<T>()
-        {
-            return ResolvePop<T>();
-        }
-
-        private dynamic ResolvePop<T>()
-        {
-            return Resolve(Pop<T>());
-        }
-
-        private static void DebugBreak()
-        {
-            throw new DebugBreakException();
-        }
-
-        public void Continue(IRef<Continuation> continuation)
-        {
-            Continue(continuation.Value);
-        }
+        public Executor() => AddOperations();
+        public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
+        public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
+        public void Continue() => Continue(ContextStack.Pop());
 
         public void Continue(Continuation continuation)
         {
@@ -274,6 +239,11 @@ namespace Pyro.Exec
             var pop = DataStack.Pop();
             return !(pop is IRefBase data) ? pop : data.BaseValue;
         }
+
+        private dynamic RPop() => Resolve(Pop());
+        private dynamic RPop<T>() => ResolvePop<T>();
+        private dynamic ResolvePop<T>() => Resolve(Pop<T>());
+        private static void DebugBreak() => throw new DebugBreakException();
     }
 }
 
