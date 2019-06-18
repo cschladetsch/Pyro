@@ -1,24 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using Pryo;
 
 namespace Pyro.Language
 {
     /// <inheritdoc cref="Process" />
+    /// <inheritdoc cref="ILexer" />
     /// <summary>
     /// Common to all lexers. Provides basic lexing functionality that is not specific to
     /// any token-type.
     /// </summary>
-    public class LexerBase : Process, ILexer
+    public class LexerBase
+        : Process
+        , ILexer
     {
         public string Input => _input;
         public int Offset => _offset;
         public int LineNumber => _lineNumber;
-        public string Line => _lines[_lineNumber];
-        public List<string> Lines => _lines;
+        public string Line => Lines[_lineNumber];
+        public List<string> Lines { get; } = new List<string>();
 
         protected virtual void AddStringToken(Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }
+
+        protected string _input;
+        protected int _offset, _lineNumber;
 
         public LexerBase(string input)
         {
@@ -27,47 +32,47 @@ namespace Pyro.Language
 
         public string GetLine(int lineNumber)
         {
-            return _lines[lineNumber];
+            return Lines[lineNumber];
         }
 
         public string GetText(Slice slice)
         {
-            return _lines[slice.LineNumber].Substring(slice.Start, slice.Length);
+            return Lines[slice.LineNumber].Substring(slice.Start, slice.Length);
         }
 
-        // PERF
         protected void CreateLines()
         {
             if (string.IsNullOrEmpty(_input))
                 return;
 
-            var newLine = '\n';
+            const char newLine = '\n';
             if (_input[_input.Length - 1] != newLine)
                 _input += newLine;
 
             int lineStart = 0, n = 0;
-            foreach (char c in _input)
+            foreach (var c in _input)
             {
                 if (c == newLine)
                 {
-                    _lines.Add(_input.Substring(lineStart, n - lineStart + 1));
+                    Lines.Add(_input.Substring(lineStart, n - lineStart + 1));
                     lineStart = n + 1;
                 }
+
                 ++n;
             }
         }
 
         protected bool LexString()
         {
-            int start = _offset;
+            var start = _offset;
             Next();
-            while (!Failed && Current() != '"') // "
+            while (!Failed && Current() != '"')
             {
                 if (Current() == '\\')
                 {
                     switch (Next())
                     {
-                    case '"':    // "
+                    case '"':
                     case 'n':
                     case 't':
                         break;
@@ -97,7 +102,7 @@ namespace Pyro.Language
 
         protected char Current()
         {
-            if (_lineNumber == _lines.Count)
+            if (_lineNumber == Lines.Count)
                 return (char)0;
             return Line[_offset];
         }
@@ -112,7 +117,7 @@ namespace Pyro.Language
             else
                 ++_offset;
 
-            if (_lineNumber == _lines.Count)
+            if (_lineNumber == Lines.Count)
                 return (char)0;
 
             return Line[_offset];
@@ -131,23 +136,22 @@ namespace Pyro.Language
         /// <returns>(char)0 if cannot peek, else the char peeked</returns>
         protected char Peek(int n = 1)
         {
-            const char end = (char) 0;
+            const char end = (char)0;
 
             if (Current() == 0)
                 return end;
+
             if (EndOfLine())
                 return end;
-            if (_offset + n >= Line.Length)
-                return end;
 
-            return Line[_offset + n];
+            return _offset + n >= Line.Length ? end : Line[_offset + n];
         }
 
         protected Slice Gather(Func<char, bool> filter)
         {
             var start = _offset;
             while (filter(Next()))
-                ;
+                /* skip */;
 
             return new Slice(this, start, _offset);
         }
@@ -159,14 +163,10 @@ namespace Pyro.Language
         }
 
         protected virtual void AddKeywordOrIdent(Slice gatherIdent)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
         protected bool IsValidIdentGlyph(char ch)
-        {
-            return char.IsLetterOrDigit(ch) || ch == '_';
-        }
+            => char.IsLetterOrDigit(ch) || ch == '_';
 
         protected Slice GatherIdent()
         {
@@ -178,17 +178,9 @@ namespace Pyro.Language
         }
 
         protected bool IsSpaceChar(char arg)
-        {
-            return char.IsWhiteSpace(arg);
-        }
+            => char.IsWhiteSpace(arg);
 
         private string UnfuckNewLines(string input)
-        {
-            return input.Replace("\r", "");
-        }
-
-        protected string _input;
-        protected int _offset, _lineNumber;
-        private readonly  List<string> _lines = new List<string>();
+            => input.Replace("\r", "");
     }
 }

@@ -1,6 +1,4 @@
-﻿using Pryo;
-
-namespace Pyro.Unity3d
+﻿namespace Pyro.Unity3d
 {
     public static class RegisterTypes
     {

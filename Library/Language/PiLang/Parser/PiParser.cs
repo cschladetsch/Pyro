@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Pryo;
-using Pyro.Language.Impl;
-using Pyro.Language.Lexer;
 
 namespace Pyro.Language.Parser
 {
+    using Impl;
+    using Lexer;
+
     /// <summary>
     /// PiParser for the Pi language. It's quite simple.
     /// </summary>
@@ -12,19 +12,21 @@ namespace Pyro.Language.Parser
         : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
         , IParser
     {
-        public PiParser(PiLexer lexer) : base(lexer, null)
+        public PiParser(PiLexer lexer)
+            : base(lexer, null)
         {
         }
 
-        public PiAstNode Root => _stack.Peek();
+        public PiAstNode Root
+            => _Stack.Peek();
 
         public bool Process(PiLexer lex, EStructure structure = EStructure.None)
         {
-            _current = 0;
-            _lexer = lex;
+            _Current = 0;
+            _Lexer = lex;
 
-            if (_lexer.Failed)
-                return Fail(_lexer.Error);
+            if (_Lexer.Failed)
+                return Fail(_Lexer.Error);
 
             RemoveWhitespace();
 
@@ -33,7 +35,7 @@ namespace Pyro.Language.Parser
 
         private void RemoveWhitespace()
         {
-            foreach (var tok in _lexer.Tokens)
+            foreach (var tok in _Lexer.Tokens)
             {
                 switch (tok.Type)
                 {
@@ -44,13 +46,13 @@ namespace Pyro.Language.Parser
                         continue;
                 }
 
-                _tokens.Add(tok);
+                _Tokens.Add(tok);
             }
         }
 
         private bool Run(EStructure st)
         {
-            _stack.Push(_astFactory.New(EPiAst.Continuation));
+            _Stack.Push(_AstFactory.New(EPiAst.Continuation));
             while (!Failed && NextSingle(Top()))
                 ;
             return !Failed;
@@ -67,18 +69,22 @@ namespace Pyro.Language.Parser
                 case EPiToken.Separator:
                 case EPiToken.Ident:
                     return ParsePathname(context);
+
                 case EPiToken.OpenSquareBracket:
                     return ParseCompound(context, EPiAst.Array, EPiToken.CloseSquareBracket);
+
                 case EPiToken.OpenBrace:
                     return ParseCompound(context, EPiAst.Continuation, EPiToken.CloseBrace);
+
                 case EPiToken.CloseSquareBracket:
                 case EPiToken.CloseBrace:
-                    return FailLocation("Unopened compound");
+                    return FailLocation("Unopened compound.");
+
                 case EPiToken.None:
                     return false;
-                // most pi tokens just fall through to being passed to translator
+
                 default:
-                    context.Add(AddValue(_astFactory.New(Consume())));
+                    context.Add(AddValue(_AstFactory.New(Consume())));
                     return true;
             }
         }
@@ -97,11 +103,13 @@ namespace Pyro.Language.Parser
                             goto done;
                         quoted = true;
                         break;
+
                     case EPiToken.Separator:
                         if (prev == EPiToken.Separator)
                             return FailLocation("Malformed pathname");
                         elements.Add(new Pathname.Element(Pathname.EElementType.Separator));
                         break;
+
                     case EPiToken.Ident:
                         // we can have an ident after an optional initial quote, or after a separator
                         var start = prev == EPiToken.None || prev == EPiToken.Quote;
@@ -110,6 +118,7 @@ namespace Pyro.Language.Parser
                         else
                             goto done;
                         break;
+
                     default:
                         goto done;
                 }
@@ -146,6 +155,9 @@ namespace Pyro.Language.Parser
                 case EPiToken.Int:
                     node.Value = int.Parse(text);
                     break;
+                case EPiToken.Float:
+                    node.Value = float.Parse(text);
+                    break;
                 case EPiToken.String:
                     node.Value = text;
                     break;
@@ -179,3 +191,4 @@ namespace Pyro.Language.Parser
         }
     }
 }
+

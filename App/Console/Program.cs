@@ -1,38 +1,74 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using Pyro.ExecutionContext;
-using Pyro.Language;
-using Pyro.Network;
 
 namespace Pyro.Console
 {
+    using ExecutionContext;
+    using Language;
+    using Network;
+
     using Con = System.Console;
 
-    internal class Program : Pyro.AppCommon.AppCommonBase
+    internal class Program
+        : AppCommon.AppCommonBase
     {
         public const int ListenPort = 9999;
 
         private readonly Context _context;
         private IPeer _peer;
-        private string HostName => _peer.Remote?.HostName;
-        private int HostPort => _peer.Remote?.HostPort ?? 0;
+        private string HostName => _peer?.Remote?.HostName ?? "local";
+        private int HostPort => _peer?.Remote?.HostPort ?? 0;
+
+        /// <summary>
+        /// If true, start a local peer and use loopback
+        /// </summary>
+        private bool _useLoopback = false;
+
+        private static void Main(string[] args)
+            => new Program(args).Repl();
+
+        private Program(string[] args)
+            : base(args)
+        {
+            _context = new Context();
+            RegisterTypes.Register(_context.Registry);
+
+            if (_useLoopback && !StartPeer(args))
+                Exit(1);
+
+            RunInitialisationScripts();
+
+            if (_peer != null)
+                _peer.OnReceivedRequest
+                    += (server, client, text)
+                        => WriteLine(text, ConsoleColor.Magenta);
+        }
 
         public bool Execute(string input)
         {
             if (string.IsNullOrEmpty(input))
+            {
+                if (_peer != null)
+                    WriteLocalDataStack();
                 return true;
+            }
 
             try
             {
                 if (PreProcess(input))
                     return true;
 
-                if (!_context.Translate(input, out var cont))
+                if  (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
 
-                return _peer.Execute(cont);
+                if (_peer != null)
+                    _peer.Execute(cont);
+                else
+                {
+                    _context.Executor.Continue(cont);
+                    WriteLocalDataStack();
+                }
             }
             catch (Exception e)
             {
@@ -40,6 +76,18 @@ namespace Pyro.Console
             }
 
             return false;
+        }
+
+        public void WriteLocalDataStack(int max = 50)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            var results = _context.Executor.DataStack;
+            var n = 0;
+            foreach (var result in results)
+                str.AppendLine($"{n++}: {_context.Registry.ToPiScript(result)}");
+
+            Con.Write(str.ToString());
         }
 
         public void WriteDataStackContents(IClient client, int max = 50)
@@ -54,30 +102,6 @@ namespace Pyro.Console
             Con.Write(str.ToString());
         }
 
-        private static void Main(string[] args)
-        {
-            new Program(args).Repl();
-        }
-
-        private Program(string[] args)
-            : base(args)
-        {
-            _context = new Context();
-
-            if (!StartPeer(args))
-                Exit(1);
-
-            RunInitialisationScripts();
-        }
-
-        private static string GetVersion()
-        {
-            var name = Assembly.GetExecutingAssembly().GetName();
-            var version = name.Version;
-            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            return $"Pyro {name.Name} {version} built {built}";
-        }
-
         private bool StartPeer(string[] args)
         {
             var port = ListenPort;
@@ -85,12 +109,12 @@ namespace Pyro.Console
                 return Error("Local server listen port number expected as argument");
 
             _peer = Create.NewPeer(port);
-            return _peer.Start() || Error("Failed to start local server");
+            return _peer.SelfHost() || Error("Failed to start local server");
         }
 
         private void RunInitialisationScripts()
         {
-            // TODO: run things like ~/.pyro-start.{pi|rho}
+            // TODO: run things like ~/.pyro-start.{pi,rho}
         }
 
         private void WriteHeader()
@@ -107,11 +131,12 @@ namespace Pyro.Console
                     WritePrompt();
                     var input = GetInput();
                     if (string.IsNullOrEmpty(input))
-                        _peer.Remote.Continue("1 drop");    // hack to force stack refresh!
+                    {
+                        _peer?.Remote?.Continue("1 drop");    // hack to force stack refresh!
+                        System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
+                    }
                     else if (!Execute(input))
                         continue;
-                    
-                    System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
 
                     WriteDataStack();
                 }
@@ -122,21 +147,45 @@ namespace Pyro.Console
             }
         }
 
-        private string GetInput()
+        private static string GetInput()
         {
             return Con.ReadLine();
         }
 
         private bool PreProcess(string input)
         {
+            //if (!string.IsNullOrEmpty(input))
+            //{
+            //    if (input.StartsWith("."))
+            //    {
+            //        //var cmd = input.Substring(1);
+            //        var bash = @"C:\Program Files\Git\git-bash.exe";
+            //        var proc = new System.Diagnostics.Process();
+            //        proc.OutputDataReceived += (sender, args) => WriteLine(args.Data);
+            //        ProcessStartInfo si = new ProcessStartInfo();
+            //        si.RedirectStandardOutput = true;
+            //        si.UseShellExecute = false;
+            //        si.CreateNoWindow = true;
+            //        si.RedirectStandardOutput = true;
+            //        si.FileName = bash;
+            //        //si.Arguments = cmd;
+            //        proc.StartInfo = si;
+            //        var sr =
+            //        proc.StandardOutput =
+            //        return true;
+            //    }
+            //}
+
             switch (input)
             {
-                case "help":
                 case "?":
+                case "help":
                     return ShowHelp();
+
                 case "rho":
                     _context.Language = ELanguage.Rho;
                     return true;
+
                 case "pi":
                     _context.Language = ELanguage.Pi;
                     return true;
@@ -155,7 +204,10 @@ namespace Pyro.Console
         private void WriteDataStack()
         {
             var current = Con.ForegroundColor;
-            WriteDataStackContents(_peer.Remote);
+            if (_peer != null)
+                WriteDataStackContents(_peer.Remote);
+            else
+                WriteLocalDataStack();
             Con.ForegroundColor = current;
         }
 
@@ -170,13 +222,13 @@ When you type at the prompt, your text is executed in the current context - whic
 Before the prompt is printed, the data-stack of the current server is printed. Operations you perform act on this data-stack. Each connection to a remote server has its own private context.
 
 To connect to a remote node, type:
-...rho> connect(""_hostName""[, port])
+rho> connect(""_hostName""[, port])
 
 To then switch execution context, type:
-...rho> enter(""hostname"")
+rho> enter(""hostname"")
 
 To do both:
-...rho> join(""hostname""[, port])
+rho> join(""hostname""[, port])
 
 For help on syntax for Pi/Rho languages, see the corresponding documentation.
 
@@ -187,7 +239,7 @@ Press Ctrl-C to quit.
 
         protected override void Shutdown()
         {
-            var color = ConsoleColor.DarkGray;
+            const ConsoleColor color = ConsoleColor.DarkGray;
             Error("Shutting down...", color);
             _peer?.Stop();
             Error("Done", color);
@@ -196,3 +248,4 @@ Press Ctrl-C to quit.
         }
     }
 }
+

@@ -1,12 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
+    /// <inheritdoc cref="IClass{T}" />
+    /// <inheritdoc cref="ClassBase" />
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Class<T>
-        : ClassBase, IClass<T> 
+        : ClassBase
+        , IClass<T>
     {
+        private readonly Action<IRegistry, StringBuilder, T> _toText;
+
         internal Class(IRegistry reg)
             : base(reg, typeof(T))
         {
@@ -15,33 +23,27 @@ namespace Pryo.Impl
         public Class(IRegistry reg, Action<IRegistry, StringBuilder, T> toText)
             : base(reg, typeof(T))
         {
-            this._toText = toText;
+            _toText = toText;
         }
 
-        public override object NewInstance(Stack<object> stack)
+        public override object NewInstance()
         {
-            return Activator.CreateInstance(Type);
+            var instance = Activator.CreateInstance(Type);
+            AddRefFields(instance);
+            return instance;
         }
 
         public override void NewRef(Id id, out IRefBase refBase)
-        {
-            refBase = new Ref<T>(_registry, this, id);
-        }
+            => refBase = new Ref<T>(_registry, this, id);
 
         public IRef<T> NewRef(Id id, T value)
-        {
-            return new Ref<T>(_registry, this, id, value);
-        }
+            => new Ref<T>(_registry, this, id, value);
 
         public IConstRef<T> CreateConst(Id id, T value)
-        {
-            return new ConstRef<T>(_registry, this, id, value);
-        }
+            => new ConstRef<T>(_registry, this, id, value);
 
-        public override void AppendText(StringBuilder str, object obj)
-        {
-            AppendText(str, _registry.Get<T>(obj));
-        }
+        public override void ToPiScript(StringBuilder str, object obj)
+            => AppendText(str, _registry.Get<T>(obj));
 
         public void AppendText(StringBuilder str, T obj)
         {
@@ -50,7 +52,6 @@ namespace Pryo.Impl
             else
                 str.Append(obj.ToString());
         }
-
-        private readonly Action<IRegistry, StringBuilder, T> _toText;
     }
 }
+

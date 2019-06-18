@@ -1,9 +1,10 @@
 ﻿using NUnit.Framework;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestConditionals : TestCommon
+    public class TestConditionals
+        : TestCommon
     {
         [Test]
         public void TestIfElse()

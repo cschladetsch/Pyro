@@ -1,0 +1,12 @@
+﻿// returns many things on the stack
+fun foo(b)
+	b + 2
+	b + 1
+ 	b
+
+// backquotes means `insert pi code here`
+fun(1)
+assert(`depth` == 3)
+`clear`
+assert(`depth` == 0)
+

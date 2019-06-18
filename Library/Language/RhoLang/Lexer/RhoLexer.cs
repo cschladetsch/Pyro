@@ -1,13 +1,13 @@
-﻿using Pryo;
-using Pyro.Language;
-using Pyro.Language.Impl;
-
-namespace Pyro.RhoLang.Lexer
+﻿namespace Pyro.RhoLang.Lexer
 {
+    using Language;
+    using Pyro.Language.Impl;
+
+    /// <inheritdoc />
     /// <summary>
     /// Lexer for the Rho language
     /// </summary>
-    public class RhoLexer 
+    public class RhoLexer
         : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory>
     {
         public RhoLexer(string input)
@@ -33,23 +33,41 @@ namespace Pyro.RhoLang.Lexer
             _KeyWords.Add("write", ERhoToken.Write);
             _KeyWords.Add("new", ERhoToken.New);
             _KeyWords.Add("in", ERhoToken.In);
+            _KeyWords.Add("class", ERhoToken.Class);
         }
 
         protected override bool NextToken()
-        { 
-            char current = Current();
+        {
+            var current = Current();
             if (current == 0)
                 return false;
 
             if (char.IsLetter(current) || current == '_')
                 return IdentOrKeyword();
 
+            // TODO: this handled differently (and poorly) in PiLexer.
             if (char.IsDigit(current))
-                return AddSlice(ERhoToken.Int, Gather(char.IsDigit));
+            {
+                var start = Gather(char.IsDigit);
+
+                // TODO: floating point numbers
+                //if (Current() == '.')
+                //{
+                //    Next();
+                //    var frac = Gather(char.IsDigit);
+                //    AddSlice(ERhoToken.Float, new Slice(this, start.Start, frac.End));
+                //}
+                //else
+                //    AddSlice(ERhoToken.Int, start);
+
+                return AddSlice(ERhoToken.Int, start);
+            }
 
             switch (current)
             {
             case Pathname.Quote: return Add(ERhoToken.Quote);
+            // TODO: This means we can't use ` at all in embedded Pi code.
+            case '`': return AddEmbeddedPi();
             case '{': return Add(ERhoToken.OpenBrace);
             case '}': return Add(ERhoToken.CloseBrace);
             case '(': return Add(ERhoToken.OpenParan);
@@ -66,7 +84,7 @@ namespace Pyro.RhoLang.Lexer
             case '|': return AddIfNext('|', ERhoToken.Or, ERhoToken.BitOr);
             case '<': return AddIfNext('=', ERhoToken.LessEquiv, ERhoToken.Less);
             case '>': return AddIfNext('=', ERhoToken.GreaterEquiv, ERhoToken.Greater);
-            case '"': return LexString(); 
+            case '"': return LexString();
             case '^': return Add(ERhoToken.Xor);
             case '\t': return Add(ERhoToken.Tab);
             case '\r':
@@ -111,7 +129,7 @@ namespace Pyro.RhoLang.Lexer
                     Next();
                     var start = _offset + 1;
                     while (Next() != '\n')
-                        ;
+                        /* skip comment */;
 
                     var comment = _Factory.NewToken(
                         ERhoToken.Comment,
@@ -129,12 +147,19 @@ namespace Pyro.RhoLang.Lexer
             return false;
         }
 
+        private bool AddEmbeddedPi()
+        {
+            Next();
+            AddSlice(ERhoToken.PiSlice, Gather(c => c != '`'));
+            Next();
+            return true;
+        }
+
         protected override void AddKeywordOrIdent(Slice slice)
         {
-            if (_KeyWords.TryGetValue(slice.Text, out var tok))
-                _Tokens.Add(_Factory.NewToken(tok, slice));
-            else
-                _Tokens.Add(_Factory.NewTokenIdent(slice));
+            _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
+                ? _Factory.NewToken(tok, slice)
+                : _Factory.NewTokenIdent(slice));
         }
 
         protected override void Terminate()
@@ -143,3 +168,4 @@ namespace Pyro.RhoLang.Lexer
         }
     }
 }
+

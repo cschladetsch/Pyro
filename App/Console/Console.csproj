@@ -40,6 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -72,10 +74,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Interfaces\CoreNetwork\CoreNetwork.csproj">
-      <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
-      <Name>CoreNetwork</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\AppCommon\AppCommon.csproj">
       <Project>{fd200c39-038b-4f39-a7a8-249b6ece6921}</Project>
       <Name>AppCommon</Name>
@@ -87,10 +85,6 @@
     <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Ext\Flow\Flow2.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>

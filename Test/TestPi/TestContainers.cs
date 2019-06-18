@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestContainers : TestCommon
+    public class TestContainers
+        : TestCommon
     {
         [Test]
         public void TestMap()
@@ -17,7 +18,7 @@ namespace Diver.Test
 
             // expand map to the stack
             PiRun(makeMap + " expand");
-            _exec.WriteDataStack(10);
+            //_Exec.WriteDataStack(10);
             AssertPop(2);
             Assert.AreEqual(4, DataStack.Count);
             DataStack.Clear();
@@ -33,7 +34,8 @@ namespace Diver.Test
             var map = Pop<Dictionary<object, object>>();
             Assert.IsTrue(map.ContainsKey(1));
             Assert.IsTrue(map.ContainsKey("foo"));
-            Assert.IsTrue(map.ContainsValue(2));
+
+            Assert.AreEqual(2, map[1]);
             Assert.AreEqual("bar", map["foo"]);
         }
 

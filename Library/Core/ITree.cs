@@ -1,22 +1,40 @@
 ﻿using System.Collections.Generic;
 
-namespace Pryo
+namespace Pyro
 {
+    /// <summary>
+    /// A hierachy of objects with a search path.
+    /// </summary>
     public interface ITree
     {
-        object Scope { get; set; }
-        List<object> SearchPath { get; set; }
+        /// <summary>
+        /// The current node in the tree.
+        /// </summary>
+        IConstRefBase Scope { get; set; }
+
+        /// <summary>
+        /// The parent of the current node, if any.
+        /// </summary>
+        IConstRefBase Parent { get; }
+
+        /// <summary>
+        /// Search path for identifiers not found in local scope.
+        /// </summary>
+        IList<IConstRefBase> SearchPath { get; set; }
 
         object Resolve(IIdentifer ident);
         object Resolve(IPathname path);
     }
 
-    public interface IIdentifer : ITextSerialise
+    public interface IIdentifer
+        : ITextSerialise
     {
         bool Quoted { get; set; }
     }
 
-    public interface IPathname : ITextSerialise
+    public interface IPathname
+        : IIdentifer
     {
     }
 }
+

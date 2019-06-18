@@ -1,12 +1,45 @@
-﻿using NUnit.Framework;
-using Pryo;
-using Pyro.Exec;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+using Pyro.Language;
 
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
+    using Exec;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Test basic Rho functionality: boolean logic, arithmetic, strings, conditionals.
+    /// </summary>
     [TestFixture]
-    public class TestRhoBasic : TestCommon
+    public class TestRhoBasic
+        : TestCommon
     {
+        [Test]
+        public void TestArrays()
+        {
+            RhoRun("[1 2 3]");
+            var list = Pop<List<object>>();
+            Assert.AreEqual(list.Count, 3);
+            Assert.AreEqual(list[0], 1);
+            Assert.AreEqual(list[1], 2);
+            Assert.AreEqual(list[2], 3);
+        }
+
+        //[Test]
+        public void TestFloats()
+        {
+            AssertEqual("1.1 + 2.2", 1.1f + 2.2f);
+            AssertEqual("1.1 - 2.2", 1.1f - 2.2f);
+            AssertEqual("1.1*2.2", 1.1f * 2.2f);
+            AssertEqual("1.1/2.2", 1.1f / 2.2f);
+        }
+
+        private void AssertEqual(string rho, object val, EStructure str = EStructure.Expression)
+        {
+            RhoRun(rho, false, str);
+            Assert.AreEqual(val, Pop());
+        }
+
         [Test]
         public void TestBoolean()
         {
@@ -36,14 +69,10 @@ namespace Diver.Test.Rho
         }
 
         private void False(string text)
-        {
-            Assert.Throws<AssertionFailedException>(() => True(text));
-        }
+            => Assert.Throws<AssertionFailedException>(() => True(text));
 
         private void True(string text)
-        {
-            RhoRun($"assert({text})");
-        }
+            => RhoRun($"assert({text})");
 
         [Test]
         public void TestArithmetic()
@@ -120,7 +149,7 @@ fun foo()
 @"fun foo()
 	1
 ");
-            
+
             RhoRun(
 @"fun foo()
 	1
@@ -216,3 +245,4 @@ assert(foo() == 6)
         }
     }
 }
+

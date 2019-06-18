@@ -1,26 +1,27 @@
-﻿using Pryo;
-using Pyro.Exec;
-
-namespace Pyro.Language.Impl
+﻿namespace Pyro.Language.Impl
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Common for all Language Parsers.
+    /// </summary>
+    /// <typeparam name="TLexer">The lexicographical analyser to use.</typeparam>
+    /// <typeparam name="TParser">The Abstract Syntax Tree (Ast) generator to use.</typeparam>
     public class TranslatorBase<TLexer, TParser>
         : TranslatorCommon
-        where TLexer : ILexer
-        where TParser : IParser
+        where TLexer
+            : ILexer
+        where TParser
+            : IParser
     {
-        public TLexer Lexer => _lexer;
-        public TParser Parser => _parser;
+        public TParser Parser => _Parser;
 
-        protected TranslatorBase(IRegistry reg) : base(reg)
+        protected TLexer _Lexer;
+        protected TParser _Parser;
+
+        protected TranslatorBase(IRegistry reg)
+            : base(reg)
         {
         }
-
-        public override bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program)
-        {
-            return base.Translate(text, out cont, st);
-        }
-
-        protected TLexer _lexer;
-        protected TParser _parser;
     }
 }
+

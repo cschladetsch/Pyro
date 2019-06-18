@@ -1,0 +1,11 @@
+﻿// test conditionals
+
+fun foo(m)
+    if (m >= 1)
+        true
+    else 
+        false
+
+assert(foo(1))
+assert(!foo(0))
+

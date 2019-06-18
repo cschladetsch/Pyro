@@ -1,99 +1,91 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 using NUnit.Framework;
-using Pryo;
-using Pryo.Impl;
-using Pyro.Exec;
-using Pyro.Language;
-using Pyro.Language.Lexer;
-using Pyro.RhoLang;
-using RegisterTypes = Pyro.Exec.RegisterTypes;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
+    using Exec;
+    using Impl;
+    using Language;
+    using Language.Lexer;
+    using RhoLang;
+
+    /// <inheritdoc />
     /// <summary>
     /// Common to most unit tests in the system
     /// </summary>
     [TestFixture]
-    public class TestCommon : Process
+    public class TestCommon
+        : Process
     {
         public bool Verbose = true;
         public const string ScriptsFolder = "Scripts";
 
-        protected Continuation _continuation;
-        protected IDictionary<string, object> _scope => _continuation?.Scope;
-        protected IList<object> _code => _continuation?.Code;
-        protected Stack<object> DataStack => _exec.DataStack;
-        protected IRegistry _reg;
-        protected IRef<Executor> _executor;
-        protected Executor _exec => _executor.Value;
+        protected Continuation _Continuation;
+        protected IDictionary<string, object> _Scope => _Continuation?.Scope;
+        protected IList<object> _Code => _Continuation?.Code;
+        protected Stack<object> DataStack => _Exec.DataStack;
+        protected IRegistry _Registry;
+        protected IRef<Executor> _ExecutorRef;
+        protected Executor _Exec => _ExecutorRef.Value;
+
         private ITranslator _pi;
         private ITranslator _rho;
 
         [SetUp]
         public void Setup()
         {
-            _reg = new Registry();
-            _pi = new PiTranslator(_reg);
-            _rho = new RhoTranslator(_reg);
-            _executor = _reg.Add(new Executor());
-            RegisterTypes.Register(_reg);
+            _Registry = new Registry();
+            Exec.RegisterTypes.Register(_Registry);
+
+            _pi = new PiTranslator(_Registry);
+            _rho = new RhoTranslator(_Registry);
+            _ExecutorRef = _Registry.Add(new Executor());
         }
 
         protected void PiRun(string text)
         {
-            _exec.Clear();
-            _exec.Continue(_continuation = PiTranslate(text));
+            _Exec.Clear();
+            _Exec.Continue(_Continuation = PiTranslate(text));
         }
 
         protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program)
         {
-            _exec.Clear();
-            Time("Exec took ", () => _exec.Continue(_continuation = RhoTranslate(text, trace, st)));
-        }
-
-        protected void Time(string label, Action action)
-        {
-            WriteLine(Timer.Time("\t" + label, action));
+            _Exec.Clear();
+            _Exec.Continue(_Continuation = RhoTranslate(text, trace, st));
         }
 
         protected Continuation PiTranslate(string text)
         {
-            var trans = new PiTranslator(_reg);
+            var trans = new PiTranslator(_Registry);
             if (!trans.Translate(text, out var cont))
                 WriteLine($"Error: {trans.Error}");
+
             Assert.IsFalse(trans.Failed, trans.Error);
-            return _continuation = cont;
+            return _Continuation = cont;
         }
 
         protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
         {
-            var trans = new RhoTranslator(_reg);
+            var trans = new RhoTranslator(_Registry);
             if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
+
             if (trace)
                 WriteLine(trans.ToString());
-            Assert.IsFalse(trans.Failed);
-            return _continuation = cont;
-        }
 
-        protected bool RunScript(string scriptName)
-        {
-            return RunScriptPathname(GetFullScriptPathname(scriptName));
-        }
-
-        protected string GetFullScriptPathname(string scriptName)
-        {
-            return Path.Combine(GetScriptsPath(), scriptName);
+            Assert.IsFalse(trans.Failed, trans.Error);
+            return _Continuation = cont;
         }
 
         protected ITranslator MakeTranslator(string scriptName)
         {
             Type klass = null;
-            switch (Path.GetExtension(scriptName))
+            var extension = Path.GetExtension(scriptName);
+            switch (extension)
             {
                 case ".pi":
                     klass = typeof(PiTranslator);
@@ -101,17 +93,11 @@ namespace Diver.Test
                 case ".rho":
                     klass = typeof(RhoTranslator);
                     break;
-                //case ".tau":
-                //    klass = typeof(TauTranslator);
-                //    break;
+                default:
+                    throw new NotImplementedException($"Unsupported script {extension}");
             }
 
-            return Activator.CreateInstance(klass, _reg) as ITranslator;
-        }
-
-        protected string LoadScript(string fileName)
-        {
-            return File.ReadAllText(GetFullScriptPathname(fileName));
+            return Activator.CreateInstance(klass, _Registry) as ITranslator;
         }
 
         protected Continuation TranslateScript(string fileName)
@@ -126,14 +112,15 @@ namespace Diver.Test
             var fileName = Path.GetFileName(filePath);
             try
             {
-                WriteLine($"Running {fileName}");
-                _exec.SourceFilename = fileName;
+                //WriteLine($"Running {fileName}");
+                _Exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = MakeTranslator(filePath);
                 if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
+
                 Assert.IsFalse(trans.Failed);
-                Time($"Exec script `{fileName}`", () => _exec.Continue(cont));
+                _Exec.Continue(cont);
             }
             catch (Exception e)
             {
@@ -144,30 +131,38 @@ namespace Diver.Test
             return true;
         }
 
+        protected string LoadScript(string fileName)
+            => File.ReadAllText(GetFullScriptPathname(fileName));
+
+        protected bool RunScript(string scriptName)
+            => RunScriptPathname(GetFullScriptPathname(scriptName));
+
+        protected string GetFullScriptPathname(string scriptName)
+            => Path.Combine(GetScriptsPath(), scriptName);
+
         protected string GetScriptsPath()
-        {
-            return MakeLocalPath(ScriptsFolder);
-        }
+            => MakeLocalPath(ScriptsFolder);
 
         protected string MakeLocalPath(string relative)
-        {
-            return Path.Combine(GetFolderRoot(), relative);
-        }
+            => Path.Combine(GetFolderRoot(), relative);
 
         private static string GetFolderRoot()
-        {
-            return TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
-        }
+            => TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
 
         protected void AssertEmpty()
-        {
-            Assert.AreEqual(0, DataStack.Count);
-        }
+            => Assert.AreEqual(0, DataStack.Count);
 
         protected void AssertPop<T>(T val)
-        {
-            Assert.AreEqual(val, Pop<T>());
-        }
+            => Assert.AreEqual(val, Pop<T>());
+
+        protected T ConstRef<T>(object o)
+            => Executor.ConstRef<T>(o);
+
+        protected void TestFreezeThawPi(string text)
+            => Assert.IsTrue(Continue(FreezeThaw(_pi, text)));
+
+        protected void TestFreezeThawRho(string text)
+            => Assert.IsTrue(Continue(FreezeThaw(_rho, text)));
 
         protected object Pop()
         {
@@ -178,16 +173,12 @@ namespace Diver.Test
         protected T Pop<T>()
         {
             var top = Pop();
-            if (top is T result) // deal with unwrapped values
+            if (top is T result)                // Deal with unwrapped values.
                 return result;
-            var typed = top as IConstRef<T>; // deal with boxed values
+
+            var typed = top as IConstRef<T>;    // Deal with boxed values.
             Assert.IsNotNull(typed);
             return typed.Value;
-        }
-
-        protected void WriteLine(object obj)
-        {
-            WriteLine($"{obj}");
         }
 
         protected void WriteLine(string fmt, params object[] args)
@@ -202,8 +193,8 @@ namespace Diver.Test
         private static void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
-            System.Diagnostics.Trace.WriteLine(text);
-            Console.WriteLine(text);
+            //System.Diagnostics.Trace.WriteLine(text);
+            //Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)
@@ -211,19 +202,15 @@ namespace Diver.Test
             var lex = new PiLexer(input);
             if (lex.Failed)
                 WriteLine("LexerFailed: {0}", lex.Error);
+
             Assert.IsTrue(lex.Process(), lex.Error);
             return lex;
         }
 
-        protected T ConstRef<T>(object o)
-        {
-            return Executor.ConstRef<T>(o);
-        }
-
         protected void AssertVarEquals<T>(string ident, T val)
         {
-            Assert.IsTrue(_scope.ContainsKey(ident), $"{ident} not found");
-            var obj = _scope[ident];
+            Assert.IsTrue(_Scope.ContainsKey(ident), $"{ident} not found");
+            var obj = _Scope[ident];
             switch (obj)
             {
                 case T v:
@@ -265,10 +252,10 @@ namespace Diver.Test
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
-            Assert.AreEqual(0, _exec.DataStack.Count);
+            Assert.AreEqual(0, _Exec.DataStack.Count);
         }
 
-        protected void TestFreezeThawScript(string fileName)
+        protected void FreezeThaw(string fileName)
         {
             var script = LoadScript(fileName);
             switch (Path.GetExtension(fileName))
@@ -276,21 +263,13 @@ namespace Diver.Test
                 case ".pi":
                     TestFreezeThawPi(script);
                     return;
+
                 case ".rho":
                     TestFreezeThawRho(script);
                     return;
             }
+
             Assert.Fail($"Unsupported extension {fileName}");
-        }
-
-        protected void TestFreezeThawPi(string text)
-        {
-            Assert.IsTrue(Continue(FreezeThaw(_pi, text)));            
-        }
-
-        protected void TestFreezeThawRho(string text)
-        {
-            Assert.IsTrue(Continue(FreezeThaw(_rho, text)));            
         }
 
         protected bool Continue(Continuation cont)
@@ -298,7 +277,7 @@ namespace Diver.Test
             Assert.IsNotNull(cont);
             try
             {
-                _exec.Continue(cont);
+                _Exec.Continue(cont);
                 return true;
             }
             catch (Exception e)
@@ -310,13 +289,18 @@ namespace Diver.Test
 
         protected Continuation FreezeThaw(ITranslator trans, string text)
         {
-            WriteLine("--- Input:");
-            WriteLine(text);
+            void Noisey(string info)
+            {
+                //if (Verbose)
+                //    WriteLine(info);
+            }
+            Noisey("--- Input:");
+            Noisey(text);
             Assert.IsTrue(trans.Translate(text, out var cont));
 
-            WriteLine("--- Serialised:");
+            Noisey("--- Serialised:");
             var str = cont.ToText();
-            WriteLine(str);
+            Noisey(str);
             Assert.IsNotEmpty(str);
 
             var thawed = PiTranslate(str);
@@ -327,3 +311,4 @@ namespace Diver.Test
         }
     }
 }
+

@@ -2,17 +2,29 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
+    /// <inheritdoc cref="IClassBase" />
+    /// <inheritdoc cref="StructBase" />
+    /// <summary>
+    /// Common to all Class types used by a Registry.
+    /// </summary>
     public class ClassBase
         : StructBase
         , IClassBase
     {
         public int TypeNumber { get; set; }
 
+        private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();
+
         internal ClassBase(IRegistry reg, Type type)
             : base(reg, type)
         {
+        }
+
+        public object Duplicate(object obj)
+        {
+            return null;
         }
 
         public ICallable GetCallable(string name)
@@ -33,6 +45,14 @@ namespace Pryo.Impl
             refBase = new RefBase(_registry, this, id);
         }
 
+        protected void AddRefFields(object instance)
+        {
+            foreach (var field in _fields)
+            {
+
+            }
+        }
+
         public IRefBase Create(Id id, object value)
         {
             return new RefBase(_registry, this, id, value);
@@ -48,16 +68,20 @@ namespace Pryo.Impl
             return new ConstRefBase(_registry, this, id, value);
         }
 
+        public virtual object NewInstance()
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual object NewInstance(Stack<object> dataStack)
         {
             throw new NotImplementedException();
         }
 
-        public virtual void AppendText(StringBuilder str, object value)
+        public virtual void ToPiScript(StringBuilder str, object value)
         {
             str.Append(value);
         }
-
-        private readonly Dictionary<string, ICallable> _callables = new Dictionary<string, ICallable>();
     }
 }
+

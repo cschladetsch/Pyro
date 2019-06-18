@@ -1,10 +1,12 @@
 ﻿using System.IO;
+
 using NUnit.Framework;
 
-namespace Diver.Test
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestPiScripts : TestCommon
+    public class TestPiScripts
+        : TestCommon
     {
         [Test]
         public void RunScript()

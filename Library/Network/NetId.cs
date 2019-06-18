@@ -1,5 +1,4 @@
 ﻿using System;
-using Pryo;
 
 namespace Pyro.Network
 {
@@ -20,3 +19,4 @@ namespace Pyro.Network
         private Id _id;
     }
 }
+

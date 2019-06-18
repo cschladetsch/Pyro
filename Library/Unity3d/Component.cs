@@ -3,7 +3,7 @@
     /// <summary>
     /// A Component of a GameObject
     /// </summary>
-    public class Component 
+    public class Component
         : Element
         , IHasFileId
     {

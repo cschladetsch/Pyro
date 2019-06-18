@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
-using Pryo;
+
 using Pyro.Exec;
 
 namespace Pyro.Network.Impl
 {
+    /// <inheritdoc cref="IServer" />
     /// <summary>
-    /// A server on the network executes incoming scripts and returns Executor data-stack to sender.
+    /// A server on the network executes incoming scripts and returns Executor data-stack
+    /// to sender.
     /// </summary>
-    public class Server : NetCommon, IServer
+    public class Server
+        : NetCommon
+        , IServer
     {
         public override Socket Socket
         {
@@ -18,66 +22,28 @@ namespace Pyro.Network.Impl
         }
 
         public int ListenPort => _port;
+        public event MessageHandler ReceivedRequest;
 
-        public event ReceivedResponseHandler RecievedResponse;
+        private const int RequestBacklogCount = 50;
+        private Socket _listener;
+        private readonly int _port;
 
         public Server(Peer peer, int port)
             : base(peer)
         {
-            AddTypes(_Context.Registry);
+            RegisterTypes.Register(_Context.Registry);
 
             _port = port;
-            _Exec.Scope["peer"] = _Peer;
-            _Exec.Scope["con"] = this;
-            _Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
-            _Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
-            _Exec.Scope["test"] = TranslatePi("9999 connect & 1 'RemoteAt peer .@ &");
+            //_Exec.Scope["peer"] = _Peer;
+            //_Exec.Scope["con"] = this;
+            //_Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
+            //_Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
+            //_Exec.Scope["test"] = TranslatePi("9999 connect & 1 'RemoteAt peer .@ &");
         }
 
-        private void AddTypes(IRegistry registry)
+        public override string ToString()
         {
-            Exec.RegisterTypes.Register(registry);
-
-            registry.Register(new ClassBuilder<Peer>(registry)
-                .Methods
-                    .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
-                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
-                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
-                    .Add<Client>("Leave", (q, s) => q.Leave())
-                .Class);
-            registry.Register(new ClassBuilder<Client>(registry)
-                .Methods
-                    //.Add<string, bool>("Send", (q, s) => q.Send(s))
-                .Class);
-        }
-
-        protected override bool ProcessReceived(Socket sender, string pi)
-        {
-            try
-            {
-                RecievedResponse?.Invoke(this, _Peer.GetClient(sender), pi);
-                RunLocally(pi);
-                return SendResponse(sender);
-            }
-            catch (Exception e)
-            {
-                return Error($"ProcessReceived: {e.Message}");
-            }
-        }
-
-        private void RunLocally(string pi)
-        {
-            var cont = TranslatePi(pi).Code[0] as Continuation;
-            cont.Scope = _Exec.Scope;
-            _Exec.Continue(cont);
-        }
-
-        private bool SendResponse(Socket sender)
-        {
-            // TODO: Also send _Exec.Scope (?)
-            var response = _Registry.ToText(_Exec.DataStack.ToList());
-            //WriteLine($"Server sends {response}");
-            return Send(sender, response);
+            return $"Server: listening on {ListenPort}, connected={_listener?.Connected}";
         }
 
         public bool Start()
@@ -118,6 +84,36 @@ namespace Pyro.Network.Impl
             return _Context.Exec(script);
         }
 
+        protected override bool ProcessReceived(Socket sender, string pi)
+        {
+            try
+            {
+                ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
+                RunLocally(pi);
+                return SendResponse(sender);
+            }
+            catch (Exception e)
+            {
+                return Error($"ProcessReceived: {e.Message}");
+            }
+        }
+
+        private void RunLocally(string pi)
+        {
+            if (TranslatePi(pi).Code[0] is Continuation cont)
+            {
+                cont.Scope = _Exec.Scope;
+                _Exec.Continue(cont);
+            }
+        }
+
+        private bool SendResponse(Socket sender)
+        {
+            // TODO: Also send _Exec.Scope (?)
+            var response = _Registry.ToPiScript(_Exec.DataStack.ToList());
+            //WriteLine($"Server sends {response}");
+            return Send(sender, response);
+        }
         private void Listen()
         {
             _listener.BeginAccept(ConnectRequest, null);
@@ -134,9 +130,6 @@ namespace Pyro.Network.Impl
             Receive(socket);
             Listen();
         }
-
-        private const int RequestBacklogCount = 50;
-        private Socket _listener;
-        private readonly int _port;
     }
 }
+

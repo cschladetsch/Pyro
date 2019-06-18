@@ -2,45 +2,63 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Pryo;
 
 namespace Pyro.Language.Impl
 {
+    /// <inheritdoc />
     /// <summary>
     /// Common for all Parsers.
-    ///
     /// Iterate over a stream of tokens to produce an abstract syntax tree
     /// </summary>
-    /// <typeparam name="TLexer"></typeparam>
-    /// <typeparam name="TAstNode"></typeparam>
-    /// <typeparam name="TTokenNode"></typeparam>
-    /// <typeparam name="ETokenEnum"></typeparam>
-    /// <typeparam name="EAstEnum"></typeparam>
-    /// <typeparam name="AstFactory"></typeparam>
     public class ParserCommon<TLexer, TAstNode, TTokenNode, ETokenEnum, EAstEnum, AstFactory>
         : ProcessCommon
-        where TLexer : ILexerCommon<TTokenNode>
-        where AstFactory : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
-        where TTokenNode : class, ITokenNode<ETokenEnum>
-        where TAstNode : class
+            where TLexer
+                : ILexerCommon<TTokenNode>
+            where AstFactory
+                : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
+            where TTokenNode
+                : class, ITokenNode<ETokenEnum>
+            where TAstNode
+                : class
     {
+        /// <summary>
+        /// The list of input tokens.
+        /// </summary>
+        protected List<TTokenNode> _Tokens = new List<TTokenNode>();
+
+        /// <summary>
+        /// The runtime stack of AstNodes. This will change as
+        /// the parser operates.
+        /// </summary>
+        protected readonly Stack<TAstNode> _Stack = new Stack<TAstNode>();
+
+        /// <summary>
+        /// The current offset into the input string that is being Tokenised
+        /// </summary>
+        protected int _Current;
+
+        /// <summary>
+        /// The Lexer to use. TODO: Use interfaces instead?
+        /// </summary>
+        protected TLexer _Lexer;
+
+        /// <summary>
+        /// How to make Ast tokens.
+        /// </summary>
+        protected AstFactory _AstFactory = new AstFactory();
+
         protected ParserCommon(TLexer lexer, IRegistry reg)
             : base(reg)
         {
-            _current = 0;
-            _lexer = lexer;
+            _Current = 0;
+            _Lexer = lexer;
         }
 
         public string PrintTree()
-        { 
-            var str = new StringBuilder();
-            PrintTree(str, 0, _stack.Peek());
-            return str.ToString();
-        }
-
-        public override string ToString()
         {
-            return PrintTree();
+            var str = new StringBuilder();
+            PrintTree(str, 0, _Stack.Peek());
+            return str.ToString();
         }
 
         private void PrintTree(StringBuilder str, int level, TAstNode root)
@@ -48,27 +66,37 @@ namespace Pyro.Language.Impl
             var val = root.ToString();
             if (string.IsNullOrEmpty(val))
                 return;
-            for (int n = 0; n < level; ++n)
+
+            for (var n = 0; n < level; ++n)
                 str.Append("    ");
 
             str.Append(val);
             str.Append(Environment.NewLine);
-            foreach (var ch in _astFactory.GetChildren(root))
-            {
+            foreach (var ch in _AstFactory.GetChildren(root))
                 PrintTree(str, level + 1, ch);
-            }
         }
 
+        public override string ToString()
+            => PrintTree();
+
         protected bool Has()
-        {
-            return _current < _tokens.Count;
-        }
+            => _Current < _Tokens.Count;
+
+        protected TAstNode Pop()
+            => !StackHas() ? null : _Stack.Pop();
+
+        protected TAstNode Top()
+            => !StackHas() ? null : _Stack.Peek();
+
+        private bool StackHas()
+            => _Stack.Count > 0 || FailLocation("Empty context stack");
 
         protected bool Push(TAstNode node)
         {
             if (node == null)
                 throw new NullValueException();
-            _stack.Push(node);
+
+            _Stack.Push(node);
             return true;
         }
 
@@ -76,24 +104,9 @@ namespace Pyro.Language.Impl
         {
             if (obj == null)
                 return FailLocation("Cannot add Null object to internal parse stack");
-            
-            _astFactory.AddChild(Top(), obj);
+
+            _AstFactory.AddChild(Top(), obj);
             return true;
-        }
-
-        protected TAstNode Pop()
-        {
-            return !CheckStackExists() ? null : _stack.Pop();
-        }
-
-        protected TAstNode Top()
-        {
-            return !CheckStackExists() ? null : _stack.Peek();
-        }
-
-        private bool CheckStackExists()
-        {
-            return _stack.Count > 0 || FailLocation("Empty context stack");
         }
 
         protected TAstNode PushConsume()
@@ -111,140 +124,65 @@ namespace Pyro.Language.Impl
 
         protected TTokenNode Next()
         {
-            if (_current == _tokens.Count)
-            {
-                FailLocation("Expected more");
-                throw new Exception("Expected more");
-            }
+            if (_Current != _Tokens.Count)
+                return _Tokens[++_Current];
 
-            return _tokens[++_current];
-        }
-
-        protected TTokenNode Last()
-        {
-            return _tokens[_current - 1];
+            FailLocation("Expected more");
+            throw new Exception("Expected more");
         }
 
         protected TTokenNode Current()
         {
-            if (!Has())
-            {
-                Fail("Expected something more");
-                throw new Exception("Expected something");
-            }
+            if (Has())
+                return _Tokens[_Current];
 
-            return _tokens[_current];
-        }
-
-        protected bool Current(TTokenNode node)
-        {
-            return _current < _tokens.Count && _tokens[_current].Equals(node);
-        }
-
-        protected bool Empty()
-        {
-            return _current >= _tokens.Count;
-        }
-
-        protected TTokenNode Peek()
-        {
-            return _current + 1 >= _tokens.Count ? null : _tokens[_current + 1];
-        }
-
-        protected bool PeekConsume(ETokenEnum ty)
-        {
-            if (!Peek().Type.Equals(ty))
-                return false;
-            Consume();
-            return true;
-
-        }
-
-        protected bool CurrentIs(ETokenEnum ty)
-        {
-            return Current().Type.Equals(ty);
-        }
-
-        protected bool PeekIs(ETokenEnum ty)
-        {
-            return Peek().Type.Equals(ty);
-        }
-
-        protected bool Consume(ETokenEnum ty)
-        {
-            if (!Current().Type.Equals(ty))
-                return false;
-            Consume();
-            return true;
-
+            Fail("Expected something more");
+            throw new Exception("Expected something");
         }
 
         protected TTokenNode Consume()
         {
-            if (_current == _tokens.Count)
-            {
-                FailLocation("Expected something more");
-                throw new NotImplementedException("Expected something");
-            }
+            if (_Current != _Tokens.Count)
+                return _Tokens[_Current++];
 
-            return _tokens[_current++];
-        }
-
-        protected bool Try(IList<ETokenEnum> types)
-        {
-            return Enumerable.Contains(types, Current().Type);
-        }
-
-        protected bool Try(ETokenEnum type)
-        {
-            return !Empty() && Current().Type.Equals(type);
-        }
-
-        protected bool FailLocation(string text)
-        {
-            return Fail(!Has() ? text : _lexer.CreateErrorMessage(Current(), text));
+            FailLocation("Expected something more");
+            throw new NotImplementedException("Expected something");
         }
 
         protected TAstNode Expect(ETokenEnum type)
         {
             var tok = Current();
             if (!tok.Type.Equals(type))
-            {
                 FailLocation($"Expected {type}, have {tok}");
-            }
+            else
+                Next();
 
-            Next();
-            return _astFactory.New(Last());
+            return _AstFactory.New(Last());
         }
 
-        protected TAstNode NewNode(EAstEnum t)
-        {
-            return _astFactory.New(t);
-        }
+        protected bool Empty()
+            => _Current >= _Tokens.Count;
 
-        protected TAstNode NewNode(EAstEnum e, TTokenNode t)
-        {
-            return _astFactory.New(e, t);
-        }
+        protected TTokenNode Last()
+            => _Tokens[_Current - 1];
+
+        protected TTokenNode Peek()
+            => _Current + 1 >= _Tokens.Count ? null : _Tokens[_Current + 1];
+
+        protected bool Try(IList<ETokenEnum> types)
+            => Enumerable.Contains(types, Current().Type);
+
+        protected bool Try(ETokenEnum type)
+            => !Empty() && Current().Type.Equals(type);
+
+        protected bool FailLocation(string text)
+            => Fail(!Has() ? text : _Lexer.CreateErrorMessage(Current(), text));
+
+        protected TAstNode NewNode(EAstEnum a)
+            => _AstFactory.New(a);
 
         protected TAstNode NewNode(TTokenNode t)
-        {
-            return _astFactory.New(t);
-        }
-
-        protected List<TTokenNode> _tokens = new List<TTokenNode>();
-        protected readonly Stack<TAstNode> _stack = new Stack<TAstNode>();
-
-        /// <summary>
-        /// The current offset into the input string that is being Tokenised
-        /// </summary>
-        protected int _current;
-
-        /// <summary>
-        /// The Lexer to use. TODO: Use interfaces instead?
-        /// </summary>
-        protected TLexer _lexer;
-        protected AstFactory _astFactory = new AstFactory();
+            => _AstFactory.New(t);
     }
 }
 

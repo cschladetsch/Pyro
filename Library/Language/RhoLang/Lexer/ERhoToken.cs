@@ -75,6 +75,13 @@
         Write,
         MulAssign,
         DivAssign,
-        Suspend
+        Suspend,
+        Class,
+        Constructor,
+        Destructor,
+        BackTic,
+        PiSlice,
+        Pass
     }
 }
+

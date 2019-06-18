@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Pryo.Impl;
+using Pyro.Impl;
 
-namespace Pryo.BuiltinTypes
+namespace Pyro.BuiltinTypes
 {
     public class Void
     {
@@ -24,21 +24,37 @@ namespace Pryo.BuiltinTypes
             reg.Register(new Class<float>(reg));
             reg.Register(new ClassBuilder<List<object>>(reg, ListToText)
                 .Class);
+            reg.Register(new ClassBuilder<Dictionary<object, object>>(reg, DictToText)
+                .Class);
         }
 
-        private static void ListToText(IRegistry reg, StringBuilder arg1, IList arg2)
+        private static void DictToText(IRegistry reg, StringBuilder sb, Dictionary<object,object> dict)
         {
-            arg1.Append('[');
+            foreach (var kv in dict)
+            {
+                reg.ToPiScript(sb, kv.Key);
+                sb.Append(' ');
+                reg.ToPiScript(sb, kv.Value);
+                sb.Append(' ');
+            }
+
+            sb.Append($"{dict.Count} tomap ");
+        }
+
+        private static void ListToText(IRegistry reg, StringBuilder sb, IList list)
+        {
+            sb.Append('[');
             var first = true;
-            foreach (var obj in arg2)
+            foreach (var obj in list)
             {
                 if (first)
                     first = false;
                 else
-                    arg1.Append(' ');
-                reg.AppendText(arg1, obj);
+                    sb.Append(' ');
+                reg.ToPiScript(sb, obj);
             }
-            arg1.Append(']');
+
+            sb.Append(']');
         }
 
         private static void StringToText(IRegistry reg, StringBuilder arg1, string arg2)

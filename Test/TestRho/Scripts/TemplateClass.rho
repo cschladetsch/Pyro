@@ -1,0 +1,19 @@
+﻿// define a new class. Note that (ext) can be anything:
+// another Rho-class, a C# class, a value type, a reference type, etc
+class Foo(ext)
+	Name = "foo"
+	create(arg)
+		Last = "bar"
+		Grok = arg
+	destroy
+		nop
+	fun full()
+		Name + " " + Last + "-" + ext
+
+klass = Foo("spam")
+foo = klass("grok")
+
+assert(foo.Name == "foo")
+assert(foo.Grok == "grok")
+assert(foo.full() == "foo bar-spam")
+

@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
+    /// <inheritdoc />
     /// <summary>
     /// Store of instances, and a mapping of types to facrtories.
     /// </summary>
-    public class Registry : IRegistry
+    public class Registry
+        : IRegistry
     {
         public Guid Guid { get; }
+
+        private int _nextId;
+        private readonly Dictionary<string, IClassBase> _classNames = new Dictionary<string, IClassBase>();
+        private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
+        private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
 
         public Registry()
         {
@@ -50,7 +57,7 @@ namespace Pryo.Impl
                     val = GetRef<T>(rb.Id).Value;
                     return true;
             }
-            val = default(T);
+            val = default;
             return false;
         }
 
@@ -73,7 +80,7 @@ namespace Pryo.Impl
 
         public object New(IClassBase @class, Stack<object> dataStack)
         {
-            return @class.NewInstance(dataStack);
+            return @class.NewInstance();//dataStack);
         }
 
         public IRefBase NewRef(IClassBase @class, Stack<object> dataStack)
@@ -86,24 +93,37 @@ namespace Pryo.Impl
             throw new NotImplementedException();
         }
 
-        public void AppendText(StringBuilder stringBuilder, object obj)
+        public void ToPiScript(StringBuilder stringBuilder, object obj)
         {
             if (obj is IConstRefBase rb)
                 obj = rb.BaseValue;
+
             var type = obj?.GetType();
             if (type == null)
                 return;
+
             if (_classes.TryGetValue(type, out var @class))
-                @class.AppendText(stringBuilder, obj);
+                @class.ToPiScript(stringBuilder, obj);
             else
                 stringBuilder.Append(obj);
         }
 
-        public string ToText(object obj)
+        public string ToPiScript(object obj)
         {
             var str = new StringBuilder();
-            AppendText(str, obj);
+            ToPiScript(str, obj);
             return str.ToString();
+        }
+
+        public object Duplicate(object obj)
+        {
+            if (obj.GetType().IsValueType)
+                return Activator.CreateInstance(obj.GetType(), obj);
+
+            if (obj is IRefBase model)
+                return model.Class.Duplicate(obj);
+
+            return null;
         }
 
         public IRef<T> GetRef<T>(Id id)
@@ -116,6 +136,7 @@ namespace Pryo.Impl
             var klass = GetClass<T>();
             if (klass == null)
                 throw new CouldNotMakeClass(value.GetType());
+
             return AddNew<T>(klass, value);
         }
 
@@ -124,6 +145,7 @@ namespace Pryo.Impl
             var klass = GetClass<T>();
             if (klass == null)
                 throw new CouldNotMakeClass(typeof(T));
+
             return AddNew<T>(klass);
         }
 
@@ -133,6 +155,7 @@ namespace Pryo.Impl
             var classBase = GetClass(type);
             if (classBase == null)
                 throw new CouldNotMakeClass(value?.GetType());
+
             return classBase.Create(NextId(), value);
         }
 
@@ -150,9 +173,11 @@ namespace Pryo.Impl
         {
             if (type == null)
                 type = typeof(void);
+
             var klass = FindClass(type);
             if (klass != null)
                 return klass;
+
             return _classes[type] = new ClassBase(this, type);
         }
 
@@ -163,19 +188,16 @@ namespace Pryo.Impl
 
         private IRef<T> AddNew<T>(IClassBase classBase)
         {
-            var id = NextId();
-            classBase.NewRef(id, out var refBase);
-            Reflect(classBase, refBase);
-            AddNewInstance(classBase, refBase, id);
-            return refBase as IRef<T>;
+            return AddNew<T>(classBase, (T)classBase.NewInstance());
         }
 
         private IRef<T> AddNew<T>(IClassBase classBase, T value)
         {
-            var val = AddNew<T>(classBase);
-            val.Value = value;
-            Reflect(classBase, val);
-            return val;
+            var id = NextId();
+            classBase.NewRef(id, out var refBase);
+            refBase.BaseValue = value;
+            AddNewInstance(classBase, refBase, id);
+            return refBase as IRef<T>;
         }
 
         private IRefBase AddNew(IClassBase classBase, object value)
@@ -189,18 +211,18 @@ namespace Pryo.Impl
         private void AddNewInstance(IClassBase classBase, IRefBase refBase, Id id)
         {
             Reflect(classBase, refBase);
-
             _instances.Add(id, refBase);
         }
 
         private void Reflect(IClassBase classBase, IRefBase refBase)
         {
-            if (!(refBase.BaseValue is IReflected reflected)) 
+            if (!(refBase.BaseValue is IReflected reflected))
                 return;
 
             reflected.SelfBase = refBase;
             if (!(refBase is ConstRefBase self))
                 throw new Exception("Internal error: IRef is not a ConstRef");
+
             self.Registry = this;
             self.Class = classBase;
         }
@@ -215,10 +237,5 @@ namespace Pryo.Impl
         {
             return new Id(++_nextId);
         }
-
-        private int _nextId;
-        private readonly Dictionary<string, IClassBase> _classNames = new Dictionary<string, IClassBase>();
-        private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
-        private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
     }
 }

@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -44,6 +46,13 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Scripts\Add.rho" />
+    <None Include="Scripts\Coments.rho" />
+    <None Include="Scripts\Import.rho" />
+    <None Include="Scripts\PiRho\PiFromRho1.rho" />
+    <None Include="Scripts\PiRho\PiFromRho0.rho" />
+    <Compile Include="PiFromRho.cs" />
+    <None Include="Scripts\Conditionals.rho" />
+    <Compile Include="TestRhoClass.cs" />
     <Compile Include="TestRhoFreezeThaw.cs" />
     <Compile Include="TestRhoLoops.cs" />
     <Compile Include="TestRhoBasic.cs" />
@@ -55,6 +64,8 @@
   <ItemGroup>
     <None Include="Readme.md" />
     <None Include="Scripts\Array.rho" />
+    <None Include="Scripts\BasicClass.rho" />
+    <None Include="Scripts\TemplateClass.rho" />
     <None Include="Scripts\FreezeThaw.rho" />
     <None Include="Scripts\Loops.rho" />
     <None Include="Scripts\NestedFunctions.rho" />

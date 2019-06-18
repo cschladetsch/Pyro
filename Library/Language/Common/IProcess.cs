@@ -1,6 +1,10 @@
 ﻿namespace Pyro.Language
 {
-    // TODO: This is more generic than being in Pyro.Language
+    /// <summary>
+    /// A generalised process.
+    ///
+    /// TODO: this is more general than living in Pyro.Language namespace.
+    /// </summary>
     public interface IProcess
     {
         bool Failed { get; }

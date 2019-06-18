@@ -1,10 +1,15 @@
-﻿namespace Pryo
+﻿using Pyro.Impl;
+
+namespace Pyro
 {
+    /// <summary>
+    /// A part of a string.
+    /// </summary>
     public interface IStringSlice
     {
-        string Text { get; }
+        IString Text { get; }
         int Start { get; }
         int End { get; }
-        //int Length => Start - End;
     }
 }
+

@@ -45,8 +45,8 @@ namespace Pyro.Unity3d.Scene.Lexer
                         return AddNumber();
                     if (Peek() != '-')
                         return Add(EToken.Dash);
-                    return Peek(2) == '-' 
-                        ? AddThreeCharOp(EToken.Document) 
+                    return Peek(2) == '-'
+                        ? AddThreeCharOp(EToken.Document)
                         : LexError("-- not expected");
                 }
             }

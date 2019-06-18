@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Pyro.Language.Impl
 {
+    /// <inheritdoc cref="LexerBase" />
     /// <summary>
     /// Common to all Lexers
     /// </summary>
@@ -18,10 +19,26 @@ namespace Pyro.Language.Impl
     {
         public IList<TToken> Tokens => _Tokens;
 
-        protected LexerCommon(string input) : base(input)
-        {
-            _Factory.SetLexer(this);
-        }
+        protected List<TToken> _Tokens = new List<TToken>();
+        protected Dictionary<string, TEnum> _KeyWords = new Dictionary<string, TEnum>();
+        protected Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
+        protected TTokenFactory _Factory = new TTokenFactory();
+
+        protected LexerCommon(string input)
+            : base(input)
+            => _Factory.SetLexer(this);
+
+        protected override void LexError(string fmt, params object[] args) => Error = string.Format(fmt, args);
+        protected override void AddStringToken(Slice slice) => _Tokens.Add(_Factory.NewTokenString(slice));
+        protected virtual bool NextToken() => false;
+        protected virtual void Terminate() { }
+        protected virtual void AddKeyWords() { }
+
+        public TEnum StringToEnum(string str)
+            => _KeyWords.TryGetValue(str, out var e) ? e : default;
+
+        public string EnumToString(TEnum e)
+            => _KeyWordsInvert.TryGetValue(e, out var str) ? str : e.ToString();
 
         public bool Process()
         {
@@ -35,21 +52,8 @@ namespace Pyro.Language.Impl
             var str = new StringBuilder();
             foreach (var tok in _Tokens)
                 str.Append($"{tok}, ");
-            
+
             return str.ToString();
-        }
-
-        protected virtual void AddKeyWords()
-        {
-        }
-
-        protected virtual bool NextToken()
-        {
-            return false;
-        }
-
-        protected virtual void Terminate()
-        {
         }
 
         protected bool Run()
@@ -74,16 +78,6 @@ namespace Pyro.Language.Impl
             return tok;
         }
 
-        protected override void LexError(string fmt, params object[] args)
-        {
-            _error = string.Format(fmt, args);
-        }
-
-        protected override void AddStringToken(Slice slice)
-        {
-            _Tokens.Add(_Factory.NewTokenString(slice));
-        }
-
         protected bool AddSlice(TEnum type, Slice slice)
         {
             _Tokens.Add(_Factory.NewToken(type, slice));
@@ -101,7 +95,7 @@ namespace Pyro.Language.Impl
 
         protected bool AddIfNext(char ch, TEnum thenType, TEnum elseType)
         {
-            if (Peek() != ch) 
+            if (Peek() != ch)
                 return Add(elseType, 1);
 
             Add(thenType, 2);
@@ -127,9 +121,7 @@ namespace Pyro.Language.Impl
         }
 
         protected bool LexError(string text)
-        {
-            return Fail(CreateErrorMessage(_Factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
-        }
+            => Fail(CreateErrorMessage(_Factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args)
         {
@@ -153,7 +145,7 @@ namespace Pyro.Language.Impl
                         str.Append(ch);
                 }
 
-                if (n != tok.LineNumber) 
+                if (n != tok.LineNumber)
                     continue;
 
                 for (var ch = 0; ch < lex.GetLine(n).Length; ++ch)
@@ -174,9 +166,6 @@ namespace Pyro.Language.Impl
 
             return str.ToString();
         }
-
-        protected List<TToken> _Tokens = new List<TToken>();
-        protected Dictionary<string, TEnum> _KeyWords = new Dictionary<string, TEnum>();
-        protected TTokenFactory _Factory = new TTokenFactory();
     }
 }
+

@@ -1,7 +1,6 @@
-﻿using System;
-using NUnit.Framework;
-using Pryo;
-using Pryo.Impl;
+﻿using NUnit.Framework;
+using Pyro;
+using Pyro.Impl;
 
 namespace Diver.TestCore
 {
@@ -13,12 +12,11 @@ namespace Diver.TestCore
     [TestFixture]
     public class TestRegistry
     {
-        [Test] 
+        [Test]
         public void TestValues()
         {
             var reg = new Registry();
-
-            IRef<int> num = reg.Add(42);
+            var num = reg.Add(42);
             Assert.IsNotNull(num);
             Assert.IsNotNull(num.Value);
 
@@ -27,12 +25,12 @@ namespace Diver.TestCore
             IConstRefBase cref = num;
             Assert.AreEqual(cref.Get<int>(), 42);
 
-            var str = reg.Add<string>();
+            var str = reg.Add("");
             str.Value = "Foo";
             Assert.AreEqual(str.Value, "Foo");
         }
 
-        [Test] 
+        [Test]
         public void TestReferenceFields()
         {
             var reg = new Registry();

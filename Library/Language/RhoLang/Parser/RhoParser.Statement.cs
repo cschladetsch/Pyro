@@ -1,11 +1,11 @@
-﻿using Pyro.RhoLang.Lexer;
-
-namespace Pyro.RhoLang.Parser
+﻿namespace Pyro.RhoLang.Parser
 {
+    using Lexer;
+
+    /// <inheritdoc cref="IProcess" />
     /// <summary>
     /// Rho statements are stand-alone components made of sub-expressions.
-    ///
-    /// NOTE that Statements do not leave anything on the parsing stack:
+    /// <b>NOTE</b> that Statements do not leave anything on the parsing stack:
     /// They either succeed or leave a decent contextual lexical+semantic error message.
     /// </summary>
     public partial class RhoParser
@@ -43,27 +43,27 @@ namespace Pyro.RhoLang.Parser
                 case ERhoToken.If:
                     return If();
 
+                case ERhoToken.Class:
                 case ERhoToken.Fun:
-                    return Function();
+                    return NamedBlock();
 
-                // TODO: Need a 'pass' for empty blocks
-                //case ERhoToken.Pass:
-                //    Append(Current().Type);
-                //    return true;
+                case ERhoToken.Pass:
+                    PushConsume();
+                    return true;
 
                 case ERhoToken.Nop:
                     return false;
             }
 
             if (!Expression())
-                return FailLocation("Expression expected");
-
+                return FailLocation("Statement or expression expected.");
             return Append(Pop()) && !Try(ERhoToken.Nop);
         }
 
-        private bool Function()
+        private bool NamedBlock() => AddNamedBlock(NewNode(Consume()));
+
+        private bool AddNamedBlock(RhoAstNode cont)
         {
-            var cont = NewNode(Consume());
             var ident = Expect(ERhoToken.Ident);
 
             Expect(ERhoToken.OpenParan);
@@ -118,6 +118,7 @@ namespace Pyro.RhoLang.Parser
             Expect(ERhoToken.OpenParan);
             if (!Expression())
                 return FailLocation("Assert needs an expression to test");
+
             Expect(ERhoToken.CloseParan);
 
             assert.Add(Pop());
@@ -130,6 +131,7 @@ namespace Pyro.RhoLang.Parser
             Expect(ERhoToken.OpenParan);
             if (!Expression())
                 return FailLocation("Write what?");
+
             Expect(ERhoToken.CloseParan);
 
             write.Add(Pop());
@@ -141,11 +143,13 @@ namespace Pyro.RhoLang.Parser
             var @if = NewNode(Consume());
             if (!Expression())
                 return FailLocation("If what?");
+
             @if.Add(Pop());
 
             // get the true-clause
             if (!Block())
                 return FailLocation("If needs a block");
+
             @if.Add(Pop());
 
             // if there's an else-clause, add it as well
@@ -154,6 +158,7 @@ namespace Pyro.RhoLang.Parser
             {
                 if (!Block())
                     return FailLocation("No else block");
+
                 @if.Add(Pop());
             }
 
@@ -170,7 +175,7 @@ namespace Pyro.RhoLang.Parser
         /// These are stored in the same Ast node. The way to tell the
         /// difference is by the number of children in the node.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if parsing succeeded.</returns>
         private bool For()
         {
             var @for = NewNode(Consume());
@@ -216,13 +221,8 @@ namespace Pyro.RhoLang.Parser
 
         // for (a in [1 2 3])
         //      block
-        private bool ForEach(RhoAstNode @for)
-        {
-            if (!Expression())
-                return FailLocation("For each in what?");
-
-            return true;
-        }
+        private bool ForEach(RhoAstNode @for) =>
+            Expression() || FailLocation("For each in what?");
 
         // for (a = 0; a < 10; ++a)
         //      block
@@ -238,10 +238,8 @@ namespace Pyro.RhoLang.Parser
             @for.Add(Pop());
             Expect(ERhoToken.Semi);
 
-            if (!Expression())
-                return FailLocation("What happens when the for statement loops?");
-
-            return true;
+            return Expression() || FailLocation("What happens when the for statement loops?");
         }
     }
 }
+

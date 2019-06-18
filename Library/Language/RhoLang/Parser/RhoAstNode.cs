@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using Pyro.RhoLang.Lexer;
 
 namespace Pyro.RhoLang.Parser
 {
+    using Lexer;
+
     /// <summary>
-    /// A node in the Rho Abstract Syntax Tree
+    /// A Node in the Rho Abstract Syntax Tree (Ast).
     /// </summary>
     public class RhoAstNode
     {
@@ -15,14 +16,9 @@ namespace Pyro.RhoLang.Parser
         public IList<RhoAstNode> Children => _children;
         public string Text => Token?.Text;
 
-        public RhoAstNode()
-        {
-        }
+        private readonly List<RhoAstNode> _children = new List<RhoAstNode>();
 
-        public RhoAstNode(ERhoAst type)
-        {
-            Type = type;
-        }
+        public RhoAstNode(ERhoAst type) => Type = type;
 
         public RhoAstNode(ERhoToken type)
         {
@@ -36,40 +32,28 @@ namespace Pyro.RhoLang.Parser
             RhoToken = piToken;
         }
 
+        /// <summary>
+        /// Pretty-print.
+        /// </summary>
         public override string ToString()
         {
             var val = $"{Value}";
             var text = $"{Text}";
             var type = $"{Type}: ";
-            if (!string.IsNullOrEmpty(val))
-                val = $"{val}";
+
             if (Token?.Type == ERhoToken.String)
                 text = $"\"{text}\"";
+
             if (type == "TokenType: ")
                 type = "";
+
             return $"{type}{val} {text}";
         }
 
-        public void Add(RhoAstNode node)
-        {
-            _children.Add(node);
-        }
-
-        public void Add(RhoToken token)
-        {
-            _children.Add(new RhoAstNode(ERhoAst.TokenType, token));
-        }
-
-        public void Add(ERhoToken piToken)
-        {
-            _children.Add(new RhoAstNode(piToken));
-        }
-
-        public RhoAstNode GetChild(int n)
-        {
-            return Children[n];
-        }
-
-        private readonly List<RhoAstNode> _children = new List<RhoAstNode>();
+        public void Add(RhoAstNode node) => _children.Add(node);
+        public void Add(RhoToken token) => _children.Add(new RhoAstNode(ERhoAst.TokenType, token));
+        public void Add(ERhoToken piToken) => _children.Add(new RhoAstNode(piToken));
+        public RhoAstNode GetChild(int n) => Children[n];
     }
 }
+

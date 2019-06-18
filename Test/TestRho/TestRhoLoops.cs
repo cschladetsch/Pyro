@@ -1,17 +1,18 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Constraints;
+//using NUnit.Framework.Constraints;
 
-namespace Diver.Test.Rho
+namespace Pyro.Test.Rho
 {
     [TestFixture]
-    public class TestRhoLoops : TestCommon
+    public class TestRhoLoops
+	    : TestCommon
     {
 	    [Test]
 	    public void TestForEachIn()
 	    {
 		    RhoRun(@"
 c = 0
-for (a in [1, 2, 3])
+for (a in [1 2 3])
 	c = c + a
 ");
 	    }
@@ -21,13 +22,13 @@ for (a in [1, 2, 3])
 		{
 			RhoRun(@"
 c = 0
-for (a in [1,2,3,4])
-	for (b in [4,5,6,7])
+for (a in [1 2 3 4])
+	for (b in [4 5 6 7])
 		c = c + b
 	c = c + a
 writeln(c)
 ");
-			var str = _continuation.ToString();
+			var str = _Continuation.ToString();
 			//var str = _continuation.Serialise();
 
 	        var c = 0;

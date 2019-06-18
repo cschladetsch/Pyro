@@ -12,6 +12,13 @@ Has built-in support for Continuations, including the following three main opera
 * `Replace`. This will continue what is on the data stack, and will not return to current context.
 * `Resume`. This drops the current context completely, and resumes whatever is on the data stack.
 
+## Embedded Pi
+
+*Rho* code can have *Pi* code embedded in it, contained between back-tic ` characters:
+```
+assert(`1 1 +` == 2)
+```
+
 ## Tests
 
 See the [tests](/Test/TestRho)

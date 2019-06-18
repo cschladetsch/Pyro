@@ -1,7 +1,7 @@
 ﻿namespace Pyro.Language
 {
     /// <summary>
-    /// A segment in a lexer
+    /// A text segment in a lexer.
     /// </summary>
     public struct Slice
     {

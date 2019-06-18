@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Pryo
+namespace Pyro
 {
     /// <summary>
     /// Common interface for all Dive system classes.
@@ -12,15 +12,16 @@ namespace Pryo
     {
         AssemblyName Assembly { get; }
         Version Version { get; }
-        string TypeName { get; } 
+        string TypeName { get; }
         Type Type { get; }
         int TypeNumber { get; }
 
+        object Duplicate(object obj);
         ICallable GetCallable(string name);
         void AddCallable(string name, ICallable callable);
         void SetProperty(IRefBase obj, string name, object value);
         object GetProperty(IRefBase obj, string name);
-    
+
         void SetProperty<T>(IRefBase obj, string name, T value);
         IRef<T> GetProperty<T>(IRefBase obj, string name);
 
@@ -31,8 +32,10 @@ namespace Pryo
 
         IRefBase Create(Id id, object value);
         IConstRefBase CreateConst(Id id, object value);
+        object NewInstance();
         object NewInstance(Stack<object> dataStack);
 
-        void AppendText(StringBuilder str, object value);
+        void ToPiScript(StringBuilder str, object value);
     }
 }
+

@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-using Pryo;
+﻿using System.Linq;
+using System.Collections.Generic;
 
-namespace Diver.Test
+using NUnit.Framework;
+
+namespace Pyro.Test
 {
     [TestFixture]
-    public class TestPiTranslator : TestCommon
+    public class TestPiTranslator
+        : TestCommon
     {
         [Test]
         public void TestContinuations()
@@ -151,8 +152,8 @@ namespace Diver.Test
         public void TestVars()
         {
             PiRun("1 'a # a 2 +");
-            Assert.IsTrue(_scope.ContainsKey("a"));
-            var a = _scope["a"];
+            Assert.IsTrue(_Scope.ContainsKey("a"));
+            var a = _Scope["a"];
             Assert.AreEqual(1, a);
             Assert.AreEqual(1, DataStack.Count);
             Assert.AreEqual(1 + 2, Pop<int>());
@@ -164,6 +165,8 @@ namespace Diver.Test
         {
             PiRun("\"foo\" \"bar\" +");
             Assert.AreEqual("foobar", Pop<string>());
+            PiRun("\"a\" \"b\" \"c\" + +");
+            Assert.AreEqual("abc", Pop<string>());
         }
 
         [Test]
@@ -184,3 +187,4 @@ namespace Diver.Test
         }
     }
 }
+

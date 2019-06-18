@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
-using Pryo;
 
 namespace Pyro.Exec
 {
-    public partial class Continuation : Reflected<Continuation>
+    public partial class Continuation
+        : Reflected<Continuation>
     {
         public void DebugWrite(StringBuilder str)
         {
@@ -21,25 +21,26 @@ namespace Pyro.Exec
                 }
             }
 
-            if (_code == null)
+            if (Code == null)
             {
                 str.AppendLine("    No code");
                 return;
             }
 
-            if (_next == _code.Count)
+            if (Ip == Code.Count)
             {
                 str.AppendLine("    [end]");
                 return;
             }
 
-            var index = Math.Max(0, _next - 6);
-            str.AppendLine($"    Code from {index} to fault at {_next}/{_code.Count}:");
+            var index = Math.Max(0, Ip - 6);
+            str.AppendLine($"    Code from {index} to fault at {Ip}/{Code.Count}:");
             str.Append("        ");
-            for (int n = index; n <= _next; ++n)
+            for (int n = index; n <= Ip; ++n)
             {
-                str.Append($"{_code[n]}, ");
+                str.Append($"{Code[n]}, ");
             }
         }
     }
 }
+
