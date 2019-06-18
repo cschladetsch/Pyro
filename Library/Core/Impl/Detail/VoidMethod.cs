@@ -6,14 +6,14 @@ namespace Pyro.Impl
     /// <summary>
     /// A callable thing that doesn't return anything and takes two arguments.
     /// </summary>
-    public class VoidCallable<T, A, B>
+    public class VoidMethod<T, A, B>
         : CallableBase
         , ICallable<T>
             where T : class
     {
         private readonly Action<T, A, B> _fun;
 
-        public VoidCallable(Action<T, A, B> fun)
+        public VoidMethod(Action<T, A, B> fun)
             : base(fun) => _fun = fun;
 
         public override void Invoke(IRegistry reg, Stack<object> stack)
@@ -25,14 +25,14 @@ namespace Pyro.Impl
         }
     }
 
-    public class VoidCallable<T, A>
+    public class VoidMethod<T, A>
         : CallableBase
         , ICallable<T>
             where T : class
     {
         private readonly Action<T, A> _fun;
 
-        public VoidCallable(Action<T, A> fun)
+        public VoidMethod(Action<T, A> fun)
             : base(fun) => _fun = fun;
 
         public override void Invoke(IRegistry reg, Stack<object> stack)
@@ -43,14 +43,14 @@ namespace Pyro.Impl
         }
     }
 
-    public class VoidCallable<T>
+    public class VoidMethod<T>
         : CallableBase
         , ICallable<T>
             where T : class
     {
         private readonly Action<T> _fun;
 
-        public VoidCallable(Action<T> fun)
+        public VoidMethod(Action<T> fun)
             : base(fun) => _fun = fun;
 
         public override void Invoke(IRegistry reg, Stack<object> stack)

@@ -10,6 +10,7 @@ namespace Pyro
     /// </summary>
     public class Pathname
         : IdentBase
+        , IPathname
     {
         public enum EElementType
         {
@@ -52,6 +53,11 @@ namespace Pyro
             Elements = elements;
         }
 
+        public Pathname(string text) : base(false)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
             var str = new StringBuilder();
@@ -80,6 +86,23 @@ namespace Pyro
 
             return str.ToString();
         }
+
+        public string ToText(IRegistry reg = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FromText(string s, IRegistry reg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FromText(IStringSlice s, IRegistry reg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Quoted { get; set; }
     }
 }
 

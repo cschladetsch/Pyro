@@ -10,7 +10,8 @@ namespace Pyro
         void Invoke(IRegistry reg, Stack<object> stack);
     }
 
-    public interface ICallable<T> : ICallable
+    public interface ICallable<T>
+        : ICallable
     {
     }
 }

@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuiltinTypes\Builtins.cs" />
-    <Compile Include="Impl\Callable.cs" />
+    <Compile Include="Impl\Detail\VoidFunction.cs" />
+    <Compile Include="Impl\Detail\Function.cs" />
+    <Compile Include="Impl\Detail\Method.cs" />
     <Compile Include="Impl\CallableBase.cs" />
     <Compile Include="ClassBuilder.cs" />
     <Compile Include="Create.cs" />
@@ -83,7 +85,7 @@
     <Compile Include="IObject.cs" />
     <Compile Include="IReflected.cs" />
     <Compile Include="Impl\RefBase.cs" />
-    <Compile Include="Impl\VoidCallable.cs" />
+    <Compile Include="Impl\Detail\VoidMethod.cs" />
     <Compile Include="IProcess.cs" />
     <Compile Include="IStringSlice.cs" />
     <Compile Include="IStructBase.cs" />

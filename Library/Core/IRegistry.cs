@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Pyro
 {
     /// <summary>
     /// A mapping of id to object.
     ///
-    /// Can be serialised to Json or binary
+    /// Can be serialised to Json or binary.
     /// </summary>
     public interface IRegistry
     {
@@ -39,14 +39,16 @@ namespace Pyro
         IRef<T> GetRef<T>(Id id);
 
         /// <summary>
-        /// Get a previously registered class by name. Used primarily for persistence.
+        /// Get a previously registered class by name.
+        ///
+        /// Used primarily for persistence.
         /// </summary>
         /// <param name="name">The name of the class</param>
         /// <returns>A class if it was found, else null</returns>
         IClassBase GetClass(string name);
 
         /// <summary>
-        /// Get the underlying type of a given object. This is equivalent to derefenencing.
+        /// Get the underlying value of a given object. This is equivalent to derefenencing.
         /// </summary>
         /// <typeparam name="T">The type to get</typeparam>
         /// <param name="obj">The generic object to dereference.</param>
@@ -54,7 +56,7 @@ namespace Pyro
         T Get<T>(object obj);
 
         /// <summary>
-        /// Try to dereference an object to a given type.
+        /// Try to dereference an object to a given value.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -100,8 +102,15 @@ namespace Pyro
         object New(IClassBase @class, Stack<object> dataStack);
         IRefBase NewRef(IClassBase @class, Stack<object> dataStack);
         IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack);
+
         void ToPiScript(StringBuilder stringBuilder, object o);
         string ToPiScript(object obj);
+
+        /// <summary>
+        /// Create a new instance that has the same value as the given instance.
+        /// </summary>
+        /// <param name="obj">The object to duplicate.</param>
+        /// <returns>A new new copy of original object.</returns>
         object Duplicate(object obj);
     }
 }
