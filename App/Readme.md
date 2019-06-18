@@ -1,5 +1,5 @@
 # Applications
-Contains source for applications used by _Pyro_.
+Source for applications used by _Pyro_.
 
 ## Contents
 1. **Console**. Interactive Repl Console.

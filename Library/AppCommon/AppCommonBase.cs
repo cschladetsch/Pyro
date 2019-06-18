@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-
 using Con = System.Console;
 
 namespace Pyro.AppCommon

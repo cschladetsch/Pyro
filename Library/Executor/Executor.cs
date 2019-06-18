@@ -16,15 +16,15 @@ namespace Pyro.Exec
         public bool Rethrows { get; set; }
         public string SourceFilename;
 
-        private bool _break;
-        private Continuation _current;
-        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
-        private IRegistry _registry => Self.Registry;
-
         public Executor() => AddOperations();
         public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
         public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
         public void Continue() => Continue(ContextStack.Pop());
+
+        private bool _break;
+        private Continuation _current;
+        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+        private IRegistry _registry => Self.Registry;
 
         public void Continue(Continuation continuation)
         {
@@ -49,7 +49,7 @@ namespace Pyro.Exec
         {
             while (cont.Next(out var next))
             {
-                // unbox reference types
+                // unbox pyro-reference types
                 if (next is IRefBase refBase)
                     next = refBase.BaseValue;
 

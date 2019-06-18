@@ -61,8 +61,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PyroProject", "PyroProject"
 		.gitattributes = .gitattributes
 		Unity3d\DriverProject\.gitignore = Unity3d\DriverProject\.gitignore
 		.gitmodules = .gitmodules
-		GitCommands.md = GitCommands.md
-		Readme.md = Readme.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{60581136-811F-494B-8673-936DBACC7570}"

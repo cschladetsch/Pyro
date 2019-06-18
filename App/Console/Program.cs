@@ -45,7 +45,6 @@ namespace Pyro.Console
                         => WriteLine(text, ConsoleColor.Magenta);
         }
 
-
         public bool Execute(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -115,7 +114,7 @@ namespace Pyro.Console
 
         private void RunInitialisationScripts()
         {
-            // TODO: run things like ~/.pyro-start.{pi|rho}
+            // TODO: run things like ~/.pyro-start.{pi,rho}
         }
 
         private void WriteHeader()

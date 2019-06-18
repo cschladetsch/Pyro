@@ -11,7 +11,7 @@ namespace Pyro.Exec
     {
         public int TraceLevel;
 
-        private void Write(object obj)
+        private static void Write(object obj)
         {
             Write($"{obj}");
         }
@@ -21,13 +21,13 @@ namespace Pyro.Exec
             WriteLine($"{obj}");
         }
 
-        static void Write(string text, params object[] args)
+        private static void Write(string text, params object[] args)
         {
             System.Diagnostics.Debug.Write(text);
-            Console.Write(text);
+            Console.Write(text, args);
         }
 
-        private void WriteLine(string fmt, params object[] args)
+        private static void WriteLine(string fmt, params object[] args)
         {
             if (args == null || args.Length == 0)
                 Write(fmt + '\n');

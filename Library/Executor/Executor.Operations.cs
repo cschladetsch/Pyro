@@ -5,11 +5,25 @@ using System.Linq;
 
 namespace Pyro.Exec
 {
+    /// <summary>
+    /// Implementation of the various operations an Executor can perform.
+    /// </summary>
     public partial class Executor
     {
+        /// <summary>
+        /// The number of significant digits for float comparisons.
+        /// </summary>
         public int FloatPrecision;
+
+        /// <summary>
+        /// A hack that is broken anyway.
+        /// </summary>
         private bool _leaveForEach;
 
+        /// <summary>
+        /// Add options to the internal mapping of EOperation enum to
+        /// functor that does the work for that operation.
+        /// </summary>
         private void AddOperations()
         {
             _actions[EOperation.Plus] = () =>

@@ -1,7 +1,7 @@
 ﻿namespace Pyro.Exec
 {
     /// <summary>
-    /// TODO
+    /// Register fundamental types in a registry.
     /// </summary>
     public static class RegisterTypes
     {
