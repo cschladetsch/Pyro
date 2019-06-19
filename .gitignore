@@ -15,6 +15,8 @@ Assets/Liminal/Assemblies/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+StyleCop.Cache
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

@@ -21,4 +21,3 @@ namespace Pyro
             where A0 : class where A1 : class => new Function<A0, A1, R>(fun);
     }
 }
-

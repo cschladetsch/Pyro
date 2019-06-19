@@ -53,16 +53,13 @@ namespace Pyro.Test
             public IList<IRef<User>> Users;
         }
 
-        // TODO TEST
-        //[Test]
+        [Test]
         public void TestPersistedInstances()
         {
             var user = _Registry.Add<User>().Value;
-            var org = _Registry.Add<Organisation>().Value;
             user.Name = "Freddy";
             user.Last = "Blogs";
             user.Age = 42;
-            user.Org.Value = org;
 
             var pi = _Registry.ToPiScript(user);
             PiRun(pi);

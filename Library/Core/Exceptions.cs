@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pyro
 {
@@ -23,6 +24,7 @@ namespace Pyro
     /// <summary>
     /// Couldn't find class to make in Registry.
     /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.Csharp.Maintainability", "*")]
     public class CouldNotMakeClass
         : Exception
     {
