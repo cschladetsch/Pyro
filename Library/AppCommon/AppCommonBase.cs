@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reflection;
-using Con = System.Console;
-
-namespace Pyro.AppCommon
+﻿namespace Pyro.AppCommon
 {
+    using System;
+    using System.Reflection;
+    using Con = System.Console;
+
     /// <summary>
-    /// Functionality that is common to all Apps that use Pyro libraries.
+    /// Functionality that is common to all (console) Apps that use Pyro libraries.
     /// </summary>
     public abstract class AppCommonBase
     {
@@ -20,17 +20,6 @@ namespace Pyro.AppCommon
             WriteHeader();
         }
 
-        protected virtual void ProcessArgs(string[] args)
-        {
-        }
-
-        protected abstract void Shutdown();
-
-        private static void WriteHeader()
-        {
-            WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
-        }
-
         public static string GetVersion()
         {
             var name = Assembly.GetExecutingAssembly().GetName();
@@ -38,6 +27,12 @@ namespace Pyro.AppCommon
             var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
             return $"Pyro {name.Name} {version} built {built}";
         }
+
+        protected virtual void ProcessArgs(string[] args)
+        {
+        }
+
+        protected abstract void Shutdown();
 
         protected void Exit(int result = 0)
         {
@@ -52,13 +47,14 @@ namespace Pyro.AppCommon
         }
 
         protected static void Write(string text, ConsoleColor color = ConsoleColor.White)
-        {
-            ConWrite(text, color, Con.Write);
-        }
+            => ConWrite(text, color, Con.Write);
 
         protected static void WriteLine(string text, ConsoleColor color = ConsoleColor.White)
+            => ConWrite(text, color, Con.WriteLine);
+
+        private static void WriteHeader()
         {
-            ConWrite(text, color, Con.WriteLine);
+            WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
         }
 
         /// <summary>
@@ -66,7 +62,6 @@ namespace Pyro.AppCommon
         /// </summary>
         private static void ConWrite(string text, ConsoleColor color, Action<string> write)
         {
-            //System.Console.WriteLine(text);
             var current = Con.ForegroundColor;
             Con.ForegroundColor = color;
             write(text);

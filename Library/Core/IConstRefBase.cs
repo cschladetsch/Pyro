@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <inheritdoc />
     /// <summary>
     /// Common to all types that provide const-only access to underlying value.

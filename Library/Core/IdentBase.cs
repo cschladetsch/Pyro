@@ -11,9 +11,7 @@
         public bool Quoted;
 
         public IdentBase(bool quoted = false)
-        {
-            Quoted = quoted;
-        }
+            => Quoted = quoted;
     }
 }
 

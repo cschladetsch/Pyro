@@ -1,10 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Pyro
+﻿namespace Pyro
 {
-    /// <inheritdoc />
+    using System;
+    using System.Text;
+    using System.Collections.Generic;
+
+    /// <inheritdoc cref="IdentBase" />
     /// <summary>
     /// A partial or fully-qualified path name.
     /// </summary>
@@ -103,7 +103,7 @@ namespace Pyro
         }
 
         // public bool Quoted { get; set; }
-        public bool Quoted { get; set; }
+        public new bool Quoted { get; set; }
     }
 }
 

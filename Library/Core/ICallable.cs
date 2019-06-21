@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Is able to be called given context of a registry and a data stack
     /// </summary>

@@ -12,17 +12,16 @@ namespace Pyro
         internal Id(int start = 0) => Value = start;
 
         public Id(Id prev)
-            : this(prev.Value + 1)
-        {
-        }
+            : this(prev.Value + 1) { }
 
-        public override string ToString() => $"#{Value}";
-        public override int GetHashCode() => Value;
+        public override string ToString()
+            => $"#{Value}";
 
-        public override bool Equals(object obj)
-        {
-            return obj is Id id && id.Value == Value;
-        }
+        public override int GetHashCode()
+            => Value;
+
+        public override bool Equals(object obj) =>
+            obj is Id id && id.Value == Value;
     }
 }
 
