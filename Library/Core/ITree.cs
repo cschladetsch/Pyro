@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// A hierachy of objects with a search path.
     /// </summary>

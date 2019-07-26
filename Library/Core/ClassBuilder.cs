@@ -1,12 +1,18 @@
-﻿using System;
-using System.Text;
+﻿#pragma warning disable SA1401
 
 namespace Pyro
 {
+    using System;
+    using System.Text;
+
     using Impl;
 
     /// <summary>
-    /// Make a new class that can added to a Registry. This isn't always necessary, unless there are overloaded methods in the class.
+    /// Make a new class that can added to a Registry.
+    ///
+    /// This isn't always necessary, unless there are overloaded
+    /// methods in the class.
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ClassBuilder<T>
@@ -64,31 +70,31 @@ namespace Pyro
 
             public AddMethod Add<A>(string name, Action<T, A> fun)
             {
-                _builder._class.AddCallable(name, new VoidMethod<T,A>(fun));
+                _builder._class.AddCallable(name, new VoidMethod<T, A>(fun));
                 return this;
             }
 
-            public AddMethod Add<A,B>(string name, Action<T,A,B> fun)
+            public AddMethod Add<A, B>(string name, Action<T, A, B> fun)
             {
-                _builder._class.AddCallable(name, new VoidMethod<T,A,B>(fun));
+                _builder._class.AddCallable(name, new VoidMethod<T, A, B>(fun));
                 return this;
             }
 
-            public AddMethod Add<A,B,R>(string name, Func<T,A,B,R> fun)
+            public AddMethod Add<A, B, R>(string name, Func<T, A, B, R> fun)
             {
-                _builder._class.AddCallable(name, new Method<T,A,B,R>(fun));
+                _builder._class.AddCallable(name, new Method<T, A, B, R>(fun));
                 return this;
             }
 
             public AddMethod Add<A, R>(string name, Func<T, A, R> fun)
             {
-                _builder._class.AddCallable(name, new Method<T,A,R>(fun));
+                _builder._class.AddCallable(name, new Method<T, A, R>(fun));
                 return this;
             }
 
             public AddMethod Add<R>(string name, Func<T, R> fun)
             {
-                _builder._class.AddCallable(name, new Method<T,R>(fun));
+                _builder._class.AddCallable(name, new Method<T, R>(fun));
                 return this;
             }
         }
@@ -99,4 +105,3 @@ namespace Pyro
         }
     }
 }
-

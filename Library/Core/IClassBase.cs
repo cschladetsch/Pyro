@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Text;
+
     /// <summary>
     /// Common interface for all Dive system classes.
     /// </summary>

@@ -1,8 +1,8 @@
-﻿using System;
-using Pyro.Impl;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+    using Impl;
+
     /// <summary>
     /// Top-level factory for Core
     /// </summary>
@@ -15,10 +15,11 @@ namespace Pyro
 
         public static ICallable Function<R>(Func<R> fun)
             => new Function<R>(fun);
+
         public static ICallable Callable<A, R>(Func<A, R> fun)
             where A : class => new Function<A, R>(fun);
+
         public static ICallable Callable<A0, A1, R>(Func<A0, A1, R> fun)
             where A0 : class where A1 : class => new Function<A0, A1, R>(fun);
     }
 }
-

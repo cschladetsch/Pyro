@@ -1,43 +1,11 @@
 ﻿using System;
-using System.Reflection;
 
 namespace Pyro.NetworkGen
 {
-    enum EBuildType
+    public enum EBuildType
     {
         Proxy,
         Agent,
-    }
-
-    class AssemblyProcess
-    {
-        protected static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-
-        public AssemblyProcess(string asmName)
-        {
-            var asm = Assembly.LoadFile(asmName);
-            foreach (var module in asm.GetModules())
-            {
-                foreach (var type in module.GetTypes())
-                {
-                    _logger.Info(type.FullName);
-                }
-            }
-        }
-    }
-
-    class BuildAgent : AssemblyProcess
-    {
-        public BuildAgent(string asmName) : base(asmName)
-        {
-        }
-    }
-
-    class BuildProxy : AssemblyProcess
-    {
-        public BuildProxy(string asmName) : base(asmName)
-        {
-        }
     }
 
     internal class Program

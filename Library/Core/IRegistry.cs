@@ -1,9 +1,9 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+    using System.Text;
+    using System.Collections.Generic;
+
     /// <summary>
     /// A mapping of id to object.
     ///

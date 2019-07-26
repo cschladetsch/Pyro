@@ -1,7 +1,7 @@
-﻿using System.Text;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System.Text;
+
     /// <inheritdoc />
     /// <summary>
     /// A class for a given type T

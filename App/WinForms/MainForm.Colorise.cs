@@ -15,15 +15,6 @@ namespace WinForms
         private Font _defaultFont;
         private Font _boldFont;
 
-        private void CheckFonts()
-        {
-            if (_defaultFont != null)
-                return;
-
-            _defaultFont = piInput.Font;
-            _boldFont = new Font(_defaultFont.FontFamily, _defaultFont.Size, FontStyle.Bold);
-        }
-
         private static int GetStartOffset(Control rtb, Slice slice)
         {
             var lines = rtb.Text.Split('\n');
@@ -53,6 +44,15 @@ namespace WinForms
             rtb.AutoScrollOffset = scroll;
 
             return true;
+        }
+
+        private void CheckFonts()
+        {
+            if (_defaultFont != null)
+                return;
+
+            _defaultFont = piInput.Font;
+            _boldFont = new Font(_defaultFont.FontFamily, _defaultFont.Size, FontStyle.Bold);
         }
 
         #region Native

@@ -21,6 +21,15 @@ namespace Pyro
         public string Error { get; protected set; }
 
         /// <summary>
+        /// Reset this Process to a successful state.
+        /// </summary>
+        public void Reset()
+        {
+            Failed = false;
+            Error = "";
+        }
+
+        /// <summary>
         /// A special kind of failure: this is a failure of the system itself,
         /// rather than a failure to produce results given invalid user input.
         /// </summary>
@@ -43,15 +52,6 @@ namespace Pyro
             Failed = true;
             Error = err;
             return false;
-        }
-
-        /// <summary>
-        /// Reset this Process to a successful state.
-        /// </summary>
-        public void Reset()
-        {
-            Failed = false;
-            Error = "";
         }
     }
 }

@@ -60,7 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuiltinTypes\Builtins.cs" />
+    <Compile Include="BuiltinTypes\CustomMapComparer.cs" />
+    <Compile Include="BuiltinTypes\Void.cs" />
+    <Compile Include="BuiltinTypes\BuiltinTypes.cs" />
     <Compile Include="Impl\Detail\VoidFunction.cs" />
     <Compile Include="Impl\Detail\Function.cs" />
     <Compile Include="Impl\Detail\Method.cs" />

@@ -11,10 +11,14 @@ namespace Pyro
     {
         protected readonly IRegistry _reg;
 
-        protected ProcessCommon(IRegistry r) => _reg = r;
-        protected IRef<T> New<T>() => _reg.Add<T>(default);
-        protected IRef<T> New<T>(T val) => _reg.Add(val);
-        protected void WriteLine(object obj) => WriteLine("{0}", obj.ToString());
+        protected ProcessCommon(IRegistry r)
+            => _reg = r;
+        protected IRef<T> New<T>()
+            => _reg.Add<T>(default);
+        protected IRef<T> New<T>(T val)
+            => _reg.Add(val);
+        protected void WriteLine(object obj)
+            => WriteLine("{0}", obj.ToString());
 
         protected void WriteLine(string fmt, params object[] args)
         {
@@ -26,7 +30,8 @@ namespace Pyro
             Console.WriteLine(text);
         }
 
-        protected new void Reset() => base.Reset();
+        protected new void Reset()
+            => base.Reset();
     }
 }
 

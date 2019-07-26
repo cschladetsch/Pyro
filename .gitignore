@@ -1,5 +1,6 @@
 TestResults.xml
 tests.txt
+.current
 
 
 /Unity3d/PyroUnity/Assets/Liminal/Assemblies/
@@ -17,6 +18,8 @@ tests.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+
+StyleCop.Cache
 
 # Build results
 [Dd]ebug/

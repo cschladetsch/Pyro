@@ -17,18 +17,18 @@ namespace Pyro.Console
 
         private readonly Context _context;
         private IPeer _peer;
+        private bool _useLoopback = false;
+
         private string HostName => _peer?.Remote?.HostName ?? "local";
         private int HostPort => _peer?.Remote?.HostPort ?? 0;
 
         /// <summary>
         /// If true, start a local peer and use loopback
         /// </summary>
-        private bool _useLoopback = false;
-
-        private static void Main(string[] args)
+        public static void Main(string[] args)
             => new Program(args).Repl();
 
-        private Program(string[] args)
+        public Program(string[] args)
             : base(args)
         {
             _context = new Context();
@@ -59,7 +59,7 @@ namespace Pyro.Console
                 if (PreProcess(input))
                     return true;
 
-                if  (!_context.Translate(input, out var cont))
+                if (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
 
                 if (_peer != null)
@@ -100,6 +100,16 @@ namespace Pyro.Console
                 str.AppendLine($"{n++}: {result}");
 
             Con.Write(str.ToString());
+        }
+
+        protected override void Shutdown()
+        {
+            const ConsoleColor Color = ConsoleColor.DarkGray;
+            Error("Shutting down...", Color);
+            _peer?.Stop();
+            Error("Done", Color);
+            Con.ForegroundColor = ConsoleColor.White;
+            Exit();
         }
 
         private bool StartPeer(string[] args)
@@ -147,15 +157,15 @@ namespace Pyro.Console
             }
         }
 
-        private static string GetInput()
+        private string GetInput()
         {
             return Con.ReadLine();
         }
 
         private bool PreProcess(string input)
         {
-            //if (!string.IsNullOrEmpty(input))
-            //{
+            // if (!string.IsNullOrEmpty(input))
+            // {
             //    if (input.StartsWith("."))
             //    {
             //        //var cmd = input.Substring(1);
@@ -174,7 +184,7 @@ namespace Pyro.Console
             //        proc.StandardOutput =
             //        return true;
             //    }
-            //}
+            // }
 
             switch (input)
             {
@@ -211,7 +221,7 @@ namespace Pyro.Console
             Con.ForegroundColor = current;
         }
 
-        private static bool ShowHelp()
+        private bool ShowHelp()
         {
             Con.WriteLine(
 @"
@@ -236,16 +246,5 @@ Press Ctrl-C to quit.
 ");
             return true;
         }
-
-        protected override void Shutdown()
-        {
-            const ConsoleColor color = ConsoleColor.DarkGray;
-            Error("Shutting down...", color);
-            _peer?.Stop();
-            Error("Done", color);
-            Con.ForegroundColor = ConsoleColor.White;
-            Exit();
-        }
     }
 }
-

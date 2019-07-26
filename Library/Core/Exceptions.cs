@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
     /// <inheritdoc />
     /// <summary>
     /// Given member (field, property, method, inner class etc) not found.
@@ -20,9 +21,11 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Couldn't find class to make in Registry.
     /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.Csharp.Maintainability", "*")]
     public class CouldNotMakeClass
         : Exception
     {
@@ -32,6 +35,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// The context stack was empty, and yet was attempted to be popp'ed
     /// </summary>
@@ -44,6 +48,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Used for debugging.
     /// </summary>
@@ -56,6 +61,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Thrown when an unexpected null reference was found
     /// </summary>
@@ -68,6 +74,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// An Assertion failed.
     /// </summary>
@@ -80,6 +87,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// An attempt was made to access the contents of and empty data-stack in an Executor.
     /// </summary>
@@ -92,6 +100,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Given identifier could not be resolved locally, in the context stack, or in the tree.
     /// </summary>
@@ -106,6 +115,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Invalid comparisons between two different enumeration types.
     /// </summary>
@@ -121,6 +131,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Cannot resolve given identifier.
     /// </summary>
@@ -133,6 +144,7 @@ namespace Pyro
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// There was a mis-match in types for a given binary operation.
     /// </summary>

@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-
-namespace Pyro.ExecutionContext
+﻿namespace Pyro.ExecutionContext
 {
+    using System;
+    using System.IO;
+    using System.Collections.Generic;
+
     using Exec;
     using Impl;
     using Language;

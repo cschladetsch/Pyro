@@ -1,7 +1,8 @@
 ﻿namespace Pyro
 {
     /// <summary>
-    /// TODO
+    /// Instances of classes that implement this interface have access to
+    /// their <see cref="IRefBase"/>
     /// </summary>
     public interface IReflected
     {
@@ -9,7 +10,7 @@
     }
 
     /// <summary>
-    /// A Reflected object of type T
+    /// Reflected instances have access to their typed self.
     /// </summary>
     public interface IReflected<T>
     {
