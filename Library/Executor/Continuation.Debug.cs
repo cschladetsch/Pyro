@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+    using System.Text;
+
     public partial class Continuation
         : Reflected<Continuation>
     {
@@ -36,7 +36,7 @@ namespace Pyro.Exec
             var index = Math.Max(0, Ip - 6);
             str.AppendLine($"    Code from {index} to fault at {Ip}/{Code.Count}:");
             str.Append("        ");
-            for (int n = index; n <= Ip; ++n)
+            for (var n = index; n <= Ip; ++n)
             {
                 str.Append($"{Code[n]}, ");
             }

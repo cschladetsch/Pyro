@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reflection;
-
-namespace WinForms
+﻿namespace WinForms
 {
+    using System;
+    using System.Reflection;
+
     partial class MainForm
     {
         /// <summary>

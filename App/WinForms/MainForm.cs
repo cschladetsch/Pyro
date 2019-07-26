@@ -1,15 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
-
-using Pyro;
-using Pyro.Exec;
-using Pyro.Network;
-using Pyro.ExecutionContext;
-
-namespace WinForms
+﻿namespace WinForms
 {
+    using System;
+    using System.IO;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using Pyro;
+    using Pyro.Exec;
+    using Pyro.Network;
+    using Pyro.ExecutionContext;
+
     /// <summary>
     /// The main form for the application.
     /// </summary>
@@ -30,13 +29,13 @@ namespace WinForms
         public MainForm()
         {
             InitializeComponent();
+
             _context = new Context();
-
-            Pyro.Network.RegisterTypes.Register(_context.Registry);
-
             _peer = Pyro.Network.Create.NewPeer(ListenPort);
             _peer.OnConnected += Connected;
             _peer.OnReceivedResponse += Received;
+
+            Pyro.Network.RegisterTypes.Register(_context.Registry);
 
             // Clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
@@ -57,7 +56,6 @@ namespace WinForms
             };
 
             UpdatePiContext();
-
             ColorisePi();
             ColoriseRho();
         }

@@ -6,7 +6,8 @@
 
     /// <summary>
     /// Functions that deal only with parsing expressions.
-    /// <bold>NOTE</bold> that in Rho, a statement can also be an expression.
+    ///
+    /// NOTE in Rho, a statement can also be an expression.
     /// </summary>
     public partial class RhoParser
     {

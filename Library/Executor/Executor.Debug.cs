@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+    using System.Text;
+
     /// <inheritdoc />
     /// <summary>
     /// Debug methods for executor. Removed from main implementation for clarity.
@@ -12,14 +12,10 @@ namespace Pyro.Exec
         public int TraceLevel;
 
         private static void Write(object obj)
-        {
-            Write($"{obj}");
-        }
+            => Write($"{obj}");
 
         private void WriteLine(object obj)
-        {
-            WriteLine($"{obj}");
-        }
+            => WriteLine($"{obj}");
 
         private static void Write(string text, params object[] args)
         {
@@ -36,9 +32,7 @@ namespace Pyro.Exec
         }
 
         private void DebugTrace()
-        {
-            WriteLine(DebugWrite());
-        }
+            => WriteLine(DebugWrite());
 
         private string DebugWrite()
         {
@@ -84,9 +78,7 @@ namespace Pyro.Exec
         }
 
         private static string GetTyped(object obj)
-        {
-            return obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
-        }
+            => obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
 
         private void PerformPrelude(object next)
         {

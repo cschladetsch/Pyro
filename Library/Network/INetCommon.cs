@@ -1,7 +1,6 @@
-﻿using System.Net.Sockets;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System.Net.Sockets;
     using ExecutionContext;
 
     /// <summary>

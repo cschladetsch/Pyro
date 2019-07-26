@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <inheritdoc />
     /// <summary>
     /// Processes a sequence of Continuations.

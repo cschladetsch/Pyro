@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <inheritdoc />
     /// <summary>
     /// Implementation of the various operations an Executor can perform.
     /// </summary>
@@ -668,7 +669,7 @@ namespace Pyro.Exec
     }
 
     /// <summary>
-    ///
+    /// DOC
     /// </summary>
     public class CannotConvertException
         : Exception

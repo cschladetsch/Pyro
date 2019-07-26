@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-
-namespace Pyro.Console
+﻿namespace Pyro.Console
 {
+    using System;
+    using System.Linq;
+    using System.Text;
     using ExecutionContext;
     using Language;
     using Network;
-
     using Con = System.Console;
 
     internal class Program
@@ -17,7 +15,7 @@ namespace Pyro.Console
 
         private readonly Context _context;
         private IPeer _peer;
-        private bool _useLoopback = false;
+        private readonly bool _useLoopback = false;
 
         private string HostName => _peer?.Remote?.HostName ?? "local";
         private int HostPort => _peer?.Remote?.HostPort ?? 0;
@@ -51,6 +49,7 @@ namespace Pyro.Console
             {
                 if (_peer != null)
                     WriteLocalDataStack();
+
                 return true;
             }
 
@@ -104,10 +103,10 @@ namespace Pyro.Console
 
         protected override void Shutdown()
         {
-            const ConsoleColor Color = ConsoleColor.DarkGray;
-            Error("Shutting down...", Color);
+            const ConsoleColor color = ConsoleColor.DarkGray;
+            Error("Shutting down...", color);
             _peer?.Stop();
-            Error("Done", Color);
+            Error("Done", color);
             Con.ForegroundColor = ConsoleColor.White;
             Exit();
         }
@@ -124,7 +123,7 @@ namespace Pyro.Console
 
         private void RunInitialisationScripts()
         {
-            // TODO: run things like ~/.pyro-start.{pi,rho}
+            // TODO: run things like ~/.pyrorc.{pi,rho}
         }
 
         private void WriteHeader()
@@ -157,10 +156,8 @@ namespace Pyro.Console
             }
         }
 
-        private string GetInput()
-        {
-            return Con.ReadLine();
-        }
+        private static string GetInput()
+            => Con.ReadLine();
 
         private bool PreProcess(string input)
         {
@@ -191,11 +188,9 @@ namespace Pyro.Console
                 case "?":
                 case "help":
                     return ShowHelp();
-
                 case "rho":
                     _context.Language = ELanguage.Rho;
                     return true;
-
                 case "pi":
                     _context.Language = ELanguage.Pi;
                     return true;
@@ -248,3 +243,4 @@ Press Ctrl-C to quit.
         }
     }
 }
+

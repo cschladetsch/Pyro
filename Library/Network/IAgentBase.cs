@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System;
+
     /// <summary>
     /// Common for all Agents.
     ///

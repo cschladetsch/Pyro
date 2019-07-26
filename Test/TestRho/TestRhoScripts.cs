@@ -1,9 +1,8 @@
-﻿using System.IO;
-
-using NUnit.Framework;
-
-namespace Pyro.Test.Rho
+﻿namespace Pyro.Test.Rho
 {
+    using System.IO;
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestRhoScripts
         : TestCommon
@@ -28,3 +27,4 @@ namespace Pyro.Test.Rho
         }
     }
 }
+

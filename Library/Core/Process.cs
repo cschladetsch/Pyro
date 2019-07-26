@@ -1,19 +1,8 @@
-﻿using System;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+
     /// <inheritdoc />
-    /// <summary>
-    /// This is a simple class which works in various contexts.
-    ///
-    /// It is common to all things that preserve state over time.
-    ///
-    /// Notably each language's Lexer, Parser, and Translator are all Proceses's.
-    ///
-    /// The base of all netork classes are also Process's.
-    ///
-    /// This is the work-horse of many systems. A very humble yet very important and used class.
-    /// </summary>
     public class Process
         : IProcess
     {

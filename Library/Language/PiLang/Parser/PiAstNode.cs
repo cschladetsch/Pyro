@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Pyro.Language.Parser
+﻿namespace Pyro.Language.Parser
 {
+    using System.Collections.Generic;
     using Lexer;
 
     /// <summary>

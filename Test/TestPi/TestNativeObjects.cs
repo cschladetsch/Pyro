@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using NUnit.Framework;
     using Language.Lexer;
 
     [TestFixture]

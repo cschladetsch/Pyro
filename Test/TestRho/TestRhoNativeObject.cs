@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-
-namespace Pyro.Test.Rho
+﻿namespace Pyro.Test.Rho
 {
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestRhoNativeObject
         : TestCommon

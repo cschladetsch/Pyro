@@ -1,16 +1,15 @@
-﻿using System;
-using System.Linq;
-
-namespace Pyro.RhoLang
+﻿namespace Pyro.RhoLang
 {
+    using System;
+    using System.Linq;
     using Exec;
     using Lexer;
     using Parser;
-
     using Language;
     using Language.Parser;
     using Language.Impl;
 
+    /// <inheritdoc />
     /// <summary>
     /// Translate from Rho script to an executable Continuation.
     /// </summary>
@@ -59,113 +58,77 @@ namespace Pyro.RhoLang
             {
                 case ERhoToken.Assign:
                     return Assign(node);
-
                 case ERhoToken.Fun:
                 case ERhoToken.Class:
                     return Function(node);
-
                 case ERhoToken.Assert:
                     return AppendChildOp(node, EOperation.Assert);
-
                 case ERhoToken.If:
                      return If(node);
-
                 case ERhoToken.Write:
                     return AppendChildOp(node, EOperation.Write);
-
                 case ERhoToken.WriteLine:
                     return AppendChildOp(node, EOperation.WriteLine);
-
                 case ERhoToken.OpenParan:
                     return node.Children.All(Generate);
-
                 case ERhoToken.Not:
                     return AppendChildOp(node, EOperation.Not);
-
                 case ERhoToken.True:
                     return Append(true);
-
                 case ERhoToken.False:
                     return Append(false);
-
                 case ERhoToken.While:
                     return While(node);
-
                 case ERhoToken.DivAssign:
                     return BinaryOp(node, EOperation.DivEquals);
-
                 case ERhoToken.MulAssign:
                     return BinaryOp(node, EOperation.MulEquals);
-
                 case ERhoToken.MinusAssign:
                     return BinaryOp(node, EOperation.MinusEquals);
-
                 case ERhoToken.PlusAssign:
                     return BinaryOp(node, EOperation.PlusEquals);
-
                 case ERhoToken.Retrieve:
                     return Append(EOperation.Retrieve);
-
                 case ERhoToken.Self:
                     return Append(EOperation.Self);
-
                 case ERhoToken.NotEquiv:
                     return BinaryOp(node, EOperation.NotEquiv);
-
                 case ERhoToken.Equiv:
                     return BinaryOp(node, EOperation.Equiv);
-
                 case ERhoToken.Less:
                     return BinaryOp(node, EOperation.Less);
-
                 case ERhoToken.Greater:
                     return BinaryOp(node, EOperation.Greater);
-
                 case ERhoToken.GreaterEquiv:
                     return BinaryOp(node, EOperation.GreaterOrEquiv);
-
                 case ERhoToken.LessEquiv:
                     return BinaryOp(node, EOperation.LessOrEquiv);
-
                 case ERhoToken.Minus:
                     return BinaryOp(node, EOperation.Minus);
-
                 case ERhoToken.Plus:
                     return BinaryOp(node, EOperation.Plus);
-
                 case ERhoToken.Multiply:
                     return BinaryOp(node, EOperation.Multiply);
-
                 case ERhoToken.Divide:
                     return BinaryOp(node, EOperation.Divide);
-
                 case ERhoToken.Or:
                     return BinaryOp(node, EOperation.LogicalOr);
-
                 case ERhoToken.And:
                     return BinaryOp(node, EOperation.LogicalAnd);
-
                 case ERhoToken.Xor:
                     return BinaryOp(node, EOperation.LogicalXor);
-
                 case ERhoToken.Int:
                     return Append(int.Parse(node.Text));
-
                 case ERhoToken.Float:
                     return Append(float.Parse(node.Text));
-
                 case ERhoToken.String:
                     return Append(node.Text);
-
                 case ERhoToken.Ident:
                     return Append(new Label(node.Text));
-
                 case ERhoToken.Pathname:
                     throw new NotImplementedException("Translate pathname");
-
                 case ERhoToken.Yield:
                     return Append(EOperation.Suspend);
-
                 case ERhoToken.Return:
                     // DO NOT REFACTOR INTO LINQ.
                     // In fact, don't use Linq anywhere in this library.
@@ -173,10 +136,8 @@ namespace Pyro.RhoLang
                         if (!Generate(child))
                             return false;
                     return Append(EOperation.Resume);
-
                 case ERhoToken.For:
                     return For(node);
-
                 case ERhoToken.PiSlice:
                     return PiSlice(node);
             }
@@ -184,10 +145,17 @@ namespace Pyro.RhoLang
             return Fail($"Unsupported RhoToken {node.Token.Type}");
         }
 
-        private bool AppendChildOp(RhoAstNode node, EOperation op) => Generate(node.GetChild(0)) && Append(op);
-        private bool AppendQuoted(RhoAstNode node) => Append(new Label(node.Text, true));
-        private bool List(RhoAstNode node) => PushNew() && GenerateChildren(node) && Append(Pop().Code);
-        private bool Block(RhoAstNode node) => GenerateChildren(node);
+        private bool AppendChildOp(RhoAstNode node, EOperation op)
+            => Generate(node.GetChild(0)) && Append(op);
+
+        private bool AppendQuoted(RhoAstNode node)
+            => Append(new Label(node.Text, true));
+
+        private bool List(RhoAstNode node)
+            => PushNew() && GenerateChildren(node) && Append(Pop().Code);
+
+        private bool Block(RhoAstNode node)
+            => GenerateChildren(node);
 
         private bool PiSlice(RhoAstNode rhoNode)
         {
@@ -227,31 +195,22 @@ namespace Pyro.RhoLang
                     Generate(node.GetChild(0));
                     AppendQuoted(node.GetChild(1));
                     return Append(EOperation.Store);
-
                 case ERhoAst.IndexOp:
                     return BinaryOp(node, EOperation.At);
-
                 case ERhoAst.Call:
                     return Call(node);
-
                 case ERhoAst.GetMember:
                     return GetMember(node);
-
                 case ERhoAst.Conditional:
                     return If(node);
-
                 case ERhoAst.Block:
                     return PushNew() && Block(node) && Append(Pop());
-
                 case ERhoAst.List:
                     return List(node);
-
                 case ERhoAst.For:
                     return For(node);
-
                 case ERhoAst.Program:
                     return Block(node);
-
                 default:
                     return Token(node);
             }

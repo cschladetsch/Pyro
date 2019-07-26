@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-
-namespace Pyro.TestPi
+﻿namespace Pyro.TestPi
 {
+    using NUnit.Framework;
     using Test;
     using Language.Lexer;
 

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Flow;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System;
+    using System.Collections.Generic;
+    using Flow;
     using Exec;
 
     /// <summary>

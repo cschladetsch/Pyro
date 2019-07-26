@@ -1,10 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-
-using Pyro.Network;
-
-namespace WinForms
+﻿namespace WinForms
 {
+    using System;
+    using System.Windows.Forms;
+    using Pyro.Network;
+
     /// <summary>
     /// Dialog for connecting to another Pyro Peer
     /// </summary>
@@ -20,14 +19,10 @@ namespace WinForms
         }
 
         private void _OkPressed(object sender, EventArgs e)
-        {
-            _local.Connect(_hostName.Text, int.Parse(_portNumber.Text));
-        }
+            => _local.Connect(_hostName.Text, int.Parse(_portNumber.Text));
 
         private void _CancelPressed(object sender, EventArgs e)
-        {
-            Close();
-        }
+            => Close();
     }
 }
 
