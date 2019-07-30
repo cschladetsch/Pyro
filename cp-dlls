@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cp Bin/Pyro*.dll /w/repos/App/LiminalApp/Assets/Plugins/Liminal
+cp Bin/Pyro*.dll /w/repos/PyroPortal/PyroPortal/Assets/Liminal/Plugins/Pyro
+
+
