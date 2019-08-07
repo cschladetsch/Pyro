@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Pyro.Language
+﻿namespace Pyro.Language
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <inheritdoc cref="Process" />
     /// <inheritdoc cref="ILexer" />
     /// <summary>
@@ -19,26 +19,20 @@ namespace Pyro.Language
         public string Line => Lines[_lineNumber];
         public List<string> Lines { get; } = new List<string>();
 
-        protected virtual void AddStringToken(Slice slice) { }
-        protected virtual void LexError(string fmt, params object[] args) { }
-
         protected string _input;
         protected int _offset, _lineNumber;
 
+        protected virtual void AddStringToken(Slice slice) { }
+        protected virtual void LexError(string fmt, params object[] args) { }
+
         public LexerBase(string input)
-        {
-            _input = UnfuckNewLines(input);
-        }
+            => _input = UnfuckNewLines(input);
 
         public string GetLine(int lineNumber)
-        {
-            return Lines[lineNumber];
-        }
+            => Lines[lineNumber];
 
         public string GetText(Slice slice)
-        {
-            return Lines[slice.LineNumber].Substring(slice.Start, slice.Length);
-        }
+            => Lines[slice.LineNumber].Substring(slice.Start, slice.Length);
 
         protected void CreateLines()
         {
@@ -184,3 +178,4 @@ namespace Pyro.Language
             => input.Replace("\r", "");
     }
 }
+

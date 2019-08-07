@@ -1,7 +1,7 @@
-﻿using System.IO;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+    using System.IO;
     using Impl;
 
     public static class Io
@@ -14,7 +14,7 @@ namespace Pyro
             bin.Scope["file_exists"] = Create.Callable<string, bool>(File.Exists);
             bin.Scope["file_delete"] = Create.Callable<string, bool>(File.Delete);
             bin.Scope["file_open"] = Create.Callable<string, FileStream>(File.Open);
-            bin.Scope["file_readtext"] = Create.Callable<string, string, bool>(File.ReadAllText);
+            bin.Scope["file_readtext"] = Create.Callable<string, string>(File.ReadAllText);
             bin.Scope["file_writetext"] = Create.Callable<string, string, bool>(File.WriteAllText);
         }
 
@@ -36,14 +36,27 @@ namespace Pyro
                 return new FileStream(path, FileMode.OpenOrCreate);
             }
 
-            public static bool ReadAllText(string path, string text)
+            public static string ReadAllText(string path)
             {
-                throw new System.NotImplementedException();
+                return System.IO.File.ReadAllText(path);
             }
 
             public static bool WriteAllText(string path, string text)
             {
-                throw new System.NotImplementedException();
+                if (!System.IO.File.Exists(path))
+                    return false;
+
+                try
+                {
+                    System.IO.File.WriteAllText(path, text);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return false;
+                }
+
+                return true;
             }
         }
     }

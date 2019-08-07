@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using Pyro;
-using Pyro.Impl;
-
-namespace Diver.TestCore
+﻿namespace Pyro.TestCore
 {
+    using NUnit.Framework;
+    using Pyro;
+    using Impl;
+
     public class Foo
     {
         public IRef<int> Num;

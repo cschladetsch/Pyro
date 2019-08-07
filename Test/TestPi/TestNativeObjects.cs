@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-
 namespace Pyro.Test
 {
+    ﻿using System.Collections.Generic;
+    using NUnit.Framework;
     using Language.Lexer;
 
     [TestFixture]

@@ -1,9 +1,8 @@
-﻿using System.IO;
-
-using NUnit.Framework;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using System.IO;
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestPiScripts
         : TestCommon

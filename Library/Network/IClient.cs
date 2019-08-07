@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System.Collections.Generic;
     using Exec;
 
     /// <inheritdoc />

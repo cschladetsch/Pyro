@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Pyro.Language
+﻿namespace Pyro.Language
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Due to the limit that C# generic types can only have
     /// default constructors, we need this in-between factory

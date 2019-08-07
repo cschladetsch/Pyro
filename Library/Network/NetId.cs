@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System;
+
     /// <summary>
     /// Identifies an object in a Domain
     /// </summary>

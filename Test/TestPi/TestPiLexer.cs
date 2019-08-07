@@ -1,9 +1,7 @@
-﻿using System.Linq;
-
-using NUnit.Framework;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using System.Linq;
+    using NUnit.Framework;
     using Language.Lexer;
 
     [TestFixture]

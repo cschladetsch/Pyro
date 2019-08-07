@@ -1,7 +1,7 @@
-﻿using Pyro.Exec;
-
-namespace Pyro.Language
+﻿namespace Pyro.Language
 {
+    using Exec;
+
     /// <summary>
     /// Converts a string to a Pi Continuation.
     /// </summary>
@@ -13,3 +13,4 @@ namespace Pyro.Language
         bool Translate(string text, out Continuation result, EStructure st = EStructure.Program);
     }
 }
+

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections;
-
-using NUnit.Framework;
-
-using Flow;
-using Pyro.Exec;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
-    using ExecutionContext;
+    using System;
+    using System.Collections;
+    using NUnit.Framework;
+    using Flow;
+    using Exec;
     using Language;
     using Network;
+    using ExecutionContext;
 
     [TestFixture]
     public class TestNetworkPeer
@@ -29,7 +26,7 @@ namespace Pyro.Test
         [Test]
         public void TestSelfHosting()
         {
-            var peer = Create.NewPeer(ListenPort);
+            var peer = Network.Create.NewPeer(ListenPort);
             peer.OnConnected += Connected;
             peer.OnReceivedRequest += Received;
 

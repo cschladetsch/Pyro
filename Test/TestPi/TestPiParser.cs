@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-
-using NUnit.Framework;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using NUnit.Framework;
     using Language;
     using Language.Lexer;
     using Language.Parser;

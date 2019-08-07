@@ -114,7 +114,7 @@
                         Next();
                         return Add(ERhoToken.Resume, 3);
                     }
-                    return Fail("Two dots doesn't work");
+                    return Fail("Two dots doesn't work.");
                 }
                 return Add(ERhoToken.Dot);
 
@@ -144,7 +144,7 @@
                 return Add(ERhoToken.Separator);
             }
 
-            LexError($"Unrecognised '{current}'");
+            LexError($"Unrecognised '{current}'.");
 
             return false;
         }
@@ -165,9 +165,7 @@
         }
 
         protected override void Terminate()
-        {
-            _Tokens.Add(_Factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
-        }
+            => _Tokens.Add(_Factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
     }
 }
 

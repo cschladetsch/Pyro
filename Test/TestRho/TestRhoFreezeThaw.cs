@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestRhoFreezeThaw
         : TestCommon
@@ -19,4 +19,4 @@ namespace Pyro.Test
             //FreezeThaw("Loops.rho");
         }
     }
-    }
+}

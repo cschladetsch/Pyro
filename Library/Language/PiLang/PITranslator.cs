@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Pyro.Language
+﻿namespace Pyro.Language
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
     using Exec;
     using Impl;
     using Lexer;
@@ -50,14 +49,10 @@ namespace Pyro.Language
         }
 
         public override string ToString()
-        {
-            return $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
-        }
+            => $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
 
         public bool TranslateNode(PiAstNode node, IList<object> objects)
-        {
-            return node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
-        }
+            => node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
 
         private bool AddNode(PiAstNode piAst, IList<object> objects)
         {
@@ -296,3 +291,4 @@ namespace Pyro.Language
         private Continuation _continuation;
     }
 }
+

@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using Pyro.Language;
-
-namespace Pyro.Test.Rho
+﻿namespace Pyro.Test.Rho
 {
+    using System.Collections.Generic;
+    using NUnit.Framework;
     using Exec;
+    using Language;
 
     /// <inheritdoc />
     /// <summary>

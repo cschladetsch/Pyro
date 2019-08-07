@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+
     /// <inheritdoc />
     /// <summary>
     /// Cannot enumerate over values in given object.

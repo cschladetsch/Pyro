@@ -1,7 +1,10 @@
-﻿namespace Pyro.AppCommon
+﻿using System.Runtime.InteropServices;
+
+namespace Pyro.AppCommon
 {
     using System;
     using System.Reflection;
+    using static System.Console;
     using Con = System.Console;
 
     /// <summary>
@@ -14,8 +17,8 @@
 
         protected AppCommonBase(string[] args)
         {
-            Con.CancelKeyPress += Cancel;
-            _originalColor = Con.ForegroundColor;
+            CancelKeyPress += Cancel;
+            _originalColor = ForegroundColor;
             _self = this;
             WriteHeader();
         }
@@ -36,7 +39,7 @@
 
         protected void Exit(int result = 0)
         {
-            Con.ForegroundColor = _originalColor;
+            ForegroundColor = _originalColor;
             Environment.Exit(result);
         }
 
@@ -53,19 +56,17 @@
             => ConWrite(text, color, Con.WriteLine);
 
         private static void WriteHeader()
-        {
-            WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
-        }
+            => WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
 
         /// <summary>
         /// Save/restore current foreground color while writing a string to the console.
         /// </summary>
         private static void ConWrite(string text, ConsoleColor color, Action<string> write)
         {
-            var current = Con.ForegroundColor;
-            Con.ForegroundColor = color;
+            var current = ForegroundColor;
+            ForegroundColor = color;
             write(text);
-            Con.ForegroundColor = current;
+            ForegroundColor = current;
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)

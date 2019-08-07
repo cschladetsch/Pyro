@@ -1,5 +1,6 @@
 namespace Pyro.Language
 {
+    /// <inheritdoc />
     /// <summary>
     /// Common interface to all Parsers.
     /// </summary>
@@ -8,3 +9,4 @@ namespace Pyro.Language
     {
     }
 }
+

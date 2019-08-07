@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Pyro
+﻿namespace Pyro
 {
+    using System;
+
     public static class Timer
     {
         public static string Time(string label, Action action)

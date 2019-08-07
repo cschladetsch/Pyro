@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-
-using NUnit.Framework;
-
-using Pyro.Exec;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using Exec;
+
     [TestFixture]
     public class TestExecutor
         : TestCommon

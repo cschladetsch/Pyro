@@ -19,10 +19,8 @@
                 case ERhoToken.WriteLine:
                 case ERhoToken.Write:
                     return Write();
-
                 case ERhoToken.Assert:
                     return Assert();
-
                 case ERhoToken.Return:
                 case ERhoToken.Yield:
                 case ERhoToken.Resume:
@@ -33,34 +31,30 @@
                         change.Add(Pop());
                     return Append(change);
                 }
-
                 case ERhoToken.While:
                     return While();
-
                 case ERhoToken.For:
                     return For();
-
                 case ERhoToken.If:
                     return If();
-
                 case ERhoToken.Class:
                 case ERhoToken.Fun:
                     return NamedBlock();
-
                 case ERhoToken.Pass:
                     PushConsume();
                     return true;
-
                 case ERhoToken.Nop:
                     return false;
             }
 
             if (!Expression())
                 return FailLocation("Statement or expression expected.");
+
             return Append(Pop()) && !Try(ERhoToken.Nop);
         }
 
-        private bool NamedBlock() => AddNamedBlock(NewNode(Consume()));
+        private bool NamedBlock()
+            => AddNamedBlock(NewNode(Consume()));
 
         private bool AddNamedBlock(RhoAstNode cont)
         {
@@ -71,6 +65,7 @@
             if (Try(ERhoToken.Ident))
             {
                 args.Add(Consume());
+
                 while (TryConsume(ERhoToken.Comma))
                     args.Add(Expect(ERhoToken.Ident));
             }
@@ -79,7 +74,7 @@
             Expect(ERhoToken.NewLine);
 
             if (!Block())
-                return FailLocation("Function block expected");
+                return FailLocation("Function block expected.");
 
             // make the continuation
             var block = Pop();
@@ -106,7 +101,7 @@
             @while.Add(Pop());
 
             if (!Block())
-                return FailLocation("No While body");
+                return FailLocation("No While body.");
 
             @while.Add(Pop());
             return Append(@while);
@@ -117,7 +112,7 @@
             var assert = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
-                return FailLocation("Assert needs an expression to test");
+                return FailLocation("Assert needs an expression to test.");
 
             Expect(ERhoToken.CloseParan);
 
@@ -148,7 +143,7 @@
 
             // get the true-clause
             if (!Block())
-                return FailLocation("If needs a block");
+                return FailLocation("If needs a block.");
 
             @if.Add(Pop());
 
@@ -157,7 +152,7 @@
             if (TryConsume(ERhoToken.Else))
             {
                 if (!Block())
-                    return FailLocation("No else block");
+                    return FailLocation("No else block.");
 
                 @if.Add(Pop());
             }
@@ -212,7 +207,7 @@
 
             // add the iteration block
             if (!Block())
-                return FailLocation("For block expected");
+                return FailLocation("For block expected.");
 
             @for.Add(Pop());
 

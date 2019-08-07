@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Pyro.RhoLang
+﻿namespace Pyro.RhoLang
 {
+    using System;
     using Exec;
 
     /// <inheritdoc />
@@ -74,5 +73,4 @@ namespace Pyro.RhoLang
         }
     }
 }
-
 

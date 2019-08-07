@@ -1,12 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-
-using NUnit.Framework;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Collections.Generic;
+    using NUnit.Framework;
     using Exec;
     using Impl;
     using Language;

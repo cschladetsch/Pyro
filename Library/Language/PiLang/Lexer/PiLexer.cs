@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Pyro.Language.Lexer
+﻿namespace Pyro.Language.Lexer
 {
+    using System.Collections.Generic;
     using Exec;
     using Impl;
 
