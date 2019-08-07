@@ -325,13 +325,16 @@ namespace Pyro.Exec
 
         private bool GetMethod(Type type, string member, dynamic obj, IClassBase @class)
         {
-            if (@class != null)
+            if (@class == null)
+                return false;
+            if (type == null)
                 return false;
 
             var mi = type.GetMethod(member);
-            var numArgs = mi.GetParameters().Length;
-            var args = DataStack.Take(numArgs).ToArray();
-            Push(mi.Invoke(obj, args));
+            if (mi == null)
+                return false;
+            Push(obj);
+            Push(mi);
 
             return true;
         }

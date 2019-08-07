@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Pyro.Exec
 {
@@ -187,6 +189,15 @@ namespace Pyro.Exec
 
                 case IClassBase @class:
                     Push(@class.NewInstance());//DataStack));
+                    break;
+
+                case MethodInfo mi:
+                    var obj = Pop();
+                    var numArgs = mi.GetParameters().Length;
+                    var args = DataStack.Take(numArgs).ToArray();
+                    var ret = mi.Invoke(obj, args);
+                    if (mi.ReturnType != typeof(void))
+                        Push(ret);
                     break;
 
                 default:
