@@ -2,8 +2,6 @@
 {
     using System.Collections.Generic;
     using NUnit.Framework;
-    using Exec;
-    using Language;
 
     /// <inheritdoc />
     /// <summary>
@@ -23,7 +21,6 @@
 a = {1 2 3}
 a[1]
 ");
-
             Assert.AreEqual(2, Pop<int>());
         }
     }

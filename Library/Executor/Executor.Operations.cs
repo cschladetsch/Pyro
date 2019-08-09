@@ -104,9 +104,24 @@
         private void SetMember()
         {
             var obj = Pop() as object;
-            var field = Pop<Label>();
-            var fi = obj.GetType().GetField(field.Text);
-            fi.SetValue(obj, Pop());
+            var name = Pop<Label>().Text;
+            var type = obj.GetType();
+
+            var fi = type.GetField(name);
+            if (fi != null)
+            {
+                fi.SetValue(obj, Pop());
+                return;
+            }
+
+            var pi = type.GetProperty(name);
+            if (pi != null)
+            {
+                pi.SetValue(obj, Pop());
+                return;
+            }
+
+            throw new MemberNotFoundException(type, name);
         }
 
         public void Clear()

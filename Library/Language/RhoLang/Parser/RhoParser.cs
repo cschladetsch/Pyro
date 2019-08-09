@@ -15,7 +15,6 @@
         public RhoAstNode Result => _Stack.Peek();
 
         private readonly EStructure _structure;
-        private int _indent;
 
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
             : base(lexer, reg)

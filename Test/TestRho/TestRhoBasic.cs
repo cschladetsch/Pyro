@@ -24,7 +24,7 @@
             Assert.AreEqual(list[2], 3);
         }
 
-        //[Test]
+        [Test]
         public void TestFloats()
         {
             AssertEqual("1.1 + 2.2", 1.1f + 2.2f);

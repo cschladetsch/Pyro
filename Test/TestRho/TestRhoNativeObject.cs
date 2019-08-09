@@ -6,6 +6,7 @@
     {
         public string s;
     }
+
     public class Class
     {
         public int n;
@@ -67,3 +68,4 @@ k
         }
     }
 }
+

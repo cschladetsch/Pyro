@@ -11,13 +11,13 @@
         public void RunSomeScripts()
         {
             TestScript("Conditionals.rho");
-            //TestScript("Loops.rho");
-            //TestScript("NestedFunctions.rho");
-            //TestScript("PassingFunctions.rho");
-            //TestScript("Variables.rho");
-            //TestScript("Arithmetic.rho");
-            //TestScript("Array.rho");
-            //TestScript("FreezeThaw.rho");
+            TestScript("Loops.rho");
+            TestScript("NestedFunctions.rho");
+            TestScript("PassingFunctions.rho");
+            TestScript("Variables.rho");
+            TestScript("Arithmetic.rho");
+            TestScript("Array.rho");
+            TestScript("FreezeThaw.rho");
         }
 
         //[Test]
