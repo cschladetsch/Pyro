@@ -3,7 +3,8 @@
     using System.Collections.Generic;
     using NUnit.Framework;
 
-    [TestFixture]
+    // WIP
+    //[TestFixture]
     public class TestPiFreezeThaw
         : TestCommon
     {
@@ -56,8 +57,8 @@
         {
             var user = _Registry.Add<User>().Value;
             user.Name = "Freddy";
-            user.Last = "Blogs";
-            user.Age = 42;
+            user.Last = "Mercury";
+            user.Age = 45;
 
             var pi = _Registry.ToPiScript(user);
             PiRun(pi);
