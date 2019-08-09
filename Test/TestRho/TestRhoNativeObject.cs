@@ -2,6 +2,11 @@
 {
     using NUnit.Framework;
 
+    public class Class
+    {
+        public int n;
+    }
+
     [TestFixture]
     public class TestRhoNativeObject
         : TestCommon
@@ -38,6 +43,24 @@ assert(a == ""foobar"")
 assert(b == ""foo"")
 assert(c == ""bar"")
 assert(d == ""ar"")
+");
+        }
+
+        [Test]
+        public void TestNew()
+        {
+            RhoRun(@"
+new ""Pyro.Test.Rho.Class,TestRho""
+");
+            Assert.AreEqual(typeof(Class), Pop<Class>().GetType());
+        }
+
+        [Test]
+        public void TestFieldAssignment()
+        {
+            RhoRun(@"
+a=new Class;
+
 ");
         }
     }

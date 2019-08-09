@@ -48,8 +48,12 @@ namespace Pyro.Language.Impl
             return true;
         }
 
-        protected Continuation Pop() => _stack.Pop();
-        protected Continuation Top() => _stack.Peek();
+        protected Continuation Pop()
+            => _stack.Pop();
+
+        protected Continuation Top()
+            => _stack.Peek();
+
         protected bool Append(object obj)
         {
             Top().Code.Add(obj);

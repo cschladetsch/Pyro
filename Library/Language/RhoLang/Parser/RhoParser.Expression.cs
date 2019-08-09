@@ -175,7 +175,11 @@
         private bool New()
         {
             var @new = NewNode(Consume());
-            @new.Add(Pop());
+            if (Expression())
+                @new.Add(Pop());
+            else
+                return FailLocation("new what?");
+
             return Push(@new);
         }
 

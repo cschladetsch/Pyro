@@ -56,6 +56,8 @@
         {
             switch (node.RhoToken.Type)
             {
+                case ERhoToken.New:
+                    return GenNew(node);
                 case ERhoToken.Assign:
                     return Assign(node);
                 case ERhoToken.Fun:
@@ -143,6 +145,12 @@
             }
 
             return Fail($"Unsupported RhoToken {node.Token.Type}");
+        }
+
+        private bool GenNew(RhoAstNode node)
+        {
+            Append(node.Children[0].Text);
+            return Append(EOperation.New);
         }
 
         private bool AppendChildOp(RhoAstNode node, EOperation op)

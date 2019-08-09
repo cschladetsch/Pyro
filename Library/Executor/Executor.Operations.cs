@@ -538,12 +538,20 @@
 
         private void New()
         {
-            var typeName = Pop<Label>();
-            var klass = _registry.GetClass(typeName.Text);
-            if (klass == null)
+            //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
+            var typeName = Pop<string>();
+            var klass = _registry.GetClass(typeName);
+            if (klass != null)
+            {
+                Push(_registry.New(klass, DataStack));
+                return;
+            }
+
+            var type = Type.GetType(typeName);
+            if (type == null)
                 throw new UnknownIdentifierException(typeName);
 
-            Push(_registry.New(klass, DataStack));
+            Push(Activator.CreateInstance(type));
         }
 
         private void Insert()
