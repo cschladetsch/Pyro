@@ -39,7 +39,7 @@ namespace Pyro.BuiltinTypes
 
         private static void ListToText(IRegistry reg, StringBuilder sb, IList list)
         {
-            sb.Append('[');
+            sb.Append($"{list.Count}: [");
             var first = true;
             foreach (var obj in list)
             {
