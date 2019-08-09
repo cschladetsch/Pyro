@@ -9,7 +9,8 @@ namespace Pyro
 
         internal static Id None = new Id(0);
 
-        internal Id(int start = 0) => Value = start;
+        internal Id(int num = 0)
+            => Value = num;
 
         public Id(Id prev)
             : this(prev.Value + 1) { }
@@ -20,8 +21,8 @@ namespace Pyro
         public override int GetHashCode()
             => Value;
 
-        public override bool Equals(object obj) =>
-            obj is Id id && id.Value == Value;
+        public override bool Equals(object obj)
+            => obj is Id id && id.Value == Value;
     }
 }
 
