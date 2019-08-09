@@ -82,6 +82,7 @@
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
+            _actions[EOperation.SetMember] = SetMember;
             _actions[EOperation.ForEachIn] = ForEachIn;
             _actions[EOperation.ForLoop] = ForLoop;
             _actions[EOperation.Freeze] = Freeze;
@@ -98,6 +99,14 @@
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+        }
+
+        private void SetMember()
+        {
+            var obj = Pop() as object;
+            var field = Pop<Label>();
+            var fi = obj.GetType().GetField(field.Text);
+            fi.SetValue(obj, Pop());
         }
 
         public void Clear()

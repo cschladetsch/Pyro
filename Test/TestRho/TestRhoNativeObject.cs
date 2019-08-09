@@ -2,9 +2,14 @@
 {
     using NUnit.Framework;
 
+    public class Inner
+    {
+        public string s;
+    }
     public class Class
     {
         public int n;
+        public Inner inner = new Inner();
     }
 
     [TestFixture]
@@ -50,18 +55,15 @@ assert(d == ""ar"")
         public void TestNew()
         {
             RhoRun(@"
-new ""Pyro.Test.Rho.Class,TestRho""
+k=new ""Pyro.Test.Rho.Class,TestRho"" // Need to use fully-qualified name and also Assembly name.
+k.n=42
+k.inner.s=""foo""
+k
 ");
-            Assert.AreEqual(typeof(Class), Pop<Class>().GetType());
-        }
-
-        [Test]
-        public void TestFieldAssignment()
-        {
-            RhoRun(@"
-a=new Class;
-
-");
+            var k = Pop<Class>();
+            Assert.AreEqual(typeof(Class), k.GetType());
+            Assert.AreEqual(42, k.n);
+            Assert.AreEqual("foo", k.inner.s);
         }
     }
 }
