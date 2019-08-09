@@ -681,9 +681,10 @@
 
         private void PushFront()
         {
-            var cont = RPop<List<object>>() as List<object>;
-            var obj = RPop();
-            cont.Insert(0, obj);
+            if (!(RPop<List<object>>() is List<object> cont))
+                throw new Exception("Expected a list.");
+
+            cont.Insert(0, RPop());
             Push(cont);
         }
 

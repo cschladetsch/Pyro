@@ -7,7 +7,7 @@
     using Language.Lexer;
     using Language.Parser;
 
-    [TestFixture()]
+    [TestFixture]
     class TestPiParser
         : TestCommon
     {
@@ -44,18 +44,17 @@
 
             Assert.AreEqual("'foo", First.Value.ToString());
 
-            // TODO TEST: fails
-            //Parse("foo/bar");
-            //Assert.AreEqual(EPiAst.Pathname, First.Type);
-            //Assert.AreEqual("foo/bar", First.Value.ToString());
+            Parse("foo/bar");
+            Assert.AreEqual(EPiAst.Pathname, First.Type);
+            Assert.AreEqual("foo/bar", First.Value.ToString());
 
-            //Parse("'foo/bar");
-            //Assert.AreEqual(EPiAst.Pathname, First.Type);
-            //Assert.AreEqual("'foo/bar", First.Value.ToString());
+            Parse("'foo/bar");
+            Assert.AreEqual(EPiAst.Pathname, First.Type);
+            Assert.AreEqual("'foo/bar", First.Value.ToString());
 
-            //Parse("'foo/bar/spam");
-            //Assert.AreEqual(EPiAst.Pathname, First.Type);
-            //Assert.AreEqual("'foo/bar/spam", First.Value.ToString());
+            Parse("'foo/bar/spam");
+            Assert.AreEqual(EPiAst.Pathname, First.Type);
+            Assert.AreEqual("'foo/bar/spam", First.Value.ToString());
         }
 
         [Test]

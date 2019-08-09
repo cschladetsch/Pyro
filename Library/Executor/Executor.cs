@@ -17,8 +17,6 @@ namespace Pyro.Exec
         public int NumOps { get; private set; }
         public bool Rethrows { get; set; }
         public string SourceFilename;
-
-        public Executor() => AddOperations();
         public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
         public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
         public void Continue() => Continue(ContextStack.Pop());
@@ -27,6 +25,9 @@ namespace Pyro.Exec
         private Continuation _current;
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
+
+        public Executor()
+            => AddOperations();
 
         public void Continue(Continuation continuation)
         {
@@ -79,7 +80,8 @@ namespace Pyro.Exec
                         WriteLine($"Exception: {e}");
                     }
 
-                    throw;
+                    if (Rethrows)
+                        throw;
                 }
 
                 if (_break)
@@ -110,6 +112,7 @@ namespace Pyro.Exec
                     item = Resolve(next);
                     throw new UnknownIdentifierException(next);
                 }
+
                 DataStack.Push(item);
                 break;
             }
@@ -251,10 +254,17 @@ namespace Pyro.Exec
             return !(pop is IRefBase data) ? pop : data.BaseValue;
         }
 
-        private dynamic RPop() => Resolve(Pop());
-        private dynamic RPop<T>() => ResolvePop<T>();
-        private dynamic ResolvePop<T>() => Resolve(Pop<T>());
-        private static void DebugBreak() => throw new DebugBreakException();
+        private dynamic RPop()
+            => Resolve(Pop());
+
+        private dynamic RPop<T>()
+            => ResolvePop<T>();
+
+        private dynamic ResolvePop<T>()
+            => Resolve(Pop<T>());
+
+        private static void DebugBreak()
+            => throw new DebugBreakException();
     }
 }
 

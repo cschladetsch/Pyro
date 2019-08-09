@@ -14,7 +14,7 @@
             var lex = PiLex("a __a a__ a_b ___");
             var tokens = lex.Tokens.Where(t => !IsWhiteSpace(t)).ToList();
             Assert.AreEqual(5, tokens.Count);
-            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new []{"a", "__a", "a__", "a_b", "___"}));
+            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new [] {"a", "__a", "a__", "a_b", "___"}));
         }
 
         [Test]
@@ -39,9 +39,8 @@
             AssertSameTokens("'a", EPiToken.Quote, EPiToken.Ident);
             AssertSameTokens("a", EPiToken.Ident);
             AssertSameTokens("ident", EPiToken.Ident);
-            // TODO TEST
-            //AssertSameTokens("ident/ident", EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
-            //AssertSameTokens("'ident/ident", EPiToken.Quote, EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
+            AssertSameTokens("ident/ident", EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
+            AssertSameTokens("'ident/ident", EPiToken.Quote, EPiToken.Ident, EPiToken.Separator, EPiToken.Ident);
         }
 
         [Test]

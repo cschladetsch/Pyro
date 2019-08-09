@@ -22,7 +22,6 @@
             Assert.AreEqual(list, list2);
         }
 
-        // TODO TEST
         [Test]
         public void TestDict()
         {
@@ -68,8 +67,7 @@
             Assert.AreEqual(user.Age, user2.Age);
         }
 
-        // TODO TEST
-        //[Test]
+        [Test]
         public void TestPersistentReferencedObjects()
         {
             var org = _Registry.Add<Organisation>();
@@ -111,8 +109,8 @@
             FreezeThaw("Boolean.pi");
             FreezeThaw("Comments.pi");
             FreezeThaw("Arithmetic.pi");
-            //FreezeThaw("Array.pi");
-            //FreezeThaw("Conditionals.pi");
+            FreezeThaw("Array.pi");
+            FreezeThaw("Conditionals.pi");
             FreezeThaw("Continuations.pi");
             FreezeThaw("Strings.pi");
         }
