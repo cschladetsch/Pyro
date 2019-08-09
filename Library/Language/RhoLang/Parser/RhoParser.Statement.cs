@@ -135,6 +135,11 @@
 
         private bool If()
         {
+            var current = _Current;
+            while (current > 0 && _Tokens[current].Type != ERhoToken.NewLine)
+                current--;
+            var indent = current - _Current;
+
             var @if = NewNode(Consume());
             if (!Expression())
                 return FailLocation("If what?");
@@ -149,6 +154,14 @@
 
             // if there's an else-clause, add it as well
             ConsumeNewLines();
+
+            //while (indent > 0)
+            //{
+            //    if (!TryConsume(ERhoToken.Tab))
+            //        return Append(@if);
+            //    indent--;
+            //}
+
             if (TryConsume(ERhoToken.Else))
             {
                 if (!Block())
@@ -157,6 +170,7 @@
                 @if.Add(Pop());
             }
 
+            ConsumeNewLines();
             return Append(@if);
         }
 
