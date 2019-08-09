@@ -54,6 +54,7 @@
     <None Include="Scripts\Conditionals.rho" />
     <Compile Include="TestRhoClass.cs" />
     <Compile Include="TestRhoFreezeThaw.cs" />
+    <Compile Include="TestRhoIndexing.cs" />
     <Compile Include="TestRhoLoops.cs" />
     <Compile Include="TestRhoBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

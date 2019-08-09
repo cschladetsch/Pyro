@@ -1,5 +1,6 @@
-﻿namespace Pyro.Test
+namespace Pyro.Test
 {
+    ﻿using System.Collections.Generic;
     using NUnit.Framework;
     using Language.Lexer;
 
@@ -26,6 +27,14 @@
             Assert.IsNotNull(user);
         }
 
+        [Test]
+        public void TestList()
+        {
+            PiRun("[] 'a # 42 'Add a .@ & a");
+            var list = Pop<List<object>>();
+            Assert.AreEqual(1, list.Count);
+            Assert.AreEqual(42, (int)list[0]);
+        }
 
         [Test]
         public void TestString()

@@ -1,4 +1,6 @@
-﻿namespace Pyro.RhoLang
+﻿using System.CodeDom.Compiler;
+
+namespace Pyro.RhoLang
 {
     using System;
     using System.Linq;
@@ -56,6 +58,8 @@
         {
             switch (node.RhoToken.Type)
             {
+                case ERhoToken.New:
+                    return GenNew(node);
                 case ERhoToken.Assign:
                     return Assign(node);
                 case ERhoToken.Fun:
@@ -145,6 +149,12 @@
             return Fail($"Unsupported RhoToken {node.Token.Type}");
         }
 
+        private bool GenNew(RhoAstNode node)
+        {
+            Append(node.Children[0].Text);
+            return Append(EOperation.New);
+        }
+
         private bool AppendChildOp(RhoAstNode node, EOperation op)
             => Generate(node.GetChild(0)) && Append(op);
 
@@ -228,7 +238,30 @@
         private bool Assign(RhoAstNode node)
         {
             var ch = node.Children;
-            return Generate(ch[0]) && AppendQuoted(ch[1]) && Append(EOperation.Assign);
+            Generate(ch[0]);    // the r-value
+
+            switch (ch[1].Type)
+            {
+            case ERhoAst.TokenType:
+                switch (ch[1].Token.Type)
+                {
+                case ERhoToken.Ident:
+                    return AppendQuoted(ch[1]) && Append(EOperation.Assign);
+                }
+                break;
+
+            case ERhoAst.GetMember:
+                ch = ch[1].Children;
+                var subject = ch[0];
+                var member = ch[1];
+
+                AppendQuoted(member);
+                Generate(subject);
+
+                return Append(EOperation.SetMember);
+            }
+
+            return false;
         }
 
         private bool Function(RhoAstNode node)

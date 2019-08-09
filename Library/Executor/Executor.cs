@@ -1,7 +1,9 @@
-﻿namespace Pyro.Exec
+namespace Pyro.Exec
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
 
     /// <inheritdoc />
     /// <summary>
@@ -15,8 +17,6 @@
         public int NumOps { get; private set; }
         public bool Rethrows { get; set; }
         public string SourceFilename;
-
-        public Executor() => AddOperations();
         public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
         public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
         public void Continue() => Continue(ContextStack.Pop());
@@ -25,6 +25,9 @@
         private Continuation _current;
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
+
+        public Executor()
+            => AddOperations();
 
         public void Continue(Continuation continuation)
         {
@@ -77,7 +80,8 @@
                         WriteLine($"Exception: {e}");
                     }
 
-                    throw;
+                    if (Rethrows)
+                        throw;
                 }
 
                 if (_break)
@@ -108,6 +112,7 @@
                     item = Resolve(next);
                     throw new UnknownIdentifierException(next);
                 }
+
                 DataStack.Push(item);
                 break;
             }
@@ -189,6 +194,15 @@
                     Push(@class.NewInstance());//DataStack));
                     break;
 
+                case MethodInfo mi:
+                    var obj = Pop();
+                    var numArgs = mi.GetParameters().Length;
+                    var args = DataStack.Take(numArgs).ToArray();
+                    var ret = mi.Invoke(obj, args);
+                    if (mi.ReturnType != typeof(void))
+                        Push(ret);
+                    break;
+
                 default:
                     ContextStack.Push(next);
                     break;
@@ -240,10 +254,17 @@
             return !(pop is IRefBase data) ? pop : data.BaseValue;
         }
 
-        private dynamic RPop() => Resolve(Pop());
-        private dynamic RPop<T>() => ResolvePop<T>();
-        private dynamic ResolvePop<T>() => Resolve(Pop<T>());
-        private static void DebugBreak() => throw new DebugBreakException();
+        private dynamic RPop()
+            => Resolve(Pop());
+
+        private dynamic RPop<T>()
+            => ResolvePop<T>();
+
+        private dynamic ResolvePop<T>()
+            => Resolve(Pop<T>());
+
+        private static void DebugBreak()
+            => throw new DebugBreakException();
     }
 }
 

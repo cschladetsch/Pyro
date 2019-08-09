@@ -1,13 +1,13 @@
-﻿using NUnit.Framework;
-using Pyro.Language;
-
-namespace Pyro.Test
+﻿namespace Pyro.Test
 {
+    using NUnit.Framework;
+    using Language;
+
     /// <inheritdoc />
     /// <summary>
     /// Run pi from rho.
     /// </summary>
-    [TestFixture()]
+    [TestFixture]
     public class PiFromRho
         : TestCommon
     {

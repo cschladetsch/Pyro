@@ -2,6 +2,7 @@
 {
     using Language;
     using Pyro.Language.Impl;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <inheritdoc />
     /// <summary>
@@ -36,6 +37,7 @@
             _KeyWords.Add("class", ERhoToken.Class);
         }
 
+        [SuppressMessage("NDepend", "ND1003:AvoidMethodsTooBigTooComplex", Justification="This is practically irreducible")]
         protected override bool NextToken()
         {
             var current = Current();

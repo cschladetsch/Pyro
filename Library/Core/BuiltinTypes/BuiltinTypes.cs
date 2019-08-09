@@ -14,8 +14,8 @@ namespace Pyro.BuiltinTypes
             reg.Register(new Class<int>(reg));
             reg.Register(new ClassBuilder<string>(reg, StringToText)
                 .Methods
-                .Add<int, int, string>("Substring", (s, n, m) => s.Substring(n, m))
-                .Add<int, string>("Substring1", (s, n) => s.Substring(n))
+                    .Add<int, int, string>("Substring", (s, n, m) => s.Substring(n, m))
+                    .Add<int, string>("Substring1", (s, n) => s.Substring(n))
                 .Class);
             reg.Register(new Class<float>(reg));
             reg.Register(new ClassBuilder<List<object>>(reg, ListToText)

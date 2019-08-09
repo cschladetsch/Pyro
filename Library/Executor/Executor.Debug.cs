@@ -14,7 +14,7 @@
         private static void Write(object obj)
             => Write($"{obj}");
 
-        private void WriteLine(object obj)
+        private static void WriteLine(object obj)
             => WriteLine($"{obj}");
 
         private static void Write(string text, params object[] args)

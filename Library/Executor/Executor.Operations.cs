@@ -82,6 +82,7 @@
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
+            _actions[EOperation.SetMember] = SetMember;
             _actions[EOperation.ForEachIn] = ForEachIn;
             _actions[EOperation.ForLoop] = ForLoop;
             _actions[EOperation.Freeze] = Freeze;
@@ -98,6 +99,29 @@
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+        }
+
+        private void SetMember()
+        {
+            var obj = Pop() as object;
+            var name = Pop<Label>().Text;
+            var type = obj.GetType();
+
+            var fi = type.GetField(name);
+            if (fi != null)
+            {
+                fi.SetValue(obj, Pop());
+                return;
+            }
+
+            var pi = type.GetProperty(name);
+            if (pi != null)
+            {
+                pi.SetValue(obj, Pop());
+                return;
+            }
+
+            throw new MemberNotFoundException(type, name);
         }
 
         public void Clear()
@@ -305,6 +329,10 @@
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
             var @class = _registry.GetClass(type);
+
+            if (GetField(type, member, obj))
+                return;
+
             if (GetProperty(type, member, obj))
                 return;
 
@@ -314,7 +342,17 @@
             GetCallable(@class, member, obj);
         }
 
-        private bool GetProperty(Type type, string member, dynamic obj)
+        private bool GetField(Type type, string member, object obj)
+        {
+            var field = type.GetField(member);
+            if (field == null)
+                return false;
+
+            Push(field.GetValue(obj));
+            return true;
+        }
+
+        private bool GetProperty(Type type, string member, object obj)
         {
             var pi = type.GetProperty(member);
             if (pi == null)
@@ -324,20 +362,24 @@
             return true;
         }
 
-        private bool GetMethod(Type type, string member, dynamic obj, IClassBase @class)
+        private bool GetMethod(Type type, string member, object obj, IClassBase @class)
         {
-            if (@class != null)
+            if (@class == null)
+                return false;
+            if (type == null)
                 return false;
 
             var mi = type.GetMethod(member);
-            var numArgs = mi.GetParameters().Length;
-            var args = DataStack.Take(numArgs).ToArray();
-            Push(mi.Invoke(obj, args));
+            if (mi == null)
+                return false;
+
+            Push(obj);
+            Push(mi);
 
             return true;
         }
 
-        private void GetCallable(IClassBase @class, string member, dynamic obj)
+        private void GetCallable(IClassBase @class, string member, object obj)
         {
             var callable = @class.GetCallable(member);
             if (callable == null)
@@ -520,12 +562,20 @@
 
         private void New()
         {
-            var typeName = Pop<Label>();
-            var klass = _registry.GetClass(typeName.Text);
-            if (klass == null)
+            //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
+            var typeName = Pop<string>();
+            var klass = _registry.GetClass(typeName);
+            if (klass != null)
+            {
+                Push(_registry.New(klass, DataStack));
+                return;
+            }
+
+            var type = Type.GetType(typeName);
+            if (type == null)
                 throw new UnknownIdentifierException(typeName);
 
-            Push(_registry.New(klass, DataStack));
+            Push(Activator.CreateInstance(type));
         }
 
         private void Insert()
@@ -631,9 +681,10 @@
 
         private void PushFront()
         {
-            var cont = RPop<List<object>>() as List<object>;
-            var obj = RPop();
-            cont.Insert(0, obj);
+            if (!(RPop<List<object>>() is List<object> cont))
+                throw new Exception("Expected a list.");
+
+            cont.Insert(0, RPop());
             Push(cont);
         }
 
