@@ -11,11 +11,11 @@
             const string root = "/bin";
             var bin = tree.Resolve(Create.Pathname(root)) as IRefBase;
 
-            bin.Scope["file_exists"] = Create.Callable<string, bool>(File.Exists);
-            bin.Scope["file_delete"] = Create.Callable<string, bool>(File.Delete);
-            bin.Scope["file_open"] = Create.Callable<string, FileStream>(File.Open);
-            bin.Scope["file_readtext"] = Create.Callable<string, string>(File.ReadAllText);
-            bin.Scope["file_writetext"] = Create.Callable<string, string, bool>(File.WriteAllText);
+            bin.Scope["file_exists"] = Create.Function<string, bool>(File.Exists);
+            bin.Scope["file_delete"] = Create.Function<string, bool>(File.Delete);
+            bin.Scope["file_open"] = Create.Function<string, FileStream>(File.Open);
+            bin.Scope["file_readtext"] = Create.Function<string, string>(File.ReadAllText);
+            bin.Scope["file_writetext"] = Create.Function<string, string, bool>(File.WriteAllText);
         }
 
         public static class File
