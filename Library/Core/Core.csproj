@@ -63,6 +63,7 @@
     <Compile Include="BuiltinTypes\CustomMapComparer.cs" />
     <Compile Include="BuiltinTypes\Void.cs" />
     <Compile Include="BuiltinTypes\BuiltinTypes.cs" />
+    <Compile Include="IIdentifer.cs" />
     <Compile Include="Impl\Detail\VoidFunction.cs" />
     <Compile Include="Impl\Detail\Function.cs" />
     <Compile Include="Impl\Detail\Method.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Impl\IString.cs" />
     <Compile Include="Impl\Tree.cs" />
     <Compile Include="IObject.cs" />
+    <Compile Include="IPathname.cs" />
     <Compile Include="IReflected.cs" />
     <Compile Include="Impl\RefBase.cs" />
     <Compile Include="Impl\Detail\VoidMethod.cs" />
