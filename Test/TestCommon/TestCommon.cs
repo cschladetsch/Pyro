@@ -72,7 +72,7 @@
             if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
 
-            if (trace)
+            //if (trace)
                 WriteLine(trans.ToString());
 
             Assert.IsFalse(trans.Failed, trans.Error);
@@ -175,7 +175,9 @@
                 return result;
 
             var typed = top as IConstRef<T>;    // Deal with boxed values.
-            Assert.IsNotNull(typed);
+            if (typed == null)
+                throw new TypeMismatchError(typeof(T), top.GetType());
+
             return typed.Value;
         }
 

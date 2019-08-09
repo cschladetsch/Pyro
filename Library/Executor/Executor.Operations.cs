@@ -305,6 +305,10 @@
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
             var @class = _registry.GetClass(type);
+
+            if (GetField(type, member, obj))
+                return;
+
             if (GetProperty(type, member, obj))
                 return;
 
@@ -314,7 +318,17 @@
             GetCallable(@class, member, obj);
         }
 
-        private bool GetProperty(Type type, string member, dynamic obj)
+        private bool GetField(Type type, string member, object obj)
+        {
+            var field = type.GetField(member);
+            if (field == null)
+                return false;
+
+            Push(field.GetValue(obj));
+            return true;
+        }
+
+        private bool GetProperty(Type type, string member, object obj)
         {
             var pi = type.GetProperty(member);
             if (pi == null)
@@ -324,7 +338,7 @@
             return true;
         }
 
-        private bool GetMethod(Type type, string member, dynamic obj, IClassBase @class)
+        private bool GetMethod(Type type, string member, object obj, IClassBase @class)
         {
             if (@class == null)
                 return false;
@@ -334,13 +348,14 @@
             var mi = type.GetMethod(member);
             if (mi == null)
                 return false;
+
             Push(obj);
             Push(mi);
 
             return true;
         }
 
-        private void GetCallable(IClassBase @class, string member, dynamic obj)
+        private void GetCallable(IClassBase @class, string member, object obj)
         {
             var callable = @class.GetCallable(member);
             if (callable == null)

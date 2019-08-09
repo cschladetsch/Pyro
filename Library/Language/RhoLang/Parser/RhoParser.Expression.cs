@@ -150,8 +150,8 @@
             if (Try(ERhoToken.PiSlice))
                 return Pi();
 
-            if (TryConsume(ERhoToken.OpenSquareBracket))
-                return Index();
+            if (TryConsume(ERhoToken.OpenBrace))
+                return AddList();
 
             if (Try(ERhoToken.Self))
                 return PushConsumed();
@@ -179,12 +179,12 @@
             return Push(@new);
         }
 
-        private bool Index()
+        private bool AddList()
         {
             var list = NewNode(ERhoAst.List);
             while (true)
             {
-                if (TryConsume(ERhoToken.CloseSquareBracket))
+                if (TryConsume(ERhoToken.CloseBrace))
                     break;
 
                 if (Expression())
@@ -303,12 +303,15 @@
 
         private bool IndexOp()
         {
-            var index = PushConsume();
+            Consume();
+
+            var index = NewNode(ERhoAst.IndexOp);
             index.Add(Pop());
             if (!Expression())
                 return FailLocation("Indexing expression expected");
 
             index.Add(Pop());
+            Push(index);
 
             Expect(ERhoToken.CloseSquareBracket);
             return true;
