@@ -11,16 +11,17 @@
         public void RunScript()
         {
             //_exec.TraceLevel = 100
-            TestScript("StackOperations.pi");
-            TestScript("Relational.pi");
-            TestScript("Comments.pi");
-            TestScript("Arithmetic.pi");
+            TestScript("ResumeAfter.pi");
+            //TestScript("StackOperations.pi");
+            //TestScript("Relational.pi");
+            //TestScript("Comments.pi");
+            //TestScript("Arithmetic.pi");
 
-            TestScript("Boolean.pi");
-            TestScript("Array.pi");
-            TestScript("Conditionals.pi");
-            TestScript("Continuations.pi");
-            TestScript("Strings.pi");
+            //TestScript("Boolean.pi");
+            //TestScript("Array.pi");
+            //TestScript("Conditionals.pi");
+            //TestScript("Continuations.pi");
+            //TestScript("Strings.pi");
         }
 
         //[Test]

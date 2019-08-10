@@ -1,14 +1,17 @@
-﻿namespace Pyro.Exec
+﻿using System;
+
+namespace Pyro.Exec
 {
     using System.Text;
     using System.Collections.Generic;
+    using Flow;
 
-    /// <inheritdoc />
     /// <summary>
     /// Also known as a co-routine.
     /// Can be interrupted mid-execution and later resumed.
     /// </summary>
     public partial class Continuation
+        : IGenerator
     {
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block
@@ -16,7 +19,6 @@
         public int Ip { get; private set; }
         public IList<object> Code { get; }
         public IList<string> Args { get; private set; }
-
         private IDictionary<string, object> _scope => Scope;
 
         public Continuation(IList<object> code)
@@ -147,6 +149,109 @@
             // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
             //_scope.Clear();
             Ip = 0;
+        }
+
+        public string Name { get; set; }
+        public IKernel Kernel { get; set; }
+        public event TransientHandler Completed;
+        public bool Active { get; private set; }
+        public void Complete()
+        {
+            if (!Active)
+                return;
+            Completed?.Invoke(this);
+            Active = false;
+            Running = false;
+        }
+
+        IGenerator IGenerator.AddTo(IGroup @group)
+        {
+            throw new NotImplementedException();
+        }
+
+        IGenerator IGenerator.Named(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator SuspendAfter(ITransient other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator SuspendAfter(TimeSpan span)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator ResumeAfter(Func<bool> pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator ResumeAfter(ITransient other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator ResumeAfter(TimeSpan span)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITransient Named(string name)
+        {
+            Name = name;
+            return this;
+        }
+
+        public event GeneratorHandler Resumed;
+        public event GeneratorHandler Stepped;
+        public event GeneratorHandler Suspended;
+        public bool Running { get; protected set; }
+        public int StepNumber { get; }
+        public object Value { get; }
+        public void Resume()
+        {
+            Active = true;
+        }
+
+        public void Pre()
+        {
+        }
+
+        public void Post()
+        {
+        }
+
+        public void Step()
+        {
+        }
+
+        public void Suspend()
+        {
+            Active = false;
+        }
+
+        public ITransient AddTo(IGroup @group)
+        {
+            @group.Add(this);
+            return this;
+        }
+
+        public ITransient Then(IGenerator next)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITransient Then(Action action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITransient Then(Action<ITransient> action)
+        {
+            throw new NotImplementedException();
         }
     }
 }

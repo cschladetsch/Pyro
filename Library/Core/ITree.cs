@@ -25,16 +25,5 @@
         object Resolve(IIdentifer ident);
         object Resolve(IPathname path);
     }
-
-    public interface IIdentifer
-        : ITextSerialise
-    {
-        bool Quoted { get; set; }
-    }
-
-    public interface IPathname
-        : IIdentifer
-    {
-    }
 }
 
