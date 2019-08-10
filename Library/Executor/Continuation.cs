@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
     using System.Text;
     using System.Collections.Generic;
     using Flow;
@@ -14,7 +13,7 @@ namespace Pyro.Exec
         : IGenerator
     {
         /// <summary>
-        /// The 'instruction pointer', or the thing to execute next in list of objects in code block
+        /// The 'instruction pointer', or the thing to execute next in list of objects in code block.
         /// </summary>
         public int Ip { get; private set; }
         public IList<object> Code { get; }
@@ -189,9 +188,26 @@ namespace Pyro.Exec
             throw new NotImplementedException();
         }
 
+        // TODO: this is duplicated code from Transient.ResumeAfter()
         public IGenerator ResumeAfter(ITransient other)
         {
-            throw new NotImplementedException();
+            if (other == null || !other.Active)
+            {
+                Resume();
+                return this;
+            }
+
+            Suspend();
+
+            void DoResume(ITransient tr)
+            {
+                Resume();
+                other.Completed -= DoResume;
+            }
+
+            other.Completed += DoResume;
+
+            return this;
         }
 
         public IGenerator ResumeAfter(TimeSpan span)
@@ -231,6 +247,7 @@ namespace Pyro.Exec
         public void Suspend()
         {
             Active = false;
+            Suspended?.Invoke(this);
         }
 
         public ITransient AddTo(IGroup @group)

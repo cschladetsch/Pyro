@@ -21,7 +21,6 @@
 
         protected string _input;
         protected int _offset, _lineNumber;
-
         protected virtual void AddStringToken(Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }
 
@@ -98,6 +97,7 @@
         {
             if (_lineNumber == Lines.Count)
                 return (char)0;
+
             return Line[_offset];
         }
 

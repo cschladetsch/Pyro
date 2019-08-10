@@ -1,5 +1,8 @@
 ﻿namespace Pyro.Language
 {
+    /// <summary>
+    /// The language type.
+    /// </summary>
     public enum ELanguage
     {
         None,
@@ -8,3 +11,4 @@
         Tau,    // pre-fx
     }
 }
+

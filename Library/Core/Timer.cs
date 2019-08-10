@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// DOC
+    /// </summary>
     public static class Timer
     {
         public static string Time(string label, Action action)

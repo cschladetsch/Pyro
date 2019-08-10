@@ -1,5 +1,8 @@
 ﻿namespace Pyro.Language
 {
+    /// <summary>
+    /// Specifies a language construct.
+    /// </summary>
     public enum EStructure
     {
         None,
@@ -11,3 +14,4 @@
         Class,           // a collection of properties, events, and methods
     }
 }
+

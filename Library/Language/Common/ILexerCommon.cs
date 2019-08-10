@@ -9,9 +9,4 @@
     {
         string CreateErrorMessage(TToken tok, string fmt, params object[] args);
     }
-
-    public interface ILexer
-        : IProcess
-    {
-    }
 }

@@ -8,11 +8,12 @@ namespace Pyro
         public int Value { get; }
 
         internal static Id None = new Id(0);
-
         internal Id(int start = 0) => Value = start;
 
         public Id(Id prev)
-            : this(prev.Value + 1) { }
+            : this(prev.Value + 1)
+        {
+        }
 
         public override string ToString()
             => $"#{Value}";

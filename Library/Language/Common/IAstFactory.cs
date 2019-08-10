@@ -11,9 +11,9 @@
     {
         void AddChild(TAstNode parent, TAstNode node);
         IList<TAstNode> GetChildren(TAstNode node);
-
         TAstNode New(TTokenNode t);
         TAstNode New(TEAstEnum t);
         TAstNode New(TEAstEnum e, TTokenNode t);
     }
 }
+

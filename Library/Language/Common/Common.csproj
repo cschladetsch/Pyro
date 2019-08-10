@@ -53,6 +53,7 @@
     <Compile Include="EStructure.cs" />
     <Compile Include="IAstFactory.cs" />
     <Compile Include="IAstNode.cs" />
+    <Compile Include="ILexer.cs" />
     <Compile Include="ILexerCommon.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IProcess.cs" />

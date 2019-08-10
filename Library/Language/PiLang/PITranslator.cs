@@ -15,7 +15,10 @@
     public class PiTranslator
         : TranslatorBase<PiLexer, PiParser>
     {
-        public PiTranslator(IRegistry reg) : base(reg)
+        private Continuation _continuation;
+
+        public PiTranslator(IRegistry reg)
+            : base(reg)
         {
         }
 
@@ -287,8 +290,6 @@
             objects.Add(cont);
             return true;
         }
-
-        private Continuation _continuation;
     }
 }
 

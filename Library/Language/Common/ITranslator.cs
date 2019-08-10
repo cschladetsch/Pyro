@@ -2,6 +2,7 @@
 {
     using Exec;
 
+    /// <inheritdoc />
     /// <summary>
     /// Converts a string to a Pi Continuation.
     /// </summary>
