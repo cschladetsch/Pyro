@@ -4,8 +4,4 @@
         : IIdentifer
     {
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> develop
