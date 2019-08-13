@@ -5,4 +5,8 @@
     {
         bool Quoted { get; set; }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> develop

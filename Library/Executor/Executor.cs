@@ -4,6 +4,7 @@ namespace Pyro.Exec
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Flow;
 
     /// <inheritdoc />
     /// <summary>
@@ -20,6 +21,7 @@ namespace Pyro.Exec
         public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
         public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
         public void Continue() => Continue(ContextStack.Pop());
+        public IKernel Kernel;
 
         private bool _break;
         private Continuation _current;
@@ -27,7 +29,10 @@ namespace Pyro.Exec
         private IRegistry _registry => Self.Registry;
 
         public Executor()
-            => AddOperations();
+        {
+            Kernel = Flow.Create.Kernel();
+            AddOperations();
+        }
 
         public void Continue(Continuation continuation)
         {
