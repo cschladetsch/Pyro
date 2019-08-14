@@ -1,6 +1,13 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
-    internal interface IStruct<T> : IStructBase
+    /// <inheritdoc />
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    internal interface IStruct<T>
+        : IStructBase
     {
     }
 }
+

@@ -10,3 +10,4 @@
 
 // find a in higher scope
 1 2 { 'a # { a + } } 3 == assert
+

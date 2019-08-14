@@ -8,8 +8,8 @@
     <ProjectGuid>{575091D8-A55C-4794-9F15-120E927C3305}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pryo</RootNamespace>
-    <AssemblyName>PyroCore</AssemblyName>
+    <RootNamespace>Pyro</RootNamespace>
+    <AssemblyName>Pyro.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -58,8 +60,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuiltinTypes\Builtins.cs" />
-    <Compile Include="Impl\Callable.cs" />
+    <Compile Include="BuiltinTypes\CustomMapComparer.cs" />
+    <Compile Include="BuiltinTypes\Void.cs" />
+    <Compile Include="BuiltinTypes\BuiltinTypes.cs" />
+    <Compile Include="IIdentifer.cs" />
+    <Compile Include="Impl\Detail\VoidFunction.cs" />
+    <Compile Include="Impl\Detail\Function.cs" />
+    <Compile Include="Impl\Detail\Method.cs" />
     <Compile Include="Impl\CallableBase.cs" />
     <Compile Include="ClassBuilder.cs" />
     <Compile Include="Create.cs" />
@@ -76,8 +83,13 @@
     <Compile Include="Impl\Factory.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="IConstRef.cs" />
+    <Compile Include="Impl\IString.cs" />
+    <Compile Include="Impl\Tree.cs" />
+    <Compile Include="IObject.cs" />
+    <Compile Include="IPathname.cs" />
+    <Compile Include="IReflected.cs" />
     <Compile Include="Impl\RefBase.cs" />
-    <Compile Include="Impl\VoidCallable.cs" />
+    <Compile Include="Impl\Detail\VoidMethod.cs" />
     <Compile Include="IProcess.cs" />
     <Compile Include="IStringSlice.cs" />
     <Compile Include="IStructBase.cs" />
@@ -106,17 +118,17 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reflected.cs" />
+    <Compile Include="Impl\Reflected.cs" />
     <Compile Include="Impl\StringSlice.cs" />
+    <Compile Include="ReflectedBase.cs" />
     <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Impl\Detail\Readme.md" />
+    <None Include="Impl\Readme.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -126,7 +138,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+    <PostBuildEvent>echo copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+rem copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
 
 </PostBuildEvent>
   </PropertyGroup>

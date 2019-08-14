@@ -1,9 +1,21 @@
-﻿using NUnit.Framework;
-
-namespace Diver.Test.Rho
+﻿namespace Pyro.Test.Rho
 {
+    using NUnit.Framework;
+
+    public class Inner
+    {
+        public string s;
+    }
+
+    public class Class
+    {
+        public int n;
+        public Inner inner = new Inner();
+    }
+
     [TestFixture]
-    public class TestRhoNativeObject : TestCommon
+    public class TestRhoNativeObject
+        : TestCommon
     {
         [Test]
         public void TestString()
@@ -39,5 +51,21 @@ assert(c == ""bar"")
 assert(d == ""ar"")
 ");
         }
+
+        [Test]
+        public void TestNew()
+        {
+            RhoRun(@"
+k=new ""Pyro.Test.Rho.Class,TestRho"" // Need to use fully-qualified name and also Assembly name.
+k.n=42
+k.inner.s=""foo""
+k
+");
+            var k = Pop<Class>();
+            Assert.AreEqual(typeof(Class), k.GetType());
+            Assert.AreEqual(42, k.n);
+            Assert.AreEqual("foo", k.inner.s);
+        }
     }
 }
+

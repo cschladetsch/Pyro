@@ -1,10 +1,9 @@
-﻿namespace Pryo.Impl
+﻿namespace Pyro.Impl
 {
-    internal class Factory : IFactory
+    internal class Factory
+        : IFactory
     {
-        public IRegistry NewRegistry()
-        {
-            return new Registry();
-        }
+        public IRegistry NewRegistry() => new Registry();
+        public ITree NewTree() => new Tree();
     }
 }

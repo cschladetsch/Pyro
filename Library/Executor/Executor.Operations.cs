@@ -1,15 +1,30 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Pryo;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Implementation of the various operations an Executor can perform.
+    /// </summary>
     public partial class Executor
     {
+        /// <summary>
+        /// The number of significant digits for float comparisons.
+        /// </summary>
         public int FloatPrecision;
 
+        /// <summary>
+        /// A hack that is broken anyway.
+        /// </summary>
+        private bool _leaveForEach;
+
+        /// <summary>
+        /// Add options to the internal mapping of EOperation enum to
+        /// functor that does the work for that operation.
+        /// </summary>
         private void AddOperations()
         {
             _actions[EOperation.Plus] = () =>
@@ -18,12 +33,14 @@ namespace Pyro.Exec
                 var a = RPop();
                 Push(a + b);
             };
+
             _actions[EOperation.Minus] = () =>
             {
                 var a = RPop();
                 var b = RPop();
                 Push(b - a);
             };
+
             _actions[EOperation.Multiply] = () => Push(RPop() * RPop());
             _actions[EOperation.Divide] = Divide;
             _actions[EOperation.Suspend] = Suspend;
@@ -49,13 +66,15 @@ namespace Pyro.Exec
             _actions[EOperation.Remove] = Remove;
             _actions[EOperation.Expand] = Expand;
             _actions[EOperation.Insert] = Insert;
+            _actions[EOperation.New] = New;
+            _actions[EOperation.GetType] = GetTypeOf;
             _actions[EOperation.At] = At;
             _actions[EOperation.Has] = Has;
             _actions[EOperation.DebugPrintDataStack] = DebugPrintDataStack;
             _actions[EOperation.DebugPrintContinuation] = DebugPrintContinuation;
             _actions[EOperation.DebugPrintContextStack] = DebugPrintContextStack;
             _actions[EOperation.DebugPrint] = DebugTrace;
-            _actions[EOperation.Depth] = () => Push(_data.Count);
+            _actions[EOperation.Depth] = () => Push(DataStack.Count);
             _actions[EOperation.SetFloatPrecision] = SetFloatPrecision;
             _actions[EOperation.Write] = () => Write(RPop());
             _actions[EOperation.WriteLine] = () => WriteLine(RPop());
@@ -63,6 +82,7 @@ namespace Pyro.Exec
             _actions[EOperation.IfElse] = IfElse;
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
+            _actions[EOperation.SetMember] = SetMember;
             _actions[EOperation.ForEachIn] = ForEachIn;
             _actions[EOperation.ForLoop] = ForLoop;
             _actions[EOperation.Freeze] = Freeze;
@@ -75,11 +95,74 @@ namespace Pyro.Exec
             _actions[EOperation.Over] = Over;
             _actions[EOperation.Dup] = Dup;
             _actions[EOperation.Clear] = () => DataStack.Clear();
-
             _actions[EOperation.Less] = Less;
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+        }
+
+        private void SetMember()
+        {
+            var obj = Pop() as object;
+            var name = Pop<Label>().Text;
+            var type = obj.GetType();
+
+            var fi = type.GetField(name);
+            if (fi != null)
+            {
+                fi.SetValue(obj, Pop());
+                return;
+            }
+
+            var pi = type.GetProperty(name);
+            if (pi != null)
+            {
+                pi.SetValue(obj, Pop());
+                return;
+            }
+
+            throw new MemberNotFoundException(type, name);
+        }
+
+        public void Clear()
+        {
+            DataStack = new Stack<object>();
+            ContextStack = new Stack<Continuation>();
+            NumOps = 0;
+
+            _break = false;
+            _current = null;
+        }
+
+        private void Assert()
+        {
+            if (!Pop<bool>())
+                throw new AssertionFailedException();
+        }
+
+        private void StoreValue()
+        {
+            var name = Pop<IdentBase>();
+            var val = Pop();
+            if (name is Label label)
+                Context().SetScopeObject(label.Text, val);
+            else
+                throw new Exception($"Can't store to {name}");
+        }
+
+        private void GetValue()
+        {
+            var label = Pop<string>();
+            var fromScope = Context().FromScope(label);
+            Push(fromScope);
+        }
+
+        private void GetTypeOf()
+        {
+            var obj = Pop();
+            if (obj is IConstRefBase cref)
+                Push(cref.Class.TypeName);
+            Push(obj.GetType());
         }
 
         private void GreaterEquiv()
@@ -112,9 +195,15 @@ namespace Pyro.Exec
 
         private void Dup()
         {
-            var a = Pop();
-            Push(a);
-            Push(a);
+            var top = Pop();
+            var dup = top;//Duplicate(top); // TODO: copy-on-write duplication
+            Push(top);
+            Push(dup);
+        }
+
+        private object Duplicate(object obj)
+        {
+            return _registry.Duplicate(obj);
         }
 
         private void Over()
@@ -147,7 +236,7 @@ namespace Pyro.Exec
         private void Pick()
         {
             var n = Pop<int>();
-            Push(_data.ToArray()[n]);
+            Push(DataStack.ToArray()[n]);
         }
 
         private void Swap()
@@ -158,7 +247,7 @@ namespace Pyro.Exec
             Push(b);
         }
 
-        private void Thaw()
+        private static void Thaw()
         {
             throw new NotImplementedException();
         }
@@ -168,7 +257,7 @@ namespace Pyro.Exec
             Push(_current.ToText());
         }
 
-        private void ForLoop()
+        private static void ForLoop()
         {
             throw new NotImplementedException();
         }
@@ -177,9 +266,9 @@ namespace Pyro.Exec
         {
             var block = Pop<Continuation>();
             var obj = RPop();
-            var en = obj as IEnumerable;
-            if (en == null)
+            if (!(obj is IEnumerable en))
                 throw new CannotEnumerate(obj);
+
             var label = Pop<Label>().Text;
             block.SetScopeObject(label, null);
             foreach (var _ in ForEachInLoop(block, en, label))
@@ -187,20 +276,19 @@ namespace Pyro.Exec
             }
         }
 
-        private bool _leaveForEach;
-
-        IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)
+        private IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)
         {
             var next = obj.GetEnumerator();
             if (!next.MoveNext())
                 yield break;
-            _context.Push(_current);
-            
-            // we need to ensure that when an inner loop ends,
+
+            ContextStack.Push(_current);
+
+            // We need to ensure that when an inner loop ends,
             // the outer loop doesn't move to next value in the
             // enumeration.
             //
-            // this is what _leaveForEach is used for. It's
+            // This is what _leaveForEach is used for. It's
             // a bit complicated, sorry.
             while (true)
             {
@@ -209,6 +297,7 @@ namespace Pyro.Exec
                 _current = block;
                 _break = false;
                 Execute(block);
+
                 if (!_leaveForEach && !next.MoveNext())
                 {
                     _leaveForEach = true;
@@ -219,7 +308,8 @@ namespace Pyro.Exec
                 yield return val;
             }
 
-            _context.Pop();
+            // TODO: pop or not?!?
+            ContextStack.Pop();
             Break();
         }
 
@@ -229,6 +319,7 @@ namespace Pyro.Exec
             var @class = ConstRef<IClassBase>(RPop());
             if (@class == null)
                 throw new Exception($"Couldn't get class from {obj}");
+
             Push(_registry.New(@class, DataStack));
         }
 
@@ -238,38 +329,62 @@ namespace Pyro.Exec
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
             var @class = _registry.GetClass(type);
-            if (GetProperty(type, member, obj)) 
+
+            if (GetField(type, member, obj))
                 return;
+
+            if (GetProperty(type, member, obj))
+                return;
+
             if (GetMethod(type, member, obj, @class))
                 return;
+
             GetCallable(@class, member, obj);
         }
 
-        private bool GetProperty(Type type, string member, dynamic obj)
+        private bool GetField(Type type, string member, object obj)
+        {
+            var field = type.GetField(member);
+            if (field == null)
+                return false;
+
+            Push(field.GetValue(obj));
+            return true;
+        }
+
+        private bool GetProperty(Type type, string member, object obj)
         {
             var pi = type.GetProperty(member);
             if (pi == null)
                 return false;
+
             Push(pi.GetValue(obj));
             return true;
         }
 
-        private bool GetMethod(Type type, string member, dynamic obj, IClassBase @class)
+        private bool GetMethod(Type type, string member, object obj, IClassBase @class)
         {
-            if (@class != null)
+            if (@class == null)
                 return false;
+            if (type == null)
+                return false;
+
             var mi = type.GetMethod(member);
-            var numArgs = mi.GetParameters().Length;
-            var args = DataStack.Take(numArgs).ToArray();
-            Push(mi.Invoke(obj, args));
+            if (mi == null)
+                return false;
+
+            Push(obj);
+            Push(mi);
+
             return true;
         }
 
-        private void GetCallable(IClassBase @class, string member, dynamic obj)
+        private void GetCallable(IClassBase @class, string member, object obj)
         {
             var callable = @class.GetCallable(member);
             if (callable == null)
                 throw new MemberNotFoundException(obj.GetType(), member);
+
             Push(obj);
             Push(callable);
         }
@@ -284,19 +399,19 @@ namespace Pyro.Exec
         {
             var ident = Pop<Label>().Text;
             var val = RPop();
-            // first, search context for an object with
-            // matching name and use that
-            foreach (var c in _context)
+            // First, search context for an object with
+            // matching name and use that.
+            foreach (var c in ContextStack)
             {
-                if (c.HasScopeObject(ident))
-                {
-                    c.SetScopeObject(ident, val);
-                    return;
-                }
+                if (!c.HasScopeObject(ident))
+                    continue;
+
+                c.SetScopeObject(ident, val);
+                return;
             }
 
-            // if nothing found in context stack,
-            // make new object in current scope
+            // If nothing found in context stack,
+            // make new object in current scope.
             _current.SetScopeObject(ident, val);
         }
 
@@ -305,6 +420,7 @@ namespace Pyro.Exec
             var test = RPop<bool>();
             var thenBody = RPop();
             var ifBody = RPop();
+
             Push(test ? ifBody : thenBody);
         }
 
@@ -398,13 +514,16 @@ namespace Pyro.Exec
                 case List<object> list:
                     Push(list.Contains(RPop()));
                     break;
+
                 case Dictionary<object, object> dict:
                     Push(dict.ContainsKey(RPop()));
                     break;
+
                 case HashSet<object> set:
                     Push(set.Contains(RPop()));
                     break;
-                default:
+
+                 default:
                     throw new NotImplementedException($"Cannot use 'has' on type {cont.GetType().Name}");
             }
         }
@@ -418,9 +537,11 @@ namespace Pyro.Exec
                 case IList list:
                     Push(list[ConstRef<int>(index)]);
                     break;
+
                 case IDictionary dict:
                     Push(dict[RPop()]);
                     break;
+
                 default:
                     throw new NotImplementedException($"Cannot use 'at' operation on a {cont.GetType().Name}");
             }
@@ -428,11 +549,33 @@ namespace Pyro.Exec
 
         public static T ConstRef<T>(object obj)
         {
-            if (obj is T result)
+            switch (obj)
+            {
+            case T result:
                 return result;
-            if (obj is IConstRef<T> cref)
+            case IConstRef<T> cref:
                 return cref.Value;
+            }
+
             throw new CannotConvertException(obj, typeof(T));
+        }
+
+        private void New()
+        {
+            //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
+            var typeName = Pop<string>();
+            var klass = _registry.GetClass(typeName);
+            if (klass != null)
+            {
+                Push(_registry.New(klass, DataStack));
+                return;
+            }
+
+            var type = Type.GetType(typeName);
+            if (type == null)
+                throw new UnknownIdentifierException(typeName);
+
+            Push(Activator.CreateInstance(type));
         }
 
         private void Insert()
@@ -444,13 +587,16 @@ namespace Pyro.Exec
                     var index = RPop();
                     list.Insert(index, RPop());
                     break;
+
                 case Dictionary<object, object> map:
                     var kv = RPop();
                     map.Add(kv.Key, kv.Value);
                     break;
+
                 case HashSet<object> set:
                     set.Add(RPop());
                     break;
+
                 default:
                     throw new NotImplementedException($"Cannot insert into {cont.GetType().Name}");
             }
@@ -473,7 +619,7 @@ namespace Pyro.Exec
                     Push(obj);
             }
 
-            // finally, push size of container
+            // Push size of container.
             Push(cont);
             GetSize();
         }
@@ -487,15 +633,19 @@ namespace Pyro.Exec
                 case List<object> list:
                     list.RemoveAt(index);
                     break;
+
                 case Dictionary<object, object> dict:
                     dict.Remove(index);
                     break;
+
                 case HashSet<object> set:
                     set.Remove(index);
                     break;
+
                 default:
                     throw new NotImplementedException($"Cannot remove {index} from type {cont.GetType().Name}");
             }
+
             Push(cont);
         }
 
@@ -507,13 +657,16 @@ namespace Pyro.Exec
                 case IList list:
                     Push(list.Count);
                     return;
+
                 case Dictionary<object, object> dict:
                     Push(dict.Count);
                     return;
+
                 case HashSet<object> set:
                     Push(set.Count);
                     return;
-                default:
+
+               default:
                     throw new NotImplementedException($"Cannot get size of a {cont.GetType().Name}");
             }
         }
@@ -528,9 +681,10 @@ namespace Pyro.Exec
 
         private void PushFront()
         {
-            var cont = RPop<List<object>>() as List<object>;
-            var obj = RPop();
-            cont.Insert(0, obj);
+            if (!(RPop<List<object>>() is List<object> cont))
+                throw new Exception("Expected a list.");
+
+            cont.Insert(0, RPop());
             Push(cont);
         }
 
@@ -553,9 +707,9 @@ namespace Pyro.Exec
             {
                 case IEnumerable<object> list:
                 {
-                    var other = b as IEnumerable<object>;
-                    if (other == null)
+                    if (!(b is IEnumerable<object> other))
                         throw new CannotCompareEnumerationsException(a, b);
+
                     Push(list.SequenceEqual(other));
                     return;
                 }
@@ -565,7 +719,11 @@ namespace Pyro.Exec
         }
     }
 
-    public class CannotConvertException : Exception
+    /// <summary>
+    /// DOC
+    /// </summary>
+    public class CannotConvertException
+        : Exception
     {
         public object Object;
         public Type TargetType;
@@ -582,3 +740,4 @@ namespace Pyro.Exec
         }
     }
 }
+

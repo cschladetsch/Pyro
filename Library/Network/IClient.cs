@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
-using Pyro.Exec;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System.Collections.Generic;
+    using Exec;
+
+    /// <inheritdoc />
     /// <summary>
     /// The Client interface.
     /// </summary>
-    public interface IClient : INetCommon
+    public interface IClient
+        : INetCommon
     {
         string HostName { get; }
         int HostPort { get; }
@@ -17,3 +19,4 @@ namespace Pyro.Network
         void Close();
     }
 }
+

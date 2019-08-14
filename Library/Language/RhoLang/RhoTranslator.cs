@@ -1,15 +1,21 @@
-﻿using System;
-using System.Linq;
-using Pryo;
-using Pyro.Exec;
-using Pyro.Language;
-using Pyro.Language.Impl;
-using Pyro.RhoLang.Lexer;
-using Pyro.RhoLang.Parser;
+﻿using System.CodeDom.Compiler;
 
 namespace Pyro.RhoLang
 {
-    public class RhoTranslator 
+    using System;
+    using System.Linq;
+    using Exec;
+    using Lexer;
+    using Parser;
+    using Language;
+    using Language.Parser;
+    using Language.Impl;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Translate from Rho script to an executable Continuation.
+    /// </summary>
+    public class RhoTranslator
         : TranslatorBase<RhoLexer, RhoParser>
     {
         public RhoTranslator(IRegistry r)
@@ -17,12 +23,8 @@ namespace Pyro.RhoLang
         {
         }
 
-        void ShowTime(string name, Action action)
-        {
-            var start = DateTime.Now;
-            action();
-            WriteLine($"{name} took {(DateTime.Now - start).TotalMilliseconds}");
-        }
+        public override string ToString()
+            => $"=== RhoTranslator:\n--- Input: {_Lexer.Input}--- Lexer: {_Lexer}\n--- Parser: {_Parser}\n--- Code: {Result}";
 
         public override bool Translate(string text, out Continuation result, EStructure st = EStructure.Program)
         {
@@ -32,374 +34,285 @@ namespace Pyro.RhoLang
             if (string.IsNullOrEmpty(text))
                 return true;
 
-            _lexer = new RhoLexer(text);
-            _lexer.Process();
-            if (_lexer.Failed)
-                return Fail(_lexer.Error);
+            _Lexer = new RhoLexer(text);
+            _Lexer.Process();
+            if (_Lexer.Failed)
+                return Fail(_Lexer.Error);
 
-            _parser = new RhoParser(_lexer, _reg, st);
-            _parser.Process();
-            if (_parser.Failed)
-                return Fail(_parser.Error);
+            _Parser = new RhoParser(_Lexer, _reg, st);
+            _Parser.Process();
+            if (_Parser.Failed)
+                return Fail(_Parser.Error);
 
-            //WriteLine(_parser.PrintTree());
-            TranslateNode(_parser.Result);
+            if (!Generate(_Parser.Result))
+                return false;
 
             result = Result;
-
             return !Failed;
         }
 
-        void TranslateToken(RhoAstNode node)
+        /// <summary>
+        /// Translate given node into pi-code.
+        /// </summary>
+        private bool Token(RhoAstNode node)
         {
             switch (node.RhoToken.Type)
             {
-                case ERhoToken.Fun:
-                    TranslateFunction(node);
-                    return;
-
-                case ERhoToken.Assert:
-                    TranslateNode(node.GetChild(0));
-                    Append(EOperation.Assert);
-                    return;
-
-                 case ERhoToken.If:
-                     TranslateIf(node);
-                     return;
-
-                case ERhoToken.Write:
-                    TranslateNode(node.GetChild(0));
-                    Append(EOperation.Write);
-                    return;
-
-                case ERhoToken.WriteLine:
-                    TranslateNode(node.GetChild(0));
-                    Append(EOperation.WriteLine);
-                    return;
-
-                case ERhoToken.OpenParan:
-                    foreach (var ch in node.Children)
-                        TranslateNode(ch);
-                    return;
-
-                case ERhoToken.Not:
-                    TranslateNode(node.GetChild(0));
-                    Append(EOperation.Not);
-                    return;
-
-                case ERhoToken.True:
-                    Append(true);
-                    return;
-
-                case ERhoToken.False:
-                    Append(false);
-                    return;
-
-                case ERhoToken.While:
-                    TranslateWhile(node);
-                    return;
-
-                //case ERhoToken.DivAssign:
-                //    TranslateBinaryOp(node, EOperation.DivEquals);
-                //    return;
-
-                //case ERhoToken.MulAssign:
-                //    TranslateBinaryOp(node, EOperation.MulEquals);
-                //    return;
-
-                //case ERhoToken.MinusAssign:
-                //    TranslateBinaryOp(node, EOperation.MinusEquals);
-                //    return;
-
-                //case ERhoToken.PlusAssign:
-                //    TranslateBinaryOp(node, EOperation.PlusEquals);
-                //    return;
-
+                case ERhoToken.New:
+                    return GenNew(node);
                 case ERhoToken.Assign:
-                    TranslateNode(node.GetChild(0));
-                    AppendQuoted(node.GetChild(1));
-                    Append(EOperation.Assign);
-                    return;
-
+                    return Assign(node);
+                case ERhoToken.Fun:
+                case ERhoToken.Class:
+                    return Function(node);
+                case ERhoToken.Assert:
+                    return AppendChildOp(node, EOperation.Assert);
+                case ERhoToken.If:
+                     return If(node);
+                case ERhoToken.Write:
+                    return AppendChildOp(node, EOperation.Write);
+                case ERhoToken.WriteLine:
+                    return AppendChildOp(node, EOperation.WriteLine);
+                case ERhoToken.OpenParan:
+                    return node.Children.All(Generate);
+                case ERhoToken.Not:
+                    return AppendChildOp(node, EOperation.Not);
+                case ERhoToken.True:
+                    return Append(true);
+                case ERhoToken.False:
+                    return Append(false);
+                case ERhoToken.While:
+                    return While(node);
+                case ERhoToken.DivAssign:
+                    return BinaryOp(node, EOperation.DivEquals);
+                case ERhoToken.MulAssign:
+                    return BinaryOp(node, EOperation.MulEquals);
+                case ERhoToken.MinusAssign:
+                    return BinaryOp(node, EOperation.MinusEquals);
+                case ERhoToken.PlusAssign:
+                    return BinaryOp(node, EOperation.PlusEquals);
                 case ERhoToken.Retrieve:
-                    Append(EOperation.Retrieve);
-                    return;
-
+                    return Append(EOperation.Retrieve);
                 case ERhoToken.Self:
-                    Append(EOperation.Self);
-                    return;
-
+                    return Append(EOperation.Self);
                 case ERhoToken.NotEquiv:
-                    TranslateBinaryOp(node, EOperation.NotEquiv);
-                    return;
-
+                    return BinaryOp(node, EOperation.NotEquiv);
                 case ERhoToken.Equiv:
-                    TranslateBinaryOp(node, EOperation.Equiv);
-                    return;
-
+                    return BinaryOp(node, EOperation.Equiv);
                 case ERhoToken.Less:
-                    TranslateBinaryOp(node, EOperation.Less);
-                    return;
-
+                    return BinaryOp(node, EOperation.Less);
                 case ERhoToken.Greater:
-                    TranslateBinaryOp(node, EOperation.Greater);
-                    return;
-
+                    return BinaryOp(node, EOperation.Greater);
                 case ERhoToken.GreaterEquiv:
-                    TranslateBinaryOp(node, EOperation.GreaterOrEquiv);
-                    return;
-
+                    return BinaryOp(node, EOperation.GreaterOrEquiv);
                 case ERhoToken.LessEquiv:
-                    TranslateBinaryOp(node, EOperation.LessOrEquiv);
-                    return;
-
+                    return BinaryOp(node, EOperation.LessOrEquiv);
                 case ERhoToken.Minus:
-                    TranslateBinaryOp(node, EOperation.Minus);
-                    return;
-
+                    return BinaryOp(node, EOperation.Minus);
                 case ERhoToken.Plus:
-                    TranslateBinaryOp(node, EOperation.Plus);
-                    return;
-
+                    return BinaryOp(node, EOperation.Plus);
                 case ERhoToken.Multiply:
-                    TranslateBinaryOp(node, EOperation.Multiply);
-                    return;
-
+                    return BinaryOp(node, EOperation.Multiply);
                 case ERhoToken.Divide:
-                    TranslateBinaryOp(node, EOperation.Divide);
-                    return;
-
+                    return BinaryOp(node, EOperation.Divide);
                 case ERhoToken.Or:
-                    TranslateBinaryOp(node, EOperation.LogicalOr);
-                    return;
-
+                    return BinaryOp(node, EOperation.LogicalOr);
                 case ERhoToken.And:
-                    TranslateBinaryOp(node, EOperation.LogicalAnd);
-                    return;
-
+                    return BinaryOp(node, EOperation.LogicalAnd);
                 case ERhoToken.Xor:
-                    TranslateBinaryOp(node, EOperation.LogicalXor);
-                    return;
-
+                    return BinaryOp(node, EOperation.LogicalXor);
                 case ERhoToken.Int:
-                    Append(int.Parse(node.Text));
-                    return;
-
+                    return Append(int.Parse(node.Text));
                 case ERhoToken.Float:
-                    Append(float.Parse(node.Text));
-                    return;
-
+                    return Append(float.Parse(node.Text));
                 case ERhoToken.String:
-                    Append(node.Text);
-                    return;
-
+                    return Append(node.Text);
                 case ERhoToken.Ident:
-                    Append(new Label(node.Text));
-                    return;
-
+                    return Append(new Label(node.Text));
                 case ERhoToken.Pathname:
-                    //Append(new Pathname(node.Token.Text));
                     throw new NotImplementedException("Translate pathname");
-                    return;
-
                 case ERhoToken.Yield:
-                    //for (var ch : node.Children)
-                    //    Translate(ch);
-                    Append(EOperation.Suspend);
-                    return;
-
+                    return Append(EOperation.Suspend);
                 case ERhoToken.Return:
-                    foreach (var ch in node.Children)
-                        TranslateNode(ch);
-                    Append(EOperation.Resume);
-                    return;
+                    // DO NOT REFACTOR INTO LINQ.
+                    // In fact, don't use Linq anywhere in this library.
+                    foreach (var child in node.Children)
+                        if (!Generate(child))
+                            return false;
+                    return Append(EOperation.Resume);
                 case ERhoToken.For:
-                    TranslateFor(node);
-                    return;
+                    return For(node);
+                case ERhoToken.PiSlice:
+                    return PiSlice(node);
             }
 
-            Fail($"Unsupported Token {node.Token.Type}");
+            return Fail($"Unsupported RhoToken {node.Token.Type}");
         }
 
-        private void AppendQuoted(RhoAstNode node)
+        private bool GenNew(RhoAstNode node)
         {
-            Append(new Label(node.Text, true));
+            Append(node.Children[0].Text);
+            return Append(EOperation.New);
         }
 
-        void TranslateBinaryOp(RhoAstNode node, EOperation op)
+        private bool AppendChildOp(RhoAstNode node, EOperation op)
+            => Generate(node.GetChild(0)) && Append(op);
+
+        private bool AppendQuoted(RhoAstNode node)
+            => Append(new Label(node.Text, true));
+
+        private bool List(RhoAstNode node)
+            => PushNew() && GenerateChildren(node) && Append(Pop().Code);
+
+        private bool Block(RhoAstNode node)
+            => GenerateChildren(node);
+
+        private bool PiSlice(RhoAstNode rhoNode)
         {
-            TranslateNode(node.GetChild(0));
-            TranslateNode(node.GetChild(1));
+            if (!(rhoNode.Value is PiAstNode piNode))
+                return InternalFail("PiAstNode type expected");
 
-            Append(op);
+            // TODO: store a private _piTranslator that is re-used
+            return new PiTranslator(_reg).TranslateNode(piNode, Top().Code)
+                || Fail("Couldn't translate pi");
         }
 
-        //void TranslatePathname(RhoAstNode node)
-        //{
-        //    Pathname::Elements elements;
-        //    typedef Pathname::Element El;
-        //
-        //    for (var ch : node.GetChildren())
-        //    {
-        //        switch (ch.GetToken().type)
-        //        {
-        //        case RhoTokenEnumType::Quote:
-        //            elements.push_back(El::Quote);
-        //            break;
-        //        case RhoTokenEnumType::Sep:
-        //            elements.push_back(El::Separator);
-        //            break;
-        //        case RhoTokenEnumType::Ident:
-        //            elements.push_back(Label(ch.GetTokenText()));
-        //            break;
-        //        }
-        //    }
-        //
-        //    AppendNew(Pathname(move(elements)));
-        //}
+        private bool BinaryOp(RhoAstNode node, EOperation op)
+        {
+            Generate(node.GetChild(0));
+            Generate(node.GetChild(1));
 
+            return Append(op);
+        }
 
-        protected void TranslateNode(RhoAstNode node)
+        /// <summary>
+        /// Generate executable pi-code from given node.
+        /// </summary>
+        protected bool Generate(RhoAstNode node)
         {
             if (node == null)
-            {
-                Fail("Unexpected empty node");
-                return;
-            }
+                return InternalFail("Unexpected empty RhoAstNode");
 
             switch (node.Type)
             {
                 case ERhoAst.Suspend:
-                    Append(EOperation.Suspend);
-                    break;
+                    return Append(EOperation.Suspend);
 
                 case ERhoAst.Pathname:
-                    TranslateToken(node);
-                    return;
+                    return Token(node);
 
                 case ERhoAst.Assignment:
-                    // like a binary op, but argument order is reversed
-                    //TranslateNode(node.GetChild(1));
-                    TranslateNode(node.GetChild(0));
+                    Generate(node.GetChild(0));
                     AppendQuoted(node.GetChild(1));
-                    Append(EOperation.Store);
-                    return;
-
+                    return Append(EOperation.Store);
                 case ERhoAst.IndexOp:
-                    TranslateBinaryOp(node, EOperation.At);
-                    return;
-
-                //case ERhoAst.Assignment:
-                //    // like a binary op, but argument order is reversed
-                //    //TranslateNode(node.GetChild(1));
-                //    TranslateNode(node.GetChild(0));
-                //    Append(node.GetChild(1).Value);
-                //    Append(EOperation.Store);
-                //    return;
-
+                    return BinaryOp(node, EOperation.At);
                 case ERhoAst.Call:
-                    TranslateCall(node);
-                    return;
-
+                    return Call(node);
                 case ERhoAst.GetMember:
-                    TranslateGetMember(node);
-                    return;
-
-
+                    return GetMember(node);
                 case ERhoAst.Conditional:
-                    TranslateIf(node);
-                    return;
-
+                    return If(node);
                 case ERhoAst.Block:
-                    PushNew();
-                    TranslateBlock(node);
-                    Append(Pop());
-                    return;
-
+                    return PushNew() && Block(node) && Append(Pop());
                 case ERhoAst.List:
-                    TranslateList(node);
-                    return;
-
+                    return List(node);
                 case ERhoAst.For:
-                    TranslateFor(node);
-                    return;
-
+                    return For(node);
                 case ERhoAst.Program:
-                    TranslateBlock(node);
-                    return;
+                    return Block(node);
                 default:
-                    TranslateToken(node);
-                    return;
+                    return Token(node);
             }
-
-            Fail($"Unsupported node {node}");
         }
 
-        private void TranslateList(RhoAstNode node)
-        {
-            PushNew();
-            foreach (var ch in node.Children)
-            {
-                TranslateNode(ch);
-            }
-
-            var top = Pop();
-            Append(top.Code);
-        }
-
-        private void TranslateBlock(RhoAstNode node)
+        private bool GenerateChildren(RhoAstNode node)
         {
             foreach (var st in node.Children)
-                TranslateNode(st);
+                if (!Generate(st))
+                    return InternalFail($"Failed to generate code for '{st}' from {node}");
+
+            return true;
         }
 
-        private void TranslateFunction(RhoAstNode node)
+        private bool Assign(RhoAstNode node)
         {
             var ch = node.Children;
-            var ident = ch[0].Value;
+            Generate(ch[0]);    // the r-value
+
+            switch (ch[1].Type)
+            {
+            case ERhoAst.TokenType:
+                switch (ch[1].Token.Type)
+                {
+                case ERhoToken.Ident:
+                    return AppendQuoted(ch[1]) && Append(EOperation.Assign);
+                }
+                break;
+
+            case ERhoAst.GetMember:
+                ch = ch[1].Children;
+                var subject = ch[0];
+                var member = ch[1];
+
+                AppendQuoted(member);
+                Generate(subject);
+
+                return Append(EOperation.SetMember);
+            }
+
+            return false;
+        }
+
+        private bool Function(RhoAstNode node)
+        {
+            var ch = node.Children;
             var args = ch[1].Children;
             var block = ch[2].Children;
 
-            // write the body
             PushNew();
             foreach (var obj in block)
-                TranslateNode(obj);
-            var cont = Pop();
+                Generate(obj);
 
-            // add the args
+            var cont = Pop();
             foreach (var arg in args)
                 cont.AddArg(arg.Token.Text);
 
-            Append(cont);
+            return Append(cont);
        }
 
-        private void TranslateCall(RhoAstNode node)
+        private bool Call(RhoAstNode node)
         {
             var children = node.Children;
             var args = children[1].Children;
             var name = children[0];
             foreach (var a in args.Reverse())
-                TranslateNode(a);
+                Generate(a);
 
-            TranslateNode(name);
+            Generate(name);
+
             // TODO: add Replace/Suspend/Resume to children
             if (children.Count > 2 && children[2].Token.Type == ERhoToken.Replace)
                 Append(EOperation.Replace);
             else
                 Append(EOperation.Suspend);
+
+            return true;
         }
 
-        private void TranslateGetMember(RhoAstNode node)
+        private bool GetMember(RhoAstNode node)
         {
             var ch = node.Children;
             var subject = ch[0];
             var member = ch[1];
+
             AppendQuoted(member);
-            TranslateNode(subject);
-            Append(EOperation.GetMember);
+            Generate(subject);
+
+            return Append(EOperation.GetMember);
         }
 
-        private void TranslateIf(RhoAstNode node)
+        private bool If(RhoAstNode node)
         {
             var ch = node.Children;
             var test = ch[0];
@@ -407,45 +320,39 @@ namespace Pyro.RhoLang
             var elseBlock = ch.Count > 2 ? ch[2] : null;
             var hasElse = elseBlock != null;
 
-            TranslateNode(thenBlock);
+            Generate(thenBlock);
             if (hasElse)
-                TranslateNode(elseBlock);
-            TranslateNode(test);
+                Generate(elseBlock);
+
+            Generate(test);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
 
             // TODO: Allow for if! and if... as well as if&
-            Append(EOperation.Suspend);
+            return Append(EOperation.Suspend);
         }
 
-        private void TranslateFor(RhoAstNode node)
+        private bool For(RhoAstNode node)
         {
             var ch = node.Children;
             if (ch.Count == 3)
             {
                 // for (a in b) ...
                 AppendQuoted(ch[0]);
-                TranslateNode(ch[1]);
-                TranslateNode(ch[2]);
-                Append(EOperation.ForEachIn);
-                return;
+                Generate(ch[1]);
+                Generate(ch[2]);
+                return Append(EOperation.ForEachIn);
             }
 
             // for (a = 0; a < 10; ++a) ...
-            TranslateNode(ch[0]);
-            TranslateNode(ch[1]);
-            TranslateNode(ch[2]);
-            TranslateNode(ch[3]);
-            Append(EOperation.ForLoop);
+            Generate(ch[0]);
+            Generate(ch[1]);
+            Generate(ch[2]);
+            Generate(ch[3]);
+            return Append(EOperation.ForLoop);
         }
 
-        static void TranslateWhile(RhoAstNode node)
-        {
-            throw new NotImplementedException("while loops");
-        }
-
-        public override string ToString()
-        {
-            return $"=== RhoTranslator:\n--- Input: {_lexer.Input}--- Lexer: {_lexer}\n--- Parser: {_parser}\n--- Code: {Result}";
-        }
+        private static bool While(RhoAstNode node)
+            => throw new NotImplementedException("while loops");
     }
 }
+

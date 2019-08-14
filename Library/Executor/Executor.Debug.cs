@@ -1,8 +1,9 @@
-﻿using System;
-using System.Text;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
+    using System;
+    using System.Text;
+
+    /// <inheritdoc />
     /// <summary>
     /// Debug methods for executor. Removed from main implementation for clarity.
     /// </summary>
@@ -10,23 +11,19 @@ namespace Pyro.Exec
     {
         public int TraceLevel;
 
-        void Write(object obj)
-        {
-            Write($"{obj}");
-        }
+        private static void Write(object obj)
+            => Write($"{obj}");
 
-        void WriteLine(object obj)
-        {
-            WriteLine($"{obj}");
-        }
+        private static void WriteLine(object obj)
+            => WriteLine($"{obj}");
 
-        void Write(string text, params object[] args)
+        private static void Write(string text, params object[] args)
         {
             System.Diagnostics.Debug.Write(text);
-            Console.Write(text);
+            Console.Write(text, args);
         }
-        
-        void WriteLine(string fmt, params object[] args)
+
+        private static void WriteLine(string fmt, params object[] args)
         {
             if (args == null || args.Length == 0)
                 Write(fmt + '\n');
@@ -35,9 +32,7 @@ namespace Pyro.Exec
         }
 
         private void DebugTrace()
-        {
-            WriteLine(DebugWrite());
-        }
+            => WriteLine(DebugWrite());
 
         private string DebugWrite()
         {
@@ -73,9 +68,9 @@ namespace Pyro.Exec
         public void WriteDataStack(StringBuilder str, int max = 4)
         {
             str.AppendLine("Data:");
-            var data = _data.ToArray();
+            var data = DataStack.ToArray();
             max = Math.Min(data.Length, max);
-            for (int n = max - 1; n >= 0; --n)
+            for (var n = max - 1; n >= 0; --n)
             {
                 var obj = data[n];
                 str.AppendLine($"    [{n}]: {GetTyped(obj)}");
@@ -83,9 +78,7 @@ namespace Pyro.Exec
         }
 
         private static string GetTyped(object obj)
-        {
-            return obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
-        }
+            => obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
 
         private void PerformPrelude(object next)
         {
@@ -102,3 +95,4 @@ namespace Pyro.Exec
         }
     }
 }
+

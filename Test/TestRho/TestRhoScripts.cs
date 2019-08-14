@@ -1,21 +1,23 @@
-﻿using System.IO;
-using NUnit.Framework;
-
-namespace Diver.Test.Rho
+﻿namespace Pyro.Test.Rho
 {
+    using System.IO;
+    using NUnit.Framework;
+
     [TestFixture]
-    public class TestRhoScripts : TestCommon
+    public class TestRhoScripts
+        : TestCommon
     {
         [Test]
         public void RunSomeScripts()
         {
+            TestScript("Conditionals.rho");
             TestScript("Loops.rho");
             TestScript("NestedFunctions.rho");
             TestScript("PassingFunctions.rho");
             TestScript("Variables.rho");
             TestScript("Arithmetic.rho");
             TestScript("Array.rho");
-            //TestScript("FreezeThaw.rho");
+            TestScript("FreezeThaw.rho");
         }
 
         //[Test]
@@ -26,3 +28,4 @@ namespace Diver.Test.Rho
         }
     }
 }
+

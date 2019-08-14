@@ -1,49 +1,23 @@
 ﻿using System;
-using System.Reflection;
 
 namespace Pyro.NetworkGen
 {
-    enum EBuildType
+    public enum EBuildType
     {
         Proxy,
         Agent,
     }
 
-    class AssemblyProcess
+    internal class Program
     {
-        protected static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger(); 
-
-        public AssemblyProcess(string asmName)
+        private static void Main(string[] args)
         {
-            var asm = Assembly.LoadFile(asmName);
-            foreach (var module in asm.GetModules())
+            if (args.Length != 3)
             {
-                foreach (var type in module.GetTypes())
-                {
-                    _logger.Info(type.FullName);
-                }
+                Console.WriteLine("Usage: NetworkGen {Proxy,Agent} inputDir outputDir");
+                return;
             }
-        }
-    }
 
-    class BuildAgent : AssemblyProcess
-    {
-        public BuildAgent(string asmName) : base(asmName)
-        {
-        }
-    }
-
-    class BuildProxy : AssemblyProcess
-    {
-        public BuildProxy(string asmName) : base(asmName)
-        {
-        }
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
             var type = Enum.Parse(typeof(EBuildType), args[0]);
             var inputAsm = args[1];
             var outputDir = args[2];
@@ -53,6 +27,7 @@ namespace Pyro.NetworkGen
                 case EBuildType.Agent:
                     BuildAgent(inputAsm, outputDir);
                     break;
+
                 case EBuildType.Proxy:
                     BuildProxy(inputAsm, outputDir);
                     break;

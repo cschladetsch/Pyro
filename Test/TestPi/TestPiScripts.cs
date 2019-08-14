@@ -1,25 +1,27 @@
-﻿using System.IO;
-using NUnit.Framework;
-
-namespace Diver.Test
+﻿namespace Pyro.Test
 {
+    using System.IO;
+    using NUnit.Framework;
+
     [TestFixture]
-    public class TestPiScripts : TestCommon
+    public class TestPiScripts
+        : TestCommon
     {
         [Test]
         public void RunScript()
         {
             //_exec.TraceLevel = 100
-            TestScript("StackOperations.pi");
-            TestScript("Relational.pi");
-            TestScript("Comments.pi");
-            TestScript("Arithmetic.pi");
+            TestScript("ResumeAfter.pi");
+            //TestScript("StackOperations.pi");
+            //TestScript("Relational.pi");
+            //TestScript("Comments.pi");
+            //TestScript("Arithmetic.pi");
 
-            TestScript("Boolean.pi");
-            TestScript("Array.pi");
-            TestScript("Conditionals.pi");
-            TestScript("Continuations.pi");
-            TestScript("Strings.pi");
+            //TestScript("Boolean.pi");
+            //TestScript("Array.pi");
+            //TestScript("Conditionals.pi");
+            //TestScript("Continuations.pi");
+            //TestScript("Strings.pi");
         }
 
         //[Test]

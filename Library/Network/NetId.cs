@@ -1,8 +1,7 @@
-﻿using System;
-using Pryo;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
+    using System;
+
     /// <summary>
     /// Identifies an object in a Domain
     /// </summary>
@@ -20,3 +19,4 @@ namespace Pyro.Network
         private Id _id;
     }
 }
+

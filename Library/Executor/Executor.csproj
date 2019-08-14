@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -52,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CannotEnumerate.cs" />
+    <Compile Include="Exception.cs" />
     <Compile Include="Continuation.cs" />
     <Compile Include="Continuation.Debug.cs" />
     <Compile Include="EOperation.cs" />
@@ -67,18 +69,18 @@
       <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ext\Flow\Flow2.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow2</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Continuation.OpToText.cs" />
     <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+    <PostBuildEvent>echo copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+rem copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
+
+
 
 </PostBuildEvent>
   </PropertyGroup>

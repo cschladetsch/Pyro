@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Pryo
+﻿namespace Pyro
 {
-    public class Pathname : IdentBase
+    using System;
+    using System.Text;
+    using System.Collections.Generic;
+
+    /// <inheritdoc cref="IdentBase" />
+    /// <summary>
+    /// A partial or fully-qualified path name.
+    /// </summary>
+    public class Pathname
+        : IdentBase
+        , IPathname
     {
         public enum EElementType
         {
@@ -16,6 +22,9 @@ namespace Pryo
         public const char Quote = '\'';
         public const char Slash = '/';
 
+        /// <summary>
+        /// A part of a Pathname
+        /// </summary>
         public class Element
         {
             public EElementType Type;
@@ -33,17 +42,20 @@ namespace Pryo
             }
         }
 
-        public IList<Element> Elements => _elements;
+        public IList<Element> Elements { get; }
 
         public Pathname()
-        {
-            _elements = new List<Element>();
-        }
+            => Elements = new List<Element>();
 
         public Pathname(IList<Element> elements, bool quoted = false)
             : base(quoted)
         {
-            _elements = elements;
+            Elements = elements;
+        }
+
+        public Pathname(string text) : base(false)
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()
@@ -51,18 +63,22 @@ namespace Pryo
             var str = new StringBuilder();
             if (Quoted)
                 str.Append(Quote);
-            foreach (var elem in _elements)
+
+            foreach (var elem in Elements)
             {
                 switch (elem.Type)
                 {
                     case EElementType.None:
                         break;
+
                     case EElementType.Separator:
                         str.Append(Slash);
                         break;
+
                     case EElementType.Ident:
                         str.Append(elem.Ident);
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -71,6 +87,23 @@ namespace Pryo
             return str.ToString();
         }
 
-        private readonly IList<Element> _elements;
+        public string ToText(IRegistry reg = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FromText(string s, IRegistry reg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FromText(IStringSlice s, IRegistry reg)
+        {
+            throw new NotImplementedException();
+        }
+
+        // public bool Quoted { get; set; }
+        public new bool Quoted { get; set; }
     }
 }
+

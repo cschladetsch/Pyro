@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using System.Reflection;
-using NUnit.Framework;
-using Pyro.Language.Lexer;
-
-namespace Diver.Test
+﻿namespace Pyro.Test
 {
+    using System.Linq;
+    using NUnit.Framework;
+    using Language.Lexer;
+
     [TestFixture]
-    public class TestPiLexer : TestCommon
+    public class TestPiLexer
+        : TestCommon
     {
         [Test]
         public void TestIdents()
@@ -14,15 +14,15 @@ namespace Diver.Test
             var lex = PiLex("a __a a__ a_b ___");
             var tokens = lex.Tokens.Where(t => !IsWhiteSpace(t)).ToList();
             Assert.AreEqual(5, tokens.Count);
-            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new []{"a", "__a", "a__", "a_b", "___"}));
+            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new [] {"a", "__a", "a__", "a_b", "___"}));
         }
 
         [Test]
         public void TestNumbersAndOps()
         {
             AssertSameTokens(
-                "1 2 + 2 - 3 *", 
-                EPiToken.Int, EPiToken.Int, EPiToken.Plus, 
+                "1 2 + 2 - 3 *",
+                EPiToken.Int, EPiToken.Int, EPiToken.Plus,
                 EPiToken.Int, EPiToken.Minus, EPiToken.Int, EPiToken.Multiply
             );
         }
@@ -56,3 +56,4 @@ namespace Diver.Test
         }
     }
 }
+

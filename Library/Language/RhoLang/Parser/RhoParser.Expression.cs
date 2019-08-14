@@ -1,11 +1,13 @@
-﻿using Pyro.RhoLang.Lexer;
-
-namespace Pyro.RhoLang.Parser
+﻿namespace Pyro.RhoLang.Parser
 {
+    using Language.Lexer;
+    using Language.Parser;
+    using Lexer;
+
     /// <summary>
     /// Functions that deal only with parsing expressions.
     ///
-    /// NOTE that in Rho, a statement can also be an expression.
+    /// NOTE in Rho, a statement can also be an expression.
     /// </summary>
     public partial class RhoParser
     {
@@ -14,17 +16,17 @@ namespace Pyro.RhoLang.Parser
             if (!Logical())
                 return false;
 
-            if (   Try(ERhoToken.Assign) 
-                || Try(ERhoToken.PlusAssign) 
-                || Try(ERhoToken.MinusAssign) 
-                || Try(ERhoToken.MulAssign) 
+            if (   Try(ERhoToken.Assign)
+                || Try(ERhoToken.PlusAssign)
+                || Try(ERhoToken.MinusAssign)
+                || Try(ERhoToken.MulAssign)
                 || Try(ERhoToken.DivAssign)
                )
             {
                 var assign = NewNode(Consume());
                 var ident = Pop();
                 if (!Logical())
-                    return FailLocation("Assignment requires an expression");
+                    return FailLocation("Logical sub-expression expected");
 
                 assign.Add(Pop());
                 assign.Add(ident);
@@ -44,7 +46,7 @@ namespace Pyro.RhoLang.Parser
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
-                    return FailLocation("Relational component expected");
+                    return FailLocation("Relational sub-expression expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -53,23 +55,23 @@ namespace Pyro.RhoLang.Parser
             return true;
         }
 
-        bool Relational()
+        private bool Relational()
         {
             if (!Additive())
                 return false;
 
-            while (   Try(ERhoToken.Less) 
-                   || Try(ERhoToken.Greater) 
-                   || Try(ERhoToken.Equiv) 
+            while (   Try(ERhoToken.Less)
+                   || Try(ERhoToken.Greater)
+                   || Try(ERhoToken.Equiv)
                    || Try(ERhoToken.NotEquiv)
-                   || Try(ERhoToken.LessEquiv) 
+                   || Try(ERhoToken.LessEquiv)
                    || Try(ERhoToken.GreaterEquiv)
                 )
             {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Additive())
-                    return FailLocation("Additive component expected");
+                    return FailLocation("Additive sub-expression expected");
 
                 node.Add(Pop());
                 Push(node);
@@ -78,7 +80,7 @@ namespace Pyro.RhoLang.Parser
             return true;
         }
 
-        bool Additive()
+        private bool Additive()
         {
             // unary +/- operator
             if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
@@ -95,7 +97,7 @@ namespace Pyro.RhoLang.Parser
             {
                 var negate = NewNode(Consume());
                 if (!Additive())
-                    return FailLocation("Additive component expected");
+                    return FailLocation("Additive sub-component expected");
 
                 negate.Add(Pop());
                 return Push(negate);
@@ -128,7 +130,7 @@ namespace Pyro.RhoLang.Parser
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Factor())
-                    return FailLocation("Factor expected with a term");
+                    return FailLocation("Term expected a factor");
 
                 node.Add(Pop());
                 Push(node);
@@ -140,68 +142,98 @@ namespace Pyro.RhoLang.Parser
         private bool Factor()
         {
             if (Try(ERhoToken.New))
-            {
-                var @new = NewNode(Consume());
-                @new.Add(Pop());
-                return Push(@new);
-            }
+                return New();
 
             if (Try(ERhoToken.OpenParan))
-            {
-                var exp = NewNode(Consume());
-                if (!Expression())
-                    return FailLocation("Expected an expression");
+                return Paran();
 
-                Expect(ERhoToken.CloseParan);
-                exp.Add(Pop());
-                return Push(exp);
-            }
+            if (Try(ERhoToken.PiSlice))
+                return Pi();
 
-            if (TryConsume(ERhoToken.OpenSquareBracket))
-            {
-                var list = NewNode(ERhoAst.List);
-                while (true)
-                {
-                    if (TryConsume(ERhoToken.CloseSquareBracket))
-                        break;
-                    if (Expression())
-                        list.Add(Pop());
-                    else
-                        return FailLocation("Expressions required within array");
-                    if (!TryConsume(ERhoToken.Comma))
-                        break;
-                }
+            if (TryConsume(ERhoToken.OpenBrace))
+                return AddList();
 
-                Expect(ERhoToken.CloseSquareBracket);
-                if (Failed)
-                    return FailLocation("Closing bracked expected for array");
+            if (Try(ERhoToken.Self))
+                return PushConsumed();
 
-                return Push(list);
-            }
+            if (Try(ERhoToken.Ident) || Try(ERhoToken.Pathname))
+                return FactorIdent();
 
-            if (   Try(ERhoToken.Int) 
-                || Try(ERhoToken.Float) 
-                || Try(ERhoToken.String) 
-                || Try(ERhoToken.True) 
+            if (   Try(ERhoToken.Int)
+                || Try(ERhoToken.Float)
+                || Try(ERhoToken.String)
+                || Try(ERhoToken.True)
                 || Try(ERhoToken.False)
                 )
             {
                 return PushConsumed();
             }
 
-            if (Try(ERhoToken.Self))
-                return PushConsumed();
-
-            if (Try(ERhoToken.Ident))
-                return ParseFactorIdent();
-
-            if (Try(ERhoToken.Pathname))
-                return ParseFactorIdent();
-
             return false;
         }
 
-        private bool ParseFactorIdent()
+        private bool New()
+        {
+            var @new = NewNode(Consume());
+            if (Expression())
+                @new.Add(Pop());
+            else
+                return FailLocation("new what?");
+
+            return Push(@new);
+        }
+
+        private bool AddList()
+        {
+            var list = NewNode(ERhoAst.List);
+            while (true)
+            {
+                if (TryConsume(ERhoToken.CloseBrace))
+                    break;
+
+                if (Expression())
+                    list.Add(Pop());
+                else
+                    return FailLocation("Expression required within array");
+
+                //if (!TryConsume(ERhoToken.Comma))
+                //    break;
+            }
+
+            //Expect(ERhoToken.CloseSquareBracket);
+            return Failed
+                ? FailLocation("Closing bracket expected for array")
+                : Push(list);
+        }
+
+        private bool Paran()
+        {
+            var exp = NewNode(Consume());
+            if (!Expression())
+                return FailLocation("Expected an expression");
+
+            Expect(ERhoToken.CloseParan);
+            exp.Add(Pop());
+            return Push(exp);
+        }
+
+        private bool Pi()
+        {
+            var lexer = new PiLexer(Current().Text);
+            if (!lexer.Process())
+                return FailLocation(lexer.Error);
+
+            var parser = new PiParser(lexer);
+            if (!parser.Process(lexer))
+                return FailLocation(parser.Error);
+
+            var pi = NewNode(Consume());
+            pi.Value = parser.Root;
+            Push(pi);
+            return true;
+        }
+
+        private bool FactorIdent()
         {
             PushConsume();
 
@@ -228,7 +260,7 @@ namespace Pyro.RhoLang.Parser
                 }
             }
 
-            return true;
+            return !Failed;
         }
 
         private bool GetMember()
@@ -238,8 +270,8 @@ namespace Pyro.RhoLang.Parser
             var get = NewNode(ERhoAst.GetMember);
             get.Add(Pop());
             get.Add(Expect(ERhoToken.Ident));
-            Push(get);
-            return true;
+
+            return Push(get);
         }
 
         private bool Call()
@@ -252,7 +284,7 @@ namespace Pyro.RhoLang.Parser
 
             // the thing to call is on the parse stack. It could be something like
             // `foo().bar.spam[4](a,b,c)`
-            call.Add(Pop()); 
+            call.Add(Pop());
             call.Add(args);
             Push(call);
 
@@ -263,7 +295,7 @@ namespace Pyro.RhoLang.Parser
                 {
                     Consume();
                     if (!Expression())
-                        return FailLocation("What is the next argument?");
+                        return FailLocation("Argument expected");
 
                     args.Add(Pop());
                 }
@@ -275,14 +307,19 @@ namespace Pyro.RhoLang.Parser
 
         private bool IndexOp()
         {
-            var index = PushConsume();
+            Consume();
+
+            var index = NewNode(ERhoAst.IndexOp);
             index.Add(Pop());
             if (!Expression())
-                return FailLocation("Index what?");
+                return FailLocation("Indexing expression expected");
+
             index.Add(Pop());
+            Push(index);
 
             Expect(ERhoToken.CloseSquareBracket);
             return true;
         }
     }
 }
+

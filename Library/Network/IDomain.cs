@@ -7,6 +7,8 @@
     /// and have spatial awareness.
     /// </summary>
     public interface IDomain
+       : IRegistry
     {
     }
 }
+

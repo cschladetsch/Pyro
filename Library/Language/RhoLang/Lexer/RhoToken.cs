@@ -1,16 +1,14 @@
-﻿using Pyro.Language;
-using Pyro.Language.Impl;
-
-namespace Pyro.RhoLang.Lexer
+﻿namespace Pyro.RhoLang.Lexer
 {
+    using Language;
+    using Language.Impl;
+
+    /// <inheritdoc cref="ITokenBase{TEnum}" />
     public class RhoToken
         : TokenBase<ERhoToken>
         , ITokenNode<ERhoToken>
     {
-        public RhoToken()
-        {
-            _type = ERhoToken.Nop;
-        }
+        public RhoToken() => _type = ERhoToken.Nop;
 
         public RhoToken(ERhoToken type, Slice slice)
             : base(type, slice)
@@ -26,3 +24,4 @@ namespace Pyro.RhoLang.Lexer
         }
     }
 }
+

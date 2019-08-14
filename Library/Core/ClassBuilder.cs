@@ -1,18 +1,28 @@
-﻿using System;
-using System.Text;
-using Pryo.Impl;
+﻿#pragma warning disable SA1401
 
-namespace Pryo
+namespace Pyro
 {
+    using System;
+    using System.Text;
+    using Impl;
+
     /// <summary>
-    /// Make a new class that can added to a Registry. This isn't always necessary, unless there are overloaded methods in the class.
+    /// Make a new class that can added to a Registry.
+    ///
+    /// This isn't always necessary, unless there are overloaded
+    /// methods in the class.
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ClassBuilder<T> where T : class//, new()
+    public class ClassBuilder<T>
+        where T : class
     {
         public IClass<T> Class => _class;
         public AddMethod Methods;
         public AddProperty Properties;
+
+        private readonly IClass<T> _class;
+        private readonly IRegistry _registry;
 
         public ClassBuilder(IRegistry reg)
         {
@@ -51,47 +61,46 @@ namespace Pryo
             {
             }
 
-            public AddMethod Add<A,B>(string name, Action<T,A,B> fun)
+            public AddMethod Add(string name, Action<T> fun)
             {
-                _builder._class.AddCallable(name, new VoidCallable<T,A,B>(fun));
+                _builder._class.AddCallable(name, new VoidMethod<T>(fun));
                 return this;
             }
 
             public AddMethod Add<A>(string name, Action<T, A> fun)
             {
-                _builder._class.AddCallable(name, new VoidCallable<T,A>(fun));
+                _builder._class.AddCallable(name, new VoidMethod<T, A>(fun));
                 return this;
             }
 
-            public AddMethod Add(string name, Action<T> fun)
+            public AddMethod Add<A, B>(string name, Action<T, A, B> fun)
             {
-                _builder._class.AddCallable(name, new VoidCallable<T>(fun));
+                _builder._class.AddCallable(name, new VoidMethod<T, A, B>(fun));
                 return this;
             }
-            public AddMethod Add<A,B,R>(string name, Func<T,A,B,R> fun)
+
+            public AddMethod Add<A, B, R>(string name, Func<T, A, B, R> fun)
             {
-                _builder._class.AddCallable(name, new Callable<T,A,B,R>(fun));
+                _builder._class.AddCallable(name, new Method<T, A, B, R>(fun));
                 return this;
             }
 
             public AddMethod Add<A, R>(string name, Func<T, A, R> fun)
             {
-                _builder._class.AddCallable(name, new Callable<T,A,R>(fun));
+                _builder._class.AddCallable(name, new Method<T, A, R>(fun));
                 return this;
             }
 
             public AddMethod Add<R>(string name, Func<T, R> fun)
             {
-                _builder._class.AddCallable(name, new Callable<T,R>(fun));
+                _builder._class.AddCallable(name, new Method<T, R>(fun));
                 return this;
             }
         }
 
         public class AddProperty
         {
+            // TODO
         }
-
-        private readonly IClass<T> _class;
-        private readonly IRegistry _registry;
     }
 }

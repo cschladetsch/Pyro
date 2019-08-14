@@ -1,0 +1,6 @@
+#!/bin/sh
+
+alias flow='cd `go.impl -root`/Library/Ext/Flow'
+
+echo Enter Pyro with 'flow' alias.
+

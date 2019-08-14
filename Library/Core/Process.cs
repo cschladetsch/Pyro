@@ -1,38 +1,47 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
-    /// <summary>
-    /// This is a simple class which works in various contexts.
-    /// It is common to all things that preservce state over time, or `Processes`.
-    /// Notablety each language's Lexer, Parser, and Translator are all Proceses's.
-    /// The base of all netork classes are also Process's.
-    /// </summary>
-    public class Process : IProcess
+    using System;
+
+    /// <inheritdoc />
+    public class Process
+        : IProcess
     {
         public bool Failed { get; private set; }
+        public string Error { get; protected set; }
 
-        public string Error
-        {
-            get => _error;
-            protected set => _error = value;
-        }
-
-        protected Process()
-        {
-        }
-
-        public virtual bool Fail(string err)
-        {
-            Failed = true;
-            _error = err;
-            return false;
-        }
-
-        protected void Reset()
+        /// <summary>
+        /// Reset this Process to a successful state.
+        /// </summary>
+        public void Reset()
         {
             Failed = false;
-            _error = "";
+            Error = "";
         }
 
-        protected string _error;
+        /// <summary>
+        /// A special kind of failure: this is a failure of the system itself,
+        /// rather than a failure to produce results given invalid user input.
+        /// </summary>
+        /// <param name="error"></param>
+        /// <returns></returns>
+        protected virtual bool InternalFail(string error)
+        {
+            var text = $"INTERNAL: {error}";
+            Fail(text);
+            throw new Exception(text);
+        }
+
+        /// <summary>
+        /// A Process failure due to client input.
+        /// </summary>
+        /// <param name="err">What went wrong.</param>
+        /// <returns>false.</returns>
+        protected virtual bool Fail(string err)
+        {
+            Failed = true;
+            Error = err;
+            return false;
+        }
     }
 }
+

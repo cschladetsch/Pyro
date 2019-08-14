@@ -1,30 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using Pyro.Exec;
+using System.Collections.Generic;
 
 namespace Pyro.Network.Impl
 {
+    using Exec;
+
+    /// <inheritdoc cref="IClient" />
     /// <inheritdoc cref="NetCommon" />
     /// <summary>
     /// A connection to a remote server. Can send executable script, and receive
     /// results that are also executable scripts.
     /// </summary>
-    public class Client : NetCommon, IClient
+    public class Client
+        : NetCommon
+        , IClient
     {
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
 
-        public override Socket Socket
-        {
-            get => _socket;
-            set => _socket = value;
-        }
+        private Socket _socket;
+        private IList<object> _stack;
+
+        public override Socket Socket { get => _socket; set => _socket = value; }
 
         public Client(Peer peer)
             : base(peer)
         {
+        }
+
+        public override string ToString()
+        {
+            return $"Client: connected to {HostName}:{HostPort}";
         }
 
         public IEnumerable<string> Results()
@@ -33,30 +41,24 @@ namespace Pyro.Network.Impl
                 yield break;
 
             foreach (var elem in _stack)
-                yield return _Context.Registry.ToText(elem);
+                yield return _Context.Registry.ToPiScript(elem);
         }
 
         public void CompleteConnect(Socket socket)
-        {
-            _socket = socket;
-        }
+            => _socket = socket;
 
         public bool Continue(Continuation cont)
-        {
-            return Send(cont?.ToText());
-        }
+            => Send(cont?.ToText());
 
         public bool Continue(string script)
-        {
-            return !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
-        }
+            => !_Context.Translate(script, out var cont) ? Fail(_Context.Error) : Continue(cont);
 
         public bool Connect(string hostName, int port)
         {
             var address = GetAddress(hostName);
             if (address == null)
-                return Fail($"Couldn't find Ip4 address for {hostName}");
-            
+                return Fail($"Couldn't find address for {hostName}");
+
             var endPoint = new IPEndPoint(address, port);
             var client = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             client.BeginConnect(endPoint, Connected, client);
@@ -65,9 +67,7 @@ namespace Pyro.Network.Impl
         }
 
         public bool Send(Continuation continuation)
-        {
-            return Send(continuation.ToText());
-        }
+            => Send(continuation.ToText());
 
         public void Close()
         {
@@ -76,19 +76,13 @@ namespace Pyro.Network.Impl
             _socket = null;
         }
 
-        //public bool ProcessResponse(string response)
-        //{
-        //    WriteLine($"Recv: {response}");
-        //    return true;
-        //}
-
         private void Connected(IAsyncResult ar)
         {
             try
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
-                WriteLine($"Client connected to {_socket.RemoteEndPoint}");
+                WriteLine($"Client: connected to {_socket.RemoteEndPoint} using {_socket.LocalEndPoint}");
                 Receive(_socket);
             }
             catch (Exception e)
@@ -129,9 +123,5 @@ namespace Pyro.Network.Impl
             var address = Socket?.RemoteEndPoint as IPEndPoint;
             return address?.Address.ToString() ?? "none";
         }
-
-        private Socket _socket;
-        private IList<object> _stack;
-
     }
 }

@@ -1,66 +1,79 @@
 ﻿namespace Pyro.Exec
 {
     /// <summary>
-    /// Operations that can be performed by an Executor.
+    /// Operations that can be performed by an Executor,
+    /// which is the virtual machine used by all custom languages.
     ///
-    /// This is the virtual machine that is used by all
-    /// custom languages.
+    /// NOTE: Do NOT randomly re-order these values. They may be stored as integer values elsewhere.
+    /// NOTE: Only ever add to the end of this list.
     /// </summary>
     public enum EOperation
     {
         Nop,
 
-        // instances
-        //New,
-        //Delete,
+        // Instances
+        New,
+        Self,
+        Delete,
         HasType,
-        //Exists,
+        GetType,
+        IsTypeOf,
+        GetBaseTypes,
+        Exists,
         GarbageCollect,
 
-        // arithmetic
+        // Arithmetic
         Plus,
         Minus,
         Multiply,
         Divide,
         Modulo,
 
-        // variables
+        // Iteration
+        ForEachIn,
+        ForLoop,
+
+        // Variables
         Store,
         Has,
         Retrieve,
         Assign,
         GetPath,
 
-        // flow control
+        // Flow control
         Suspend,
         Resume,
         Replace,
-        
-        // output
+        Break,
+        DataToContext,
+        ContextToData,
+
+        // Output
         Assert,
         Write,
         WriteLine,
 
-        // conditional
+        // Conditional
         If,
         IfElse,
 
-        // stack
+        // Stack
         StackToList,
         ListToStack,
         Depth,
         Dup,
         Clear,
         Swap,
-        Break,
         Rot,
-        Roll,
         RotN,
+        Roll,
         RollN,
         Pick,
         Over,
+        Drop,
+        DropN,
 
-        // serialisation
+        // Serialisation
         Freeze,
         Thaw,
         FreezeText,
@@ -68,9 +81,10 @@
         FreezeYaml,
         ThawYaml,
 
-        // logical
+        // Logical
         Not,
         Equiv,
+        NotEquiv,
         LogicalAnd,
         LogicalOr,
         LogicalXor,
@@ -78,9 +92,8 @@
         Greater,
         GreaterOrEquiv,
         LessOrEquiv,
-        NotEquiv,
 
-        // containers
+        // Containers
         Expand,
         ToArray,
         ToMap,
@@ -95,25 +108,27 @@
         Insert,
         At,
 
-        // debugging
-        DebugPrintDataStack,
-        DebugPrintContextStack,
-        DebugPrint,
-        DebugPrintContinuation,
-        DebugSetLevel,
-
-        SetFloatPrecision,
-
-        Self,
-
-        // accessors
+        // Accessors
         GetMember,
         SetMember,
         SetMemberValue,
-        ForEachIn,
-        ForLoop,
-        Drop,
-        DropN,
 
+        // Debugging
+        DebugPrint,
+        DebugPrintDataStack,
+        DebugPrintContextStack,
+        DebugPrintContinuation,
+        DebugSetLevel,
+        DebugBreak,
+        DebugSetVerbosity,
+        DebugGetVerbosity,
+
+        // Global State
+        SetFloatPrecision,
+        DivEquals,
+        MulEquals,
+        MinusEquals,
+        PlusEquals
     }
 }
+

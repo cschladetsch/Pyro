@@ -1,11 +1,11 @@
 ﻿using System.Text;
 using System.Collections.Generic;
 
-using Pryo;
-using Pyro.Exec;
-
 namespace Pyro.Language.Impl
 {
+    using Exec;
+
+    /// <inheritdoc cref="ITranslator" />
     /// <summary>
     /// Common to all processes that translate an AST to Pi code sequences.
     /// </summary>
@@ -14,14 +14,10 @@ namespace Pyro.Language.Impl
         , ITranslator
     {
         public int TraceLevel { get; set; }
-
         protected virtual Continuation Result => _stack.Count == 0 ? null : Top();
+        private readonly Stack<Continuation> _stack = new Stack<Continuation>();
 
-        protected TranslatorCommon(IRegistry r)
-            : base(r)
-        {
-            Reset();
-        }
+        protected TranslatorCommon(IRegistry r) : base(r) => Reset();
 
         public virtual bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program)
         {
@@ -34,7 +30,7 @@ namespace Pyro.Language.Impl
         {
             base.Reset();
             _stack.Clear();
-            _stack.Push(Continuation.New(_reg));
+            PushNew();
         }
 
         public override string ToString()
@@ -46,26 +42,23 @@ namespace Pyro.Language.Impl
             return str.ToString();
         }
 
-        protected void PushNew()
+        protected bool PushNew()
         {
             _stack.Push(Continuation.New(_reg));
+            return true;
         }
 
         protected Continuation Pop()
-        {
-            return _stack.Pop();
-        }
+            => _stack.Pop();
 
         protected Continuation Top()
-        {
-            return _stack.Peek();
-        }
+            => _stack.Peek();
 
-        protected void Append(object obj)
+        protected bool Append(object obj)
         {
             Top().Code.Add(obj);
+            return true;
         }
-
-        private readonly Stack<Continuation> _stack = new Stack<Continuation>();
     }
 }
+

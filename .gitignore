@@ -1,11 +1,10 @@
+/NDependOut/
+/packages
+
 TestResults.xml
 tests.txt
 /.current
-/NDependOut
-
-
 /Unity3d/PyroUnity/Assets/Liminal/Assemblies/
-
 
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -19,6 +18,8 @@ tests.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+
+StyleCop.Cache
 
 # Build results
 [Dd]ebug/

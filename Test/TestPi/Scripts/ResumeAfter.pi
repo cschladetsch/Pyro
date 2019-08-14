@@ -1,0 +1,6 @@
+﻿TimeNow & 'start # 
+1000 'Wait self & 
+TimeNow & 'stop # 
+stop start - 'TotalMilliSeconds & 
+2 == assert
+

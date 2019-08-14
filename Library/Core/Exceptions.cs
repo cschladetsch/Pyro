@@ -1,8 +1,14 @@
-﻿using System;
-
-namespace Pryo
+﻿namespace Pyro
 {
-    public class MemberNotFoundException : Exception
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Given member (field, property, method, inner class etc) not found.
+    /// </summary>
+    public class MemberNotFoundException
+        : Exception
     {
         public MemberNotFoundException(Type type, string member)
             : base($"Member {member} not found in {type.Name}")
@@ -15,7 +21,13 @@ namespace Pryo
         }
     }
 
-    public class CouldNotMakeClass : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// Couldn't find class to make in Registry.
+    /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.Csharp.Maintainability", "*")]
+    public class CouldNotMakeClass
+        : Exception
     {
         public CouldNotMakeClass(Type type)
             : base($"Couldn't make class for {type.FullName}")
@@ -23,51 +35,92 @@ namespace Pryo
         }
     }
 
-    public class ContextStackEmptyException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// The context stack was empty, and yet was attempted to be popp'ed
+    /// </summary>
+    public class ContextStackEmptyException
+        : Exception
     {
-        public ContextStackEmptyException() : base("Empty ContextStack")
+        public ContextStackEmptyException()
+            : base("Empty ContextStack")
         {
         }
     }
 
-    public class DebugBreakException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// Used for debugging.
+    /// </summary>
+    public class DebugBreakException
+        : Exception
     {
-        public DebugBreakException() : base("DebugBreak")
+        public DebugBreakException()
+            : base("DebugBreak")
         {
         }
     }
 
-    public class NullValueException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// Thrown when an unexpected null reference was found
+    /// </summary>
+    public class NullValueException
+        : Exception
     {
-        public NullValueException() : base("Null value")
+        public NullValueException(string text = "Null value")
+            : base(text)
         {
         }
     }
 
-    public class AssertionFailedException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// An Assertion failed.
+    /// </summary>
+    public class AssertionFailedException
+        : Exception
     {
-        public AssertionFailedException() : base("Assertion failed")
+        public AssertionFailedException()
+            : base("Assertion failed")
         {
         }
     }
 
-    public class DataStackEmptyException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// An attempt was made to access the contents of and empty data-stack in an Executor.
+    /// </summary>
+    public class DataStackEmptyException
+        : Exception
     {
-        public DataStackEmptyException() : base("Empty Stack")
+        public DataStackEmptyException()
+            : base("Empty Stack")
         {
         }
     }
 
-    public class UnknownIdentifierException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// Given identifier could not be resolved locally, in the context stack, or in the tree.
+    /// </summary>
+    public class UnknownIdentifierException
+        : Exception
     {
         public object What;
-        public UnknownIdentifierException(object obj) : base($"Unknown object '{obj}'")
+        public UnknownIdentifierException(object obj)
+            : base($"Unknown object '{obj}'")
         {
             What = obj;
         }
     }
 
-    public class CannotCompareEnumerationsException : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// Invalid comparisons between two different enumeration types.
+    /// </summary>
+    public class CannotCompareEnumerationsException
+        : Exception
     {
         public object Left, Right;
         public CannotCompareEnumerationsException(object left, object right)
@@ -78,21 +131,34 @@ namespace Pryo
         }
     }
 
-    public class CannotResolve : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// Cannot resolve given identifier.
+    /// </summary>
+    public class CannotResolve
+        : Exception
     {
-        public CannotResolve(string ident) : base($"Couldn't resolve {ident}")
+        public CannotResolve(string ident)
+            : base($"Couldn't resolve {ident}")
         {
         }
     }
 
-    public class TypeMismatchError : Exception
+    /// <inheritdoc />
+    /// <summary>
+    /// There was a mis-match in types for a given binary operation.
+    /// </summary>
+    public class TypeMismatchError
+        : Exception
     {
         public Type Expected, Got;
 
-        public TypeMismatchError(Type expected, Type got) : base($"Expected {expected}, got {got}")
+        public TypeMismatchError(Type expected, Type got)
+            : base($"Expected {expected}, got {got}")
         {
             Expected = expected;
             Got = got;
         }
     }
 }
+

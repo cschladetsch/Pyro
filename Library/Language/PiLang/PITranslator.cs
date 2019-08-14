@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Pryo;
-using Pyro.Exec;
-using Pyro.Language.Impl;
-using Pyro.Language.Lexer;
-using Pyro.Language.Parser;
-
-namespace Pyro.Language
+﻿namespace Pyro.Language
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using Exec;
+    using Impl;
+    using Lexer;
+    using Parser;
+
+    /// <inheritdoc />
     /// <summary>
-    /// Translates input Pi text source code to an executable Continuation
+    /// Translates input Pi text source code to an executable Continuation.
     /// </summary>
-    public class PiTranslator : TranslatorBase<PiLexer, PiParser>
+    public class PiTranslator
+        : TranslatorBase<PiLexer, PiParser>
     {
         public PiTranslator(IRegistry reg) : base(reg)
         {
         }
 
-        public override bool Translate(string input, out Continuation result, EStructure st = EStructure.Program)
+        public override bool Translate(
+            string input,
+            out Continuation result,
+            EStructure st = EStructure.Program)
         {
             if (!base.Translate(input, out result, st))
                 return false;
@@ -28,13 +32,13 @@ namespace Pyro.Language
             if (string.IsNullOrEmpty(input))
                 return true;
 
-            _lexer = new PiLexer(input);
-            
-            if (!_lexer.Process())
-                return Fail($"LexerError: {_lexer.Error}");
+            _Lexer = new PiLexer(input);
 
-            _parser = new PiParser(_lexer);
-            if (!Parser.Process(_lexer, EStructure.Program))
+            if (!_Lexer.Process())
+                return Fail($"LexerError: {_Lexer.Error}");
+
+            _Parser = new PiParser(_Lexer);
+            if (!Parser.Process(_Lexer, EStructure.Program))
                 return Fail($"ParserError: {Parser.Error}");
 
             if (!TranslateNode(Parser.Root, _continuation.Code))
@@ -45,14 +49,10 @@ namespace Pyro.Language
         }
 
         public override string ToString()
-        {
-            return $"=== PITranslator:\nInput: {_lexer.Input}PiLexer: {_lexer}\nParser: {Parser}\nCode: {_continuation}\n";
-        }
+            => $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
 
-        private bool TranslateNode(PiAstNode node, IList<object> objects)
-        {
-            return node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
-        }
+        public bool TranslateNode(PiAstNode node, IList<object> objects)
+            => node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
 
         private bool AddNode(PiAstNode piAst, IList<object> objects)
         {
@@ -77,7 +77,7 @@ namespace Pyro.Language
             return true;
         }
 
-        private void AddToken(PiAstNode node, IList<object> objects)
+        private static void AddToken(PiAstNode node, ICollection<object> objects)
         {
             var token = node.PiToken;
             // TODO: use a map or even have the Executor execute Pi tokens to avoid this pointless duplication.
@@ -145,6 +145,9 @@ namespace Pyro.Language
                 case EPiToken.Clear:
                     objects.Add(EOperation.Clear);
                     break;
+                case EPiToken.GetType:
+                    objects.Add(EOperation.GetType);
+                    break;
                 case EPiToken.Swap:
                     objects.Add(EOperation.Swap);
                     break;
@@ -195,6 +198,9 @@ namespace Pyro.Language
                     break;
                 case EPiToken.Insert:
                     objects.Add(EOperation.Insert);
+                    break;
+                case EPiToken.New:
+                    objects.Add(EOperation.New);
                     break;
                 case EPiToken.Remove:
                     objects.Add(EOperation.Remove);
@@ -259,7 +265,7 @@ namespace Pyro.Language
             }
         }
 
-        private bool TranslateMap(PiAstNode piAst, IList<object> objects)
+        private static bool TranslateMap(PiAstNode piAst, IList<object> objects)
         {
             throw new NotImplementedException("TranslateMap");
         }
@@ -285,3 +291,4 @@ namespace Pyro.Language
         private Continuation _continuation;
     }
 }
+

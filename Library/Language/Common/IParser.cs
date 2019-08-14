@@ -1,6 +1,12 @@
 namespace Pyro.Language
 {
-    public interface IParser : IProcess
+    /// <inheritdoc />
+    /// <summary>
+    /// Common interface to all Parsers.
+    /// </summary>
+    public interface IParser
+        : IProcess
     {
     }
 }
+

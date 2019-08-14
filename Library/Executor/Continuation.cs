@@ -1,26 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Pryo;
+﻿using System;
 
 namespace Pyro.Exec
 {
+    using System.Text;
+    using System.Collections.Generic;
+    using Flow;
+
     /// <summary>
-    /// Also known as a co-routine. Can be interrupted mid-execution and later resumed.
+    /// Also known as a co-routine.
+    /// Can be interrupted mid-execution and later resumed.
     /// </summary>
     public partial class Continuation
-        : Reflected<Continuation>
+        : IGenerator
     {
-        public IList<object> Code => _code;
-        public IList<string> Args => _args;
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block
         /// </summary>
-        public int Ip => _next;
+        public int Ip { get; private set; }
+        public IList<object> Code { get; }
+        public IList<string> Args { get; private set; }
+        private IDictionary<string, object> _scope => Scope;
 
         public Continuation(IList<object> code)
-        {
-            _code = code;
-        }
+            => Code = code;
 
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
@@ -39,19 +41,21 @@ namespace Pyro.Exec
                 switch (elem)
                 {
                     case EOperation op:
-                        str.Append('`');
-                        str.Append((int) op);
+                        str.Append(OpToText(op));
                         break;
+
                     case bool val:
                         str.Append(val ? "true" : "false");
                         break;
+
                     default:
-                        reg.AppendText(str, elem);
+                        reg.ToPiScript(str, elem);
                         break;
                 }
 
                 str.Append(' ');
             }
+
             str.Append('}');
         }
 
@@ -61,18 +65,17 @@ namespace Pyro.Exec
                 .Class);
         }
 
-        // this is human-readable version. for transmission/persistence, use ToText()
+        // this is human-readable version. for transmission/persistence, use ToPiScript()
         public override string ToString()
         {
             var str = new StringBuilder();
-            //str.Append($"Continuation: {_scope.Count} args, {_code.Count} instructions:\n\t");
             str.Append('{');
-            str.Append($"#{_next}/{_code.Count} ");
-            if (_args != null)
+            str.Append($"#{Ip}/{Code.Count} ");
+            if (Args != null)
             {
                 str.Append('(');
                 var comma = "";
-                foreach (var a in _args)
+                foreach (var a in Args)
                 {
                     str.Append($"{a}{comma}");
                     comma = ", ";
@@ -80,7 +83,7 @@ namespace Pyro.Exec
                 str.Append(") ");
             }
 
-            foreach (var c in _code)
+            foreach (var c in Code)
             {
                 str.Append(c);
                 str.Append(", ");
@@ -88,32 +91,33 @@ namespace Pyro.Exec
             str.Append('}');
 
             return str.ToString();
-            //return $"#{_next}/{_code.Count}:{ToText()}";
         }
 
         public void AddArg(string ident)
         {
-            if (_args == null)
-                _args = new List<string>();
-            _args.Add(ident);
+            if (Args == null)
+                Args = new List<string>();
+
+            Args.Add(ident);
         }
 
         public void Enter(Executor exec)
         {
-            if (_args == null)
+            // Nothing to do if no args to pull.
+            if (Args == null)
                 return;
 
-            // already entered
-            if (_next != 0)
+            // Already entered; we may be re-entering, which is fine.
+            if (Ip != 0)
                 return;
 
-            if (exec.DataStack.Count < _args.Count)
+            if (exec.DataStack.Count < Args.Count)
                 throw new DataStackEmptyException();
-            
-            foreach (var arg in _args)
+
+            foreach (var arg in Args)
                 _scope[arg] = exec.DataStack.Pop();
 
-            _next = 0;
+            Ip = 0;
         }
 
         public bool HasScopeObject(string label)
@@ -133,8 +137,8 @@ namespace Pyro.Exec
 
         public bool Next(out object next)
         {
-            var has = _next < _code.Count;
-            next = has ? _code[_next++] : null;
+            var has = Ip < Code.Count;
+            next = has ? Code[Ip++] : null;
             if (!has)
                 Reset();
             return has;
@@ -144,12 +148,111 @@ namespace Pyro.Exec
         {
             // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
             //_scope.Clear();
-            _next = 0;
+            Ip = 0;
         }
 
-        private int _next;
-        private IList<string> _args;
-        private readonly IList<object> _code;
-        private IDictionary<string, object> _scope => Scope;
+        public string Name { get; set; }
+        public IKernel Kernel { get; set; }
+        public event TransientHandler Completed;
+        public bool Active { get; private set; }
+        public void Complete()
+        {
+            if (!Active)
+                return;
+            Completed?.Invoke(this);
+            Active = false;
+            Running = false;
+        }
+
+        IGenerator IGenerator.AddTo(IGroup @group)
+        {
+            throw new NotImplementedException();
+        }
+
+        IGenerator IGenerator.Named(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator SuspendAfter(ITransient other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator SuspendAfter(TimeSpan span)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator ResumeAfter(Func<bool> pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator ResumeAfter(ITransient other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGenerator ResumeAfter(TimeSpan span)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITransient Named(string name)
+        {
+            Name = name;
+            return this;
+        }
+
+        public event GeneratorHandler Resumed;
+        public event GeneratorHandler Stepped;
+        public event GeneratorHandler Suspended;
+        public bool Running { get; protected set; }
+        public int StepNumber { get; }
+        public object Value { get; }
+        public void Resume()
+        {
+            Active = true;
+        }
+
+        public void Pre()
+        {
+        }
+
+        public void Post()
+        {
+        }
+
+        public void Step()
+        {
+        }
+
+        public void Suspend()
+        {
+            Active = false;
+        }
+
+        public ITransient AddTo(IGroup @group)
+        {
+            @group.Add(this);
+            return this;
+        }
+
+        public ITransient Then(IGenerator next)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITransient Then(Action action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITransient Then(Action<ITransient> action)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+

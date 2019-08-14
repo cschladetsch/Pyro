@@ -1,41 +1,28 @@
-namespace Pryo
+namespace Pyro
 {
     /// <summary>
     /// Every object in a Registry has a unique Id.
     /// </summary>
     public class Id
     {
-        public int Value => _value;
+        public int Value { get; }
 
         internal static Id None = new Id(0);
 
-        internal Id(int start = 0)
-        {
-            _value = start;
-        }
+        internal Id(int num = 0)
+            => Value = num;
 
         public Id(Id prev)
-            : this(prev._value + 1)
-        {
-        }
+            : this(prev.Value + 1) { }
 
         public override string ToString()
-        {
-            return $"#{_value}";
-        }
+            => $"#{Value}";
 
         public override int GetHashCode()
-        {
-            return _value;
-        }
+            => Value;
 
         public override bool Equals(object obj)
-        {
-            if (!(obj is Id id))
-                return false;
-            return id._value == _value;
-        }
-
-        private readonly int _value;
+            => obj is Id id && id.Value == Value;
     }
 }
+

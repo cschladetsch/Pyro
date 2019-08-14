@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -54,10 +56,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Interfaces\CoreNetwork\CoreNetwork.csproj">
-      <Project>{4095fa8f-2d5e-4b5f-8d14-6d2f4e6ba4d9}</Project>
-      <Name>CoreNetwork</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>

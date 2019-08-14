@@ -1,10 +1,13 @@
-﻿using System.Net.Sockets;
-using Pryo;
-using Pyro.ExecutionContext;
-
-namespace Pyro.Network
+﻿namespace Pyro.Network
 {
-    public interface INetCommon : IProcess
+    using System.Net.Sockets;
+    using ExecutionContext;
+
+    /// <summary>
+    /// Common interface to clients and servers.
+    /// </summary>
+    public interface INetCommon
+        : IProcess
     {
         Context Context { get; }
         Socket Socket { get; }

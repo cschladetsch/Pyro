@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-
-namespace Diver.Tests
+﻿namespace Diver.Tests
 {
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestConsole
     {

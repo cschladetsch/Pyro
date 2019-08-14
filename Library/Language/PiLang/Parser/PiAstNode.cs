@@ -1,23 +1,24 @@
-﻿using System.Collections.Generic;
-using Pyro.Language.Lexer;
-
-namespace Pyro.Language.Parser
+﻿namespace Pyro.Language.Parser
 {
+    using System.Collections.Generic;
+    using Lexer;
+
+    /// <summary>
+    /// A node in the Abstract Syntax Tree (Ast)
+    /// </summary>
     public class PiAstNode
     {
-        public EPiAst Type = EPiAst.None;
+        private readonly List<PiAstNode> _children = new List<PiAstNode>();
+
+        public EPiAst Type;
         public PiToken PiToken;
         public object Value;
         public IList<PiAstNode> Children => _children;
 
-        public PiAstNode()
-        {
-        }
-
-        public PiAstNode(EPiAst type)
-        {
-            Type = type;
-        }
+        public PiAstNode(EPiAst type) => Type = type;
+        public void Add(PiAstNode node) => _children.Add(node);
+        public void Add(EPiToken piToken) => _children.Add(new PiAstNode(piToken));
+        public void Add(EPiAst type, object value) => _children.Add(new PiAstNode(type, value));
 
         public PiAstNode(EPiToken type)
         {
@@ -45,21 +46,5 @@ namespace Pyro.Language.Parser
 
             return $"{Type}: '{text}'";
         }
-
-        public void Add(PiAstNode node)
-        {
-            _children.Add(node);
-        }
-
-        public void Add(EPiToken piToken)
-        {
-            _children.Add(new PiAstNode(piToken));
-        }
-        public void Add(EPiAst type, object value)
-        {
-            _children.Add(new PiAstNode(type, value));  
-        }
-
-        private readonly List<PiAstNode> _children = new List<PiAstNode>();
     }
 }

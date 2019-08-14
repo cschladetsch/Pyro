@@ -1,0 +1,20 @@
+﻿fun WaitSeconds()
+	start = TimeNow()
+	self.Wait(1000)
+	stop = TimeNow()
+	assert((stop - start).TotalMilliSeconds/10 == 100)	// divide by ten for timing issues
+
+fun Fetch(n)
+	result = new Future()
+	fun WaitSeconds()
+		self.Wait(Seconds(2))
+		result.Value = n
+	WaitSeconds()
+	return result
+
+fun Dowork()
+	fetch = Fetch(42)
+	self.Wait(fetch)
+	assert(fetch.Available)
+	assert(fetch.Value == 42)
+

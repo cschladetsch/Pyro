@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace Pryo.Impl
+namespace Pyro.Impl
 {
+    /// <inheritdoc />
     /// <summary>
     /// Common implementation behind all type-specific objects in the Dive system.
     /// </summary>
-    internal class ConstRefBase : IConstRefBase
+    internal class ConstRefBase
+        : IConstRefBase
     {
         public static ConstRefBase None = new ConstRefBase(null, null, Id.None);
         public Id Id => _id;
@@ -14,6 +17,11 @@ namespace Pryo.Impl
         public IClassBase Class { get; internal set; }
         public bool IsConst => true;
         public object BaseValue => _baseValue;
+        public IDictionary<string, object> Scope => _scope ?? (_scope = new Dictionary<string, object>());
+
+        protected readonly Id _id;
+        protected object _baseValue;
+        private Dictionary<string, object> _scope;
 
         public ConstRefBase(IRegistry reg, IClassBase klass, Id id)
         {
@@ -32,8 +40,6 @@ namespace Pryo.Impl
         {
             return (T) _baseValue;
         }
-
-        protected readonly Id _id;
-        protected object _baseValue;
     }
 }
+

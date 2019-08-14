@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using NUnit.Framework;
-using Pryo;
-using Pyro.Language;
-using Pyro.Language.Lexer;
-using Pyro.Language.Parser;
-
-namespace Diver.Test
+﻿namespace Pyro.Test
 {
-    [TestFixture()]
-    class TestPiParser : TestCommon
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using NUnit.Framework;
+    using Language;
+    using Language.Lexer;
+    using Language.Parser;
+
+    [TestFixture]
+    class TestPiParser
+        : TestCommon
     {
         protected internal PiParser PiParser;
         protected internal IList<PiAstNode> Sequence => PiParser.Root.Children;
@@ -34,9 +34,9 @@ namespace Diver.Test
             Assert.IsNotNull(ident);
             Assert.IsFalse(ident.Quoted);
 
-            Parse("s 's", true);
-            Parse("'s s", true);
-            Parse("'foo", true);
+            Parse("s 's");
+            Parse("'s s");
+            Parse("'foo");
             Assert.AreEqual(EPiAst.Ident, First.Type);
             var ident1 = (Label) First.Value;
             Assert.IsNotNull(ident1);
@@ -87,3 +87,4 @@ namespace Diver.Test
         }
     }
 }
+

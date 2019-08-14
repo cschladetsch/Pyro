@@ -1,4 +1,4 @@
-﻿namespace Pryo
+﻿namespace Pyro
 {
     /// <summary>
     /// Can be serialised to/from strings.
@@ -23,3 +23,4 @@
         bool FromText(IStringSlice s, IRegistry reg);
     }
 }
+

@@ -1,21 +1,22 @@
-﻿using NUnit.Framework;
-
-namespace Diver.Test
+﻿namespace Pyro.Test
 {
+    using NUnit.Framework;
+
     [TestFixture]
-    public class TestRhoFreezeThaw : TestCommon
+    public class TestRhoFreezeThaw
+        : TestCommon
     {
         [Test]
         public void TestFreezeThaw()
         {
-            TestFreezeThawScript("Add.rho");
-            TestFreezeThawScript("Variables.rho");
-            TestFreezeThawScript("Arithmetic.rho");
+            FreezeThaw("Add.rho");
+            FreezeThaw("Variables.rho");
+            FreezeThaw("Arithmetic.rho");
 
             // TODO: these fail
-            //TestFreezeThawScript("NestedFunctions.rho");
-            //TestFreezeThawScript("PassingFunctions.rho");
-            //TestFreezeThawScript("Loops.rho");
+            //FreezeThaw("NestedFunctions.rho");
+            //FreezeThaw("PassingFunctions.rho");
+            //FreezeThaw("Loops.rho");
         }
     }
 }

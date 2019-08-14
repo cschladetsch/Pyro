@@ -1,16 +1,19 @@
-﻿using System;
-
-namespace Pryo
+﻿namespace Pyro
 {
+    using System;
+    using System.Collections.Generic;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Common to all types that provide const-only access to underlying value.
+    /// </summary>
     public interface IConstRefBase
+        : IObject
     {
-        Id Id { get; }
-        IRegistry Registry { get; }
         Type ValueType { get; }
-        IClassBase Class { get; }
         bool IsConst { get; }
         object BaseValue { get; }
-
+        IDictionary<string, object> Scope { get; }
         T Get<T>();
     }
 
@@ -19,3 +22,4 @@ namespace Pryo
         T Value { get; }
     }
 }
+
