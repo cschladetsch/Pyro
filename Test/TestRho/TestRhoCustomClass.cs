@@ -9,19 +9,17 @@
         public class Foo
         {
             public int Num => 42;
-
             public string Str = "foobar";
 
             public int Sum(int a, int b)
-            {
-                return a + b;
-            }
+                => a + b;
 
             public string MulString(string a, int b)
             {
                 var str = "";
                 while (b-- > 0)
                     str += a;
+
                 return str;
             }
         }
@@ -31,13 +29,13 @@
         {
             var foo = _Registry.Add<Foo>();
             var text = _Registry.ToPiScript(foo);
+
             WriteLine(text);
         }
 
         [Test]
         public void TestCustomClass()
         {
-            // TODO: use reflection to find methods if not explicitly provided via ClassBuilder<> object
             _Registry.Register(new ClassBuilder<Foo>(_Registry)
                 .Methods
                     .Add<int,int,int>("Sum", (q,a,b) => q.Sum(a,b))

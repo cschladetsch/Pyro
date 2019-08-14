@@ -56,6 +56,9 @@ namespace Pyro.Language.Impl
 
         public string PrintTree()
         {
+            if (_Stack.Count == 0)
+                return "[Empty]";
+
             var str = new StringBuilder();
             PrintTree(str, 0, _Stack.Peek());
             return str.ToString();
@@ -68,7 +71,7 @@ namespace Pyro.Language.Impl
                 return;
 
             for (var n = 0; n < level; ++n)
-                str.Append("    ");
+                str.Append("  ");
 
             str.Append(val);
             str.Append(Environment.NewLine);
