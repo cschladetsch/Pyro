@@ -1,0 +1,14 @@
+{
+    "name": "com.liminal.pyro",
+    "displayName": "Pyro",
+    "version": "0.0.1",
+    "unity": "2019.1",
+    "description": "Two good languages.",
+    "keywords": [
+        "liminal",
+	"pyro",
+	"pi",
+	"rho"
+    ],
+    "category": "Unity"
+}
