@@ -69,6 +69,10 @@
       <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ext\Flow\Flow.csproj">
+      <Project>{da87a965-0077-4af8-986b-3934f186125e}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Continuation.OpToText.cs" />

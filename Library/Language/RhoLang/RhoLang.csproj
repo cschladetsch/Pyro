@@ -72,6 +72,10 @@
       <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ext\Flow\Flow.csproj">
+      <Project>{da87a965-0077-4af8-986b-3934f186125e}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</Project>
       <Name>Common</Name>
