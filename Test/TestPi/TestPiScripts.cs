@@ -8,20 +8,24 @@
         : TestCommon
     {
         [Test]
-        public void RunScript()
+        public void RunScripts()
         {
-            //_exec.TraceLevel = 100
-            TestScript("ResumeAfter.pi");
-            //TestScript("StackOperations.pi");
-            //TestScript("Relational.pi");
-            //TestScript("Comments.pi");
-            //TestScript("Arithmetic.pi");
-
-            //TestScript("Boolean.pi");
-            //TestScript("Array.pi");
-            //TestScript("Conditionals.pi");
-            //TestScript("Continuations.pi");
-            //TestScript("Strings.pi");
+            TestScript("Arithmetic.pi");
+            TestScript("Array.pi");
+            TestScript("Boolean.pi");
+            TestScript("Comments.pi");
+            TestScript("Common.pi");
+            TestScript("Conditionals.pi");
+            //TestScript("Floats.pi");
+            //TestScript("Loops.pi");
+            //TestScript("Map.pi");
+            TestScript("Relational.pi");
+            TestScript("StackOperations.pi");
+            TestScript("Strings.pi");
+            //TestScript("TestAppCalls.pi");
+            //TestScript("TreeScope.pi");
+            //TestScript("Variables.pi");
+            TestScript("Continuations.pi");
         }
 
         //[Test]
