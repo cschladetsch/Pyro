@@ -94,15 +94,12 @@
         /// <param name="val"></param>
         /// <returns></returns>
         IConstRef<T> AddConst<T>(T val);
-
         IConstRef<T> AddConst<T>();
         IClassBase GetClass(Type type);
         IClass<T> GetClass<T>();
-
         object New(IClassBase @class, Stack<object> dataStack);
         IRefBase NewRef(IClassBase @class, Stack<object> dataStack);
         IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack);
-
         void ToPiScript(StringBuilder stringBuilder, object o);
         string ToPiScript(object obj);
 

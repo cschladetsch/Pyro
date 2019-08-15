@@ -35,6 +35,7 @@
             {
                 if (Translator == _pi)
                     return ELanguage.Pi;
+
                 return Translator == _rho ? ELanguage.Rho : ELanguage.None;
             }
             set
@@ -59,6 +60,18 @@
                 }
             }
         }
+
+        public bool ExecRho(string text)
+            => Exec(ELanguage.Rho, text);
+
+        public bool ExecPi(string text)
+            => Exec(ELanguage.Pi, text);
+
+        public bool Exec(string text)
+            => Translator == null ? Fail("No translator") : Exec(Translator, text);
+
+        public bool Translate(string text, out Continuation result)
+            => Translate(Translator, out result, text);
 
         public Context(bool runStartScripts = false)
         {
@@ -89,18 +102,6 @@
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
         }
 
-        public bool ExecRho(string text)
-            => Exec(ELanguage.Rho, text);
-
-        public bool ExecPi(string text)
-            => Exec(ELanguage.Pi, text);
-
-        public bool Exec(string text)
-            => Translator == null ? Fail("No translator") : Exec(Translator, text);
-
-        public bool Translate(string text, out Continuation result)
-            => Translate(Translator, out result, text);
-
         private bool Translate(ITranslator translator, out Continuation result, string text)
         {
             result = null;
@@ -127,11 +128,8 @@
 
         public bool ExecFile(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName))
-                return Fail("Empty filename");
-
             if (!File.Exists(fileName))
-                return Fail($"File {fileName} doesn't exist");
+                return Fail($"File '{fileName}' doesn't exist");
 
             var ext = Path.GetExtension(fileName);
             switch (ext)

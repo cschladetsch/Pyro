@@ -1,9 +1,9 @@
 namespace Pyro.Exec
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Collections.Generic;
     using Flow;
 
     /// <inheritdoc />
@@ -15,6 +15,7 @@ namespace Pyro.Exec
     {
         public Stack<object> DataStack { get; private set; } = new Stack<object>();
         public Stack<Continuation> ContextStack { get; private set; } = new Stack<Continuation>();
+        public List<Continuation> Suspended { get; private set; } = new List<Continuation>();
         public int NumOps { get; private set; }
         public bool Rethrows { get; set; }
         public string SourceFilename;
@@ -55,42 +56,55 @@ namespace Pyro.Exec
 
         private void Execute(Continuation cont)
         {
-            while (cont.Next(out var next))
+            while (true)
             {
-                // unbox pyro-reference types
-                if (next is IRefBase refBase)
-                    next = refBase.BaseValue;
+                // do not execute anything that is completed
+                if (!cont.Active)
+                    return;
 
-                try
+                // if it's suspended, delay
+                if (!cont.Running)
                 {
-                    Perform(next);
+                    Suspended.Add(ContextStack.Peek());
+                    cont = ContextStack.Pop();
+                    continue;
+                }
 
-                    if (TraceLevel > 5)
+                while (cont.Next(out var next))
+                {
+                    // unbox pyro-reference types
+                    if (next is IRefBase refBase) next = refBase.BaseValue;
+
+                    try
                     {
-                        if (next is EOperation op)
+                        Perform(next);
+
+                        if (TraceLevel > 5)
                         {
-                            Write($"{op} -->");
-                            WriteDataStack();
+                            if (next is EOperation op)
+                            {
+                                Write($"{op} -->");
+                                WriteDataStack();
+                            }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    if (!string.IsNullOrEmpty(SourceFilename))
-                        WriteLine($"While executing {SourceFilename}:");
-
-                    if (TraceLevel > 10)
+                    catch (Exception e)
                     {
-                        WriteLine(DebugWrite());
-                        WriteLine($"Exception: {e}");
+                        if (!string.IsNullOrEmpty(SourceFilename)) WriteLine($"While executing {SourceFilename}:");
+
+                        if (TraceLevel > 10)
+                        {
+                            WriteLine(DebugWrite());
+                            WriteLine($"Exception: {e}");
+                        }
+
+                        if (Rethrows) throw;
                     }
 
-                    if (Rethrows)
-                        throw;
+                    if (_break) break;
                 }
 
-                if (_break)
-                    break;
+                break;
             }
         }
 
@@ -153,6 +167,9 @@ namespace Pyro.Exec
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Attempt to resolve a name by looking at the context stack
+        /// </summary>
         private object ResolveContextually(Label label)
         {
             var current = Context();
@@ -170,9 +187,7 @@ namespace Pyro.Exec
         }
 
         private Continuation Context()
-        {
-            return _current;
-        }
+            => _current;
 
         /// <summary>
         /// Perform a continuation, then return to current context
@@ -216,14 +231,6 @@ namespace Pyro.Exec
             Break();
         }
 
-        /// <summary>
-        /// Stop the current continuation and resume whatever is on the context stack
-        /// </summary>
-        private void Break()
-        {
-            _break = true;
-        }
-
         public void Push(object obj)
         {
             if (obj == null)
@@ -258,6 +265,13 @@ namespace Pyro.Exec
             var pop = DataStack.Pop();
             return !(pop is IRefBase data) ? pop : data.BaseValue;
         }
+
+        /// <summary>
+        /// Stop the current continuation and resume whatever is on the
+        /// context stack.
+        /// </summary>
+        private void Break()
+            => _break = true;
 
         private dynamic RPop()
             => Resolve(Pop());

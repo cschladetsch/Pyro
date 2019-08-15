@@ -13,7 +13,6 @@ namespace Pyro
     /// methods in the class.
     ///
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class ClassBuilder<T>
         where T : class
     {
@@ -40,24 +39,21 @@ namespace Pyro
 
         public class AdderBase
         {
+            public IClass<T> Class => _builder._class;
+
             protected ClassBuilder<T> _builder;
 
             public AdderBase(ClassBuilder<T> builder)
-            {
-                _builder = builder;
-            }
+                => _builder = builder;
 
             public TA Get<TA>(object obj)
-            {
-                return _builder._registry.Get<TA>(obj);
-            }
-
-            public IClass<T> Class => _builder._class;
+                => _builder._registry.Get<TA>(obj);
         }
 
         public class AddMethod : AdderBase
         {
-            public AddMethod(ClassBuilder<T> cb) : base(cb)
+            public AddMethod(ClassBuilder<T> cb)
+                : base(cb)
             {
             }
 

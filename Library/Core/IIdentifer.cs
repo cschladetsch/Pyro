@@ -1,5 +1,8 @@
 ﻿namespace Pyro
 {
+    /// <summary>
+    /// DOC
+    /// </summary>
     public interface IIdentifer
         : ITextSerialise
     {

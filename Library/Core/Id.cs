@@ -13,7 +13,9 @@ namespace Pyro
             => Value = num;
 
         public Id(Id prev)
-            : this(prev.Value + 1) { }
+            : this(prev.Value + 1)
+        {
+        }
 
         public override string ToString()
             => $"#{Value}";
