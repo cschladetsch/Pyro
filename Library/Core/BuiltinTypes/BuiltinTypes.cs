@@ -5,16 +5,16 @@ using Pyro.Impl;
 
 namespace Pyro.BuiltinTypes
 {
-    internal static class BuiltinTypes
+    public static class BuiltinTypes
     {
-        internal static void Register(IRegistry reg)
+        public static void Register(IRegistry reg)
         {
             reg.Register(new Class<Void>(reg));
             reg.Register(new Class<bool>(reg));
             reg.Register(new Class<int>(reg));
             reg.Register(new ClassBuilder<string>(reg, StringToText)
                 .Methods
-                    .Add<int, int, string>("Substring", (s, n, m) => s.Substring(n, m))
+                    .Add<int, int, string>("Substring", (s, m, n) => s.Substring(n, m))
                     .Add<int, string>("Substring1", (s, n) => s.Substring(n))
                 .Class);
             reg.Register(new Class<float>(reg));

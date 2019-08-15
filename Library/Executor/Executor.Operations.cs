@@ -336,10 +336,13 @@
             if (GetProperty(type, member, obj))
                 return;
 
+            if (GetCallable(@class, member, obj))
+                return;
+
             if (GetMethod(type, member, obj, @class))
                 return;
 
-            GetCallable(@class, member, obj);
+            throw new MemberNotFoundException(obj.GetType(), member);
         }
 
         private bool GetField(Type type, string member, object obj)
@@ -379,14 +382,15 @@
             return true;
         }
 
-        private void GetCallable(IClassBase @class, string member, object obj)
+        private bool GetCallable(IClassBase @class, string member, object obj)
         {
             var callable = @class.GetCallable(member);
             if (callable == null)
-                throw new MemberNotFoundException(obj.GetType(), member);
+                return false;//throw new MemberNotFoundException(obj.GetType(), member);
 
             Push(obj);
             Push(callable);
+            return true;
         }
 
         private void NotEquiv()

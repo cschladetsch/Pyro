@@ -10,13 +10,23 @@
         [Test]
         public void RunSomeScripts()
         {
+            BuiltinTypes.BuiltinTypes.Register(_Registry);
+
             TestScript("Conditionals.rho");
-            //TestScript("Loops.rho");
-            //TestScript("NestedFunctions.rho");
-            //TestScript("PassingFunctions.rho");
-            //TestScript("Variables.rho");
-            //TestScript("Arithmetic.rho");
-            //TestScript("Array.rho");
+            TestScript("Arithmetic.rho");
+            TestScript("Array.rho");
+            TestScript("Loops.rho");
+            TestScript("NestedFunctions.rho");
+            TestScript("PassingFunctions.rho");
+            TestScript("Variables.rho");
+
+            // needs ClassBuilder
+            TestScript("Strings.rho");
+
+            // needs re-arch
+            //TestScript("NestedLoops.rho");
+
+            // needs re-arch
             //TestScript("FreezeThaw.rho");
         }
 
