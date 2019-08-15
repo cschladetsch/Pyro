@@ -27,12 +27,11 @@
             RhoRun("assert(`1 2 {+} &` == 3)");
         }
 
-        //[Test]
+        [Test]
         public void RunScripts()
         {
             RunScript("PiRho/PiFromRho0.rho");
             RunScript("PiRho/PiFromRho1.rho");
-            RunScript("PiRho/PiFromRho2.rho");
         }
     }
 }

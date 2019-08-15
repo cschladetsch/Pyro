@@ -12,16 +12,17 @@
         {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
 
-            TestScript("Conditionals.rho");
+            TestScript("Add.rho");
             TestScript("Arithmetic.rho");
             TestScript("Array.rho");
+            TestScript("Comments.rho");
+            TestScript("Variables.rho");
+            TestScript("Strings.rho");
+            TestScript("Conditionals.rho");
+            TestScript("Arithmetic.rho");
             TestScript("Loops.rho");
             TestScript("NestedFunctions.rho");
             TestScript("PassingFunctions.rho");
-            TestScript("Variables.rho");
-
-            // needs ClassBuilder
-            TestScript("Strings.rho");
 
             // needs re-arch
             //TestScript("NestedLoops.rho");
