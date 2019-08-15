@@ -45,7 +45,7 @@
             _actions[EOperation.Divide] = Divide;
             _actions[EOperation.Suspend] = Suspend;
             _actions[EOperation.Resume] = Resume;
-            _actions[EOperation.Replace] = Break;
+            _actions[EOperation.Replace] = Replace;
             _actions[EOperation.Break] = DebugBreak;
             _actions[EOperation.Store] = StoreValue;
             _actions[EOperation.Retrieve] = GetValue;
@@ -99,6 +99,11 @@
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+        }
+
+        private void Replace()
+        {
+            throw new NotImplementedException("Replace.");
         }
 
         private void SetMember()

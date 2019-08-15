@@ -8,24 +8,31 @@
         : TestCommon
     {
         [Test]
+        public void TestSnippets()
+        {
+            PiRun("1 1 + 2 == assert");
+            PiRun("-1 -1 - 0 == assert");
+        }
+
+        [Test]
         public void RunScripts()
         {
-            TestScript("Arithmetic.pi");
-            TestScript("Array.pi");
-            TestScript("Boolean.pi");
-            TestScript("Comments.pi");
-            TestScript("Common.pi");
-            TestScript("Conditionals.pi");
-            //TestScript("Floats.pi");
-            //TestScript("Loops.pi");
-            //TestScript("Map.pi");
-            TestScript("Relational.pi");
-            TestScript("StackOperations.pi");
-            TestScript("Strings.pi");
-            //TestScript("TestAppCalls.pi");
-            //TestScript("TreeScope.pi");
-            //TestScript("Variables.pi");
-            TestScript("Continuations.pi");
+            TestScript("Floats.pi");
+            //TestScript("Arithmetic.pi");
+            //TestScript("Array.pi");
+            //TestScript("Boolean.pi");
+            //TestScript("Comments.pi");
+            //TestScript("Common.pi");
+            //TestScript("Conditionals.pi");
+            ////TestScript("Loops.pi");
+            ////TestScript("Map.pi");
+            //TestScript("Relational.pi");
+            //TestScript("StackOperations.pi");
+            //TestScript("Strings.pi");
+            ////TestScript("TestAppCalls.pi");
+            ////TestScript("TreeScope.pi");
+            ////TestScript("Variables.pi");
+            //TestScript("Continuations.pi");
         }
 
         //[Test]
