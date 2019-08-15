@@ -1,4 +1,6 @@
-﻿namespace Pyro.RhoLang.Parser
+﻿using System.Runtime.InteropServices;
+
+namespace Pyro.RhoLang.Parser
 {
     using Language;
     using Language.Impl;
@@ -69,7 +71,10 @@
         {
             while (!Failed && !Try(ERhoToken.Nop))
                 if (!Statement())
+                {
+                    var c = Current();
                     return false;
+                }
 
             return true;
         }
@@ -100,10 +105,10 @@
                 while (TryConsume(ERhoToken.Tab))
                     ++level;
 
-                if (level < indent)
+                if (level == indent - 1 || level == indent + 1)
                 {
                     // return to start so top block can continue
-                    _Current -= indent;
+                    //_Current -= indent;
                     return true;
                 }
 
