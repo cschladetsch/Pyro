@@ -134,6 +134,9 @@
             return _opToToken.TryGetValue(op, out var tok) && Add(tok);
         }
 
+        protected override bool Fail(string err)
+            => base.Fail($"{_lineNumber}({_offset}): {err}");
+
         protected override void AddKeywordOrIdent(Slice slice)
             => _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
             ? _Factory.NewToken(tok, slice)
