@@ -128,7 +128,8 @@
         private bool AddQuotedOperation()
         {
             Next();
-            var num = int.Parse(Gather(char.IsDigit).Text);
+            if (!int.TryParse(Gather(char.IsDigit).Text, out var num))
+                return Fail("Operation number expected");
             var op = (EOperation) num;
             return _opToToken.TryGetValue(op, out var tok) && Add(tok);
         }
