@@ -5,6 +5,20 @@ fun foo(m)
 		true
 	else
 		false
+
 assert(foo(1))
 assert(!foo(0))
+
+fun bar(m)
+	if (m >= 1)
+		if (m < 10)
+			3
+		else
+			6
+	else
+		false
+
+assert(bar(6) == 3)
+assert(bar(20) == 6)
+assert(!bar(0))
 

@@ -73,7 +73,7 @@ namespace Pyro.RhoLang.Parser
                 if (!Statement())
                 {
                     var c = Current();
-                    return false;
+                    return c.Type == ERhoToken.Nop;
                 }
 
             return true;
@@ -105,10 +105,10 @@ namespace Pyro.RhoLang.Parser
                 while (TryConsume(ERhoToken.Tab))
                     ++level;
 
-                if (level == indent - 1 || level == indent + 1)
+                if (level < indent)
                 {
                     // return to start so top block can continue
-                    //_Current -= indent;
+                    _Current--;// -= indent;
                     return true;
                 }
 
