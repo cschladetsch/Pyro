@@ -1,0 +1,7 @@
+Test/TestCommon/TestCommon.csproj
+Test/TestConsole/TestConsole.csproj
+Test/TestCore/TestCore.csproj
+Test/TestExecutor/TestExecutor.csproj
+Test/TestPeer/TestPeer.csproj
+Test/TestPi/TestPi.csproj
+Test/TestRho/TestRho.csproj
