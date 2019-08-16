@@ -1,4 +1,8 @@
-﻿namespace Pyro.Test.Rho
+﻿using System;
+using System.Text;
+using Pyro.RhoLang.Lexer;
+
+namespace Pyro.Test.Rho
 {
     using System.Collections.Generic;
     using NUnit.Framework;
@@ -14,9 +18,19 @@
         : TestCommon
     {
         [Test]
+        public void TestParse()
+        {
+            var input = "1\n";
+            var lex = new RhoLexer(input);
+            lex.Process();
+            var slice = new Slice(lex, 0, input.Length - 1) {LineNumber = 0};
+            Console.WriteLine(slice.Text);
+        }
+
+        [Test]
         public void TestArrays()
         {
-            RhoRun("[1 2 3]");
+            RhoRun("{1 2 3}");
             var list = Pop<List<object>>();
             Assert.AreEqual(list.Count, 3);
             Assert.AreEqual(list[0], 1);
