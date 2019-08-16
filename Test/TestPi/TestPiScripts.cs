@@ -8,20 +8,31 @@
         : TestCommon
     {
         [Test]
-        public void RunScript()
+        public void TestSnippets()
         {
-            //_exec.TraceLevel = 100
-            TestScript("ResumeAfter.pi");
-            //TestScript("StackOperations.pi");
-            //TestScript("Relational.pi");
-            //TestScript("Comments.pi");
-            //TestScript("Arithmetic.pi");
+            PiRun("1 1 + 2 == assert");
+            PiRun("-1 -1 - 0 == assert");
+        }
 
-            //TestScript("Boolean.pi");
+        [Test]
+        public void RunScripts()
+        {
+            TestScript("Floats.pi");
+            //TestScript("Arithmetic.pi");
             //TestScript("Array.pi");
+            //TestScript("Boolean.pi");
+            //TestScript("Comments.pi");
+            //TestScript("Common.pi");
             //TestScript("Conditionals.pi");
-            //TestScript("Continuations.pi");
+            ////TestScript("Loops.pi");
+            ////TestScript("Map.pi");
+            //TestScript("Relational.pi");
+            //TestScript("StackOperations.pi");
             //TestScript("Strings.pi");
+            ////TestScript("TestAppCalls.pi");
+            ////TestScript("TreeScope.pi");
+            ////TestScript("Variables.pi");
+            //TestScript("Continuations.pi");
         }
 
         //[Test]

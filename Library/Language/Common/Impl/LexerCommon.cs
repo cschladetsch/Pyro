@@ -23,6 +23,7 @@ namespace Pyro.Language.Impl
         protected Dictionary<string, TEnum> _KeyWords = new Dictionary<string, TEnum>();
         protected Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
         protected TTokenFactory _Factory = new TTokenFactory();
+        public TToken ErrorToken;
 
         protected LexerCommon(string input)
             : base(input)
@@ -125,6 +126,7 @@ namespace Pyro.Language.Impl
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args)
         {
+            ErrorToken = tok;
             var buff = $"({tok.LineNumber}):[{tok.Slice.Start}]: {string.Format(fmt, args)}";
             const int beforeContext = 2;
             const int afterContext = 2;

@@ -135,10 +135,14 @@
 
         private bool If()
         {
-            var current = _Current;
-            while (current > 0 && _Tokens[current].Type != ERhoToken.NewLine)
-                current--;
-            var indent = current - _Current;
+            var start = _Current;
+
+            // find our current indent level by searching for last new line
+            while (start > 0 && _Tokens[start].Type != ERhoToken.NewLine)
+                start--;
+
+            // the indent level of current if
+            var indent = _Current - start;
 
             var @if = NewNode(Consume());
             if (!Expression())
@@ -152,25 +156,23 @@
 
             @if.Add(Pop());
 
-            // if there's an else-clause, add it as well
-            ConsumeNewLines();
-
-            //while (indent > 0)
-            //{
-            //    if (!TryConsume(ERhoToken.Tab))
-            //        return Append(@if);
-            //    indent--;
-            //}
-
-            if (TryConsume(ERhoToken.Else))
+            while (indent > 0)
             {
-                if (!Block())
-                    return FailLocation("No else block.");
+                if (!TryConsume(ERhoToken.Tab))
+                    return Append(@if);
 
-                @if.Add(Pop());
+                if (TryConsume(ERhoToken.Else))
+                {
+                    if (!Block())
+                        return FailLocation("No else block.");
+
+                    @if.Add(Pop());
+                    return Append(@if);
+                }
+
+                indent--;
             }
 
-            ConsumeNewLines();
             return Append(@if);
         }
 

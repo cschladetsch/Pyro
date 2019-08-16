@@ -144,7 +144,7 @@
         protected Slice Gather(Func<char, bool> filter)
         {
             var start = _offset;
-            while (filter(Next()))
+            while (!EndOfLine() && filter(Next()))
                 /* skip */;
 
             return new Slice(this, start, _offset);

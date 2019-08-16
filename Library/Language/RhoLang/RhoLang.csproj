@@ -80,6 +80,10 @@
       <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
       <Name>PiLang</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj">
+      <Project>{da87a965-0077-4af8-986b-3934f186125e}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

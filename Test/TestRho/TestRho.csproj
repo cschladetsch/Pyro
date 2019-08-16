@@ -46,12 +46,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Scripts\Add.rho" />
-    <None Include="Scripts\Coments.rho" />
-    <None Include="Scripts\Import.rho" />
+    <None Include="Scripts\Comments.rho" />
     <None Include="Scripts\PiRho\PiFromRho1.rho" />
     <None Include="Scripts\PiRho\PiFromRho0.rho" />
     <Compile Include="PiFromRho.cs" />
     <None Include="Scripts\Conditionals.rho" />
+    <None Include="Scripts\NestedLoops.rho" />
     <Compile Include="TestRhoClass.cs" />
     <Compile Include="TestRhoFreezeThaw.cs" />
     <Compile Include="TestRhoIndexing.cs" />
@@ -71,7 +71,7 @@
     <None Include="Scripts\Loops.rho" />
     <None Include="Scripts\NestedFunctions.rho" />
     <None Include="Scripts\PassingFunctions.rho" />
-    <None Include="Scripts\Random.rho" />
+    <None Include="Scripts\Experimental.rho" />
     <None Include="Scripts\Arithmetic.rho" />
     <None Include="Scripts\Strings.rho" />
     <None Include="Scripts\Variables.rho" />

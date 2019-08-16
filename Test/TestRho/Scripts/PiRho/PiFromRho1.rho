@@ -2,11 +2,12 @@
 fun foo(b)
 	b + 2
 	b + 1
- 	b
+	b
 
-// backquotes means `insert pi code here`
-fun(1)
+foo(1)
 assert(`depth` == 3)
+assert(`3 tolist` == { 3 2 1})
+
 `clear`
 assert(`depth` == 0)
 

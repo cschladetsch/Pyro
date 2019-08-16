@@ -32,6 +32,7 @@ namespace Pyro.Exec
         public Executor()
         {
             Kernel = Flow.Create.Kernel();
+            Rethrows = true;
             AddOperations();
         }
 

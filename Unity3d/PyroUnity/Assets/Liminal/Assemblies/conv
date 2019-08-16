@@ -1,7 +1,0 @@
-#!/bin/sh
-
-for dll in *.pdb; do
-    pdb2mdb $dll
-done
-
-

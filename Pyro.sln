@@ -37,11 +37,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{723E24B8-056
 		Bin\Readme.md = Bin\Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity3d", "Unity3d", "{D1E3528C-178C-48E2-96AC-738FD2EBA27F}"
-	ProjectSection(SolutionItems) = preProject
-		Unity3d\Readme.md = Unity3d\Readme.md
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Library\Core\Core.csproj", "{575091D8-A55C-4794-9F15-120E927C3305}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Network", "Library\Network\Network.csproj", "{CDF87E43-0A6B-48E4-BD94-C44E35592AD4}"
@@ -55,34 +50,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPi", "Test\TestPi\TestPi.csproj", "{BDA73C27-6B43-4F77-8D63-6DC8445553FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "App\Console\Console.csproj", "{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PyroProject", "PyroProject", "{2F68091D-B2C5-42AB-9436-E62AB147912C}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-		Unity3d\DriverProject\.gitignore = Unity3d\DriverProject\.gitignore
-		.gitmodules = .gitmodules
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{60581136-811F-494B-8673-936DBACC7570}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{CCE8DD57-FCD8-493F-968F-398C0E5EA5A0}"
-	ProjectSection(SolutionItems) = preProject
-		Unity3d\DiverProject\Assets\App\Enter.cs = Unity3d\DiverProject\Assets\App\Enter.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Liminal", "Liminal", "{1D2DF0BC-1801-4C5A-86E5-01B9A92A1B29}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{30E7E7DD-EBC5-45E5-A368-E86E49F79151}"
-	ProjectSection(SolutionItems) = preProject
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\BuiltinTypes.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\BuiltinTypes.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\Core.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\Core.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\Executor.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\Executor.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\LanguageCommon.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\LanguageCommon.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\Network.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\Network.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\NetworkCommsDotNet.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\NetworkCommsDotNet.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\PiLang.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\PiLang.dll
-		Unity3d\DriverProject\Assets\Liminal\Assemblies\RhoLang.dll = Unity3d\DriverProject\Assets\Liminal\Assemblies\RhoLang.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiLang", "Library\Language\PiLang\PiLang.csproj", "{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}"
 EndProject
@@ -106,6 +73,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms", "App\WinForms\WinForms.csproj", "{22096879-8D63-4BBA-A77C-C82506994F8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdIo", "Library\StdIo\StdIo.csproj", "{789E1135-5218-4E29-85E6-08381CF4991A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "C:\users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj", "{DA87A965-0077-4AF8-986B-3934F186125E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -475,6 +444,26 @@ Global
 		{789E1135-5218-4E29-85E6-08381CF4991A}.Release|x64.Build.0 = Release|Any CPU
 		{789E1135-5218-4E29-85E6-08381CF4991A}.Release|x86.ActiveCfg = Release|Any CPU
 		{789E1135-5218-4E29-85E6-08381CF4991A}.Release|x86.Build.0 = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|x64.Build.0 = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Debug|x86.Build.0 = Debug|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|ARM.Build.0 = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|ARM64.Build.0 = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|x64.Build.0 = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA87A965-0077-4AF8-986B-3934F186125E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -490,11 +479,6 @@ Global
 		{78931217-1400-4BFA-BB40-63CE304581EE} = {633E509A-26A0-410E-BF83-91201ECBB488}
 		{BDA73C27-6B43-4F77-8D63-6DC8445553FB} = {633E509A-26A0-410E-BF83-91201ECBB488}
 		{063FD01E-5FEF-47FE-912E-8ED54FEEA24B} = {7E50329A-E782-4AF6-B6BE-E0AB3FF26C82}
-		{2F68091D-B2C5-42AB-9436-E62AB147912C} = {D1E3528C-178C-48E2-96AC-738FD2EBA27F}
-		{60581136-811F-494B-8673-936DBACC7570} = {2F68091D-B2C5-42AB-9436-E62AB147912C}
-		{CCE8DD57-FCD8-493F-968F-398C0E5EA5A0} = {60581136-811F-494B-8673-936DBACC7570}
-		{1D2DF0BC-1801-4C5A-86E5-01B9A92A1B29} = {60581136-811F-494B-8673-936DBACC7570}
-		{30E7E7DD-EBC5-45E5-A368-E86E49F79151} = {1D2DF0BC-1801-4C5A-86E5-01B9A92A1B29}
 		{142AFFDB-3FA9-47D2-B28A-EC01595CFA19} = {789EF740-5925-4AF1-9E55-3315E731EE8A}
 		{789EF740-5925-4AF1-9E55-3315E731EE8A} = {93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}
 		{329084C8-82D9-44C9-86DD-FA587C1A6FA4} = {789EF740-5925-4AF1-9E55-3315E731EE8A}
@@ -505,6 +489,7 @@ Global
 		{FD200C39-038B-4F39-A7A8-249B6ECE6921} = {93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}
 		{22096879-8D63-4BBA-A77C-C82506994F8F} = {7E50329A-E782-4AF6-B6BE-E0AB3FF26C82}
 		{789E1135-5218-4E29-85E6-08381CF4991A} = {93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}
+		{DA87A965-0077-4AF8-986B-3934F186125E} = {086669FE-817A-4BD2-84A4-E1D90C667250}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B78CF9FE-EE87-47B6-99F7-300B5AEFB5BC}
