@@ -55,7 +55,7 @@
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ext\Flow\Flow.csproj">
+    <ProjectReference Include="C:\users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj">
       <Project>{da87a965-0077-4af8-986b-3934f186125e}</Project>
       <Name>Flow</Name>
     </ProjectReference>
