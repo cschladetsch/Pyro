@@ -59,17 +59,17 @@ namespace Pyro.Exec
         {
             while (true)
             {
-                // do not execute anything that is completed
-                if (!cont.Active)
-                    return;
+                //// do not execute anything that is completed
+                //if (!cont.Active)
+                //    return;
 
-                // if it's suspended, delay
-                if (!cont.Running)
-                {
-                    Suspended.Add(ContextStack.Peek());
-                    cont = ContextStack.Pop();
-                    continue;
-                }
+                //// if it's suspended, delay
+                //if (!cont.Running)
+                //{
+                //    Suspended.Add(ContextStack.Peek());
+                //    cont = ContextStack.Pop();
+                //    continue;
+                //}
 
                 while (cont.Next(out var next))
                 {

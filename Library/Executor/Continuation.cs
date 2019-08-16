@@ -21,7 +21,10 @@
         private IDictionary<string, object> _scope => Scope;
 
         public Continuation(IList<object> code)
-            => Code = code;
+        {
+            Active = true;
+            Code = code;
+        }
 
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
