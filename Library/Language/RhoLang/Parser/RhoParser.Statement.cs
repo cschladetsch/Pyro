@@ -206,6 +206,7 @@
             }
             else
             {
+                _Current--;
                 // for (a = 0; n < 10; ++a) ...
                 if (!ForLoop(@for))
                     return false;
@@ -239,17 +240,28 @@
         //      block
         private bool ForLoop(RhoAstNode @for)
         {
-            Expect(ERhoToken.Semi);
-            if (Failed)
-                return false;
-
-            if (!Logical())
-                return FailLocation("When does the for statement stop?");
+            if (!Expression())
+                return FailLocation("Initialisation expression expected.");
 
             @for.Add(Pop());
+            if (!TryConsume(ERhoToken.Semi))
+                return FailLocation("Semi expected.");
+
+            if (!Expression())
+                return FailLocation("When does the for statement stop?");
+            @for.Add(Pop());
+
             Expect(ERhoToken.Semi);
 
-            return Expression() || FailLocation("What happens when the for statement loops?");
+            if (!Expression())
+                return FailLocation("What happens at end of for loop?");
+
+            @for.Add(Pop());
+
+            //Expect(ERhoToken.CloseParan);
+
+            //return Block() || FailLocation("For each in what?");
+            return true;
         }
     }
 }
