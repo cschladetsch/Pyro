@@ -15,9 +15,18 @@
         }
 
         [Test]
+        public void TestAssignment()
+        {
+            PiRun("1 'a #");
+            Assert.AreEqual(1, _Scope["a"]);
+            PiRun("2 'a # a a a + +");
+            Assert.AreEqual(6, Pop<int>());
+        }
+
+        [Test]
         public void RunScripts()
         {
-            TestScript("Floats.pi");
+            //TestScript("Floats.pi");
             //TestScript("Arithmetic.pi");
             //TestScript("Array.pi");
             //TestScript("Boolean.pi");
@@ -31,7 +40,7 @@
             //TestScript("Strings.pi");
             ////TestScript("TestAppCalls.pi");
             ////TestScript("TreeScope.pi");
-            ////TestScript("Variables.pi");
+            TestScript("Variables.pi");
             //TestScript("Continuations.pi");
         }
 

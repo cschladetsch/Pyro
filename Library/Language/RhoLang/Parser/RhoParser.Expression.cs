@@ -219,7 +219,8 @@
 
         private bool Pi()
         {
-            var lexer = new PiLexer(Current().Text);
+            var input = Current().Text;
+            var lexer = new PiLexer(input);
             if (!lexer.Process())
                 return FailLocation(lexer.Error);
 
