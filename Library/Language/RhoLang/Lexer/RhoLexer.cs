@@ -145,7 +145,7 @@
                 return Add(ERhoToken.Separator);
             }
 
-            LexError($"Unrecognised '{current}'.");
+            LexError($"Unrecognised RhoToken '{current}'.");
 
             return false;
         }

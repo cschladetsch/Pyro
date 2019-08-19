@@ -27,21 +27,21 @@
         public void RunScripts()
         {
             //TestScript("Floats.pi");
-            //TestScript("Arithmetic.pi");
-            //TestScript("Array.pi");
-            //TestScript("Boolean.pi");
-            //TestScript("Comments.pi");
-            //TestScript("Common.pi");
-            //TestScript("Conditionals.pi");
-            ////TestScript("Loops.pi");
-            ////TestScript("Map.pi");
-            //TestScript("Relational.pi");
-            //TestScript("StackOperations.pi");
-            //TestScript("Strings.pi");
-            ////TestScript("TestAppCalls.pi");
-            ////TestScript("TreeScope.pi");
+            TestScript("Arithmetic.pi");
+            TestScript("Array.pi");
+            TestScript("Boolean.pi");
+            TestScript("Comments.pi");
+            TestScript("Common.pi");
+            TestScript("Conditionals.pi");
+            //TestScript("Loops.pi");
+            //TestScript("Map.pi");
+            TestScript("Relational.pi");
+            TestScript("StackOperations.pi");
+            TestScript("Strings.pi");
+            //TestScript("TestAppCalls.pi");
+            //TestScript("TreeScope.pi");
             TestScript("Variables.pi");
-            //TestScript("Continuations.pi");
+            TestScript("Continuations.pi");
         }
 
         //[Test]

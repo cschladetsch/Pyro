@@ -14,6 +14,9 @@
         [Test]
         public void TestBasic()
         {
+            RhoRun("`1 'a #`", false, EStructure.Expression);
+            Assert.AreEqual(1, _Scope["a"]);
+
             RhoRun("`1`", false, EStructure.Expression);
             Assert.AreEqual(1, Pop());
 

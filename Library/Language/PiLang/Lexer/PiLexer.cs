@@ -85,7 +85,6 @@
                     // remove the previously added int
                     // TODO: should really do this before adding the first int...
                     _Tokens.RemoveAt(_Tokens.Count - 1);
-                    var slice = Gather(char.IsDigit);
                     return AddSlice(
                         EPiToken.Float,
                         new Slice(this, prev.LineNumber, prev.Slice.Start, _offset));
@@ -116,7 +115,7 @@
                 return true;
             }
 
-            return LexError($"Unrecognised '{current}'");
+            return LexError($"Unrecognised PiToken '{current}'");
         }
 
         private PiToken PrevToken()

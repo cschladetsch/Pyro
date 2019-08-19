@@ -1,7 +1,7 @@
 ﻿// test local storage
 
-'foo exists not assert
-1 'bar # 'bar exists assert 'bar erase 'bar exists not assert
+//'foo exists ! assert
+//1 'bar # 'bar exists assert 'bar erase 'bar exists not assert
 
 1 'a # a 1 == assert
 2 'b # a b + 3 == assert
@@ -9,5 +9,5 @@
 2 { 'a # a 1 + } & 3 == assert
 
 // find a in higher scope
-1 2 { 'a # { a + } } 3 == assert
+1 2 { 'a # { a + } & } & 3 == assert
 
