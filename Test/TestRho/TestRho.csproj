@@ -47,6 +47,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\Add.rho" />
     <None Include="Scripts\Comments.rho" />
+    <None Include="Scripts\ForLoops.rho" />
     <None Include="Scripts\PiRho\PiFromRho1.rho" />
     <None Include="Scripts\PiRho\PiFromRho0.rho" />
     <Compile Include="PiFromRho.cs" />
@@ -68,7 +69,6 @@
     <None Include="Scripts\BasicClass.rho" />
     <None Include="Scripts\TemplateClass.rho" />
     <None Include="Scripts\FreezeThaw.rho" />
-    <None Include="Scripts\Loops.rho" />
     <None Include="Scripts\NestedFunctions.rho" />
     <None Include="Scripts\PassingFunctions.rho" />
     <None Include="Scripts\Experimental.rho" />

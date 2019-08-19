@@ -12,6 +12,7 @@
         {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
 
+            TestScript("ForLoops.rho");
             TestScript("Add.rho");
             TestScript("Arithmetic.rho");
             TestScript("Array.rho");
@@ -20,7 +21,8 @@
             TestScript("Strings.rho");
             TestScript("Conditionals.rho");
             TestScript("Arithmetic.rho");
-            TestScript("Loops.rho");
+            TestScript("RangeLoops.rho");
+            TestScript("ForLoops.rho");
             TestScript("NestedFunctions.rho");
             TestScript("PassingFunctions.rho");
 

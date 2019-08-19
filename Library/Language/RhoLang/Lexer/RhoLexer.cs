@@ -88,6 +88,7 @@
             case '>': return AddIfNext('=', ERhoToken.GreaterEquiv, ERhoToken.Greater);
             case '"': return LexString();
             case '^': return Add(ERhoToken.Xor);
+            case ';': return Add(ERhoToken.Semi);
             case '\t': return Add(ERhoToken.Tab);
             case '\r':
             {

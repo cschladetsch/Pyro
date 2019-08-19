@@ -110,7 +110,7 @@
             var fileName = Path.GetFileName(filePath);
             try
             {
-                //WriteLine($"Running {fileName}");
+                WriteLine($"Running {fileName}");
                 _Exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = MakeTranslator(filePath);

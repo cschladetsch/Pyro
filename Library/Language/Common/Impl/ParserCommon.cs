@@ -108,7 +108,10 @@ namespace Pyro.Language.Impl
             if (obj == null)
                 return FailLocation("Cannot add Null object to internal parse stack");
 
-            _AstFactory.AddChild(Top(), obj);
+            if (Top() == null)
+                Push(obj);
+            else
+                _AstFactory.AddChild(Top(), obj);
             return true;
         }
 
