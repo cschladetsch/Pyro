@@ -1,4 +1,4 @@
-# Pyro :sun_with_face:
+# Pyro ![alt text](https://github.com/cschladetsch/Pyro/Library/Icons/flame-32.png "Pyro")
 
 *Pyro* provides a framework for distrubuted, interactive virtual reality experiences.
 
