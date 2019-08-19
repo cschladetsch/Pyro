@@ -100,6 +100,7 @@ namespace Pyro.Language.Impl
                 return Add(elseType, 1);
 
             Add(thenType, 2);
+            Next();
             return true;
         }
 
