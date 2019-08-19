@@ -74,7 +74,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms", "App\WinForms\Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdIo", "Library\StdIo\StdIo.csproj", "{789E1135-5218-4E29-85E6-08381CF4991A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "C:\users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj", "{DA87A965-0077-4AF8-986B-3934F186125E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "Library\Ext\Flow\Flow.csproj", "{DA87A965-0077-4AF8-986B-3934F186125E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
