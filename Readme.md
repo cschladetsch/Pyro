@@ -1,4 +1,4 @@
-# Pyro
+# Pyro ![alt text](https://github.com/cschladetsch/Pyro/blob/develop/App/WinForms/Resources/flame.png "Pyro")
 
 *Pyro* provides a framework for distrubuted, interactive virtual reality experiences.
 
