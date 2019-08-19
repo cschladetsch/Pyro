@@ -2,6 +2,9 @@ Test/TestCommon/TestCommon.csproj
 Test/TestConsole/TestConsole.csproj
 Test/TestCore/TestCore.csproj
 Test/TestExecutor/TestExecutor.csproj
+Test/TestNetwork/TestNetwork.csproj
+Test/TestNetworkModule/TestNetworkModule.csproj
 Test/TestPeer/TestPeer.csproj
 Test/TestPi/TestPi.csproj
 Test/TestRho/TestRho.csproj
+Test/TestUnityRead/TestUnityRead.csproj
