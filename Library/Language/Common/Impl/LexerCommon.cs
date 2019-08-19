@@ -100,14 +100,12 @@ namespace Pyro.Language.Impl
                 return Add(elseType, 1);
 
             Add(thenType, 2);
-            Next();
             return true;
         }
 
         protected bool AddTwoCharOp(TEnum ty)
         {
             Add(ty, 2);
-            Next();
 
             return true;
         }
@@ -115,7 +113,6 @@ namespace Pyro.Language.Impl
         protected bool AddThreeCharOp(TEnum ty)
         {
             Add(ty, 3);
-            Next();
             Next();
 
             return true;
