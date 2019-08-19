@@ -1,4 +1,4 @@
-# Pyro :sun_with_face: [https://github.com/cschladetsch/Pyro/blob/develop/App/WinForms/Resources/flame.png]
+# Pyro [https://github.com/cschladetsch/Pyro/blob/develop/App/WinForms/Resources/flame.png]
 
 *Pyro* provides a framework for distrubuted, interactive virtual reality experiences.
 
