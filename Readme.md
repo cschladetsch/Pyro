@@ -35,10 +35,13 @@ Binary assemblies are built to `Bin` folder.
 Each project also copies its output assembly to the `Assemblies` folder within the sample Unity3d project.
 
 ## Applications
-There are three main applications that come with the *Pyro* suite:
+There are four main applications that come with the *Pyro* suite:
 1. A command-line Repl interface.
 1. A Gui interface.
 1. A network generation tool for proxies and agents.
+1. A Unity3d console with Pi, Rho, Stack and Output panels.
+
+All components support colored output and on-the-fly colored syntax highlighting.
 
 ## Code Analysis
 
