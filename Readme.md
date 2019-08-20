@@ -32,7 +32,7 @@ $ git flow init
 
 Binary assemblies are built to `Bin` folder. 
 
-Each project also copies its output assembly to the `Liminal/Assemblies` folder within the sample Unity3d project.
+Each project also copies its output assembly to the `Assemblies` folder within the sample Unity3d project.
 
 ## Applications
 There are three main applications that come with the *Pyro* suite:
