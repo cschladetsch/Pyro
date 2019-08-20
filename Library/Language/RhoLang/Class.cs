@@ -13,6 +13,9 @@
     ///
     /// C# : <code>new Klass&lt;T&gt;(a0)</code> becomes
     /// Rho: <code>Klass(T)(a0)</code>.
+    ///
+    /// NOTE: not implemeted.
+    ///
     /// </summary>
     public class Class
         : Reflected<Class>

@@ -1,6 +1,4 @@
-﻿using System.CodeDom.Compiler;
-
-namespace Pyro.RhoLang
+﻿namespace Pyro.RhoLang
 {
     using System;
     using System.Linq;

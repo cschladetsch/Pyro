@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Pyro.RhoLang.Parser
+﻿namespace Pyro.RhoLang.Parser
 {
     using Language;
     using Language.Impl;
