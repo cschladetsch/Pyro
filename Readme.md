@@ -1,7 +1,5 @@
 # Pyro ![alt text](https://github.com/cschladetsch/Pyro/Library/Icons/flame-32.png "Pyro")
 
-*Pyro* provides a framework for distrubuted, interactive virtual reality experiences.
-
 ## Overview
 
 *Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel.
@@ -35,6 +33,12 @@ $ git flow init
 Binary assemblies are built to `Bin` folder. 
 
 Each project also copies its output assembly to the `Liminal/Assemblies` folder within the sample Unity3d project.
+
+## Applications
+There are three main applications that come with the *Pyro* suite:
+1. A command-line Repl interface.
+1. A Gui interface.
+1. A network generation tool for proxies and agents.
 
 ## Code Analysis
 
