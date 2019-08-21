@@ -49,6 +49,7 @@
     <None Include="Scripts\Comments.rho" />
     <None Include="Scripts\Coros.rho" />
     <None Include="Scripts\ForLoops.rho" />
+    <None Include="Scripts\Functions.rho" />
     <None Include="Scripts\PiRho\PiFromRho1.rho" />
     <None Include="Scripts\PiRho\PiFromRho0.rho" />
     <Compile Include="PiFromRho.cs" />

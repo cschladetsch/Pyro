@@ -25,6 +25,7 @@ namespace Pyro.Exec
         public Continuation(IList<object> code)
         {
             Active = true;
+            Running = true;
             Code = code;
         }
 

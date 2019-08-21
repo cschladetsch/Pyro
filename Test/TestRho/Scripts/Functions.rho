@@ -1,0 +1,9 @@
+﻿fun foo()
+	1
+	2
+	3
+foo()
+assert(`3 ==`)
+assert(`depth 2 ==`)
+`clear`
+
