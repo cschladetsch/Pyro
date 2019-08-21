@@ -262,6 +262,9 @@
                 case EPiToken.SetFloatPrecision:
                     objects.Add(EOperation.SetFloatPrecision);
                     break;
+                case EPiToken.Exists:
+                    objects.Add(EOperation.Exists);
+                    break;
                 default:
                     objects.Add(node.Value);
                     break;

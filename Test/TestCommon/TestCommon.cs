@@ -252,7 +252,8 @@
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
-            Assert.AreEqual(0, _Exec.DataStack.Count);
+            Assert.AreEqual(0, DataStack.Count, $"Stack not empty {DataStack.Count} remain.");
+            DataStack.Clear();
         }
 
         protected void FreezeThaw(string fileName)

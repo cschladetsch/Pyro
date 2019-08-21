@@ -1,4 +1,6 @@
-﻿namespace Pyro.Exec
+﻿using System.Activities.Statements;
+
+namespace Pyro.Exec
 {
     using System;
     using System.Collections;
@@ -100,7 +102,11 @@
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
             _actions[EOperation.Self] = () => Push(_current);
+            _actions[EOperation.Exists] = Exists;
         }
+
+        private void Exists()
+            => Push(RPop() != null);
 
         private void Replace()
         {
