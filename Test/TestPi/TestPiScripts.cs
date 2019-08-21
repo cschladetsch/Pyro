@@ -27,7 +27,6 @@
         public void RunScripts()
         {
             TestScript("Variables.pi");
-            return;
             TestScript("Current.pi");
             TestScript("Common.pi");
 
