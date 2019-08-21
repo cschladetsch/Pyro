@@ -1,6 +1,4 @@
-﻿using System.Activities.Statements;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
     using System;
     using System.Collections;
@@ -584,7 +582,7 @@ namespace Pyro.Exec
             throw new CannotConvertException(obj, typeof(T));
         }
 
-        private void New()
+        private new void New()
         {
             //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
             var typeName = Pop<string>();

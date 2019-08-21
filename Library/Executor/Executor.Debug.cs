@@ -82,13 +82,16 @@
         {
             if (Verbosity == 0)
                 return;
+
             var str = new StringBuilder();
             str.Append("========\n");
+
             if (Verbosity > 5)
             {
                 WriteDataStack(str);
                 str.AppendLine($"next: '{GetTyped(next)}'");
             }
+
             WriteLine(str);
         }
     }

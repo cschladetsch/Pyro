@@ -1,6 +1,4 @@
-﻿using Flow;
-
-namespace Pyro.Exec
+﻿namespace Pyro.Exec
 {
     using System;
     using System.Text;
@@ -18,9 +16,7 @@ namespace Pyro.Exec
             {
                 str.AppendLine("    Scope:");
                 foreach (var obj in _scope)
-                {
                     str.AppendLine($"    {obj.Key}={obj.Value}");
-                }
             }
 
             if (Code == null)
@@ -38,10 +34,9 @@ namespace Pyro.Exec
             var index = Math.Max(0, Ip - 6);
             str.AppendLine($"    Code from {index} to fault at {Ip}/{Code.Count}:");
             str.Append("        ");
+
             for (var n = index; n <= Ip; ++n)
-            {
                 str.Append($"{Code[n]}, ");
-            }
         }
     }
 }
