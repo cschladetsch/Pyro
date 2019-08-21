@@ -1,4 +1,6 @@
-﻿namespace Pyro.Test
+﻿using System.Text;
+
+namespace Pyro.Test
 {
     using System;
     using System.IO;
@@ -252,6 +254,12 @@
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
+            if (DataStack.Count != 0)
+            {
+                var sb = new StringBuilder();
+                _Exec.WriteDataStack(sb, 10);
+                WriteLine(sb.ToString());
+            }
             Assert.AreEqual(0, DataStack.Count, $"Stack not empty {DataStack.Count} remain.");
             DataStack.Clear();
         }

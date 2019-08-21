@@ -31,7 +31,8 @@ namespace Pyro.Exec
         {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
-            Verbosity = 100;
+            Verbosity = 0;
+            //Verbosity = 100;
             AddOperations();
         }
 
@@ -178,16 +179,27 @@ namespace Pyro.Exec
             return ident.Quoted ? ident : Resolve(ident);
         }
 
-        private object Resolve(IdentBase identBase)
+        private bool TryResolve(IdentBase identBase, out object found)
         {
+            found = null;
             switch (identBase)
             {
             case Label label:
-                return _registry.GetClass(label.Text) ?? ResolveContextually(label);
+                found = _registry.GetClass(label.Text) ?? ResolveContextually(label);
+                return found != null;
 
             case Pathname path:
-                return ResolvePath(path);
+                found = ResolvePath(path);
+                return found != null;
             }
+
+            return false;
+        }
+
+        private object Resolve(IdentBase identBase)
+        {
+            if (TryResolve(identBase, out var res))
+                return res;
 
             throw new CannotResolve($"{identBase}");
         }

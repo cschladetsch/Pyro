@@ -26,10 +26,9 @@
         [Test]
         public void RunScripts()
         {
-            TestScript("Current.pi");
             TestScript("Variables.pi");
             return;
-
+            TestScript("Current.pi");
             TestScript("Common.pi");
 
             //TestScript("Floats.pi");

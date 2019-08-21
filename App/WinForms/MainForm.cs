@@ -58,6 +58,8 @@ namespace WinForms
             UpdatePiContext();
             ColorisePi();
             ColoriseRho();
+
+            Exec.Rethrows = true;
         }
 
         private void Received(IServer server, IClient client, string text)
@@ -95,6 +97,7 @@ namespace WinForms
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                output.Text = $"Exception: {e.Message}";
             }
         }
 

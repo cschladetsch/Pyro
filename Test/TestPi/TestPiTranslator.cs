@@ -62,7 +62,7 @@
         [Test]
         public void TestIdents()
         {
-            Assert.Throws<UnknownIdentifierException>(() => PiRun("asdasd"));
+            Assert.Throws<UnknownIdentifierException>(() => PiRun("NotAnIdentifier"));
         }
 
         [Test]

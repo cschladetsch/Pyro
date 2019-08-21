@@ -106,7 +106,7 @@ namespace Pyro.Exec
         }
 
         private void Exists()
-            => Push(RPop() != null);
+            => Push(TryResolve(Pop(), out object _));
 
         private void Replace()
         {
