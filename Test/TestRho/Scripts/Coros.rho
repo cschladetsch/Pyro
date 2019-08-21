@@ -1,0 +1,21 @@
+﻿
+fun Wait(seconds)
+	start = TimeNow()
+	self.Delay(seconds)
+	end = TimeNow()
+	d = TimeNow() - start
+	Print(d)
+	self
+
+fun WaitForOther()
+	start = TimeNow()
+	self.Wait(Wait(1))
+	d = TimeNow() - start
+	Print(d)
+
+WaitForOther()
+
+
+`clear`
+
+

@@ -1,8 +1,10 @@
-﻿namespace Pyro
+﻿using Flow.Impl;
+
+namespace Pyro
 {
-    /// <inheritdoc />
     public class ReflectedBase
-        : IReflected
+        : Generator
+        , IReflected
     {
         public IRefBase SelfBase { get; set; }
     }

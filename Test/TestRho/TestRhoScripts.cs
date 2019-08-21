@@ -1,7 +1,10 @@
-﻿namespace Pyro.Test.Rho
+﻿using System;
+
+namespace Pyro.Test.Rho
 {
     using System.IO;
     using NUnit.Framework;
+    using static Create;
 
     [TestFixture]
     public class TestRhoScripts
@@ -12,19 +15,23 @@
         {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
 
-            TestScript("ForLoops.rho");
-            TestScript("Add.rho");
-            TestScript("Arithmetic.rho");
-            TestScript("Array.rho");
-            TestScript("Comments.rho");
-            TestScript("Variables.rho");
-            TestScript("Strings.rho");
-            TestScript("Conditionals.rho");
-            TestScript("Arithmetic.rho");
-            TestScript("RangeLoops.rho");
-            TestScript("ForLoops.rho");
-            TestScript("NestedFunctions.rho");
-            TestScript("PassingFunctions.rho");
+            _Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
+            _Exec.Scope["Print"] = Function<TimeSpan>(d => DebugTraceLine(d.ToString()));
+
+            TestScript("Coros.rho");
+            //TestScript("ForLoops.rho");
+            //TestScript("Add.rho");
+            //TestScript("Arithmetic.rho");
+            //TestScript("Array.rho");
+            //TestScript("Comments.rho");
+            //TestScript("Variables.rho");
+            //TestScript("Strings.rho");
+            //TestScript("Conditionals.rho");
+            //TestScript("Arithmetic.rho");
+            //TestScript("RangeLoops.rho");
+            //TestScript("ForLoops.rho");
+            //TestScript("NestedFunctions.rho");
+            //TestScript("PassingFunctions.rho");
 
             // needs re-arch
             //TestScript("NestedLoops.rho");

@@ -190,7 +190,7 @@
             DebugTraceLine(text);
         }
 
-        private static void DebugTraceLine(string text)
+        protected void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
             //System.Diagnostics.Trace.WriteLine(text);

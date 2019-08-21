@@ -1,4 +1,6 @@
-﻿namespace Pyro.Exec
+﻿using Flow.Impl;
+
+namespace Pyro.Exec
 {
     using System;
     using System.Text;
@@ -25,6 +27,17 @@
             Active = true;
             Code = code;
         }
+
+        public void Delay(int seconds)
+        {
+            ResumeAfter(TimeSpan.FromSeconds(seconds));
+        }
+
+        public void Wait(ITransient other)
+        {
+            base.ResumeAfter(other);
+        }
+
 
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
@@ -105,6 +118,9 @@
 
         public void Enter(Executor exec)
         {
+            if (Kernel == null)
+                Kernel = exec.Kernel;
+
             // Nothing to do if no args to pull.
             if (Args == null)
                 return;
@@ -153,19 +169,20 @@
             Ip = 0;
         }
 
-        public string Name { get; set; }
-        public IKernel Kernel { get; set; }
-        public event TransientHandler Completed;
-        public bool Active { get; private set; }
-        public void Complete()
-        {
-            if (!Active)
-                return;
-            Completed?.Invoke(this);
-            Active = false;
-            Running = false;
-        }
+        //public string Name { get; set; }
+        //public IKernel Kernel { get; set; }
+        //public event TransientHandler Completed;
+        //public bool Active { get; private set; }
+        //public void Complete()
+        //{
+        //    if (!Active)
+        //        return;
+        //    Completed?.Invoke(this);
+        //    Active = false;
+        //    Running = false;
+        //}
 
+        //public bool Running { get; protected set; }
         IGenerator IGenerator.AddTo(IGroup @group)
         {
             throw new NotImplementedException();
@@ -176,6 +193,7 @@
             throw new NotImplementedException();
         }
 
+        /*
         public IGenerator SuspendAfter(ITransient other)
         {
             throw new NotImplementedException();
@@ -273,6 +291,7 @@
         {
             throw new NotImplementedException();
         }
+        */
     }
 }
 

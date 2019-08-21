@@ -22,7 +22,6 @@ namespace Pyro.Exec
         public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
         public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
         public void Continue() => Continue(ContextStack.Pop());
-        public IKernel Kernel;
 
         private bool _break;
         private Continuation _current;
@@ -73,6 +72,12 @@ namespace Pyro.Exec
 
                 while (cont.Next(out var next))
                 {
+                    Kernel.Step();
+                    if (!cont.Running)
+                    {
+ TODO
+                    }
+
                     // unbox pyro-reference types
                     if (next is IRefBase refBase) next = refBase.BaseValue;
 

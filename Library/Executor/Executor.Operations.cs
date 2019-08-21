@@ -99,6 +99,7 @@
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+            _actions[EOperation.Self] = () => Push(_current);
         }
 
         private void Replace()

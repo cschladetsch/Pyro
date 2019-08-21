@@ -154,7 +154,7 @@
                 return AddList();
 
             if (Try(ERhoToken.Self))
-                return PushConsumed();
+                return FactorIdent();
 
             if (Try(ERhoToken.Ident) || Try(ERhoToken.Pathname))
                 return FactorIdent();
@@ -213,6 +213,14 @@
                 return FailLocation("Expected an expression");
 
             Expect(ERhoToken.CloseParan);
+
+            //// want to allow `(1 - 2).ToString()`
+            //// But this doesn't work because dots are expected only after Members
+            //if (TryConsume(ERhoToken.Dot))
+            //{
+            //    FactorIdent();
+            //}
+
             exp.Add(Pop());
             return Push(exp);
         }
