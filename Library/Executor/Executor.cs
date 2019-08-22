@@ -37,6 +37,7 @@ namespace Pyro.Exec
         public void PushContext(Continuation continuation)
         {
             ContextStack.Add(continuation);
+            Info($"PushContext: {ContextStack.Count}");
             _nextContext = ContextStack.Count - 1;
         }
 
@@ -102,7 +103,10 @@ namespace Pyro.Exec
                 return false;
 
             if (!_current.Next(out var next))
+            {
+                //PopContext();
                 return false;
+            }
 
             if (!GetCurrent())
                 return false;
@@ -201,6 +205,8 @@ namespace Pyro.Exec
             if (TryResolve(identBase, out var res))
                 return res;
 
+            TryResolve(identBase, out var res2);
+
             throw new CannotResolve($"{identBase}");
         }
 
@@ -259,14 +265,17 @@ namespace Pyro.Exec
                 case MethodInfo mi:
                     var obj = Pop();
                     var numArgs = mi.GetParameters().Length;
-                    var args = DataStack.Take(numArgs).ToArray();
+                    var args = new object[numArgs];
+                    for (var n = 0; n < numArgs; ++n)
+                        args[n] = DataStack.Pop();
                     var ret = mi.Invoke(obj, args);
                     if (mi.ReturnType != typeof(void))
                         Push(ret);
                     break;
 
                 default:
-                    PushContext(next);
+                    //PushContext(next);
+                    _current = next;
                     break;
             }
 

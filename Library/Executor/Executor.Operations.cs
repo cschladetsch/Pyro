@@ -739,6 +739,12 @@
 
             Push(a.Equals(b));
         }
+
+        public void RemoveContinuation(Continuation continuation)
+        {
+            Info("Removing cont.");
+            ContextStack.Remove(continuation);
+        }
     }
 }
 

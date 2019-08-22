@@ -25,10 +25,11 @@
             Active = true;
             Running = true;
             Code = code;
+
         }
 
-        public void Delay(int seconds)
-            => ResumeAfter(TimeSpan.FromSeconds(seconds));
+        public void Delay(int millis)
+            => ResumeAfter(TimeSpan.FromMilliseconds(millis));
 
         public void Wait(ITransient other)
             => ResumeAfter(other);
@@ -114,7 +115,27 @@
         public void Enter(Executor exec)
         {
             if (Kernel == null)
+            {
                 Kernel = exec.Kernel;
+                Kernel.Root.Add(this);
+
+                void End(ITransient tr)
+                {
+                    exec.RemoveContinuation(this);
+                    Completed -= End;
+                }
+                Completed += End;
+
+                Resumed += tr =>
+                {
+                    Info("Resumed coro");
+                };
+                Suspended += tr =>
+                {
+                    exec.PushContext(this);
+                    Info("Suspended coro");
+                };
+            }
 
             // Nothing to do if no args to pull.
             if (Args == null)
@@ -153,6 +174,8 @@
 
         public void Reset()
         {
+            Complete();
+
             // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
             //_scope.Clear();
             Ip = 0;

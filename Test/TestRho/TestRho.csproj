@@ -64,6 +64,7 @@
     <Compile Include="TestRhoCustomClass.cs" />
     <Compile Include="TestRhoNativeObject.cs" />
     <Compile Include="TestRhoScripts.cs" />
+    <None Include="Scripts\Yielding.rho" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Readme.md" />

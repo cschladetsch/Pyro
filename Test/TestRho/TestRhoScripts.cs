@@ -18,8 +18,9 @@ namespace Pyro.Test.Rho
             _Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
             _Exec.Scope["Print"] = Function<TimeSpan>(d => DebugTraceLine(d.ToString()));
 
-            TestScript("Functions.rho");
-            //TestScript("Coros.rho");
+            TestScript("Coros.rho");
+            //TestScript("Functions.rho");
+            //TestScript("Yielding.rho");
             //TestScript("Add.rho");
             //TestScript("Arithmetic.rho");
             //TestScript("ForLoops.rho");
