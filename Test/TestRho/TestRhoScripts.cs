@@ -11,12 +11,20 @@ namespace Pyro.Test.Rho
         : TestCommon
     {
         [Test]
+        public void Print()
+        {
+            _Exec.Scope["pr"] = Function<object>(DebugTrace);
+            TestScript("Print.rho");
+        }
+
+        [Test]
         public void RunSomeScripts()
         {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
 
             _Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
             _Exec.Scope["Print"] = Function<TimeSpan>(d => DebugTraceLine(d.ToString()));
+            _Exec.Scope["pr"] = Function<object>(DebugTrace);
 
             TestScript("Coros.rho");
             //TestScript("Functions.rho");
@@ -41,6 +49,14 @@ namespace Pyro.Test.Rho
 
             // needs re-arch
             //TestScript("FreezeThaw.rho");
+        }
+
+        private void DebugTrace(object obj)
+        {
+            var text = "****> " + obj.ToString() + " <****";
+            TestContext.Out.WriteLine(text);
+            System.Diagnostics.Trace.WriteLine(text);
+            Console.WriteLine(text);
         }
 
         //[Test]

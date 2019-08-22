@@ -119,8 +119,8 @@ namespace Pyro.Exec
             {
                 Perform(next);
 
-                if (Verbosity > 10)
-                    Write($"{next} ");
+                //if (Verbosity > 10)
+                //    Write($"{next} ");
             }
             catch (Exception e)
             {

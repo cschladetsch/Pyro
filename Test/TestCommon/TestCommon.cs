@@ -74,7 +74,7 @@ namespace Pyro.Test
             if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
 
-            //if (trace)
+            if (trace)
                 WriteLine(trans.ToString());
 
             Assert.IsFalse(trans.Failed, trans.Error);
@@ -118,6 +118,8 @@ namespace Pyro.Test
                 var trans = MakeTranslator(filePath);
                 if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
+
+                //WriteLine(trans.ToString());
 
                 Assert.IsFalse(trans.Failed);
                 _Exec.Continue(cont);
@@ -197,7 +199,7 @@ namespace Pyro.Test
         protected void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
-            System.Diagnostics.Trace.WriteLine(text);
+            //System.Diagnostics.Trace.WriteLine(text);
             Console.WriteLine(text);
         }
 

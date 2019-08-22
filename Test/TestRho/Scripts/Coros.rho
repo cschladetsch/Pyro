@@ -1,20 +1,10 @@
-﻿fun Wait(millis)
-	start = TimeNow()
+﻿pr("begin")
+
+fun Wait(millis)
+	pr("start")
 	self.Delay(millis)
-	end = TimeNow()
-	d = TimeNow() - start
-	Print(d)
+	pr("done")
 
-fun WaitForOther()
-	start = TimeNow()
-	self.Wait(Wait(1))
-	d = TimeNow() - start
-	Print(d)
-
-Wait(200)
-
-//WaitForOther()
+Wait(1000)
 
 `clear`
-
-
