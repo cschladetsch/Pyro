@@ -27,7 +27,15 @@
 
             str.Append($"\tIp={Ip}/{Code.Count}: ");
             for (var n = 0; n < Code.Count; ++n)
-                str.Append($"{Code[n]}, ");
+            {
+                string wrap1 = "", wrap2 = "";
+                if (n == Ip)
+                {
+                    wrap1 = " >>> ";
+                    wrap2 = " <<< ";
+                }
+                str.Append($"{wrap1}{Code[n]}{wrap2}, ");
+            }
         }
     }
 }

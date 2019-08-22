@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace Pyro.Exec
 {
     using System;
@@ -37,7 +39,7 @@ namespace Pyro.Exec
         public void PushContext(Continuation continuation)
         {
             ContextStack.Add(continuation);
-            Info($"PushContext: {ContextStack.Count}");
+            WriteLine($"PushContext: {ContextStack.Count}");
             _nextContext = ContextStack.Count - 1;
         }
 
@@ -90,26 +92,39 @@ namespace Pyro.Exec
         {
             Kernel.Step();
 
+            bool IsRunning(Continuation cont)
+                => cont != null && cont.Running && cont.Ip < cont.Code.Count;
+
             bool GetCurrent()
             {
-                if (_current != null)
+                if (IsRunning(_current))
                     return true;
 
-                _current = PopContext();
+                do
+                {
+                    _current = PopContext();
+                } while (_current != null && !IsRunning(_current));
+
                 return _current != null;
             }
 
             if (!GetCurrent())
-                return false;
+            {
+                _current = PopContext();
+                if (_current == null)
+                {
+                    return ContextStack.Count != 0;
+                }
+            }
 
             if (!_current.Next(out var next))
             {
-                //PopContext();
-                return false;
+                PopContext();
+                return ContextStack.Count != 0;
             }
 
             if (!GetCurrent())
-                return false;
+                return ContextStack.Count != 0;
 
             // unbox pyro-reference types
             if (next is IRefBase refBase)
@@ -274,8 +289,8 @@ namespace Pyro.Exec
                     break;
 
                 default:
-                    //PushContext(next);
-                    _current = next;
+                    PushContext(next);
+                    _current = null;
                     break;
             }
 

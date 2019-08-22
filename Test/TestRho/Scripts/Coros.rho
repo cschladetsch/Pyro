@@ -1,10 +1,12 @@
-﻿pr("begin")
+﻿self.Delay(1000)
 
-fun Wait(millis)
-	pr("start")
-	self.Delay(millis)
-	pr("done")
-
-Wait(1000)
-
-`clear`
+//pr("begin")
+//
+//fun Wait(millis)
+//	pr("start")
+//	self.Delay(millis)
+//	pr("done")
+//
+//Wait(2000)
+//
+//`clear`
