@@ -30,7 +30,7 @@ namespace Pyro.Exec
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
             Verbosity = 0;
-            //Verbosity = 100;
+            Verbosity = 100;
             AddOperations();
         }
 
@@ -316,6 +316,7 @@ namespace Pyro.Exec
                 var c = ContextStack[n];
                 if (c.Active && c.Running)
                 {
+                    ContextStack.RemoveAt(n);
                     _nextContext--;
                     return c;
                 }

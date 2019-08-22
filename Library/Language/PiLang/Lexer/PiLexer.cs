@@ -27,7 +27,20 @@
                 return IdentOrKeyword();
 
             if (char.IsDigit(current))
-                return AddSlice(EPiToken.Int, Gather(char.IsDigit));
+            {
+                var start = Gather(char.IsDigit);
+                if (Current() == '.')
+                {
+                    Next();
+                    var end = Gather(char.IsDigit);
+                    if (start.LineNumber != end.LineNumber)
+                        return Fail("Bad float literal");
+
+                    return AddSlice(EPiToken.Float, new Slice(this, start.Start, end.End));
+                }
+
+                return AddSlice(EPiToken.Int, start);
+            }
 
             switch (current)
             {
