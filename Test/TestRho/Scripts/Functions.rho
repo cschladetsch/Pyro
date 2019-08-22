@@ -1,4 +1,8 @@
-﻿fun foo()
+﻿fun bar(n)
+	assert(n == 42)
+bar(42)
+
+fun foo()
 	1
 	2
 	3

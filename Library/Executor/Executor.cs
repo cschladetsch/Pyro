@@ -45,7 +45,8 @@ namespace Pyro.Exec
 
         public void Continue()
         {
-            _nextContext = ContextStack.Count - 1;
+            // TODO ???
+            //_nextContext = ContextStack.Count - 1;
             Continue(PopContext());
         }
 
@@ -68,6 +69,7 @@ namespace Pyro.Exec
         {
             _current = cont;
             _break = false;
+            cont.Enter(this);
         }
 
         private void Execute(Continuation cont)
@@ -318,6 +320,7 @@ namespace Pyro.Exec
                 {
                     ContextStack.RemoveAt(n);
                     _nextContext--;
+                    c.Enter(this);
                     return c;
                 }
             }
