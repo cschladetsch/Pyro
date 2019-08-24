@@ -6,6 +6,8 @@
 
 ## Overview
 
+**Note: The build is only failing due to some experimental tests that intend to fail. The actual code builds fine.**
+
 *Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel.
 
 Each major component has its own project, and its own `Readme.md` file.
