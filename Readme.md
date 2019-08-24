@@ -8,7 +8,7 @@
 
 **Note: The build is only failing because of issues with appveyor and submodules which this library uses. The actual code builds fine.**
 
-*Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel. It is based on [Kai](KAI) and [Om](OM) before that, dating back decades.
+*Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel. It is based on [Kai](../KAI) and [Om](../OM) before that, dating back decades.
 
 Each major component has its own project, and its own `Readme.md` file.
 
