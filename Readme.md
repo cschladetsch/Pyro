@@ -6,7 +6,7 @@
 
 ## Overview
 
-**Note: The build is only failing due to some experimental tests that intend to fail. The actual code builds fine.**
+**Note: The build is only failing because of iussues with appveyor and submodules which this library uses. The actual code builds fine.**
 
 *Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel.
 
