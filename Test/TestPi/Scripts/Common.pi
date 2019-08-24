@@ -4,6 +4,6 @@
 4 set_float_precision
 
 // helper to ease readability
-{ == assert } 'equals #
+{ == assert } 'eq #
 
 //"Setup common" writeln

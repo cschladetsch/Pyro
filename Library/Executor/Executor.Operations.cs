@@ -99,7 +99,12 @@
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
+            _actions[EOperation.Self] = () => Push(_current);
+            _actions[EOperation.Exists] = Exists;
         }
+
+        private void Exists()
+            => Push(TryResolve(Pop(), out object _));
 
         private void Replace()
         {
@@ -132,7 +137,7 @@
         public void Clear()
         {
             DataStack = new Stack<object>();
-            ContextStack = new Stack<Continuation>();
+            ContextStack = new List<Continuation>();
             NumOps = 0;
 
             _break = false;
@@ -287,7 +292,7 @@
             if (!next.MoveNext())
                 yield break;
 
-            ContextStack.Push(_current);
+            AddContext(_current);
 
             // We need to ensure that when an inner loop ends,
             // the outer loop doesn't move to next value in the
@@ -313,9 +318,17 @@
                 yield return val;
             }
 
-            // TODO: pop or not?!?
-            ContextStack.Pop();
+            PopContext();
+
             Break();
+        }
+
+        private void AddContext(Continuation current)
+        {
+            if (current == null)
+                throw new ArgumentNullException(nameof(current));
+
+            ContextStack.Add(current);
         }
 
         private void OpNew()
@@ -569,7 +582,7 @@
             throw new CannotConvertException(obj, typeof(T));
         }
 
-        private void New()
+        private new void New()
         {
             //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
             var typeName = Pop<string>();
@@ -725,27 +738,6 @@
             }
 
             Push(a.Equals(b));
-        }
-    }
-
-    /// <summary>
-    /// DOC
-    /// </summary>
-    public class CannotConvertException
-        : Exception
-    {
-        public object Object;
-        public Type TargetType;
-
-        public CannotConvertException(object obj, Type type)
-        {
-            Object = obj;
-            TargetType = type;
-        }
-
-        public override string ToString()
-        {
-            return $"Couldn't convert {Object} to type {TargetType.Name}";
         }
     }
 }

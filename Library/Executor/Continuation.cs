@@ -23,8 +23,15 @@
         public Continuation(IList<object> code)
         {
             Active = true;
+            Running = true;
             Code = code;
         }
+
+        public void Delay(int seconds)
+            => ResumeAfter(TimeSpan.FromSeconds(seconds));
+
+        public void Wait(ITransient other)
+            => ResumeAfter(other);
 
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
@@ -62,10 +69,8 @@
         }
 
         public static void Register(IRegistry reg)
-        {
-            reg.Register(new ClassBuilder<Continuation>(reg, ToText)
-                .Class);
-        }
+            => reg.Register(new ClassBuilder<Continuation>(reg, ToText)
+            .Class);
 
         // this is human-readable version. for transmission/persistence, use ToPiScript()
         public override string ToString()
@@ -73,6 +78,7 @@
             var str = new StringBuilder();
             str.Append('{');
             str.Append($"#{Ip}/{Code.Count} ");
+
             if (Args != null)
             {
                 str.Append('(');
@@ -82,6 +88,7 @@
                     str.Append($"{a}{comma}");
                     comma = ", ";
                 }
+
                 str.Append(") ");
             }
 
@@ -90,6 +97,7 @@
                 str.Append(c);
                 str.Append(", ");
             }
+
             str.Append('}');
 
             return str.ToString();
@@ -105,6 +113,9 @@
 
         public void Enter(Executor exec)
         {
+            if (Kernel == null)
+                Kernel = exec.Kernel;
+
             // Nothing to do if no args to pull.
             if (Args == null)
                 return;
@@ -123,19 +134,13 @@
         }
 
         public bool HasScopeObject(string label)
-        {
-            return _scope.ContainsKey(label);
-        }
+            => _scope.ContainsKey(label);
 
         public void SetScopeObject(string label, object val)
-        {
-            _scope[label] = val;
-        }
+            => _scope[label] = val;
 
         public object FromScope(string label)
-        {
-            return _scope.TryGetValue(label, out var value) ? value : null;
-        }
+            => _scope.TryGetValue(label, out var value) ? value : null;
 
         public bool Next(out object next)
         {
@@ -153,123 +158,12 @@
             Ip = 0;
         }
 
-        public string Name { get; set; }
-        public IKernel Kernel { get; set; }
-        public event TransientHandler Completed;
-        public bool Active { get; private set; }
-        public void Complete()
-        {
-            if (!Active)
-                return;
-            Completed?.Invoke(this);
-            Active = false;
-            Running = false;
-        }
-
         IGenerator IGenerator.AddTo(IGroup @group)
         {
             throw new NotImplementedException();
         }
 
         IGenerator IGenerator.Named(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IGenerator SuspendAfter(ITransient other)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IGenerator SuspendAfter(TimeSpan span)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IGenerator ResumeAfter(Func<bool> pred)
-        {
-            throw new NotImplementedException();
-        }
-
-        // TODO: this is duplicated code from Transient.ResumeAfter()
-        public IGenerator ResumeAfter(ITransient other)
-        {
-            if (other == null || !other.Active)
-            {
-                Resume();
-                return this;
-            }
-
-            Suspend();
-
-            void DoResume(ITransient tr)
-            {
-                Resume();
-                other.Completed -= DoResume;
-            }
-
-            other.Completed += DoResume;
-
-            return this;
-        }
-
-        public IGenerator ResumeAfter(TimeSpan span)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ITransient Named(string name)
-        {
-            Name = name;
-            return this;
-        }
-
-        public event GeneratorHandler Resumed;
-        public event GeneratorHandler Stepped;
-        public event GeneratorHandler Suspended;
-        public bool Running { get; protected set; }
-        public int StepNumber { get; }
-        public object Value { get; }
-        public void Resume()
-        {
-            Active = true;
-        }
-
-        public void Pre()
-        {
-        }
-
-        public void Post()
-        {
-        }
-
-        public void Step()
-        {
-        }
-
-        public void Suspend()
-        {
-            Active = false;
-            Suspended?.Invoke(this);
-        }
-
-        public ITransient AddTo(IGroup @group)
-        {
-            @group.Add(this);
-            return this;
-        }
-
-        public ITransient Then(IGenerator next)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ITransient Then(Action action)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ITransient Then(Action<ITransient> action)
         {
             throw new NotImplementedException();
         }

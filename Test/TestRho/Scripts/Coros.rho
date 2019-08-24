@@ -1,0 +1,26 @@
+﻿fun Wait(seconds)
+	start = TimeNow()
+	self.Delay(seconds)
+	end = TimeNow()
+	d = TimeNow() - start
+	Print(d)
+	self
+
+fun WaitForOther()
+	start = TimeNow()
+	self.Wait(Wait(1))
+	d = TimeNow() - start
+	Print(d)
+
+WaitForOther()
+
+`clear`
+
+fun foo()
+	yield(1)
+	yield(2)
+	yield(3)
+assert(foo() == 1)
+assert(foo() == 2)
+assert(foo() == 3)
+

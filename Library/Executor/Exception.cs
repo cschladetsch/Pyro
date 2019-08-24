@@ -15,7 +15,7 @@
             => _obj = obj;
 
         public override string ToString()
-            => $"Cannot enumerate over {_obj.GetType().Name}";
+            => $"Cannot enumerate over {_obj?.GetType().Name}";
     }
 }
 

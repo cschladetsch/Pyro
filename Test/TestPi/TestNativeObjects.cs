@@ -22,7 +22,7 @@ namespace Pyro.Test
             _Registry.Register(new ClassBuilder<UserModel>(_Registry)
                 .Class);
 
-            PiRun("'UserModel new");
+            PiRun(@"""UserModel"" new");
             var user = Pop<UserModel>();
             Assert.IsNotNull(user);
         }

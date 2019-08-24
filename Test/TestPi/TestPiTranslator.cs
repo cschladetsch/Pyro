@@ -11,6 +11,11 @@
         [Test]
         public void TestContinuations()
         {
+            PiRun("{1 +} 'a # 3 a &");
+            PiRun("3 'a # { {1 +} 'a # 3 a &} & a +");
+            AssertPop(7);
+            AssertEmpty();
+
             PiRun("1 1 {+} &");
             AssertPop(2);
             AssertEmpty();
@@ -21,10 +26,6 @@
 
             PiRun("2 3 4 { + * } &");
             AssertPop(14);
-            AssertEmpty();
-
-            PiRun("3 'a # { {1 +} 'a # 3 a &} & a +");
-            AssertPop(7);
             AssertEmpty();
         }
 
@@ -62,7 +63,7 @@
         [Test]
         public void TestIdents()
         {
-            Assert.Throws<UnknownIdentifierException>(() => PiRun("asdasd"));
+            Assert.Throws<CannotResolve>(() => PiRun("NotAnIdentifier"));
         }
 
         [Test]

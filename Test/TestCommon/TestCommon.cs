@@ -1,4 +1,6 @@
-﻿namespace Pyro.Test
+﻿using System.Text;
+
+namespace Pyro.Test
 {
     using System;
     using System.IO;
@@ -190,7 +192,7 @@
             DebugTraceLine(text);
         }
 
-        private static void DebugTraceLine(string text)
+        protected void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
             //System.Diagnostics.Trace.WriteLine(text);
@@ -252,7 +254,14 @@
         protected void TestScript(string scriptName)
         {
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
-            Assert.AreEqual(0, _Exec.DataStack.Count);
+            if (DataStack.Count != 0)
+            {
+                var sb = new StringBuilder();
+                _Exec.WriteDataStack(sb, 10);
+                WriteLine(sb.ToString());
+            }
+            Assert.AreEqual(0, DataStack.Count, $"Stack not empty {DataStack.Count} remain.");
+            DataStack.Clear();
         }
 
         protected void FreezeThaw(string fileName)

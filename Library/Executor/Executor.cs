@@ -14,100 +14,130 @@ namespace Pyro.Exec
         : Reflected<Executor>
     {
         public Stack<object> DataStack { get; private set; } = new Stack<object>();
-        public Stack<Continuation> ContextStack { get; private set; } = new Stack<Continuation>();
-        public List<Continuation> Suspended { get; private set; } = new List<Continuation>();
+        public List<Continuation> ContextStack { get; private set; } = new List<Continuation>();
         public int NumOps { get; private set; }
         public bool Rethrows { get; set; }
         public string SourceFilename;
-        public void PushContext(Continuation continuation) => ContextStack.Push(continuation);
-        public void Continue(IRef<Continuation> continuation) => Continue(continuation.Value);
-        public void Continue() => Continue(ContextStack.Pop());
-        public IKernel Kernel;
 
         private bool _break;
         private Continuation _current;
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
+        private int _nextContext;
 
         public Executor()
         {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
+            Verbosity = 0;
+            Verbosity = 100;
             AddOperations();
+        }
+
+        public void PushContext(Continuation continuation)
+        {
+            ContextStack.Add(continuation);
+            _nextContext = ContextStack.Count - 1;
+        }
+
+        public void Continue(IRef<Continuation> continuation)
+            => Continue(continuation.Value);
+
+        public void Continue()
+        {
+            // TODO ???
+            //_nextContext = ContextStack.Count - 1;
+            Continue(PopContext());
         }
 
         public void Continue(Continuation continuation)
         {
-            _current = continuation;
-            _break = false;
+            Prepare(continuation);
 
             while (true)
             {
                 Execute(_current);
                 _break = false;
-                if (ContextStack.Count > 0)
-                {
-                    _current = ContextStack.Pop();
-                    _current.Enter(this);
-                }
-                else
+
+                _current = PopContext();
+                if (_current == null)
                     break;
             }
         }
 
+        public void Prepare(Continuation cont)
+        {
+            _current = cont;
+            _break = false;
+            cont.Enter(this);
+        }
+
         private void Execute(Continuation cont)
         {
-            while (true)
+            _current = cont;
+            while (Next())
             {
-                //// do not execute anything that is completed
-                //if (!cont.Active)
-                //    return;
-
-                //// if it's suspended, delay
-                //if (!cont.Running)
-                //{
-                //    Suspended.Add(ContextStack.Peek());
-                //    cont = ContextStack.Pop();
-                //    continue;
-                //}
-
-                while (cont.Next(out var next))
+                if (_break)
                 {
-                    // unbox pyro-reference types
-                    if (next is IRefBase refBase) next = refBase.BaseValue;
-
-                    try
-                    {
-                        Perform(next);
-
-                        if (TraceLevel > 5)
-                        {
-                            if (next is EOperation op)
-                            {
-                                Write($"{op} -->");
-                                WriteDataStack();
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        if (!string.IsNullOrEmpty(SourceFilename)) WriteLine($"While executing {SourceFilename}:");
-
-                        if (TraceLevel > 10)
-                        {
-                            WriteLine(DebugWrite());
-                            WriteLine($"Exception: {e}");
-                        }
-
-                        if (Rethrows) throw;
-                    }
-
-                    if (_break) break;
+                    _break = false;
+                    _current = PopContext();
                 }
-
-                break;
             }
         }
+
+        public bool Next()
+        {
+            Kernel.Step();
+
+            bool GetCurrent()
+            {
+                if (_current != null)
+                    return true;
+
+                _current = PopContext();
+                return _current != null;
+            }
+
+            if (!GetCurrent())
+                return false;
+
+            if (!_current.Next(out var next))
+                return false;
+
+            if (!GetCurrent())
+                return false;
+
+            // unbox pyro-reference types
+            if (next is IRefBase refBase)
+                next = refBase.BaseValue;
+
+            try
+            {
+                Perform(next);
+
+                if (Verbosity > 10)
+                    Write($"{next} ");
+            }
+            catch (Exception e)
+            {
+                if (!string.IsNullOrEmpty(SourceFilename))
+                    WriteLine($"While executing {SourceFilename}:");
+
+                if (Verbosity > 10)
+                {
+                    WriteLine(DebugWrite());
+                    WriteLine($"Exception: {e}");
+                }
+
+                if (Rethrows)
+                    throw;
+
+                return false;
+            }
+
+            return true;
+        }
+
 
         public void Perform(object next)
         {
@@ -149,16 +179,27 @@ namespace Pyro.Exec
             return ident.Quoted ? ident : Resolve(ident);
         }
 
-        private object Resolve(IdentBase identBase)
+        private bool TryResolve(IdentBase identBase, out object found)
         {
+            found = null;
             switch (identBase)
             {
             case Label label:
-                return _registry.GetClass(label.Text) ?? ResolveContextually(label);
+                found = _registry.GetClass(label.Text) ?? ResolveContextually(label);
+                return found != null;
 
             case Pathname path:
-                return ResolvePath(path);
+                found = ResolvePath(path);
+                return found != null;
             }
+
+            return false;
+        }
+
+        private object Resolve(IdentBase identBase)
+        {
+            if (TryResolve(identBase, out var res))
+                return res;
 
             throw new CannotResolve($"{identBase}");
         }
@@ -193,9 +234,9 @@ namespace Pyro.Exec
         /// <summary>
         /// Perform a continuation, then return to current context
         /// </summary>
-        private void Suspend()
+        private new void Suspend()
         {
-            ContextStack.Push(_current);
+            PushContext(_current);
             Resume();
         }
 
@@ -225,7 +266,7 @@ namespace Pyro.Exec
                     break;
 
                 default:
-                    ContextStack.Push(next);
+                    PushContext(next);
                     break;
             }
 
@@ -265,6 +306,26 @@ namespace Pyro.Exec
 
             var pop = DataStack.Pop();
             return !(pop is IRefBase data) ? pop : data.BaseValue;
+        }
+
+        private Continuation PopContext()
+        {
+            for (var n = _nextContext; n >= 0; ++n)
+            {
+                if (n >= ContextStack.Count)
+                    break;
+
+                var c = ContextStack[n];
+                if (c.Active && c.Running)
+                {
+                    ContextStack.RemoveAt(n);
+                    _nextContext--;
+                    c.Enter(this);
+                    return c;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

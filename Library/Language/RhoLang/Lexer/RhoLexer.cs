@@ -47,20 +47,18 @@
             if (char.IsLetter(current) || current == '_')
                 return IdentOrKeyword();
 
-            // TODO: this handled differently (and poorly) in PiLexer.
             if (char.IsDigit(current))
             {
                 var start = Gather(char.IsDigit);
+                if (Current() == '.')
+                {
+                    Next();
+                    var end = Gather(char.IsDigit);
+                    if (start.LineNumber != end.LineNumber)
+                        return Fail("Bad float literal");
 
-                // TODO: floating point numbers
-                //if (Current() == '.')
-                //{
-                //    Next();
-                //    var frac = Gather(char.IsDigit);
-                //    AddSlice(ERhoToken.Float, new Slice(this, start.Start, frac.End));
-                //}
-                //else
-                //    AddSlice(ERhoToken.Int, start);
+                    return AddSlice(ERhoToken.Float, new Slice(this, start.Start, end.End));
+                }
 
                 return AddSlice(ERhoToken.Int, start);
             }

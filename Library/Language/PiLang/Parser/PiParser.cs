@@ -83,7 +83,7 @@
                     return false;
 
                 case EPiToken.Exists:
-                    context.Add(AddValue(_AstFactory.New(Consume())));
+                    context.Add(_AstFactory.New(Consume()));
                     return false;
 
                 default:

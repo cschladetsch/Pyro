@@ -9,8 +9,6 @@
     /// </summary>
     public partial class Executor
     {
-        public int TraceLevel;
-
         private static void Write(object obj)
             => Write($"{obj}");
 
@@ -20,7 +18,7 @@
         private static void Write(string text, params object[] args)
         {
             System.Diagnostics.Debug.Write(text);
-            Console.Write(text, args);
+            //Console.Write(text, args);
         }
 
         private static void WriteLine(string fmt, params object[] args)
@@ -31,7 +29,7 @@
                 Write($"{string.Format(fmt, args)}\n");
         }
 
-        private void DebugTrace()
+        public void DebugTrace()
             => WriteLine(DebugWrite());
 
         private string DebugWrite()
@@ -82,15 +80,18 @@
 
         private void PerformPrelude(object next)
         {
-            if (TraceLevel == 0)
+            if (Verbosity == 0)
                 return;
+
             var str = new StringBuilder();
             str.Append("========\n");
-            if (TraceLevel > 5)
+
+            if (Verbosity > 5)
             {
                 WriteDataStack(str);
                 str.AppendLine($"next: '{GetTyped(next)}'");
             }
+
             WriteLine(str);
         }
     }

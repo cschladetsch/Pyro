@@ -16,6 +16,18 @@
         protected internal PiAstNode First => Sequence?[0];
 
         [Test]
+        public void TestAssignCoro()
+        {
+            PiRun("{+} 'a # 1 2 a & 3 == assert");
+        }
+
+        [Test]
+        public void TestFloatPrecision()
+        {
+            PiRun("4 set_float_precision { == assert } 'eq #");
+        }
+
+        [Test]
         public void TestSimpleTokens()
         {
             var lexer = new PiLexer("1 2 3");

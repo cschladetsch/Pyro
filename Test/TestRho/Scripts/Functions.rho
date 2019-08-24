@@ -1,0 +1,13 @@
+﻿fun bar(n)
+	assert(n == 42)
+bar(42)
+
+fun foo()
+	1
+	2
+	3
+foo()
+assert(`3 ==`)
+assert(`depth 2 ==`)
+`clear`
+

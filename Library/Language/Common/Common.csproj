@@ -79,6 +79,10 @@
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ext\Flow\Flow.csproj">
+      <Project>{da87a965-0077-4af8-986b-3934f186125e}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

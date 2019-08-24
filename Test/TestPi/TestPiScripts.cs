@@ -26,12 +26,15 @@
         [Test]
         public void RunScripts()
         {
+            TestScript("Variables.pi");
+            TestScript("Current.pi");
+            TestScript("Common.pi");
+
             //TestScript("Floats.pi");
             TestScript("Arithmetic.pi");
             TestScript("Array.pi");
             TestScript("Boolean.pi");
             TestScript("Comments.pi");
-            TestScript("Common.pi");
             TestScript("Conditionals.pi");
             //TestScript("Loops.pi");
             //TestScript("Map.pi");
@@ -40,7 +43,6 @@
             TestScript("Strings.pi");
             //TestScript("TestAppCalls.pi");
             //TestScript("TreeScope.pi");
-            TestScript("Variables.pi");
             TestScript("Continuations.pi");
         }
 

@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PyroTool")]
 [assembly: AssemblyDescription("Interactive Pyro")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("LiminalVR Pty Ltd")]
 [assembly: AssemblyProduct("Pyro Tool")]
 [assembly: AssemblyCopyright("Copyright © Christian Schladetsch 2019")]
 [assembly: AssemblyTrademark("")]
