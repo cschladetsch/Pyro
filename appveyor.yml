@@ -1,6 +1,7 @@
 version: 1.0.{build}
 before_build:
   - nuget restore
+  - git submodule -q update --init
 image: Visual Studio 2017
 build:
   project: Pyro.sln
