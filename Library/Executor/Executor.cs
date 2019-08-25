@@ -123,8 +123,8 @@ namespace Pyro.Exec
                 return ContextStack.Count != 0;
             }
 
-            if (!GetCurrent())
-                return ContextStack.Count != 0;
+            //if (!GetCurrent())
+            //    return ContextStack.Count != 0;
 
             // unbox pyro-reference types
             if (next is IRefBase refBase)

@@ -24,13 +24,21 @@
         }
 
         [Test]
+        public void TestExistsAssert()
+        {
+            PiRun("'foo exists not assert");
+        }
+
+        [Test]
         public void RunScripts()
         {
             TestScript("Variables.pi");
+            return;
+
             TestScript("Current.pi");
             TestScript("Common.pi");
 
-            //TestScript("Floats.pi");
+            TestScript("Floats.pi");
             TestScript("Arithmetic.pi");
             TestScript("Array.pi");
             TestScript("Boolean.pi");

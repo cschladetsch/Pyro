@@ -119,7 +119,8 @@ namespace Pyro.Test
                 if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
 
-                //WriteLine(trans.ToString());
+                if (Verbose)
+                    WriteLine(trans.ToString());
 
                 Assert.IsFalse(trans.Failed);
                 _Exec.Continue(cont);
@@ -170,6 +171,8 @@ namespace Pyro.Test
 
         protected object Pop()
         {
+            if (Verbose && _Exec.DataStack.Count == 0)
+                _Exec.DebugTrace();
             Assert.Greater(DataStack.Count, 0, "Empty Datastack");
             return DataStack.Pop();
         }
@@ -199,8 +202,8 @@ namespace Pyro.Test
         protected void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
-            //System.Diagnostics.Trace.WriteLine(text);
-            Console.WriteLine(text);
+            System.Diagnostics.Trace.WriteLine(text);
+            //Console.WriteLine(text);
         }
 
         protected PiLexer PiLex(string input)

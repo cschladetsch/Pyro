@@ -21,8 +21,8 @@ namespace Pyro.Exec
         private static void Write(string text, params object[] args)
         {
             //Debug.Write(text);
-            //Console.Write(text);
-            //Trace.Write(text);
+            Console.Write(text);
+            Trace.Write(text);
             TestContext.Out.WriteLine(text);
         }
 
