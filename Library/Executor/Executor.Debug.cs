@@ -18,7 +18,7 @@
         private static void Write(string text, params object[] args)
         {
             System.Diagnostics.Debug.Write(text);
-            //Console.Write(text, args);
+            Console.Write(text, args);
         }
 
         private static void WriteLine(string fmt, params object[] args)

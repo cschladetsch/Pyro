@@ -33,7 +33,7 @@
             AssertSameTokens("break", EPiToken.Break);
         }
 
-        [Test]
+        //[Test]
         public void TestPathnames()
         {
             AssertSameTokens("'a", EPiToken.Quote, EPiToken.Ident);

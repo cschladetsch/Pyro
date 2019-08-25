@@ -45,7 +45,7 @@
             RhoRun(
 @"
 fun foo(type)
-	a = type()
+	a = new ""Foo""//type()
 	assert(a.Num == 42)
 	assert(a.Sum(a.Num, 3) == 42 + 3)
 	assert(a.MulString(""foo"", 3) + ""bar"" == ""foofoofoobar"")
