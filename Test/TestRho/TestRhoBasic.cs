@@ -170,12 +170,10 @@ fun bar(f, n)
 assert(bar(foo, 1) == 2)
 assert(bar(foo, 2) == 3)
 ");
-
-
         }
 
         [Test]
-        public void TestReturnVal()
+        public void TestReturnVal0()
         {
             RhoRun(
 @"fun foo()
@@ -183,6 +181,39 @@ assert(bar(foo, 2) == 3)
 assert(foo() == 1)
 assert(foo() == 1)
 ");
+
+            RhoRun(
+@"fun foo()
+	1
+assert(foo() == 1)
+");
+
+            RhoRun(
+@"fun foo(n)
+	n
+assert(foo(1) == 1)
+assert(foo(2) == 2)
+");
+
+            RhoRun(
+@"fun foo()
+	1
+assert(foo() == 1)
+");
+            RhoRun(
+@"fun foo(n)
+	3
+assert(foo(1) == 3)
+assert(foo(2) == 3)
+");
+
+            RhoRun(
+@"fun foo()
+	2
+assert(foo() == 2)
+assert(foo() == 2)
+");
+
         }
 
         [Test]
@@ -222,23 +253,23 @@ if true
             RhoRun(ifThen);
             AssertPop(1);
 
-            var ifThenElse1 = @"
-if true
-	1
-else
-	2
-";
-            RhoRun(ifThenElse1);
-            AssertPop(1);
+            //            var ifThenElse1 = @"
+            //if true
+            //	1
+            //else
+            //	2
+            //";
+            //            RhoRun(ifThenElse1);
+            //            AssertPop(1);
 
-            var ifThenElse2 = @"
-if false
-	1
-else
-	2
-";
-            RhoRun(ifThenElse2);
-            AssertPop(2);
+            //            var ifThenElse2 = @"
+            //if false
+            //	1
+            //else
+            //	2
+            //";
+            //            RhoRun(ifThenElse2);
+            //            AssertPop(2);
         }
 
         [Test]

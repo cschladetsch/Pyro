@@ -113,6 +113,8 @@
 
         public void Enter(Executor exec)
         {
+            Running = true;
+
             if (Kernel == null)
             {
                 Kernel = exec.Kernel;
@@ -134,23 +136,23 @@
                     exec.PushContext(this);
                     Info("Suspended coro");
                 };
-
-                Running = true;
             }
 
-            // Nothing to do if no args to pull.
-            if (Args == null)
-                return;
-
-            // Already entered; we may be re-entering, which is fine.
             if (Ip != 0)
                 return;
 
-            if (exec.DataStack.Count < Args.Count)
-                throw new DataStackEmptyException();
+            //// Already entered; we may be re-entering, which is fine.
+            //if (Ip != 0)
+            //    return;
 
-            foreach (var arg in Args)
-                _scope[arg] = exec.DataStack.Pop();
+            if (Args != null)
+            {
+                if (exec.DataStack.Count < Args.Count)
+                    throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
+
+                foreach (var arg in Args)
+                    _scope[arg] = exec.DataStack.Pop();
+            }
 
             Ip = 0;
         }
@@ -180,7 +182,6 @@
 
             // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
             //_scope.Clear();
-            Ip = 0;
         }
 
         IGenerator IGenerator.AddTo(IGroup @group)

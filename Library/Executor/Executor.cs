@@ -40,6 +40,8 @@ namespace Pyro.Exec
         {
             ContextStack.Add(continuation);
             WriteLine($"PushContext: {ContextStack.Count}");
+            if (continuation.Ip < continuation.Code.Count)
+                continuation.Running = true;
             //_nextContext = ContextStack.Count - 1;
         }
 

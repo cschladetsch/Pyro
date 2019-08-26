@@ -25,7 +25,7 @@
                 return;
             }
 
-            str.Append($"\tIp={Ip}/{Code.Count}: ");
+            str.Append($"\tIp={Ip}/{Code.Count}, Active={Active}, Run={Running}: ");
             for (var n = 0; n < Code.Count; ++n)
             {
                 string wrap1 = "", wrap2 = "";
