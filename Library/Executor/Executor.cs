@@ -104,22 +104,15 @@ namespace Pyro.Exec
                     return false;
             }
 
-            if (_current == null)
-                return false;
-
-            if (!_current.Next(out var next))
-                return false;
-
-            // unbox pyro-reference types
+            var end = !_current.Next(out var next);
             if (next is IRefBase refBase)
                 next = refBase.BaseValue;
 
             try
             {
                 Perform(next);
-
-                //if (Verbosity > 10)
-                //    Write($"{next} ");
+                if (end)
+                    _current.Complete();
             }
             catch (Exception e)
             {
@@ -325,9 +318,7 @@ namespace Pyro.Exec
                     continue;
 
                 ContextStack.RemoveAt(n);
-                cont.Start(this);
-                _current = cont;
-                return cont;
+                return _current = cont.Start(this);
             }
 
             return null;
@@ -338,7 +329,10 @@ namespace Pyro.Exec
         /// context stack.
         /// </summary>
         private void Break()
-            => _break = true;
+        {
+            _break = true;
+            _current = null;
+        }
 
         private dynamic RPop()
             => Resolve(Pop());

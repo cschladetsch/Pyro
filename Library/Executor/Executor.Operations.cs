@@ -744,7 +744,7 @@
         {
             Info("Removing cont.");
             ContextStack.Remove(continuation);
-            _current = null;
+            Break();
         }
     }
 }

@@ -113,13 +113,15 @@ namespace Pyro.Exec
             Args.Add(ident);
         }
 
-        public void Start(Executor exec)
+        public Continuation Start(Executor exec)
         {
             var cp = Self.Registry.Add(new Continuation(Code)).Value;
             cp.Args = Args;
 
             cp.Kernel = exec.Kernel;
-            cp.Kernel.Root.Add(cp);
+            cp.Ip = Ip;
+            cp.Scope = Scope;
+            //cp.Kernel.Root.Add(cp);
 
             void End(ITransient tr)
             {
@@ -131,7 +133,7 @@ namespace Pyro.Exec
 
             cp.Resumed += tr =>
             {
-                exec.PushContext(cp);
+                //exec.PushContext(cp);
                 Info("Resumed coro");
             };
 
@@ -150,6 +152,8 @@ namespace Pyro.Exec
                 foreach (var arg in Args)
                     cp.Scope[arg] = exec.DataStack.Pop();
             }
+
+            return cp;
         }
 
         public bool HasScopeObject(string label)
@@ -165,8 +169,6 @@ namespace Pyro.Exec
         {
             var has = Ip < Code.Count;
             next = has ? Code[Ip++] : null;
-            if (Ip == Code.Count)
-                Complete();
             return has;
         }
 
