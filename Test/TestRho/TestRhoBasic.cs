@@ -176,10 +176,10 @@ assert(bar(foo, 2) == 3)
         public void TestReturnVal0()
         {
             RhoRun(
-@"fun foo(n)
+@"fun foo()
 	3
-assert(foo(1) == 3)
-//assert(foo(2) == 3)
+assert(foo() == 3)
+assert(foo() == 3)
 ");
 
             RhoRun(
