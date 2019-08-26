@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using NUnit.Framework.Internal;
-
-namespace Pyro.Impl
+﻿namespace Pyro.Impl
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Text;
+
     /// <inheritdoc cref="IClassBase" />
     /// <inheritdoc cref="StructBase" />
     /// <summary>
@@ -32,6 +31,66 @@ namespace Pyro.Impl
 
             //    _callables[method.Name] = call;
             //}
+        }
+
+        public object Duplicate(object obj)
+        {
+            return null;
+        }
+
+        public ICallable GetCallable(string name)
+        {
+            return _callables.TryGetValue(name, out var call) ? call : null;
+        }
+
+        public void AddCallable(string name, ICallable callable)
+        {
+            if (_callables.ContainsKey(name))
+                throw new Exception("Duplicate callable added to class");
+
+            _callables[name] = callable;
+        }
+
+        public virtual void NewRef(Id id, out IRefBase refBase)
+        {
+            refBase = new RefBase(_registry, this, id);
+        }
+
+        public IRefBase Create(Id id, object value)
+        {
+            return new RefBase(_registry, this, id, value);
+        }
+
+        public IConstRefBase CreateConst(Id id)
+        {
+            return new ConstRefBase(_registry, this, id);
+        }
+
+        public IConstRefBase CreateConst(Id id, object value)
+        {
+            return new ConstRefBase(_registry, this, id, value);
+        }
+
+        public virtual object NewInstance()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual object NewInstance(Stack<object> dataStack)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void ToPiScript(StringBuilder str, object value)
+        {
+            str.Append(value);
+        }
+
+        protected void AddRefFields(object instance)
+        {
+            foreach (var field in _fields)
+            {
+            }
         }
 
         private ICallable MakeCallable(MethodInfo mi)
@@ -67,7 +126,7 @@ namespace Pyro.Impl
                 case 1:
                     gen = typeof(Method<,,>).MakeGenericType(Type, pars[0], returnType);
                     var d = typeof(Func<,,>).MakeGenericType(Type, pars[0], returnType);
-                    Action<object, object> a = (q, a0) => mi.Invoke(q, new[] {a0});
+                    Action<object, object> a = (q, a0) => mi.Invoke(q, new[] { a0 });
 
                     break;
                 case 2:
@@ -85,67 +144,6 @@ namespace Pyro.Impl
             var del = Expression.Lambda(call, p2).Compile();
 
             return Activator.CreateInstance(gen, del) as ICallable;
-        }
-
-        public object Duplicate(object obj)
-        {
-            return null;
-        }
-
-        public ICallable GetCallable(string name)
-        {
-            return _callables.TryGetValue(name, out var call) ? call : null;
-        }
-
-        public void AddCallable(string name, ICallable callable)
-        {
-            if (_callables.ContainsKey(name))
-                throw new Exception("Duplicate callable added to class");
-
-            _callables[name] = callable;
-        }
-
-        public virtual void NewRef(Id id, out IRefBase refBase)
-        {
-            refBase = new RefBase(_registry, this, id);
-        }
-
-        protected void AddRefFields(object instance)
-        {
-            foreach (var field in _fields)
-            {
-
-            }
-        }
-
-        public IRefBase Create(Id id, object value)
-        {
-            return new RefBase(_registry, this, id, value);
-        }
-
-        public IConstRefBase CreateConst(Id id)
-        {
-            return new ConstRefBase(_registry, this, id);
-        }
-
-        public IConstRefBase CreateConst(Id id, object value)
-        {
-            return new ConstRefBase(_registry, this, id, value);
-        }
-
-        public virtual object NewInstance()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual object NewInstance(Stack<object> dataStack)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void ToPiScript(StringBuilder str, object value)
-        {
-            str.Append(value);
         }
     }
 }

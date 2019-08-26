@@ -8,6 +8,7 @@ namespace WinForms
     using Pyro.Exec;
     using Pyro.Network;
     using Pyro.ExecutionContext;
+    using static Pyro.Create;
 
     /// <summary>
     /// The main form for the application.
@@ -58,8 +59,24 @@ namespace WinForms
             UpdatePiContext();
             ColorisePi();
             ColoriseRho();
+            Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
+            Exec.Scope["PrintSpan"] = Function<TimeSpan>(d => Print(d.ToString()));
+            Exec.Scope["PrintTime"] = Function<DateTime>(d => Print(d.ToString()));
 
             Exec.Rethrows = true;
+
+            var timer = new System.Windows.Forms.Timer {Interval = 10};
+            timer.Tick += (sender, args) => Exec.Next();
+            timer.Start();
+        }
+
+        private void Print(object obj)
+        {
+            if (obj == null)
+                return;
+
+            Console.WriteLine(obj);
+            output.Text += "\n" + obj.ToString();
         }
 
         private void Received(IServer server, IClient client, string text)
@@ -80,7 +97,7 @@ namespace WinForms
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    output.Text = $"Exception: {e.Message}";
+                    output.Text += $"Exception: {e.Message}";
                 }
             }
 
@@ -97,7 +114,7 @@ namespace WinForms
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                output.Text = $"Exception: {e.Message}";
+                output.Text += $"Exception: {e.Message}";
             }
         }
 
@@ -196,12 +213,13 @@ namespace WinForms
                 action();
                 var span = DateTime.Now - start;
                 toolStripStatusLabel1.Text = $"Took {span.TotalMilliseconds:0.00}ms";
-                output.Text = _context.Error;
+                if (!string.IsNullOrEmpty(_context.Error))
+                    output.Text += _context.Error + "\n";
                 UpdateStackView();
             }
             catch (Exception e)
             {
-                output.Text = $"Exception: {e.Message} ({_context.Error})";
+                output.Text += $"Exception: {e.Message} ({_context.Error})";
                 Console.WriteLine(e);
             }
         }

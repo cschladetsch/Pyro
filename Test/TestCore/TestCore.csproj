@@ -66,6 +66,10 @@
       <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj">
+      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

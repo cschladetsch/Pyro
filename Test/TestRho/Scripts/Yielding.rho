@@ -1,0 +1,7 @@
+﻿fun foo()
+	yield(1)
+	yield(2)
+	yield(3)
+assert(foo() == 1)
+assert(foo() == 2)
+assert(foo() == 3)
