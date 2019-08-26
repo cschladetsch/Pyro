@@ -157,13 +157,38 @@ fun foo()
         }
 
         [Test]
-        public void TestSimpleFunctions()
+        public void TestCalls()
         {
-            RhoRun("a = 1");
+            _Exec.ContextStack.Clear();
+            _Exec.DataStack.Clear();
+            RhoRun(
+@"
+fun foo()
+	1
+fun bar(f, n)
+	n + f()
+assert(bar(foo, 1) == 2)
+assert(bar(foo, 2) == 3)
+");
+
+
+        }
+
+        [Test]
+        public void TestReturnVal()
+        {
             RhoRun(
 @"fun foo()
 	1
+assert(foo() == 1)
+assert(foo() == 1)
 ");
+        }
+
+        [Test]
+        public void TestSimpleFunctions()
+        {
+            RhoRun("a = 1");
 
             RhoRun(
 @"fun foo()
@@ -182,16 +207,6 @@ assert(foo() == 1)
 @"fun foo(a)
 	a
 foo(42)
-");
-
-            RhoRun(
-@"
-fun foo()
-	1
-fun bar(f, n)
-	n + f()
-assert(bar(foo, 1) == 2)
-assert(bar(foo, 2) == 3)
 ");
 
         }

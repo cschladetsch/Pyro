@@ -40,7 +40,7 @@ namespace Pyro.Exec
         {
             ContextStack.Add(continuation);
             WriteLine($"PushContext: {ContextStack.Count}");
-            _nextContext = ContextStack.Count - 1;
+            //_nextContext = ContextStack.Count - 1;
         }
 
         public void Continue(IRef<Continuation> continuation)
@@ -113,14 +113,14 @@ namespace Pyro.Exec
                 _current = PopContext();
                 if (_current == null)
                 {
-                    return ContextStack.Count != 0;
+                    return false;//ContextStack.Count != 0;
                 }
             }
 
             if (!_current.Next(out var next))
             {
                 PopContext();
-                return ContextStack.Count != 0;
+                return false;//ContextStack.Count != 0;
             }
 
             //if (!GetCurrent())
@@ -334,16 +334,12 @@ namespace Pyro.Exec
 
         private Continuation PopContext()
         {
-            for (var n = _nextContext; n >= 0; ++n)
+            for (var n = ContextStack.Count - 1; n >= 0; --n)
             {
-                if (n >= ContextStack.Count)
-                    break;
-
                 var c = ContextStack[n];
                 if (c.Active && c.Running)
                 {
                     ContextStack.RemoveAt(n);
-                    _nextContext--;
                     c.Enter(this);
                     return c;
                 }

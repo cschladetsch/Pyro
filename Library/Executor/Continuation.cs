@@ -25,7 +25,6 @@
             Active = true;
             Running = true;
             Code = code;
-
         }
 
         public void Delay(int millis)
@@ -135,6 +134,8 @@
                     exec.PushContext(this);
                     Info("Suspended coro");
                 };
+
+                Running = true;
             }
 
             // Nothing to do if no args to pull.
@@ -167,14 +168,15 @@
         {
             var has = Ip < Code.Count;
             next = has ? Code[Ip++] : null;
-            if (!has)
+            if (Ip == Code.Count)
                 Reset();
             return has;
         }
 
         public void Reset()
         {
-            Complete();
+            //Complete();
+            Running = false;
 
             // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
             //_scope.Clear();

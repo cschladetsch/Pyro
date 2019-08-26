@@ -56,17 +56,17 @@
 
             Assert.AreEqual("'foo", First.Value.ToString());
 
-            Parse("foo/bar");
-            Assert.AreEqual(EPiAst.Pathname, First.Type);
-            Assert.AreEqual("foo/bar", First.Value.ToString());
+            //Parse("foo/bar");
+            //Assert.AreEqual(EPiAst.Pathname, First.Type);
+            //Assert.AreEqual("foo/bar", First.Value.ToString());
 
-            Parse("'foo/bar");
-            Assert.AreEqual(EPiAst.Pathname, First.Type);
-            Assert.AreEqual("'foo/bar", First.Value.ToString());
+            //Parse("'foo/bar");
+            //Assert.AreEqual(EPiAst.Pathname, First.Type);
+            //Assert.AreEqual("'foo/bar", First.Value.ToString());
 
-            Parse("'foo/bar/spam");
-            Assert.AreEqual(EPiAst.Pathname, First.Type);
-            Assert.AreEqual("'foo/bar/spam", First.Value.ToString());
+            //Parse("'foo/bar/spam");
+            //Assert.AreEqual(EPiAst.Pathname, First.Type);
+            //Assert.AreEqual("'foo/bar/spam", First.Value.ToString());
         }
 
         [Test]

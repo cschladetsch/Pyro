@@ -114,7 +114,7 @@ namespace Pyro.Exec
             {
                 WriteDataStack(str);
                 str.AppendLine("Current: ");
-                _current.DebugWrite(str);
+                _current?.DebugWrite(str);
                 str.AppendLine();
                 WriteContextStack(str);
                 str.AppendLine($"Next:\n\t'{GetTyped(next)}'");
