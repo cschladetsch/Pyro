@@ -119,8 +119,13 @@ namespace Pyro.Test
                 if (!trans.Translate(text, out var cont))
                     WriteLine($"Error: {trans.Error}");
 
+                if (Verbose)
+                    WriteLine(trans.ToString());
+
                 Assert.IsFalse(trans.Failed);
                 _Exec.Continue(cont);
+                while (_Exec.Next())
+                    ;
             }
             catch (Exception e)
             {
@@ -166,6 +171,8 @@ namespace Pyro.Test
 
         protected object Pop()
         {
+            if (Verbose && _Exec.DataStack.Count == 0)
+                _Exec.DebugTrace();
             Assert.Greater(DataStack.Count, 0, "Empty Datastack");
             return DataStack.Pop();
         }

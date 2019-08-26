@@ -9,9 +9,21 @@
         : TestCommon
     {
         [Test]
+        public void TestOne()
+        {
+            PiRun("42");
+            AssertPop<int>(42);
+        }
+        [Test]
         public void TestAddIntegers()
         {
             TestAdd(1,2,3);
+        }
+
+        [Test]
+        public void TestAddFloats()
+        {
+            TestAdd(1.1f, 1.1f, 1.1f + 1.1f);
         }
 
         [Test]

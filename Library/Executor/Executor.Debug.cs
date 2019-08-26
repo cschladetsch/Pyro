@@ -1,4 +1,7 @@
-﻿namespace Pyro.Exec
+﻿using System.Diagnostics;
+using NUnit.Framework;
+
+namespace Pyro.Exec
 {
     using System;
     using System.Text;
@@ -18,7 +21,11 @@
         private static void Write(string text, params object[] args)
         {
             System.Diagnostics.Debug.Write(text);
-            Console.Write(text, args);
+            //Console.Write(text, args);
+            //Debug.Write(text);
+            Console.Write(text);
+            Trace.Write(text);
+            TestContext.Out.WriteLine(text);
         }
 
         private static void WriteLine(string fmt, params object[] args)
@@ -36,6 +43,7 @@
         {
             var str = new StringBuilder();
             WriteDataStack(str);
+            WriteContextStack(str);
             WriteContinuation(str);
             return str.ToString();
         }
@@ -71,7 +79,25 @@
             for (var n = max - 1; n >= 0; --n)
             {
                 var obj = data[n];
-                str.AppendLine($"    [{n}]: {GetTyped(obj)}");
+                str.AppendLine($"\t[{n}]: {GetTyped(obj)}");
+            }
+        }
+
+        public void WriteContextStack(StringBuilder str, int max = 4)
+        {
+            str.AppendLine("Context:");
+            max = Math.Min(ContextStack.Count, max);
+            if (max == 0)
+            {
+                str.AppendLine("\tEmpty");
+                return;
+            }
+            for (var n = max - 1; n >= 0; --n)
+            {
+                var obj = ContextStack[n];
+                str.Append($"\t[{n}]: ");
+                obj.DebugWrite(str);
+                str.AppendLine();
             }
         }
 
@@ -84,15 +110,19 @@
                 return;
 
             var str = new StringBuilder();
-            str.Append("========\n");
+            str.AppendLine($"---- Step #{Kernel.StepNumber}");
 
             if (Verbosity > 5)
             {
                 WriteDataStack(str);
-                str.AppendLine($"next: '{GetTyped(next)}'");
+                str.AppendLine("Current: ");
+                _current?.DebugWrite(str);
+                str.AppendLine();
+                WriteContextStack(str);
+                str.AppendLine($"Next:\n\t'{GetTyped(next)}'");
             }
 
-            WriteLine(str);
+            WriteLine(str.ToString());
         }
     }
 }

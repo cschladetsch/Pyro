@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace Pyro.Exec
 {
     using System;
@@ -37,7 +39,10 @@ namespace Pyro.Exec
         public void PushContext(Continuation continuation)
         {
             ContextStack.Add(continuation);
-            _nextContext = ContextStack.Count - 1;
+            _current = null;
+            //if (continuation.Ip < continuation.Code.Count)
+            //    continuation.Running = true;
+            //_nextContext = ContextStack.Count - 1;
         }
 
         public void Continue(IRef<Continuation> continuation)
@@ -52,7 +57,7 @@ namespace Pyro.Exec
 
         public void Continue(Continuation continuation)
         {
-            Prepare(continuation);
+            PushContext(continuation);
 
             while (true)
             {
@@ -65,12 +70,12 @@ namespace Pyro.Exec
             }
         }
 
-        public void Prepare(Continuation cont)
-        {
-            _current = cont;
-            _break = false;
-            cont.Enter(this);
-        }
+        //public void Prepare(Continuation cont)
+        //{
+        //    _current = cont;
+        //    _break = false;
+        //    cont.Enter(this);
+        //}
 
         private void Execute(Continuation cont)
         {
@@ -89,34 +94,25 @@ namespace Pyro.Exec
         {
             Kernel.Step();
 
-            bool GetCurrent()
-            {
-                if (_current != null)
-                    return true;
+            bool IsRunning(Continuation cont)
+                => cont != null && cont.Running && cont.Active && cont.Ip < cont.Code.Count;
 
+            while (!IsRunning(_current))
+            {
                 _current = PopContext();
-                return _current != null;
+                if (_current == null)
+                    return false;
             }
 
-            if (!GetCurrent())
-                return false;
-
-            if (!_current.Next(out var next))
-                return false;
-
-            if (!GetCurrent())
-                return false;
-
-            // unbox pyro-reference types
+            var end = !_current.Next(out var next);
             if (next is IRefBase refBase)
                 next = refBase.BaseValue;
 
             try
             {
                 Perform(next);
-
-                if (Verbosity > 10)
-                    Write($"{next} ");
+                if (end)
+                    _current.Complete();
             }
             catch (Exception e)
             {
@@ -201,6 +197,8 @@ namespace Pyro.Exec
             if (TryResolve(identBase, out var res))
                 return res;
 
+            TryResolve(identBase, out var res2);
+
             throw new CannotResolve($"{identBase}");
         }
 
@@ -259,7 +257,9 @@ namespace Pyro.Exec
                 case MethodInfo mi:
                     var obj = Pop();
                     var numArgs = mi.GetParameters().Length;
-                    var args = DataStack.Take(numArgs).ToArray();
+                    var args = new object[numArgs];
+                    for (var n = 0; n < numArgs; ++n)
+                        args[n] = DataStack.Pop();
                     var ret = mi.Invoke(obj, args);
                     if (mi.ReturnType != typeof(void))
                         Push(ret);
@@ -267,6 +267,7 @@ namespace Pyro.Exec
 
                 default:
                     PushContext(next);
+                    _current = null;
                     break;
             }
 
@@ -310,19 +311,14 @@ namespace Pyro.Exec
 
         private Continuation PopContext()
         {
-            for (var n = _nextContext; n >= 0; ++n)
+            for (var n = ContextStack.Count - 1; n >= 0; --n)
             {
-                if (n >= ContextStack.Count)
-                    break;
+                var cont = ContextStack[n];
+                if (!cont.Active || !cont.Running)
+                    continue;
 
-                var c = ContextStack[n];
-                if (c.Active && c.Running)
-                {
-                    ContextStack.RemoveAt(n);
-                    _nextContext--;
-                    c.Enter(this);
-                    return c;
-                }
+                ContextStack.RemoveAt(n);
+                return _current = cont.Start(this);
             }
 
             return null;
@@ -333,7 +329,10 @@ namespace Pyro.Exec
         /// context stack.
         /// </summary>
         private void Break()
-            => _break = true;
+        {
+            _break = true;
+            _current = null;
+        }
 
         private dynamic RPop()
             => Resolve(Pop());

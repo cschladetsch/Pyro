@@ -76,6 +76,12 @@
     <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj">
+      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

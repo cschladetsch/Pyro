@@ -13,6 +13,12 @@ namespace Pyro
         : ReflectedBase
         , IReflected<T>
     {
+        public IDictionary<string, object> Scope
+        {
+            get => _scope ?? (_scope = new Dictionary<string, object>());
+            set => _scope = value;
+        }
+
         private IDictionary<string, object> _scope;
 
         public IRef<T> Self
@@ -24,12 +30,6 @@ namespace Pyro
                     throw new ArgumentNullException(nameof(value));
                 SelfBase = Self = value;
             }
-        }
-
-        public IDictionary<string, object> Scope
-        {
-            get => _scope ?? (_scope = new Dictionary<string, object>());
-            set => _scope = value;
         }
 
         public string ToText()
