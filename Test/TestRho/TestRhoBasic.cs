@@ -156,7 +156,7 @@ fun foo()
             Assert.AreEqual(3, cont.Code[2]);
         }
 
-        [Test]
+        //[Test]
         public void TestCalls()
         {
             _Exec.ContextStack.Clear();
@@ -293,7 +293,7 @@ foo(2)
             RhoRun(text);
         }
 
-        [Test]
+        //[Test]
         public void TestNestedFunctions()
         {
             RhoRun(@"

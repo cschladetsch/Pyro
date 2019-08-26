@@ -18,7 +18,7 @@ namespace Pyro.Test.Rho
         }
 
         [Test]
-        public void RunSomeScripts()
+        public void RunSomeRhoScripts()
         {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
 
@@ -27,25 +27,25 @@ namespace Pyro.Test.Rho
             _Exec.Scope["pr"] = Function<object>(DebugTrace);
 
             TestScript("Coros.rho");
-            //TestScript("Functions.rho");
+            TestScript("Functions.rho");
+            TestScript("Add.rho");
+            TestScript("Arithmetic.rho");
+            TestScript("Arithmetic.rho");
+            TestScript("Array.rho");
+            TestScript("Comments.rho");
+            TestScript("Variables.rho");
+            TestScript("Strings.rho");
+            TestScript("Arithmetic.rho");
+
+            // Failing:
+            //TestScript("NestedLoops.rho");
             //TestScript("Yielding.rho");
-            //TestScript("Add.rho");
-            //TestScript("Arithmetic.rho");
             //TestScript("ForLoops.rho");
-            //TestScript("Arithmetic.rho");
-            //TestScript("Array.rho");
-            //TestScript("Comments.rho");
-            //TestScript("Variables.rho");
-            //TestScript("Strings.rho");
             //TestScript("Conditionals.rho");
-            //TestScript("Arithmetic.rho");
             //TestScript("RangeLoops.rho");
             //TestScript("ForLoops.rho");
             //TestScript("NestedFunctions.rho");
             //TestScript("PassingFunctions.rho");
-
-            // needs re-arch
-            //TestScript("NestedLoops.rho");
 
             // needs re-arch
             //TestScript("FreezeThaw.rho");
@@ -60,7 +60,7 @@ namespace Pyro.Test.Rho
         }
 
         //[Test]
-        public void RunAllScripts()
+        public void RunAllRhoScripts()
         {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.rho"))
                 Assert.IsTrue(RunScriptPathname(file));
