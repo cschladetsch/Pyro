@@ -40,8 +40,8 @@ namespace Pyro.Exec
         {
             ContextStack.Add(continuation);
             WriteLine($"PushContext: {ContextStack.Count}");
-            if (continuation.Ip < continuation.Code.Count)
-                continuation.Running = true;
+            //if (continuation.Ip < continuation.Code.Count)
+            //    continuation.Running = true;
             //_nextContext = ContextStack.Count - 1;
         }
 
@@ -86,6 +86,7 @@ namespace Pyro.Exec
                 {
                     _break = false;
                     _current = PopContext();
+                    _current?.Enter(this);
                 }
             }
         }
@@ -95,38 +96,20 @@ namespace Pyro.Exec
             Kernel.Step();
 
             bool IsRunning(Continuation cont)
-                => cont != null && cont.Running && cont.Ip < cont.Code.Count;
+                => cont != null && cont.Running && cont.Active && cont.Ip < cont.Code.Count;
 
-            bool GetCurrent()
-            {
-                if (IsRunning(_current))
-                    return true;
-
-                do
-                {
-                    _current = PopContext();
-                } while (_current != null && !IsRunning(_current));
-
-                return _current != null;
-            }
-
-            if (!GetCurrent())
+            while (!IsRunning(_current))
             {
                 _current = PopContext();
                 if (_current == null)
-                {
-                    return false;//ContextStack.Count != 0;
-                }
+                    return false;
             }
+
+            if (_current == null)
+                return false;
 
             if (!_current.Next(out var next))
-            {
-                PopContext();
-                return false;//ContextStack.Count != 0;
-            }
-
-            //if (!GetCurrent())
-            //    return ContextStack.Count != 0;
+                return false;
 
             // unbox pyro-reference types
             if (next is IRefBase refBase)
@@ -342,7 +325,6 @@ namespace Pyro.Exec
                 if (c.Active && c.Running)
                 {
                     ContextStack.RemoveAt(n);
-                    c.Enter(this);
                     return c;
                 }
             }

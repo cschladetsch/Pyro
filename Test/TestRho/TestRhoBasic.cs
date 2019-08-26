@@ -176,16 +176,10 @@ assert(bar(foo, 2) == 3)
         public void TestReturnVal0()
         {
             RhoRun(
-@"fun foo()
-	1
-assert(foo() == 1)
-assert(foo() == 1)
-");
-
-            RhoRun(
-@"fun foo()
-	1
-assert(foo() == 1)
+@"fun foo(n)
+	3
+assert(foo(1) == 3)
+//assert(foo(2) == 3)
 ");
 
             RhoRun(
@@ -194,19 +188,27 @@ assert(foo() == 1)
 assert(foo(1) == 1)
 assert(foo(2) == 2)
 ");
+            RhoRun(
+@"fun foo()
+	1
+foo()
+writeln(foo)
+foo()
+writeln(foo)
+");
 
             RhoRun(
 @"fun foo()
 	1
 assert(foo() == 1)
 ");
-            RhoRun(
-@"fun foo(n)
-	3
-assert(foo(1) == 3)
-assert(foo(2) == 3)
-");
 
+
+            RhoRun(
+@"fun foo()
+	1
+assert(foo() == 1)
+");
             RhoRun(
 @"fun foo()
 	2

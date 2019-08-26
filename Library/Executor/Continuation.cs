@@ -145,7 +145,7 @@
             //if (Ip != 0)
             //    return;
 
-            if (Args != null)
+            if (Args != null && _scope.Count == 0)
             {
                 if (exec.DataStack.Count < Args.Count)
                     throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
@@ -177,10 +177,8 @@
 
         public void Reset()
         {
-            //Complete();
             Running = false;
-
-            // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
+            Ip = 0;
             //_scope.Clear();
         }
 
