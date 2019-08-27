@@ -51,7 +51,7 @@ All components support colored output and on-the-fly colored syntax highlighting
 
 ## Window
 
-![Window](Resources/PyroWindow.png)
+![Window](Resources/PyroWindow.PNG)
 
 ## Code Analysis
 
