@@ -92,6 +92,10 @@
       <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj">
+      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>
@@ -103,10 +107,6 @@
     <ProjectReference Include="..\TestCommon\TestCommon.csproj">
       <Project>{afc905f1-f4d7-430d-b005-b6b9e01245af}</Project>
       <Name>TestCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
