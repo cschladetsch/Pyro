@@ -84,7 +84,7 @@
 
                 case EPiToken.Exists:
                     context.Add(_AstFactory.New(Consume()));
-                    return false;
+                    return true;
 
                 default:
                     context.Add(AddValue(_AstFactory.New(Consume())));

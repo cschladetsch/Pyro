@@ -12,8 +12,13 @@
         public void TestContinuations()
         {
             PiRun("{1 +} 'a # 3 a &");
-            PiRun("3 'a # { {1 +} 'a # 3 a &} & a +");
-            AssertPop(7);
+            AssertPop(4);
+
+            PiRun("{ { 1 + } 'b # 3 b & } & ");
+            AssertPop(4);
+
+            PiRun("3 'a # { { 1 + } 'b # 4 b & } 123 writeln & a +");
+            AssertPop(8);
             AssertEmpty();
 
             PiRun("1 1 {+} &");

@@ -8,35 +8,34 @@
     {
         public void DebugWrite(StringBuilder str)
         {
-            if (_scope == null)
+            if (_scope == null || _scope.Count == 0)
             {
-                str.AppendLine("    No scope");
+                str.AppendLine("\tNothing in scope.");
             }
             else
             {
-                str.AppendLine("    Scope:");
+                str.AppendLine("\tScope:");
                 foreach (var obj in _scope)
-                    str.AppendLine($"    {obj.Key}={obj.Value}");
+                    str.AppendLine($"\t\tname={obj.Key}, val={obj.Value}");
             }
 
             if (Code == null)
             {
-                str.AppendLine("    No code");
+                str.AppendLine("\tNo code");
                 return;
             }
 
-            if (Ip == Code.Count)
+            str.Append($"\tIp={Ip}/{Code.Count}, Active={Active}, Run={Running}: ");
+            for (var n = 0; n < Code.Count; ++n)
             {
-                str.AppendLine("    [end]");
-                return;
+                string wrap1 = "", wrap2 = "";
+                if (n == Ip)
+                {
+                    wrap1 = " >>> ";
+                    wrap2 = " <<< ";
+                }
+                str.Append($"{wrap1}{Code[n]}{wrap2}, ");
             }
-
-            var index = Math.Max(0, Ip - 6);
-            str.AppendLine($"    Code from {index} to fault at {Ip}/{Code.Count}:");
-            str.Append("        ");
-
-            for (var n = index; n <= Ip; ++n)
-                str.Append($"{Code[n]}, ");
         }
     }
 }

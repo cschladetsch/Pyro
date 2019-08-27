@@ -94,8 +94,8 @@
     public class DataStackEmptyException
         : Exception
     {
-        public DataStackEmptyException()
-            : base("Empty Stack")
+        public DataStackEmptyException(string text = "Empty Stack")
+            : base(text)
         {
         }
     }

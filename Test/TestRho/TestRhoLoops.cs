@@ -11,18 +11,18 @@
 		{
 			RhoRun(@"
 c = 0
-for (a in [1 2 3])
+for (a in {1 2 3})
 	c = c + a
 ");
 		}
 
-		[Test]
+		//[Test]
 		public void TestNestedForEachIn()
 		{
 			RhoRun(@"
 c = 0
-for (a in [1 2 3 4])
-	for (b in [4 5 6 7])
+for (a in {1 2 3 4})
+	for (b in {4 5 6 7})
 		c = c + b
 	c = c + a
 writeln(c)
@@ -33,9 +33,9 @@ writeln(c)
 			var c = 0;
 			for (var a = 1; a < 5; ++a)
 			{
-				for (var b = 4; b < 8; ++b)
-					c += b;
-				c += a;
+                for (var b = 4; b < 8; ++b)
+                    c += b;
+                c += a;
 			}
 
 			AssertVarEquals("c", c);

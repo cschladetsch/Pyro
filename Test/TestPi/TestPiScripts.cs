@@ -24,30 +24,36 @@
         }
 
         [Test]
-        public void RunScripts()
+        public void TestExistsAssert()
+        {
+            PiRun("'foo exists not assert");
+        }
+
+        [Test]
+        public void RunSomePiScripts()
         {
             TestScript("Variables.pi");
-            TestScript("Current.pi");
             TestScript("Common.pi");
-
-            //TestScript("Floats.pi");
             TestScript("Arithmetic.pi");
             TestScript("Array.pi");
             TestScript("Boolean.pi");
             TestScript("Comments.pi");
-            TestScript("Conditionals.pi");
-            //TestScript("Loops.pi");
-            //TestScript("Map.pi");
             TestScript("Relational.pi");
             TestScript("StackOperations.pi");
             TestScript("Strings.pi");
+            TestScript("Continuations.pi");
+
+            //TestScript("Current.pi");
+            //TestScript("Floats.pi");
+            //TestScript("Conditionals.pi");
+            //TestScript("Loops.pi");
+            //TestScript("Map.pi");
             //TestScript("TestAppCalls.pi");
             //TestScript("TreeScope.pi");
-            TestScript("Continuations.pi");
         }
 
         //[Test]
-        public void RunAllScripts()
+        public void RunAllPiScripts()
         {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.pi"))
                 Assert.IsTrue(RunScriptPathname(file));

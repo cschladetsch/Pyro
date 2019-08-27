@@ -1,4 +1,6 @@
-﻿namespace Pyro.Exec
+﻿using Flow.Impl;
+
+namespace Pyro.Exec
 {
     using System;
     using System.Text;
@@ -16,7 +18,7 @@
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block.
         /// </summary>
         public int Ip { get; private set; }
-        public IList<object> Code { get; }
+        public IList<object> Code { get; set; }
         public IList<string> Args { get; private set; }
         private IDictionary<string, object> _scope => Scope;
 
@@ -27,8 +29,8 @@
             Code = code;
         }
 
-        public void Delay(int seconds)
-            => ResumeAfter(TimeSpan.FromSeconds(seconds));
+        public void Delay(int millis)
+            => ResumeAfter(TimeSpan.FromMilliseconds(millis));
 
         public void Wait(ITransient other)
             => ResumeAfter(other);
@@ -111,26 +113,47 @@
             Args.Add(ident);
         }
 
-        public void Enter(Executor exec)
+        public Continuation Start(Executor exec)
         {
-            if (Kernel == null)
-                Kernel = exec.Kernel;
+            var cp = Self.Registry.Add(new Continuation(Code)).Value;
+            cp.Args = Args;
 
-            // Nothing to do if no args to pull.
-            if (Args == null)
-                return;
+            cp.Kernel = exec.Kernel;
+            cp.Ip = Ip;
+            cp.Scope = Scope;
+            //cp.Kernel.Root.Add(cp);
 
-            // Already entered; we may be re-entering, which is fine.
-            if (Ip != 0)
-                return;
+            void End(ITransient tr)
+            {
+                exec.RemoveContinuation(this);
+                cp.Completed -= End;
+            }
 
-            if (exec.DataStack.Count < Args.Count)
-                throw new DataStackEmptyException();
+            cp.Completed += End;
 
-            foreach (var arg in Args)
-                _scope[arg] = exec.DataStack.Pop();
+            cp.Resumed += tr =>
+            {
+                //exec.PushContext(cp);
+                Info("Resumed coro");
+            };
 
-            Ip = 0;
+            cp.Suspended += tr =>
+            {
+                Info("Suspended coro");
+            };
+
+            cp.Resume();
+
+            if (Args != null)
+            {
+                if (exec.DataStack.Count < Args.Count)
+                    throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
+
+                foreach (var arg in Args)
+                    cp.Scope[arg] = exec.DataStack.Pop();
+            }
+
+            return cp;
         }
 
         public bool HasScopeObject(string label)
@@ -146,16 +169,7 @@
         {
             var has = Ip < Code.Count;
             next = has ? Code[Ip++] : null;
-            if (!has)
-                Reset();
             return has;
-        }
-
-        public void Reset()
-        {
-            // TODO: want to reset scope here, but also want to keep it to check results in unit-tests
-            //_scope.Clear();
-            Ip = 0;
         }
 
         IGenerator IGenerator.AddTo(IGroup @group)
