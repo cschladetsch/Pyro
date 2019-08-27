@@ -62,8 +62,9 @@ namespace WinForms
             Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
             Exec.Scope["PrintSpan"] = Function<TimeSpan>(d => Print(d.ToString()));
             Exec.Scope["PrintTime"] = Function<DateTime>(d => Print(d.ToString()));
+            Exec.Scope["print"] = Function<object>(d => Print(d.ToString()));
 
-            Exec.Rethrows = true;
+            //Exec.Rethrows = true;
 
             var timer = new System.Windows.Forms.Timer {Interval = 10};
             timer.Tick += (sender, args) => Exec.Next();

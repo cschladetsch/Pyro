@@ -156,7 +156,7 @@ fun foo()
             Assert.AreEqual(3, cont.Code[2]);
         }
 
-        //[Test]
+        [Test]
         public void TestCalls()
         {
             _Exec.ContextStack.Clear();
