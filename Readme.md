@@ -49,6 +49,10 @@ There are four main applications that come with the *Pyro* suite:
 
 All components support colored output and on-the-fly colored syntax highlighting.
 
+## Window
+
+(Resources/PyroWindow.png)
+
 ## Code Analysis
 
 Define `CODE_ANALYSIS` for each project that uses `SuppressMessage` attribute.
