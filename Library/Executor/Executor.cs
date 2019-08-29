@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Threading;
 
 namespace Pyro.Exec
@@ -95,7 +96,7 @@ namespace Pyro.Exec
             Kernel.Step();
 
             bool IsRunning(Continuation cont)
-                => cont != null && cont.Running && cont.Active && cont.Ip < cont.Code.Count;
+                => cont != null && cont.IsRunning();
 
             while (!IsRunning(_current))
             {
@@ -152,27 +153,28 @@ namespace Pyro.Exec
                 throw new NotImplementedException($"Operation {op} not implemented");
 
             default:
-                var item = Resolve(next);
-                if (item == null)
-                {
-                    item = Resolve(next);
+                if (!TryResolve(next, out var eval))
                     throw new UnknownIdentifierException(next);
-                }
 
-                DataStack.Push(item);
+                DataStack.Push(eval);
                 break;
             }
         }
 
-        private object Resolve(object next)
+        private bool TryResolve(object id, out object found)
         {
-            if (next == null)
-                return null;
+            found = null;
+            if (id == null)
+                return false;
 
-            if (!(next is IdentBase ident))
-                return next;
+            if (!(id is IdentBase ident))
+                return false;
 
-            return ident.Quoted ? ident : Resolve(ident);
+            if (!ident.Quoted)
+                return TryResolve(ident, out found);
+
+            found = id;
+            return true;
         }
 
         private bool TryResolve(IdentBase identBase, out object found)
@@ -181,28 +183,22 @@ namespace Pyro.Exec
             switch (identBase)
             {
             case Label label:
-                found = _registry.GetClass(label.Text) ?? ResolveContextually(label);
-                return found != null;
+                found = _registry.GetClass(label.Text);
+                if (found != null)
+                    return true;
+
+                // TODO: search Sytem types like System.Int32 etc
+
+                return TryResolve(label, out found);
 
             case Pathname path:
-                found = ResolvePath(path);
-                return found != null;
+                return TryResolvePath(path, out found);
             }
 
             return false;
         }
 
-        private object Resolve(IdentBase identBase)
-        {
-            if (TryResolve(identBase, out var res))
-                return res;
-
-            TryResolve(identBase, out var res2);
-
-            throw new CannotResolve($"{identBase}");
-        }
-
-        private static object ResolvePath(Pathname path)
+        private bool TryResolvePath(Pathname path, out object found)
         {
             throw new NotImplementedException();
         }
@@ -210,20 +206,20 @@ namespace Pyro.Exec
         /// <summary>
         /// Attempt to resolve a name by looking at the context stack
         /// </summary>
-        private object ResolveContextually(Label label)
+        private bool ResolveContextually(Label label, out object obj)
         {
-            var current = Context();
+            obj = null;
             var ident = label.Text;
-            if (current.HasScopeObject(ident))
-                return current.Scope[ident];
+
+            var current = Context();
+            if (current.Scope.TryGetValue(ident, out obj))
+                return true;
 
             foreach (var cont in ContextStack)
-            {
-                if (cont.HasScopeObject(ident))
-                    return cont.Scope[ident];
-            }
+                if (cont.Scope.TryGetValue(ident, out obj))
+                    return true;
 
-            return Scope.TryGetValue(ident, out var obj) ? obj : null;
+            return Scope.TryGetValue(ident, out obj);
         }
 
         private Continuation Context()
@@ -243,7 +239,11 @@ namespace Pyro.Exec
         /// </summary>
         private void Resume()
         {
-            var next = RPop();
+            if (!RPop(out var next))
+            {
+                Break();
+                return;
+            }
             switch (next)
             {
                 case ICallable call:
@@ -334,14 +334,28 @@ namespace Pyro.Exec
             _current = null;
         }
 
-        private dynamic RPop()
-            => Resolve(Pop());
+        private T RPop<T>()
+        {
+            if (RPop<T>(out var val))
+                return val;
+            throw new DataStackEmptyException();
+        }
 
-        private dynamic RPop<T>()
-            => ResolvePop<T>();
+        private bool RPop<T>(out T val)
+        {
+            val = default;
+            if (!ResolvePop<T>(out var typed))
+                return false;
 
-        private dynamic ResolvePop<T>()
-            => Resolve(Pop<T>());
+            val = typed;
+            return true;
+        }
+
+        private bool RPop(out dynamic val)
+            => TryResolve(Pop(), out val);
+
+        private bool ResolvePop<T>(out T val)
+            => RPop(out val);
 
         private static void DebugBreak()
             => throw new DebugBreakException();

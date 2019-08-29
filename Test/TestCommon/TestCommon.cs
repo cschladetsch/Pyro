@@ -74,7 +74,7 @@ namespace Pyro.Test
             if (!trans.Translate(text, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
 
-            //if (trace)
+            if (trace)
                 WriteLine(trans.ToString());
 
             Assert.IsFalse(trans.Failed, trans.Error);
