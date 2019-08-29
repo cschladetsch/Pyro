@@ -20,11 +20,9 @@ namespace Pyro.Exec
 
         private static void Write(string text, params object[] args)
         {
-            System.Diagnostics.Debug.Write(text);
-            //Console.Write(text, args);
-            //Debug.Write(text);
             Console.Write(text);
-            Trace.Write(text);
+            //Debug.Write(text);
+            //Trace.Write(text);
             TestContext.Out.WriteLine(text);
         }
 
@@ -94,8 +92,13 @@ namespace Pyro.Exec
             }
             for (var n = max - 1; n >= 0; --n)
             {
-                var obj = ContextStack[n];
                 str.Append($"\t[{n}]: ");
+                var obj = ContextStack[n];
+                if (obj == null)
+                {
+                    str.AppendLine("ERROR: NULL CONTEXT");
+                    continue;
+                }
                 obj.DebugWrite(str);
                 str.AppendLine();
             }

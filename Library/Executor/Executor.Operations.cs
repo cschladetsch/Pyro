@@ -21,6 +21,13 @@
         /// </summary>
         private bool _leaveForEach;
 
+        private dynamic RPop()
+        {
+            if (TryResolve(Pop(), out object val))
+                return val;
+            throw new DataStackEmptyException();
+        }
+
         /// <summary>
         /// Add options to the internal mapping of EOperation enum to
         /// functor that does the work for that operation.
@@ -274,16 +281,16 @@
 
         private void ForEachIn()
         {
-            var block = Pop<Continuation>();
-            var obj = RPop();
-            if (!(obj is IEnumerable en))
-                throw new CannotEnumerate(obj);
+            var forLoop = Pop<Continuation>();
+            var range = RPop();
+            if (!(range is IEnumerable))
+                throw new CannotEnumerate(range);
 
             var label = Pop<Label>().Text;
-            block.SetScopeObject(label, null);
-            foreach (var _ in ForEachInLoop(block, en, label))
-            {
-            }
+            forLoop.SetScopeObject(label, null);
+            forLoop.SetRange(range);
+            Push(forLoop);
+            Suspend();
         }
 
         private IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)

@@ -1,4 +1,5 @@
-﻿using Flow.Impl;
+﻿using System.Collections;
+using Flow.Impl;
 
 namespace Pyro.Exec
 {
@@ -21,6 +22,7 @@ namespace Pyro.Exec
         public IList<object> Code { get; set; }
         public IList<string> Args { get; private set; }
         private IDictionary<string, object> _scope => Scope;
+        private IEnumerator _enumerator;
 
         public Continuation(IList<object> code)
         {
@@ -169,7 +171,16 @@ namespace Pyro.Exec
         {
             var has = Ip < Code.Count;
             next = has ? Code[Ip++] : null;
-            return has;
+            if (has)
+                return true;
+            if (_enumerator == null)
+                return false;
+            if (!_enumerator.MoveNext())
+                return false;
+
+            next = _enumerator.Current;
+            Ip = 0;
+            return true;
         }
 
         IGenerator IGenerator.AddTo(IGroup @group)
@@ -181,6 +192,20 @@ namespace Pyro.Exec
         {
             throw new NotImplementedException();
         }
+
+        public void SetRange(IEnumerable range)
+        {
+            if (range == null)
+            {
+                _enumerator = null;
+                return;
+            }
+
+            _enumerator = range.GetEnumerator();
+        }
+
+        public bool IsRunning()
+            => Running && Active && (Ip < Code.Count || _enumerator != null);
     }
 }
 

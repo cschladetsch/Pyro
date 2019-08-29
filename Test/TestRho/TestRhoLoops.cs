@@ -1,4 +1,6 @@
-﻿namespace Pyro.Test.Rho
+﻿using System;
+
+namespace Pyro.Test.Rho
 {
 	using NUnit.Framework;
 
@@ -7,38 +9,42 @@
 		: TestCommon
 	{
 		[Test]
-		public void TestForEachIn()
+		public void TestAccum()
 		{
 			RhoRun(@"
 c = 0
-for (a in {1 2 3})
-	c = c + a
+c = c + 1
+c = c + 2
+assert(c == 0 + 1 + 2)
 ");
 		}
 
-		//[Test]
+
+		[Test]
+		public void TestForEachIn()
+		{
+			//_Exec.Verbosity = 0;
+			RhoRun(@"
+c = 0
+for (a in {1 2})
+	writeln(a)
+	c = c + a
+assert(c == 3)
+");
+		}
+
+		[Test]
 		public void TestNestedForEachIn()
 		{
 			RhoRun(@"
 c = 0
-for (a in {1 2 3 4})
-	for (b in {4 5 6 7})
-		c = c + b
-	c = c + a
+for (a in {1 2 3})
+	for (b in {4 5 6})
+		'c = c + a + b
+
 writeln(c)
+assert(c == 1 + 4 + 5 + 6 + 2 + 4 + 5 + 6 + 3 + 4 + 5 + 6)
 ");
-			var str = _Continuation.ToString();
-			//var str = _continuation.Serialise();
-
-			var c = 0;
-			for (var a = 1; a < 5; ++a)
-			{
-                for (var b = 4; b < 8; ++b)
-                    c += b;
-                c += a;
-			}
-
-			AssertVarEquals("c", c);
 		}
 
 		//[Test]
