@@ -1,4 +1,3 @@
 #!/bin/sh
 
 cp Bin/Pyro*.dll PyroUnity/PryoConsole/Assets/Plugins
-
