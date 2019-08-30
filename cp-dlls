@@ -1,5 +1,6 @@
 #!/bin/sh
 
-cp Bin/Pyro*.dll /w/repos/App/Unity/Plugins
+cp Bin/Pyro*.dll ~/local/PyroUnity/PryoConsole/Assets/Plugins
+
 
 
