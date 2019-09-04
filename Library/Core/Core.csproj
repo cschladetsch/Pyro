@@ -137,6 +137,10 @@
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AppCommon\AppCommon.csproj">
+      <Project>{fd200c39-038b-4f39-a7a8-249b6ece6921}</Project>
+      <Name>AppCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ext\Flow\Flow.csproj">
       <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
       <Name>Flow</Name>

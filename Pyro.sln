@@ -73,7 +73,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdIo", "Library\StdIo\StdIo.csproj", "{789E1135-5218-4E29-85E6-08381CF4991A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "Library\Ext\Flow\Flow.csproj", "{18326C80-2CC4-417D-8FEE-EA608ED85636}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ext", "Ext", "{A7693DF2-1BBE-44EC-BF5B-543F34F2AECB}"
 EndProject
 Global
