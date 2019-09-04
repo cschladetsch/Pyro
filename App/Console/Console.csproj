@@ -86,6 +86,10 @@
       <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
       <Name>Executor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj">
+      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+      <Name>Flow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
       <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
       <Name>Common</Name>
@@ -109,10 +113,6 @@
     <ProjectReference Include="..\NetworkGen\NetworkGen.csproj">
       <Project>{e6cd36b6-157b-4b89-bca0-aaac0e56688a}</Project>
       <Name>NetworkGen</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\chris\work\Packages\Pyro\Library\Ext\Flow\Flow.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
