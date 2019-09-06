@@ -1,15 +1,9 @@
-using System.ComponentModel;
-using System.Threading;
-
 namespace Pyro.Exec
 {
     using System;
-    using System.Linq;
     using System.Reflection;
     using System.Collections.Generic;
-    using Flow;
 
-    /// <inheritdoc />
     /// <summary>
     /// Processes a sequence of Continuations.
     /// </summary>
@@ -32,7 +26,7 @@ namespace Pyro.Exec
         {
             Kernel = Flow.Create.Kernel();
             //Rethrows = true;
-            Verbosity = 0;
+            //Verbosity = 0;
             Verbosity = 100;
             AddOperations();
         }
@@ -41,20 +35,13 @@ namespace Pyro.Exec
         {
             ContextStack.Add(continuation);
             _current = null;
-            //if (continuation.Ip < continuation.Code.Count)
-            //    continuation.Running = true;
-            //_nextContext = ContextStack.Count - 1;
         }
 
         public void Continue(IRef<Continuation> continuation)
             => Continue(continuation.Value);
 
         public void Continue()
-        {
-            // TODO ???
-            //_nextContext = ContextStack.Count - 1;
-            Continue(PopContext());
-        }
+            => Continue(PopContext());
 
         public void Continue(Continuation continuation)
         {
@@ -71,23 +58,16 @@ namespace Pyro.Exec
             }
         }
 
-        //public void Prepare(Continuation cont)
-        //{
-        //    _current = cont;
-        //    _break = false;
-        //    cont.Enter(this);
-        //}
-
         private void Execute(Continuation cont)
         {
             _current = cont;
             while (Next())
             {
-                if (_break)
-                {
-                    _break = false;
-                    _current = PopContext();
-                }
+                if (!_break)
+                    continue;
+
+                _break = false;
+                _current = PopContext();
             }
         }
 
@@ -240,13 +220,14 @@ namespace Pyro.Exec
         /// <summary>
         /// Resume the continuation that spawned the current one
         /// </summary>
-        private void Resume()
+        private new void Resume()
         {
             if (!RPop(out var next))
             {
                 Break();
                 return;
             }
+
             switch (next)
             {
                 case ICallable call:
