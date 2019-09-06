@@ -161,19 +161,22 @@ namespace Pyro.Exec
             }
         }
 
-        private bool TryResolve(object id, out object found)
+        private bool TryResolve(object obj, out object found)
         {
             found = null;
-            if (id == null)
+            if (obj == null)
                 return false;
 
-            if (!(id is IdentBase ident))
-                return false;
+            if (!(obj is IdentBase ident))
+            {
+                found = obj;
+                return true;
+            }
 
             if (!ident.Quoted)
                 return TryResolve(ident, out found);
 
-            found = id;
+            found = obj;
             return true;
         }
 
@@ -341,21 +344,22 @@ namespace Pyro.Exec
             throw new DataStackEmptyException();
         }
 
+        /// <summary>
+        /// Get top of stack as a value of type T, or as a name of a value of type T
+        /// </summary>
         private bool RPop<T>(out T val)
         {
-            val = default;
-            if (!ResolvePop<T>(out var typed))
+            val = default(T);
+            var pop = (object) Pop();
+            if (!TryResolve(pop, out var found))
                 return false;
 
-            val = typed;
+            val = (T) found;
             return true;
         }
 
         private bool RPop(out dynamic val)
             => TryResolve(Pop(), out val);
-
-        private bool ResolvePop<T>(out T val)
-            => RPop(out val);
 
         private static void DebugBreak()
             => throw new DebugBreakException();
