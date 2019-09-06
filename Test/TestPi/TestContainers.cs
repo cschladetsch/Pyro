@@ -42,6 +42,11 @@
         [Test]
         public void TestArray()
         {
+            PiRun("1 2 3 3 tolist expand tolist");
+            TestListContents();
+
+            //Assert.Throws<>(() =? PiRun("["));
+
             PiRun("[] [] == assert");
 
             PiRun("[1 2 3]");
@@ -50,10 +55,6 @@
             PiRun("1 2 3 3 tolist");
             TestListContents();
 
-            PiRun("1 2 3 3 tolist expand tolist");
-            TestListContents();
-
-            //Assert.Throws<>(() =? PiRun("["));
         }
 
         private void TestListContents()
