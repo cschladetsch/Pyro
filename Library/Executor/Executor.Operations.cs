@@ -496,7 +496,6 @@
 
         private void DebugPrintContextStack()
         {
-            //WriteContextStack();
             throw new NotImplementedException("DebugPrintContextStack");
         }
 
@@ -749,7 +748,6 @@
 
         public void RemoveContinuation(Continuation continuation)
         {
-            Info("Removing cont.");
             ContextStack.Remove(continuation);
             Break();
         }
