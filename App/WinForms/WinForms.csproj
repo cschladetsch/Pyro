@@ -45,11 +45,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox.cs">
+    <Compile Include="Dialogs\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutBox.Designer.cs">
+    <Compile Include="Dialogs\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Context.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Context.Designer.cs">
+      <DependentUpon>Context.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ContextStackView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ContextStackView.Designer.cs">
+      <DependentUpon>ContextStackView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\DataStackView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\DataStackView.Designer.cs">
+      <DependentUpon>DataStackView.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.ColorisePi.cs">
       <SubType>Form</SubType>
@@ -66,22 +84,42 @@
     <Compile Include="MainForm.GetVersion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models.cs" />
-    <Compile Include="NetworkConnect.cs">
+    <Compile Include="Dialogs\NetworkConnect.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NetworkConnect.Designer.cs">
+    <Compile Include="Dialogs\NetworkConnect.Designer.cs">
       <DependentUpon>NetworkConnect.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AboutBox.resx">
+    <Compile Include="UserControls\Output.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Output.Designer.cs">
+      <DependentUpon>Output.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PiInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\PiInput.Designer.cs">
+      <DependentUpon>PiInput.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Context.resx">
+      <DependentUpon>Context.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ContextStackView.resx">
+      <DependentUpon>ContextStackView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\DataStackView.resx">
+      <DependentUpon>DataStackView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NetworkConnect.resx">
+    <EmbeddedResource Include="Dialogs\NetworkConnect.resx">
       <DependentUpon>NetworkConnect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -97,6 +135,12 @@
     <Compile Include="MainForm.Colorise.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="UserControls\Output.resx">
+      <DependentUpon>Output.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PiInput.resx">
+      <DependentUpon>PiInput.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

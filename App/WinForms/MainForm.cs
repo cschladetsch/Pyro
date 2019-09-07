@@ -64,7 +64,7 @@ namespace WinForms
             Exec.Scope["PrintTime"] = Function<DateTime>(d => Print(d.ToString()));
             Exec.Scope["print"] = Function<object>(d => Print(d.ToString()));
 
-            //Exec.Rethrows = true;
+            Exec.Rethrows = true;
 
             var timer = new System.Windows.Forms.Timer {Interval = 10};
             timer.Tick += (sender, args) => Exec.Next();
@@ -330,6 +330,11 @@ namespace WinForms
 
         private static void Connected(IPeer peer, IClient client)
             => Console.WriteLine($"Connected: {peer} {client}");
+
+        private void context1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
