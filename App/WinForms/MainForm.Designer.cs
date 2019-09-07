@@ -99,13 +99,7 @@
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.context1 = new WinForms.UserControls.Context();
             this.dataStackView2 = new WinForms.DataStackView();
-            this.dataStackView1 = new WinForms.DataStackView();
             this.contextStackView6 = new WinForms.ContextStackView();
-            this.contextStackView5 = new WinForms.ContextStackView();
-            this.contextStackView4 = new WinForms.ContextStackView();
-            this.contextStackView3 = new WinForms.ContextStackView();
-            this.contextStackView2 = new WinForms.ContextStackView();
-            this.contextStackView1 = new WinForms.ContextStackView();
             this.piInput1 = new WinForms.UserControls.PiInput();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -484,16 +478,10 @@
             // splitContainer4.Panel1
             //
             this.splitContainer4.Panel1.Controls.Add(this.dataStackView2);
-            this.splitContainer4.Panel1.Controls.Add(this.dataStackView1);
             //
             // splitContainer4.Panel2
             //
             this.splitContainer4.Panel2.Controls.Add(this.contextStackView6);
-            this.splitContainer4.Panel2.Controls.Add(this.contextStackView5);
-            this.splitContainer4.Panel2.Controls.Add(this.contextStackView4);
-            this.splitContainer4.Panel2.Controls.Add(this.contextStackView3);
-            this.splitContainer4.Panel2.Controls.Add(this.contextStackView2);
-            this.splitContainer4.Panel2.Controls.Add(this.contextStackView1);
             this.splitContainer4.Size = new System.Drawing.Size(416, 516);
             this.splitContainer4.SplitterDistance = 188;
             this.splitContainer4.TabIndex = 0;
@@ -713,14 +701,6 @@
             this.dataStackView2.Size = new System.Drawing.Size(416, 188);
             this.dataStackView2.TabIndex = 1;
             //
-            // dataStackView1
-            //
-            this.dataStackView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataStackView1.Location = new System.Drawing.Point(0, 0);
-            this.dataStackView1.Name = "dataStackView1";
-            this.dataStackView1.Size = new System.Drawing.Size(416, 188);
-            this.dataStackView1.TabIndex = 0;
-            //
             // contextStackView6
             //
             this.contextStackView6.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -728,44 +708,6 @@
             this.contextStackView6.Name = "contextStackView6";
             this.contextStackView6.Size = new System.Drawing.Size(416, 324);
             this.contextStackView6.TabIndex = 5;
-            //
-            // contextStackView5
-            //
-            this.contextStackView5.Location = new System.Drawing.Point(0, 0);
-            this.contextStackView5.Name = "contextStackView5";
-            this.contextStackView5.Size = new System.Drawing.Size(422, 298);
-            this.contextStackView5.TabIndex = 4;
-            //
-            // contextStackView4
-            //
-            this.contextStackView4.Location = new System.Drawing.Point(0, 0);
-            this.contextStackView4.Name = "contextStackView4";
-            this.contextStackView4.Size = new System.Drawing.Size(422, 298);
-            this.contextStackView4.TabIndex = 3;
-            //
-            // contextStackView3
-            //
-            this.contextStackView3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contextStackView3.Location = new System.Drawing.Point(0, 0);
-            this.contextStackView3.Name = "contextStackView3";
-            this.contextStackView3.Size = new System.Drawing.Size(416, 324);
-            this.contextStackView3.TabIndex = 2;
-            //
-            // contextStackView2
-            //
-            this.contextStackView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contextStackView2.Location = new System.Drawing.Point(0, 0);
-            this.contextStackView2.Name = "contextStackView2";
-            this.contextStackView2.Size = new System.Drawing.Size(416, 324);
-            this.contextStackView2.TabIndex = 1;
-            //
-            // contextStackView1
-            //
-            this.contextStackView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contextStackView1.Location = new System.Drawing.Point(0, 0);
-            this.contextStackView1.Name = "contextStackView1";
-            this.contextStackView1.Size = new System.Drawing.Size(416, 324);
-            this.contextStackView1.TabIndex = 0;
             //
             // piInput1
             //
@@ -885,14 +827,8 @@
         private System.Windows.Forms.ToolStripButton toolStripButton9;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.SplitContainer splitContainer5;
-        private DataStackView dataStackView1;
-        private ContextStackView contextStackView1;
-        private ContextStackView contextStackView2;
-        private ContextStackView contextStackView5;
-        private ContextStackView contextStackView4;
-        private ContextStackView contextStackView3;
-        private DataStackView dataStackView2;
         private ContextStackView contextStackView6;
+        private DataStackView dataStackView2;
         private UserControls.Context context1;
         private UserControls.PiInput piInput1;
     }

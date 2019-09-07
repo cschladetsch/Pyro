@@ -42,7 +42,7 @@ namespace WinForms
             Perform(EOperation.Clear);
 
             output.Text = GetVersion();
-            mainTabControl.SelectedIndex = 1;
+            mainTabControl.SelectedIndex = 2;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;
             rhoInput.TextChanged += RhoInputOnTextChanged;
@@ -66,9 +66,16 @@ namespace WinForms
 
             Exec.Rethrows = true;
 
+            ClearDebug();
+
             var timer = new System.Windows.Forms.Timer {Interval = 10};
             timer.Tick += (sender, args) => Exec.Next();
             timer.Start();
+        }
+
+        private void ClearDebug()
+        {
+
         }
 
         private void Print(object obj)
