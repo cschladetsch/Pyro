@@ -68,7 +68,7 @@
         [Test]
         public void TestIdents()
         {
-            Assert.Throws<CannotResolve>(() => PiRun("NotAnIdentifier"));
+            Assert.Throws<UnknownIdentifierException>(() => PiRun("NotAnIdentifier"));
         }
 
         [Test]

@@ -25,7 +25,7 @@ namespace Pyro.Exec
         public Executor()
         {
             Kernel = Flow.Create.Kernel();
-            //Rethrows = true;
+            Rethrows = true;
             //Verbosity = 0;
             Verbosity = 100;
             AddOperations();
@@ -166,13 +166,18 @@ namespace Pyro.Exec
             switch (identBase)
             {
             case Label label:
+                // TODO: search Sytem types like System.Int32 etc
                 found = _registry.GetClass(label.Text);
                 if (found != null)
                     return true;
 
-                // TODO: search Sytem types like System.Int32 etc
+                if (TryResolveContextually(label, out found))
+                    return true;
 
-                return TryResolve(label, out found);
+                if (Scope.TryGetValue(label.Text, out found))
+                    return true;
+
+                return false;
 
             case Pathname path:
                 return TryResolvePath(path, out found);
@@ -189,7 +194,7 @@ namespace Pyro.Exec
         /// <summary>
         /// Attempt to resolve a name by looking at the context stack
         /// </summary>
-        private bool ResolveContextually(Label label, out object obj)
+        private bool TryResolveContextually(Label label, out object obj)
         {
             obj = null;
             var ident = label.Text;
