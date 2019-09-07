@@ -21,5 +21,10 @@ namespace WinForms.UserControls
         {
 
         }
+
+        public void Clear()
+        {
+            listView1.Items.Clear();
+        }
     }
 }

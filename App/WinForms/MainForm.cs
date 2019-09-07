@@ -75,7 +75,9 @@ namespace WinForms
 
         private void ClearDebug()
         {
-
+            context1.Clear();
+            dataStackView2.Clear();
+            contextStackView6.Clear();
         }
 
         private void Print(object obj)
