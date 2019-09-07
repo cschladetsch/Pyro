@@ -1,3 +1,5 @@
+using WinForms.UserControls;
+
 namespace WinForms
 {
     using System;
@@ -26,6 +28,10 @@ namespace WinForms
         private List<object> _last;
         private bool _local = true;
         private bool PiSelected => mainTabControl.SelectedIndex == 0;
+
+        internal RichTextBox Output => output;
+        internal Context Context => _context;
+        internal PiDebugger PiDebugger => piDebugger1;
 
         public MainForm()
         {
@@ -224,7 +230,7 @@ namespace WinForms
                 var span = DateTime.Now - start;
                 toolStripStatusLabel1.Text = $"Took {span.TotalMilliseconds:0.00}ms";
                 if (!string.IsNullOrEmpty(_context.Error))
-                    output.Text += _context.Error + "\n";
+                    output.Text += "\n" + _context.Error;
                 UpdateStackView();
             }
             catch (Exception e)

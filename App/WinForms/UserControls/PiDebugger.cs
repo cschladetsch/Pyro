@@ -18,5 +18,9 @@
         {
             listView1.Items.Clear();
         }
+
+        public void Restart()
+        {
+        }
     }
 }

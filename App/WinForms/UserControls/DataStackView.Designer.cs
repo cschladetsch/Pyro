@@ -55,7 +55,7 @@
             this.toolStripButton3});
             this.DataStackTools.Location = new System.Drawing.Point(0, 0);
             this.DataStackTools.Name = "DataStackTools";
-            this.DataStackTools.Size = new System.Drawing.Size(378, 25);
+            this.DataStackTools.Size = new System.Drawing.Size(441, 25);
             this.DataStackTools.TabIndex = 0;
             this.DataStackTools.Text = "toolStrip1";
             //
@@ -101,7 +101,7 @@
             listViewItem1});
             this.listView1.Location = new System.Drawing.Point(0, 25);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(378, 321);
+            this.listView1.Size = new System.Drawing.Size(441, 374);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -129,12 +129,13 @@
             //
             // DataStackView
             //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.DataStackTools);
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "DataStackView";
-            this.Size = new System.Drawing.Size(378, 346);
+            this.Size = new System.Drawing.Size(441, 399);
             this.DataStackTools.ResumeLayout(false);
             this.DataStackTools.PerformLayout();
             this.ResumeLayout(false);
