@@ -1,6 +1,6 @@
 ﻿namespace WinForms.UserControls
 {
-    partial class Context
+    partial class PiDebugger
     {
         /// <summary>
         /// Required designer variable.
@@ -36,12 +36,28 @@
             "",
             "print",
             "Identifier"}, -1);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PiDebugger));
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.listView1 = new System.Windows.Forms.ListView();
             this.Num = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Value = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Unused = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
+            //
+            // toolStrip1
+            //
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1,
+            this.toolStripButton2});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(448, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
             //
             // listView1
             //
@@ -57,13 +73,12 @@
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2});
-            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Location = new System.Drawing.Point(0, 25);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(304, 206);
-            this.listView1.TabIndex = 0;
+            this.listView1.Size = new System.Drawing.Size(448, 333);
+            this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             //
             // Num
             //
@@ -84,23 +99,49 @@
             this.Unused.Text = "Unused";
             this.Unused.Width = 167;
             //
-            // Context
+            // toolStripButton1
+            //
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            //
+            // toolStripButton2
+            //
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "toolStripButton2";
+            //
+            // PiDebugger
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listView1);
-            this.Name = "Context";
-            this.Size = new System.Drawing.Size(304, 206);
+            this.Controls.Add(this.toolStrip1);
+            this.Name = "PiDebugger";
+            this.Size = new System.Drawing.Size(448, 358);
+            this.Load += new System.EventHandler(this.PiDebugger_Load);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader Unused;
         private System.Windows.Forms.ColumnHeader Num;
-        private System.Windows.Forms.ColumnHeader Type;
         private System.Windows.Forms.ColumnHeader Value;
+        private System.Windows.Forms.ColumnHeader Type;
+        private System.Windows.Forms.ColumnHeader Unused;
     }
 }

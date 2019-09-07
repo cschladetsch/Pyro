@@ -75,7 +75,7 @@ namespace WinForms
 
         private void ClearDebug()
         {
-            context1.Clear();
+            piDebugger1.Clear();
             dataStackView2.Clear();
             contextStackView6.Clear();
         }

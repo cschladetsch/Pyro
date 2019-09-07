@@ -51,12 +51,6 @@
     <Compile Include="Dialogs\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Context.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\Context.Designer.cs">
-      <DependentUpon>Context.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ContextStackView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -98,6 +92,12 @@
     <Compile Include="UserControls\Output.Designer.cs">
       <DependentUpon>Output.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PiDebugger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\PiDebugger.Designer.cs">
+      <DependentUpon>PiDebugger.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PiInput.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -106,9 +106,6 @@
     </Compile>
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Context.resx">
-      <DependentUpon>Context.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ContextStackView.resx">
       <DependentUpon>ContextStackView.cs</DependentUpon>
@@ -137,6 +134,9 @@
     </Compile>
     <EmbeddedResource Include="UserControls\Output.resx">
       <DependentUpon>Output.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PiDebugger.resx">
+      <DependentUpon>PiDebugger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PiInput.resx">
       <DependentUpon>PiInput.cs</DependentUpon>
