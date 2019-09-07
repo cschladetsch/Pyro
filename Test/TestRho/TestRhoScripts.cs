@@ -14,7 +14,8 @@ namespace Pyro.Test.Rho
         public void Print()
         {
             _Exec.Scope["pr"] = Function<object>(DebugTrace);
-            TestScript("Print.rho");
+            RhoRun("pr(\"hello\")");
+            //TestScript("Print.rho");
         }
 
         [Test]
