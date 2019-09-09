@@ -1,6 +1,6 @@
 ﻿namespace WinForms
 {
-    partial class ContextStackView
+    public partial class ContextStackView
     {
         /// <summary>
         /// Required designer variable.

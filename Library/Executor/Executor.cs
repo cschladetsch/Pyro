@@ -210,7 +210,7 @@ namespace Pyro.Exec
             return Scope.TryGetValue(ident, out obj);
         }
 
-        private Continuation Context()
+        public Continuation Context()
             => _current;
 
         /// <summary>

@@ -1,10 +1,12 @@
 ﻿namespace WinForms.UserControls
 {
     using System;
-    using System.Windows.Forms;
 
-    public partial class PiDebugger : UserControl
+    public partial class PiDebugger
+        : UserControlBase
     {
+        //private MainForm _main;
+
         public PiDebugger()
         {
             InitializeComponent();
@@ -14,13 +16,15 @@
         {
         }
 
-        public void Clear()
+        public override void Clear()
         {
             listView1.Items.Clear();
         }
 
         public void Restart()
         {
+            _contextStackView.Clear();
+            _contextStackView.Show(_Exec.Context());
         }
     }
 }

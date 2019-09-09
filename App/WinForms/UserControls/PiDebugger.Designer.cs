@@ -1,6 +1,6 @@
 ﻿namespace WinForms.UserControls
 {
-    partial class PiDebugger
+    public partial class PiDebugger
     {
         /// <summary>
         /// Required designer variable.

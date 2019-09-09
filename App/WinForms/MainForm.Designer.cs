@@ -75,7 +75,9 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
-            this.piInput1 = new WinForms.UserControls.PiInput();
+            this.piDebugger1 = new WinForms.UserControls.PiDebugger();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.piInputDebugger1 = new WinForms.UserControls.PiDebuggerInput();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.dataStackView2 = new WinForms.DataStackView();
             this.contextStackView6 = new WinForms.ContextStackView();
@@ -96,7 +98,6 @@
             this.saveRhoDialog = new System.Windows.Forms.SaveFileDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.piDebugger1 = new WinForms.UserControls.PiDebugger();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -345,6 +346,7 @@
             this.splitContainer1.Size = new System.Drawing.Size(1088, 567);
             this.splitContainer1.SplitterDistance = 784;
             this.splitContainer1.TabIndex = 3;
+            this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             //
             // mainTabControl
             //
@@ -457,18 +459,37 @@
             //
             // splitContainer5.Panel2
             //
-            this.splitContainer5.Panel2.Controls.Add(this.piInput1);
+            this.splitContainer5.Panel2.Controls.Add(this.richTextBox1);
+            this.splitContainer5.Panel2.Controls.Add(this.piInputDebugger1);
             this.splitContainer5.Size = new System.Drawing.Size(356, 541);
             this.splitContainer5.SplitterDistance = 236;
             this.splitContainer5.TabIndex = 0;
             //
-            // piInput1
+            // piDebugger1
             //
-            this.piInput1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.piInput1.Location = new System.Drawing.Point(0, 0);
-            this.piInput1.Name = "piInput1";
-            this.piInput1.Size = new System.Drawing.Size(356, 301);
-            this.piInput1.TabIndex = 0;
+            this.piDebugger1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.piDebugger1.Location = new System.Drawing.Point(0, 0);
+            this.piDebugger1.Name = "piDebugger1";
+            this.piDebugger1.Size = new System.Drawing.Size(356, 236);
+            this.piDebugger1.TabIndex = 0;
+            this.piDebugger1.Load += new System.EventHandler(this.piDebugger1_Load);
+            //
+            // richTextBox1
+            //
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(356, 301);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
+            //
+            // piInputDebugger1
+            //
+            this.piInputDebugger1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.piInputDebugger1.Location = new System.Drawing.Point(0, 0);
+            this.piInputDebugger1.Name = "piInputDebugger1";
+            this.piInputDebugger1.Size = new System.Drawing.Size(356, 301);
+            this.piInputDebugger1.TabIndex = 0;
             //
             // splitContainer4
             //
@@ -491,6 +512,7 @@
             // dataStackView2
             //
             this.dataStackView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataStackView2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataStackView2.Location = new System.Drawing.Point(0, 0);
             this.dataStackView2.Name = "dataStackView2";
             this.dataStackView2.Size = new System.Drawing.Size(416, 197);
@@ -499,6 +521,7 @@
             // contextStackView6
             //
             this.contextStackView6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contextStackView6.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contextStackView6.Location = new System.Drawing.Point(0, 0);
             this.contextStackView6.Name = "contextStackView6";
             this.contextStackView6.Size = new System.Drawing.Size(416, 340);
@@ -660,14 +683,6 @@
             this.saveRhoDialog.Filter = "Rho files|*.rho";
             this.saveRhoDialog.Title = "Save Rho Script";
             //
-            // piDebugger1
-            //
-            this.piDebugger1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.piDebugger1.Location = new System.Drawing.Point(0, 0);
-            this.piDebugger1.Name = "piDebugger1";
-            this.piDebugger1.Size = new System.Drawing.Size(356, 236);
-            this.piDebugger1.TabIndex = 0;
-            //
             // MainForm
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -773,8 +788,9 @@
         private System.Windows.Forms.SplitContainer splitContainer5;
         private ContextStackView contextStackView6;
         private DataStackView dataStackView2;
-        private UserControls.PiInput piInput1;
         private UserControls.PiDebugger piDebugger1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private UserControls.PiDebuggerInput piInputDebugger1;
     }
 }
 

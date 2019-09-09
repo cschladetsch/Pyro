@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace WinForms
+﻿namespace WinForms
 {
-    public partial class DataStackView : UserControl
+    using System;
+    using System.Windows.Forms;
+
+    public partial class DataStackView
+        : UserControl
     {
+        private MainForm _main;
+
         public DataStackView()
         {
             InitializeComponent();
@@ -30,6 +26,11 @@ namespace WinForms
         public void Clear()
         {
             listView1.Items.Clear();
+        }
+
+        public void Construct(MainForm mainForm)
+        {
+            _main = mainForm;
         }
     }
 }

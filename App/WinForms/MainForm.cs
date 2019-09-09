@@ -32,6 +32,7 @@ namespace WinForms
         internal RichTextBox Output => output;
         internal Context Context => _context;
         internal PiDebugger PiDebugger => piDebugger1;
+        internal ContextStackView ContextStackView => contextStackView6;
 
         public MainForm()
         {
@@ -72,11 +73,21 @@ namespace WinForms
 
             Exec.Rethrows = true;
 
-            ClearDebug();
+            SetupPiDebug();
 
             var timer = new System.Windows.Forms.Timer {Interval = 10};
             timer.Tick += (sender, args) => Exec.Next();
             timer.Start();
+        }
+
+        private void SetupPiDebug()
+        {
+            piDebugger1.Construct(this);
+            piInputDebugger1.Construct(this);
+            dataStackView2.Construct(this);
+            contextStackView6.Construct(this);
+
+            ClearDebug();
         }
 
         private void ClearDebug()
@@ -347,6 +358,16 @@ namespace WinForms
             => Console.WriteLine($"Connected: {peer} {client}");
 
         private void context1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
+
+        private void piDebugger1_Load(object sender, EventArgs e)
         {
 
         }

@@ -98,11 +98,14 @@
     <Compile Include="UserControls\PiDebugger.Designer.cs">
       <DependentUpon>PiDebugger.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PiInput.cs">
+    <Compile Include="UserControls\PiDebuggerInput.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\PiInput.Designer.cs">
-      <DependentUpon>PiInput.cs</DependentUpon>
+    <Compile Include="UserControls\PiDebuggerInput.Designer.cs">
+      <DependentUpon>PiDebuggerInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlBase.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
@@ -138,8 +141,8 @@
     <EmbeddedResource Include="UserControls\PiDebugger.resx">
       <DependentUpon>PiDebugger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PiInput.resx">
-      <DependentUpon>PiInput.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\PiDebuggerInput.resx">
+      <DependentUpon>PiDebuggerInput.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
