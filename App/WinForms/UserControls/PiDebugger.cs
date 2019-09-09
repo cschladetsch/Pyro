@@ -26,5 +26,10 @@
             _contextStackView.Clear();
             _contextStackView.Show(_Exec.Context());
         }
+
+        public void Input(string pi)
+        {
+            Console.WriteLine($"Debugging {pi}");
+        }
     }
 }

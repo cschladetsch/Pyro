@@ -2,14 +2,14 @@ using WinForms.UserControls;
 
 namespace WinForms
 {
-    using System;
-    using System.IO;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
     using Pyro;
     using Pyro.Exec;
-    using Pyro.Network;
     using Pyro.ExecutionContext;
+    using Pyro.Network;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Windows.Forms;
     using static Pyro.Create;
 
     /// <summary>
@@ -75,7 +75,7 @@ namespace WinForms
 
             SetupPiDebug();
 
-            var timer = new System.Windows.Forms.Timer {Interval = 10};
+            var timer = new System.Windows.Forms.Timer { Interval = 10 };
             timer.Tick += (sender, args) => Exec.Next();
             timer.Start();
         }
@@ -124,7 +124,7 @@ namespace WinForms
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    output.Text += $"Exception: {e.Message}";
+                    output.Text += $@"Exception: {e.Message}";
                 }
             }
 
@@ -163,11 +163,11 @@ namespace WinForms
         {
             switch (e.KeyCode)
             {
-            //case Keys.Tab:
-            //{
-            //    ChangeTab(e.Control, e.Shift);
-            //    break;
-            //}
+                //case Keys.Tab:
+                //{
+                //    ChangeTab(e.Control, e.Shift);
+                //    break;
+                //}
 
                 case Keys.Enter:
                 {
@@ -187,7 +187,7 @@ namespace WinForms
             // TODO: this is stupid
             int Next(int cur, int tot) => (cur + 1) % tot;
             int Prev(int cur, int tot) => (cur + tot - 1) % tot;
-            NextTab(ctrl ? (Func<int, int, int>) Prev : Next);
+            NextTab(ctrl ? (Func<int, int, int>)Prev : Next);
         }
 
         private void NextTab(Func<int, int, int> act)
@@ -201,8 +201,9 @@ namespace WinForms
         {
             switch (e.KeyCode)
             {
-                case Keys.Enter:
+            case Keys.Enter:
                 {
+                    int n;
                     if (e.Control)
                     {
                         ExecutePi();
@@ -357,19 +358,10 @@ namespace WinForms
         private static void Connected(IPeer peer, IClient client)
             => Console.WriteLine($"Connected: {peer} {client}");
 
-        private void context1_Load(object sender, EventArgs e)
+        private void PiDebuggerInputPreview(object sender, PreviewKeyDownEventArgs e)
         {
-
-        }
-
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void piDebugger1_Load(object sender, EventArgs e)
-        {
-
+            var pi = piInput.Lines[piInput.GetLineFromCharIndex(piInput.SelectionStart)];
+            piDebugger1.Input(pi);
         }
     }
 }

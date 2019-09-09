@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace WinForms.UserControls
+﻿namespace WinForms.UserControls
 {
+    using System;
+    using System.Windows.Forms;
+
     public partial class PiDebuggerInput
         : UserControlBase
     {
@@ -22,5 +15,31 @@ namespace WinForms.UserControls
         {
 
         }
+
+        private void PiDebuggerInput_PreviewKeyDown(PreviewKeyDownEventArgs e)
+        {
+//            if (e.Control && (e.KeyCode == Keys.Enter))
+//            {
+//                var pi = richTextBox1.Lines[richTextBox1.GetLineFromCharIndex(richTextBox1.SelectionStart)];
+//                try
+//                {
+//                    if (_Main.Context.Translate(pi, out var cont))
+//                    {
+//                        _Exec.PushContext(cont);
+//                        _piDebugger.Restart();
+//                    }
+//                }
+//                catch (Exception exception)
+//                {
+//                    Console.WriteLine(exception);
+//                }
+//            }
+        }
+
+        public void Input(PreviewKeyDownEventArgs previewKeyDownEventArgs)
+        {
+            PiDebuggerInput_PreviewKeyDown(previewKeyDownEventArgs);
+        }
     }
 }
+
