@@ -480,7 +480,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(356, 301);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
-            this.richTextBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.PiDebuggerInputPreview);
             // 
             // piInputDebugger1
             // 
@@ -488,6 +487,8 @@
             this.piInputDebugger1.Location = new System.Drawing.Point(0, 0);
             this.piInputDebugger1.Name = "piInputDebugger1";
             this.piInputDebugger1.Size = new System.Drawing.Size(356, 301);
+            //this.piInputDebugger1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.PiDebuggerInputPreview);
+            //this.piInputDebugger1.KeyDown += new System.Windows.Forms.KeyDownEventHandler(this.PiDebuggerInputPreview);
             this.piInputDebugger1.TabIndex = 0;
             // 
             // splitContainer4

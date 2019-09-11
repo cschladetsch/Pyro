@@ -39,6 +39,9 @@
             this.richTextBox1.Size = new System.Drawing.Size(581, 339);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            this.richTextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RichTextBox1_KeyDown);
+            this.richTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RichTextBox1_KeyPress);
+            this.richTextBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.RichTextBox1_PreviewKeyDown);
             // 
             // PiDebuggerInput
             // 
