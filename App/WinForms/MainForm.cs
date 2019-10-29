@@ -358,11 +358,17 @@ namespace WinForms
         private static void Connected(IPeer peer, IClient client)
             => Console.WriteLine($"Connected: {peer} {client}");
 
-        private void PiDebuggerInputPreview(object sender, PreviewKeyDownEventArgs e)
-        {
-            var pi = piInput.Lines[piInput.GetLineFromCharIndex(piInput.SelectionStart)];
-            piDebugger1.Input(pi);
-        }
+        //private void PiDebuggerInputPreview(object sender, PreviewKeyDownEventArgs e)
+        //{
+        //    if (sender != piInputDebugger1)
+        //        return;
+
+        //    if (e.Control && e.KeyCode == Keys.Enter)
+        //    {
+        //        var pi = piInput.SelectedText;
+        //        piDebugger1.Input(pi);
+        //    }
+        //}
     }
 }
 

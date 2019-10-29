@@ -18,6 +18,7 @@
 
         private void PiDebuggerInput_PreviewKeyDown(PreviewKeyDownEventArgs e)
         {
+            Console.WriteLine(e);
 //            if (e.Control && (e.KeyCode == Keys.Enter))
 //            {
 //                var pi = richTextBox1.Lines[richTextBox1.GetLineFromCharIndex(richTextBox1.SelectionStart)];
@@ -39,6 +40,21 @@
         public void Input(PreviewKeyDownEventArgs previewKeyDownEventArgs)
         {
             PiDebuggerInput_PreviewKeyDown(previewKeyDownEventArgs);
+        }
+
+        private void RichTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(richTextBox1.SelectedText);
+        }
+
+        private void RichTextBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            Console.WriteLine(e);
+        }
+
+        private void RichTextBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Console.WriteLine(e);
         }
     }
 }
