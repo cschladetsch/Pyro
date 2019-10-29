@@ -23,11 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{F06FFE4A-725
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkGen", "App\NetworkGen\NetworkGen.csproj", "{E6CD36B6-157B-4B89-BCA0-AAAC0E56688A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{329084C8-82D9-44C9-86DD-FA587C1A6FA4} = {329084C8-82D9-44C9-86DD-FA587C1A6FA4}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executor", "Library\Executor\Executor.csproj", "{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{086669FE-817A-4BD2-84A4-E1D90C667250}"
