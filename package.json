@@ -1,11 +1,11 @@
 {
-    "name": "com.liminal.pyro",
+    "name": "com.cschladetsch.pyro",
     "displayName": "Pyro",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "unity": "2019.1",
     "description": "Scripting languages and distributed object model.",
     "keywords": [
-        "liminal",
+        "cschladetsch",
 	"pyro",
 	"pi",
 	"rho"
