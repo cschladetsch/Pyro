@@ -1,12 +1,10 @@
-# Pyro ![Pyro](Library/flame-small.png)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/cschladetsch/pyro?svg=true)](https://ci.appveyor.com/project/cschladetsch/pyro)
+# Pyro ![Foo](Library/flame-small.png)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/cschladetsch/flow?svg=true)](https://ci.appveyor.com/project/cschladetsch/flow)
 [![CodeFactor](https://www.codefactor.io/repository/github/cschladetsch/pyro/badge)](https://www.codefactor.io/repository/github/cschladetsch/pyro)
 [![License](https://img.shields.io/github/license/cschladetsch/pyro.svg?label=License&maxAge=86400)](./LICENSE.txt)
 [![Release](https://img.shields.io/github/release/cschladetsch/pyro.svg?label=Release&maxAge=60)](https://github.com/cschladetsch/pyro/releases/latest)
 
 ## Overview
-
-**Note: The build is only failing because of issues with appveyor and submodules which this library uses. The actual code builds fine.**
 
 *Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel. It is based on [Flow](https://github.com/cschladetsch/Flow), [Kai](https://github.com/cschladetsch/KAI) and [Om](https://github.com/cschladetsch/OM) before that, dating back decades.
 
