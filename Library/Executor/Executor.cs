@@ -26,8 +26,8 @@ namespace Pyro.Exec
         {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
-            //Verbosity = 0;
-            Verbosity = 100;
+            Verbosity = 0;
+            //Verbosity = 100;
             AddOperations();
         }
 
