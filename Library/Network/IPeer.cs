@@ -40,7 +40,8 @@
 
         bool SelfHost();
         bool Connect(string hostName, int port);
-        bool Enter(IClient client);
+        bool EnterClient(IClient client);
+        bool Enter(int clientNumber);
         bool Execute(Continuation continuation);
         bool Execute(string pi);
         void Leave();

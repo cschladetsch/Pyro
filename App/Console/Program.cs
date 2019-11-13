@@ -8,6 +8,16 @@
     using Network;
     using Con = System.Console;
 
+    public class UserClass
+    {
+        public string Name;
+        
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+    }
+
     internal class Program
         : AppCommon.AppCommonBase
     {
@@ -15,7 +25,7 @@
 
         private readonly Context _context;
         private IPeer _peer;
-        private readonly bool _useLoopback = false;
+        private readonly bool _useLoopback = true;
 
         private string HostName => _peer?.Remote?.HostName ?? "local";
         private int HostPort => _peer?.Remote?.HostPort ?? 0;
@@ -30,7 +40,10 @@
             : base(args)
         {
             _context = new Context();
+            _context.Language = ELanguage.Rho;
             RegisterTypes.Register(_context.Registry);
+
+            _context.Registry.Register(new ClassBuilder<UserClass>(_context.Registry).Class);
 
             if (_useLoopback && !StartPeer(args))
                 Exit(1);
@@ -38,9 +51,14 @@
             RunInitialisationScripts();
 
             if (_peer != null)
+            {
+                var r = _peer.Local.Context.Registry;
+                r.Register(new ClassBuilder<UserClass>(r).Class);
+
                 _peer.OnReceivedRequest
                     += (server, client, text)
                         => WriteLine(text, ConsoleColor.Magenta);
+            }
         }
 
         public bool Execute(string input)
@@ -65,15 +83,19 @@
                     _peer.Execute(cont);
                 else
                 {
+                    cont.Scope = _context.Executor.Scope;
                     _context.Executor.Continue(cont);
-                    WriteLocalDataStack();
                 }
             }
             catch (Exception e)
             {
                 Error(e.Message);
+                if (_peer != null)
+                    _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");
             }
-
+            
+            WriteLocalDataStack();
+            
             return false;
         }
 
@@ -118,6 +140,7 @@
                 return Error("Local server listen port number expected as argument");
 
             _peer = Create.NewPeer(port);
+            //_context.Executor.Scope["local"] = _peer;
             return _peer.SelfHost() || Error("Failed to start local server");
         }
 

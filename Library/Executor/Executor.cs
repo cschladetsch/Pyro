@@ -26,8 +26,8 @@ namespace Pyro.Exec
         {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
-            //Verbosity = 0;
-            Verbosity = 100;
+            Verbosity = 0;
+            //Verbosity = 100;
             AddOperations();
         }
 
@@ -248,7 +248,7 @@ namespace Pyro.Exec
                     var numArgs = mi.GetParameters().Length;
                     var args = new object[numArgs];
                     for (var n = 0; n < numArgs; ++n)
-                        args[n] = DataStack.Pop();
+                        args[numArgs - 1 - n] = DataStack.Pop();
                     var ret = mi.Invoke(obj, args);
                     if (mi.ReturnType != typeof(void))
                         Push(ret);

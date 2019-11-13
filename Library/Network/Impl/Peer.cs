@@ -51,7 +51,7 @@ namespace Pyro.Network.Impl
             else
                 text += "no server";
 
-            return text;
+            return $"\"{text}\"";
         }
 
         public static void Register(IRegistry reg)
@@ -60,9 +60,8 @@ namespace Pyro.Network.Impl
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
                     .Add<int>("StartServer", (q, s) => q.StartServer(s))
-                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
-                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
-                    .Add<Client>("Leave", (q, s) => q.Leave())
+                    .Add<int, bool>("Remote", (q, s) => q.Enter(s))
+                    .Add("Leave", (q) => q.Leave())
                 .Class);
         }
 
@@ -89,7 +88,7 @@ namespace Pyro.Network.Impl
         public bool Execute(Continuation continuation)
             => _remote?.Continue(continuation) ?? Fail("Not connected");
 
-        public bool EnterRemoteAt(int index)
+        public bool Enter(int index)
             => index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);
 
         private IPEndPoint GetRemoteEndPoint()
@@ -122,12 +121,18 @@ namespace Pyro.Network.Impl
             // client to connect to local server via loopback Tcp.
             System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
 
-            return Enter(Clients[0]) || Error("Couldn't shell to localhost");
+            return EnterClient(Clients[0]) || Error("Couldn't shell to localhost");
+        }
+
+        public bool Listen()
+        {
+            return _server.Start();
         }
 
         public void Leave()
         {
             // TODO: maybe? keep a stack of remotes to pop from
+            _remote.Close();
             _remote = null;
         }
 
@@ -141,7 +146,7 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        public bool Enter(IClient client)
+        public bool EnterClient(IClient client)
         {
             if (client == null)
                 return Fail("Null client");
@@ -200,22 +205,28 @@ namespace Pyro.Network.Impl
 
         public void NewConnection(Socket socket)
         {
-            //WriteLine($"Connected to {socket.RemoteEndPoint}");
             if (!(socket.RemoteEndPoint is IPEndPoint address))
             {
                 Error($"{socket} is not an IPEndPoint");
                 return;
             }
+            
+            var client = new Client(this);
+            _clients.Add(client);
+            client.Socket = socket;
+            OnConnected?.Invoke(this, client);
 
-            foreach (var client in _clients)
-            {
-                if (client.HostName != address.Address.ToString())
-                    continue;
-                OnConnected?.Invoke(this, client);
-                return;
-            }
+            WriteLine($"Connected to {socket.RemoteEndPoint}");
 
-            Error($"Failed to find client for {socket.RemoteEndPoint}");
+            //foreach (var client in _clients)
+            //{
+            //    if (client.HostName != address.Address.ToString())
+            //        continue;
+            //    OnConnected?.Invoke(this, client);
+            //    return;
+            //}
+
+            //Error($"Failed to find client for {socket.RemoteEndPoint}");
         }
 
         public string GetLocalHostname()

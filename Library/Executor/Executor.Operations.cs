@@ -353,6 +353,8 @@
             var obj = Pop();
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
+
+            // TODO: not need to have to register classes.
             var @class = _registry.GetClass(type);
 
             if (GetField(type, member, obj))
@@ -591,7 +593,7 @@
         private new void New()
         {
             //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
-            var typeName = Pop<string>();
+            var typeName = Pop<Label>().Text;
             var klass = _registry.GetClass(typeName);
             if (klass != null)
             {

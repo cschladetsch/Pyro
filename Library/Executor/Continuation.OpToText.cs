@@ -149,7 +149,7 @@
             case EOperation.Self:
                 return "self";
             case EOperation.GetMember:
-                return "get_member";
+                return ".@";
             case EOperation.SetMember:
                 return "set_member";
             case EOperation.SetMemberValue:
