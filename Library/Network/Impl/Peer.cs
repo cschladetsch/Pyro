@@ -51,7 +51,7 @@ namespace Pyro.Network.Impl
             else
                 text += "no server";
 
-            return text;
+            return $"\"{text}\"";
         }
 
         public static void Register(IRegistry reg)
@@ -123,6 +123,11 @@ namespace Pyro.Network.Impl
             System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
 
             return Enter(Clients[0]) || Error("Couldn't shell to localhost");
+        }
+
+        public bool Listen()
+        {
+            return _server.Start();
         }
 
         public void Leave()
@@ -200,22 +205,28 @@ namespace Pyro.Network.Impl
 
         public void NewConnection(Socket socket)
         {
-            //WriteLine($"Connected to {socket.RemoteEndPoint}");
             if (!(socket.RemoteEndPoint is IPEndPoint address))
             {
                 Error($"{socket} is not an IPEndPoint");
                 return;
             }
+            
+            var client = new Client(this);
+            _clients.Add(client);
+            client.Socket = socket;
+            OnConnected?.Invoke(this, client);
 
-            foreach (var client in _clients)
-            {
-                if (client.HostName != address.Address.ToString())
-                    continue;
-                OnConnected?.Invoke(this, client);
-                return;
-            }
+            WriteLine($"Connected to {socket.RemoteEndPoint}");
 
-            Error($"Failed to find client for {socket.RemoteEndPoint}");
+            //foreach (var client in _clients)
+            //{
+            //    if (client.HostName != address.Address.ToString())
+            //        continue;
+            //    OnConnected?.Invoke(this, client);
+            //    return;
+            //}
+
+            //Error($"Failed to find client for {socket.RemoteEndPoint}");
         }
 
         public string GetLocalHostname()

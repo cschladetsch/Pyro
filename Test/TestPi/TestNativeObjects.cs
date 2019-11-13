@@ -13,6 +13,16 @@ namespace Pyro.Test
             public string Name { get; set; }
             public string Email { get; set; }
             public int Age { get; set; }
+
+            public string GetFoo()
+            {
+                return "Foo";
+            }
+
+            public string GetString()
+            {
+                return $"{Name}:{Email}:{Age}";
+            }
         }
 
         [Test]
@@ -25,6 +35,10 @@ namespace Pyro.Test
             PiRun(@"""UserModel"" new");
             var user = Pop<UserModel>();
             Assert.IsNotNull(user);
+
+            PiRun(@"""UserModel"" new 'u #");
+            PiRun("'GetFoo .@ &");
+            AssertPop("Foo");
         }
 
         [Test]

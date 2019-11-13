@@ -15,7 +15,7 @@
 
         private readonly Context _context;
         private IPeer _peer;
-        private readonly bool _useLoopback = false;
+        private readonly bool _useLoopback = true;
 
         private string HostName => _peer?.Remote?.HostName ?? "local";
         private int HostPort => _peer?.Remote?.HostPort ?? 0;
@@ -65,6 +65,7 @@
                     _peer.Execute(cont);
                 else
                 {
+                    cont.Scope = _context.Executor.Scope;
                     _context.Executor.Continue(cont);
                     WriteLocalDataStack();
                 }
@@ -118,6 +119,7 @@
                 return Error("Local server listen port number expected as argument");
 
             _peer = Create.NewPeer(port);
+            //_context.Executor.Scope["local"] = _peer;
             return _peer.SelfHost() || Error("Failed to start local server");
         }
 
