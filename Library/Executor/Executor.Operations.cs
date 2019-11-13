@@ -353,6 +353,8 @@
             var obj = Pop();
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
+
+            // TODO: not need to have to register classes.
             var @class = _registry.GetClass(type);
 
             if (GetField(type, member, obj))

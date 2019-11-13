@@ -149,7 +149,7 @@
 
         private bool GenNew(RhoAstNode node)
         {
-            Append(node.Children[0].Text);
+            Append(new Label(node.Children[0].Text, true));
             return Append(EOperation.New);
         }
 

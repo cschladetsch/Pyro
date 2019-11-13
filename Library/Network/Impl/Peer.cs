@@ -61,7 +61,7 @@ namespace Pyro.Network.Impl
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
                     .Add<int>("StartServer", (q, s) => q.StartServer(s))
                     .Add<int, bool>("Remote", (q, s) => q.Enter(s))
-                    .Add<Client>("Leave", (q, s) => q.Leave())
+                    .Add("Leave", (q) => q.Leave())
                 .Class);
         }
 
@@ -121,7 +121,7 @@ namespace Pyro.Network.Impl
             // client to connect to local server via loopback Tcp.
             System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
 
-            return Enter(Clients[0]) || Error("Couldn't shell to localhost");
+            return EnterClient(Clients[0]) || Error("Couldn't shell to localhost");
         }
 
         public bool Listen()
@@ -132,6 +132,7 @@ namespace Pyro.Network.Impl
         public void Leave()
         {
             // TODO: maybe? keep a stack of remotes to pop from
+            _remote.Close();
             _remote = null;
         }
 
@@ -145,7 +146,7 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        public bool Enter(IClient client)
+        public bool EnterClient(IClient client)
         {
             if (client == null)
                 return Fail("Null client");

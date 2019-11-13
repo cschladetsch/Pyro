@@ -8,6 +8,16 @@
     using Network;
     using Con = System.Console;
 
+    public class UserClass
+    {
+        public string Name;
+        
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+    }
+
     internal class Program
         : AppCommon.AppCommonBase
     {
@@ -33,15 +43,22 @@
             _context.Language = ELanguage.Rho;
             RegisterTypes.Register(_context.Registry);
 
+            _context.Registry.Register(new ClassBuilder<UserClass>(_context.Registry).Class);
+
             if (_useLoopback && !StartPeer(args))
                 Exit(1);
 
             RunInitialisationScripts();
 
             if (_peer != null)
+            {
+                var r = _peer.Local.Context.Registry;
+                r.Register(new ClassBuilder<UserClass>(r).Class);
+
                 _peer.OnReceivedRequest
                     += (server, client, text)
                         => WriteLine(text, ConsoleColor.Magenta);
+            }
         }
 
         public bool Execute(string input)

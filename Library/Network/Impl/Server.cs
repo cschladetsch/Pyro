@@ -34,13 +34,28 @@ namespace Pyro.Network.Impl
             RegisterTypes.Register(_Context.Registry);
 
             _port = port;
-            
-            _Exec.Scope["peer"] = _Peer;
-            _Exec.Scope["server"] = this;
-            _Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
-            _Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
-            _Exec.Scope["test"] = TranslatePi("9999 connect & 1 'RemoteAt peer .@ &");
 
+            var scope = _Exec.Scope;
+
+            _Context.Language = Language.ELanguage.Rho;
+            scope["peer"] = _Peer;
+            scope["server"] = this;
+            scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
+            scope["enter"] = TranslateRho("peer.Enter(2)");
+            scope["join"] = TranslateRho("assert(connect() && enter())");
+            scope["leave"] = TranslateRho("peer.Leave()");
+            _Context.Language = Language.ELanguage.Pi;
+        }
+
+        private Exec.Continuation TranslateRho(string text)
+        {
+            if (!_Context.Translate(text, out var cont))
+            {
+                Error(_Context.Error);
+                return null;
+            }
+
+            return cont;
         }
 
         public override string ToString()
