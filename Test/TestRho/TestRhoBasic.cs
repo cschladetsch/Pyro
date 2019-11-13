@@ -1,12 +1,10 @@
-﻿using System;
-using System.Text;
-using Pyro.RhoLang.Lexer;
-
-namespace Pyro.Test.Rho
+﻿namespace Pyro.Test.Rho
 {
+    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
     using Exec;
+    using RhoLang.Lexer;
     using Language;
 
     /// <inheritdoc />
@@ -126,8 +124,8 @@ namespace Pyro.Test.Rho
         [Test]
         public void TestParseCall()
         {
-            var prog = RhoTranslate(@"foo()");
-            var code = prog.Code;
+            var translate = RhoTranslate(@"foo()");
+            var code = translate.Code;
             Assert.AreEqual(2, code.Count);
             var name = ConstRef<Label>(code[0]);
             var op = ConstRef<EOperation>(code[1]);
@@ -215,7 +213,6 @@ assert(foo() == 1)
 assert(foo() == 2)
 assert(foo() == 2)
 ");
-
         }
 
         [Test]
@@ -277,26 +274,25 @@ if true
         [Test]
         public void TestWriteln()
         {
-            var text = @"writeln(""testing 1 2 3"")";
-            RhoRun(text);
+            RhoRun(@"writeln(""testing 1 2 3"")");
         }
 
         [Test]
         public void TestLocalScope()
         {
-            var text = @"
+            RhoRun(@"
 fun foo(a)
 	b = a + 1
 	assert(b == 3)
 foo(2)
-";
-            RhoRun(text);
+");
         }
 
         //[Test]
         public void TestNestedFunctions()
         {
-            RhoRun(@"
+            RhoRun(
+@"
 fun foo()
 	fun bar(f, num)
 		1 + f(num)

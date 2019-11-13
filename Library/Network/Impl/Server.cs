@@ -34,11 +34,28 @@ namespace Pyro.Network.Impl
             RegisterTypes.Register(_Context.Registry);
 
             _port = port;
-            //_Exec.Scope["peer"] = _Peer;
-            //_Exec.Scope["con"] = this;
-            //_Exec.Scope["connect"] = TranslatePi(@"""192.168.56.1"" 'Connect peer .@ & assert");
-            //_Exec.Scope["clients"] = TranslatePi("'Clients peer .@");
-            //_Exec.Scope["test"] = TranslatePi("9999 connect & 1 'RemoteAt peer .@ &");
+
+            var scope = _Exec.Scope;
+
+            _Context.Language = Language.ELanguage.Rho;
+            scope["peer"] = _Peer;
+            scope["server"] = this;
+            scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
+            scope["enter"] = TranslateRho("peer.Enter(2)");
+            scope["join"] = TranslateRho("assert(connect() && enter())");
+            scope["leave"] = TranslateRho("peer.Leave()");
+            _Context.Language = Language.ELanguage.Pi;
+        }
+
+        private Exec.Continuation TranslateRho(string text)
+        {
+            if (!_Context.Translate(text, out var cont))
+            {
+                Error(_Context.Error);
+                return null;
+            }
+
+            return cont;
         }
 
         public override string ToString()
@@ -94,7 +111,10 @@ namespace Pyro.Network.Impl
             }
             catch (Exception e)
             {
-                return Error($"ProcessReceived: {e.Message}");
+                var msg = $"{e.Message} {e.InnerException?.Message}";
+                _Exec.Push($"Error: {msg}");
+                SendResponse(sender);
+                return Error(msg);
             }
         }
 
@@ -105,13 +125,15 @@ namespace Pyro.Network.Impl
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
             }
+            else
+            {
+                _Exec.Push($"Error: {_Context.Error}");
+            }
         }
 
         private bool SendResponse(Socket sender)
         {
-            // TODO: Also send _Exec.Scope (?)
             var response = _Registry.ToPiScript(_Exec.DataStack.ToList());
-            //WriteLine($"Server sends {response}");
             return Send(sender, response);
         }
         private void Listen()
