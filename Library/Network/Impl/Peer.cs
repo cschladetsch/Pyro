@@ -60,8 +60,7 @@ namespace Pyro.Network.Impl
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
                     .Add<int>("StartServer", (q, s) => q.StartServer(s))
-                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
-                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
+                    .Add<int, bool>("Remote", (q, s) => q.Enter(s))
                     .Add<Client>("Leave", (q, s) => q.Leave())
                 .Class);
         }
@@ -89,7 +88,7 @@ namespace Pyro.Network.Impl
         public bool Execute(Continuation continuation)
             => _remote?.Continue(continuation) ?? Fail("Not connected");
 
-        public bool EnterRemoteAt(int index)
+        public bool Enter(int index)
             => index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);
 
         private IPEndPoint GetRemoteEndPoint()

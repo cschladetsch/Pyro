@@ -30,6 +30,7 @@
             : base(args)
         {
             _context = new Context();
+            _context.Language = ELanguage.Rho;
             RegisterTypes.Register(_context.Registry);
 
             if (_useLoopback && !StartPeer(args))
@@ -67,14 +68,17 @@
                 {
                     cont.Scope = _context.Executor.Scope;
                     _context.Executor.Continue(cont);
-                    WriteLocalDataStack();
                 }
             }
             catch (Exception e)
             {
                 Error(e.Message);
+                if (_peer != null)
+                    _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");
             }
-
+            
+            WriteLocalDataStack();
+            
             return false;
         }
 

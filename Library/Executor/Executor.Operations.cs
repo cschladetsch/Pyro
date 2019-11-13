@@ -591,7 +591,7 @@
         private new void New()
         {
             //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
-            var typeName = Pop<string>();
+            var typeName = Pop<Label>().Text;
             var klass = _registry.GetClass(typeName);
             if (klass != null)
             {
