@@ -15,14 +15,14 @@
 
         private readonly Context _context;
         private IPeer _peer;
+        /// <summary>
+        /// If true, start a local peer and use loopback
+        /// </summary>
         private readonly bool _useLoopback = false;
 
         private string HostName => _peer?.Remote?.HostName ?? "local";
         private int HostPort => _peer?.Remote?.HostPort ?? 0;
 
-        /// <summary>
-        /// If true, start a local peer and use loopback
-        /// </summary>
         public static void Main(string[] args)
             => new Program(args).Repl();
 

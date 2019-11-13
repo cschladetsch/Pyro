@@ -110,10 +110,6 @@
       <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
       <Name>Network</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetworkGen\NetworkGen.csproj">
-      <Project>{e6cd36b6-157b-4b89-bca0-aaac0e56688a}</Project>
-      <Name>NetworkGen</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
