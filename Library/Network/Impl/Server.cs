@@ -111,7 +111,10 @@ namespace Pyro.Network.Impl
             }
             catch (Exception e)
             {
-                return Error($"ProcessReceived: {e.Message}");
+                var msg = $"{e.Message} {e.InnerException?.Message}";
+                _Exec.Push($"Error: {msg}");
+                SendResponse(sender);
+                return Error(msg);
             }
         }
 
@@ -122,13 +125,15 @@ namespace Pyro.Network.Impl
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
             }
+            else
+            {
+                _Exec.Push($"Error: {_Context.Error}");
+            }
         }
 
         private bool SendResponse(Socket sender)
         {
-            // TODO: Also send _Exec.Scope (?)
             var response = _Registry.ToPiScript(_Exec.DataStack.ToList());
-            //WriteLine($"Server sends {response}");
             return Send(sender, response);
         }
         private void Listen()
