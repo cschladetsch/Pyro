@@ -16,11 +16,14 @@
         public static ICallable Function(Action act)
             => new VoidFunction(act);
 
+        public static ICallable Function<A>(Action<A> act)
+            => new VoidFunction<A>(act);
+
         public static ICallable Function<R>(Func<R> fun)
             => new Function<R>(fun);
 
-        public static ICallable Function<A>(Action<A> fun)
-            => new VoidFunction<A>(fun);
+        public static ICallable Method<T,A>(Action<T, A> fun)
+            where T : class => new VoidMethod<T, A>(fun);
 
         public static ICallable Function<A, R>(Func<A, R> fun)
             where A : class => new Function<A, R>(fun);
