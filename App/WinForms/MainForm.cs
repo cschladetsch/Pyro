@@ -106,11 +106,11 @@ namespace WinForms
             output.Text += "\n" + obj.ToString();
         }
 
-        private void Received(IServer server, IClient client, string text)
+        private void Received(IClient client, string text)
         {
             if (InvokeRequired)
             {
-                Invoke(new MessageHandler(Received), server, client, text);
+                Invoke(new MessageHandler(Received), client, text);
                 return;
             }
 
@@ -203,7 +203,6 @@ namespace WinForms
             {
             case Keys.Enter:
                 {
-                    int n;
                     if (e.Control)
                     {
                         ExecutePi();

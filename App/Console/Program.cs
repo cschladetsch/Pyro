@@ -56,7 +56,7 @@
                 r.Register(new ClassBuilder<UserClass>(r).Class);
 
                 _peer.OnReceivedRequest
-                    += (server, client, text)
+                    += (client, text)
                         => WriteLine(text, ConsoleColor.Magenta);
             }
         }

@@ -31,9 +31,7 @@ namespace Pyro.Network.Impl
         }
 
         public override string ToString()
-        {
-            return $"Client: connected to {HostName}:{HostPort}";
-        }
+            => $"Client: connected to {HostName}:{HostPort}";
 
         public IEnumerable<string> Results()
         {
@@ -82,7 +80,14 @@ namespace Pyro.Network.Impl
             {
                 _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
+                if (!_socket.Connected)
+                {
+                    Warn($"Failed to connect to {_socket.RemoteEndPoint}");
+                    return;
+                }
+
                 WriteLine($"Client: connected to {_socket.RemoteEndPoint} using {_socket.LocalEndPoint}");
+
                 Receive(_socket);
             }
             catch (Exception e)

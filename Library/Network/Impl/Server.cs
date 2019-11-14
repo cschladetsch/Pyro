@@ -40,7 +40,10 @@ namespace Pyro.Network.Impl
             _Context.Language = Language.ELanguage.Rho;
             scope["peer"] = _Peer;
             scope["server"] = this;
+            // work 
             //scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
+
+            // home
             scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
             scope["enter"] = TranslateRho("peer.Enter(2)");
             scope["join"] = TranslateRho("assert(connect() && enter())");
@@ -106,7 +109,7 @@ namespace Pyro.Network.Impl
         {
             try
             {
-                ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
+                ReceivedRequest?.Invoke(_Peer.GetClient(sender), pi);
                 RunLocally(pi);
                 return SendResponse(sender);
             }

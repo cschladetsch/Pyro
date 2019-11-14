@@ -133,7 +133,7 @@
             case EOperation.New:
                 return "new";
             case EOperation.At:
-                return "@";
+                return "at";
             case EOperation.DebugPrintDataStack:
                 return "debug_print_data";
             case EOperation.DebugPrintContextStack:
