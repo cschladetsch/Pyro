@@ -21,7 +21,7 @@
     internal class Program
         : AppCommon.AppCommonBase
     {
-        public const int ListenPort = 9999;
+        public const int ListenPort = 7777;
 
         private readonly Context _context;
         private IPeer _peer;

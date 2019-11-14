@@ -60,7 +60,7 @@ namespace Pyro.Network.Impl
         private static void Sent(IAsyncResult ar)
         {
             var socket = ar.AsyncState as Socket;
-            socket?.EndSend(ar);
+            int? sent = socket?.EndSend(ar);
         }
 
         protected IPAddress GetAddress(string hostname)
