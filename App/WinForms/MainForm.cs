@@ -3,6 +3,7 @@ using WinForms.UserControls;
 namespace WinForms
 {
     using Pyro;
+    using Pyro.AppCommon;
     using Pyro.Exec;
     using Pyro.ExecutionContext;
     using Pyro.Network;
@@ -48,7 +49,7 @@ namespace WinForms
             // Clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
 
-            output.Text = GetVersion();
+            output.Text = AppCommonBase.GetVersion();
             mainTabControl.SelectedIndex = 2;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;

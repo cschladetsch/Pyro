@@ -13,20 +13,27 @@
         public string Name;
         
         public int Add(int a, int b)
-        {
-            return a + b;
-        }
+            => a + b;
     }
 
+    /// <summary>
+    /// A Repl console for Pyro.
+    /// 
+    /// Can connect and enter into other consoles.
+    /// </summary>
     internal class Program
         : AppCommon.AppCommonBase
     {
+        /// <summary>
+        /// Port that we listen on for incoming connections.
+        /// </summary>
         public const int ListenPort = 7777;
 
-        private readonly Context _context;
         private IPeer _peer;
+        private readonly Context _context;
+
         /// <summary>
-        /// If true, start a local peer and use loopback
+        /// If true, start a local peer and use loopback Tcp to local server.
         /// </summary>
         private readonly bool _useLoopback = true;
 
@@ -39,8 +46,7 @@
         public Program(string[] args)
             : base(args)
         {
-            _context = new Context();
-            _context.Language = ELanguage.Rho;
+            _context = new Context { Language = ELanguage.Rho };
             RegisterTypes.Register(_context.Registry);
 
             _context.Registry.Register(new ClassBuilder<UserClass>(_context.Registry).Class);
@@ -65,9 +71,7 @@
         {
             if (string.IsNullOrEmpty(input))
             {
-                if (_peer != null)
-                    WriteLocalDataStack();
-
+                //WriteDataStack();
                 return true;
             }
 
@@ -80,12 +84,12 @@
                     return Error(_context.Error);
 
                 if (_peer != null)
-                    _peer.Execute(cont);
-                else
-                {
-                    cont.Scope = _context.Executor.Scope;
-                    _context.Executor.Continue(cont);
-                }
+                    return _peer.Execute(cont);
+
+                cont.Scope = _context.Executor.Scope;
+                _context.Executor.Continue(cont);
+
+                return true;
             }
             catch (Exception e)
             {
@@ -93,8 +97,6 @@
                 if (_peer != null)
                     _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");
             }
-            
-            WriteLocalDataStack();
             
             return false;
         }
@@ -164,8 +166,8 @@
                     var input = GetInput();
                     if (string.IsNullOrEmpty(input))
                     {
-                        _peer?.Remote?.Continue("1 drop");    // hack to force stack refresh!
-                        System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
+                        //_peer?.Remote?.Continue("1 drop");    // hack to force stack refresh!
+                        //System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
                     }
                     else if (!Execute(input))
                         continue;
@@ -184,6 +186,10 @@
 
         private bool PreProcess(string input)
         {
+            // Idea here was to allow execution of arbitrary commands in the current context.
+            // This is a wonderfully stupid idea for security reasons, but still.
+            // In any case, I've removed it for now.
+            //
             // if (!string.IsNullOrEmpty(input))
             // {
             //    if (input.StartsWith("."))
@@ -250,15 +256,17 @@ When you type at the prompt, your text is executed in the current context - whic
 Before the prompt is printed, the data-stack of the current server is printed. Operations you perform act on this data-stack. Each connection to a remote server has its own private context.
 
 To connect to a remote node, type:
-rho> connect(""_hostName""[, port])
+Rho> connect(""_hostName"", port) // adds a connection to a remote server. all peers are servers and clients.
 
 To then switch execution context, type:
-rho> enter(""hostname"")
+Rho> enter(N) // where N is the client connection you want to enter
 
 To do both:
-rho> join(""hostname""[, port])
+Rho> join(""hostname"", port)
 
-For help on syntax for Pi/Rho languages, see the corresponding documentation.
+For help on syntax for Pi/Rho languages, see https://github.com/cschladetsch/Pyro
+
+Press Ctrl-D to leave current context.
 
 Press Ctrl-C to quit.
 ");

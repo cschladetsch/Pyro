@@ -25,10 +25,16 @@ namespace Pyro.AppCommon
 
         public static string GetVersion()
         {
-            var name = Assembly.GetExecutingAssembly().GetName();
+            var asm = Assembly.GetEntryAssembly();
+            var desc = asm.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
+            var name = asm.GetName();
             var version = name.Version;
-            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            return $"Pyro {name.Name} {version} built {built}";
+
+            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision*2);
+            var b = built.ToString("yy-MM-ddTHH:mm");
+            var v = $"{version.Build}.{version.Revision}";
+
+            return $"{desc} v{v} built {b}";
         }
 
         protected virtual void ProcessArgs(string[] args)
