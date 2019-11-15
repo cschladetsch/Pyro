@@ -40,11 +40,8 @@ namespace Pyro.Network.Impl
             _Context.Language = Language.ELanguage.Rho;
             scope["peer"] = _Peer;
             scope["server"] = this;
-            // work 
-            //scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
-
-            // home
-            scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
+            scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
+            //scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
             scope["enter"] = TranslateRho("peer.Enter(2)");
             scope["join"] = TranslateRho("assert(connect() && enter())");
             scope["leave"] = TranslateRho("peer.Leave()");
@@ -100,46 +97,41 @@ namespace Pyro.Network.Impl
             _listener = null;
         }
 
-        public bool Execute(string script)
-        {
-            return _Context.Exec(script);
-        }
-
         protected override bool ProcessReceived(Socket sender, string pi)
         {
             try
             {
-                ReceivedRequest?.Invoke(_Peer.GetClient(sender), pi);
-                RunLocally(pi);
-                return SendResponse(sender);
+                if (!RunLocally(pi))
+                    return false;
+
+                var stack = _Registry.ToPiScript(_Exec.DataStack.ToList());
+                return Send(sender, stack);
             }
             catch (Exception e)
             {
                 var msg = $"{e.Message} {e.InnerException?.Message}";
                 _Exec.Push($"Error: {msg}");
-                SendResponse(sender);
                 return Error(msg);
             }
-        }
-
-        private void RunLocally(string pi)
-        {
-            if (TranslatePi(pi).Code[0] is Continuation cont)
+            finally
             {
-                cont.Scope = _Exec.Scope;
-                _Exec.Continue(cont);
-            }
-            else
-            {
-                _Exec.Push($"Error: {_Context.Error}");
+                ReceivedRequest?.Invoke(_Peer.GetClient(sender), pi);
             }
         }
 
-        private bool SendResponse(Socket sender)
+        private bool RunLocally(string pi)
         {
-            var response = _Registry.ToPiScript(_Exec.DataStack.ToList());
-            return Send(sender, response);
+            if (!_Context.Translate(pi, out var cont))
+            {
+                _Exec.Push(_Context.Error);
+                return Error(_Context.Error);
+            }
+            cont = cont.Code[0] as Continuation;
+            cont.Scope = _Exec.Scope;
+            _Exec.Continue(cont);
+            return true;
         }
+
         private void Listen()
         {
             _listener.BeginAccept(ConnectRequest, null);

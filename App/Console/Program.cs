@@ -84,7 +84,7 @@
                     return Error(_context.Error);
 
                 if (_peer != null)
-                    return _peer.Execute(cont);
+                    return _peer.Execute(cont.ToText());
 
                 cont.Scope = _context.Executor.Scope;
                 _context.Executor.Continue(cont);
@@ -149,11 +149,6 @@
         private void RunInitialisationScripts()
         {
             // TODO: run things like ~/.pyrorc.{pi,rho}
-        }
-
-        private void WriteHeader()
-        {
-            Write($"{GetVersion()}\n", ConsoleColor.DarkGray);
         }
 
         private void Repl()

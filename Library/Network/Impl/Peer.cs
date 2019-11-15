@@ -76,9 +76,10 @@ namespace Pyro.Network.Impl
         public void StartServer(int listenPort)
         {
             _server = new Server(this, listenPort);
-            _server.ReceivedRequest
-                += (client, text)
-                => OnReceivedRequest?.Invoke(client, text);
+            _server.ReceivedRequest += (client, text) => 
+            {
+                OnReceivedRequest?.Invoke(client, text);
+            };
         }
 
         public bool Execute(string script)
@@ -92,9 +93,6 @@ namespace Pyro.Network.Impl
 
         public bool SelfHost()
             => !_server.Start() ? Fail("Couldn't start server") : SelfHost(_server.ListenPort);
-
-        public bool Execute(Continuation continuation)
-            => _remote?.Continue(continuation) ?? Fail("Not connected");
 
         public bool Enter(int index)
             => index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);

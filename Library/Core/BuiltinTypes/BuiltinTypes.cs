@@ -40,7 +40,7 @@
 
         private static void ListToText(IRegistry reg, StringBuilder sb, IList list)
         {
-            sb.Append($"{list.Count}: [");
+            sb.Append($"[");
             var first = true;
             foreach (var obj in list)
             {
