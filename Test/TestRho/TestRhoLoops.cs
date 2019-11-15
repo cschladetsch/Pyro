@@ -20,7 +20,7 @@ assert(c == 0 + 1 + 2)
 		}
 
 
-		[Test]
+		// TODO [Test]
 		public void TestForEachIn()
 		{
 			//_Exec.Verbosity = 0;
@@ -33,7 +33,7 @@ assert(c == 3)
 ");
 		}
 
-		[Test]
+		// TODO [Test]
 		public void TestNestedForEachIn()
 		{
 			RhoRun(@"

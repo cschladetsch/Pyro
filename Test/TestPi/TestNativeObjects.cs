@@ -1,6 +1,6 @@
 namespace Pyro.Test
 {
-    ﻿using System.Collections.Generic;
+     using System.Collections.Generic;
     using NUnit.Framework;
     using Language.Lexer;
 
@@ -32,12 +32,11 @@ namespace Pyro.Test
             _Registry.Register(new ClassBuilder<UserModel>(_Registry)
                 .Class);
 
-            PiRun(@"""UserModel"" new");
+            PiRun(@"'UserModel new");
             var user = Pop<UserModel>();
             Assert.IsNotNull(user);
 
-            PiRun(@"""UserModel"" new 'u #");
-            PiRun("'GetFoo .@ &");
+            PiRun(@"'UserModel new 'u # 'GetFoo u .@ &");
             AssertPop("Foo");
         }
 
@@ -57,7 +56,7 @@ namespace Pyro.Test
 
             const string pre0 = "\"foobar\" 's # ";
             const string length = pre0 + "'Length s .@";
-            const string sub0 = pre0 + "3 0 'Substring s .@ &";
+            const string sub0 = pre0 + "0 3 'Substring s .@ &";
             const string sub1 = pre0 + "3 3 'Substring s .@ &";
             const string sub2 = pre0 + "4 'Substring1 s .@ &";
 

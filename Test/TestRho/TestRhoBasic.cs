@@ -159,14 +159,22 @@ fun foo()
         {
             _Exec.ContextStack.Clear();
             _Exec.DataStack.Clear();
+            _Exec.Verbosity = 100;
             RhoRun(
 @"
 fun foo()
 	1
+//assert(foo() == 1)
+//assert(foo() + 1 == 2)
+//assert(foo() + 2 == 3)
+
 fun bar(f, n)
-	n + f()
-assert(bar(foo, 1) == 2)
+	f(n)
 assert(bar(foo, 2) == 3)
+
+//n + f()
+//assert(bar(foo, 1) == 2)
+//assert(bar(foo, 2) == 3)
 ");
         }
 

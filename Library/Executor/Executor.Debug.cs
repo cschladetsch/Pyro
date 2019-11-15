@@ -20,7 +20,7 @@ namespace Pyro.Exec
 
         private static void Write(string text, params object[] args)
         {
-            Console.Write(text);
+            //Console.Write(text);
             //Debug.Write(text);
             //Trace.Write(text);
             TestContext.Out.WriteLine(text);

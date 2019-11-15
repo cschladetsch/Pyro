@@ -13,11 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{9392
 		Library\Readme.md = Library\Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{7E50329A-E782-4AF6-B6BE-E0AB3FF26C82}"
-	ProjectSection(SolutionItems) = preProject
-		App\Readme.md = App\Readme.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{F06FFE4A-7255-4347-B1E2-CA3296B27B59}"
 	ProjectSection(SolutionItems) = preProject
 		Readme.md = Readme.md
@@ -68,8 +63,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdIo", "Library\StdIo\StdIo.csproj", "{789E1135-5218-4E29-85E6-08381CF4991A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "Library\Ext\Flow\Flow.csproj", "{18326C80-2CC4-417D-8FEE-EA608ED85636}"
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ext", "Ext", "{A7693DF2-1BBE-44EC-BF5B-543F34F2AECB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -444,7 +437,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E6CD36B6-157B-4B89-BCA0-AAAC0E56688A} = {7E50329A-E782-4AF6-B6BE-E0AB3FF26C82}
 		{4DFE7BD2-F168-4AE7-B569-C684C1615EA7} = {93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}
 		{086669FE-817A-4BD2-84A4-E1D90C667250} = {93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}
 		{575091D8-A55C-4794-9F15-120E927C3305} = {93925AAF-A197-4A57-A6BD-EDF17C7B1B3C}
