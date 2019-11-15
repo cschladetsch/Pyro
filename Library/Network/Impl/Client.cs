@@ -17,7 +17,7 @@ namespace Pyro.Network.Impl
         : NetCommon
         , IClient
     {
-        public event ClientReceivedHandler OnRecieved;
+        public event ClientReceivedHandler OnReceived;
 
         // TODO: Move to NetCommon
         public string HostName => GetHostName();
@@ -35,7 +35,7 @@ namespace Pyro.Network.Impl
         public override string ToString()
             => $"Client: connected to {HostName}:{HostPort}";
 
-        public IList<string> Results()
+        public IEnumerable<string> Results()
         {
             return _results;
         }
@@ -115,7 +115,7 @@ namespace Pyro.Network.Impl
                 foreach (var elem in _Exec.Pop<IList<object>>())
                     _results.Add(_Context.Registry.ToPiScript(elem));
 
-                OnRecieved?.Invoke(this, sender);
+                OnReceived?.Invoke(this, sender);
             }
             catch (Exception e)
             {
