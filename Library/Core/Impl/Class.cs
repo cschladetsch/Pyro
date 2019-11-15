@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-
-namespace Pyro.Impl
+﻿namespace Pyro.Impl
 {
+    using System;
+    using System.Text;
+
     /// <inheritdoc cref="IClass{T}" />
     /// <inheritdoc cref="ClassBase" />
     /// <summary>
