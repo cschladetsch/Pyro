@@ -16,7 +16,7 @@
 
             reg.Register(new ClassBuilder<string>(reg, StringToText)
                 .Methods
-                    .Add<int, int, string>("Substring", (s, m, n) => s.Substring(n, m))
+                    .Add<int, int, string>("Substring", (s, n, m) => s.Substring(n, m))
                     .Add<int, string>("Substring1", (s, n) => s.Substring(n))
                 .Class);
             reg.Register(new ClassBuilder<List<object>>(reg, ListToText)

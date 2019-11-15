@@ -14,23 +14,21 @@
     /// C# : <code>new Klass&lt;T&gt;(a0)</code> becomes
     /// Rho: <code>Klass(T)(a0)</code>.
     ///
-    /// NOTE: not implemeted.
+    /// NOTE: not implemented.
     ///
     /// </summary>
     public class Class
         : Reflected<Class>
     {
-        public string Name;
-
         /// <summary>
         /// What to execute to create a new instance.
         /// </summary>
-        public Continuation CreateCont { get; }
+        private Continuation CreateCont { get; }
 
         /// <summary>
-        /// What to executure when an instance leaves scope.
+        /// What to execute when an instance leaves scope.
         /// </summary>
-        public Continuation DestroyCont { get; }
+        private Continuation DestroyCont { get; }
 
         private readonly Executor _exec;
 

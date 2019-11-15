@@ -12,11 +12,15 @@ namespace Pyro.Language.Impl
         public string Text => Lexer.GetText(Slice);
         public char this[int n] => Lexer.Input[_slice.Start + n];
 
-        public TokenBase()
+        protected ETokenType _type;
+        
+        private readonly Slice _slice;
+        
+        protected TokenBase()
         {
         }
 
-        public TokenBase(ETokenType type, Slice slice)
+        protected TokenBase(ETokenType type, Slice slice)
         {
             _type = type;
             _slice = slice;
@@ -41,8 +45,5 @@ namespace Pyro.Language.Impl
 
             return _slice.Length == 0 ? "" : Lexer.GetLine(LineNumber).Substring(_slice.Start, _slice.Length);
         }
-
-        public ETokenType _type;
-        public readonly Slice _slice;
     }
 }

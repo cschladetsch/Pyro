@@ -13,13 +13,13 @@
         : Process
         , ILexer
     {
-        public string Input => _input;
-        public int Offset => _offset;
+        private int Offset => _offset;
         public int LineNumber => _lineNumber;
-        public string Line => Lines[_lineNumber];
+        private string Line => Lines[_lineNumber];
         public List<string> Lines { get; } = new List<string>();
+        public string Input => _input;
 
-        protected string _input;
+        private string _input;
         protected int _offset, _lineNumber;
         protected virtual void AddStringToken(Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }
