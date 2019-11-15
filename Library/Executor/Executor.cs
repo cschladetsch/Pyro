@@ -12,7 +12,7 @@ namespace Pyro.Exec
     {
         public Stack<object> DataStack { get; private set; } = new Stack<object>();
         public List<Continuation> ContextStack { get; private set; } = new List<Continuation>();
-        public int NumOps { get; private set; }
+        private int NumOps { get; set; }
         public bool Rethrows { get; set; }
         public string SourceFilename;
 
@@ -20,18 +20,16 @@ namespace Pyro.Exec
         private Continuation _current;
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
-        private int _nextContext;
 
         public Executor()
         {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
             Verbosity = 0;
-            //Verbosity = 100;
             AddOperations();
         }
 
-        public void PushContext(Continuation continuation)
+        private void PushContext(Continuation continuation)
         {
             ContextStack.Add(continuation);
             _current = null;
@@ -166,7 +164,7 @@ namespace Pyro.Exec
             switch (identBase)
             {
             case Label label:
-                // TODO: search Sytem types like System.Int32 etc
+                // TODO: search System types like System.Int32 etc
                 found = _registry.GetClass(label.Text);
                 if (found != null)
                     return true;
@@ -240,7 +238,7 @@ namespace Pyro.Exec
                     break;
 
                 case IClassBase @class:
-                    Push(@class.NewInstance());//DataStack));
+                    Push(@class.NewInstance());
                     break;
 
                 case MethodInfo mi:
