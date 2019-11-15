@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCommonBase.cs" />
     <Compile Include="BuiltinTypes\CustomMapComparer.cs" />
     <Compile Include="BuiltinTypes\Void.cs" />
     <Compile Include="BuiltinTypes\BuiltinTypes.cs" />
