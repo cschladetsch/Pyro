@@ -3,6 +3,7 @@ using WinForms.UserControls;
 namespace WinForms
 {
     using Pyro;
+    using Pyro.AppCommon;
     using Pyro.Exec;
     using Pyro.ExecutionContext;
     using Pyro.Network;
@@ -48,7 +49,7 @@ namespace WinForms
             // Clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
 
-            output.Text = GetVersion();
+            output.Text = AppCommonBase.GetVersion();
             mainTabControl.SelectedIndex = 2;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;
@@ -106,11 +107,11 @@ namespace WinForms
             output.Text += "\n" + obj.ToString();
         }
 
-        private void Received(IServer server, IClient client, string text)
+        private void Received(IClient client, string text)
         {
             if (InvokeRequired)
             {
-                Invoke(new MessageHandler(Received), server, client, text);
+                Invoke(new MessageHandler(Received), client, text);
                 return;
             }
 
@@ -203,7 +204,6 @@ namespace WinForms
             {
             case Keys.Enter:
                 {
-                    int n;
                     if (e.Control)
                     {
                         ExecutePi();

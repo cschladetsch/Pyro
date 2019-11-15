@@ -31,6 +31,7 @@ $ git submodule update
 $ git lfs install
 $ git flow init
 ```
+Can be installed as a Unity3d Package. See [package.json](package.json).
 
 ## Building
 

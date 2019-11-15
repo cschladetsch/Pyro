@@ -133,7 +133,7 @@
             case EOperation.New:
                 return "new";
             case EOperation.At:
-                return "@";
+                return "at";
             case EOperation.DebugPrintDataStack:
                 return "debug_print_data";
             case EOperation.DebugPrintContextStack:
@@ -149,7 +149,7 @@
             case EOperation.Self:
                 return "self";
             case EOperation.GetMember:
-                return "get_member";
+                return ".@";
             case EOperation.SetMember:
                 return "set_member";
             case EOperation.SetMemberValue:

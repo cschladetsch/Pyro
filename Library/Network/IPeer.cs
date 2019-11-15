@@ -8,8 +8,9 @@
     /// <summary>
     /// General message passed from client to server.
     /// </summary>
-    public delegate void MessageHandler(IServer server, IClient client, string text);
+    public delegate void MessageHandler(IClient client, string text);
     public delegate void ConnectedHandler(IPeer peer, IClient client);
+    public delegate void PeerWriteHandler(EDebugLevel log, string text);
 
     /// <inheritdoc />
     /// <summary>
@@ -22,6 +23,8 @@
         IClient Remote { get; }
         IList<IClient> Clients { get; }
         string LocalHostName { get; }
+
+        event PeerWriteHandler OnWrite;
 
         /// <summary>
         /// Fires when we connect to a new client.
@@ -39,11 +42,13 @@
         event MessageHandler OnReceivedResponse;
 
         bool SelfHost();
+
         bool Connect(string hostName, int port);
-        bool Enter(IClient client);
-        bool Execute(Continuation continuation);
+        bool EnterClient(IClient client);
+        bool Enter(int clientNumber);
         bool Execute(string pi);
         void Leave();
+
         void Stop();
 
         /// <summary>

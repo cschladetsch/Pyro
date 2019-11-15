@@ -3,6 +3,25 @@ using System.Collections.Generic;
 
 namespace Pyro.Impl
 {
+    public class Method<T, A0, A1, A2, R>
+        : CallableBase
+        , ICallable<T>
+        where T : class
+    {
+        private readonly Func<T, A0, A1, A2, R> _fun;
+
+        public Method(Func<T, A0, A1, A2, R> fun) : base(fun) => _fun = fun;
+
+        public override void Invoke(IRegistry reg, Stack<object> stack)
+        {
+            var obj = stack.Pop();
+            var a0 = stack.Pop();
+            var a1 = stack.Pop();
+            var a2 = stack.Pop();
+            stack.Push(_fun(reg.Get<T>(obj), reg.Get<A0>(a0), reg.Get<A1>(a1), reg.Get<A2>(a2)));
+        }
+    }
+
     /// <summary>
     /// A callable method with two arguments.
     /// </summary>
@@ -22,8 +41,8 @@ namespace Pyro.Impl
         public override void Invoke(IRegistry reg, Stack<object> stack)
         {
             var obj = stack.Pop();
-            var a1 = stack.Pop();
             var a0 = stack.Pop();
+            var a1 = stack.Pop();
             stack.Push(_fun(reg.Get<T>(obj), reg.Get<A0>(a0), reg.Get<A1>(a1)));
         }
     }

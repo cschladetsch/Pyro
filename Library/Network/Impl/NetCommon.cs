@@ -17,6 +17,7 @@ namespace Pyro.Network.Impl
         : NetworkConsoleWriter
         , INetCommon
     {
+        // TODO: should a server have a different context for each client?
         public Context Context => _Context;
         public abstract Socket Socket { get; set; }
 
@@ -60,7 +61,7 @@ namespace Pyro.Network.Impl
         private static void Sent(IAsyncResult ar)
         {
             var socket = ar.AsyncState as Socket;
-            socket?.EndSend(ar);
+            int? sent = socket?.EndSend(ar);
         }
 
         protected IPAddress GetAddress(string hostname)

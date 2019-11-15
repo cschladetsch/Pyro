@@ -19,9 +19,17 @@ namespace Pyro.Network.Impl
         , IPeer
     {
         public string LocalHostName => GetLocalHostname();
+
+        public event PeerWriteHandler OnWrite;
+
         public event MessageHandler OnReceivedRequest;
-        public event MessageHandler OnReceivedResponse;
+
+        // We connected to a new remote server (and made a new local client for it)
         public event ConnectedHandler OnConnected;
+
+        // a local client (and there could be many different local clients) received a response.
+        public event MessageHandler OnReceivedResponse;
+
         public IList<object> Stack { get; }
 
         public IList<IClient> Clients => _clients.Cast<IClient>().ToList();
@@ -32,7 +40,7 @@ namespace Pyro.Network.Impl
 
         private Server _server;
         private IClient _remote;
-        private readonly List<Client> _clients = new List<Client>();
+        private readonly List<IClient> _clients = new List<IClient>();
 
         public Peer()
         {
@@ -51,7 +59,7 @@ namespace Pyro.Network.Impl
             else
                 text += "no server";
 
-            return text;
+            return $"\"{text}\"";
         }
 
         public static void Register(IRegistry reg)
@@ -60,18 +68,18 @@ namespace Pyro.Network.Impl
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
                     .Add<int>("StartServer", (q, s) => q.StartServer(s))
-                    .Add<Client, bool>("Remote", (q, s) => q.EnterRemote(s))
-                    .Add<int, bool>("RemoteAt", (q, s) => q.EnterRemoteAt(s))
-                    .Add<Client>("Leave", (q, s) => q.Leave())
+                    .Add<int, bool>("Remote", (q, s) => q.Enter(s))
+                    .Add("Leave", (q) => q.Leave())
                 .Class);
         }
 
         public void StartServer(int listenPort)
         {
             _server = new Server(this, listenPort);
-            _server.ReceivedRequest
-                += (server, client, text)
-                => OnReceivedRequest?.Invoke(server, client, text);
+            _server.ReceivedRequest += (client, text) => 
+            {
+                OnReceivedRequest?.Invoke(client, text);
+            };
         }
 
         public bool Execute(string script)
@@ -86,10 +94,7 @@ namespace Pyro.Network.Impl
         public bool SelfHost()
             => !_server.Start() ? Fail("Couldn't start server") : SelfHost(_server.ListenPort);
 
-        public bool Execute(Continuation continuation)
-            => _remote?.Continue(continuation) ?? Fail("Not connected");
-
-        public bool EnterRemoteAt(int index)
+        public bool Enter(int index)
             => index >= _clients.Count ? Fail($"No such client id={index}") : EnterRemote(_clients[index]);
 
         private IPEndPoint GetRemoteEndPoint()
@@ -98,8 +103,11 @@ namespace Pyro.Network.Impl
         private int GetHostPort()
             => GetRemoteEndPoint()?.Port ?? 0;
 
-        public bool EnterRemote(Client client)
+        public bool EnterRemote(IClient client)
         {
+            if (client.Socket == null)
+                return false;
+
             WriteLine($"Remoting into {client.Socket.RemoteEndPoint}");
             if (!_clients.Contains(client))
                 return false;
@@ -122,13 +130,30 @@ namespace Pyro.Network.Impl
             // client to connect to local server via loopback Tcp.
             System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
 
-            return Enter(Clients[0]) || Error("Couldn't shell to localhost");
+            return EnterClient(Clients[0]) || Error("Couldn't shell to localhost");
         }
+
+        public bool Listen()
+            =>  _server.Start();
+
+        public void Received(Socket socket, string text)
+            => OnReceivedResponse?.Invoke(FindClient(socket), text);
+
+        private IClient FindClient(Socket socket)
+            => _clients.FirstOrDefault(c => c.Socket == socket);
 
         public void Leave()
         {
-            // TODO: maybe? keep a stack of remotes to pop from
-            _remote = null;
+            if (_remote == _clients[0])
+            {
+                Error("Cannot leave self");
+                return;
+            }
+
+            _remote.Close();
+            _clients.Remove(_remote);
+
+            _remote = _clients[0];  // self-host
         }
 
         public bool Connect(string hostName, int port)
@@ -141,7 +166,7 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        public bool Enter(IClient client)
+        public bool EnterClient(IClient client)
         {
             if (client == null)
                 return Fail("Null client");
@@ -200,22 +225,11 @@ namespace Pyro.Network.Impl
 
         public void NewConnection(Socket socket)
         {
-            //WriteLine($"Connected to {socket.RemoteEndPoint}");
-            if (!(socket.RemoteEndPoint is IPEndPoint address))
-            {
-                Error($"{socket} is not an IPEndPoint");
-                return;
-            }
+            var client = new Client(this) {  Socket = socket};
+            _clients.Add(client);
+            OnConnected?.Invoke(this, client);
 
-            foreach (var client in _clients)
-            {
-                if (client.HostName != address.Address.ToString())
-                    continue;
-                OnConnected?.Invoke(this, client);
-                return;
-            }
-
-            Error($"Failed to find client for {socket.RemoteEndPoint}");
+            WriteLine($"Connected to {socket.RemoteEndPoint}");
         }
 
         public string GetLocalHostname()
