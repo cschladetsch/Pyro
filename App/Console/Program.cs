@@ -72,7 +72,8 @@
             if (string.IsNullOrEmpty(input))
             {
                 //WriteDataStack();
-                return true;
+		_peer?.Remote?.Continue(" ");
+		return true;
             }
 
             try
