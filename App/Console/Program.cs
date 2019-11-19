@@ -135,9 +135,9 @@
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
             var results = client.Results().ToList();
-            var n = 0;
+            var n = results.Count - 1;
             foreach (var result in results)
-                str.AppendLine($"{n++}: {result}");
+                str.AppendLine($"{n--}: {result}");
 
             Con.Write(str.ToString());
         }

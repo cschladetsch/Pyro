@@ -112,13 +112,9 @@
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
 
-                var top = _Exec.Pop();
-                if (top is IList<object> stack)
-                {
-                    _results.Clear();
-                    foreach (var elem in stack)
-                        _results.Add(_Context.Registry.ToPiScript(elem));
-                }
+                _results.Clear();
+                foreach (var elem in _Exec.DataStack)
+                    _results.Add(_Context.Registry.ToPiScript(elem));
 
                 OnReceived?.Invoke(this, sender);
             }
