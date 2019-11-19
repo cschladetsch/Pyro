@@ -355,7 +355,10 @@ namespace WinForms
             => ColoriseRho();
 
         private static void Connected(IPeer peer, IClient client)
-            => Console.WriteLine($"Connected: {peer} {client}");
+        { 
+            Console.WriteLine($"Connected: {peer} {client}");
+        }
+
 
         //private void PiDebuggerInputPreview(object sender, PreviewKeyDownEventArgs e)
         //{

@@ -25,6 +25,15 @@
         public static ICallable Method<T,A>(Action<T, A> fun)
             where T : class => new VoidMethod<T, A>(fun);
 
+        public static ICallable Method<T,A0,A1>(Action<T, A0,A1> fun)
+            where T : class => new VoidMethod<T, A0, A1>(fun);
+
+        public static ICallable Method<T,A0,A1,A2>(Action<T, A0, A1, A2> method)
+            where T : class => new VoidMethod<T, A0,A1,A2>(method);
+
+        public static ICallable Method<T,A0,A1,A2,A3>(Action<T, A0, A1, A2, A3> method)
+            where T : class => new VoidMethod<T, A0,A1,A2,A3>(method);
+
         public static ICallable Function<A, R>(Func<A, R> fun)
             where A : class => new Function<A, R>(fun);
 

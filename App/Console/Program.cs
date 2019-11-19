@@ -61,10 +61,20 @@
                 var r = _peer.Local.Context.Registry;
                 r.Register(new ClassBuilder<UserClass>(r).Class);
 
+                _peer.OnConnected += OnConnected;
+
                 _peer.OnReceivedRequest
                     += (client, text)
                         => WriteLine(text, ConsoleColor.Magenta);
             }
+        }
+
+        private void OnConnected(IPeer peer, IClient client)
+        {
+            var scope = client.Context.Executor.Scope;
+            scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((Q,name,id) => Q.Connected(name, id));
+            scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((Q,id,x,y,z) => Q.UpdateTransform(id,x,y,z));
+            scope["Disconnected"] = Pyro.Create.Method<TestClient, int>((Q,id) => Q.Disconnect(id));
         }
 
         public bool Execute(string input)
@@ -72,8 +82,8 @@
             if (string.IsNullOrEmpty(input))
             {
                 //WriteDataStack();
-		_peer?.Remote?.Continue(" ");
-		return true;
+                _peer?.Remote?.Continue(" ");
+                return true;
             }
 
             try
