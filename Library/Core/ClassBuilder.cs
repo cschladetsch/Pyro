@@ -74,6 +74,12 @@ namespace Pyro
                 _builder._class.AddCallable(name, new VoidMethod<T, A, B>(fun));
                 return this;
             }
+            
+            public AddMethod Add<A0, A1, A2, A3>(string name, Action<T, A0, A1, A2, A3> method)
+            {
+                _builder._class.AddCallable(name, new VoidMethod<T, A0, A1, A2, A3>(method));
+                return this;
+            }
 
             public AddMethod Add<A, B, R>(string name, Func<T, A, B, R> fun)
             {
