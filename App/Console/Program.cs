@@ -27,7 +27,7 @@
         /// <summary>
         /// Port that we listen on for incoming connections.
         /// </summary>
-        public const int ListenPort = 7777;
+        private const int ListenPort = 7777;
 
         private IPeer _peer;
         private readonly Context _context;
@@ -43,7 +43,7 @@
         public static void Main(string[] args)
             => new Program(args).Repl();
 
-        public Program(string[] args)
+        private Program(string[] args)
             : base(args)
         {
             _context = new Context { Language = ELanguage.Rho };
@@ -58,8 +58,17 @@
 
             if (_peer != null)
             {
-                var r = _peer.Local.Context.Registry;
-                r.Register(new ClassBuilder<UserClass>(r).Class);
+                var reg = _peer.Local.Context.Registry;
+                reg.Register(new ClassBuilder<UserClass>(reg).Class);
+                
+                // not strictly needed, but avoids runtime reflection on calls
+                new ClassBuilder<TestClient>(reg)
+                    .Methods
+                        .Add<int, float, float, float>("UpdateTransform", (q, n, x, y, z) => q.UpdateTransform(n, x, y, z))
+                    ;
+
+                var scope = _peer.Local.Context.Executor.Scope;
+                scope["server"] = new TestClient();
 
                 _peer.OnConnected += OnConnected;
 
@@ -77,13 +86,14 @@
         private void OnConnected(IPeer peer, IClient client)
         {
             //WriteLine("OnConnected: adding methods");
-            var scope = client.Context.Executor.Scope;
-            scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((Q,name,id) => Q.Connected(name, id));
-            scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((Q,id,x,y,z) => Q.UpdateTransform(id,x,y,z));
-            scope["Disconnected"] = Pyro.Create.Method<TestClient, int>((Q,id) => Q.Disconnect(id));
+            var scope = peer.Local.Context.Executor.Scope;
+            scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((q,name,id) => q.Connected(name, id));
+            scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((q,id,x,y,z) => q.UpdateTransform(id,x,y,z));
+            scope["Disconnected"] = Pyro.Create.Method<TestClient, int>((q,id) => q.Disconnect(id));
+            
         }
 
-        public bool Execute(string input)
+        private bool Execute(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
@@ -111,26 +121,29 @@
             catch (Exception e)
             {
                 Error(e.Message);
-                if (_peer != null)
-                    _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");
+                _peer?.Execute($"Error: {e.Message} {e.InnerException?.Message}");
             }
             
             return false;
         }
 
-        public void WriteLocalDataStack(int max = 50)
+        private void WriteLocalDataStack(int max = 50)
         {
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
             var results = _context.Executor.DataStack;
             var n = 0;
             foreach (var result in results)
+            {
                 str.AppendLine($"{n++}: {_context.Registry.ToPiScript(result)}");
+                if (n >= max)
+                    break;
+            }
 
             Con.Write(str.ToString());
         }
 
-        public void WriteDataStackContents(IClient client, int max = 50)
+        private static void WriteDataStackContents(IClient client, int max = 50)
         {
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
@@ -175,13 +188,7 @@
                 try
                 {
                     WritePrompt();
-                    var input = GetInput();
-                    if (string.IsNullOrEmpty(input))
-                    {
-                        //_peer?.Remote?.Continue("1 drop");    // hack to force stack refresh!
-                        //System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(25));
-                    }
-                    else if (!Execute(input))
+                    if (!Execute(GetInput()))
                         continue;
 
                     WriteDataStack();

@@ -40,8 +40,11 @@ namespace Pyro.Network.Impl
             _Context.Language = Language.ELanguage.Rho;
             scope["peer"] = _Peer;
             scope["server"] = this;
-            scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
-            //scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
+            // work
+            //scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
+            
+            // home
+            scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
             scope["enter"] = TranslateRho("peer.Enter(2)");
             scope["join"] = TranslateRho("assert(connect() && enter())");
             scope["leave"] = TranslateRho("peer.Leave()");
@@ -127,9 +130,17 @@ namespace Pyro.Network.Impl
                 _Exec.Push(_Context.Error);
                 return Error(_Context.Error);
             }
+
+            if (cont.Code.Count == 0)
+                return true;
+
             cont = cont.Code[0] as Continuation;
+            if (cont == null)
+                return Error("Server.RunLocally: Continuation expected");
+            
             cont.Scope = _Exec.Scope;
             _Exec.Continue(cont);
+
             return true;
         }
 
