@@ -57,120 +57,34 @@
             RunInitialisationScripts();
 
             if (_peer != null)
-            {
-                var reg = _peer.Local.Context.Registry;
-                reg.Register(new ClassBuilder<UserClass>(reg).Class);
-                
-                // not strictly needed, but avoids runtime reflection on calls
-                new ClassBuilder<TestClient>(reg)
-                    .Methods
-                        .Add<int, float, float, float>("UpdateTransform", (q, n, x, y, z) => q.UpdateTransform(n, x, y, z))
-                    ;
-
-                var scope = _peer.Local.Context.Executor.Scope;
-                scope["remote"] = new TestClient();
-
-                _peer.OnConnected += OnConnected;
-
-                _peer.OnReceivedRequest
-                    += (client, text)
-                        => WriteLine(text, ConsoleColor.Magenta);
-            }
+                CreatePeer();
         }
 
-        /// <summary>
-        /// Invoked server-side when a new client connects
-        /// </summary>
-        /// <param name="peer"></param>
-        /// <param name="client"></param>
-        private void OnConnected(IPeer peer, IClient client)
+        private void CreatePeer()
         {
-            var scope = peer.Local.Context.Executor.Scope;
-            scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((q,name,id) => q.AddRemote(name, id));
-            scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((q,id,x,y,z) => q.UpdateTransform(id,x,y,z));
-            scope["Disconnected"] = Pyro.Create.Method<TestClient, int>((q,id) => q.Disconnect(id));
-        }
+            var reg = _peer.Local.Context.Registry;
+            reg.Register(new ClassBuilder<UserClass>(reg).Class);
 
-        private bool Execute(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                //WriteDataStack();
-                _peer?.Remote?.Continue(" ");
-                return true;
-            }
+            // not strictly needed, but avoids runtime reflection on calls
+            new ClassBuilder<TestClient>(reg)
+                .Methods
+                    .Add<int, float, float, float>("UpdateTransform", (q, n, x, y, z) => q.UpdateTransform(n, x, y, z))
+                ;
 
-            try
-            {
-                if (PreProcess(input))
-                    return true;
+            var scope = _peer.Local.Context.Executor.Scope;
+            scope["remote"] = new TestClient();
 
-                if (!_context.Translate(input, out var cont))
-                    return Error(_context.Error);
-
-                if (_peer != null)
-                    return _peer.Execute(cont.ToText());
-
-                cont.Scope = _context.Executor.Scope;
-                _context.Executor.Continue(cont);
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                Error(e.Message);
-                _peer?.Execute($"Error: {e.Message} {e.InnerException?.Message}");
-            }
-            
-            return false;
-        }
-
-        private void WriteLocalDataStack(int max = 50)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            var results = _context.Executor.DataStack;
-            var n = 0;
-            foreach (var result in results)
-            {
-                str.AppendLine($"{n++}: {_context.Registry.ToPiScript(result)}");
-                if (n >= max)
-                    break;
-            }
-
-            Con.Write(str.ToString());
-        }
-
-        private static void WriteDataStackContents(IClient client, int max = 50)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            var results = client.Results().ToList();
-            var n = results.Count - 1;
-            foreach (var result in results)
-                str.AppendLine($"{n--}: {result}");
-
-            Con.Write(str.ToString());
-        }
-
-        protected override void Shutdown()
-        {
-            const ConsoleColor color = ConsoleColor.DarkGray;
-            Error("Shutting down...", color);
-            _peer?.Stop();
-            Error("Done", color);
-            Con.ForegroundColor = ConsoleColor.White;
-            Exit();
+            _peer.OnConnected += OnConnected;
+            _peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
         private bool StartPeer(string[] args)
         {
             var port = ListenPort;
             if (args.Length == 1 && !int.TryParse(args[0], out port))
-                return Error("Local server listen port number expected as argument");
+                return Error($"Local server listen port number expected as argument, got {args[0]}");
 
             _peer = Create.NewPeer(port);
-            //_context.Executor.Scope["local"] = _peer;
             return _peer.SelfHost() || Error("Failed to start local server");
         }
 
@@ -196,6 +110,13 @@
                     Error($"{e.Message}");
                 }
             }
+        }
+
+        private void WritePrompt()
+        {
+            Write($"{HostName}:{HostPort} ", ConsoleColor.DarkGray);
+            Write($"{_context.Language}> ", ConsoleColor.Gray);
+            Con.ForegroundColor = ConsoleColor.White;
         }
 
         private static string GetInput()
@@ -245,11 +166,83 @@
             return false;
         }
 
-        private void WritePrompt()
+        /// <summary>
+        /// First, we translate the input (which could be any supported language) to Pi.
+        /// Then we convert that to Pi text and send to current server.
+        /// </summary>
+        private bool Execute(string input)
         {
-            Write($"{HostName}:{HostPort} ", ConsoleColor.DarkGray);
-            Write($"{_context.Language}> ", ConsoleColor.Gray);
-            Con.ForegroundColor = ConsoleColor.White;
+            if (string.IsNullOrEmpty(input))
+            {
+                // hack to get refresh of remote data stack
+                _peer?.Remote?.Continue(" ");
+                return true;
+            }
+
+            try
+            {
+                if (PreProcess(input))
+                    return true;
+
+                if (!_context.Translate(input, out var cont))
+                    return Error(_context.Error);
+
+                if (_peer != null)
+                    return _peer.Execute(cont.ToText());
+
+                cont.Scope = _context.Executor.Scope;
+                _context.Executor.Continue(cont);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+                _peer?.Execute($"Error: {e.Message} {e.InnerException?.Message}");
+            }
+            
+            return false;
+        }
+
+        /// <summary>
+        /// Invoked server-side when a new client connects
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="client"></param>
+        private void OnConnected(IPeer peer, IClient client)
+        {
+            var scope = peer.Local.Context.Executor.Scope;
+            scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((q,name,id) => q.AddRemote(name, id));
+            scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((q,id,x,y,z) => q.UpdateTransform(id,x,y,z));
+            scope["Disconnected"] = Pyro.Create.Method<TestClient, int>((q,id) => q.Disconnect(id));
+        }
+
+        private void WriteLocalDataStack(int max = 50)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            var results = _context.Executor.DataStack;
+            var n = 0;
+            foreach (var result in results)
+            {
+                str.AppendLine($"{n++}: {_context.Registry.ToPiScript(result)}");
+                if (n >= max)
+                    break;
+            }
+
+            Con.Write(str.ToString());
+        }
+
+        private static void WriteDataStackContents(IClient client, int max = 50)
+        {
+            Con.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            var results = client.Results().ToList();
+            var n = results.Count - 1;
+            foreach (var result in results)
+                str.AppendLine($"{n--}: {result}");
+
+            Con.Write(str.ToString());
         }
 
         private void WriteDataStack()
@@ -288,6 +281,16 @@ Press Ctrl-D to leave current context.
 Press Ctrl-C to quit.
 ");
             return true;
+        }
+
+        protected override void Shutdown()
+        {
+            const ConsoleColor color = ConsoleColor.DarkGray;
+            Error("Shutting down...", color);
+            _peer?.Stop();
+            Error("Done", color);
+            Con.ForegroundColor = ConsoleColor.White;
+            Exit();
         }
     }
 }

@@ -115,6 +115,16 @@
         }
     }
 
+    public class NotEnoughArgumentsException
+        : Exception
+    {
+        public NotEnoughArgumentsException(string text)
+            : base(text)
+        {
+            
+        }
+    }
+
     /// <inheritdoc />
     /// <summary>
     /// Invalid comparisons between two different enumeration types.

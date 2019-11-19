@@ -242,11 +242,17 @@ namespace Pyro.Exec
                     break;
 
                 case MethodInfo mi:
-                    var obj = Pop();
                     var numArgs = mi.GetParameters().Length;
+                    if (DataStack.Count < numArgs + 1)
+                    {
+                        var servant = DataStack.Count > 0 ? DataStack.Peek() : "null";
+                        throw new NotEnoughArgumentsException($"{servant}.{mi.Name} expects {numArgs} args");
+                    }
+                    
+                    var obj = Pop();
                     var args = new object[numArgs];
                     for (var n = 0; n < numArgs; ++n)
-                        args[numArgs - 1 - n] = DataStack.Pop();
+                        args[n] = Pop();
                     var ret = mi.Invoke(obj, args);
                     if (mi.ReturnType != typeof(void))
                         Push(ret);
