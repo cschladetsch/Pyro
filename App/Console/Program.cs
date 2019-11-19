@@ -76,9 +76,9 @@
         /// <param name="client"></param>
         private void OnConnected(IPeer peer, IClient client)
         {
-            //WriteLine("OnConnected: adding methods");
-            var scope = client.Context.Executor.Scope;
-            scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((Q,name,id) => Q.Connected(name, id));
+            WriteLine("OnConnected: adding methods");
+            var scope = peer.Local.Context.Executor.Scope;
+            scope["AddRemote"] = Pyro.Create.Method<TestClient, string, int>((Q,name,id) => Q.AddRemote(name, id));
             scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((Q,id,x,y,z) => Q.UpdateTransform(id,x,y,z));
             scope["Disconnected"] = Pyro.Create.Method<TestClient, int>((Q,id) => Q.Disconnect(id));
         }

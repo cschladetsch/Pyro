@@ -1,8 +1,8 @@
 ﻿class TestClient
 {
-    public void Connected(string fullName, int id)
+    public void AddRemote(string fullName, int id)
     {
-        System.Console.WriteLine($"Connect: {fullName} {id}");
+        System.Console.WriteLine($"AddRemote: {fullName} {id}");
     }
 
     public void UpdateTransform(int id, float x, float y, float z)
