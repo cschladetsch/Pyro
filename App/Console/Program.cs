@@ -69,8 +69,14 @@
             }
         }
 
+        /// <summary>
+        /// Invoked server-side when a new client connects
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="client"></param>
         private void OnConnected(IPeer peer, IClient client)
         {
+            //WriteLine("OnConnected: adding methods");
             var scope = client.Context.Executor.Scope;
             scope["Connected"] = Pyro.Create.Method<TestClient, string, int>((Q,name,id) => Q.Connected(name, id));
             scope["UpdateTransform"] = Pyro.Create.Method<TestClient, int,float,float,float>((Q,id,x,y,z) => Q.UpdateTransform(id,x,y,z));
