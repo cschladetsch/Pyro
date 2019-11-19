@@ -1,10 +1,10 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Collections.Generic;
-
-namespace Pyro.Network.Impl
+﻿namespace Pyro.Network.Impl
 {
+    using System;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Collections.Generic;
+
     using Exec;
 
     /// <inheritdoc cref="IClient" />
@@ -111,9 +111,14 @@ namespace Pyro.Network.Impl
 
                 cont.Scope = _Exec.Scope;
                 _Exec.Continue(cont);
-                _results.Clear();
-                foreach (var elem in _Exec.Pop<IList<object>>())
-                    _results.Add(_Context.Registry.ToPiScript(elem));
+
+                var top = _Exec.Pop();
+                if (top is IList<object> stack)
+                {
+                    _results.Clear();
+                    foreach (var elem in stack)
+                        _results.Add(_Context.Registry.ToPiScript(elem));
+                }
 
                 OnReceived?.Invoke(this, sender);
             }
