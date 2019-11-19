@@ -222,11 +222,11 @@
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
             var results = _context.Executor.DataStack;
-            var n = 0;
+            var n = Math.Max(results.Count, max);
             foreach (var result in results)
             {
-                str.AppendLine($"{n++}: {_context.Registry.ToPiScript(result)}");
-                if (n >= max)
+                str.AppendLine($"{--n}: {_context.Registry.ToPiScript(result)}");
+                if (n == 0)
                     break;
             }
 
