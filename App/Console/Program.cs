@@ -68,7 +68,7 @@
                     ;
 
                 var scope = _peer.Local.Context.Executor.Scope;
-                scope["server"] = new TestClient();
+                scope["remote"] = new TestClient();
 
                 _peer.OnConnected += OnConnected;
 
