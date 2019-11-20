@@ -27,10 +27,22 @@ if (1 == 1)
 else
 	false
 ";
-            var cont = RhoTranslate(r0);
-            DebugTrace(cont.ToText());
-            _Exec.Continue(cont);
+            var r1 = @"
+if (1 != 1)
+	true
+else
+	false
+";
+            var c0 = RhoTranslate(r0);
+            var c1 = RhoTranslate(r1);
+            
+            DebugTrace(c0.ToText());
+            _Exec.Continue(c0);
             AssertPop(true);
+            
+            DebugTrace(c1.ToText());
+            _Exec.Continue(c1);
+            AssertPop(false);
         }
         
         [Test]
@@ -77,7 +89,8 @@ else
             _Exec.Scope["pr"] = Function<object>(DebugTrace);
 
             Verbose = true;
-            TestScript("Conditionals.rho");
+            TestScript("Conditionals0.rho");
+            AssertPop(true);
             return;
 
             TestScript("Functions.rho");
