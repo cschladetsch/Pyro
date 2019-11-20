@@ -156,11 +156,8 @@
 
             @if.Add(Pop());
 
-            while (indent > 0)
+            while (indent >= 0)
             {
-                if (!TryConsume(ERhoToken.Tab))
-                    return Append(@if);
-
                 if (TryConsume(ERhoToken.Else))
                 {
                     if (!Block())
@@ -169,6 +166,9 @@
                     @if.Add(Pop());
                     return Append(@if);
                 }
+
+                if (!TryConsume(ERhoToken.Tab))
+                    return Append(@if);
 
                 indent--;
             }

@@ -52,7 +52,7 @@
     <None Include="Scripts\Functions.rho" />
     <None Include="Scripts\PiRho\PiFromRho1.rho" />
     <None Include="Scripts\PiRho\PiFromRho0.rho" />
-    <Compile Include="PiFromRho.cs" />
+    <Compile Include="TestPiFromRho.cs" />
     <None Include="Scripts\Conditionals.rho" />
     <None Include="Scripts\NestedLoops.rho" />
     <Compile Include="TestRhoClass.cs" />
