@@ -186,7 +186,7 @@
         /// <summary>
         /// Generate executable pi-code from given node.
         /// </summary>
-        protected bool Generate(RhoAstNode node)
+        private bool Generate(RhoAstNode node)
         {
             if (node == null)
                 return InternalFail("Unexpected empty RhoAstNode");
@@ -284,7 +284,7 @@
             var children = node.Children;
             var args = children[1].Children;
             var name = children[0];
-            foreach (var a in args.Reverse())
+            foreach (var a in args)
                 Generate(a);
 
             Generate(name);

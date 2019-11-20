@@ -61,8 +61,8 @@ namespace Pyro.Impl
         public override void Invoke(IRegistry reg, Stack<object> stack)
         {
             var obj = stack.Pop();
-            var a0 = stack.Pop();
             var a1 = stack.Pop();
+            var a0 = stack.Pop();
             stack.Push(_fun(reg.Get<T>(obj), reg.Get<A0>(a0), reg.Get<A1>(a1)));
         }
     }
@@ -83,9 +83,9 @@ namespace Pyro.Impl
         public override void Invoke(IRegistry reg, Stack<object> stack)
         {
             var obj = stack.Pop();
-            var a0 = stack.Pop();
-            var a1 = stack.Pop();
             var a2 = stack.Pop();
+            var a1 = stack.Pop();
+            var a0 = stack.Pop();
             stack.Push(_fun(reg.Get<T>(obj), reg.Get<A0>(a0), reg.Get<A1>(a1), reg.Get<A2>(a2)));
         }
     }
