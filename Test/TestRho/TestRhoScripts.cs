@@ -90,7 +90,6 @@ else
 
             Verbose = true;
             TestScript("Conditionals0.rho");
-            AssertPop(true);
             return;
 
             TestScript("Functions.rho");
