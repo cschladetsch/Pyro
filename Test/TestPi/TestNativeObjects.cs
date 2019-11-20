@@ -65,11 +65,11 @@ namespace Pyro.Test
             AssertSameTokens(sub0, EPiToken.String, EPiToken.Quote, EPiToken.Ident, EPiToken.Store, EPiToken.Int,
                 EPiToken.Int, EPiToken.Quote, EPiToken.Ident, EPiToken.Ident, EPiToken.GetMember, EPiToken.Suspend);
 
-            PiRun(length);
-            AssertPop(6);
-
             PiRun(sub0);
             AssertPop("foo");
+
+            PiRun(length);
+            AssertPop(6);
 
             PiRun(sub1);
             AssertPop("bar");

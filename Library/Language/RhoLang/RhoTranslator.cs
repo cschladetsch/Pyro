@@ -284,7 +284,7 @@
             var children = node.Children;
             var args = children[1].Children;
             var name = children[0];
-            foreach (var a in args)
+            foreach (var a in args.Reverse().ToList())
                 Generate(a);
 
             Generate(name);

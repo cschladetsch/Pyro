@@ -56,6 +56,11 @@ namespace Pyro.Exec
             }
         }
 
+        public bool Single()
+        {
+            return Next();
+        }
+        
         private void Execute(Continuation cont)
         {
             _current = cont;
