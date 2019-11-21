@@ -210,6 +210,13 @@
         {
             var scope = peer.Local.Context.Scope;
             scope["remote"] = new TestClient();
+            client.Context.Executor.Scope["remote"] = new TestClient();
+//            client.Context.Scope["AddRemote"] = Pyro.Create.Function<string, int>((a, b) => AddRemote);
+        }
+
+        void AddRemote(string fullName, int id)
+        {
+            WriteLine($"AddRemote: {fullName} {id}");
         }
 
         private void WriteLocalDataStack(int max = 50)
