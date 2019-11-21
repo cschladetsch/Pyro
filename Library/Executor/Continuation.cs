@@ -31,6 +31,12 @@ namespace Pyro.Exec
             Code = code;
         }
 
+        private Continuation(IList<object> code, IList<string> args)
+            : this(code)
+        {
+            Args = args;
+        }
+
         public void Delay(int millis)
             => ResumeAfter(TimeSpan.FromMilliseconds(millis));
 
@@ -117,8 +123,7 @@ namespace Pyro.Exec
 
         public Continuation Start(Executor exec)
         {
-            var cp = Self.Registry.Add(new Continuation(Code)).Value;
-            cp.Args = Args;
+            var cp = Self.Registry.Add(new Continuation(Code, Args)).Value;
 
             cp.Kernel = exec.Kernel;
             cp.Ip = Ip;

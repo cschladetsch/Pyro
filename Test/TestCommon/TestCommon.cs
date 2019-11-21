@@ -15,7 +15,7 @@ namespace Pyro.Test
 
     /// <inheritdoc />
     /// <summary>
-    /// Common to most unit tests in the system
+    /// Common to most unit tests in the system.
     /// </summary>
     [TestFixture]
     public class TestCommon
@@ -58,20 +58,20 @@ namespace Pyro.Test
             _Exec.Continue(_Continuation = RhoTranslate(text, trace, st));
         }
 
-        protected Continuation PiTranslate(string text)
+        protected Continuation PiTranslate(string piScript)
         {
             var trans = new PiTranslator(_Registry);
-            if (!trans.Translate(text, out var cont))
+            if (!trans.Translate(piScript, out var cont))
                 WriteLine($"Error: {trans.Error}");
 
             Assert.IsFalse(trans.Failed, trans.Error);
             return _Continuation = cont;
         }
 
-        protected Continuation RhoTranslate(string text, bool trace = false, EStructure st = EStructure.Program)
+        protected Continuation RhoTranslate(string rhoScript, bool trace = false, EStructure st = EStructure.Program)
         {
             var trans = new RhoTranslator(_Registry);
-            if (!trans.Translate(text, out var cont, st))
+            if (!trans.Translate(rhoScript, out var cont, st))
                 WriteLine($"Error: {trans.Error}");
 
             if (trace)
@@ -81,7 +81,7 @@ namespace Pyro.Test
             return _Continuation = cont;
         }
 
-        protected ITranslator MakeTranslator(string scriptName)
+        private ITranslator MakeTranslator(string scriptName)
         {
             Type klass = null;
             var extension = Path.GetExtension(scriptName);
@@ -136,19 +136,13 @@ namespace Pyro.Test
             return true;
         }
 
-        protected string LoadScript(string fileName)
-            => File.ReadAllText(GetFullScriptPathname(fileName));
-
         protected bool RunScript(string scriptName)
             => RunScriptPathname(GetFullScriptPathname(scriptName));
-
-        protected string GetFullScriptPathname(string scriptName)
-            => Path.Combine(GetScriptsPath(), scriptName);
 
         protected string GetScriptsPath()
             => MakeLocalPath(ScriptsFolder);
 
-        protected string MakeLocalPath(string relative)
+        private string MakeLocalPath(string relative)
             => Path.Combine(GetFolderRoot(), relative);
 
         private static string GetFolderRoot()
@@ -166,7 +160,7 @@ namespace Pyro.Test
         protected void TestFreezeThawPi(string text)
             => Assert.IsTrue(Continue(FreezeThaw(_pi, text)));
 
-        protected void TestFreezeThawRho(string text)
+        private void TestFreezeThawRho(string text)
             => Assert.IsTrue(Continue(FreezeThaw(_rho, text)));
 
         protected object Pop()
@@ -190,7 +184,7 @@ namespace Pyro.Test
             return typed.Value;
         }
 
-        protected void WriteLine(string fmt, params object[] args)
+        protected static void WriteLine(string fmt, params object[] args)
         {
             var text = fmt;
             if (args != null && args.Length > 0)
@@ -199,14 +193,14 @@ namespace Pyro.Test
             DebugTraceLine(text);
         }
 
-        protected void DebugTraceLine(string text)
+        protected static void DebugTraceLine(string text)
         {
             TestContext.Out.WriteLine(text);
             System.Diagnostics.Trace.WriteLine(text);
             Console.WriteLine(text);
         }
 
-        protected PiLexer PiLex(string input)
+        protected static PiLexer PiLex(string input)
         {
             var lex = new PiLexer(input);
             if (lex.Failed)
@@ -237,7 +231,7 @@ namespace Pyro.Test
             AssertSameTokens(lex.Tokens, tokens);
         }
 
-        protected void AssertSameTokens(IEnumerable<object> input, params EPiToken[] tokens)
+        private static void AssertSameTokens(IEnumerable<object> input, params EPiToken[] tokens)
         {
             var piTokens = input.Cast<PiToken>().Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
             var expected = tokens.ToList();
@@ -245,7 +239,7 @@ namespace Pyro.Test
             Assert.IsTrue(piTokens.SequenceEqual(expected));
         }
 
-        protected bool IsWhiteSpace(PiToken piToken)
+        protected static bool IsWhiteSpace(PiToken piToken)
         {
             switch (piToken.Type)
             {
@@ -303,7 +297,7 @@ namespace Pyro.Test
             }
         }
 
-        protected Continuation FreezeThaw(ITranslator trans, string text)
+        private Continuation FreezeThaw(ITranslator trans, string text)
         {
             void Noisey(string info)
             {
@@ -325,6 +319,12 @@ namespace Pyro.Test
             Assert.IsNotNull(continuation);
             return continuation;
         }
+        
+        private string GetFullScriptPathname(string scriptName)
+            => Path.Combine(GetScriptsPath(), scriptName);
+
+        private string LoadScript(string fileName)
+            => File.ReadAllText(GetFullScriptPathname(fileName));
     }
 }
 

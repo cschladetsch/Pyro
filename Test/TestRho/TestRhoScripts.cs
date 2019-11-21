@@ -19,6 +19,67 @@ namespace Pyro.Test.Rho
         }
 
         [Test]
+        public void TestRhoConditionals()
+        {
+            var r0 = @"
+if (1 == 1)
+	true
+else
+	false
+";
+            var r1 = @"
+if (1 != 1)
+	true
+else
+	false
+";
+            var c0 = RhoTranslate(r0);
+            var c1 = RhoTranslate(r1);
+            
+            DebugTrace(c0.ToText());
+            _Exec.Continue(c0);
+            AssertPop(true);
+            
+            DebugTrace(c1.ToText());
+            _Exec.Continue(c1);
+            AssertPop(false);
+        }
+        
+        [Test]
+        public void TestRhoNestedConditionals()
+        {
+            string Script(int a, int b)
+            {
+                return $@"
+if ({a} != 1)
+	if ({b} == 2)
+		10
+	else
+		20
+else
+	30
+";
+            }
+
+            var s0 = Script(1, 1);
+            var s1 = Script(2, 2);
+            var s2 = Script(2, 3);
+            var c0 = RhoTranslate(s0);
+            var c1 = RhoTranslate(s1);
+            var c2 = RhoTranslate(s2);
+            
+            _Exec.Continue(c0);
+            AssertPop(30);    // a = 1, b = 1 => c = 30
+            
+            _Exec.Continue(c1);    // a = 2, b = 2 => c= 10
+            AssertPop(10);
+            
+            _Exec.Continue(c2);    // a = 2, b = 3 => c= 20
+            AssertPop(20);
+        }
+        
+        
+        [Test]
         public void RunSomeRhoScripts()
         {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
@@ -26,6 +87,10 @@ namespace Pyro.Test.Rho
             _Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
             _Exec.Scope["Print"] = Function<TimeSpan>(d => DebugTraceLine(d.ToString()));
             _Exec.Scope["pr"] = Function<object>(DebugTrace);
+
+            Verbose = true;
+            TestScript("Conditionals0.rho");
+            return;
 
             TestScript("Functions.rho");
             TestScript("Add.rho");
@@ -42,7 +107,6 @@ namespace Pyro.Test.Rho
             //TestScript("NestedLoops.rho");
             //TestScript("Yielding.rho");
             //TestScript("ForLoops.rho");
-            //TestScript("Conditionals.rho");
             //TestScript("RangeLoops.rho");
             //TestScript("ForLoops.rho");
             //TestScript("NestedFunctions.rho");
