@@ -148,8 +148,8 @@ namespace Pyro.Network.Impl
                 return;
             }
 
-            _remote.Close();
-            _clients.Remove(_remote);
+            //_remote.Close();
+            //_clients.Remove(_remote);
 
             _remote = _clients[0];  // self-host
         }

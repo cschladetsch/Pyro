@@ -64,15 +64,6 @@
 
         private void CreatePeer()
         {
-            var reg = _peer.Local.Context.Registry;
-            reg.Register(new ClassBuilder<UserClass>(reg).Class);
-
-            // not strictly needed, but avoids runtime reflection on calls
-            new ClassBuilder<TestClient>(reg)
-                .Methods
-                    .Add<int, float, float, float>("UpdateTransform", (q, n, x, y, z) => q.UpdateTransform(n, x, y, z))
-                ;
-
             _peer.OnConnected += OnConnected;
             _peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
@@ -84,6 +75,9 @@
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
 
             _peer = Create.NewPeer(port);
+            var scope = _peer.Local.Context.Executor.Scope;
+            var reg = _peer.Local.Context.Registry;
+            reg.Register(new ClassBuilder<TestClient>(reg).Class);
             return _peer.SelfHost() || Error("Failed to start local server");
         }
 
@@ -160,6 +154,9 @@
                 case "pi":
                     _context.Language = ELanguage.Pi;
                     return true;
+                case "leave":
+                    _peer.Leave();
+                    return true;
             }
 
             return false;
@@ -210,8 +207,8 @@
         /// <param name="client"></param>
         private void OnConnected(IPeer peer, IClient client)
         {
-            var scope = peer.Local.Context.Scope;
-            scope["remote"] = new TestClient();
+//            var scope = peer.Local.Context.Scope;
+//            scope["remote"] = new TestClient();
 //            client.Context.Executor.Scope["remote"] = new TestClient();
         }
 

@@ -59,8 +59,7 @@ namespace Pyro.Network.Impl
                 return Fail("No socket to send with");
 
             var byteData = Encoding.ASCII.GetBytes(text + '~');
-            var ar = socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, socket);
-//            WriteLine($"Send: '{text}': {byteData.Length}, {ar}");
+            socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, socket);
             
             return true;
         }
@@ -79,6 +78,7 @@ namespace Pyro.Network.Impl
 
         public void Receive(Socket socket)
         {
+            WriteLine($"NetCommon.Receive: {socket.RemoteEndPoint}");
             var state = new StateObject {workSocket = socket};
             socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
         }
