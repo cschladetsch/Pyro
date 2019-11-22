@@ -30,6 +30,8 @@
         private const int ListenPort = 7777;
 
         private IPeer _peer;
+        
+        // only used for translation
         private readonly Context _context;
 
         /// <summary>
@@ -111,7 +113,7 @@
 
         private void WritePrompt()
         {
-            Write($"{HostName}:{HostPort} ", ConsoleColor.DarkGray);
+            Write($"{_peer.Remote?.Socket?.RemoteEndPoint} ", ConsoleColor.DarkGray);
             Write($"{_context.Language}> ", ConsoleColor.Gray);
             Con.ForegroundColor = ConsoleColor.White;
         }
@@ -210,13 +212,7 @@
         {
             var scope = peer.Local.Context.Scope;
             scope["remote"] = new TestClient();
-            client.Context.Executor.Scope["remote"] = new TestClient();
-//            client.Context.Scope["AddRemote"] = Pyro.Create.Function<string, int>((a, b) => AddRemote);
-        }
-
-        void AddRemote(string fullName, int id)
-        {
-            WriteLine($"AddRemote: {fullName} {id}");
+//            client.Context.Executor.Scope["remote"] = new TestClient();
         }
 
         private void WriteLocalDataStack(int max = 50)
@@ -235,14 +231,16 @@
             Con.Write(str.ToString());
         }
 
-        private static void WriteDataStackContents(IClient client, int max = 50)
+        public static void WriteDataStackContents(IClient client, int max = 50)
         {
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
-            var results = client.Results().ToList();
+            // make a copy as it could be changed by another call while we're iterating over data stack
+            var results = client.Context.Executor.DataStack.ToList();
+            var reg = client.Context.Registry;
             var n = results.Count - 1;
             foreach (var result in results)
-                str.AppendLine($"{n--}: {result}");
+                str.AppendLine($"{n--}: {reg.ToPiScript(result)}");
 
             Con.Write(str.ToString());
         }

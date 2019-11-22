@@ -8,7 +8,7 @@ using Flow;
 
 namespace Pyro.Network.Impl
 {
-    using Exec;
+    using System.Text;
 
     /// <inheritdoc cref="IPeer" />
     /// <summary>
@@ -164,6 +164,29 @@ namespace Pyro.Network.Impl
             return true;
         }
 
+        public bool ShowStack(int i)
+        {
+            if (i >= _clients.Count)
+                return Error("Invalid client number.");
+            var client = _clients[i];
+            
+            // TODO: this is copied from Console.Program.cs
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            var str = new StringBuilder();
+            // make a copy as it could be changed by another call while we're iterating over data stack
+            var results = client.Context.Executor.DataStack.ToList();
+            var reg = client.Context.Registry;
+            var n = results.Count - 1;
+            foreach (var result in results)
+                str.AppendLine($"{n--}: {reg.ToPiScript(result)}");
+
+            Console.Write(str.ToString());
+            return true;
+        }
+        
+        public bool To(int n, string piScript)
+            => n >= _clients.Count ? Error("Invalid client number.") : _clients[n].Continue(piScript);
+
         public bool EnterClient(IClient client)
         {
             if (client == null)
@@ -213,6 +236,17 @@ namespace Pyro.Network.Impl
             throw new NotImplementedException();
         }
 
+        public void SwitchClient(int n)
+        {
+            if (n >= _clients.Count)
+            {
+                Error($"Invalid client number {n}");
+                return;
+            }
+            
+            _remote = _clients[n];
+        }
+
         public IFuture<TR> RemoteCall<TR, T0, T1>(NetId agentId, string methodName, T0 t0, T1 t1)
         {
             throw new NotImplementedException();
@@ -235,6 +269,20 @@ namespace Pyro.Network.Impl
         {
             var address = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             return address?.ToString() ?? "localhost";
+        }
+
+        public void ShowEndPoints()
+        {
+            foreach (var client in _clients)
+                WriteLine($"{client.Socket.LocalEndPoint} -> {client.Socket.RemoteEndPoint}");
+        }
+        
+        public void NewServerConnection(Socket socket)
+        {
+            WriteLine($"NewServerConn: {socket.RemoteEndPoint}");
+            var client = new Client(this) { Socket = socket};
+            //client.Receive(socket);
+            _clients.Add(client);
         }
     }
 }

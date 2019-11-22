@@ -69,6 +69,8 @@
         IFuture<Tr> RemoteCall<Tr>(NetId agentId, string methodName);
         IFuture<Tr> RemoteCall<Tr, T0>(NetId agentId, string methodName, T0 t0);
         IFuture<Tr> RemoteCall<Tr, T0, T1>(NetId agentId, string methodName, T0 t0, T1 t1);
+        bool To(int n, string piScript);
+        bool ShowStack(int i);
     }
 }
 

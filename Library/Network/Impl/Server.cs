@@ -51,7 +51,7 @@ namespace Pyro.Network.Impl
             _Context.Language = Language.ELanguage.Pi;
         }
 
-        private Exec.Continuation TranslateRho(string text)
+        private Continuation TranslateRho(string text)
         {
             if (!_Context.Translate(text, out var cont))
             {
@@ -64,7 +64,7 @@ namespace Pyro.Network.Impl
 
         public override string ToString()
         {
-            return $"Server: listening on {ListenPort}, connected={_listener?.Connected}";
+            return $"Server: listening on {ListenPort}";
         }
 
         public bool Start()
@@ -156,7 +156,7 @@ namespace Pyro.Network.Impl
 
             var socket = _listener.EndAccept(ar);
             WriteLine($"Serving {socket.RemoteEndPoint}");
-            _Peer.NewConnection(socket);
+            _Peer.NewServerConnection(socket);
             Receive(socket);
             Listen();
         }
