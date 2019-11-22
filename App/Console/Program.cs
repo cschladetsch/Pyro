@@ -3,18 +3,10 @@
     using System;
     using System.Linq;
     using System.Text;
-    using ExecutionContext;
     using Language;
     using Network;
+    using ExecutionContext;
     using Con = System.Console;
-
-    public class UserClass
-    {
-        public string Name;
-        
-        public int Add(int a, int b)
-            => a + b;
-    }
 
     /// <summary>
     /// A Repl console for Pyro.
@@ -24,23 +16,14 @@
     internal class Program
         : AppCommon.AppCommonBase
     {
-        /// <summary>
-        /// Port that we listen on for incoming connections.
-        /// </summary>
+        // Port that we listen on for incoming connections.
         private const int ListenPort = 7777;
 
+        // our peer that can connect to any other peer, and can also be connected to by any other peer
         private IPeer _peer;
         
-        // only used for translation
+        // only used for translation - not execution. Execution is performed by servers or clients.
         private readonly Context _context;
-
-        /// <summary>
-        /// If true, start a local peer and use loopback Tcp to local server.
-        /// </summary>
-        private readonly bool _useLoopback = true;
-
-        private string HostName => _peer?.Remote?.HostName ?? "local";
-        private int HostPort => _peer?.Remote?.HostPort ?? 0;
 
         public static void Main(string[] args)
             => new Program(args).Repl();
@@ -51,21 +34,18 @@
             _context = new Context { Language = ELanguage.Rho };
             RegisterTypes.Register(_context.Registry);
 
-            _context.Registry.Register(new ClassBuilder<UserClass>(_context.Registry).Class);
-
-            if (_useLoopback && !StartPeer(args))
+            if (!StartPeer(args))
                 Exit(1);
 
-            RunInitialisationScripts();
+            SetupPeer();
 
-            if (_peer != null)
-                CreatePeer();
+            RunInitialisationScripts();
         }
 
-        private void CreatePeer()
+        private void SetupPeer()
         {
             _peer.OnConnected += OnConnected;
-            _peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
+            //_peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
         private bool StartPeer(string[] args)
@@ -75,9 +55,13 @@
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
 
             _peer = Create.NewPeer(port);
-            var scope = _peer.Local.Context.Executor.Scope;
-            var reg = _peer.Local.Context.Registry;
+            var ctx = _peer.Local.Context;
+            var reg = ctx.Registry;
+            var scope = ctx.Executor.Scope;
+            
             reg.Register(new ClassBuilder<TestClient>(reg).Class);
+            scope["remote"] = new TestClient();
+            
             return _peer.SelfHost() || Error("Failed to start local server");
         }
 
@@ -170,8 +154,8 @@
         {
             if (string.IsNullOrEmpty(input))
             {
-                // hack to get refresh of remote data stack
-                _peer?.Remote?.Continue(" ");
+                // get refresh of remote data stack
+                _peer.Remote?.Continue(" ");
                 return true;
             }
 
@@ -183,59 +167,29 @@
                 if (!_context.Translate(input, out var cont))
                     return Error(_context.Error);
 
-                if (_peer != null)
-                    return _peer.Execute(cont.ToText());
-
-                cont.Scope = _context.Executor.Scope;
-                _context.Executor.Continue(cont);
-
-                return true;
+                return _peer.Execute(cont.ToText());
             }
             catch (Exception e)
             {
                 Error(e.Message);
-                _peer?.Execute($"Error: {e.Message} {e.InnerException?.Message}");
+                _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");
             }
-            
+
             return false;
         }
 
-        /// <summary>
-        /// Invoked server-side when a new client connects
-        /// </summary>
-        /// <param name="peer"></param>
-        /// <param name="client"></param>
         private void OnConnected(IPeer peer, IClient client)
         {
-//            var scope = peer.Local.Context.Scope;
-//            scope["remote"] = new TestClient();
-//            client.Context.Executor.Scope["remote"] = new TestClient();
         }
 
-        private void WriteLocalDataStack(int max = 50)
+        private static void WriteDataStackContents(INetCommon client, int max = 50)
         {
             Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
-            var results = _context.Executor.DataStack;
-            var n = Math.Max(results.Count, max);
-            foreach (var result in results)
-            {
-                str.AppendLine($"{--n}: {_context.Registry.ToPiScript(result)}");
-                if (n == 0)
-                    break;
-            }
-
-            Con.Write(str.ToString());
-        }
-
-        public static void WriteDataStackContents(IClient client, int max = 50)
-        {
-            Con.ForegroundColor = ConsoleColor.Yellow;
-            var str = new StringBuilder();
-            // make a copy as it could be changed by another call while we're iterating over data stack
+            // Make a copy as it could be changed by another network call while we're iterating over data stack.
             var results = client.Context.Executor.DataStack.ToList();
             var reg = client.Context.Registry;
-            var n = results.Count - 1;
+            var n = Math.Min(max, results.Count - 1);
             foreach (var result in results)
                 str.AppendLine($"{n--}: {reg.ToPiScript(result)}");
 
@@ -245,10 +199,7 @@
         private void WriteDataStack()
         {
             var current = Con.ForegroundColor;
-            if (_peer != null)
-                WriteDataStackContents(_peer.Remote);
-            else
-                WriteLocalDataStack();
+            WriteDataStackContents(_peer.Remote);
             Con.ForegroundColor = current;
         }
 
@@ -263,18 +214,12 @@ When you type at the prompt, your text is executed in the current context - whic
 Before the prompt is printed, the data-stack of the current server is printed. Operations you perform act on this data-stack. Each connection to a remote server has its own private context.
 
 To connect to a remote node, type:
-Rho> connect(""_hostName"", port) // adds a connection to a remote server. all peers are servers and clients.
+Rho> peer.Connect(""_hostName"", port) 
 
 To then switch execution context, type:
-Rho> enter(N) // where N is the client connection you want to enter
+Rho> peer.Enter(n) 
 
-To do both:
-Rho> join(""hostname"", port)
-
-For help on syntax for Pi/Rho languages, see https://github.com/cschladetsch/Pyro
-
-Press Ctrl-D to leave current context.
-
+Press Ctrl-D or type 'leave' to leave current context and return to local context.
 Press Ctrl-C to quit.
 ");
             return true;

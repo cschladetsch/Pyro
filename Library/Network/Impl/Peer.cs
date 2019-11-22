@@ -86,7 +86,7 @@ namespace Pyro.Network.Impl
         public IClient GetClient(Socket sender)
             => _clients.FirstOrDefault(c => c.Socket == sender);
 
-        public string GetHostName()
+        private string GetHostName()
             => GetRemoteEndPoint()?.Address.ToString();
 
         public bool SelfHost()
@@ -101,7 +101,7 @@ namespace Pyro.Network.Impl
         private int GetHostPort()
             => GetRemoteEndPoint()?.Port ?? 0;
 
-        public bool EnterRemote(IClient client)
+        private bool EnterRemote(IClient client)
         {
             if (client.Socket == null)
                 return false;
@@ -119,7 +119,7 @@ namespace Pyro.Network.Impl
         /// </summary>
         /// <param name="port">The port to connect to.</param>
         /// <returns>True if connection made,</returns>
-        public bool SelfHost(int port)
+        private bool SelfHost(int port)
         {
             if (!Connect(GetLocalHostname(), port))
                 return Error("Couldn't connect to localhost");
@@ -147,11 +147,9 @@ namespace Pyro.Network.Impl
                 Error("Cannot leave self");
                 return;
             }
-
-            //_remote.Close();
-            //_clients.Remove(_remote);
-
-            _remote = _clients[0];  // self-host
+            
+            // Go back to self-hosting.
+            _remote = _clients[0];
         }
 
         public bool Connect(string hostName, int port)
@@ -252,10 +250,6 @@ namespace Pyro.Network.Impl
             throw new NotImplementedException();
         }
 
-        public void Update()
-        {
-        }
-
         public void NewConnection(Socket socket)
         {
             var client = new Client(this) {  Socket = socket};
@@ -279,11 +273,9 @@ namespace Pyro.Network.Impl
         
         public void NewServerConnection(Socket socket)
         {
-            WriteLine($"NewServerConn: {socket.RemoteEndPoint}");
+            //WriteLine($"NewServerConn: {socket.RemoteEndPoint}");
             var client = new Client(this) { Socket = socket};
-            //client.Receive(socket);
             _clients.Add(client);
         }
     }
 }
-

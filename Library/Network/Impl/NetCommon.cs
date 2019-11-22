@@ -78,7 +78,7 @@ namespace Pyro.Network.Impl
 
         public void Receive(Socket socket)
         {
-            WriteLine($"NetCommon.Receive: {socket.RemoteEndPoint}");
+            //WriteLine($"NetCommon.Receive: {socket.RemoteEndPoint}");
             var state = new StateObject {workSocket = socket};
             socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
         }
