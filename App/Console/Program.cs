@@ -91,13 +91,42 @@
 
         private void WritePrompt()
         {
+            // TODO: use a lock to ensure these go on same line.
             Write($"{_peer.Remote?.Socket?.RemoteEndPoint} ", ConsoleColor.DarkGray);
             Write($"{_context.Language}> ", ConsoleColor.Gray);
             Con.ForegroundColor = ConsoleColor.White;
         }
 
-        private static string GetInput()
-            => Con.ReadLine();
+        private string GetInput()
+        {
+            return Console.ReadLine();
+            /* want to trap Ctrl-Keys
+            var sb = new StringBuilder();
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    var ch = Console.ReadKey();
+                    if (ch.Key == ConsoleKey.Enter)
+                    {
+                        return sb.ToString();
+                    }
+                    
+                    if (ch.Modifiers == ConsoleModifiers.Control)
+                    {
+                        switch (ch.Key)
+                        {
+                            case ConsoleKey.D:
+                                _peer.Leave();
+                                continue;
+                        }
+                    }
+
+                    sb.Append(ch.KeyChar);
+                }
+            }
+            */
+        }
 
         private bool PreProcess(string input)
         {

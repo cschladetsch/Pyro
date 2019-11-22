@@ -179,7 +179,7 @@
             var obj = Pop();
             if (obj is IConstRefBase cref)
                 Push(cref.Class.TypeName);
-            Push(obj.GetType());
+            Push(obj.GetType().FullName);
         }
 
         private void GreaterEquiv()

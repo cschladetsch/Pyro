@@ -94,6 +94,9 @@
     <None Include="Impl\Readme.md" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo copy /y $(SolutionDir)\Bin\$(Configuration)\$(AssemblyName).* $(SolutionDir)\Unity3d\DiverProject\Assets\Liminal\Assemblies
