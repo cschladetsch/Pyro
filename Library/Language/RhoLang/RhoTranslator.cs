@@ -284,8 +284,7 @@
             var children = node.Children;
             var args = children[1].Children;
             var name = children[0];
-            // TODO: nor require the reversal by parsing in correct order in first place!
-            foreach (var a in args.Reverse().ToList())
+            foreach (var a in args.ToList())
                 Generate(a);
 
             Generate(name);

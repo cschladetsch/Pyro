@@ -257,7 +257,7 @@ namespace Pyro.Exec
                     var obj = Pop();
                     var args = new object[numArgs];
                     for (var n = 0; n < numArgs; ++n)
-                        args[n] = Pop();
+                        args[numArgs - n - 1] = Pop();
                     var ret = mi.Invoke(obj, args);
                     if (mi.ReturnType != typeof(void))
                         Push(ret);
