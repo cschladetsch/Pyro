@@ -8,7 +8,7 @@
         None,
         Pi,     // post-fix
         Rho,    // in-fix
-        Tau,    // pre-fx
+        Tau,    // IDL
     }
 }
 
