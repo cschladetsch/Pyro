@@ -61,4 +61,4 @@
 # git-lfs tracked files
 *.ico filter=lfs diff=lfs merge=lfs -binary
 *.wav filter=lfs diff=lfs merge=lfs -binary
-*.mdb filter=lfs diff=lfs merge=lfs -text
+*.mdb filter=lfs diff=lfs merge=lfs -binary
