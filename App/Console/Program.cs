@@ -209,6 +209,7 @@
 
         private void OnConnected(IPeer peer, IClient client)
         {
+            WriteLine($"Connected to {client}.");
         }
 
         private static void WriteDataStackContents(INetCommon client, int max = 50)
