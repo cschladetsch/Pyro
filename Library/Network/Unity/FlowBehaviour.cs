@@ -11,13 +11,13 @@
         public string Name { get; set; }
         public event TransientHandler Completed;
         public bool Active { get; }
+        public IKernel Kernel { get; set; }
         
         public void Complete()
         {
             throw new NotImplementedException();
         }
 
-        public IKernel Kernel { get; set; }
         public ITransient Named(string name)
         {
             throw new NotImplementedException();
