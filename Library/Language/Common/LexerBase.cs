@@ -24,7 +24,7 @@
         protected virtual void AddStringToken(Slice slice) { }
         protected virtual void LexError(string fmt, params object[] args) { }
 
-        public LexerBase(string input)
+        protected LexerBase(string input)
             => _input = UnfuckNewLines(input);
 
         public string GetLine(int lineNumber)
@@ -117,17 +117,17 @@
             return Line[_offset];
         }
 
-        protected bool EndOfLine()
+        private bool EndOfLine()
         {
             var len = Line.Length;
             return len == 0 || Offset == len - 1;
         }
 
         /// <summary>
-        /// Peek N glyphs ahead on current line
+        /// Peek N glyphs ahead on current line.
         /// </summary>
-        /// <param name="n">The number of glyphs to look ahead</param>
-        /// <returns>(char)0 if cannot peek, else the char peeked</returns>
+        /// <param name="n">The number of glyphs to look ahead.</param>
+        /// <returns>(char)0 if cannot peek, else the char peeked.</returns>
         protected char Peek(int n = 1)
         {
             const char end = (char)0;
@@ -159,10 +159,10 @@
         protected virtual void AddKeywordOrIdent(Slice gatherIdent)
             => throw new NotImplementedException();
 
-        protected bool IsValidIdentGlyph(char ch)
+        private static bool IsValidIdentGlyph(char ch)
             => char.IsLetterOrDigit(ch) || ch == '_';
 
-        protected Slice GatherIdent()
+        private Slice GatherIdent()
         {
             var begin = _offset;
             Next();
@@ -171,7 +171,7 @@
             return new Slice(this, begin, _offset);
         }
 
-        protected bool IsSpaceChar(char arg)
+        protected static bool IsSpaceChar(char arg)
             => char.IsWhiteSpace(arg);
 
         private string UnfuckNewLines(string input)

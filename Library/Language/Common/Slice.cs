@@ -1,14 +1,16 @@
 ﻿namespace Pyro.Language
 {
     /// <summary>
-    /// A text segment in a lexer.
+    /// A text segment in a Lexer.
     /// </summary>
     public struct Slice
     {
-        public int Start, End;
         public int Length => End - Start;
         public int LineNumber;
-        public LexerBase Lexer;
+
+        public readonly int Start;
+        public readonly int End;
+        public readonly LexerBase Lexer;
         public string Text => ToString();
 
         public Slice(LexerBase lexer, int ln, int start, int end)

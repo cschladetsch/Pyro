@@ -90,8 +90,6 @@ else
 
             Verbose = true;
             TestScript("Conditionals0.rho");
-            return;
-
             TestScript("Functions.rho");
             TestScript("Add.rho");
             TestScript("Arithmetic.rho");

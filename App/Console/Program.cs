@@ -212,9 +212,8 @@
             WriteLine($"Connected to {client}.");
         }
 
-        private static void WriteDataStackContents(INetCommon client, int max = 50)
+        public static void WriteDataStackContents(INetCommon client, int max = 50)
         {
-            Con.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
             // Make a copy as it could be changed by another network call while we're iterating over data stack.
             var results = client.Context.Executor.DataStack.ToList();
@@ -223,7 +222,7 @@
             foreach (var result in results)
                 str.AppendLine($"{n--}: {reg.ToPiScript(result)}");
 
-            Con.Write(str.ToString());
+            WriteLine(str.ToString(), ConsoleColor.Yellow);
         }
 
         private void WriteDataStack()
