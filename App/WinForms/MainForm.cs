@@ -48,7 +48,7 @@ namespace WinForms
             // Clear the data stack from any design-time junk.
             Perform(EOperation.Clear);
 
-            output.Text = AppCommonBase.GetVersion();
+            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
             mainTabControl.SelectedIndex = 2;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;

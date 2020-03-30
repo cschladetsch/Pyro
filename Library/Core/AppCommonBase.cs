@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Pyro
+namespace Pyro.AppCommon
 {
     using System;
     using System.Reflection;

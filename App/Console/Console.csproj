@@ -72,10 +72,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\AppCommon\AppCommon.csproj">
-      <Project>{fd200c39-038b-4f39-a7a8-249b6ece6921}</Project>
-      <Name>AppCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
       <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
       <Name>Core</Name>
