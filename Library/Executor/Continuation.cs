@@ -6,14 +6,14 @@ namespace Pyro.Exec
     using System;
     using System.Text;
     using System.Collections.Generic;
-    using Flow;
+//    using Flow;
 
     /// <summary>
     /// Also known as a co-routine.
     /// Can be interrupted mid-execution and later resumed.
     /// </summary>
     public partial class Continuation
-        : IGenerator
+//        : IGenerator
     {
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block.
@@ -40,9 +40,9 @@ namespace Pyro.Exec
         public void Delay(int millis)
             => ResumeAfter(TimeSpan.FromMilliseconds(millis));
 
-        public void Wait(ITransient other)
-            => ResumeAfter(other);
-
+//        public void Wait(ITransient other)
+//            => ResumeAfter(other);
+//
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
         /// </summary>
@@ -130,13 +130,13 @@ namespace Pyro.Exec
             cp.Scope = Scope;
             //cp.Kernel.Root.Add(cp);
 
-            void End(ITransient tr)
-            {
-                exec.RemoveContinuation(this);
-                cp.Completed -= End;
-            }
-
-            cp.Completed += End;
+//            void End(ITransient tr)
+//            {
+//                exec.RemoveContinuation(this);
+//                cp.Completed -= End;
+//            }
+//
+//            cp.Completed += End;
 
             cp.Resumed += tr =>
             {
@@ -188,15 +188,15 @@ namespace Pyro.Exec
             return true;
         }
 
-        IGenerator IGenerator.AddTo(IGroup @group)
-        {
-            throw new NotImplementedException();
-        }
-
-        IGenerator IGenerator.Named(string name)
-        {
-            throw new NotImplementedException();
-        }
+//        IGenerator IGenerator.AddTo(IGroup @group)
+//        {
+//            throw new NotImplementedException();
+//        }
+//
+//        IGenerator IGenerator.Named(string name)
+//        {
+//            throw new NotImplementedException();
+//        }
 
         public void SetRange(IEnumerable range)
         {

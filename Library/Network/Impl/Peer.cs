@@ -34,6 +34,18 @@
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
 
+//        public event OnWriteDelegate OnWrite
+//        {
+//            add
+//            {
+//                base.OnWrite += value;
+//            }
+//            remove
+//            {
+//                base.OnWrite -= value;
+//            }
+//        }
+
         private Server _server;
         private IClient _remote;
         private readonly List<IClient> _clients = new List<IClient>();

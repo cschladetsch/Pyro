@@ -11,7 +11,7 @@
     public class NetworkConsoleWriter
         : Process
     {
-        public Action<ELogLevel, string> OnWrite;
+        public event OnWriteDelegate OnWrite;
 
         protected override bool Fail(string text)
         {

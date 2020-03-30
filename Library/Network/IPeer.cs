@@ -11,6 +11,7 @@
     /// </summary>
     public delegate void MessageHandler(IClient client, string text);
     public delegate void ConnectedHandler(IPeer peer, IClient client);
+    public delegate void OnWriteDelegate(ELogLevel logLevel, string text);
 
     /// <inheritdoc />
     /// <summary>
@@ -19,6 +20,7 @@
     public interface IPeer
         : IProcess
     {
+        event OnWriteDelegate OnWrite;
         IServer Local { get; }
         IClient Remote { get; }
         IList<IClient> Clients { get; }

@@ -12,7 +12,9 @@
         : INetCommon
     {
         event ClientReceivedHandler OnReceived;
-
+        string HostName { get;}
+        int HostPort { get;}
+    
         void GetLatest();
         bool Continue(string piScript);
         bool ContinueRho(string rhoScript);
