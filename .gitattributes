@@ -37,7 +37,7 @@
 #
 # image files are treated as binary by default.
 ###############################################################################
-*.jpg   binary
+*.jpg filter=lfs diff=lfs merge=lfs -text
 *.png   binary
 *.gif   binary
 .dll binary
@@ -62,3 +62,5 @@
 *.ico filter=lfs diff=lfs merge=lfs -binary
 *.wav filter=lfs diff=lfs merge=lfs -binary
 *.mdb filter=lfs diff=lfs merge=lfs -binary
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
