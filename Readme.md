@@ -1,7 +1,7 @@
 # Pyro ![Foo](Library/flame-small.png)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/cschladetsch/flow?svg=true)](https://ci.appveyor.com/project/cschladetsch/flow)
 [![CodeFactor](https://www.codefactor.io/repository/github/cschladetsch/pyro/badge)](https://www.codefactor.io/repository/github/cschladetsch/pyro)
-[![License](https://img.shields.io/github/license/cschladetsch/pyro.svg?label=License&maxAge=86400)](./LICENSE.txt)
+[![License](https://img.shields.io/github/license/cschladetsch/pyro.svg?label=License&maxAge=86400)](/LICENSE)
 
 
 ## Overview
