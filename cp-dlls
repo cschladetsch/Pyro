@@ -1,3 +1,0 @@
-#!/bin/sh
-
-cp Bin/Pyro*.dll /w/repos/$1/Assets/Plugins/Pyro
