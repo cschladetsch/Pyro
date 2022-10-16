@@ -1,16 +1,13 @@
-﻿namespace Pyro.Test
-{
-    using System.Linq;
-    using System.Collections.Generic;
+﻿namespace Pyro.Test {
     using NUnit.Framework;
+    using System.Collections.Generic;
+    using System.Linq;
 
     [TestFixture]
     public class TestPiTranslator
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestContinuations()
-        {
+        public void TestContinuations() {
             PiRun("{1 +} 'a # 3 a &");
             AssertPop(4);
 
@@ -35,8 +32,7 @@
         }
 
         [Test]
-        public void TestConditionalExec()
-        {
+        public void TestConditionalExec() {
             PiRun("1 { 1 + } { 2 + } true ife &");
             AssertPop(2);
 
@@ -45,20 +41,17 @@
         }
 
         [SetUp]
-        public void LoadCommon()
-        {
+        public void LoadCommon() {
             RunScript("Common.pi");
         }
 
         [Test]
-        public void TestDebugList()
-        {
+        public void TestDebugList() {
             PiRun("1 2 3 [3 4 5] \"foo\" debug_datastack");
         }
 
         [Test]
-        public void TestDepth()
-        {
+        public void TestDepth() {
             PiRun("depth");
             Assert.AreEqual(0, Pop<int>());
             PiRun("1 2 3 depth");
@@ -66,14 +59,12 @@
         }
 
         [Test]
-        public void TestIdents()
-        {
+        public void TestIdents() {
             Assert.Throws<UnknownIdentifierException>(() => PiRun("NotAnIdentifier"));
         }
 
         [Test]
-        public void TestArith()
-        {
+        public void TestArith() {
             PiRun("1 2 +");
             AssertPop(3);
             AssertEmpty();
@@ -92,8 +83,7 @@
         }
 
         [Test]
-        public void TestEquiv()
-        {
+        public void TestEquiv() {
             PiRun("1 1 ==");
             AssertPop(true);
             AssertEmpty();
@@ -129,15 +119,13 @@
         }
 
         [Test]
-        public void TestBreak()
-        {
+        public void TestBreak() {
             Assert.Throws<DebugBreakException>(
                 () => PiRun("break"));
         }
 
         [Test]
-        public void TestAssertion()
-        {
+        public void TestAssertion() {
             PiRun("true assert");
             PiRun("true not not assert");
             Assert.Throws<AssertionFailedException>(
@@ -145,8 +133,7 @@
         }
 
         [Test]
-        public void TestNegativeInts()
-        {
+        public void TestNegativeInts() {
             PiRun("-1345 -0");
             AssertPop(0);
             AssertPop(-1345);
@@ -154,8 +141,7 @@
         }
 
         [Test]
-        public void TestVars()
-        {
+        public void TestVars() {
             PiRun("1 'a # a 2 +");
             Assert.IsTrue(_Scope.ContainsKey("a"));
             var a = _Scope["a"];
@@ -166,8 +152,7 @@
         }
 
         [Test]
-        public void TestAddString()
-        {
+        public void TestAddString() {
             PiRun("\"foo\" \"bar\" +");
             Assert.AreEqual("foobar", Pop<string>());
             PiRun("\"a\" \"b\" \"c\" + +");
@@ -175,19 +160,17 @@
         }
 
         [Test]
-        public void TestArray()
-        {
+        public void TestArray() {
             PiRun("[1 2 [3 4 5]]");
             var list = Pop<List<object>>();
             Assert.AreEqual(1, list[0]);
             Assert.AreEqual(2, list[1]);
             var inner = list[2] as IList<object>;
             Assert.IsNotNull(inner);
-            Assert.IsTrue(inner.SequenceEqual(new object[] {3,4,5}));
+            Assert.IsTrue(inner.SequenceEqual(new object[] { 3, 4, 5 }));
         }
 
-        private void BreakRun(string text)
-        {
+        private void BreakRun(string text) {
             Assert.Throws<DebugBreakException>(() => PiRun(text));
         }
     }

@@ -1,13 +1,10 @@
 ﻿using System.Reflection;
 using System.Windows.Forms;
 
-namespace WinForms
-{
+namespace WinForms {
     internal partial class AboutBox
-        : Form
-    {
-        public AboutBox()
-        {
+        : Form {
+        public AboutBox() {
             InitializeComponent();
             this.Text = $"About {AssemblyTitle}";
             this.labelProductName.Text = AssemblyProduct;

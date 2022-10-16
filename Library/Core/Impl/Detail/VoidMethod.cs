@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pyro.Impl
-{
+namespace Pyro.Impl {
     public class VoidMethod<T>
         : CallableBase
             , ICallable<T>
-        where T : class
-    {
+        where T : class {
         private readonly Action<T> _fun;
 
         public VoidMethod(Action<T> fun)
             : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
             _fun(reg.Get<T>(obj));
         }
@@ -23,15 +20,13 @@ namespace Pyro.Impl
     public class VoidMethod<T, A0>
         : CallableBase
             , ICallable<T>
-        where T : class
-    {
+        where T : class {
         private readonly Action<T, A0> _fun;
 
         public VoidMethod(Action<T, A0> fun)
             : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
             var a = stack.Pop();
             _fun(reg.Get<T>(obj), reg.Get<A0>(a));
@@ -45,15 +40,13 @@ namespace Pyro.Impl
     public class VoidMethod<T, A0, A1>
         : CallableBase
             , ICallable<T>
-        where T : class
-    {
+        where T : class {
         private readonly Action<T, A0, A1> _fun;
 
         public VoidMethod(Action<T, A0, A1> fun)
             : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
             var a1 = stack.Pop();
             var a0 = stack.Pop();
@@ -64,15 +57,13 @@ namespace Pyro.Impl
     public class VoidMethod<T, A0, A1, A2>
         : CallableBase
         , ICallable<T>
-            where T : class
-    {
+            where T : class {
         private readonly Action<T, A0, A1, A2> _fun;
 
         public VoidMethod(Action<T, A0, A1, A2> fun)
             : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
             var a2 = stack.Pop();
             var a1 = stack.Pop();
@@ -84,15 +75,13 @@ namespace Pyro.Impl
     public class VoidMethod<T, A0, A1, A2, A3>
         : CallableBase
             , ICallable<T>
-        where T : class
-    {
+        where T : class {
         private readonly Action<T, A0, A1, A2, A3> _fun;
 
         public VoidMethod(Action<T, A0, A1, A2, A3> fun)
             : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
             var a3 = stack.Pop();
             var a2 = stack.Pop();

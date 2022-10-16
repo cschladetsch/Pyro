@@ -1,5 +1,4 @@
-﻿namespace Pyro.Language
-{
+﻿namespace Pyro.Language {
     using System;
     using System.Collections.Generic;
 
@@ -11,8 +10,7 @@
     /// </summary>
     public class LexerBase
         : Process
-        , ILexer
-    {
+        , ILexer {
         private int Offset => _offset;
         public int LineNumber => _lineNumber;
         private string Line => Lines[_lineNumber];
@@ -33,8 +31,7 @@
         public string GetText(Slice slice)
             => Lines[slice.LineNumber].Substring(slice.Start, slice.Length);
 
-        protected void CreateLines()
-        {
+        protected void CreateLines() {
             if (string.IsNullOrEmpty(_input))
                 return;
 
@@ -43,10 +40,8 @@
                 _input += newLine;
 
             int lineStart = 0, n = 0;
-            foreach (var c in _input)
-            {
-                if (c == newLine)
-                {
+            foreach (var c in _input) {
+                if (c == newLine) {
                     Lines.Add(_input.Substring(lineStart, n - lineStart + 1));
                     lineStart = n + 1;
                 }
@@ -55,29 +50,24 @@
             }
         }
 
-        protected bool LexString()
-        {
+        protected bool LexString() {
             var start = _offset;
             Next();
-            while (!Failed && Current() != '"')
-            {
-                if (Current() == '\\')
-                {
-                    switch (Next())
-                    {
-                    case '"':
-                    case 'n':
-                    case 't':
-                        break;
+            while (!Failed && Current() != '"') {
+                if (Current() == '\\') {
+                    switch (Next()) {
+                        case '"':
+                        case 'n':
+                        case 't':
+                            break;
 
-                    default:
-                        LexError("Bad escape sequence %c");
-                        return false;
+                        default:
+                            LexError("Bad escape sequence %c");
+                            return false;
                     }
                 }
 
-                if (Peek() == 0)
-                {
+                if (Peek() == 0) {
                     Fail("Bad string literal");
                     return false;
                 }
@@ -93,22 +83,18 @@
             return true;
         }
 
-        protected char Current()
-        {
+        protected char Current() {
             if (_lineNumber == Lines.Count)
                 return (char)0;
 
             return Line[_offset];
         }
 
-        protected char Next()
-        {
-            if (EndOfLine())
-            {
+        protected char Next() {
+            if (EndOfLine()) {
                 _offset = 0;
                 ++_lineNumber;
-            }
-            else
+            } else
                 ++_offset;
 
             if (_lineNumber == Lines.Count)
@@ -117,8 +103,7 @@
             return Line[_offset];
         }
 
-        private bool EndOfLine()
-        {
+        private bool EndOfLine() {
             var len = Line.Length;
             return len == 0 || Offset == len - 1;
         }
@@ -128,8 +113,7 @@
         /// </summary>
         /// <param name="n">The number of glyphs to look ahead.</param>
         /// <returns>(char)0 if cannot peek, else the char peeked.</returns>
-        protected char Peek(int n = 1)
-        {
+        protected char Peek(int n = 1) {
             const char end = (char)0;
 
             if (Current() == 0)
@@ -141,17 +125,16 @@
             return _offset + n >= Line.Length ? end : Line[_offset + n];
         }
 
-        protected Slice Gather(Func<char, bool> filter)
-        {
+        protected Slice Gather(Func<char, bool> filter) {
             var start = _offset;
             while (!EndOfLine() && filter(Next()))
-                /* skip */;
+                /* skip */
+                ;
 
             return new Slice(this, start, _offset);
         }
 
-        protected bool IdentOrKeyword()
-        {
+        protected bool IdentOrKeyword() {
             AddKeywordOrIdent(GatherIdent());
             return true;
         }
@@ -162,8 +145,7 @@
         private static bool IsValidIdentGlyph(char ch)
             => char.IsLetterOrDigit(ch) || ch == '_';
 
-        private Slice GatherIdent()
-        {
+        private Slice GatherIdent() {
             var begin = _offset;
             Next();
             while (IsValidIdentGlyph(Current()))

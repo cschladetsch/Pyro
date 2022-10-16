@@ -1,22 +1,18 @@
-﻿namespace Pyro.Test
-{
-    using System.Collections.Generic;
+﻿namespace Pyro.Test {
     using NUnit.Framework;
+    using System.Collections.Generic;
 
     // WIP
     //[TestFixture]
     public class TestPiFreezeThaw
-        : TestCommon
-    {
+        : TestCommon {
         [SetUp]
-        public new void Setup()
-        {
+        public new void Setup() {
             _Exec.Rethrows = true;
         }
 
         [Test]
-        public void TestList()
-        {
+        public void TestList() {
             PiRun("[1 2 3]");
             var list = Pop<List<object>>();
             var list2 = FullCircle(list);
@@ -24,38 +20,33 @@
         }
 
         [Test]
-        public void TestDict()
-        {
+        public void TestDict() {
             var makeMap = "1 2 \"foo\" \"bar\" 2 tomap";
             PiRun(makeMap);
             var dict = Pop<Dictionary<object, object>>();
             var dict2 = FullCircle(dict);
-            foreach (var kv in dict)
-            {
+            foreach (var kv in dict) {
                 Assert.IsTrue(dict2.ContainsKey(kv.Key));
                 Assert.IsTrue(dict2.TryGetValue(kv.Key, out var val));
                 Assert.AreEqual(val, kv.Value);
             }
         }
 
-        public class User
-        {
+        public class User {
             public string Name;
             public string Last;
             public int Age;
             public IRef<Organisation> Org;
         }
 
-        public class Organisation
-        {
+        public class Organisation {
             public string Email;
             public IList<IRef<User>> Users;
         }
 
         //[Test]
-        #warning // persistence not implemented
-        public void TestPersistedInstances()
-        {
+#warning // persistence not implemented
+        public void TestPersistedInstances() {
             var user = _Registry.Add<User>().Value;
             user.Name = "Freddy";
             user.Last = "Mercury";
@@ -70,8 +61,7 @@
         }
 
         //[Test]
-        public void TestPersistentReferencedObjects()
-        {
+        public void TestPersistentReferencedObjects() {
             var org = _Registry.Add<Organisation>();
             org.Value.Email = "foo@org.com";
             var user = _Registry.Add<User>();
@@ -88,8 +78,7 @@
         }
 
         //[Test]
-        public void TestFreezeThaw()
-        {
+        public void TestFreezeThaw() {
             TestFreezeThawPi("true assert");
 
             TestFreezeThawPi("1 2 +");
@@ -117,8 +106,7 @@
             FreezeThaw("Strings.pi");
         }
 
-        private T FullCircle<T>(T obj)
-        {
+        private T FullCircle<T>(T obj) {
             var pi = _Registry.ToPiScript(obj);
             PiRun(pi);
             return Pop<T>();

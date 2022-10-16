@@ -1,14 +1,11 @@
-﻿namespace Pyro.BuiltinTypes
-{
-    using System.Text;
+﻿namespace Pyro.BuiltinTypes {
+    using Impl;
     using System.Collections;
     using System.Collections.Generic;
-    using Impl;
+    using System.Text;
 
-    public static class BuiltinTypes
-    {
-        public static void Register(IRegistry reg)
-        {
+    public static class BuiltinTypes {
+        public static void Register(IRegistry reg) {
             reg.Register(new Class<float>(reg));
             reg.Register(new Class<Void>(reg));
             reg.Register(new Class<bool>(reg));
@@ -25,10 +22,8 @@
                 .Class);
         }
 
-        private static void DictToText(IRegistry reg, StringBuilder sb, Dictionary<object, object> dict)
-        {
-            foreach (var kv in dict)
-            {
+        private static void DictToText(IRegistry reg, StringBuilder sb, Dictionary<object, object> dict) {
+            foreach (var kv in dict) {
                 reg.ToPiScript(sb, kv.Key);
                 sb.Append(' ');
                 reg.ToPiScript(sb, kv.Value);
@@ -38,12 +33,10 @@
             sb.Append($"{dict.Count} tomap ");
         }
 
-        private static void ListToText(IRegistry reg, StringBuilder sb, IList list)
-        {
+        private static void ListToText(IRegistry reg, StringBuilder sb, IList list) {
             sb.Append($"[");
             var first = true;
-            foreach (var obj in list)
-            {
+            foreach (var obj in list) {
                 if (first)
                     first = false;
                 else
@@ -54,8 +47,7 @@
             sb.Append(']');
         }
 
-        private static void StringToText(IRegistry reg, StringBuilder arg1, string arg2)
-        {
+        private static void StringToText(IRegistry reg, StringBuilder arg1, string arg2) {
             arg1.Append('"');
             arg2 = arg2.Replace("\"", "\\\"");
             arg2 = arg2.Replace("~", "\\~");

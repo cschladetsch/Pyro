@@ -1,10 +1,8 @@
-﻿namespace Pyro.RhoLang.Lexer
-{
+﻿namespace Pyro.RhoLang.Lexer {
     /// <summary>
     /// Tokens used by the Rho language.
     /// </summary>
-    public enum ERhoToken
-    {
+    public enum ERhoToken {
         Nop,
         Int,
         String,

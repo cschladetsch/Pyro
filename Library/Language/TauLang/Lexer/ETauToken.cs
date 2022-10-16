@@ -1,7 +1,5 @@
-﻿namespace Pyro.Language.Tau.Lexer
-{
-    public enum ETauToken
-    {
+﻿namespace Pyro.Language.Tau.Lexer {
+    public enum ETauToken {
         None,
         Namespace,
         OpenBrace,

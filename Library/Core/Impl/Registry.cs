@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pyro.Impl
-{
+namespace Pyro.Impl {
     /// <inheritdoc />
     /// <summary>
     /// Store of instances, and a mapping of types to facrtories.
     /// </summary>
     public class Registry
-        : IRegistry
-    {
+        : IRegistry {
         public Guid Guid { get; }
 
         private int _nextId;
@@ -18,38 +16,31 @@ namespace Pyro.Impl
         private readonly Dictionary<Type, IClassBase> _classes = new Dictionary<Type, IClassBase>();
         private readonly Dictionary<Id, IRefBase> _instances = new Dictionary<Id, IRefBase>();
 
-        public Registry()
-        {
+        public Registry() {
             BuiltinTypes.BuiltinTypes.Register(this);
         }
 
-        public bool Register(IClassBase @class)
-        {
+        public bool Register(IClassBase @class) {
             AddClass(@class.Type, @class);
             return true;
         }
 
-        public IClassBase GetClass(string name)
-        {
+        public IClassBase GetClass(string name) {
             return _classNames.TryGetValue(name, out var @class) ? @class : null;
         }
 
-        public IRefBase GetRef(Id id)
-        {
+        public IRefBase GetRef(Id id) {
             return _instances[id];
         }
 
-        public T Get<T>(object obj)
-        {
+        public T Get<T>(object obj) {
             if (!TryGet<T>(obj, out T val))
                 throw new TypeMismatchError(typeof(T), obj?.GetType());
             return val;
         }
 
-        public bool TryGet<T>(object obj, out T val)
-        {
-            switch (obj)
-            {
+        public bool TryGet<T>(object obj, out T val) {
+            switch (obj) {
                 case T value:
                     val = value;
                     return true;
@@ -61,14 +52,12 @@ namespace Pyro.Impl
             return false;
         }
 
-        public IRefBase Add(object value)
-        {
+        public IRefBase Add(object value) {
             var klass = GetClass(value?.GetType());
             return klass == null ? null : AddNew(klass, value);
         }
 
-        public IClass<T> GetClass<T>()
-        {
+        public IClass<T> GetClass<T>() {
             var type = typeof(T);
             var klass = FindClass(type);
             if (klass != null)
@@ -78,23 +67,19 @@ namespace Pyro.Impl
             return @class;
         }
 
-        public object New(IClassBase @class, Stack<object> dataStack)
-        {
+        public object New(IClassBase @class, Stack<object> dataStack) {
             return @class.NewInstance();//dataStack);
         }
 
-        public IRefBase NewRef(IClassBase @class, Stack<object> dataStack)
-        {
+        public IRefBase NewRef(IClassBase @class, Stack<object> dataStack) {
             throw new NotImplementedException();
         }
 
-        public IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack)
-        {
+        public IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack) {
             throw new NotImplementedException();
         }
 
-        public void ToPiScript(StringBuilder stringBuilder, object obj)
-        {
+        public void ToPiScript(StringBuilder stringBuilder, object obj) {
             if (obj is IConstRefBase rb)
                 obj = rb.BaseValue;
 
@@ -108,15 +93,13 @@ namespace Pyro.Impl
                 stringBuilder.Append(obj);
         }
 
-        public string ToPiScript(object obj)
-        {
+        public string ToPiScript(object obj) {
             var str = new StringBuilder();
             ToPiScript(str, obj);
             return str.ToString();
         }
 
-        public object Duplicate(object obj)
-        {
+        public object Duplicate(object obj) {
             if (obj.GetType().IsValueType)
                 return Activator.CreateInstance(obj.GetType(), obj);
 
@@ -126,13 +109,11 @@ namespace Pyro.Impl
             return null;
         }
 
-        public IRef<T> GetRef<T>(Id id)
-        {
+        public IRef<T> GetRef<T>(Id id) {
             return _instances[id].BaseValue as IRef<T>;
         }
 
-        public IRef<T> Add<T>(T value)
-        {
+        public IRef<T> Add<T>(T value) {
             var klass = GetClass<T>();
             if (klass == null)
                 throw new CouldNotMakeClass(value.GetType());
@@ -140,8 +121,7 @@ namespace Pyro.Impl
             return AddNew<T>(klass, value);
         }
 
-        public IRef<T> Add<T>()
-        {
+        public IRef<T> Add<T>() {
             var klass = GetClass<T>();
             if (klass == null)
                 throw new CouldNotMakeClass(typeof(T));
@@ -149,8 +129,7 @@ namespace Pyro.Impl
             return AddNew<T>(klass);
         }
 
-        public IConstRefBase AddConst(object value)
-        {
+        public IConstRefBase AddConst(object value) {
             var type = value?.GetType();
             var classBase = GetClass(type);
             if (classBase == null)
@@ -159,18 +138,15 @@ namespace Pyro.Impl
             return classBase.Create(NextId(), value);
         }
 
-        public IConstRef<T> AddConst<T>(T val)
-        {
+        public IConstRef<T> AddConst<T>(T val) {
             throw new NotImplementedException();
         }
 
-        public IConstRef<T> AddConst<T>()
-        {
+        public IConstRef<T> AddConst<T>() {
             throw new NotImplementedException();
         }
 
-        public IClassBase GetClass(Type type)
-        {
+        public IClassBase GetClass(Type type) {
             if (type == null)
                 type = typeof(void);
 
@@ -181,18 +157,15 @@ namespace Pyro.Impl
             return _classes[type] = new ClassBase(this, type);
         }
 
-        private IClassBase FindClass(Type type)
-        {
+        private IClassBase FindClass(Type type) {
             return _classes.TryGetValue(type, out var klass) ? klass : null;
         }
 
-        private IRef<T> AddNew<T>(IClassBase classBase)
-        {
+        private IRef<T> AddNew<T>(IClassBase classBase) {
             return AddNew<T>(classBase, (T)classBase.NewInstance());
         }
 
-        private IRef<T> AddNew<T>(IClassBase classBase, T value)
-        {
+        private IRef<T> AddNew<T>(IClassBase classBase, T value) {
             var id = NextId();
             classBase.NewRef(id, out var refBase);
             refBase.BaseValue = value;
@@ -200,22 +173,19 @@ namespace Pyro.Impl
             return refBase as IRef<T>;
         }
 
-        private IRefBase AddNew(IClassBase classBase, object value)
-        {
+        private IRefBase AddNew(IClassBase classBase, object value) {
             var id = NextId();
             var refBase = classBase.Create(id, value);
             AddNewInstance(classBase, refBase, id);
             return refBase;
         }
 
-        private void AddNewInstance(IClassBase classBase, IRefBase refBase, Id id)
-        {
+        private void AddNewInstance(IClassBase classBase, IRefBase refBase, Id id) {
             Reflect(classBase, refBase);
             _instances.Add(id, refBase);
         }
 
-        private void Reflect(IClassBase classBase, IRefBase refBase)
-        {
+        private void Reflect(IClassBase classBase, IRefBase refBase) {
             if (!(refBase.BaseValue is IReflected reflected))
                 return;
 
@@ -227,14 +197,12 @@ namespace Pyro.Impl
             self.Class = classBase;
         }
 
-        private void AddClass(Type type, IClassBase @class)
-        {
+        private void AddClass(Type type, IClassBase @class) {
             _classes[type] = @class;
             _classNames[type.Name] = @class;
         }
 
-        private Id NextId()
-        {
+        private Id NextId() {
             return new Id(++_nextId);
         }
     }

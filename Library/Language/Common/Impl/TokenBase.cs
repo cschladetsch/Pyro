@@ -1,10 +1,8 @@
 ﻿using System.Text;
 
-namespace Pyro.Language.Impl
-{
+namespace Pyro.Language.Impl {
     public class TokenBase<ETokenType>
-        : ITokenBase<ETokenType>
-    {
+        : ITokenBase<ETokenType> {
         public Slice Slice => _slice;
         public ETokenType Type { get => _type; set => _type = value; }
         public int LineNumber => _slice.LineNumber;
@@ -13,21 +11,18 @@ namespace Pyro.Language.Impl
         public char this[int n] => Lexer.Input[_slice.Start + n];
 
         protected ETokenType _type;
-        
+
         private readonly Slice _slice;
-        
-        protected TokenBase()
-        {
+
+        protected TokenBase() {
         }
 
-        protected TokenBase(ETokenType type, Slice slice)
-        {
+        protected TokenBase(ETokenType type, Slice slice) {
             _type = type;
             _slice = slice;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             var str = new StringBuilder();
             var ty = _type.ToString();
             var text = GetText();
@@ -38,8 +33,7 @@ namespace Pyro.Language.Impl
             return str.ToString();
         }
 
-        public string GetText()
-        {
+        public string GetText() {
             if (Lexer == null)
                 return "";
 

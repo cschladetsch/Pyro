@@ -1,7 +1,5 @@
-﻿namespace Pyro.Language.Tau.Parser
-{
-    public enum ETauAst
-    {
-        
+﻿namespace Pyro.Language.Tau.Parser {
+    public enum ETauAst {
+
     }
 }

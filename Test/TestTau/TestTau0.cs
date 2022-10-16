@@ -1,17 +1,13 @@
 using NUnit.Framework;
 
-namespace TestTau
-{
-    public class Tests
-    {
+namespace TestTau {
+    public class Tests {
         [SetUp]
-        public void Setup()
-        {
+        public void Setup() {
         }
 
         [Test]
-        public void Test1()
-        {
+        public void Test1() {
             Assert.Pass();
         }
     }

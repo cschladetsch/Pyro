@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Pyro.Language;
+using Pyro.RhoLang.Lexer;
+using System;
 using System.Drawing;
 
-using Pyro.Language;
-using Pyro.RhoLang.Lexer;
-
-namespace WinForms
-{
+namespace WinForms {
     /// <inheritdoc />
     /// <summary>
     /// Colorise Rho script.
     /// </summary>
-    public partial class MainForm
-    {
-        private void ColoriseRho()
-        {
+    public partial class MainForm {
+        private void ColoriseRho() {
             CheckFonts();
 
             var rtb = rhoInput;
@@ -21,40 +17,32 @@ namespace WinForms
 
             var input = rtb.Text + " \n";
             var lex = new RhoLexer(input);
-            try
-            {
+            try {
                 DefaultColors(lex, input);
 
                 lex.Process();
 
                 foreach (var tok in lex.Tokens)
                     ColoriseRhoToken(tok, tok.Slice);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 output.Text = $"{e.Message}: {lex.Error}";
-            }
-            finally
-            {
+            } finally {
                 EndUpdate(rtb);
             }
         }
 
-        private void DefaultColors(LexerBase lex, string input)
-        {
+        private void DefaultColors(LexerBase lex, string input) {
             SetRhoSliceColor(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
         }
 
-        private bool ColoriseRhoToken(RhoToken tok, Slice slice)
-        {
+        private bool ColoriseRhoToken(RhoToken tok, Slice slice) {
             if (slice.Length < 0)
                 return false;
 
             bool Render(Color color) => SetRhoSliceColor(slice, color, _defaultFont);
             bool RenderBold(Color color) => SetRhoSliceColor(slice, color, _boldFont);
 
-            switch (tok.Type)
-            {
+            switch (tok.Type) {
                 case ERhoToken.Assert:
                     return RenderBold(Color.DarkMagenta);
 

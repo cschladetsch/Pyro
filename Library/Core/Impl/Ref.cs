@@ -1,17 +1,15 @@
 ﻿using System;
 
-namespace Pyro.Impl
-{
+namespace Pyro.Impl {
     /// <inheritdoc cref="IRef{T}" />
     internal class Ref<T>
         : ConstRef<T>
-        , IRef<T>
-    {
+        , IRef<T> {
         public /*Slice*/object Slice;
 
         public new T Value
         {
-            get => (T) BaseValue;
+            get => (T)BaseValue;
             set => BaseValue = value;
         }
 
@@ -22,17 +20,14 @@ namespace Pyro.Impl
         }
 
         public Ref(IRegistry reg, IClassBase @class, Id id)
-            : base(reg, @class, id)
-        {
+            : base(reg, @class, id) {
         }
 
         public Ref(IRegistry reg, IClassBase class1, Id id, T value)
-            : base(reg, class1, id, value)
-        {
+            : base(reg, class1, id, value) {
         }
 
-        public void Set(object value)
-        {
+        public void Set(object value) {
             throw new NotImplementedException();
         }
     }

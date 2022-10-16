@@ -1,5 +1,4 @@
-﻿namespace Pyro.Network
-{
+﻿namespace Pyro.Network {
     /// <summary>
     /// Local representation of a network-visible object.
     ///
@@ -7,7 +6,6 @@
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IAgent<T>
-        : IAgentBase
-    {
+        : IAgentBase {
     }
 }

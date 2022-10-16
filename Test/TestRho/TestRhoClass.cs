@@ -1,5 +1,4 @@
-﻿namespace Pyro.Test
-{
+﻿namespace Pyro.Test {
     using NUnit.Framework;
 
     /// <inheritdoc />
@@ -8,11 +7,9 @@
     /// </summary>
     [TestFixture()]
     internal class TestRhoClass
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestBasicClass()
-        {
+        public void TestBasicClass() {
             RunScript("BasicClass.rho");
         }
     }

@@ -1,7 +1,7 @@
 ﻿namespace Pyro {
     using System;
-    using System.Text;
     using System.Collections.Generic;
+    using System.Text;
 
     /// <inheritdoc cref="IdentBase" />
     /// <summary>

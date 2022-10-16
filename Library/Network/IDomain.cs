@@ -1,5 +1,4 @@
-﻿namespace Pyro.Network
-{
+﻿namespace Pyro.Network {
     /// <summary>
     /// A collection of objects that spatially coherent across the network.
     ///
@@ -7,8 +6,7 @@
     /// and have spatial awareness.
     /// </summary>
     public interface IDomain
-       : IRegistry
-    {
+       : IRegistry {
     }
 }
 

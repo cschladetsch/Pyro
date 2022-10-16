@@ -1,22 +1,18 @@
-﻿using System;
+﻿using Pyro.Language;
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using Pyro.Language;
-
-namespace WinForms
-{
+namespace WinForms {
     /// <summary>
     /// Colorisation systems that are language-independant.
     /// </summary>
-    public partial class MainForm
-    {
+    public partial class MainForm {
         private Font _defaultFont;
         private Font _boldFont;
 
-        private static int GetStartOffset(Control rtb, Slice slice)
-        {
+        private static int GetStartOffset(Control rtb, Slice slice) {
             var lines = rtb.Text.Split('\n');
             var offset = 0;
             for (var n = 0; n < Math.Min(lines.Length, slice.LineNumber); ++n)
@@ -25,8 +21,7 @@ namespace WinForms
             return offset + slice.Start;
         }
 
-        private static bool SetSliceColor(RichTextBox rtb, Slice slice, Color color, Font font)
-        {
+        private static bool SetSliceColor(RichTextBox rtb, Slice slice, Color color, Font font) {
             if (slice.Length < 0)
                 return false;
 
@@ -46,8 +41,7 @@ namespace WinForms
             return true;
         }
 
-        private void CheckFonts()
-        {
+        private void CheckFonts() {
             if (_defaultFont != null)
                 return;
 
@@ -64,14 +58,12 @@ namespace WinForms
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        public void BeginUpdate(Control control)
-        {
+        public void BeginUpdate(Control control) {
             SendMessage(control.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
             _oldEventMask = SendMessage(control.Handle, EmSeteventmask, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public void EndUpdate(Control control)
-        {
+        public void EndUpdate(Control control) {
             SendMessage(control.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
             SendMessage(control.Handle, EmSeteventmask, IntPtr.Zero, _oldEventMask);
         }

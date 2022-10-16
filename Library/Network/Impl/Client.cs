@@ -1,11 +1,9 @@
-﻿namespace Pyro.Network.Impl
-{
+﻿namespace Pyro.Network.Impl {
+    using Exec;
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Net.Sockets;
-    using System.Collections.Generic;
-
-    using Exec;
 
     /// <inheritdoc cref="IClient" />
     /// <inheritdoc cref="NetCommon" />
@@ -15,8 +13,7 @@
     /// </summary>
     public class Client
         : NetCommon
-        , IClient
-    {
+        , IClient {
         public event ClientReceivedHandler OnReceived;
 
         // TODO: Move to NetCommon
@@ -33,8 +30,7 @@
         private IList<string> _results = new List<string>();
 
         public Client(Peer peer)
-            : base(peer)
-        {
+            : base(peer) {
         }
 
         public override string ToString()
@@ -49,8 +45,7 @@
         public bool Continue(string script)
             => Send(script);
 
-        public bool Connect(string hostName, int port)
-        {
+        public bool Connect(string hostName, int port) {
             var address = GetAddress(hostName);
             if (address == null)
                 return Fail($"Couldn't find address for {hostName}");
@@ -65,21 +60,17 @@
         public bool Send(Continuation continuation)
             => Send(continuation.ToText());
 
-        public void Close()
-        {
+        public void Close() {
             _Stopping = true;
             _socket.Close();
             _socket = null;
         }
 
-        private void Connected(IAsyncResult ar)
-        {
-            try
-            {
-                _socket = (Socket) ar.AsyncState;
+        private void Connected(IAsyncResult ar) {
+            try {
+                _socket = (Socket)ar.AsyncState;
                 _socket.EndConnect(ar);
-                if (!_socket.Connected)
-                {
+                if (!_socket.Connected) {
                     Warn($"Failed to connect to {_socket.RemoteEndPoint}");
                     return;
                 }
@@ -87,28 +78,22 @@
                 WriteLine($"Client: connected to {_socket.RemoteEndPoint} using {_socket.LocalEndPoint}");
 
                 Receive(_socket);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Error($"{e.Message}");
             }
         }
 
-        public void GetLatest()
-        {
+        public void GetLatest() {
             // hacks
             Send(" ");
         }
 
-        public bool ContinueRho(string rhoScript)
-        {
+        public bool ContinueRho(string rhoScript) {
             return _Context.ExecRho(rhoScript) || Error($"Failed to translate {rhoScript}");
         }
 
-        protected override bool ProcessReceived(Socket sender, string pi)
-        {
-            try
-            {
+        protected override bool ProcessReceived(Socket sender, string pi) {
+            try {
                 if (!_Context.Translate(pi, out var cont))
                     return Error($"Failed to translate {pi}");
 
@@ -116,9 +101,7 @@
                 Exec.Continue(cont);
 
                 OnReceived?.Invoke(this, sender);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Error(e.Message);
                 return false;
             }
@@ -126,14 +109,12 @@
             return true;
         }
 
-        private int GetHostPort()
-        {
+        private int GetHostPort() {
             var address = Socket?.RemoteEndPoint as IPEndPoint;
             return address?.Port ?? 0;
         }
 
-        private string GetHostName()
-        {
+        private string GetHostName() {
             var address = Socket?.RemoteEndPoint as IPEndPoint;
             return address?.Address.ToString() ?? "none";
         }

@@ -1,9 +1,7 @@
-﻿namespace Pyro.Impl
-{
+﻿namespace Pyro.Impl {
     internal class RefBase
         : ConstRefBase
-        , IRefBase
-    {
+        , IRefBase {
         public new bool IsConst => false;
 
         public new object BaseValue
@@ -13,13 +11,11 @@
         }
 
         internal RefBase(IRegistry reg, IClassBase @class, Id id)
-            : base(reg, @class, id)
-        {
+            : base(reg, @class, id) {
         }
 
         internal RefBase(IRegistry reg, IClassBase @class, Id id, object val)
-            : this(reg, @class, id)
-        {
+            : this(reg, @class, id) {
             BaseValue = val;
         }
     }

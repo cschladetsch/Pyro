@@ -1,15 +1,12 @@
-﻿namespace Pyro.Test
-{
-    using System.Collections.Generic;
+﻿namespace Pyro.Test {
     using NUnit.Framework;
+    using System.Collections.Generic;
 
     [TestFixture]
     public class TestContainers
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestMap()
-        {
+        public void TestMap() {
             var makeMap = "1 2 \"foo\" \"bar\" 2 tomap";
             PiRun(makeMap);
 
@@ -29,8 +26,7 @@
             AssertEmpty();
         }
 
-        private void TestMapContents()
-        {
+        private void TestMapContents() {
             var map = Pop<Dictionary<object, object>>();
             Assert.IsTrue(map.ContainsKey(1));
             Assert.IsTrue(map.ContainsKey("foo"));
@@ -40,8 +36,7 @@
         }
 
         [Test]
-        public void TestArray()
-        {
+        public void TestArray() {
             PiRun("1 2 3 3 tolist expand tolist");
             TestListContents();
 
@@ -57,8 +52,7 @@
 
         }
 
-        private void TestListContents()
-        {
+        private void TestListContents() {
             var list = Pop<List<object>>();
             Assert.AreEqual(3, list.Count);
             Assert.AreEqual(1, list[0]);

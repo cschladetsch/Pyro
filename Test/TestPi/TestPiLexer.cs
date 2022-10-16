@@ -1,25 +1,21 @@
-﻿namespace Pyro.Test
-{
-    using System.Linq;
-    using NUnit.Framework;
+﻿namespace Pyro.Test {
     using Language.Lexer;
+    using NUnit.Framework;
+    using System.Linq;
 
     [TestFixture]
     public class TestPiLexer
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestIdents()
-        {
+        public void TestIdents() {
             var lex = PiLex("a __a a__ a_b ___");
             var tokens = lex.Tokens.Where(t => !IsWhiteSpace(t)).ToList();
             Assert.AreEqual(5, tokens.Count);
-            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new [] {"a", "__a", "a__", "a_b", "___"}));
+            Assert.IsTrue(tokens.Select(t => t.Text).SequenceEqual(new[] { "a", "__a", "a__", "a_b", "___" }));
         }
 
         [Test]
-        public void TestNumbersAndOps()
-        {
+        public void TestNumbersAndOps() {
             AssertSameTokens(
                 "1 2 + 2 - 3 *",
                 EPiToken.Int, EPiToken.Int, EPiToken.Plus,
@@ -28,14 +24,12 @@
         }
 
         [Test]
-        public void TestBreak()
-        {
+        public void TestBreak() {
             AssertSameTokens("break", EPiToken.Break);
         }
 
         //[Test]
-        public void TestPathnames()
-        {
+        public void TestPathnames() {
             AssertSameTokens("'a", EPiToken.Quote, EPiToken.Ident);
             AssertSameTokens("a", EPiToken.Ident);
             AssertSameTokens("ident", EPiToken.Ident);
@@ -44,14 +38,12 @@
         }
 
         [Test]
-        public void TestComments()
-        {
+        public void TestComments() {
             AssertSameTokens("// comment", EPiToken.Comment);
         }
 
         [Test]
-        public void TestStrings()
-        {
+        public void TestStrings() {
             AssertSameTokens("\"foo\" \"bar\" +", EPiToken.String, EPiToken.String, EPiToken.Plus);
         }
     }

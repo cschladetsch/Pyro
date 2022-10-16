@@ -1,26 +1,22 @@
 ﻿using System;
 
-namespace Pyro.Test.Rho
-{
-    using System.IO;
+namespace Pyro.Test.Rho {
     using NUnit.Framework;
+    using System.IO;
     using static Create;
 
     [TestFixture]
     public class TestRhoScripts
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void Print()
-        {
+        public void Print() {
             _Exec.Scope["pr"] = Function<object>(DebugTrace);
             RhoRun("pr(\"hello\")");
             //TestScript("Print.rho");
         }
 
         [Test]
-        public void TestRhoConditionals()
-        {
+        public void TestRhoConditionals() {
             var r0 = @"
 if (1 == 1)
 	true
@@ -35,21 +31,19 @@ else
 ";
             var c0 = RhoTranslate(r0);
             var c1 = RhoTranslate(r1);
-            
+
             DebugTrace(c0.ToText());
             _Exec.Continue(c0);
             AssertPop(true);
-            
+
             DebugTrace(c1.ToText());
             _Exec.Continue(c1);
             AssertPop(false);
         }
-        
+
         [Test]
-        public void TestRhoNestedConditionals()
-        {
-            string Script(int a, int b)
-            {
+        public void TestRhoNestedConditionals() {
+            string Script(int a, int b) {
                 return $@"
 if ({a} != 1)
 	if ({b} == 2)
@@ -67,21 +61,20 @@ else
             var c0 = RhoTranslate(s0);
             var c1 = RhoTranslate(s1);
             var c2 = RhoTranslate(s2);
-            
+
             _Exec.Continue(c0);
             AssertPop(30);    // a = 1, b = 1 => c = 30
-            
+
             _Exec.Continue(c1);    // a = 2, b = 2 => c= 10
             AssertPop(10);
-            
+
             _Exec.Continue(c2);    // a = 2, b = 3 => c= 20
             AssertPop(20);
         }
-        
-        
+
+
         [Test]
-        public void RunSomeRhoScripts()
-        {
+        public void RunSomeRhoScripts() {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
 
             _Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
@@ -114,8 +107,7 @@ else
             //TestScript("FreezeThaw.rho");
         }
 
-        private void DebugTrace(object obj)
-        {
+        private void DebugTrace(object obj) {
             var text = "****> " + obj + " <****";
             TestContext.Out.WriteLine(text);
             System.Diagnostics.Trace.WriteLine(text);
@@ -123,8 +115,7 @@ else
         }
 
         //[Test]
-        public void RunAllRhoScripts()
-        {
+        public void RunAllRhoScripts() {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.rho"))
                 Assert.IsTrue(RunScriptPathname(file));
         }

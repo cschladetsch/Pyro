@@ -1,5 +1,4 @@
-﻿namespace Pyro.Impl
-{
+﻿namespace Pyro.Impl {
     using System;
     using System.Text;
 
@@ -11,23 +10,19 @@
     /// <typeparam name="T"></typeparam>
     public class Class<T>
         : ClassBase
-        , IClass<T>
-    {
+        , IClass<T> {
         private readonly Action<IRegistry, StringBuilder, T> _toText;
 
         internal Class(IRegistry reg)
-            : base(reg, typeof(T))
-        {
+            : base(reg, typeof(T)) {
         }
 
         public Class(IRegistry reg, Action<IRegistry, StringBuilder, T> toText)
-            : base(reg, typeof(T))
-        {
+            : base(reg, typeof(T)) {
             _toText = toText;
         }
 
-        public override object NewInstance()
-        {
+        public override object NewInstance() {
             var instance = Activator.CreateInstance(Type);
             AddRefFields(instance);
             return instance;
@@ -45,8 +40,7 @@
         public override void ToPiScript(StringBuilder str, object obj)
             => AppendText(str, _registry.Get<T>(obj));
 
-        public void AppendText(StringBuilder str, T obj)
-        {
+        public void AppendText(StringBuilder str, T obj) {
             if (_toText != null)
                 _toText(_registry, str, obj);
             else

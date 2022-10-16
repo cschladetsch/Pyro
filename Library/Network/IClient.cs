@@ -1,5 +1,4 @@
-﻿namespace Pyro.Network
-{
+﻿namespace Pyro.Network {
     using System.Net.Sockets;
 
     public delegate void ClientReceivedHandler(IClient client, Socket server);
@@ -9,12 +8,11 @@
     /// The Client interface.
     /// </summary>
     public interface IClient
-        : INetCommon
-    {
+        : INetCommon {
         event ClientReceivedHandler OnReceived;
-        string HostName { get;}
-        int HostPort { get;}
-    
+        string HostName { get; }
+        int HostPort { get; }
+
         void GetLatest();
         bool Continue(string piScript);
         bool ContinueRho(string rhoScript);

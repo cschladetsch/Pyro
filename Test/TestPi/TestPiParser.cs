@@ -1,35 +1,30 @@
-﻿namespace Pyro.Test
-{
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using NUnit.Framework;
+﻿namespace Pyro.Test {
     using Language;
     using Language.Lexer;
     using Language.Parser;
+    using NUnit.Framework;
+    using System.Collections.Generic;
+    using System.Diagnostics;
 
     [TestFixture]
     class TestPiParser
-        : TestCommon
-    {
+        : TestCommon {
         protected internal PiParser PiParser;
         protected internal IList<PiAstNode> Sequence => PiParser.Root.Children;
         protected internal PiAstNode First => Sequence?[0];
 
         [Test]
-        public void TestAssignCoro()
-        {
+        public void TestAssignCoro() {
             PiRun("{+} 'a # 1 2 a & 3 == assert");
         }
 
         [Test]
-        public void TestFloatPrecision()
-        {
+        public void TestFloatPrecision() {
             PiRun("4 set_float_precision { == assert } 'eq #");
         }
 
         [Test]
-        public void TestSimpleTokens()
-        {
+        public void TestSimpleTokens() {
             var lexer = new PiLexer("1 2 3");
             Assert.IsTrue(lexer.Process());
             var parser = new PiParser(lexer);
@@ -37,8 +32,7 @@
         }
 
         //[Test]
-        public void TestPathnames()
-        {
+        public void TestPathnames() {
             Parse("foo");
             Assert.AreEqual(EPiAst.Ident, First.Type);
             Assert.AreEqual("foo", First.Value.ToString());
@@ -50,7 +44,7 @@
             Parse("'s s");
             Parse("'foo");
             Assert.AreEqual(EPiAst.Ident, First.Type);
-            var ident1 = (Label) First.Value;
+            var ident1 = (Label)First.Value;
             Assert.IsNotNull(ident1);
             Assert.IsTrue(ident1.Quoted);
 
@@ -70,8 +64,7 @@
         }
 
         [Test]
-        public void TestArray1()
-        {
+        public void TestArray1() {
             Parse("[42 23]");
             var array = Sequence[0];
             Assert.IsNotNull(array);
@@ -80,8 +73,7 @@
             Assert.AreEqual(23, contents[1].Value);
         }
 
-        private void Parse(string text, bool verbose = false)
-        {
+        private void Parse(string text, bool verbose = false) {
             var lexer = new PiLexer(text);
             Assert.IsTrue(lexer.Process());
             if (verbose)

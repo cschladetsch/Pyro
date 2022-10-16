@@ -1,5 +1,4 @@
-﻿namespace Pyro.Exec
-{
+﻿namespace Pyro.Exec {
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -9,8 +8,7 @@
     /// <summary>
     /// Implementation of the various operations an Executor can perform.
     /// </summary>
-    public partial class Executor
-    {
+    public partial class Executor {
         /// <summary>
         /// The number of significant digits for float comparisons.
         /// </summary>
@@ -21,8 +19,7 @@
         /// </summary>
         private bool _leaveForEach;
 
-        private dynamic RPop()
-        {
+        private dynamic RPop() {
             if (TryResolve(Pop(), out object val))
                 return val;
             throw new DataStackEmptyException();
@@ -32,17 +29,14 @@
         /// Add options to the internal mapping of EOperation enum to
         /// functor that does the work for that operation.
         /// </summary>
-        private void AddOperations()
-        {
-            _actions[EOperation.Plus] = () =>
-            {
+        private void AddOperations() {
+            _actions[EOperation.Plus] = () => {
                 var b = RPop();
                 var a = RPop();
                 Push(a + b);
             };
 
-            _actions[EOperation.Minus] = () =>
-            {
+            _actions[EOperation.Minus] = () => {
                 var a = RPop();
                 var b = RPop();
                 Push(b - a);
@@ -113,27 +107,23 @@
         private void Exists()
             => Push(TryResolve(Pop(), out object _));
 
-        private void Replace()
-        {
+        private void Replace() {
             throw new NotImplementedException("Replace.");
         }
 
-        private void SetMember()
-        {
+        private void SetMember() {
             var obj = Pop() as object;
             var name = Pop<Label>().Text;
             var type = obj.GetType();
 
             var fi = type.GetField(name);
-            if (fi != null)
-            {
+            if (fi != null) {
                 fi.SetValue(obj, Pop());
                 return;
             }
 
             var pi = type.GetProperty(name);
-            if (pi != null)
-            {
+            if (pi != null) {
                 pi.SetValue(obj, Pop());
                 return;
             }
@@ -141,8 +131,7 @@
             throw new MemberNotFoundException(type, name);
         }
 
-        public void Clear()
-        {
+        public void Clear() {
             DataStack = new Stack<object>();
             ContextStack = new List<Continuation>();
             NumOps = 0;
@@ -151,14 +140,12 @@
             _current = null;
         }
 
-        private void Assert()
-        {
+        private void Assert() {
             if (!Pop<bool>())
                 throw new AssertionFailedException();
         }
 
-        private void StoreValue()
-        {
+        private void StoreValue() {
             var name = Pop<IdentBase>();
             var val = Pop();
             if (name is Label label)
@@ -167,64 +154,55 @@
                 throw new Exception($"Can't store to {name}");
         }
 
-        private void GetValue()
-        {
+        private void GetValue() {
             var label = Pop<string>();
             var fromScope = Context().FromScope(label);
             Push(fromScope);
         }
 
-        private void GetTypeOf()
-        {
+        private void GetTypeOf() {
             var obj = Pop();
             if (obj is IConstRefBase cref)
                 Push(cref.Class.TypeName);
             Push(obj.GetType().FullName);
         }
 
-        private void GreaterEquiv()
-        {
+        private void GreaterEquiv() {
             var b = Pop();
             var a = Pop();
             Push(a >= b);
         }
 
-        private void Greater()
-        {
+        private void Greater() {
             var b = Pop();
             var a = Pop();
             Push(a > b);
         }
 
-        private void LessEquiv()
-        {
+        private void LessEquiv() {
             var b = Pop();
             var a = Pop();
             Push(a <= b);
         }
 
-        private void Less()
-        {
+        private void Less() {
             var b = Pop();
             var a = Pop();
             Push(a < b);
         }
 
-        private void Dup()
-        {
+        private void Dup() {
             var top = Pop();
             var dup = top;//Duplicate(top); // TODO: copy-on-write duplication
             Push(top);
             Push(dup);
         }
 
-        private object Duplicate(object obj)
-        {
+        private object Duplicate(object obj) {
             return _registry.Duplicate(obj);
         }
 
-        private void Over()
-        {
+        private void Over() {
             var a = Pop();
             var b = Pop();
             Push(b);
@@ -232,8 +210,7 @@
             Push(b);
         }
 
-        private void Rot()
-        {
+        private void Rot() {
             // 1 2 3 rot => 3 1 2
             var a = Pop();
             var b = Pop();
@@ -243,44 +220,37 @@
             Push(b);
         }
 
-        private void DropN()
-        {
+        private void DropN() {
             var n = Pop<int>();
             while (n-- > 0)
                 Pop();
         }
 
-        private void Pick()
-        {
+        private void Pick() {
             var n = Pop<int>();
             Push(DataStack.ToArray()[n]);
         }
 
-        private void Swap()
-        {
+        private void Swap() {
             var a = Pop();
             var b = Pop();
             Push(a);
             Push(b);
         }
 
-        private static void Thaw()
-        {
+        private static void Thaw() {
             throw new NotImplementedException();
         }
 
-        private void Freeze()
-        {
+        private void Freeze() {
             Push(_current.ToText());
         }
 
-        private static void ForLoop()
-        {
+        private static void ForLoop() {
             throw new NotImplementedException();
         }
 
-        private void ForEachIn()
-        {
+        private void ForEachIn() {
             var forLoop = Pop<Continuation>();
             var range = RPop();
             if (!(range is IEnumerable))
@@ -293,8 +263,7 @@
             Suspend();
         }
 
-        private IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label)
-        {
+        private IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label) {
             var next = obj.GetEnumerator();
             if (!next.MoveNext())
                 yield break;
@@ -307,16 +276,14 @@
             //
             // This is what _leaveForEach is used for. It's
             // a bit complicated, sorry.
-            while (true)
-            {
+            while (true) {
                 var val = next.Current;
                 block.SetScopeObject(label, val);
                 _current = block;
                 _break = false;
                 Execute(block);
 
-                if (!_leaveForEach && !next.MoveNext())
-                {
+                if (!_leaveForEach && !next.MoveNext()) {
                     _leaveForEach = true;
                     break;
                 }
@@ -330,16 +297,14 @@
             Break();
         }
 
-        private void AddContext(Continuation current)
-        {
+        private void AddContext(Continuation current) {
             if (current == null)
                 throw new ArgumentNullException(nameof(current));
 
             ContextStack.Add(current);
         }
 
-        private void OpNew()
-        {
+        private void OpNew() {
             var obj = RPop();
             var @class = ConstRef<IClassBase>(RPop());
             if (@class == null)
@@ -348,8 +313,7 @@
             Push(_registry.New(@class, DataStack));
         }
 
-        private void GetMember()
-        {
+        private void GetMember() {
             var obj = Pop();
             var member = Pop<Label>().Text;
             var type = (Type)obj.GetType();
@@ -372,8 +336,7 @@
             throw new MemberNotFoundException(obj.GetType(), member);
         }
 
-        private bool GetField(Type type, string member, object obj)
-        {
+        private bool GetField(Type type, string member, object obj) {
             var field = type.GetField(member);
             if (field == null)
                 return false;
@@ -382,8 +345,7 @@
             return true;
         }
 
-        private bool GetProperty(Type type, string member, object obj)
-        {
+        private bool GetProperty(Type type, string member, object obj) {
             var pi = type.GetProperty(member);
             if (pi == null)
                 return false;
@@ -392,8 +354,7 @@
             return true;
         }
 
-        private bool GetMethod(Type type, string member, object obj, IClassBase @class)
-        {
+        private bool GetMethod(Type type, string member, object obj, IClassBase @class) {
             if (@class == null)
                 return false;
             if (type == null)
@@ -409,8 +370,7 @@
             return true;
         }
 
-        private bool GetCallable(IClassBase @class, string member, object obj)
-        {
+        private bool GetCallable(IClassBase @class, string member, object obj) {
             var callable = @class.GetCallable(member);
             if (callable == null)
                 return false;//throw new MemberNotFoundException(obj.GetType(), member);
@@ -420,20 +380,17 @@
             return true;
         }
 
-        private void NotEquiv()
-        {
+        private void NotEquiv() {
             Equiv();
             Push(!Pop());
         }
 
-        private void Assign()
-        {
+        private void Assign() {
             var ident = Pop<Label>().Text;
             var val = RPop();
             // First, search context for an object with
             // matching name and use that.
-            foreach (var c in ContextStack)
-            {
+            foreach (var c in ContextStack) {
                 if (!c.HasScopeObject(ident))
                     continue;
 
@@ -446,8 +403,7 @@
             _current.SetScopeObject(ident, val);
         }
 
-        private void IfElse()
-        {
+        private void IfElse() {
             var test = RPop<bool>();
             var thenBody = RPop();
             var ifBody = RPop();
@@ -455,64 +411,54 @@
             Push(test ? ifBody : thenBody);
         }
 
-        private void If()
-        {
+        private void If() {
             var test = RPop<bool>();
             var ifBody = RPop();
             if (test)
                 Push(ifBody);
         }
 
-        private void SetFloatPrecision()
-        {
+        private void SetFloatPrecision() {
             FloatPrecision = RPop<int>();
         }
 
-        private void LogicalXor()
-        {
+        private void LogicalXor() {
             var a = RPop();
             var b = RPop();
             Push(a ^ b);
         }
 
-        private void LogicalAnd()
-        {
+        private void LogicalAnd() {
             var a = RPop();
             var b = RPop();
             Push(a && b);
         }
 
-        private void Divide()
-        {
+        private void Divide() {
             var a = RPop();
             var b = RPop();
             Push(b / a);
         }
 
-        private void LogicalOr()
-        {
+        private void LogicalOr() {
             var a = RPop();
             var b = RPop();
             Push(a || b);
         }
 
-        private void DebugPrintContextStack()
-        {
+        private void DebugPrintContextStack() {
             throw new NotImplementedException("DebugPrintContextStack");
         }
 
-        private void DebugPrintContinuation()
-        {
+        private void DebugPrintContinuation() {
             WriteContinuation();
         }
 
-        private void DebugPrintDataStack()
-        {
+        private void DebugPrintDataStack() {
             WriteDataStack(100);
         }
 
-        private void ToSet()
-        {
+        private void ToSet() {
             var count = RPop<int>();
             var set = new HashSet<object>();
             while (count-- > 0)
@@ -521,12 +467,10 @@
             Push(set);
         }
 
-        private void ToMap()
-        {
+        private void ToMap() {
             var count = RPop<int>();
             var dict = new Dictionary<object, object>();
-            while (count-- > 0)
-            {
+            while (count-- > 0) {
                 var value = RPop();
                 var key = RPop();
 
@@ -536,11 +480,9 @@
             Push(dict);
         }
 
-        private void Has()
-        {
+        private void Has() {
             var cont = RPop();
-            switch (cont)
-            {
+            switch (cont) {
                 case List<object> list:
                     Push(list.Contains(RPop()));
                     break;
@@ -553,17 +495,15 @@
                     Push(set.Contains(RPop()));
                     break;
 
-                 default:
+                default:
                     throw new NotImplementedException($"Cannot use 'has' on type {cont.GetType().Name}");
             }
         }
 
-        private void At()
-        {
+        private void At() {
             var index = RPop();
             var cont = RPop();
-            switch (cont)
-            {
+            switch (cont) {
                 case IList list:
                     Push(list[ConstRef<int>(index)]);
                     break;
@@ -577,26 +517,22 @@
             }
         }
 
-        public static T ConstRef<T>(object obj)
-        {
-            switch (obj)
-            {
-            case T result:
-                return result;
-            case IConstRef<T> cref:
-                return cref.Value;
+        public static T ConstRef<T>(object obj) {
+            switch (obj) {
+                case T result:
+                    return result;
+                case IConstRef<T> cref:
+                    return cref.Value;
             }
 
             throw new CannotConvertException(obj, typeof(T));
         }
 
-        private new void New()
-        {
+        private new void New() {
             //var typeName = Pop<Pathname>().ToString().Replace(Pathname.Slash, '.');
             var typeName = Pop<Label>().Text;
             var klass = _registry.GetClass(typeName);
-            if (klass != null)
-            {
+            if (klass != null) {
                 Push(_registry.New(klass, DataStack));
                 return;
             }
@@ -608,11 +544,9 @@
             Push(Activator.CreateInstance(type));
         }
 
-        private void Insert()
-        {
+        private void Insert() {
             var cont = RPop();
-            switch (cont)
-            {
+            switch (cont) {
                 case List<object> list:
                     var index = RPop();
                     list.Insert(index, RPop());
@@ -632,19 +566,14 @@
             }
         }
 
-        private void Expand()
-        {
+        private void Expand() {
             var cont = RPop();
-            if (cont is Dictionary<object, object> dict)
-            {
-                foreach (var kv in dict)
-                {
+            if (cont is Dictionary<object, object> dict) {
+                foreach (var kv in dict) {
                     Push(kv.Key);
                     Push(kv.Value);
                 }
-            }
-            else
-            {
+            } else {
                 foreach (var obj in cont)
                     Push(obj);
             }
@@ -654,12 +583,10 @@
             GetSize();
         }
 
-        private void Remove()
-        {
+        private void Remove() {
             var cont = RPop();
             var index = RPop();
-            switch (cont)
-            {
+            switch (cont) {
                 case List<object> list:
                     list.RemoveAt(index);
                     break;
@@ -679,11 +606,9 @@
             Push(cont);
         }
 
-        private void GetSize()
-        {
+        private void GetSize() {
             var cont = RPop();
-            switch (cont)
-            {
+            switch (cont) {
                 case IList list:
                     Push(list.Count);
                     return;
@@ -696,21 +621,19 @@
                     Push(set.Count);
                     return;
 
-               default:
+                default:
                     throw new NotImplementedException($"Cannot get size of a {cont.GetType().Name}");
             }
         }
 
-        private void PushBack()
-        {
+        private void PushBack() {
             var cont = RPop<List<object>>() as List<object>;
             var obj = RPop();
             cont.Add(obj);
             Push(cont);
         }
 
-        private void PushFront()
-        {
+        private void PushFront() {
             if (!(RPop<List<object>>() is List<object> cont))
                 throw new Exception("Expected a list.");
 
@@ -718,8 +641,7 @@
             Push(cont);
         }
 
-        private void ToArray()
-        {
+        private void ToArray() {
             var count = RPop<int>();
             var list = new List<object>();
             while (count-- > 0)
@@ -729,27 +651,23 @@
             Push(list);
         }
 
-        private void Equiv()
-        {
+        private void Equiv() {
             var a = RPop();
             var b = RPop();
-            switch (a)
-            {
-                case IEnumerable<object> list:
-                {
-                    if (!(b is IEnumerable<object> other))
-                        throw new CannotCompareEnumerationsException(a, b);
+            switch (a) {
+                case IEnumerable<object> list: {
+                        if (!(b is IEnumerable<object> other))
+                            throw new CannotCompareEnumerationsException(a, b);
 
-                    Push(list.SequenceEqual(other));
-                    return;
-                }
+                        Push(list.SequenceEqual(other));
+                        return;
+                    }
             }
 
             Push(a.Equals(b));
         }
 
-        public void RemoveContinuation(Continuation continuation)
-        {
+        public void RemoveContinuation(Continuation continuation) {
             ContextStack.Remove(continuation);
             Break();
         }

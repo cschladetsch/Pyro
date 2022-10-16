@@ -1,11 +1,10 @@
-﻿namespace Pyro.Test.Rho
-{
+﻿namespace Pyro.Test.Rho {
+    using Exec;
+    using Language;
+    using NUnit.Framework;
+    using RhoLang.Lexer;
     using System;
     using System.Collections.Generic;
-    using NUnit.Framework;
-    using Exec;
-    using RhoLang.Lexer;
-    using Language;
 
     /// <inheritdoc />
     /// <summary>
@@ -13,21 +12,18 @@
     /// </summary>
     [TestFixture]
     public class TestRhoBasic
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestParse()
-        {
+        public void TestParse() {
             var input = "1\n";
             var lex = new RhoLexer(input);
             lex.Process();
-            var slice = new Slice(lex, 0, input.Length - 1) {LineNumber = 0};
+            var slice = new Slice(lex, 0, input.Length - 1) { LineNumber = 0 };
             Console.WriteLine(slice.Text);
         }
 
         [Test]
-        public void TestArrays()
-        {
+        public void TestArrays() {
             RhoRun("{1 2 3}");
             var list = Pop<List<object>>();
             Assert.AreEqual(list.Count, 3);
@@ -37,8 +33,7 @@
         }
 
         [Test]
-        public void TestFloats()
-        {
+        public void TestFloats() {
             AssertEqual("1.1 + 2.2", 1.1f + 2.2f);
             AssertEqual("1.1 - 2.2", 1.1f - 2.2f);
             AssertEqual("1.1*2.2", 1.1f * 2.2f);
@@ -47,15 +42,13 @@
             //AssertEqual("1.1 / 2.2", 1.1f / 2.2f);
         }
 
-        private void AssertEqual(string rho, object val, EStructure str = EStructure.Expression)
-        {
+        private void AssertEqual(string rho, object val, EStructure str = EStructure.Expression) {
             RhoRun(rho, false, str);
             Assert.AreEqual(val, Pop());
         }
 
         [Test]
-        public void TestBoolean()
-        {
+        public void TestBoolean() {
             True("true");
             True("!false");
             True("!!true");
@@ -88,8 +81,7 @@
             => RhoRun($"assert({text})");
 
         [Test]
-        public void TestArithmetic()
-        {
+        public void TestArithmetic() {
             RhoRun("b = 1");
             AssertVarEquals("b", 1);
 
@@ -104,9 +96,8 @@
         }
 
         [Test]
-        public void TestSequence()
-        {
-            var code1 = RhoTranslate( @"1").Code;
+        public void TestSequence() {
+            var code1 = RhoTranslate(@"1").Code;
             Assert.AreEqual(1, code1.Count);
             Assert.AreEqual(1, code1[0]);
 
@@ -122,8 +113,7 @@
         }
 
         [Test]
-        public void TestParseCall()
-        {
+        public void TestParseCall() {
             var translate = RhoTranslate(@"foo()");
             var code = translate.Code;
             Assert.AreEqual(2, code.Count);
@@ -134,8 +124,7 @@
         }
 
         [Test]
-        public void TestParseFunDef()
-        {
+        public void TestParseFunDef() {
             var code = RhoTranslate(
 @"
 fun foo()
@@ -155,8 +144,7 @@ fun foo()
         }
 
         [Test]
-        public void TestCalls()
-        {
+        public void TestCalls() {
             _Exec.ContextStack.Clear();
             _Exec.DataStack.Clear();
             _Exec.Verbosity = 100;
@@ -179,8 +167,7 @@ assert(bar(foo, 2) == 3)
         }
 
         [Test]
-        public void TestReturnVal0()
-        {
+        public void TestReturnVal0() {
             RhoRun(
 @"fun foo()
 	3
@@ -224,8 +211,7 @@ assert(foo() == 2)
         }
 
         [Test]
-        public void TestSimpleFunctions()
-        {
+        public void TestSimpleFunctions() {
             RhoRun("a = 1");
 
             RhoRun(
@@ -250,8 +236,7 @@ foo(42)
         }
 
         [Test]
-        public void TestConditionals()
-        {
+        public void TestConditionals() {
             var ifThen =
 @"
 if true
@@ -280,14 +265,12 @@ if true
         }
 
         [Test]
-        public void TestWriteln()
-        {
+        public void TestWriteln() {
             RhoRun(@"writeln(""testing 1 2 3"")");
         }
 
         [Test]
-        public void TestLocalScope()
-        {
+        public void TestLocalScope() {
             RhoRun(@"
 fun foo(a)
 	b = a + 1
@@ -297,8 +280,7 @@ foo(2)
         }
 
         //[Test]
-        public void TestNestedFunctions()
-        {
+        public void TestNestedFunctions() {
             RhoRun(
 @"
 fun foo()

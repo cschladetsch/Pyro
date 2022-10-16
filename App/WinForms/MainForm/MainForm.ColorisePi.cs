@@ -1,18 +1,14 @@
-﻿using System;
+﻿using Pyro.Language;
+using Pyro.Language.Lexer;
+using System;
 using System.Drawing;
 
-using Pyro.Language;
-using Pyro.Language.Lexer;
-
-namespace WinForms
-{
+namespace WinForms {
     /// <summary>
     /// Colorise Pi script.
     /// </summary>
-    partial class MainForm
-    {
-        private bool ColorisePi()
-        {
+    partial class MainForm {
+        private bool ColorisePi() {
             CheckFonts();
 
             var rtb = piInput;
@@ -20,8 +16,7 @@ namespace WinForms
 
             var input = piInput.Text + " \n";
             var lex = new PiLexer(input);
-            try
-            {
+            try {
                 // start by setting everything to default color and font
                 SetPiSliceColor(new Slice(lex, 0, input.Length - 1), Color.Black, _defaultFont);
 
@@ -29,29 +24,23 @@ namespace WinForms
 
                 foreach (var tok in lex.Tokens)
                     ColorisePiToken(tok, tok.Slice);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 output.Text = $"{e.Message}: {lex.Error}";
-            }
-            finally
-            {
+            } finally {
                 EndUpdate(rtb);
             }
 
             return true;
         }
 
-        private bool ColorisePiToken(PiToken tok, Slice slice)
-        {
+        private bool ColorisePiToken(PiToken tok, Slice slice) {
             if (slice.Length < 0)
                 return false;
 
             bool Render(Color color) => SetPiSliceColor(slice, color, _defaultFont);
             bool RenderBold(Color color) => SetPiSliceColor(slice, color, _boldFont);
 
-            switch (tok.Type)
-            {
+            switch (tok.Type) {
                 case EPiToken.Assert:
                     return RenderBold(Color.DarkMagenta);
 

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Pyro.Language.Impl
-{
+namespace Pyro.Language.Impl {
     /// <inheritdoc cref="LexerBase" />
     /// <summary>
     /// Common to all Lexers
@@ -15,8 +14,7 @@ namespace Pyro.Language.Impl
         : LexerBase
         , ILexerCommon<TToken>
         where TToken : class, ITokenBase<TEnum>, new()
-        where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new()
-    {
+        where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new() {
         public IList<TToken> Tokens => _Tokens;
 
         protected List<TToken> _Tokens = new List<TToken>();
@@ -41,15 +39,13 @@ namespace Pyro.Language.Impl
         public string EnumToString(TEnum e)
             => _KeyWordsInvert.TryGetValue(e, out var str) ? str : e.ToString();
 
-        public bool Process()
-        {
+        public bool Process() {
             AddKeyWords();
             CreateLines();
             return Run();
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             var str = new StringBuilder();
             foreach (var tok in _Tokens)
                 str.Append($"{tok}, ");
@@ -57,8 +53,7 @@ namespace Pyro.Language.Impl
             return str.ToString();
         }
 
-        protected bool Run()
-        {
+        protected bool Run() {
             _offset = 0;
             _lineNumber = 0;
 
@@ -70,8 +65,7 @@ namespace Pyro.Language.Impl
             return !Failed;
         }
 
-        protected TToken LexAlpha()
-        {
+        protected TToken LexAlpha() {
             var tok = _Factory.NewTokenIdent(Gather(char.IsLetter));
             if (_KeyWords.TryGetValue(tok.ToString(), out var en))
                 tok.Type = en;
@@ -79,14 +73,12 @@ namespace Pyro.Language.Impl
             return tok;
         }
 
-        protected bool AddSlice(TEnum type, Slice slice)
-        {
+        protected bool AddSlice(TEnum type, Slice slice) {
             _Tokens.Add(_Factory.NewToken(type, slice));
             return true;
         }
 
-        protected bool Add(TEnum type, int len = 1)
-        {
+        protected bool Add(TEnum type, int len = 1) {
             AddSlice(type, new Slice(this, _offset, _offset + len));
             while (len-- > 0)
                 Next();
@@ -94,8 +86,7 @@ namespace Pyro.Language.Impl
             return true;
         }
 
-        protected bool AddIfNext(char ch, TEnum thenType, TEnum elseType)
-        {
+        protected bool AddIfNext(char ch, TEnum thenType, TEnum elseType) {
             if (Peek() != ch)
                 return Add(elseType, 1);
 
@@ -104,15 +95,13 @@ namespace Pyro.Language.Impl
             return true;
         }
 
-        protected bool AddTwoCharOp(TEnum ty)
-        {
+        protected bool AddTwoCharOp(TEnum ty) {
             Add(ty, 2);
 
             return true;
         }
 
-        protected bool AddThreeCharOp(TEnum ty)
-        {
+        protected bool AddThreeCharOp(TEnum ty) {
             Add(ty, 3);
             Next();
 
@@ -122,8 +111,7 @@ namespace Pyro.Language.Impl
         protected bool LexError(string text)
             => Fail(CreateErrorMessage(_Factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
 
-        public string CreateErrorMessage(TToken tok, string fmt, params object[] args)
-        {
+        public string CreateErrorMessage(TToken tok, string fmt, params object[] args) {
             ErrorToken = tok;
             var buff = $"({tok.LineNumber}):[{tok.Slice.Start}]: {string.Format(fmt, args)}";
             const int beforeContext = 2;
@@ -135,10 +123,8 @@ namespace Pyro.Language.Impl
 
             var str = new StringBuilder();
             str.AppendLine(buff);
-            for (var n = start; n <= end; ++n)
-            {
-                foreach (var ch in lex.GetLine(n))
-                {
+            for (var n = start; n <= end; ++n) {
+                foreach (var ch in lex.GetLine(n)) {
                     if (ch == '\t')
                         str.Append("    ");
                     else
@@ -148,10 +134,8 @@ namespace Pyro.Language.Impl
                 if (n != tok.LineNumber)
                     continue;
 
-                for (var ch = 0; ch < lex.GetLine(n).Length; ++ch)
-                {
-                    if (ch == tok.Slice.Start)
-                    {
+                for (var ch = 0; ch < lex.GetLine(n).Length; ++ch) {
+                    if (ch == tok.Slice.Start) {
                         str.Append('^');
                         break;
                     }

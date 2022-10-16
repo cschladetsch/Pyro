@@ -1,34 +1,27 @@
-﻿namespace WinForms.UserControls
-{
+﻿namespace WinForms.UserControls {
     using System;
 
     public partial class PiDebugger
-        : UserControlBase
-    {
+        : UserControlBase {
         //private MainForm _main;
 
-        public PiDebugger()
-        {
+        public PiDebugger() {
             InitializeComponent();
         }
 
-        private void PiDebugger_Load(object sender, EventArgs e)
-        {
+        private void PiDebugger_Load(object sender, EventArgs e) {
         }
 
-        public override void Clear()
-        {
+        public override void Clear() {
             listView1.Items.Clear();
         }
 
-        public void Restart()
-        {
+        public void Restart() {
             _contextStackView.Clear();
             _contextStackView.Show(_Exec.Context());
         }
 
-        public void Input(string pi)
-        {
+        public void Input(string pi) {
             Console.WriteLine($"Debugging {pi}");
         }
     }

@@ -1,10 +1,8 @@
-﻿namespace Pyro.Language.Parser
-{
+﻿namespace Pyro.Language.Parser {
     /// <summary>
     /// Abstract Syntax Tree (Ast) node types.
     /// </summary>
-    public enum EPiAst
-    {
+    public enum EPiAst {
         None,
         Program,
         Operation,

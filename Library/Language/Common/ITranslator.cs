@@ -1,5 +1,4 @@
-﻿namespace Pyro.Language
-{
+﻿namespace Pyro.Language {
     using Exec;
 
     /// <inheritdoc />
@@ -7,8 +6,7 @@
     /// Converts a string to a Pi Continuation.
     /// </summary>
     public interface ITranslator
-        : IProcess
-    {
+        : IProcess {
         int TraceLevel { get; set; }
 
         bool Translate(string text, out Continuation result, EStructure st = EStructure.Program);

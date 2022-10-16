@@ -1,11 +1,10 @@
-﻿namespace Pyro.Console
-{
+﻿namespace Pyro.Console {
+    using ExecutionContext;
+    using Language;
+    using Network;
     using System;
     using System.Linq;
     using System.Text;
-    using Language;
-    using Network;
-    using ExecutionContext;
     using Con = System.Console;
 
     /// <summary>
@@ -14,14 +13,13 @@
     /// Can connect and enter into other consoles.
     /// </summary>
     internal class Program
-        : AppCommon.AppCommonBase
-    {
+        : AppCommon.AppCommonBase {
         // Port that we listen on for incoming connections.
         private const int ListenPort = 7777;
 
         // our peer that can connect to any other peer, and can also be connected to by any other peer
         private IPeer _peer;
-        
+
         // only used for translation - not execution. Execution is performed by servers or clients.
         private readonly Context _context;
 
@@ -29,8 +27,7 @@
             => new Program(args).Repl();
 
         private Program(string[] args)
-            : base(args)
-        {
+            : base(args) {
             _context = new Context { Language = ELanguage.Rho };
             RegisterTypes.Register(_context.Registry);
 
@@ -42,14 +39,12 @@
             RunInitialisationScripts();
         }
 
-        private void SetupPeer()
-        {
+        private void SetupPeer() {
             _peer.OnConnected += OnConnected;
             //_peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
-        private bool StartPeer(string[] args)
-        {
+        private bool StartPeer(string[] args) {
             var port = ListenPort;
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
@@ -58,47 +53,39 @@
             var ctx = _peer.Local.Context;
             var reg = ctx.Registry;
             var scope = ctx.Executor.Scope;
-            
+
             reg.Register(new ClassBuilder<TestClient>(reg).Class);
             scope["remote"] = new TestClient();
-            
+
             return _peer.SelfHost() || Error("Failed to start local server");
         }
 
-        private void RunInitialisationScripts()
-        {
+        private void RunInitialisationScripts() {
             // TODO: run things like ~/.pyrorc.{pi,rho}
         }
 
-        private void Repl()
-        {
-            while (true)
-            {
-                try
-                {
+        private void Repl() {
+            while (true) {
+                try {
                     WritePrompt();
                     if (!Execute(GetInput()))
                         continue;
 
                     WriteDataStack();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Error($"{e.Message}");
                 }
             }
         }
 
-        private void WritePrompt()
-        {
+        private void WritePrompt() {
             // TODO: use a lock to ensure these go on same line.
             Write($"{_peer.Remote?.Socket?.RemoteEndPoint} ", ConsoleColor.DarkGray);
             Write($"{_context.Language}> ", ConsoleColor.Gray);
             Con.ForegroundColor = ConsoleColor.White;
         }
 
-        private string GetInput()
-        {
+        private string GetInput() {
             return Console.ReadLine();
             /* want to trap Ctrl-Keys
             var sb = new StringBuilder();
@@ -128,8 +115,7 @@
             */
         }
 
-        private bool PreProcess(string input)
-        {
+        private bool PreProcess(string input) {
             // Idea here was to allow execution of arbitrary commands in the current context.
             // This is a wonderfully stupid idea for security reasons, but still.
             // In any case, I've removed it for now.
@@ -156,8 +142,7 @@
             //    }
             // }
 
-            switch (input)
-            {
+            switch (input) {
                 case "?":
                 case "help":
                     return ShowHelp();
@@ -179,17 +164,14 @@
         /// First, we translate the input (which could be any supported language) to Pi.
         /// Then we convert that to Pi text and send to current server.
         /// </summary>
-        private bool Execute(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
+        private bool Execute(string input) {
+            if (string.IsNullOrEmpty(input)) {
                 // get refresh of remote data stack
                 _peer.Remote?.Continue(" ");
                 return true;
             }
 
-            try
-            {
+            try {
                 if (PreProcess(input))
                     return true;
 
@@ -197,9 +179,7 @@
                     return Error(_context.Error);
 
                 return _peer.Execute(cont.ToText());
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Error(e.Message);
                 _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");
             }
@@ -207,13 +187,11 @@
             return false;
         }
 
-        private void OnConnected(IPeer peer, IClient client)
-        {
+        private void OnConnected(IPeer peer, IClient client) {
             WriteLine($"Connected to {client}.");
         }
 
-        public static void WriteDataStackContents(INetCommon client, int max = 50)
-        {
+        public static void WriteDataStackContents(INetCommon client, int max = 50) {
             var str = new StringBuilder();
             // Make a copy as it could be changed by another network call while we're iterating over data stack.
             var results = client.Context.Executor.DataStack.ToList();
@@ -225,15 +203,13 @@
             WriteLine(str.ToString(), ConsoleColor.Yellow);
         }
 
-        private void WriteDataStack()
-        {
+        private void WriteDataStack() {
             var current = Con.ForegroundColor;
             WriteDataStackContents(_peer.Remote);
             Con.ForegroundColor = current;
         }
 
-        private bool ShowHelp()
-        {
+        private bool ShowHelp() {
             Con.WriteLine(
 @"
 The prompt shows the current executing context and language.
@@ -254,8 +230,7 @@ Press Ctrl-C to quit.
             return true;
         }
 
-        protected override void Shutdown()
-        {
+        protected override void Shutdown() {
             const ConsoleColor color = ConsoleColor.DarkGray;
             Error("Shutting down...", color);
             _peer?.Stop();

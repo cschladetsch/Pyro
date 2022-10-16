@@ -1,22 +1,18 @@
-﻿namespace Pyro.Test
-{
-    using System.IO;
+﻿namespace Pyro.Test {
     using NUnit.Framework;
+    using System.IO;
 
     [TestFixture]
     public class TestPiScripts
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestSnippets()
-        {
+        public void TestSnippets() {
             PiRun("1 1 + 2 == assert");
             PiRun("-1 -1 - 0 == assert");
         }
 
         [Test]
-        public void TestAssignment()
-        {
+        public void TestAssignment() {
             PiRun("1 'a #");
             Assert.AreEqual(1, _Scope["a"]);
             PiRun("2 'a # a a a + +");
@@ -24,14 +20,12 @@
         }
 
         [Test]
-        public void TestExistsAssert()
-        {
+        public void TestExistsAssert() {
             PiRun("'foo exists not assert");
         }
 
         [Test]
-        public void RunSomePiScripts()
-        {
+        public void RunSomePiScripts() {
             TestScript("Variables.pi");
             TestScript("Common.pi");
             TestScript("Arithmetic.pi");
@@ -53,8 +47,7 @@
         }
 
         //[Test]
-        public void RunAllPiScripts()
-        {
+        public void RunAllPiScripts() {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.pi"))
                 Assert.IsTrue(RunScriptPathname(file));
         }

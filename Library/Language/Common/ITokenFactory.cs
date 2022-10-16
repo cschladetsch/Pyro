@@ -1,5 +1,4 @@
-﻿namespace Pyro.Language
-{
+﻿namespace Pyro.Language {
     /// <summary>
     /// Required to make tokens based on different enumeration types.
     ///
@@ -10,8 +9,7 @@
     /// <typeparam name="TEnum">The token types for the language</typeparam>
     /// <typeparam name="TToken">A token in the lexer</typeparam>
     public interface ITokenFactory<in TEnum, out TToken>
-        where TToken : class, new()
-    {
+        where TToken : class, new() {
         void SetLexer(LexerBase lexer);
 
         TToken NewToken(TEnum en, Slice slice);

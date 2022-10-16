@@ -1,10 +1,8 @@
-﻿namespace Pyro.Language
-{
+﻿namespace Pyro.Language {
     /// <summary>
     /// The language type.
     /// </summary>
-    public enum ELanguage
-    {
+    public enum ELanguage {
         None,
         Pi,     // post-fix
         Rho,    // in-fix

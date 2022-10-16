@@ -1,5 +1,4 @@
-﻿namespace Pyro.Network.Unity
-{
+﻿namespace Pyro.Network.Unity {
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -7,8 +6,7 @@
     /// A group of resources that are watched by a collection of remote Clients.
     /// </summary>
     public class ResourceGroup
-        : ScriptableObject
-    {
+        : ScriptableObject {
         /// <summary>
         /// The remote clients that are receiving updates on this object or action.
         /// </summary>

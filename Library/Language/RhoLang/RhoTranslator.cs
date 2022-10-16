@@ -1,31 +1,27 @@
-﻿namespace Pyro.RhoLang
-{
-    using System;
-    using System.Linq;
+﻿namespace Pyro.RhoLang {
     using Exec;
+    using Language;
+    using Language.Impl;
+    using Language.Parser;
     using Lexer;
     using Parser;
-    using Language;
-    using Language.Parser;
-    using Language.Impl;
+    using System;
+    using System.Linq;
 
     /// <inheritdoc />
     /// <summary>
     /// Translate from Rho script to an executable Continuation.
     /// </summary>
     public class RhoTranslator
-        : TranslatorBase<RhoLexer, RhoParser>
-    {
+        : TranslatorBase<RhoLexer, RhoParser> {
         public RhoTranslator(IRegistry r)
-            : base(r)
-        {
+            : base(r) {
         }
 
         public override string ToString()
             => $"=== RhoTranslator:\n--- Input: {_Lexer.Input}--- Lexer: {_Lexer}\n--- Parser: {_Parser}\n--- Code: {Result}";
 
-        public override bool Translate(string text, out Continuation result, EStructure st = EStructure.Program)
-        {
+        public override bool Translate(string text, out Continuation result, EStructure st = EStructure.Program) {
             if (!base.Translate(text, out result, st))
                 return false;
 
@@ -52,10 +48,8 @@
         /// <summary>
         /// Translate given node into pi-code.
         /// </summary>
-        private bool Token(RhoAstNode node)
-        {
-            switch (node.RhoToken.Type)
-            {
+        private bool Token(RhoAstNode node) {
+            switch (node.RhoToken.Type) {
                 case ERhoToken.New:
                     return GenNew(node);
                 case ERhoToken.Assign:
@@ -66,7 +60,7 @@
                 case ERhoToken.Assert:
                     return AppendChildOp(node, EOperation.Assert);
                 case ERhoToken.If:
-                     return If(node);
+                    return If(node);
                 case ERhoToken.Write:
                     return AppendChildOp(node, EOperation.Write);
                 case ERhoToken.WriteLine:
@@ -147,8 +141,7 @@
             return Fail($"Unsupported RhoToken {node.Token.Type}");
         }
 
-        private bool GenNew(RhoAstNode node)
-        {
+        private bool GenNew(RhoAstNode node) {
             Append(new Label(node.Children[0].Text, true));
             return Append(EOperation.New);
         }
@@ -165,8 +158,7 @@
         private bool Block(RhoAstNode node)
             => GenerateChildren(node);
 
-        private bool PiSlice(RhoAstNode rhoNode)
-        {
+        private bool PiSlice(RhoAstNode rhoNode) {
             if (!(rhoNode.Value is PiAstNode piNode))
                 return InternalFail("PiAstNode type expected");
 
@@ -175,8 +167,7 @@
                 || Fail("Couldn't translate pi");
         }
 
-        private bool BinaryOp(RhoAstNode node, EOperation op)
-        {
+        private bool BinaryOp(RhoAstNode node, EOperation op) {
             Generate(node.GetChild(0));
             Generate(node.GetChild(1));
 
@@ -186,13 +177,11 @@
         /// <summary>
         /// Generate executable pi-code from given node.
         /// </summary>
-        private bool Generate(RhoAstNode node)
-        {
+        private bool Generate(RhoAstNode node) {
             if (node == null)
                 return InternalFail("Unexpected empty RhoAstNode");
 
-            switch (node.Type)
-            {
+            switch (node.Type) {
                 case ERhoAst.Suspend:
                     return Append(EOperation.Suspend);
 
@@ -224,8 +213,7 @@
             }
         }
 
-        private bool GenerateChildren(RhoAstNode node)
-        {
+        private bool GenerateChildren(RhoAstNode node) {
             foreach (var st in node.Children)
                 if (!Generate(st))
                     return InternalFail($"Failed to generate code for '{st}' from {node}");
@@ -233,37 +221,33 @@
             return true;
         }
 
-        private bool Assign(RhoAstNode node)
-        {
+        private bool Assign(RhoAstNode node) {
             var ch = node.Children;
             Generate(ch[0]);    // the r-value
 
-            switch (ch[1].Type)
-            {
-            case ERhoAst.TokenType:
-                switch (ch[1].Token.Type)
-                {
-                case ERhoToken.Ident:
-                    return AppendQuoted(ch[1]) && Append(EOperation.Assign);
-                }
-                break;
+            switch (ch[1].Type) {
+                case ERhoAst.TokenType:
+                    switch (ch[1].Token.Type) {
+                        case ERhoToken.Ident:
+                            return AppendQuoted(ch[1]) && Append(EOperation.Assign);
+                    }
+                    break;
 
-            case ERhoAst.GetMember:
-                ch = ch[1].Children;
-                var subject = ch[0];
-                var member = ch[1];
+                case ERhoAst.GetMember:
+                    ch = ch[1].Children;
+                    var subject = ch[0];
+                    var member = ch[1];
 
-                AppendQuoted(member);
-                Generate(subject);
+                    AppendQuoted(member);
+                    Generate(subject);
 
-                return Append(EOperation.SetMember);
+                    return Append(EOperation.SetMember);
             }
 
             return false;
         }
 
-        private bool Function(RhoAstNode node)
-        {
+        private bool Function(RhoAstNode node) {
             var ch = node.Children;
             var args = ch[1].Children;
             var block = ch[2].Children;
@@ -277,10 +261,9 @@
                 cont.AddArg(arg.Token.Text);
 
             return Append(cont);
-       }
+        }
 
-        private bool Call(RhoAstNode node)
-        {
+        private bool Call(RhoAstNode node) {
             var children = node.Children;
             var args = children[1].Children;
             var name = children[0];
@@ -298,8 +281,7 @@
             return true;
         }
 
-        private bool GetMember(RhoAstNode node)
-        {
+        private bool GetMember(RhoAstNode node) {
             var ch = node.Children;
             var subject = ch[0];
             var member = ch[1];
@@ -310,8 +292,7 @@
             return Append(EOperation.GetMember);
         }
 
-        private bool If(RhoAstNode node)
-        {
+        private bool If(RhoAstNode node) {
             var ch = node.Children;
             var test = ch[0];
             var thenBlock = ch[1];
@@ -329,11 +310,9 @@
             return Append(EOperation.Suspend);
         }
 
-        private bool For(RhoAstNode node)
-        {
+        private bool For(RhoAstNode node) {
             var ch = node.Children;
-            if (ch.Count == 3)
-            {
+            if (ch.Count == 3) {
                 // for (a in b) ...
                 AppendQuoted(ch[0]);
                 Generate(ch[1]);

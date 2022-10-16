@@ -1,14 +1,11 @@
-﻿namespace Pyro.Test
-{
+﻿namespace Pyro.Test {
     using NUnit.Framework;
 
     [TestFixture]
     public class TestRhoFreezeThaw
-        : TestCommon
-    {
+        : TestCommon {
         //[Test]
-        public void TestFreezeThaw()
-        {
+        public void TestFreezeThaw() {
             FreezeThaw("Add.rho");
             FreezeThaw("Variables.rho");
             FreezeThaw("Arithmetic.rho");

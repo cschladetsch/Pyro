@@ -1,5 +1,4 @@
-﻿namespace Pyro.RhoLang.Parser
-{
+﻿namespace Pyro.RhoLang.Parser {
     using Language;
     using Language.Impl;
     using Lexer;
@@ -10,21 +9,18 @@
     /// </summary>
     public partial class RhoParser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
-        , IParser
-    {
+        , IParser {
         public RhoAstNode Result => _Stack.Peek();
 
         private readonly EStructure _structure;
 
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
-            : base(lexer, reg)
-        {
+            : base(lexer, reg) {
             _Current = 0;
             _structure = st;
         }
 
-        public bool Process()
-        {
+        public bool Process() {
             if (_Lexer.Failed)
                 return Fail(_Lexer.Error);
 
@@ -33,14 +29,12 @@
             return Parse(_structure);
         }
 
-        private bool Parse(EStructure st)
-        {
+        private bool Parse(EStructure st) {
             if (st != EStructure.Expression)
                 _Stack.Push(NewNode(ERhoAst.Program));
 
             var result = false;
-            switch (st)
-            {
+            switch (st) {
                 case EStructure.Program:
                     result = Program();
                     break;
@@ -65,11 +59,9 @@
             return _Stack.Count == 1 || InternalFail("Semantic stack not empty after parsing");
         }
 
-        private bool Program()
-        {
+        private bool Program() {
             while (!Failed && !Try(ERhoToken.Nop))
-                if (!Statement())
-                {
+                if (!Statement()) {
                     var c = Current();
                     return c.Type == ERhoToken.Nop;
                 }
@@ -77,8 +69,7 @@
             return true;
         }
 
-        private bool Block()
-        {
+        private bool Block() {
             ConsumeNewLines();
 
             var indent = 0;
@@ -89,8 +80,7 @@
                 return false;
 
             Push(NewNode(ERhoAst.Block));
-            while (!Failed)
-            {
+            while (!Failed) {
                 if (Try(ERhoToken.Pass))
                     return true;
 
@@ -103,8 +93,7 @@
                 while (TryConsume(ERhoToken.Tab))
                     ++level;
 
-                if (level < indent)
-                {
+                if (level < indent) {
                     // return to start so top block can continue
                     _Current--;// -= indent;
                     return true;
@@ -117,8 +106,7 @@
             return false;
         }
 
-        private bool TryConsume(ERhoToken token)
-        {
+        private bool TryConsume(ERhoToken token) {
             ConsumeNewLines();
             if (!Try(token))
                 return false;
@@ -127,11 +115,9 @@
             return true;
         }
 
-        private void RemoveWhitespace()
-        {
+        private void RemoveWhitespace() {
             var prevNewLine = true;
-            foreach (var tok in _Lexer.Tokens)
-            {
+            foreach (var tok in _Lexer.Tokens) {
                 // remove useless consecutive newlines
                 var newLine = tok.Type == ERhoToken.NewLine;
                 if (prevNewLine && newLine)
@@ -139,8 +125,7 @@
 
                 prevNewLine = newLine;
 
-                switch (tok.Type)
-                {
+                switch (tok.Type) {
                     // keep tabs!
                     case ERhoToken.Space:
                     case ERhoToken.Comment:
@@ -151,8 +136,7 @@
             }
         }
 
-        private void ConsumeNewLines()
-        {
+        private void ConsumeNewLines() {
             while (Try(ERhoToken.NewLine))
                 Consume();
         }

@@ -1,12 +1,11 @@
-﻿namespace Pyro.Network.Impl
-{
-    using System;
-    using System.Net;
-    using System.Text;
-    using System.Linq;
-    using System.Net.Sockets;
-    using System.Collections.Generic;
+﻿namespace Pyro.Network.Impl {
     using Flow;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
 
     /// <inheritdoc cref="IPeer" />
     /// <summary>
@@ -14,8 +13,7 @@
     /// </summary>
     public class Peer
         : NetworkConsoleWriter
-        , IPeer
-    {
+        , IPeer {
         public string LocalHostName => GetLocalHostname();
 
         public event MessageHandler OnReceivedRequest;
@@ -34,33 +32,30 @@
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
 
-//        public event OnWriteDelegate OnWrite
-//        {
-//            add
-//            {
-//                base.OnWrite += value;
-//            }
-//            remove
-//            {
-//                base.OnWrite -= value;
-//            }
-//        }
+        //        public event OnWriteDelegate OnWrite
+        //        {
+        //            add
+        //            {
+        //                base.OnWrite += value;
+        //            }
+        //            remove
+        //            {
+        //                base.OnWrite -= value;
+        //            }
+        //        }
 
         private Server _server;
         private IClient _remote;
         private readonly List<IClient> _clients = new List<IClient>();
 
-        public Peer()
-        {
+        public Peer() {
         }
 
-        public Peer(int listenPort)
-        {
+        public Peer(int listenPort) {
             StartServer(listenPort);
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             var text = $"Peer: {Clients.Count} clients, ";
             if (_server != null)
                 text += $"{_server}";
@@ -70,8 +65,7 @@
             return $"\"{text}\"";
         }
 
-        public static void Register(IRegistry reg)
-        {
+        public static void Register(IRegistry reg) {
             reg.Register(new ClassBuilder<Peer>(reg)
                 .Methods
                     .Add<string, int, bool>("Connect", (q, s, p) => q.Connect(s, p))
@@ -94,25 +88,22 @@
             => _clients.FirstOrDefault(c => c.Socket == sender);
 
         public bool Listen()
-            =>  _server.Start();
+            => _server.Start();
 
         public void Received(Socket socket, string text)
             => OnReceivedResponse?.Invoke(FindClient(socket), text);
 
-        public void Leave()
-        {
-            if (_remote == _clients[0])
-            {
+        public void Leave() {
+            if (_remote == _clients[0]) {
                 Error("Cannot leave self");
                 return;
             }
-            
+
             // Go back to self-hosting.
             _remote = _clients[0];
         }
 
-        public bool Connect(string hostName, int port)
-        {
+        public bool Connect(string hostName, int port) {
             var client = new Client(this);
             if (!client.Connect(hostName, port))
                 return false;
@@ -121,12 +112,11 @@
             return true;
         }
 
-        public bool ShowStack(int i)
-        {
+        public bool ShowStack(int i) {
             if (i >= _clients.Count)
                 return Error("Invalid client number.");
             var client = _clients[i];
-            
+
             // TODO: this is copied from Console.Program.cs
             Console.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
@@ -140,12 +130,11 @@
             Console.Write(str.ToString());
             return true;
         }
-        
+
         public bool To(int n, string piScript)
             => n >= _clients.Count ? Error("Invalid client number.") : _clients[n].Continue(piScript);
 
-        public bool EnterClient(IClient client)
-        {
+        public bool EnterClient(IClient client) {
             if (client == null)
                 return Fail("Null client");
 
@@ -157,8 +146,7 @@
             return true;
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             WriteLine($"Closing {_clients.Count} connections");
             foreach (var client in _clients)
                 client.Close();
@@ -168,8 +156,7 @@
             _server = null;
         }
 
-        public TIAgent NewAgent<TIAgent>()
-        {
+        public TIAgent NewAgent<TIAgent>() {
             // TODO NEXT
             //var agent = _server.NewAgent<TIAgent>();
             //agent.Bind(this);
@@ -178,69 +165,57 @@
             throw new NotImplementedException();
         }
 
-        public IFuture<TIProxy> NewProxy<TIProxy>(Guid agentNetId)
-        {
+        public IFuture<TIProxy> NewProxy<TIProxy>(Guid agentNetId) {
             throw new NotImplementedException();
         }
 
-        public IFuture<TR> RemoteCall<TR>(NetId agentId, string methodName)
-        {
+        public IFuture<TR> RemoteCall<TR>(NetId agentId, string methodName) {
             throw new NotImplementedException();
         }
 
-        public IFuture<TR> RemoteCall<TR, T0>(NetId agentId, string methodName, T0 t0)
-        {
+        public IFuture<TR> RemoteCall<TR, T0>(NetId agentId, string methodName, T0 t0) {
             throw new NotImplementedException();
         }
 
-        public void SwitchClient(int n)
-        {
-            if (n >= _clients.Count)
-            {
+        public void SwitchClient(int n) {
+            if (n >= _clients.Count) {
                 Error($"Invalid client number {n}");
                 return;
             }
-            
+
             _remote = _clients[n];
         }
 
-        public IFuture<TR> RemoteCall<TR, T0, T1>(NetId agentId, string methodName, T0 t0, T1 t1)
-        {
+        public IFuture<TR> RemoteCall<TR, T0, T1>(NetId agentId, string methodName, T0 t0, T1 t1) {
             throw new NotImplementedException();
         }
 
-        public void NewConnection(Socket socket)
-        {
-            var client = new Client(this) {  Socket = socket};
+        public void NewConnection(Socket socket) {
+            var client = new Client(this) { Socket = socket };
             _clients.Add(client);
             OnConnected?.Invoke(this, client);
 
             WriteLine($"Connected to {socket.RemoteEndPoint}");
         }
 
-        private static string GetLocalHostname()
-        {
+        private static string GetLocalHostname() {
             var address = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             return address?.ToString() ?? "localhost";
         }
 
-        public void ShowEndPoints()
-        {
+        public void ShowEndPoints() {
             foreach (var client in _clients)
                 WriteLine($"{client.Socket.LocalEndPoint} -> {client.Socket.RemoteEndPoint}");
         }
-        
-        public void NewServerConnection(Socket socket)
-        {
+
+        public void NewServerConnection(Socket socket) {
             //WriteLine($"NewServerConn: {socket.RemoteEndPoint}");
-            var client = new Client(this) { Socket = socket};
+            var client = new Client(this) { Socket = socket };
             _clients.Add(client);
         }
-        private void StartServer(int listenPort)
-        {
+        private void StartServer(int listenPort) {
             _server = new Server(this, listenPort);
-            _server.ReceivedRequest += (client, text) => 
-            {
+            _server.ReceivedRequest += (client, text) => {
                 OnReceivedRequest?.Invoke(client, text);
             };
         }
@@ -254,8 +229,7 @@
         private int GetHostPort()
             => GetRemoteEndPoint()?.Port ?? 0;
 
-        private bool EnterRemote(IClient client)
-        {
+        private bool EnterRemote(IClient client) {
             if (client.Socket == null)
                 return false;
 
@@ -272,8 +246,7 @@
         /// </summary>
         /// <param name="port">The port to connect to.</param>
         /// <returns>True if connection made,</returns>
-        private bool SelfHost(int port)
-        {
+        private bool SelfHost(int port) {
             if (!Connect(GetLocalHostname(), port))
                 return Error("Couldn't connect to localhost");
 

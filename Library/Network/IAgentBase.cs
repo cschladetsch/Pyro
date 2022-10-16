@@ -1,5 +1,4 @@
-﻿namespace Pyro.Network
-{
+﻿namespace Pyro.Network {
     using System;
 
     /// <summary>
@@ -8,8 +7,7 @@
     /// An Agent is the server-side representation of an object
     /// that is network addresable.
     /// </summary>
-    public interface IAgentBase
-    {
+    public interface IAgentBase {
         Guid NetId { get; }
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Pyro.Exec;
+using System;
 using System.Linq;
 using System.Net.Sockets;
 
-using Pyro.Exec;
-
-namespace Pyro.Network.Impl
-{
+namespace Pyro.Network.Impl {
     /// <inheritdoc cref="IServer" />
     /// <summary>
     /// A server on the network executes incoming scripts and returns Executor data-stack
@@ -13,8 +11,7 @@ namespace Pyro.Network.Impl
     /// </summary>
     public class Server
         : NetCommon
-        , IServer
-    {
+        , IServer {
         public override Socket Socket
         {
             get => _listener;
@@ -29,8 +26,7 @@ namespace Pyro.Network.Impl
         private readonly int _port;
 
         public Server(Peer peer, int port)
-            : base(peer)
-        {
+            : base(peer) {
             RegisterTypes.Register(_Context.Registry);
 
             _port = port;
@@ -42,7 +38,7 @@ namespace Pyro.Network.Impl
             scope["server"] = this;
             // work
             //scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
-            
+
             // home
             scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
             scope["enter"] = TranslateRho("peer.Enter(2)");
@@ -51,10 +47,8 @@ namespace Pyro.Network.Impl
             _Context.Language = Language.ELanguage.Pi;
         }
 
-        private Continuation TranslateRho(string text)
-        {
-            if (!_Context.Translate(text, out var cont))
-            {
+        private Continuation TranslateRho(string text) {
+            if (!_Context.Translate(text, out var cont)) {
                 Error(_Context.Error);
                 return null;
             }
@@ -62,29 +56,24 @@ namespace Pyro.Network.Impl
             return cont;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Server: listening on {ListenPort}";
         }
 
-        public bool Start()
-        {
+        public bool Start() {
             var endPoint = GetLocalEndPoint(_port);
             if (endPoint == null)
                 return Fail($"Couldn't find suitable local endpoint using {_port}");
 
             var address = endPoint.Address;
             _listener = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            try
-            {
+            try {
                 _listener.Bind(endPoint);
                 _listener.Listen(RequestBacklogCount);
 
                 WriteLine($"Listening on {address}:{_port}");
                 Listen();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Error(e.Message);
                 Stop();
                 return false;
@@ -93,40 +82,31 @@ namespace Pyro.Network.Impl
             return true;
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             _Stopping = true;
             _listener?.Close();
             _listener = null;
         }
 
-        protected override bool ProcessReceived(Socket sender, string pi)
-        {
-            try
-            {
+        protected override bool ProcessReceived(Socket sender, string pi) {
+            try {
                 if (!RunLocally(pi))
                     return false;
 
                 // clear remote stack, send the datastack back as a list, then expand it to the remote stack, and drop the number of items that 'expand' adds to the stack
                 var stack = "clear " + _Registry.ToPiScript(Exec.DataStack.ToList()) + " expand drop";
                 return Send(sender, stack);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 var msg = $"{e.Message} {e.InnerException?.Message}";
                 Exec.Push($"Error: {msg}");
                 return Error(msg);
-            }
-            finally
-            {
+            } finally {
                 ReceivedRequest?.Invoke(_Peer.GetClient(sender), pi);
             }
         }
 
-        private bool RunLocally(string pi)
-        {
-            if (!_Context.Translate(pi, out var cont))
-            {
+        private bool RunLocally(string pi) {
+            if (!_Context.Translate(pi, out var cont)) {
                 Exec.Push(_Context.Error);
                 return Error(_Context.Error);
             }
@@ -137,20 +117,18 @@ namespace Pyro.Network.Impl
             cont = cont.Code[0] as Continuation;
             if (cont == null)
                 return Error("Server.RunLocally: Continuation expected");
-            
+
             cont.Scope = Exec.Scope;
             Exec.Continue(cont);
 
             return true;
         }
 
-        private void Listen()
-        {
+        private void Listen() {
             _listener.BeginAccept(ConnectRequest, null);
         }
 
-        private void ConnectRequest(IAsyncResult ar)
-        {
+        private void ConnectRequest(IAsyncResult ar) {
             if (_Stopping)
                 return;
 

@@ -1,5 +1,4 @@
-﻿namespace Pyro.Language.Impl
-{
+﻿namespace Pyro.Language.Impl {
     /// <inheritdoc />
     /// <summary>
     /// Common for all Language Parsers.
@@ -11,16 +10,14 @@
         where TLexer
             : ILexer
         where TParser
-            : IParser
-    {
+            : IParser {
         public TParser Parser => _Parser;
 
         protected TLexer _Lexer;
         protected TParser _Parser;
 
         protected TranslatorBase(IRegistry reg)
-            : base(reg)
-        {
+            : base(reg) {
         }
     }
 }

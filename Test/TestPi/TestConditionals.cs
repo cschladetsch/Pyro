@@ -1,14 +1,11 @@
-﻿namespace Pyro.Test
-{
+﻿namespace Pyro.Test {
     using NUnit.Framework;
 
     [TestFixture]
     public class TestConditionals
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestIfElse()
-        {
+        public void TestIfElse() {
             PiRun("1 true if");
             AssertPop(1);
 

@@ -1,5 +1,4 @@
-﻿namespace Pyro.RhoLang.Lexer
-{
+﻿namespace Pyro.RhoLang.Lexer {
     using Language;
     using Pyro.Language.Impl;
     using System.Diagnostics.CodeAnalysis;
@@ -9,15 +8,12 @@
     /// Lexer for the Rho language
     /// </summary>
     public class RhoLexer
-        : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory>
-    {
+        : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory> {
         public RhoLexer(string input)
-            : base(input)
-        {
+            : base(input) {
         }
 
-        protected override void AddKeyWords()
-        {
+        protected override void AddKeyWords() {
             _KeyWords.Add("break", ERhoToken.Break);
             _KeyWords.Add("if", ERhoToken.If);
             _KeyWords.Add("else", ERhoToken.Else);
@@ -37,9 +33,8 @@
             _KeyWords.Add("class", ERhoToken.Class);
         }
 
-        [SuppressMessage("NDepend", "ND1003:AvoidMethodsTooBigTooComplex", Justification="This is practically irreducible")]
-        protected override bool NextToken()
-        {
+        [SuppressMessage("NDepend", "ND1003:AvoidMethodsTooBigTooComplex", Justification = "This is practically irreducible")]
+        protected override bool NextToken() {
             var current = Current();
             if (current == 0)
                 return false;
@@ -47,11 +42,9 @@
             if (char.IsLetter(current) || current == '_')
                 return IdentOrKeyword();
 
-            if (char.IsDigit(current))
-            {
+            if (char.IsDigit(current)) {
                 var start = Gather(char.IsDigit);
-                if (Current() == '.')
-                {
+                if (Current() == '.') {
                     Next();
                     var end = Gather(char.IsDigit);
                     if (start.LineNumber != end.LineNumber)
@@ -63,84 +56,80 @@
                 return AddSlice(ERhoToken.Int, start);
             }
 
-            switch (current)
-            {
-            case Pathname.Quote: return Add(ERhoToken.Quote);
-            // TODO: This means we can't use ` at all in embedded Pi code.
-            case '`': return AddEmbeddedPi();
-            case '{': return Add(ERhoToken.OpenBrace);
-            case '}': return Add(ERhoToken.CloseBrace);
-            case '(': return Add(ERhoToken.OpenParan);
-            case ')': return Add(ERhoToken.CloseParan);
-            case ':': return Add(ERhoToken.Colon);
-            case ' ': return AddSlice(ERhoToken.Space, Gather(c => c == ' '));
-            case ',': return Add(ERhoToken.Comma);
-            case '*': return Add(ERhoToken.Multiply);
-            case '[': return Add(ERhoToken.OpenSquareBracket);
-            case ']': return Add(ERhoToken.CloseSquareBracket);
-            case '=': return AddIfNext('=', ERhoToken.Equiv, ERhoToken.Assign);
-            case '!': return AddIfNext('=', ERhoToken.NotEquiv, ERhoToken.Not);
-            case '&': return AddIfNext('&', ERhoToken.And, ERhoToken.BitAnd);
-            case '|': return AddIfNext('|', ERhoToken.Or, ERhoToken.BitOr);
-            case '<': return AddIfNext('=', ERhoToken.LessEquiv, ERhoToken.Less);
-            case '>': return AddIfNext('=', ERhoToken.GreaterEquiv, ERhoToken.Greater);
-            case '"': return LexString();
-            case '^': return Add(ERhoToken.Xor);
-            case ';': return Add(ERhoToken.Semi);
-            case '\t': return Add(ERhoToken.Tab);
-            case '\r':
-            {
-                // fuck I hate this
-                Next();
-                return true;
-            }
-            case '\n': return Add(ERhoToken.NewLine);
-            case '-':
-                if (char.IsDigit(Peek()))
-                    return AddSlice(ERhoToken.Int, Gather(char.IsDigit));
-                if (Peek() == '-')
-                    return AddTwoCharOp(ERhoToken.Decrement);
-                if (Peek() == '=')
-                    return AddTwoCharOp(ERhoToken.MinusAssign);
-                return Add(ERhoToken.Minus);
-
-            case '.':
-                if (Peek() == '.')
-                {
-                    Next();
-                    if (Peek() == '.')
-                    {
+            switch (current) {
+                case Pathname.Quote: return Add(ERhoToken.Quote);
+                // TODO: This means we can't use ` at all in embedded Pi code.
+                case '`': return AddEmbeddedPi();
+                case '{': return Add(ERhoToken.OpenBrace);
+                case '}': return Add(ERhoToken.CloseBrace);
+                case '(': return Add(ERhoToken.OpenParan);
+                case ')': return Add(ERhoToken.CloseParan);
+                case ':': return Add(ERhoToken.Colon);
+                case ' ': return AddSlice(ERhoToken.Space, Gather(c => c == ' '));
+                case ',': return Add(ERhoToken.Comma);
+                case '*': return Add(ERhoToken.Multiply);
+                case '[': return Add(ERhoToken.OpenSquareBracket);
+                case ']': return Add(ERhoToken.CloseSquareBracket);
+                case '=': return AddIfNext('=', ERhoToken.Equiv, ERhoToken.Assign);
+                case '!': return AddIfNext('=', ERhoToken.NotEquiv, ERhoToken.Not);
+                case '&': return AddIfNext('&', ERhoToken.And, ERhoToken.BitAnd);
+                case '|': return AddIfNext('|', ERhoToken.Or, ERhoToken.BitOr);
+                case '<': return AddIfNext('=', ERhoToken.LessEquiv, ERhoToken.Less);
+                case '>': return AddIfNext('=', ERhoToken.GreaterEquiv, ERhoToken.Greater);
+                case '"': return LexString();
+                case '^': return Add(ERhoToken.Xor);
+                case ';': return Add(ERhoToken.Semi);
+                case '\t': return Add(ERhoToken.Tab);
+                case '\r': {
+                        // fuck I hate this
                         Next();
-                        return Add(ERhoToken.Resume, 3);
+                        return true;
                     }
-                    return Fail("Two dots doesn't work.");
-                }
-                return Add(ERhoToken.Dot);
+                case '\n': return Add(ERhoToken.NewLine);
+                case '-':
+                    if (char.IsDigit(Peek()))
+                        return AddSlice(ERhoToken.Int, Gather(char.IsDigit));
+                    if (Peek() == '-')
+                        return AddTwoCharOp(ERhoToken.Decrement);
+                    if (Peek() == '=')
+                        return AddTwoCharOp(ERhoToken.MinusAssign);
+                    return Add(ERhoToken.Minus);
 
-            case '+':
-                if (Peek() == '+')
-                    return AddTwoCharOp(ERhoToken.Increment);
-                if (Peek() == '=')
-                    return AddTwoCharOp(ERhoToken.PlusAssign);
-                return Add(ERhoToken.Plus);
+                case '.':
+                    if (Peek() == '.') {
+                        Next();
+                        if (Peek() == '.') {
+                            Next();
+                            return Add(ERhoToken.Resume, 3);
+                        }
+                        return Fail("Two dots doesn't work.");
+                    }
+                    return Add(ERhoToken.Dot);
 
-            case '/':
-                if (Peek() == '/')
-                {
-                    Next();
-                    var start = _offset + 1;
-                    while (Next() != '\n')
-                        /* skip comment */;
+                case '+':
+                    if (Peek() == '+')
+                        return AddTwoCharOp(ERhoToken.Increment);
+                    if (Peek() == '=')
+                        return AddTwoCharOp(ERhoToken.PlusAssign);
+                    return Add(ERhoToken.Plus);
 
-                    var comment = _Factory.NewToken(
-                        ERhoToken.Comment,
-                        new Slice(this, start, _offset));
-                    _Tokens.Add(comment);
-                    return true;
-                }
+                case '/':
+                    if (Peek() == '/') {
+                        Next();
+                        var start = _offset + 1;
+                        while (Next() != '\n')
+                            /* skip comment */
+                            ;
 
-                //return LexError("/ is not a valid RhoToken");//Add(ERhoToken.Divide);
-                return Add(ERhoToken.Separator);
+                        var comment = _Factory.NewToken(
+                            ERhoToken.Comment,
+                            new Slice(this, start, _offset));
+                        _Tokens.Add(comment);
+                        return true;
+                    }
+
+                    //return LexError("/ is not a valid RhoToken");//Add(ERhoToken.Divide);
+                    return Add(ERhoToken.Separator);
             }
 
             LexError($"Unrecognised RhoToken '{current}'.");
@@ -148,16 +137,14 @@
             return false;
         }
 
-        private bool AddEmbeddedPi()
-        {
+        private bool AddEmbeddedPi() {
             Next();
             AddSlice(ERhoToken.PiSlice, Gather(c => c != '`'));
             Next();
             return true;
         }
 
-        protected override void AddKeywordOrIdent(Slice slice)
-        {
+        protected override void AddKeywordOrIdent(Slice slice) {
             _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
                 ? _Factory.NewToken(tok, slice)
                 : _Factory.NewTokenIdent(slice));

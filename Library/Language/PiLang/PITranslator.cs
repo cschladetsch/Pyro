@@ -1,32 +1,28 @@
-﻿namespace Pyro.Language
-{
-    using System;
-    using System.Linq;
-    using System.Collections.Generic;
+﻿namespace Pyro.Language {
     using Exec;
     using Impl;
     using Lexer;
     using Parser;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <inheritdoc />
     /// <summary>
     /// Translates input Pi text source code to an executable Continuation.
     /// </summary>
     public class PiTranslator
-        : TranslatorBase<PiLexer, PiParser>
-    {
+        : TranslatorBase<PiLexer, PiParser> {
         private Continuation _continuation;
 
         public PiTranslator(IRegistry reg)
-            : base(reg)
-        {
+            : base(reg) {
         }
 
         public override bool Translate(
             string input,
             out Continuation result,
-            EStructure st = EStructure.Program)
-        {
+            EStructure st = EStructure.Program) {
             if (!base.Translate(input, out result, st))
                 return false;
 
@@ -57,10 +53,8 @@
         public bool TranslateNode(PiAstNode node, IList<object> objects)
             => node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
 
-        private bool AddNode(PiAstNode piAst, IList<object> objects)
-        {
-            switch (piAst.Type)
-            {
+        private bool AddNode(PiAstNode piAst, IList<object> objects) {
+            switch (piAst.Type) {
                 case EPiAst.None:
                     break;
                 case EPiAst.TokenType:
@@ -80,14 +74,12 @@
             return true;
         }
 
-        private static void AddToken(PiAstNode node, ICollection<object> objects)
-        {
+        private static void AddToken(PiAstNode node, ICollection<object> objects) {
             var token = node.PiToken;
             // TODO: use a map or even have the Executor execute Pi tokens to avoid this pointless duplication.
             // There just ended up being a huge amount of pi tokens that simply map directly to operations.
             // This wasn't obvious at first, and is not true in most languages!
-            switch (token.Type)
-            {
+            switch (token.Type) {
                 case EPiToken.Assign:
                     objects.Add(EOperation.Assign);
                     break;
@@ -271,13 +263,11 @@
             }
         }
 
-        private static bool TranslateMap(PiAstNode piAst, IList<object> objects)
-        {
+        private static bool TranslateMap(PiAstNode piAst, IList<object> objects) {
             throw new NotImplementedException("TranslateMap");
         }
 
-        private bool TranslateArray(PiAstNode piAstNode, IList<object> objects)
-        {
+        private bool TranslateArray(PiAstNode piAstNode, IList<object> objects) {
             var array = new List<object>();
             if (!TranslateNode(piAstNode, array))
                 return Fail($"Failed to translate ${piAstNode}");
@@ -285,8 +275,7 @@
             return true;
         }
 
-        private bool TranslateContinuation(PiAstNode piAstNode, IList<object> objects)
-        {
+        private bool TranslateContinuation(PiAstNode piAstNode, IList<object> objects) {
             var cont = Continuation.New(_reg);
             if (!TranslateNode(piAstNode, cont.Code))
                 return Fail($"Failed to translate ${piAstNode}");

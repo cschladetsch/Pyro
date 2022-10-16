@@ -1,6 +1,4 @@
-﻿namespace Pyro.BuiltinTypes
-{
-    public class Void
-    {
+﻿namespace Pyro.BuiltinTypes {
+    public class Void {
     }
 }

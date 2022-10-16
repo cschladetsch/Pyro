@@ -1,20 +1,16 @@
-﻿namespace Pyro.TestCore
-{
+﻿namespace Pyro.TestCore {
+    using Impl;
     using NUnit.Framework;
     using Pyro;
-    using Impl;
 
-    public class Foo
-    {
+    public class Foo {
         public IRef<int> Num;
     }
 
     [TestFixture]
-    public class TestRegistry
-    {
+    public class TestRegistry {
         [Test]
-        public void TestValues()
-        {
+        public void TestValues() {
             var reg = new Registry();
             var num = reg.Add(42);
             Assert.IsNotNull(num);
@@ -31,8 +27,7 @@
         }
 
         [Test]
-        public void TestReferenceFields()
-        {
+        public void TestReferenceFields() {
             var reg = new Registry();
             IRef<Foo> foo = reg.Add(new Foo());
             Assert.AreSame(foo.Class.Type, typeof(Foo));

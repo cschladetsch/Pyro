@@ -1,25 +1,20 @@
-﻿namespace Pyro.Test.Rho
-{
+﻿namespace Pyro.Test.Rho {
     using NUnit.Framework;
 
-    public class Inner
-    {
+    public class Inner {
         public string s;
     }
 
-    public class Class
-    {
+    public class Class {
         public int n;
         public Inner inner = new Inner();
     }
 
     [TestFixture]
     public class TestRhoNativeObject
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestString()
-        {
+        public void TestString() {
             RhoRun(
 @"a = ""foobar""
 ");
@@ -53,8 +48,7 @@ assert(d == ""ar"")
         }
 
         [Test]
-        public void TestNew()
-        {
+        public void TestNew() {
             RhoRun(@"
 k=new ""Pyro.Test.Rho.Class,TestRho"" // Need to use fully-qualified name and also Assembly name.
 k.n=42

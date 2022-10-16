@@ -1,22 +1,17 @@
-﻿using System;
-
-namespace Pyro.Network.Unity
-{
+﻿namespace Pyro.Network.Unity {
     using UnityEngine;
 
     /// <summary>
     /// An Object Transform that is shared across the network.
     /// </summary>
     public class SharedTransform
-        : Common
-    {
+        : Common {
         public Vector3 Position;
         public Quaternion Rotation;
         public float MinDeltaPosition = 0.1f;
         public float MinDeltaRotation = 0.1f;
 
-        private void Update()
-        {
+        private void Update() {
         }
     }
 }

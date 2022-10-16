@@ -1,11 +1,8 @@
-﻿namespace Pyro.Language.Lexer
-{
+﻿namespace Pyro.Language.Lexer {
     using Exec;
 
-    public partial class PiLexer
-    {
-        protected override void AddKeyWords()
-        {
+    public partial class PiLexer {
+        protected override void AddKeyWords() {
             AddKeyword("break", EPiToken.Break);
             AddKeyword("if", EPiToken.If);
             AddKeyword("ife", EPiToken.IfElse);
@@ -62,14 +59,12 @@
             AddKeyword("set_float_precision", EPiToken.SetFloatPrecision);
         }
 
-        private void AddKeyword(string str, EPiToken tok)
-        {
+        private void AddKeyword(string str, EPiToken tok) {
             _KeyWords.Add(str, tok);
             _KeyWordsInvert.Add(tok, str);
         }
 
-        private static void CreateOpToToken()
-        {
+        private static void CreateOpToToken() {
             if (_opToToken.Count > 0)
                 return;
 

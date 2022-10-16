@@ -1,8 +1,8 @@
 ﻿namespace Pyro.Exec {
     using System;
-    using System.Text;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Text;
 
     /// <summary>
     /// Also known as a co-routine.

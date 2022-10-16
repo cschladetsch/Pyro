@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Pyro.Language.Impl
-{
+namespace Pyro.Language.Impl {
     /// <inheritdoc />
     /// <summary>
     /// Common for all Parsers.
@@ -19,8 +18,7 @@ namespace Pyro.Language.Impl
             where TTokenNode
                 : class, ITokenNode<ETokenEnum>
             where TAstNode
-                : class
-    {
+                : class {
         /// <summary>
         /// The list of input tokens.
         /// </summary>
@@ -48,14 +46,12 @@ namespace Pyro.Language.Impl
         protected AstFactory _AstFactory = new AstFactory();
 
         protected ParserCommon(TLexer lexer, IRegistry reg)
-            : base(reg)
-        {
+            : base(reg) {
             _Current = 0;
             _Lexer = lexer;
         }
 
-        public string PrintTree()
-        {
+        public string PrintTree() {
             if (_Stack.Count == 0)
                 return "[Empty]";
 
@@ -64,8 +60,7 @@ namespace Pyro.Language.Impl
             return str.ToString();
         }
 
-        private void PrintTree(StringBuilder str, int level, TAstNode root)
-        {
+        private void PrintTree(StringBuilder str, int level, TAstNode root) {
             var val = root.ToString();
             if (string.IsNullOrEmpty(val))
                 return;
@@ -94,8 +89,7 @@ namespace Pyro.Language.Impl
         private bool StackHas()
             => _Stack.Count > 0 || FailLocation("Empty context stack");
 
-        protected bool Push(TAstNode node)
-        {
+        protected bool Push(TAstNode node) {
             if (node == null)
                 throw new NullValueException();
 
@@ -103,8 +97,7 @@ namespace Pyro.Language.Impl
             return true;
         }
 
-        protected bool Append(TAstNode obj)
-        {
+        protected bool Append(TAstNode obj) {
             if (obj == null)
                 return FailLocation("Cannot add Null object to internal parse stack");
 
@@ -115,21 +108,18 @@ namespace Pyro.Language.Impl
             return true;
         }
 
-        protected TAstNode PushConsume()
-        {
+        protected TAstNode PushConsume() {
             var node = NewNode(Consume());
             Push(node);
             return node;
         }
 
-        protected bool PushConsumed()
-        {
+        protected bool PushConsumed() {
             PushConsume();
             return true;
         }
 
-        protected TTokenNode Next()
-        {
+        protected TTokenNode Next() {
             if (_Current != _Tokens.Count)
                 return _Tokens[++_Current];
 
@@ -137,8 +127,7 @@ namespace Pyro.Language.Impl
             throw new Exception("Expected more");
         }
 
-        protected TTokenNode Current()
-        {
+        protected TTokenNode Current() {
             if (Has())
                 return _Tokens[_Current];
 
@@ -146,8 +135,7 @@ namespace Pyro.Language.Impl
             throw new Exception("Expected something");
         }
 
-        protected TTokenNode Consume()
-        {
+        protected TTokenNode Consume() {
             if (_Current != _Tokens.Count)
                 return _Tokens[_Current++];
 
@@ -155,8 +143,7 @@ namespace Pyro.Language.Impl
             throw new NotImplementedException("Expected something");
         }
 
-        protected TAstNode Expect(ETokenEnum type)
-        {
+        protected TAstNode Expect(ETokenEnum type) {
             var tok = Current();
             if (!tok.Type.Equals(type))
                 FailLocation($"Expected {type}, have {tok}");

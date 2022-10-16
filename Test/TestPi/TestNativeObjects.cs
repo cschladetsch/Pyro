@@ -1,33 +1,27 @@
-namespace Pyro.Test
-{
-     using System.Collections.Generic;
-    using NUnit.Framework;
+namespace Pyro.Test {
     using Language.Lexer;
+    using NUnit.Framework;
+    using System.Collections.Generic;
 
     [TestFixture]
     public class TestNativeObjects
-        : TestCommon
-    {
-        public class UserModel
-        {
+        : TestCommon {
+        public class UserModel {
             public string Name { get; set; }
             public string Email { get; set; }
             public int Age { get; set; }
 
-            public string GetFoo()
-            {
+            public string GetFoo() {
                 return "Foo";
             }
 
-            public string GetString()
-            {
+            public string GetString() {
                 return $"{Name}:{Email}:{Age}";
             }
         }
 
         [Test]
-        public void TestNew()
-        {
+        public void TestNew() {
             AssertSameTokens("new", EPiToken.New);
             _Registry.Register(new ClassBuilder<UserModel>(_Registry)
                 .Class);
@@ -41,8 +35,7 @@ namespace Pyro.Test
         }
 
         [Test]
-        public void TestList()
-        {
+        public void TestList() {
             PiRun("[] 'a # 42 'Add a .@ & a");
             var list = Pop<List<object>>();
             Assert.AreEqual(1, list.Count);
@@ -50,8 +43,7 @@ namespace Pyro.Test
         }
 
         [Test]
-        public void TestString()
-        {
+        public void TestString() {
             AssertSameTokens("#", EPiToken.Store);
 
             const string pre0 = "\"foobar\" 's # ";

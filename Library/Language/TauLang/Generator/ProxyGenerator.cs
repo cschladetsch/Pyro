@@ -1,6 +1,4 @@
-﻿namespace Pyro.Language.Tau
-{
-    public class ProxyGenerator
-    {
+﻿namespace Pyro.Language.Tau {
+    public class ProxyGenerator {
     }
 }

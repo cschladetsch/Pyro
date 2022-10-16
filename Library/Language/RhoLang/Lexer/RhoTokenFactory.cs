@@ -1,5 +1,4 @@
-﻿namespace Pyro.RhoLang.Lexer
-{
+﻿namespace Pyro.RhoLang.Lexer {
     using Language;
 
     /// <inheritdoc />
@@ -7,8 +6,7 @@
     /// How to make new Rho token nodes given slices and/or token types.
     /// </summary>
     public class RhoTokenFactory
-        : ITokenFactory<ERhoToken, RhoToken>
-    {
+        : ITokenFactory<ERhoToken, RhoToken> {
         private LexerBase _lexer;
 
         public void SetLexer(LexerBase lexer) => _lexer = lexer;

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pyro.Impl
-{
+namespace Pyro.Impl {
     internal class Tree
-        : ITree
-    {
+        : ITree {
         public IConstRefBase Root { get; set; }
         public IConstRefBase Scope { get; set; }
         public IConstRefBase Parent { get; }
@@ -13,8 +11,7 @@ namespace Pyro.Impl
 
         private IConstRefBase _scope;
 
-        public object Resolve(IIdentifer ident)
-        {
+        public object Resolve(IIdentifer ident) {
             if (!(Scope is IConstRefBase cr))
                 return GetNative(ident.ToText());
             if (cr.Scope.TryGetValue(ident.ToText(), out var obj))
@@ -23,8 +20,7 @@ namespace Pyro.Impl
             return null;
         }
 
-        private object GetNative(string ident)
-        {
+        private object GetNative(string ident) {
             var ty = GetType();
 
             var field = ty.GetField(ident);
@@ -42,8 +38,7 @@ namespace Pyro.Impl
             return null;
         }
 
-        public object Resolve(IPathname path)
-        {
+        public object Resolve(IPathname path) {
             throw new NotImplementedException();
         }
     }

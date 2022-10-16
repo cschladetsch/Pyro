@@ -1,13 +1,11 @@
-﻿namespace Pyro.Language.Lexer
-{
+﻿namespace Pyro.Language.Lexer {
     /// <inheritdoc />
     /// <summary>
     /// How to make new Pi token nodes given slices and/or token types.
     /// on generic types.
     /// </summary>
     public class PiTokenFactory
-        : ITokenFactory<EPiToken, PiToken>
-    {
+        : ITokenFactory<EPiToken, PiToken> {
         private LexerBase _lexer;
 
         public void SetLexer(LexerBase lexer) => _lexer = lexer;

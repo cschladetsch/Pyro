@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pyro
-{
+namespace Pyro {
     /// <inheritdoc cref="IReflected{T}" />
     /// <summary>
     /// TODO
@@ -11,8 +10,7 @@ namespace Pyro
     /// <typeparam name="T"></typeparam>
     public class Reflected<T>
         : ReflectedBase
-        , IReflected<T>
-    {
+        , IReflected<T> {
         public IDictionary<string, object> Scope
         {
             get => _scope ?? (_scope = new Dictionary<string, object>());
@@ -32,8 +30,7 @@ namespace Pyro
             }
         }
 
-        public string ToText()
-        {
+        public string ToText() {
             var str = new StringBuilder();
             Self.Class.ToPiScript(str, Self.Value);
             return str.ToString();

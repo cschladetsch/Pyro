@@ -1,11 +1,9 @@
-﻿namespace Pyro.Language
-{
+﻿namespace Pyro.Language {
     /// <summary>
     /// Common for all tokens.
     /// </summary>
     /// <typeparam name="TEnum">The enumeration type to specify a token type.</typeparam>
-    public interface ITokenBase<TEnum>
-    {
+    public interface ITokenBase<TEnum> {
         /// <summary>
         /// The type of the token.
         /// </summary>

@@ -1,5 +1,4 @@
-﻿namespace Pyro.RhoLang.Parser
-{
+﻿namespace Pyro.RhoLang.Parser {
     using Language.Lexer;
     using Language.Parser;
     using Lexer;
@@ -9,20 +8,17 @@
     ///
     /// NOTE in Rho, a statement can also be an expression.
     /// </summary>
-    public partial class RhoParser
-    {
-        private bool Expression()
-        {
+    public partial class RhoParser {
+        private bool Expression() {
             if (!Logical())
                 return false;
 
-            if (   Try(ERhoToken.Assign)
+            if (Try(ERhoToken.Assign)
                 || Try(ERhoToken.PlusAssign)
                 || Try(ERhoToken.MinusAssign)
                 || Try(ERhoToken.MulAssign)
                 || Try(ERhoToken.DivAssign)
-               )
-            {
+               ) {
                 var assign = NewNode(Consume());
                 var ident = Pop();
                 if (!Logical())
@@ -36,13 +32,11 @@
             return true;
         }
 
-        private bool Logical()
-        {
+        private bool Logical() {
             if (!Relational())
                 return false;
 
-            while (Try(ERhoToken.And) || Try(ERhoToken.Or) || Try(ERhoToken.Xor))
-            {
+            while (Try(ERhoToken.And) || Try(ERhoToken.Or) || Try(ERhoToken.Xor)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
@@ -55,19 +49,17 @@
             return true;
         }
 
-        private bool Relational()
-        {
+        private bool Relational() {
             if (!Additive())
                 return false;
 
-            while (   Try(ERhoToken.Less)
+            while (Try(ERhoToken.Less)
                    || Try(ERhoToken.Greater)
                    || Try(ERhoToken.Equiv)
                    || Try(ERhoToken.NotEquiv)
                    || Try(ERhoToken.LessEquiv)
                    || Try(ERhoToken.GreaterEquiv)
-                )
-            {
+                ) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Additive())
@@ -80,11 +72,9 @@
             return true;
         }
 
-        private bool Additive()
-        {
+        private bool Additive() {
             // unary +/- operator
-            if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
-            {
+            if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus)) {
                 var signed = NewNode(Consume());
                 if (!Term())
                     return FailLocation("Term expected");
@@ -93,8 +83,7 @@
                 return Push(signed);
             }
 
-            if (Try(ERhoToken.Not))
-            {
+            if (Try(ERhoToken.Not)) {
                 var negate = NewNode(Consume());
                 if (!Additive())
                     return FailLocation("Additive sub-component expected");
@@ -106,8 +95,7 @@
             if (!Term())
                 return false;
 
-            while (Try(ERhoToken.Plus) || Try(ERhoToken.Minus))
-            {
+            while (Try(ERhoToken.Plus) || Try(ERhoToken.Minus)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Term())
@@ -120,13 +108,11 @@
             return true;
         }
 
-        private bool Term()
-        {
+        private bool Term() {
             if (!Factor())
                 return false;
 
-            while (Try(ERhoToken.Multiply) || Try(ERhoToken.Divide))
-            {
+            while (Try(ERhoToken.Multiply) || Try(ERhoToken.Divide)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Factor())
@@ -139,8 +125,7 @@
             return true;
         }
 
-        private bool Factor()
-        {
+        private bool Factor() {
             if (Try(ERhoToken.New))
                 return New();
 
@@ -159,21 +144,19 @@
             if (Try(ERhoToken.Ident) || Try(ERhoToken.Pathname))
                 return FactorIdent();
 
-            if (   Try(ERhoToken.Int)
+            if (Try(ERhoToken.Int)
                 || Try(ERhoToken.Float)
                 || Try(ERhoToken.String)
                 || Try(ERhoToken.True)
                 || Try(ERhoToken.False)
-                )
-            {
+                ) {
                 return PushConsumed();
             }
 
             return false;
         }
 
-        private bool New()
-        {
+        private bool New() {
             var @new = NewNode(Consume());
             if (Expression())
                 @new.Add(Pop());
@@ -183,11 +166,9 @@
             return Push(@new);
         }
 
-        private bool AddList()
-        {
+        private bool AddList() {
             var list = NewNode(ERhoAst.List);
-            while (true)
-            {
+            while (true) {
                 if (TryConsume(ERhoToken.CloseBrace))
                     break;
 
@@ -206,8 +187,7 @@
                 : Push(list);
         }
 
-        private bool Paran()
-        {
+        private bool Paran() {
             var exp = NewNode(Consume());
             if (!Expression())
                 return FailLocation("Expected an expression");
@@ -225,8 +205,7 @@
             return Push(exp);
         }
 
-        private bool Pi()
-        {
+        private bool Pi() {
             var input = Current().Text;
             var lexer = new PiLexer(input);
             if (!lexer.Process())
@@ -242,29 +221,20 @@
             return true;
         }
 
-        private bool FactorIdent()
-        {
+        private bool FactorIdent() {
             PushConsume();
 
-            while (!Failed)
-            {
-                if (Try(ERhoToken.Dot))
-                {
+            while (!Failed) {
+                if (Try(ERhoToken.Dot)) {
                     if (!GetMember())
                         return false;
-                }
-                else if (Try(ERhoToken.OpenParan))
-                {
+                } else if (Try(ERhoToken.OpenParan)) {
                     if (!Call())
                         return false;
-                }
-                else if (Try(ERhoToken.OpenSquareBracket))
-                {
+                } else if (Try(ERhoToken.OpenSquareBracket)) {
                     if (!IndexOp())
                         return false;
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
@@ -272,8 +242,7 @@
             return !Failed;
         }
 
-        private bool GetMember()
-        {
+        private bool GetMember() {
             Consume();
 
             var get = NewNode(ERhoAst.GetMember);
@@ -283,8 +252,7 @@
             return Push(get);
         }
 
-        private bool Call()
-        {
+        private bool Call() {
             // eat the opening paranthesis
             Consume();
 
@@ -297,11 +265,9 @@
             call.Add(args);
             Push(call);
 
-            if (Expression())
-            {
+            if (Expression()) {
                 args.Add(Pop());
-                while (Try(ERhoToken.Comma))
-                {
+                while (Try(ERhoToken.Comma)) {
                     Consume();
                     if (!Expression())
                         return FailLocation("Argument expected");
@@ -314,8 +280,7 @@
             return true;
         }
 
-        private bool IndexOp()
-        {
+        private bool IndexOp() {
             Consume();
 
             var index = NewNode(ERhoAst.IndexOp);

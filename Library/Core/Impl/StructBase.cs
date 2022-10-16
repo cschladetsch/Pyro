@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Pyro.Impl
-{
+namespace Pyro.Impl {
     /// <summary>
     /// Common for all instance types
     /// </summary>
-    public class StructBase : IStructBase
-    {
+    public class StructBase : IStructBase {
         public Type InstanceType { get; }
         public AssemblyName Assembly => _assembly;
         public Version Version => _version;
@@ -28,8 +26,7 @@ namespace Pyro.Impl
         protected readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
         protected readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
 
-        internal StructBase(IRegistry reg, Type type)
-        {
+        internal StructBase(IRegistry reg, Type type) {
             _type = type;
             _registry = reg;
             InstanceType = type;
@@ -44,52 +41,45 @@ namespace Pyro.Impl
             foreach (var method in type.GetMethods())
                 _methods[method.Name] = method;
 
-             foreach (var ev in type.GetEvents())
+            foreach (var ev in type.GetEvents())
                 _events[ev.Name] = ev;
         }
 
-        public void SetProperty(IRefBase obj, string name, object value)
-        {
+        public void SetProperty(IRefBase obj, string name, object value) {
             if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
 
             pi.SetValue(obj, value);
         }
 
-        public object GetProperty(IRefBase obj, string name)
-        {
+        public object GetProperty(IRefBase obj, string name) {
             if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
 
             return pi.GetValue(obj);
         }
 
-        public void SetProperty<T>(IRefBase obj, string name, T value)
-        {
+        public void SetProperty<T>(IRefBase obj, string name, T value) {
             if (!_properties.TryGetValue(name, out var pi))
                 throw new MemberNotFoundException(TypeName, name);
 
             pi.SetValue(obj, value);
         }
 
-        public IRef<T> GetProperty<T>(IRefBase obj, string name)
-        {
+        public IRef<T> GetProperty<T>(IRefBase obj, string name) {
             // TODO: only store IRef<T> properties and fields.
             return null;
         }
 
-        public object InvokeMethod(string name, List<object> args)
-        {
+        public object InvokeMethod(string name, List<object> args) {
             throw new NotImplementedException();
         }
 
-        public void InvokeEvent(string name, List<object> args)
-        {
+        public void InvokeEvent(string name, List<object> args) {
             throw new NotImplementedException();
         }
 
-        public void SetValue(IRefBase objectBase, object value)
-        {
+        public void SetValue(IRefBase objectBase, object value) {
             throw new System.NotImplementedException();
         }
     }

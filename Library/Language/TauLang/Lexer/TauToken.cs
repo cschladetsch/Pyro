@@ -1,7 +1,5 @@
-﻿namespace TauLang.Lexer
-{
-    public class TauToken
-    {
-        
+﻿namespace TauLang.Lexer {
+    public class TauToken {
+
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Pyro.Test.Rho
-{
-    using System.Collections.Generic;
+﻿namespace Pyro.Test.Rho {
     using NUnit.Framework;
+    using System.Collections.Generic;
 
     /// <inheritdoc />
     /// <summary>
@@ -9,12 +8,10 @@
     /// </summary>
     [TestFixture]
     public class TestRhoIndexing
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void Test()
-        {
-            var a = new List<int> {1, 2, 3};
+        public void Test() {
+            var a = new List<int> { 1, 2, 3 };
             DataStack.Push(a);
             RhoRun(
 @"

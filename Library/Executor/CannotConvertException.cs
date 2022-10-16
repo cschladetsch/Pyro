@@ -1,24 +1,20 @@
-﻿namespace Pyro.Exec
-{
+﻿namespace Pyro.Exec {
     using System;
 
     /// <summary>
     /// DOC
     /// </summary>
     public class CannotConvertException
-        : Exception
-    {
+        : Exception {
         public object Object;
         public Type TargetType;
 
-        public CannotConvertException(object obj, Type type)
-        {
+        public CannotConvertException(object obj, Type type) {
             Object = obj;
             TargetType = type;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Couldn't convert {Object} to type {TargetType.Name}";
         }
     }

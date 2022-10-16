@@ -1,8 +1,7 @@
-﻿namespace Pyro.Network
-{
+﻿namespace Pyro.Network {
+    using Flow;
     using System;
     using System.Collections.Generic;
-    using Flow;
 
     /// <summary>
     /// General message passed from client to server.
@@ -18,8 +17,7 @@
     /// A Peer listens to incoming connections, and can connect to other Peers.
     /// </summary>
     public interface IPeer
-        : IProcess
-    {
+        : IProcess {
         event OnWriteDelegate OnWrite;
         IServer Local { get; }
         IClient Remote { get; }
@@ -51,7 +49,7 @@
         /// Connect to given host and port.
         /// </summary>
         bool Connect(string hostName, int port);
-        
+
         bool EnterClient(IClient client);
         bool Enter(int clientNumber);
         bool Execute(string pi);

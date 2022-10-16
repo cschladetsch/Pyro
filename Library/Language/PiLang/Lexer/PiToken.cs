@@ -1,5 +1,4 @@
-﻿namespace Pyro.Language.Lexer
-{
+﻿namespace Pyro.Language.Lexer {
     using Impl;
 
     /// <inheritdoc cref="ITokenBase{TEnum}" />
@@ -8,13 +7,11 @@
     /// </summary>
     public class PiToken
         : TokenBase<EPiToken>
-        , ITokenNode<EPiToken>
-    {
+        , ITokenNode<EPiToken> {
         public PiToken() => _type = EPiToken.None;
 
         public PiToken(EPiToken type, Slice slice)
-            : base(type, slice)
-        {
+            : base(type, slice) {
         }
     }
 }

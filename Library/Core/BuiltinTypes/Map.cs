@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Pyro.BuiltinTypes
-{
+namespace Pyro.BuiltinTypes {
     public class Map
-        : Dictionary<object, object>
-    {
+        : Dictionary<object, object> {
         public Map()
-            : base(new CustomMapComparer())
-        {
+            : base(new CustomMapComparer()) {
         }
     }
 }

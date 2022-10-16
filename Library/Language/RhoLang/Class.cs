@@ -1,7 +1,6 @@
-﻿namespace Pyro.RhoLang
-{
-    using System;
+﻿namespace Pyro.RhoLang {
     using Exec;
+    using System;
 
     /// <inheritdoc />
     /// <summary>
@@ -18,8 +17,7 @@
     ///
     /// </summary>
     public class Class
-        : Reflected<Class>
-    {
+        : Reflected<Class> {
         /// <summary>
         /// What to execute to create a new instance.
         /// </summary>
@@ -32,8 +30,7 @@
 
         private readonly Executor _exec;
 
-        private Class(Executor exec, Continuation def)
-        {
+        private Class(Executor exec, Continuation def) {
             _exec = exec;
 
             // construct the meta-type by running the create continuation
@@ -55,8 +52,7 @@
         /// Create a new Rho-space runtime instance of this class.
         /// </summary>
         /// <returns></returns>
-        public object Create()
-        {
+        public object Create() {
             _exec.Continue(CreateCont);
             if (!(_exec.Pop() is Continuation instance))
                 throw new Exception($"Failed to make instance of Rho-Class {Name}");
@@ -68,8 +64,7 @@
         /// <summary>
         /// Destroy an instance on the stack.
         /// </summary>
-        public void Destroy()
-        {
+        public void Destroy() {
             _exec.Continue(DestroyCont);
         }
     }

@@ -1,7 +1,5 @@
-﻿namespace Pyro.Language.Tau.Parser
-{
-    public class TauParser
-    {
-        
+﻿namespace Pyro.Language.Tau.Parser {
+    public class TauParser {
+
     }
 }

@@ -1,13 +1,11 @@
-﻿namespace Pyro.Language.Parser
-{
-    using System.Collections.Generic;
+﻿namespace Pyro.Language.Parser {
     using Lexer;
+    using System.Collections.Generic;
 
     /// <summary>
     /// A node in the Abstract Syntax Tree (Ast)
     /// </summary>
-    public class PiAstNode
-    {
+    public class PiAstNode {
         private readonly List<PiAstNode> _children = new List<PiAstNode>();
 
         public EPiAst Type;
@@ -20,26 +18,22 @@
         public void Add(EPiToken piToken) => _children.Add(new PiAstNode(piToken));
         public void Add(EPiAst type, object value) => _children.Add(new PiAstNode(type, value));
 
-        public PiAstNode(EPiToken type)
-        {
+        public PiAstNode(EPiToken type) {
             Type = EPiAst.TokenType;
-            PiToken = new PiToken() {Type = type};
+            PiToken = new PiToken() { Type = type };
         }
 
-        public PiAstNode(EPiAst type, PiToken piToken)
-        {
+        public PiAstNode(EPiAst type, PiToken piToken) {
             Type = type;
             PiToken = piToken;
         }
 
-        public PiAstNode(EPiAst type, object value)
-        {
+        public PiAstNode(EPiAst type, object value) {
             Type = type;
             Value = value;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             var text = $"{PiToken}";
             if (string.IsNullOrEmpty(text) && Value != null)
                 text = Value.ToString();

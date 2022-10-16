@@ -1,5 +1,4 @@
-﻿namespace Pyro.RhoLang.Parser
-{
+﻿namespace Pyro.RhoLang.Parser {
     using Lexer;
 
     /// <inheritdoc cref="IProcess" />
@@ -8,14 +7,11 @@
     /// <b>NOTE</b> that Statements do not leave anything on the parsing stack:
     /// They either succeed or leave a decent contextual lexical+semantic error message.
     /// </summary>
-    public partial class RhoParser
-    {
-        private bool Statement()
-        {
+    public partial class RhoParser {
+        private bool Statement() {
             ConsumeNewLines();
 
-            switch (Current().Type)
-            {
+            switch (Current().Type) {
                 case ERhoToken.WriteLine:
                 case ERhoToken.Write:
                     return Write();
@@ -24,13 +20,12 @@
                 case ERhoToken.Return:
                 case ERhoToken.Yield:
                 case ERhoToken.Resume:
-                case ERhoToken.Suspend:
-                {
-                    var change = NewNode(Consume());
-                    if (Expression())
-                        change.Add(Pop());
-                    return Append(change);
-                }
+                case ERhoToken.Suspend: {
+                        var change = NewNode(Consume());
+                        if (Expression())
+                            change.Add(Pop());
+                        return Append(change);
+                    }
                 case ERhoToken.While:
                     return While();
                 case ERhoToken.For:
@@ -56,14 +51,12 @@
         private bool NamedBlock()
             => AddNamedBlock(NewNode(Consume()));
 
-        private bool AddNamedBlock(RhoAstNode cont)
-        {
+        private bool AddNamedBlock(RhoAstNode cont) {
             var ident = Expect(ERhoToken.Ident);
 
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
-            if (Try(ERhoToken.Ident))
-            {
+            if (Try(ERhoToken.Ident)) {
                 args.Add(Consume());
 
                 while (TryConsume(ERhoToken.Comma))
@@ -90,8 +83,7 @@
             return Append(assign);
         }
 
-        private bool While()
-        {
+        private bool While() {
             var @while = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
@@ -107,8 +99,7 @@
             return Append(@while);
         }
 
-        private bool Assert()
-        {
+        private bool Assert() {
             var assert = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
@@ -120,8 +111,7 @@
             return Append(assert);
         }
 
-        private bool Write()
-        {
+        private bool Write() {
             var write = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
             if (!Expression())
@@ -133,8 +123,7 @@
             return Append(write);
         }
 
-        private bool If()
-        {
+        private bool If() {
             var start = _Current;
 
             // find our current indent level by searching for last new line
@@ -156,10 +145,8 @@
 
             @if.Add(Pop());
 
-            while (indent >= 0)
-            {
-                if (TryConsume(ERhoToken.Else))
-                {
+            while (indent >= 0) {
+                if (TryConsume(ERhoToken.Else)) {
                     if (!Block())
                         return FailLocation("No else block.");
 
@@ -187,8 +174,7 @@
         /// difference is by the number of children in the node.
         /// </summary>
         /// <returns>True if parsing succeeded.</returns>
-        private bool For()
-        {
+        private bool For() {
             var @for = NewNode(Consume());
 
             Expect(ERhoToken.OpenParan);
@@ -198,14 +184,11 @@
             // add loop variable name
             @for.Add(Expect(ERhoToken.Ident));
 
-            if (TryConsume(ERhoToken.In))
-            {
+            if (TryConsume(ERhoToken.In)) {
                 // for (a in b) ...
                 if (!ForEach(@for))
                     return false;
-            }
-            else
-            {
+            } else {
                 _Current--;
                 // for (a = 0; n < 10; ++a) ...
                 if (!ForLoop(@for))
@@ -238,8 +221,7 @@
 
         // for (a = 0; a < 10; ++a)
         //      block
-        private bool ForLoop(RhoAstNode @for)
-        {
+        private bool ForLoop(RhoAstNode @for) {
             if (!Expression())
                 return FailLocation("Initialisation expression expected.");
 

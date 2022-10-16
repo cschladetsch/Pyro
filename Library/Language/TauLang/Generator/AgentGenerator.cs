@@ -1,6 +1,4 @@
-﻿namespace Pyro.Language.Tau
-{
-    public class AgentGenerator
-    {
+﻿namespace Pyro.Language.Tau {
+    public class AgentGenerator {
     }
 }

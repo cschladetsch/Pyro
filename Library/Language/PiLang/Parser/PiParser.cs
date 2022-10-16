@@ -1,26 +1,22 @@
-﻿namespace Pyro.Language.Parser
-{
-    using System.Collections.Generic;
+﻿namespace Pyro.Language.Parser {
     using Impl;
     using Lexer;
+    using System.Collections.Generic;
 
     /// <summary>
     /// PiParser for the Pi language. It's quite simple.
     /// </summary>
     public class PiParser
         : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
-        , IParser
-    {
+        , IParser {
         public PiParser(PiLexer lexer)
-            : base(lexer, null)
-        {
+            : base(lexer, null) {
         }
 
         public PiAstNode Root
             => _Stack.Peek();
 
-        public bool Process(PiLexer lex, EStructure structure = EStructure.None)
-        {
+        public bool Process(PiLexer lex, EStructure structure = EStructure.None) {
             _Current = 0;
             _Lexer = lex;
 
@@ -32,12 +28,9 @@
             return Run(structure);
         }
 
-        private void RemoveWhitespace()
-        {
-            foreach (var tok in _Lexer.Tokens)
-            {
-                switch (tok.Type)
-                {
+        private void RemoveWhitespace() {
+            foreach (var tok in _Lexer.Tokens) {
+                switch (tok.Type) {
                     case EPiToken.Whitespace:
                     case EPiToken.Tab:
                     case EPiToken.NewLine:
@@ -49,21 +42,18 @@
             }
         }
 
-        private bool Run(EStructure st)
-        {
+        private bool Run(EStructure st) {
             _Stack.Push(_AstFactory.New(EPiAst.Continuation));
             while (!Failed && NextSingle(Top()))
                 ;
             return !Failed;
         }
 
-        private bool NextSingle(PiAstNode context)
-        {
+        private bool NextSingle(PiAstNode context) {
             if (Empty())
                 return false;
 
-            switch (Current().Type)
-            {
+            switch (Current().Type) {
                 case EPiToken.Quote:
                 case EPiToken.Separator:
                 case EPiToken.Ident:
@@ -92,15 +82,12 @@
             }
         }
 
-        private bool ParsePathname(PiAstNode context)
-        {
+        private bool ParsePathname(PiAstNode context) {
             var elements = new List<Pathname.Element>();
             var prev = EPiToken.None;
             var quoted = false;
-            while (true)
-            {
-                switch (Current().Type)
-                {
+            while (true) {
+                switch (Current().Type) {
                     case EPiToken.Quote:
                         if (quoted || elements.Count > 0)
                             goto done;
@@ -132,15 +119,12 @@
                     break;
             }
 
-        done:
+done:
             PiAstNode node = null;
-            if (elements.Count == 1 && elements[0].Type == Pathname.EElementType.Ident)
-            {
+            if (elements.Count == 1 && elements[0].Type == Pathname.EElementType.Ident) {
                 node = NewNode(EPiAst.Ident);
                 node.Value = new Label(elements[0].Ident, quoted);
-            }
-            else
-            {
+            } else {
                 node = NewNode(EPiAst.Pathname);
                 node.Value = new Pathname(elements, quoted);
             }
@@ -149,12 +133,10 @@
             return true;
         }
 
-        private static PiAstNode AddValue(PiAstNode node)
-        {
+        private static PiAstNode AddValue(PiAstNode node) {
             var token = node.PiToken;
             var text = token.GetText();
-            switch (token.Type)
-            {
+            switch (token.Type) {
                 case EPiToken.Int:
                     node.Value = int.Parse(text);
                     break;
@@ -172,12 +154,10 @@
             return node;
         }
 
-        private bool ParseCompound(PiAstNode root, EPiAst type, EPiToken end)
-        {
+        private bool ParseCompound(PiAstNode root, EPiAst type, EPiToken end) {
             Consume();
             var node = NewNode(type);
-            while (!Empty() && !Try(end))
-            {
+            while (!Empty() && !Try(end)) {
                 if (!NextSingle(node))
                     return FailLocation($"Malformed compound {type}");
 

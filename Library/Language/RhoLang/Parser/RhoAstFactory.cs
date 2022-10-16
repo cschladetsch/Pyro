@@ -1,8 +1,7 @@
-﻿namespace Pyro.RhoLang.Parser
-{
-    using System.Collections.Generic;
+﻿namespace Pyro.RhoLang.Parser {
     using Language;
     using Lexer;
+    using System.Collections.Generic;
 
     /// <inheritdoc />
     /// <summary>
@@ -12,8 +11,7 @@
     /// Also, because Enums in C# can only derive from System.Enum.
     /// </summary>
     public class RhoAstFactory
-        : IAstFactory<RhoToken, RhoAstNode, ERhoAst>
-    {
+        : IAstFactory<RhoToken, RhoAstNode, ERhoAst> {
         public void AddChild(RhoAstNode parent, RhoAstNode node) => parent.Children.Add(node);
         public RhoAstNode New(RhoToken t) => new RhoAstNode(ERhoAst.TokenType, t);
         public RhoAstNode New(ERhoAst e, RhoToken t) => new RhoAstNode(e, t);

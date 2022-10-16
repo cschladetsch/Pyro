@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pyro.Impl
-{
+namespace Pyro.Impl {
     /// <inheritdoc cref="CallableBase" />
     /// <summary>
     /// Method with no arguments.
     /// </summary>
     /// <typeparam name="R">Return type.</typeparam>
     public class Function<R>
-        : CallableBase
-    {
+        : CallableBase {
         private readonly Func<R> _fun;
 
         public Function(Func<R> fun) : base(fun) => _fun = fun;
@@ -25,14 +23,12 @@ namespace Pyro.Impl
     /// <typeparam name="R">Return type.</typeparam>
     /// <typeparam name="A0">First argument type.</typeparam>
     public class Function<A0, R>
-        : CallableBase
-    {
+        : CallableBase {
         private readonly Func<A0, R> _fun;
 
         public Function(Func<A0, R> fun) : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var a = stack.Pop();
             stack.Push(_fun(reg.Get<A0>(a)));
         }
@@ -45,14 +41,12 @@ namespace Pyro.Impl
     /// <typeparam name="A0">First argument type.</typeparam>
     /// <typeparam name="A1">Second argument type.</typeparam>
     public class Function<A0, A1, R>
-        : CallableBase
-    {
+        : CallableBase {
         private readonly Func<A0, A1, R> _fun;
 
         public Function(Func<A0, A1, R> fun) : base(fun) => _fun = fun;
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-        {
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
             var a0 = stack.Pop();
             var a1 = stack.Pop();
             stack.Push(_fun(reg.Get<A0>(a0), reg.Get<A1>(a1)));

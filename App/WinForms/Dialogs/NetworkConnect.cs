@@ -1,19 +1,16 @@
-﻿namespace WinForms
-{
+﻿namespace WinForms {
+    using Pyro.Network;
     using System;
     using System.Windows.Forms;
-    using Pyro.Network;
 
     /// <summary>
     /// Dialog for connecting to another Pyro Peer
     /// </summary>
     public partial class NetworkConnect
-        : Form
-    {
+        : Form {
         private IPeer _local;
 
-        public NetworkConnect(IPeer local)
-        {
+        public NetworkConnect(IPeer local) {
             InitializeComponent();
             _local = local;
         }

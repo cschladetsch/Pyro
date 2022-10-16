@@ -1,7 +1,5 @@
-﻿namespace Pyro.RhoLang.Parser
-{
-    public enum ERhoAst
-    {
+﻿namespace Pyro.RhoLang.Parser {
+    public enum ERhoAst {
         None,
         Int,
         Float,

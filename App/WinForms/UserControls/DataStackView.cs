@@ -1,35 +1,28 @@
-﻿namespace WinForms
-{
+﻿namespace WinForms {
     using System;
     using System.Windows.Forms;
 
     public partial class DataStackView
-        : UserControl
-    {
+        : UserControl {
         private MainForm _main;
 
-        public DataStackView()
-        {
+        public DataStackView() {
             InitializeComponent();
         }
 
-        private void ContextStackView_Load(object sender, EventArgs e)
-        {
+        private void ContextStackView_Load(object sender, EventArgs e) {
 
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e) {
 
         }
 
-        public void Clear()
-        {
+        public void Clear() {
             listView1.Items.Clear();
         }
 
-        public void Construct(MainForm mainForm)
-        {
+        public void Construct(MainForm mainForm) {
             _main = mainForm;
         }
     }

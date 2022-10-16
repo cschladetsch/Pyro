@@ -1,7 +1,5 @@
-﻿namespace Pyro.Language
-{
+﻿namespace Pyro.Language {
     public interface ILexer
-        : IProcess
-    {
+        : IProcess {
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Pyro.Test
-{
-    using NUnit.Framework;
+﻿namespace Pyro.Test {
     using Language;
+    using NUnit.Framework;
 
     /// <inheritdoc />
     /// <summary>
@@ -9,11 +8,9 @@
     /// </summary>
     [TestFixture]
     public class PiFromRho
-        : TestCommon
-    {
+        : TestCommon {
         [Test]
-        public void TestBasic()
-        {
+        public void TestBasic() {
             RhoRun("`1 'a #`", false, EStructure.Expression);
             Assert.AreEqual(1, _Scope["a"]);
 
@@ -31,8 +28,7 @@
         }
 
         [Test]
-        public void RunScripts()
-        {
+        public void RunScripts() {
             RunScript("PiRho/PiFromRho0.rho");
             RunScript("PiRho/PiFromRho1.rho");
         }
