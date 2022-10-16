@@ -1,5 +1,4 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System.Text;
 
     /// <inheritdoc />
@@ -8,8 +7,7 @@
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IClass<in T>
-        : IClassBase
-    {
+        : IClassBase {
         void AppendText(StringBuilder str, T obj);
     }
 }

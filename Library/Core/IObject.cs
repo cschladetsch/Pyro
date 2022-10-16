@@ -1,10 +1,8 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     /// <summary>
     /// Common for all objects in the system.
     /// </summary>
-    public interface IObject
-    {
+    public interface IObject {
         /// <summary>
         /// The thing that made and registered this object.
         /// </summary>

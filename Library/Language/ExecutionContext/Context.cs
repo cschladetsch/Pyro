@@ -1,5 +1,4 @@
-﻿namespace Pyro.ExecutionContext
-{
+﻿namespace Pyro.ExecutionContext {
     using System;
     using System.IO;
     using System.Collections.Generic;
@@ -14,8 +13,7 @@
     /// given text or a filename.
     /// </summary>
     public class Context
-        : Process
-    {
+        : Process {
         public IRegistry Registry { get; }
         public ITranslator Translator { get; private set; }
         public Executor Executor { get; }
@@ -40,8 +38,7 @@
             }
             set
             {
-                switch (value)
-                {
+                switch (value) {
                     case ELanguage.None:
                         Translator = null;
                         return;
@@ -73,8 +70,7 @@
         public bool Translate(string text, out Continuation result)
             => Translate(Translator, out result, text);
 
-        public Context(bool runStartScripts = false)
-        {
+        public Context(bool runStartScripts = false) {
             Registry = new Registry();
             Executor = Registry.Add(new Executor()).Value;
             RegisterTypes.Register(Registry);
@@ -86,54 +82,45 @@
                 RunStartScripts();
         }
 
-        private void RunStartScripts()
-        {
+        private void RunStartScripts() {
             var pyroRoot = Path.Combine(HomePath(), ".pyro");
             void Exec(string file) => ExecFile(Path.Combine(pyroRoot, file));
             Exec("start.pi");
             Exec("start.rho");
         }
 
-        protected string HomePath()
-        {
+        protected string HomePath() {
             return (Environment.OSVersion.Platform == PlatformID.Unix ||
                 Environment.OSVersion.Platform == PlatformID.MacOSX)
                 ? Environment.GetEnvironmentVariable("HOME")
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
         }
 
-        private bool Translate(ITranslator translator, out Continuation result, string text)
-        {
+        private bool Translate(ITranslator translator, out Continuation result, string text) {
             result = null;
             return translator.Translate(text, out result) || Fail(translator.Error);
         }
 
-        private bool Exec(ITranslator translator, string text)
-        {
-            try
-            {
+        private bool Exec(ITranslator translator, string text) {
+            try {
                 if (!Translate(translator, out var cont, text))
                     return Fail(translator.Error);
 
                 cont.Scope = Executor.Scope;
                 Executor.Continue(cont);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 return Fail(e.Message);
             }
 
             return true;
         }
 
-        public bool ExecFile(string fileName)
-        {
+        public bool ExecFile(string fileName) {
             if (!File.Exists(fileName))
                 return Fail($"File '{fileName}' doesn't exist");
 
             var ext = Path.GetExtension(fileName);
-            switch (ext)
-            {
+            switch (ext) {
                 case ".rho":
                     return ExecPi(File.ReadAllText(fileName));
 
@@ -145,10 +132,8 @@
             }
         }
 
-        public bool Exec(ELanguage lang, string text)
-        {
-            switch (lang)
-            {
+        public bool Exec(ELanguage lang, string text) {
+            switch (lang) {
                 case ELanguage.None:
                     return Fail("No language selected");
 

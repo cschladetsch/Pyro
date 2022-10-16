@@ -1,10 +1,8 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     /// <summary>
-    /// Public way to make a new Regsitry.
+    /// Public way to make a new Registry.
     /// </summary>
-    public interface IFactory
-    {
+    public interface IFactory {
         IRegistry NewRegistry();
         ITree NewTree();
     }

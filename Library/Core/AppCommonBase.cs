@@ -1,7 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Pyro.AppCommon
-{
+﻿namespace Pyro.AppCommon {
     using System;
     using System.Reflection;
     using static System.Console;
@@ -10,47 +7,41 @@ namespace Pyro.AppCommon
     /// <summary>
     /// Functionality that is common to all (console) Apps that use Pyro libraries.
     /// </summary>
-    public abstract class AppCommonBase
-    {
+    public abstract class AppCommonBase {
         private static AppCommonBase _self;
         private readonly ConsoleColor _originalColor;
 
-        protected AppCommonBase(string[] args)
-        {
+        protected AppCommonBase(string[] args) {
             CancelKeyPress += Cancel;
             _originalColor = ForegroundColor;
             _self = this;
             WriteHeader();
         }
 
-        public static string GetVersion()
-        {
+        public static string GetVersion() {
             var asm = Assembly.GetEntryAssembly();
             var desc = asm.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
             var name = asm.GetName();
             var version = name.Version;
 
-            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision*2);
+            var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
             var b = built.ToString("yy-MM-ddTHH:mm");
             var v = $"{version.Build}.{version.Revision}";
 
             return $"{desc} v{v} built {b}";
         }
 
-        protected virtual void ProcessArgs(string[] args)
-        {
+        protected virtual void ProcessArgs(string[] args) {
         }
 
         protected abstract void Shutdown();
 
-        protected void Exit(int result = 0)
-        {
+        protected void Exit(int result = 0) {
             ForegroundColor = _originalColor;
             Environment.Exit(result);
         }
 
-        protected static bool Error(string text, ConsoleColor color = ConsoleColor.Green)
-        {
+        protected static bool Error(string text, ConsoleColor color = ConsoleColor.Green) {
             WriteLine(text, color);
             return false;
         }
@@ -67,16 +58,14 @@ namespace Pyro.AppCommon
         /// <summary>
         /// Save/restore current foreground color while writing a string to the console.
         /// </summary>
-        private static void ConWrite(string text, ConsoleColor color, Action<string> write)
-        {
+        private static void ConWrite(string text, ConsoleColor color, Action<string> write) {
             var current = ForegroundColor;
             ForegroundColor = color;
             write(text);
             ForegroundColor = current;
         }
 
-        private static void Cancel(object sender, ConsoleCancelEventArgs e)
-        {
+        private static void Cancel(object sender, ConsoleCancelEventArgs e) {
             // don't exit immediately - shut down networking gracefully first
             e.Cancel = true;
             _self.Shutdown();

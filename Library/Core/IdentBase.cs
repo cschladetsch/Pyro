@@ -1,12 +1,10 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     /// <summary>
     /// Common to all Identifier types.
     /// </summary>
-    public class IdentBase
-    {
+    public class IdentBase {
         /// <summary>
-        /// If Quoted, the ident will not be resolved immediated by an Executor.
+        /// If Quoted the ident will not be resolved immediately by an Executor.
         /// </summary>
         public bool Quoted;
 

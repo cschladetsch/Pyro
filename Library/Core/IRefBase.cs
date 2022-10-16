@@ -1,12 +1,10 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     /// <inheritdoc />
     /// <summary>
     /// An interface to an object created by a registry.
     /// </summary>
     public interface IRefBase
-        : IConstRefBase
-    {
+        : IConstRefBase {
         new object BaseValue { get; set; }
     }
 }

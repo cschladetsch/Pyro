@@ -1,5 +1,4 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System;
     using System.Collections.Generic;
 
@@ -8,8 +7,7 @@
     /// Common to all types that provide const-only access to underlying value.
     /// </summary>
     public interface IConstRefBase
-        : IObject
-    {
+        : IObject {
         Type ValueType { get; }
         bool IsConst { get; }
         object BaseValue { get; }
@@ -17,8 +15,7 @@
         T Get<T>();
     }
 
-    public interface IConstRefBase<out T>
-    {
+    public interface IConstRefBase<out T> {
         T Value { get; }
     }
 }

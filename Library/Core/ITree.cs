@@ -1,12 +1,10 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System.Collections.Generic;
 
     /// <summary>
-    /// A hierachy of objects with a search path.
+    /// A hierarchy of objects with a search path.
     /// </summary>
-    public interface ITree
-    {
+    public interface ITree {
         /// <summary>
         /// The current node in the tree.
         /// </summary>

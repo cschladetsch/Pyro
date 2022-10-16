@@ -1,5 +1,4 @@
-namespace Pyro.Exec
-{
+namespace Pyro.Exec {
     using System;
     using System.Reflection;
     using System.Collections.Generic;
@@ -8,8 +7,7 @@ namespace Pyro.Exec
     /// Processes a sequence of Continuations.
     /// </summary>
     public partial class Executor
-        : Reflected<Executor>
-    {
+        : Reflected<Executor> {
         public Stack<object> DataStack { get; private set; } = new Stack<object>();
         public List<Continuation> ContextStack { get; private set; } = new List<Continuation>();
         private int NumOps { get; set; }
@@ -21,16 +19,14 @@ namespace Pyro.Exec
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
 
-        public Executor()
-        {
+        public Executor() {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
             Verbosity = 0;
             AddOperations();
         }
 
-        private void PushContext(Continuation continuation)
-        {
+        private void PushContext(Continuation continuation) {
             ContextStack.Add(continuation);
             _current = null;
         }
@@ -41,12 +37,10 @@ namespace Pyro.Exec
         public void Continue()
             => Continue(PopContext());
 
-        public void Continue(Continuation continuation)
-        {
+        public void Continue(Continuation continuation) {
             PushContext(continuation);
 
-            while (true)
-            {
+            while (true) {
                 Execute(_current);
                 _break = false;
 
@@ -56,16 +50,13 @@ namespace Pyro.Exec
             }
         }
 
-        public bool Single()
-        {
+        public bool Single() {
             return Next();
         }
-        
-        private void Execute(Continuation cont)
-        {
+
+        private void Execute(Continuation cont) {
             _current = cont;
-            while (Next())
-            {
+            while (Next()) {
                 if (!_break)
                     continue;
 
@@ -74,15 +65,13 @@ namespace Pyro.Exec
             }
         }
 
-        public bool Next()
-        {
+        public bool Next() {
             Kernel.Step();
 
             bool IsRunning(Continuation cont)
                 => cont != null && cont.IsRunning();
 
-            while (!IsRunning(_current))
-            {
+            while (!IsRunning(_current)) {
                 _current = PopContext();
                 if (_current == null)
                     return false;
@@ -92,19 +81,15 @@ namespace Pyro.Exec
             if (next is IRefBase refBase)
                 next = refBase.BaseValue;
 
-            try
-            {
+            try {
                 Perform(next);
                 if (end)
                     _current.Complete();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 if (!string.IsNullOrEmpty(SourceFilename))
                     WriteLine($"While executing {SourceFilename}:");
 
-                if (Verbosity > 10)
-                {
+                if (Verbosity > 10) {
                     WriteLine(DebugWrite());
                     WriteLine($"Exception: {e}");
                 }
@@ -119,39 +104,35 @@ namespace Pyro.Exec
         }
 
 
-        public void Perform(object next)
-        {
+        public void Perform(object next) {
             ++NumOps;
             if (next == null)
                 throw new NullValueException();
 
             PerformPrelude(next);
-            switch (next)
-            {
-            case EOperation op when _actions.TryGetValue(op, out var action):
-                action();
-                break;
+            switch (next) {
+                case EOperation op when _actions.TryGetValue(op, out var action):
+                    action();
+                    break;
 
-            case EOperation op:
-                throw new NotImplementedException($"Operation {op} not implemented");
+                case EOperation op:
+                    throw new NotImplementedException($"Operation {op} not implemented");
 
-            default:
-                if (!TryResolve(next, out var eval))
-                    throw new UnknownIdentifierException(next);
+                default:
+                    if (!TryResolve(next, out var eval))
+                        throw new UnknownIdentifierException(next);
 
-                DataStack.Push(eval);
-                break;
+                    DataStack.Push(eval);
+                    break;
             }
         }
 
-        private bool TryResolve(object obj, out object found)
-        {
+        private bool TryResolve(object obj, out object found) {
             found = null;
             if (obj == null)
                 return false;
 
-            if (!(obj is IdentBase ident))
-            {
+            if (!(obj is IdentBase ident)) {
                 found = obj;
                 return true;
             }
@@ -163,42 +144,38 @@ namespace Pyro.Exec
             return true;
         }
 
-        private bool TryResolve(IdentBase identBase, out object found)
-        {
+        private bool TryResolve(IdentBase identBase, out object found) {
             found = null;
-            switch (identBase)
-            {
-            case Label label:
-                // TODO: search System types like System.Int32 etc
-                found = _registry.GetClass(label.Text);
-                if (found != null)
-                    return true;
+            switch (identBase) {
+                case Label label:
+                    // TODO: search System types like System.Int32 etc
+                    found = _registry.GetClass(label.Text);
+                    if (found != null)
+                        return true;
 
-                if (TryResolveContextually(label, out found))
-                    return true;
+                    if (TryResolveContextually(label, out found))
+                        return true;
 
-                if (Scope.TryGetValue(label.Text, out found))
-                    return true;
+                    if (Scope.TryGetValue(label.Text, out found))
+                        return true;
 
-                return false;
+                    return false;
 
-            case Pathname path:
-                return TryResolvePath(path, out found);
+                case Pathname path:
+                    return TryResolvePath(path, out found);
             }
 
             return false;
         }
 
-        private bool TryResolvePath(Pathname path, out object found)
-        {
+        private bool TryResolvePath(Pathname path, out object found) {
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// Attempt to resolve a name by looking at the context stack
         /// </summary>
-        private bool TryResolveContextually(Label label, out object obj)
-        {
+        private bool TryResolveContextually(Label label, out object obj) {
             obj = null;
             var ident = label.Text;
 
@@ -219,8 +196,7 @@ namespace Pyro.Exec
         /// <summary>
         /// Perform a continuation, then return to current context
         /// </summary>
-        private new void Suspend()
-        {
+        private new void Suspend() {
             PushContext(_current);
             Resume();
         }
@@ -228,16 +204,13 @@ namespace Pyro.Exec
         /// <summary>
         /// Resume the continuation that spawned the current one
         /// </summary>
-        private new void Resume()
-        {
-            if (!RPop(out var next))
-            {
+        private new void Resume() {
+            if (!RPop(out var next)) {
                 Break();
                 return;
             }
 
-            switch (next)
-            {
+            switch (next) {
                 case ICallable call:
                     call.Invoke(_registry, DataStack);
                     break;
@@ -248,12 +221,11 @@ namespace Pyro.Exec
 
                 case MethodInfo mi:
                     var numArgs = mi.GetParameters().Length;
-                    if (DataStack.Count < numArgs + 1)
-                    {
+                    if (DataStack.Count < numArgs + 1) {
                         var servant = DataStack.Count > 0 ? DataStack.Peek() : "null";
                         throw new NotEnoughArgumentsException($"{servant}.{mi.Name} expects {numArgs} args");
                     }
-                    
+
                     var obj = Pop();
                     var args = new object[numArgs];
                     for (var n = 0; n < numArgs; ++n)
@@ -272,16 +244,14 @@ namespace Pyro.Exec
             Break();
         }
 
-        public void Push(object obj)
-        {
+        public void Push(object obj) {
             if (obj == null)
                 throw new NullValueException();
 
             DataStack.Push(obj);
         }
 
-        public T Pop<T>()
-        {
+        public T Pop<T>() {
             if (DataStack.Count == 0)
                 throw new DataStackEmptyException();
 
@@ -298,8 +268,7 @@ namespace Pyro.Exec
             return data.Value;
         }
 
-        public dynamic Pop()
-        {
+        public dynamic Pop() {
             if (DataStack.Count == 0)
                 throw new DataStackEmptyException();
 
@@ -307,10 +276,8 @@ namespace Pyro.Exec
             return !(pop is IRefBase data) ? pop : data.BaseValue;
         }
 
-        private Continuation PopContext()
-        {
-            for (var n = ContextStack.Count - 1; n >= 0; --n)
-            {
+        private Continuation PopContext() {
+            for (var n = ContextStack.Count - 1; n >= 0; --n) {
                 var cont = ContextStack[n];
                 if (!cont.Active || !cont.Running)
                     continue;
@@ -326,14 +293,12 @@ namespace Pyro.Exec
         /// Stop the current continuation and resume whatever is on the
         /// context stack.
         /// </summary>
-        private void Break()
-        {
+        private void Break() {
             _break = true;
             _current = null;
         }
 
-        private T RPop<T>()
-        {
+        private T RPop<T>() {
             if (RPop<T>(out var val))
                 return val;
             throw new DataStackEmptyException();
@@ -342,14 +307,13 @@ namespace Pyro.Exec
         /// <summary>
         /// Get top of stack as a value of type T, or as a name of a value of type T
         /// </summary>
-        private bool RPop<T>(out T val)
-        {
+        private bool RPop<T>(out T val) {
             val = default(T);
-            var pop = (object) Pop();
+            var pop = (object)Pop();
             if (!TryResolve(pop, out var found))
                 return false;
 
-            val = (T) found;
+            val = (T)found;
             return true;
         }
 

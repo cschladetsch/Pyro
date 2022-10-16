@@ -1,14 +1,15 @@
-﻿namespace Pyro
+﻿using Pyro.Impl;
+
+namespace Pyro
 {
     using System;
-    using Impl;
 
     /// <summary>
     /// Top-level factory for Core
     /// </summary>
     public static class Create
     {
-        public static IFactory Factory = new Impl.Factory();
+        public static IFactory Factory = new Factory();
         public static IRegistry Registry() => Factory.NewRegistry();
         public static ITree Tree() => Factory.NewTree();
         public static IPathname Pathname(string path) => new Pathname(path);

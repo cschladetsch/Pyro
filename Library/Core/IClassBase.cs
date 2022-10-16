@@ -1,5 +1,4 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
@@ -8,8 +7,7 @@
     /// <summary>
     /// Common interface for all Dive system classes.
     /// </summary>
-    public interface IClassBase
-    {
+    public interface IClassBase {
         AssemblyName Assembly { get; }
         Version Version { get; }
         string TypeName { get; }

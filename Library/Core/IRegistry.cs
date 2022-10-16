@@ -1,5 +1,4 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System;
     using System.Text;
     using System.Collections.Generic;
@@ -7,10 +6,9 @@
     /// <summary>
     /// A mapping of id to object.
     ///
-    /// Can be serialised to Json or binary.
+    /// Can be serialised to either Json or binary formats.
     /// </summary>
-    public interface IRegistry
-    {
+    public interface IRegistry {
         /// <summary>
         /// Used for networking.
         /// </summary>

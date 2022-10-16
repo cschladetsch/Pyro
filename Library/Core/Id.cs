@@ -1,10 +1,8 @@
-namespace Pyro
-{
+namespace Pyro {
     /// <summary>
     /// Every object in a Registry has a unique Id.
     /// </summary>
-    public class Id
-    {
+    public class Id {
         public int Value { get; }
 
         internal static Id None = new Id(0);
@@ -13,8 +11,7 @@ namespace Pyro
             => Value = num;
 
         public Id(Id prev)
-            : this(prev.Value + 1)
-        {
+            : this(prev.Value + 1) {
         }
 
         public override string ToString()

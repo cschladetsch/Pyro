@@ -1,5 +1,4 @@
-﻿namespace Pyro.Exec
-{
+﻿namespace Pyro.Exec {
     using System;
 
     /// <inheritdoc />
@@ -7,8 +6,7 @@
     /// Cannot enumerate over values in given object.
     /// </summary>
     public class CannotEnumerate
-        : Exception
-    {
+        : Exception {
         private readonly object _obj;
 
         public CannotEnumerate(object obj)

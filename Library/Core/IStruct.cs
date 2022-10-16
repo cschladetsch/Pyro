@@ -1,13 +1,6 @@
-﻿namespace Pyro
-{
-    /// <inheritdoc />
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
+﻿namespace Pyro {
     internal interface IStruct<T>
-        : IStructBase
-    {
+        : IStructBase {
     }
 }
 

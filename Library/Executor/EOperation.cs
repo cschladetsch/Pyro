@@ -1,5 +1,4 @@
-﻿namespace Pyro.Exec
-{
+﻿namespace Pyro.Exec {
     /// <summary>
     /// Operations that can be performed by an Executor,
     /// which is the virtual machine used by all custom languages.
@@ -7,8 +6,7 @@
     /// NOTE: Do NOT randomly re-order these values. They may be stored as integer values elsewhere.
     /// NOTE: Only ever add to the end of this list.
     /// </summary>
-    public enum EOperation
-    {
+    public enum EOperation {
         Nop,
 
         // Instances

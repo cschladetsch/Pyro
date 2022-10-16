@@ -1,11 +1,9 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     /// <summary>
     /// DOC
     /// </summary>
     public interface IIdentifer
-        : ITextSerialise
-    {
+        : ITextSerialise {
         bool Quoted { get; set; }
     }
 }

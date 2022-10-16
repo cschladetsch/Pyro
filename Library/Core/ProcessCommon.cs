@@ -1,11 +1,8 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System;
 
     /// <inheritdoc />
-    public class ProcessCommon
-        : Process
-    {
+    public class ProcessCommon : Process {
         protected readonly IRegistry _reg;
 
         protected ProcessCommon(IRegistry r)
@@ -23,8 +20,7 @@
         protected new void Reset()
             => base.Reset();
 
-        protected void WriteLine(string fmt, params object[] args)
-        {
+        protected void WriteLine(string fmt, params object[] args) {
             var text = fmt;
             if (args != null && args.Length > 0)
                 text = string.Format(fmt, args);

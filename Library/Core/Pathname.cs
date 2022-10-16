@@ -1,5 +1,4 @@
-﻿namespace Pyro
-{
+﻿namespace Pyro {
     using System;
     using System.Text;
     using System.Collections.Generic;
@@ -10,10 +9,8 @@
     /// </summary>
     public class Pathname
         : IdentBase
-        , IPathname
-    {
-        public enum EElementType
-        {
+        , IPathname {
+        public enum EElementType {
             None,
             Separator,
             Ident
@@ -25,18 +22,15 @@
         /// <summary>
         /// A part of a Pathname
         /// </summary>
-        public class Element
-        {
+        public class Element {
             public EElementType Type;
             public string Ident;
 
-            public Element(EElementType type = EElementType.None)
-            {
+            public Element(EElementType type = EElementType.None) {
                 Type = type;
             }
 
-            public Element(string ident)
-            {
+            public Element(string ident) {
                 Type = EElementType.Ident;
                 Ident = ident;
             }
@@ -48,26 +42,21 @@
             => Elements = new List<Element>();
 
         public Pathname(IList<Element> elements, bool quoted = false)
-            : base(quoted)
-        {
+            : base(quoted) {
             Elements = elements;
         }
 
-        public Pathname(string text) : base(false)
-        {
+        public Pathname(string text) : base(false) {
             throw new NotImplementedException();
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             var str = new StringBuilder();
             if (Quoted)
                 str.Append(Quote);
 
-            foreach (var elem in Elements)
-            {
-                switch (elem.Type)
-                {
+            foreach (var elem in Elements) {
+                switch (elem.Type) {
                     case EElementType.None:
                         break;
 
@@ -87,18 +76,15 @@
             return str.ToString();
         }
 
-        public string ToText(IRegistry reg = null)
-        {
+        public string ToText(IRegistry reg = null) {
             throw new NotImplementedException();
         }
 
-        public bool FromText(string s, IRegistry reg)
-        {
+        public bool FromText(string s, IRegistry reg) {
             throw new NotImplementedException();
         }
 
-        public bool FromText(IStringSlice s, IRegistry reg)
-        {
+        public bool FromText(IStringSlice s, IRegistry reg) {
             throw new NotImplementedException();
         }
 
