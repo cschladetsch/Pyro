@@ -95,21 +95,16 @@ namespace Pyro.Language.Impl {
             return true;
         }
 
-        protected bool AddTwoCharOp(TEnum ty) {
-            Add(ty, 2);
+        protected bool AddTwoCharOp(TEnum ty) 
+            => Add(ty, 2);
 
-            return true;
-        }
-
-        protected bool AddThreeCharOp(TEnum ty) {
-            Add(ty, 3);
-            Next();
-
-            return true;
-        }
+        protected bool AddThreeCharOp(TEnum ty) 
+            => Add(ty, 3);
 
         protected bool LexError(string text)
-            => Fail(CreateErrorMessage(_Factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
+            => Fail(
+                CreateErrorMessage(
+                    _Factory.NewEmptyToken(new Slice(this, _offset, _offset)), text, Current()));
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args) {
             ErrorToken = tok;
