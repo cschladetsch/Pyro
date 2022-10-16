@@ -1,6 +1,0 @@
-#!/bin/sh
-
-unalias flow
-
-echo Leaving Pyro.
-
