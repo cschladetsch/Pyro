@@ -1,9 +1,7 @@
-﻿namespace WinForms.UserControls
-{
+﻿namespace WinForms.UserControls {
     public partial class PiDebugger
         : UserControlBase
-        , IUserControlCommon
-    {
+        , IUserControlCommon {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -13,8 +11,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PiDebugger));
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "",

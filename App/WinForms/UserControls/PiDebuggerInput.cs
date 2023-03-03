@@ -1,12 +1,11 @@
 ﻿namespace WinForms.UserControls {
     using System;
     using System.Windows.Forms;
-    using Pyro.Exec;
 
     public partial class PiDebuggerInput
         : UserControlBase
         , IUserControlCommon {
-        public PiDebuggerInput() { 
+        public PiDebuggerInput() {
             InitializeComponent();
         }
 

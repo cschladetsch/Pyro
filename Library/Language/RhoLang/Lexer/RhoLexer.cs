@@ -141,7 +141,7 @@
             Next();
             AddSlice(ERhoToken.PiSlice, Gather(c => c != '`'));
             if (Current() != '`')
-                return Fail("Unterminated embedded Pi code");   
+                return Fail("Unterminated embedded Pi code");
             Next();
             return true;
         }

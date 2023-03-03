@@ -1,6 +1,5 @@
 ﻿namespace WinForms.UserControls {
     using System;
-    using Pyro.Exec;
 
     namespace WinForms {
 

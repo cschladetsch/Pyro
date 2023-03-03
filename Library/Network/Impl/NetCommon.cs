@@ -6,8 +6,8 @@
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
-    using ExecutionContext = ExecutionContext.ExecutionContext;
     using ELanguage = Language.ELanguage;
+    using ExecutionContext = ExecutionContext.ExecutionContext;
 
     /// <summary>
     /// Functionality common to both Client and Server aspects of a Peer

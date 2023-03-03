@@ -1,5 +1,5 @@
 ﻿namespace WinForms.UserControls {
-    public partial class Output 
+    public partial class Output
         : UserControlBase
         , IUserControlCommon {
         public Output() {

@@ -95,10 +95,10 @@ namespace Pyro.Language.Impl {
             return true;
         }
 
-        protected bool AddTwoCharOp(TEnum ty) 
+        protected bool AddTwoCharOp(TEnum ty)
             => Add(ty, 2);
 
-        protected bool AddThreeCharOp(TEnum ty) 
+        protected bool AddThreeCharOp(TEnum ty)
             => Add(ty, 3);
 
         protected bool LexError(string text)

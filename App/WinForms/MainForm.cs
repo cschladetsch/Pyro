@@ -1,15 +1,13 @@
 namespace WinForms {
-    using System;
-    using System.IO;
-    using System.Windows.Forms;
-    using System.Collections.Generic;
-
-    using WinForms.UserControls;
-
     using Pyro;
     using Pyro.Exec;
     using Pyro.ExecutionContext;
     using Pyro.Network;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Windows.Forms;
+    using WinForms.UserControls;
     using static Pyro.Create;
 
     public interface IMainForm {
@@ -24,7 +22,7 @@ namespace WinForms {
     /// The main form for the application.
     /// </summary>
     public partial class MainForm
-        : Form 
+        : Form
         , IMainForm {
         public int ListenPort = 7777;
 
