@@ -27,13 +27,13 @@ namespace Pyro.Network.Impl {
 
         public Server(Peer peer, int port)
             : base(peer) {
-            RegisterTypes.Register(_Context.Registry);
+            RegisterTypes.Register(_executionContext.Registry);
 
             _port = port;
 
             var scope = Exec.Scope;
 
-            _Context.Language = Language.ELanguage.Rho;
+            _executionContext.Language = Language.ELanguage.Rho;
             scope["peer"] = _Peer;
             scope["server"] = this;
             // work
@@ -44,12 +44,12 @@ namespace Pyro.Network.Impl {
             scope["enter"] = TranslateRho("peer.Enter(2)");
             scope["join"] = TranslateRho("assert(connect() && enter())");
             scope["leave"] = TranslateRho("peer.Leave()");
-            _Context.Language = Language.ELanguage.Pi;
+            _executionContext.Language = Language.ELanguage.Pi;
         }
 
         private Continuation TranslateRho(string text) {
-            if (!_Context.Translate(text, out var cont)) {
-                Error(_Context.Error);
+            if (!_executionContext.Translate(text, out var cont)) {
+                Error(_executionContext.Error);
                 return null;
             }
 
@@ -106,9 +106,9 @@ namespace Pyro.Network.Impl {
         }
 
         private bool RunLocally(string pi) {
-            if (!_Context.Translate(pi, out var cont)) {
-                Exec.Push(_Context.Error);
-                return Error(_Context.Error);
+            if (!_executionContext.Translate(pi, out var cont)) {
+                Exec.Push(_executionContext.Error);
+                return Error(_executionContext.Error);
             }
 
             if (cont.Code.Count == 0)

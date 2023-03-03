@@ -6,7 +6,7 @@
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
-    using Context = ExecutionContext.Context;
+    using ExecutionContext = ExecutionContext.ExecutionContext;
     using ELanguage = Language.ELanguage;
 
     /// <summary>
@@ -16,19 +16,19 @@
         : NetworkConsoleWriter
         , INetCommon {
         // TODO: should a server have a different context for each client?
-        public Context Context => _Context;
+        public ExecutionContext ExecutionContext => _executionContext;
         public abstract Socket Socket { get; set; }
 
         protected readonly Peer _Peer;
-        protected readonly Context _Context;
-        protected Executor Exec => _Context.Executor;
-        protected IRegistry _Registry => _Context.Registry;
+        protected readonly ExecutionContext _executionContext;
+        protected Executor Exec => _executionContext.Executor;
+        protected IRegistry _Registry => _executionContext.Registry;
         protected bool _Stopping;
 
         protected NetCommon(Peer peer) {
             _Peer = peer;
-            _Context = new Context { Language = ELanguage.Pi };
-            RegisterTypes.Register(_Context.Registry);
+            _executionContext = new ExecutionContext { Language = ELanguage.Pi };
+            RegisterTypes.Register(_executionContext.Registry);
         }
 
         public IFuture<DateTime> Ping() {
@@ -36,10 +36,10 @@
         }
 
         protected Continuation TranslatePi(string pi) {
-            if (_Context.Translate(pi, out var cont))
+            if (_executionContext.Translate(pi, out var cont))
                 return cont;
 
-            Error(_Context.Error);
+            Error(_executionContext.Error);
             return null;
         }
 

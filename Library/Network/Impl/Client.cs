@@ -89,12 +89,12 @@
         }
 
         public bool ContinueRho(string rhoScript) {
-            return _Context.ExecRho(rhoScript) || Error($"Failed to translate {rhoScript}");
+            return _executionContext.ExecRho(rhoScript) || Error($"Failed to translate {rhoScript}");
         }
 
         protected override bool ProcessReceived(Socket sender, string pi) {
             try {
-                if (!_Context.Translate(pi, out var cont))
+                if (!_executionContext.Translate(pi, out var cont))
                     return Error($"Failed to translate {pi}");
 
                 cont.Scope = Exec.Scope;

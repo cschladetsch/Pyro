@@ -1,41 +1,54 @@
-using WinForms.UserControls;
-
 namespace WinForms {
+    using System;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Collections.Generic;
+
+    using WinForms.UserControls;
+
     using Pyro;
     using Pyro.Exec;
     using Pyro.ExecutionContext;
     using Pyro.Network;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Windows.Forms;
     using static Pyro.Create;
+
+    public interface IMainForm {
+        int ListenPort { get; }
+
+        Executor Executor { get; }
+        IRegistry Registry { get; }
+    }
+
 
     /// <summary>
     /// The main form for the application.
     /// </summary>
     public partial class MainForm
-        : Form {
+        : Form 
+        , IMainForm {
         public int ListenPort = 7777;
 
-        private readonly IPeer _peer;
-        private readonly Context _context;
-        private Executor Exec => _context.Executor;
-        private IRegistry Reg => _context.Registry;
-        private Stack<object> DataStack => Exec.DataStack;
+        public Executor Executor => _context.Executor;
+        public IRegistry Registry => _context.Registry;
+        public Stack<object> DataStack => Executor.DataStack;
+
         private List<object> _last;
         private bool _local = true;
         private bool PiSelected => mainTabControl.SelectedIndex == 0;
 
         internal RichTextBox Output => output;
-        internal Context Context => _context;
+        internal ExecutionContext Context => _context;
         internal PiDebugger PiDebugger => piDebugger1;
         internal ContextStackView ContextStackView => contextStackView6;
 
+        int IMainForm.ListenPort => throw new NotImplementedException();
+
+        private readonly IPeer _peer;
+        private readonly ExecutionContext _context;
         public MainForm() {
             InitializeComponent();
 
-            _context = new Context();
+            _context = new ExecutionContext();
             _peer = Pyro.Network.Create.NewPeer(ListenPort);
             _peer.OnConnected += Connected;
             _peer.OnReceivedResponse += Received;
@@ -62,33 +75,24 @@ namespace WinForms {
             UpdatePiContext();
             ColorisePi();
             ColoriseRho();
-            Exec.Scope["TimeNow"] = Function(() => DateTime.Now);
-            Exec.Scope["PrintSpan"] = Function<TimeSpan>(d => Print(d.ToString()));
-            Exec.Scope["PrintTime"] = Function<DateTime>(d => Print(d.ToString()));
-            Exec.Scope["print"] = Function<object>(d => Print(d.ToString()));
+            Executor.Scope["TimeNow"] = Function(() => DateTime.Now);
+            Executor.Scope["PrintSpan"] = Function<TimeSpan>(d => Print(d.ToString()));
+            Executor.Scope["PrintTime"] = Function<DateTime>(d => Print(d.ToString()));
+            Executor.Scope["print"] = Function<object>(d => Print(d.ToString()));
 
-            Exec.Rethrows = true;
+            Executor.Rethrows = true;
 
             SetupPiDebug();
 
             var timer = new System.Windows.Forms.Timer { Interval = 10 };
-            timer.Tick += (sender, args) => Exec.Next();
+            timer.Tick += (sender, args) => Executor.Next();
             timer.Start();
         }
 
         private void SetupPiDebug() {
             piDebugger1.Construct(this);
-            piInputDebugger1.Construct(this);
             dataStackView2.Construct(this);
             contextStackView6.Construct(this);
-
-            ClearDebug();
-        }
-
-        private void ClearDebug() {
-            piDebugger1.Clear();
-            dataStackView2.Clear();
-            contextStackView6.Clear();
         }
 
         private void Print(object obj) {
@@ -108,7 +112,7 @@ namespace WinForms {
             Console.WriteLine($"Recv: {text}");
             if (_context.Translate(text, out var cont)) {
                 try {
-                    Exec.Continue(cont.Code[0] as Continuation);
+                    Executor.Continue(cont.Code[0] as Continuation);
                 } catch (Exception e) {
                     Console.WriteLine(e);
                     output.Text += $@"Exception: {e.Message}";
@@ -223,7 +227,7 @@ namespace WinForms {
         private void CopyStack() {
             try {
                 _last = new List<object>();
-                foreach (var obj in Exec.DataStack) {
+                foreach (var obj in Executor.DataStack) {
                     _last.Add(_context.Registry.Duplicate(obj)); // TODO: copy-on-write duplicates
                 }
             } catch (Exception e) {
@@ -248,7 +252,7 @@ namespace WinForms {
 
         private void Perform(EOperation op) {
             if (_local)
-                Perform(() => Exec.Perform(op));
+                Perform(() => Executor.Perform(op));
             else
                 _peer.Execute(_context.Registry.ToPiScript(op));
         }
@@ -323,6 +327,10 @@ namespace WinForms {
         }
 
         private void rhoInput_TextChanged(object sender, EventArgs e) {
+
+        }
+
+        private void piDebugger1_Load(object sender, EventArgs e) {
 
         }
 

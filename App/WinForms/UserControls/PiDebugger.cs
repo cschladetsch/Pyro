@@ -1,28 +1,27 @@
 ﻿namespace WinForms.UserControls {
     using System;
+    using Pyro.Exec;
 
-    public partial class PiDebugger
-        : UserControlBase {
-        //private MainForm _main;
+    namespace WinForms {
 
-        public PiDebugger() {
-            InitializeComponent();
-        }
+        public partial class PiDebugger
+            : UserControlBase
+            , IUserControlCommon {
+            //private MainForm _main;
 
-        private void PiDebugger_Load(object sender, EventArgs e) {
-        }
+            private void PiDebugger_Load(object sender, EventArgs e) {
+            }
 
-        public override void Clear() {
-            listView1.Items.Clear();
-        }
+            public override void Render() {
+            }
 
-        public void Restart() {
-            _contextStackView.Clear();
-            _contextStackView.Show(_Exec.Context());
-        }
+            public void Input(string pi) {
+                Console.WriteLine($"Debugging {pi}");
+            }
 
-        public void Input(string pi) {
-            Console.WriteLine($"Debugging {pi}");
+            public override void Construct(IMainForm mainForm) {
+                throw new NotImplementedException();
+            }
         }
     }
 }

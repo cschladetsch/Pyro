@@ -121,8 +121,8 @@
             Console.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
             // make a copy as it could be changed by another call while we're iterating over data stack
-            var results = client.Context.Executor.DataStack.ToList();
-            var reg = client.Context.Registry;
+            var results = client.ExecutionContext.Executor.DataStack.ToList();
+            var reg = client.ExecutionContext.Registry;
             var n = results.Count - 1;
             foreach (var result in results)
                 str.AppendLine($"{n--}: {reg.ToPiScript(result)}");

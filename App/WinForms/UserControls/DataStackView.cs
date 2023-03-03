@@ -1,13 +1,11 @@
-﻿namespace WinForms {
+﻿namespace WinForms.UserControls {
     using System;
-    using System.Windows.Forms;
 
     public partial class DataStackView
-        : UserControl {
-        private MainForm _main;
+        : UserControlBase
+        , IUserControlCommon {
 
         public DataStackView() {
-            InitializeComponent();
         }
 
         private void ContextStackView_Load(object sender, EventArgs e) {
@@ -18,12 +16,12 @@
 
         }
 
-        public void Clear() {
-            listView1.Items.Clear();
+        public override void Construct(IMainForm mainForm) {
+            MainForm = mainForm;
         }
 
-        public void Construct(MainForm mainForm) {
-            _main = mainForm;
+        public override void Render() {
+            throw new NotImplementedException();
         }
     }
 }

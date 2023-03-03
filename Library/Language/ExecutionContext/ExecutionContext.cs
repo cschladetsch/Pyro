@@ -12,7 +12,7 @@
     /// Functionality to execute scripts in any system-supported language
     /// given text or a filename.
     /// </summary>
-    public class Context
+    public class ExecutionContext
         : Process {
         public IRegistry Registry { get; }
         public ITranslator Translator { get; private set; }
@@ -70,7 +70,7 @@
         public bool Translate(string text, out Continuation result)
             => Translate(Translator, out result, text);
 
-        public Context(bool runStartScripts = false) {
+        public ExecutionContext(bool runStartScripts = false) {
             Registry = new Registry();
             Executor = Registry.Add(new Executor()).Value;
             RegisterTypes.Register(Registry);

@@ -9,7 +9,7 @@
     /// </summary>
     public interface INetCommon
         : IProcess {
-        Context Context { get; }
+        ExecutionContext ExecutionContext { get; }
         Socket Socket { get; }
 
         IFuture<DateTime> Ping();

@@ -1,6 +1,8 @@
 ﻿namespace WinForms
 {
     partial class DataStackView
+        : UserControlBase
+        , IUserControlCommon
     {
         /// <summary>
         /// Required designer variable.
@@ -105,7 +107,7 @@
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            //TODO this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             //
             // DataStackValueNum
             //
@@ -141,6 +143,14 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        public override void Construct(IMainForm mainForm) {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Render() {
+            throw new System.NotImplementedException();
         }
 
         #endregion

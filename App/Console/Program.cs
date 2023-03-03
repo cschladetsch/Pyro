@@ -21,14 +21,14 @@
         private IPeer _peer;
 
         // only used for translation - not execution. Execution is performed by servers or clients.
-        private readonly Context _context;
+        private readonly ExecutionContext _context;
 
         public static void Main(string[] args)
             => new Program(args).Repl();
 
         private Program(string[] args)
             : base(args) {
-            _context = new Context { Language = ELanguage.Rho };
+            _context = new ExecutionContext { Language = ELanguage.Rho };
             RegisterTypes.Register(_context.Registry);
 
             if (!StartPeer(args))
@@ -50,7 +50,7 @@
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
 
             _peer = Create.NewPeer(port);
-            var ctx = _peer.Local.Context;
+            var ctx = _peer.Local.ExecutionContext;
             var reg = ctx.Registry;
             var scope = ctx.Executor.Scope;
 
@@ -194,8 +194,8 @@
         public static void WriteDataStackContents(INetCommon client, int max = 50) {
             var str = new StringBuilder();
             // Make a copy as it could be changed by another network call while we're iterating over data stack.
-            var results = client.Context.Executor.DataStack.ToList();
-            var reg = client.Context.Registry;
+            var results = client.ExecutionContext.Executor.DataStack.ToList();
+            var reg = client.ExecutionContext.Registry;
             var n = Math.Min(max, results.Count - 1);
             foreach (var result in results)
                 str.AppendLine($"{n--}: {reg.ToPiScript(result)}");

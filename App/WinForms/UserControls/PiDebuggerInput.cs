@@ -1,10 +1,12 @@
 ﻿namespace WinForms.UserControls {
     using System;
     using System.Windows.Forms;
+    using Pyro.Exec;
 
     public partial class PiDebuggerInput
-        : UserControlBase {
-        public PiDebuggerInput() {
+        : UserControlBase
+        , IUserControlCommon {
+        public PiDebuggerInput() { 
             InitializeComponent();
         }
 
@@ -46,6 +48,14 @@
 
         private void RichTextBox1_KeyPress(object sender, KeyPressEventArgs e) {
             Console.WriteLine(e);
+        }
+
+        public override void Construct(IMainForm mainForm) {
+            throw new NotImplementedException();
+        }
+
+        public override void Render() {
+            throw new NotImplementedException();
         }
     }
 }

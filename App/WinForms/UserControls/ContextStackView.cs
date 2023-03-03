@@ -1,11 +1,11 @@
-﻿namespace WinForms {
+﻿namespace WinForms.UserControls {
     using Pyro.Exec;
     using System;
     using System.Windows.Forms;
-    using UserControls;
 
     public partial class ContextStackView
-        : UserControlBase {
+        : UserControlBase
+        , IUserControlCommon {
         public ContextStackView() {
             InitializeComponent();
         }
@@ -14,14 +14,6 @@
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e) {
-        }
-
-        internal override void Construct(MainForm mainForm) {
-            _Main = mainForm;
-        }
-
-        public override void Clear() {
-            listView1.Items.Clear();
         }
 
         internal void Show(Continuation cont) {
@@ -39,13 +31,21 @@
                 return;
             }
 
-            subs[1] = NewSubItem(item, 1, _Main.Context.Registry.ToPiScript(obj));
+            subs[1] = NewSubItem(item, 1, Registry.ToPiScript(obj));
             subs[2] = NewSubItem(item, 2, obj.GetType().ToString());
             listView1.Items.Add(item);
         }
 
         private ListViewItem.ListViewSubItem NewSubItem(ListViewItem item, int n, string text) {
             return new ListViewItem.ListViewSubItem(item, text);
+        }
+
+        public override void Construct(IMainForm mainForm) {
+            throw new NotImplementedException();
+        }
+
+        public override void Render() {
+            throw new NotImplementedException();
         }
     }
 }
