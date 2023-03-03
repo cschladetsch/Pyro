@@ -53,7 +53,7 @@ namespace WinForms {
 
             LoadPrevious();
 
-            Closing += (a, b) => {
+            FormClosing += (a, b) => {
                 SaveFile("pi", piInput.Text);
                 SaveFile("rho", rhoInput.Text);
                 _peer?.Stop();
@@ -119,14 +119,18 @@ namespace WinForms {
         }
 
         private void LoadPrevious() {
-            try {
-                piInput.Text = LoadFile("pi");
-                rhoInput.Text = LoadFile("rho");
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-                output.Text += $"Exception: {e.Message}";
-            }
+            piInput.Text = LoadFile("pi");
+            rhoInput.Text = LoadFile("rho");
         }
+
+        //private void LoadFile(string name) {
+        //    try {
+        //        piInput.Text = LoadFile("pi");
+        //    } catch (Exception e) {
+        //        Console.WriteLine(e.Message);
+        //        output.Text += $"Exception: {e.Message}";
+        //    }
+        //}
 
         private void ChangedTab(object sender, EventArgs e) {
             if (mainTabControl.SelectedIndex != 0)
@@ -312,6 +316,10 @@ namespace WinForms {
 
         private static void Connected(IPeer peer, IClient client) {
             Console.WriteLine($"Connected: {peer} {client}");
+        }
+
+        private void loadRhoToolStripMenuItem_Click(object sender, EventArgs e) {
+
         }
 
 

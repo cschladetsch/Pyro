@@ -8,8 +8,6 @@
     /// Common interface for all Dive system classes.
     /// </summary>
     public interface IClassBase {
-        AssemblyName Assembly { get; }
-        Version Version { get; }
         string TypeName { get; }
         Type Type { get; }
         int TypeNumber { get; }

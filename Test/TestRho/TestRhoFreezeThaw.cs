@@ -4,7 +4,7 @@
     [TestFixture]
     public class TestRhoFreezeThaw
         : TestCommon {
-        //[Test]
+        [Test]
         public void TestFreezeThaw() {
             FreezeThaw("Add.rho");
             FreezeThaw("Variables.rho");

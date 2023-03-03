@@ -18,7 +18,7 @@ namespace Pyro.Language.Impl {
         public IList<TToken> Tokens => _Tokens;
 
         protected List<TToken> _Tokens = new List<TToken>();
-        protected Dictionary<string, TEnum> _KeyWords = new Dictionary<string, TEnum>();
+        protected Dictionary<string, TEnum> _keyWords = new Dictionary<string, TEnum>();
         protected Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
         protected TTokenFactory _Factory = new TTokenFactory();
         public TToken ErrorToken;
@@ -34,7 +34,7 @@ namespace Pyro.Language.Impl {
         protected virtual void AddKeyWords() { }
 
         public TEnum StringToEnum(string str)
-            => _KeyWords.TryGetValue(str, out var e) ? e : default;
+            => _keyWords.TryGetValue(str, out var e) ? e : default;
 
         public string EnumToString(TEnum e)
             => _KeyWordsInvert.TryGetValue(e, out var str) ? str : e.ToString();
@@ -67,7 +67,7 @@ namespace Pyro.Language.Impl {
 
         protected TToken LexAlpha() {
             var tok = _Factory.NewTokenIdent(Gather(char.IsLetter));
-            if (_KeyWords.TryGetValue(tok.ToString(), out var en))
+            if (_keyWords.TryGetValue(tok.ToString(), out var en))
                 tok.Type = en;
 
             return tok;

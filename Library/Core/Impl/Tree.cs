@@ -9,8 +9,6 @@ namespace Pyro.Impl {
         public IConstRefBase Parent { get; }
         public IList<IConstRefBase> SearchPath { get; set; }
 
-        private IConstRefBase _scope;
-
         public object Resolve(IIdentifer ident) {
             if (!(Scope is IConstRefBase cr))
                 return GetNative(ident.ToText());

@@ -28,7 +28,7 @@
             WriteLine(text);
         }
 
-        //[Test]
+        [Test]
         public void TestCustomClass() {
             _Registry.Register(new ClassBuilder<Foo>(_Registry)
                 .Methods

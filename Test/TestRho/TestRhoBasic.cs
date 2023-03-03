@@ -279,7 +279,7 @@ foo(2)
 ");
         }
 
-        //[Test]
+        [Test]
         public void TestNestedFunctions() {
             RhoRun(
 @"

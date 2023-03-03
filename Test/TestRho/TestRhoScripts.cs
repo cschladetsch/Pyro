@@ -114,7 +114,7 @@ else
             Console.WriteLine(text);
         }
 
-        //[Test]
+        [Test]
         public void RunAllRhoScripts() {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.rho"))
                 Assert.IsTrue(RunScriptPathname(file));

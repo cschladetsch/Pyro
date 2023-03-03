@@ -14,23 +14,23 @@
         }
 
         protected override void AddKeyWords() {
-            _KeyWords.Add("break", ERhoToken.Break);
-            _KeyWords.Add("if", ERhoToken.If);
-            _KeyWords.Add("else", ERhoToken.Else);
-            _KeyWords.Add("for", ERhoToken.For);
-            _KeyWords.Add("true", ERhoToken.True);
-            _KeyWords.Add("false", ERhoToken.False);
-            _KeyWords.Add("yield", ERhoToken.Yield);
-            _KeyWords.Add("fun", ERhoToken.Fun);
-            _KeyWords.Add("return", ERhoToken.Return);
-            _KeyWords.Add("self", ERhoToken.Self);
-            _KeyWords.Add("while", ERhoToken.While);
-            _KeyWords.Add("assert", ERhoToken.Assert);
-            _KeyWords.Add("writeln", ERhoToken.WriteLine);
-            _KeyWords.Add("write", ERhoToken.Write);
-            _KeyWords.Add("new", ERhoToken.New);
-            _KeyWords.Add("in", ERhoToken.In);
-            _KeyWords.Add("class", ERhoToken.Class);
+            _keyWords.Add("break", ERhoToken.Break);
+            _keyWords.Add("if", ERhoToken.If);
+            _keyWords.Add("else", ERhoToken.Else);
+            _keyWords.Add("for", ERhoToken.For);
+            _keyWords.Add("true", ERhoToken.True);
+            _keyWords.Add("false", ERhoToken.False);
+            _keyWords.Add("yield", ERhoToken.Yield);
+            _keyWords.Add("fun", ERhoToken.Fun);
+            _keyWords.Add("return", ERhoToken.Return);
+            _keyWords.Add("self", ERhoToken.Self);
+            _keyWords.Add("while", ERhoToken.While);
+            _keyWords.Add("assert", ERhoToken.Assert);
+            _keyWords.Add("writeln", ERhoToken.WriteLine);
+            _keyWords.Add("write", ERhoToken.Write);
+            _keyWords.Add("new", ERhoToken.New);
+            _keyWords.Add("in", ERhoToken.In);
+            _keyWords.Add("class", ERhoToken.Class);
         }
 
         [SuppressMessage("NDepend", "ND1003:AvoidMethodsTooBigTooComplex", Justification = "This is practically irreducible")]
@@ -140,12 +140,14 @@
         private bool AddEmbeddedPi() {
             Next();
             AddSlice(ERhoToken.PiSlice, Gather(c => c != '`'));
+            if (Current() != '`')
+                return Fail("Unterminated embedded Pi code");   
             Next();
             return true;
         }
 
         protected override void AddKeywordOrIdent(Slice slice) {
-            _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
+            _Tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
                 ? _Factory.NewToken(tok, slice)
                 : _Factory.NewTokenIdent(slice));
         }

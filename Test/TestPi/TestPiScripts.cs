@@ -46,7 +46,7 @@
             //TestScript("TreeScope.pi");
         }
 
-        //[Test]
+        [Test]
         public void RunAllPiScripts() {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.pi"))
                 Assert.IsTrue(RunScriptPathname(file));

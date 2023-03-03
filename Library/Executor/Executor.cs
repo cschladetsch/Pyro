@@ -22,7 +22,7 @@ namespace Pyro.Exec {
         public Executor() {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
-            Verbosity = 0;
+            Verbosity = 100;
             AddOperations();
         }
 
@@ -236,6 +236,10 @@ namespace Pyro.Exec {
                     break;
 
                 default:
+
+                    if ((next.GetType()) != typeof(Continuation)) {
+                        throw new Exception("Cannot resume type " + next.GetType());
+                    }
                     PushContext(next);
                     _current = null;
                     break;

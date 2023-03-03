@@ -8,16 +8,13 @@ namespace Pyro.Impl {
     /// </summary>
     public class StructBase : IStructBase {
         public Type InstanceType { get; }
-        public AssemblyName Assembly => _assembly;
-        public Version Version => _version;
+
         public string TypeName => _typeName;
         public string RealTypeName => Type.FullName;
         public Type Type => _type;
 
         protected readonly IRegistry _registry;
 
-        private readonly AssemblyName _assembly;
-        private readonly Version _version;
         private readonly Type _type;
         private readonly string _typeName;
 

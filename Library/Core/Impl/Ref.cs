@@ -5,7 +5,6 @@ namespace Pyro.Impl {
     internal class Ref<T>
         : ConstRef<T>
         , IRef<T> {
-        public /*Slice*/object Slice;
 
         public new T Value
         {

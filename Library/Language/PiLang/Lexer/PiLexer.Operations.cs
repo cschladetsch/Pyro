@@ -60,7 +60,7 @@
         }
 
         private void AddKeyword(string str, EPiToken tok) {
-            _KeyWords.Add(str, tok);
+            _keyWords.Add(str, tok);
             _KeyWordsInvert.Add(tok, str);
         }
 

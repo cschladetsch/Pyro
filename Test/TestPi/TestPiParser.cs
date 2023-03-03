@@ -31,7 +31,7 @@
             Assert.IsTrue(parser.Process(lexer));
         }
 
-        //[Test]
+        [Test]
         public void TestPathnames() {
             Parse("foo");
             Assert.AreEqual(EPiAst.Ident, First.Type);

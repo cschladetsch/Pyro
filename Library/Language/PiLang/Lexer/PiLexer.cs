@@ -140,7 +140,7 @@
             => base.Fail($"{_lineNumber}({_offset}): {err}");
 
         protected override void AddKeywordOrIdent(Slice slice)
-            => _Tokens.Add(_KeyWords.TryGetValue(slice.Text, out var tok)
+            => _Tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
             ? _Factory.NewToken(tok, slice)
             : _Factory.NewTokenIdent(slice));
 
