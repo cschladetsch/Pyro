@@ -21,6 +21,7 @@ namespace Pyro.Test {
         : Process {
         public bool Verbose = true;
         public const string ScriptsFolder = "Scripts";
+        public Continuation Continuation => _Continuation;
 
         protected Continuation _Continuation;
         protected IDictionary<string, object> _Scope => _Continuation?.Scope;
@@ -43,20 +44,32 @@ namespace Pyro.Test {
             _ExecutorRef = _Registry.Add(new Executor());
         }
 
-        protected void PiRun(string text) {
-            _Exec.Clear();
-            _Exec.Continue(_Continuation = PiTranslate(text));
+        protected Continuation PiRun(string text, bool trace = false) {
+            _Continuation = PiTranslate(text, trace);
+            Run(trace);
+            return _Continuation;
         }
 
-        protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program) {
-            _Exec.Clear();
-            _Exec.Continue(_Continuation = RhoTranslate(text, trace, st));
+        protected Continuation RhoRun(string text, bool trace = false, EStructure st = EStructure.Program) {
+            _Continuation = RhoTranslate(text, trace, st);
+            Run(trace);
+            return _Continuation;
         }
 
-        protected Continuation PiTranslate(string piScript) {
+        private void Run(bool trace = false) {
+            _Exec.Clear();
+            if (trace) {
+                WriteLine(Continuation.ToString());
+            }
+            _Exec.Continue(_Continuation);
+        }
+
+        protected Continuation PiTranslate(string piScript, bool trace = false) {
             var trans = new PiTranslator(_Registry);
             if (!trans.Translate(piScript, out var cont))
                 WriteLine($"Error: {trans.Error}");
+            if (trace)
+                WriteLine(cont.ToString());
 
             Assert.IsFalse(trans.Failed, trans.Error);
             return _Continuation = cont;

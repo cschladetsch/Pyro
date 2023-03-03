@@ -128,7 +128,7 @@
             var code = RhoTranslate(
 @"
 fun foo()
-	1
+1
 	2
 	3
 ").Code;

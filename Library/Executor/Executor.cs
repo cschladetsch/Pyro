@@ -236,7 +236,6 @@ namespace Pyro.Exec {
                     break;
 
                 default:
-
                     if ((next.GetType()) != typeof(Continuation)) {
                         throw new Exception("Cannot resume type " + next.GetType());
                     }
@@ -283,6 +282,9 @@ namespace Pyro.Exec {
         private Continuation PopContext() {
             for (var n = ContextStack.Count - 1; n >= 0; --n) {
                 var cont = ContextStack[n];
+                if (cont == null) {
+                    throw new NullValueException("Context stack empty.");
+                }
                 if (!cont.Active || !cont.Running)
                     continue;
 

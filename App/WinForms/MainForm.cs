@@ -322,6 +322,10 @@ namespace WinForms {
 
         }
 
+        private void rhoInput_TextChanged(object sender, EventArgs e) {
+
+        }
+
 
         //private void PiDebuggerInputPreview(object sender, PreviewKeyDownEventArgs e)
         //{
