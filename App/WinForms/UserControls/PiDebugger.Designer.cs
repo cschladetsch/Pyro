@@ -122,7 +122,7 @@
         }
 
         public override void Construct(IMainForm mainForm) {
-            throw new System.NotImplementedException();
+            MainForm = mainForm;
         }
 
         public override void Render() {

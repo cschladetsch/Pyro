@@ -41,7 +41,7 @@
         }
 
         public override void Construct(IMainForm mainForm) {
-            throw new NotImplementedException();
+            MainForm = mainForm;
         }
 
         public override void Render() {
