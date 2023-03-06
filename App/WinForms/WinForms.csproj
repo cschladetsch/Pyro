@@ -107,6 +107,12 @@
     <Compile Include="UserControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\RhoEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RhoEditorControl.Designer.cs">
+      <DependentUpon>RhoEditorControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PiDebuggerInput.resx">
       <DependentUpon>PiDebuggerInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RhoEditorControl.resx">
+      <DependentUpon>RhoEditorControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

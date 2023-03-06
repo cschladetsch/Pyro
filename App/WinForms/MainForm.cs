@@ -39,6 +39,8 @@ namespace WinForms {
         internal PiDebugger PiDebugger => piDebugger1;
         internal ContextStackView ContextStackView => contextStackView6;
 
+        internal RichTextBox rhoInput => rhoEditorControl1.RichTextBox;
+
         int IMainForm.ListenPort => throw new NotImplementedException();
 
         private readonly IPeer _peer;
@@ -60,7 +62,9 @@ namespace WinForms {
             mainTabControl.SelectedIndex = 2;
             mainTabControl.SelectedIndexChanged += ChangedTab;
             piInput.TextChanged += PiInputOnTextChanged;
+
             rhoInput.TextChanged += RhoInputOnTextChanged;
+            rhoInput.KeyDown += RhoTextKeyDown;
 
             LoadPrevious();
 
@@ -329,6 +333,10 @@ namespace WinForms {
         }
 
         private void piDebugger1_Load(object sender, EventArgs e) {
+
+        }
+
+        private void rhoEditorControl1_Load(object sender, EventArgs e) {
 
         }
 
