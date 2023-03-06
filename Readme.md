@@ -25,7 +25,7 @@ From either *Pi* or *Rho* it is trivial to access all .Net objects, and also sim
 Installation of the software is straight-forward, with the addition of having some external submodules that must be updated before building the solution.
 
 ```bash
-git clone git@github.com:cschladetsch/Pyro.git
+git clone git@github.com:cschladetsch/Pyro.git && cd Pyro
 git submodule init
 git submodule update
 git lfs install
