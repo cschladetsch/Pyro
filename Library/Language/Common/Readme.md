@@ -12,3 +12,8 @@ This commonality includes:
 * Common [Lexer](LexerCommon.cs) and [Parser](ParserCommon.cs), parameterised over enum and node types.
 * Common generation of Lexer, Parser and Translator error messages.
 
+## Todo
+
+There could be even more refactoring to make the deduced languages use less code.
+
+This is a tricky business, as it comes at a higher degree of complexity and a lower degree of maintainance.

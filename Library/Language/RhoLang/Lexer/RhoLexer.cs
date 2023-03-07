@@ -33,7 +33,6 @@
             _keyWords.Add("class", ERhoToken.Class);
         }
 
-        [SuppressMessage("NDepend", "ND1003:AvoidMethodsTooBigTooComplex", Justification = "This is practically irreducible")]
         protected override bool NextToken() {
             var current = Current();
             if (current == 0)
