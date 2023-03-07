@@ -89,7 +89,7 @@
         }
 
         public bool ContinueRho(string rhoScript) {
-            return _executionContext.ExecRho(rhoScript) || Error($"Failed to translate {rhoScript}");
+            return _executionContext.ExecRho(rhoScript) || Error($"Failed to execute {rhoScript}");
         }
 
         protected override bool ProcessReceived(Socket sender, string pi) {

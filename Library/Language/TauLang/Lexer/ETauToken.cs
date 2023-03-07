@@ -1,24 +1,35 @@
 ﻿namespace Pyro.Language.Tau.Lexer {
     public enum ETauToken {
         None,
+
         Namespace,
         OpenBrace,
         CloseBrace,
+        Class,
+
+        Ident,
         OpenParan,
         CloseParan,
-        Class,
-        Ident,
+
+        Semi,
+        Comma,
+
+        Void,
         Int,
         String,
         Float,
+
         Getter,
         Setter,
-        Semi,
-        Comma,
 
         List,
         Set,
         Dict,
+
+        Event,
+        Func,
+        LessThan,
+        GreaterThan,
 
         End,
     }

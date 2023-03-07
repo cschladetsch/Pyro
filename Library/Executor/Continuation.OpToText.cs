@@ -177,8 +177,6 @@ namespace Pyro.Exec {
                 default:
                     throw new ArgumentOutOfRangeException(nameof(op), op, null);
             }
-
-            return $"`{(int)op}";
         }
     }
 }

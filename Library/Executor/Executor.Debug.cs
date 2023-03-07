@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-
-namespace Pyro.Exec {
+﻿namespace Pyro.Exec {
     using System;
     using System.Text;
+
+    using NUnit.Framework;
 
     /// <inheritdoc />
     /// <summary>

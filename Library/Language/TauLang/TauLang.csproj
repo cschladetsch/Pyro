@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generator\AgentGenerator.cs" />
+    <Compile Include="Generator\Generator.cs" />
     <Compile Include="Generator\ProxyGenerator.cs" />
     <Compile Include="Lexer\ETauToken.cs" />
     <Compile Include="Lexer\TauToken.cs" />
@@ -61,6 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReadMe.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

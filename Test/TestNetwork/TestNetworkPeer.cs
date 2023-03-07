@@ -14,13 +14,13 @@
         : TestCommon
     {
         public const int ListenPort = 8888;
-        private Context _context;
+        private ExecutionContext _context;
 
         [SetUp]
         public new void Setup()
         {
             base.Setup();
-            _context = new Context();
+            _context = new ExecutionContext();
         }
 
         [Test]
@@ -46,11 +46,11 @@
             WriteLine($"Test: Connected to {client}");
         }
 
-        private void Received(IServer server, IClient client, string request)
+        private void Received(IClient client, string request)
         {
             Assert.IsNotEmpty(request);
             _context.Language = ELanguage.Pi;
-            WriteLine($"Recv: server={server}, client={client}, req={request}");
+            WriteLine($"Recv: client={client}, req={request}");
             Assert.IsTrue(_context.Translate(request, out var cont));
             _context.Executor.Continue(cont.Code[0] as Continuation);
             var stack = _context.Executor.DataStack;

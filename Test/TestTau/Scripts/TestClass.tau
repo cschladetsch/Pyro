@@ -1,0 +1,12 @@
+﻿// A comment
+namespace Melb0
+{
+    class Foo
+    {
+        event Func<int, string> SomeEvent;
+        string Name { get; }
+        float Age { get; set; }
+        int Sum(int a, int b);
+        void Call();
+    }
+}

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-
-namespace Pyro.Network.Unity {
+﻿namespace Pyro.Network.Unity {
     using System.Collections.Generic;
     using System.Reflection;
+
+    using UnityEngine;
 
     public class SharedProperties
         : Common {

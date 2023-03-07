@@ -117,7 +117,6 @@
                 return Error("Invalid client number.");
             var client = _clients[i];
 
-            // TODO: this is copied from Console.Program.cs
             Console.ForegroundColor = ConsoleColor.Yellow;
             var str = new StringBuilder();
             // make a copy as it could be changed by another call while we're iterating over data stack
@@ -131,7 +130,7 @@
             return true;
         }
 
-        public bool To(int n, string piScript)
+        public bool SendPiToClient(int n, string piScript)
             => n >= _clients.Count ? Error("Invalid client number.") : _clients[n].Continue(piScript);
 
         public bool EnterClient(IClient client) {
