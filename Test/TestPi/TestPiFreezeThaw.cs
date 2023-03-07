@@ -45,7 +45,6 @@
         }
 
         [Test]
-#warning // persistence not implemented
         public void TestPersistedInstances() {
             var user = _Registry.Add<User>().Value;
             user.Name = "Freddy";

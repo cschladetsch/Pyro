@@ -53,6 +53,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Readme.md" />
     <None Include="Scripts\Array.pi" />
     <None Include="Scripts\Comments.pi" />
     <None Include="Scripts\Common.pi" />
