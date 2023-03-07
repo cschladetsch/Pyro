@@ -53,6 +53,7 @@
     <Compile Include="Dialogs\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainForm\IMainForm.cs" />
     <Compile Include="UserControls\ContextStackView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -113,6 +114,12 @@
     <Compile Include="UserControls\RhoEditorControl.Designer.cs">
       <DependentUpon>RhoEditorControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TreeViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\TreeViewControl.Designer.cs">
+      <DependentUpon>TreeViewControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -152,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RhoEditorControl.resx">
       <DependentUpon>RhoEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TreeViewControl.resx">
+      <DependentUpon>TreeViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

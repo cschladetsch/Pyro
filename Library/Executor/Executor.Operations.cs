@@ -53,7 +53,7 @@
             _actions[EOperation.Assert] = Assert;
             _actions[EOperation.Equiv] = Equiv;
             _actions[EOperation.NotEquiv] = NotEquiv;
-            _actions[EOperation.Not] = () => Push(!RPop<bool>());
+            _actions[EOperation.Not] = () => Push(!ResolvePop<bool>());
             _actions[EOperation.LogicalAnd] = LogicalAnd;
             _actions[EOperation.LogicalOr] = LogicalOr;
             _actions[EOperation.LogicalXor] = LogicalXor;
@@ -404,7 +404,7 @@
         }
 
         private void IfElse() {
-            var test = RPop<bool>();
+            var test = ResolvePop<bool>();
             var thenBody = RPop();
             var ifBody = RPop();
 
@@ -412,14 +412,14 @@
         }
 
         private void If() {
-            var test = RPop<bool>();
+            var test = ResolvePop<bool>();
             var ifBody = RPop();
             if (test)
                 Push(ifBody);
         }
 
         private void SetFloatPrecision() {
-            FloatPrecision = RPop<int>();
+            FloatPrecision = ResolvePop<int>();
         }
 
         private void LogicalXor() {
@@ -459,7 +459,7 @@
         }
 
         private void ToSet() {
-            var count = RPop<int>();
+            var count = ResolvePop<int>();
             var set = new HashSet<object>();
             while (count-- > 0)
                 set.Add(RPop());
@@ -468,7 +468,7 @@
         }
 
         private void ToMap() {
-            var count = RPop<int>();
+            var count = ResolvePop<int>();
             var dict = new Dictionary<object, object>();
             while (count-- > 0) {
                 var value = RPop();
@@ -627,14 +627,14 @@
         }
 
         private void PushBack() {
-            var cont = RPop<List<object>>() as List<object>;
+            var cont = ResolvePop<List<object>>() as List<object>;
             var obj = RPop();
             cont.Add(obj);
             Push(cont);
         }
 
         private void PushFront() {
-            if (!(RPop<List<object>>() is List<object> cont))
+            if (!(ResolvePop<List<object>>() is List<object> cont))
                 throw new Exception("Expected a list.");
 
             cont.Insert(0, RPop());
@@ -642,7 +642,7 @@
         }
 
         private void ToArray() {
-            var count = RPop<int>();
+            var count = ResolvePop<int>();
             var list = new List<object>();
             while (count-- > 0)
                 list.Add(RPop());

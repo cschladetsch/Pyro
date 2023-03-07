@@ -109,7 +109,8 @@
                 cont.Scope = Executor.Scope;
                 Executor.Continue(cont);
             } catch (Exception e) {
-                return Fail(e.Message);
+                Fail(e.Message);
+                throw e;
             }
 
             return true;

@@ -1,12 +1,7 @@
-﻿using Pyro.Exec;
+﻿using Pyro;
+using Pyro.Exec;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinForms.UserControls {
@@ -29,15 +24,24 @@ namespace WinForms.UserControls {
                 stackView.Items.Add(MakeStackViewItem(n++, item));
         }
 
+        //public static void Populate(registry, ListView list, IEnumerable objects) {
+        //    list.Clear();
+        //    var n = 0;
+        //    foreach (var item in objects)
+        //        list.Items.Add(MakeStackViewItem(n++, item));
+        //}
+
         private ListViewItem MakeStackViewItem(int n, object item) {
             var row = new ListViewItem(n.ToString());
             AddSubItem(row, MainForm.Registry.ToPiScript(item));
             AddSubItem(row, GetType(item));
-            AddSubItem(row, "#?");
+            if (item as IReflected != null) {
+                AddSubItem(row, (item as IReflected).SelfBase.Id.ToString());
+            }
             return row;
         }
 
-        private string GetType(object item) {
+        public static string GetType(object item) {
             if (item == null) {
                 return "null";
             }
@@ -48,7 +52,7 @@ namespace WinForms.UserControls {
             return type;
         }
 
-        private static void AddSubItem(ListViewItem row, string text)
+        public static void AddSubItem(ListViewItem row, string text)
             => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
 
         private void StackClearClick(object sender, EventArgs e)
@@ -68,6 +72,5 @@ namespace WinForms.UserControls {
 
         private void StackDropClick(object sender, EventArgs e)
             => Perform(EOperation.Drop);
-
     }
 }

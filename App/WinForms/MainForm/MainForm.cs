@@ -10,16 +10,6 @@ namespace WinForms {
     using System.Windows.Forms;
     using static Pyro.Create;
 
-    public interface IMainForm {
-        int ListenPort { get; }
-
-        Executor Executor { get; }
-
-        IRegistry Registry { get; }
-
-        void Perform(EOperation op);
-    }
-
 
     /// <summary>
     /// The main form for the application.
@@ -30,7 +20,9 @@ namespace WinForms {
         public int ListenPort = 7777;
 
         public Executor Executor => _context.Executor;
+
         public IRegistry Registry => _context.Registry;
+
         public Stack<object> DataStack => Executor.DataStack;
 
         private List<object> _last;
@@ -38,7 +30,6 @@ namespace WinForms {
         private bool PiSelected => mainTabControl.SelectedIndex == 0;
 
         internal ExecutionContext Context => _context;
-
         internal RichTextBox rhoInput => rhoEditorControl1.RichTextBox;
 
         int IMainForm.ListenPort => throw new NotImplementedException();
@@ -59,7 +50,7 @@ namespace WinForms {
             Perform(EOperation.Clear);
 
             output1.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
-            mainTabControl.SelectedIndex = 2;
+            mainTabControl.SelectedIndex = 1;
             mainTabControl.SelectedIndexChanged += ChangedTab;
 
             piInput.TextChanged += PiInputOnTextChanged;
@@ -77,18 +68,17 @@ namespace WinForms {
             UpdatePiContext();
             ColorisePi();
             ColoriseRho();
+            AddBuiltinMethods();
+            ConnectUserControls();
+            
+            Executor.Rethrows = true;
+        }
+
+        private void AddBuiltinMethods() {
             Executor.Scope["TimeNow"] = Function(() => DateTime.Now);
             Executor.Scope["PrintSpan"] = Function<TimeSpan>(d => Print(d.ToString()));
             Executor.Scope["PrintTime"] = Function<DateTime>(d => Print(d.ToString()));
             Executor.Scope["print"] = Function<object>(d => Print(d.ToString()));
-
-            Executor.Rethrows = false;
-
-            ConnectUserControls();
-
-            //var timer = new System.Windows.Forms.Timer { Interval = 10 };
-            //timer.Tick += (sender, args) => Executor.Next();
-            //timer.Start();
         }
 
         private void ConnectUserControls() {
@@ -184,19 +174,27 @@ namespace WinForms {
         }
 
         private void ExecutePi() {
-            var pi = piInput.Lines[piInput.GetLineFromCharIndex(piInput.SelectionStart)];
-            if (_local)
-                Perform(() => _context.ExecPi(pi));
-            else
-                Perform(() => _peer.Execute(pi));
+            try {
+                var pi = piInput.Lines[piInput.GetLineFromCharIndex(piInput.SelectionStart)];
+                if (_local)
+                    Perform(() => _context.ExecPi(pi));
+                else
+                    Perform(() => _peer.Execute(pi));
+            } catch (Exception e) {
+                OutputException(e);
+            }
         }
 
         private void ExecuteRho() {
-            var script = rhoInput.SelectedText.Length > 0 ? rhoInput.SelectedText : rhoInput.Text;
-            if (_local)
-                Perform(() => _context.ExecRho(script));
-            else
-                Perform(() => _peer.Execute(script));
+            try {
+                var script = rhoInput.SelectedText.Length > 0 ? rhoInput.SelectedText : rhoInput.Text;
+                if (_local)
+                    Perform(() => _context.ExecRho(script));
+                else
+                    Perform(() => _peer.Execute(script));
+            } catch (Exception e) {
+                OutputException(e);
+            }
         }
 
         private void Perform(Action action) {
@@ -215,8 +213,13 @@ namespace WinForms {
         }
 
         private void OutputException(Exception e) {
-            output1.Append($"Exception: {e.Message} ({_context.Error})", Color.Red);
+            var text = $"{e.Message} ({_context.Error})";
+            if (e.Message == _context.Error) {
+                text = $"{e.Message}";
+            }
+            output1.Append(text, Color.Red);
             Console.WriteLine(e);
+            MessageBox.Show(text, "Pyro Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void CopyStack() {
@@ -245,10 +248,14 @@ namespace WinForms {
         //}
 
         public void Perform(EOperation op) {
-            if (_local)
-                Perform(() => Executor.Perform(op));
-            else
-                _peer.Execute(_context.Registry.ToPiScript(op));
+            try {
+                if (_local)
+                    Perform(() => Executor.Perform(op));
+                else
+                    _peer.Execute(_context.Registry.ToPiScript(op));
+            } catch (Exception e) {
+                OutputException(e);
+            }
         }
 
         private void SaveAsFile(object sender, EventArgs e) {
@@ -306,6 +313,30 @@ namespace WinForms {
 
         private void rhoEditorControl1_Load(object sender, EventArgs e) {
         }
+
+        private void debuggerToolStripMenuItem_Click(object sender, EventArgs e) {
+            ToggleControlVisibility(contextStackView1);
+        }
+
+        private void treeToolStripMenuItem_Click(object sender, EventArgs e) {
+            //ToggleControlVisibility(treeView1);
+        }
+
+        private void outputToolStripMenuItem_Click(object sender, EventArgs e) {
+            ToggleControlVisibility(output1);
+        }
+        private void stackToolStripMenuItem_Click(object sender, EventArgs e) {
+            ToggleControlVisibility(dataStackView1);
+        }
+
+        private void ToggleControlVisibility(UserControl control) {
+            if (control.Visible) {
+                control.Visible = false;
+            } else {
+                control.Visible = true;
+            }
+        }
+
     }
 }
 

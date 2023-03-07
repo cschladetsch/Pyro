@@ -20,7 +20,14 @@
         /// </summary>
         IList<IConstRefBase> SearchPath { get; set; }
 
+        IConstRefBase Root { get; }
+
+        IConstRefBase Find(IPathname path);
+
+        IEnumerable<IConstRefBase> GetChildren(IPathname path);
+
         object Resolve(IIdentifer ident);
+
         object Resolve(IPathname path);
     }
 }

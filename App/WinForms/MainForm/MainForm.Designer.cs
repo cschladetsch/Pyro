@@ -23,23 +23,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Node0");
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node3");
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Node4");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Node6");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Node7");
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("Node8");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("Node9");
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("Node5", new System.Windows.Forms.TreeNode[] {
-            treeNode14,
-            treeNode15,
-            treeNode16,
-            treeNode17});
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Node1", new System.Windows.Forms.TreeNode[] {
-            treeNode12,
-            treeNode13,
-            treeNode18});
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Node2");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,10 +35,12 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolstripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.networkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,7 +61,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -88,6 +72,7 @@
             this.rhoEditorControl1 = new WinForms.UserControls.RhoEditorControl();
             this.dataStackView1 = new WinForms.UserControls.DataStackView();
             this.output1 = new WinForms.UserControls.Output();
+            this.treeViewControl1 = new WinForms.UserControls.TreeViewControl();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -117,7 +102,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1814, 38);
+            this.menuStrip1.Size = new System.Drawing.Size(1451, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -130,9 +115,10 @@
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem,
             this.toolStripSeparator1,
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 34);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // newToolStripMenuItem
@@ -199,41 +185,60 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.Exit);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(155, 26);
+            this.toolStripMenuItem1.Text = "Load Pi...";
+            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.Checked = true;
             this.viewToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolstripToolStripMenuItem,
             this.stackToolStripMenuItem,
-            this.outputToolStripMenuItem});
+            this.outputToolStripMenuItem,
+            this.debuggerToolStripMenuItem,
+            this.treeToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 34);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.viewToolStripMenuItem.Text = "&View";
-            // 
-            // toolstripToolStripMenuItem
-            // 
-            this.toolstripToolStripMenuItem.Checked = true;
-            this.toolstripToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolstripToolStripMenuItem.Name = "toolstripToolStripMenuItem";
-            this.toolstripToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
-            this.toolstripToolStripMenuItem.Text = "&Toolstrip";
             // 
             // stackToolStripMenuItem
             // 
             this.stackToolStripMenuItem.Checked = true;
             this.stackToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stackToolStripMenuItem.Name = "stackToolStripMenuItem";
-            this.stackToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.stackToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
             this.stackToolStripMenuItem.Text = "&Stack";
+            this.stackToolStripMenuItem.Click += new System.EventHandler(this.stackToolStripMenuItem_Click);
             // 
             // outputToolStripMenuItem
             // 
             this.outputToolStripMenuItem.Checked = true;
             this.outputToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
             this.outputToolStripMenuItem.Text = "&Output";
+            this.outputToolStripMenuItem.Click += new System.EventHandler(this.outputToolStripMenuItem_Click);
+            // 
+            // debuggerToolStripMenuItem
+            // 
+            this.debuggerToolStripMenuItem.Checked = true;
+            this.debuggerToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.debuggerToolStripMenuItem.Name = "debuggerToolStripMenuItem";
+            this.debuggerToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
+            this.debuggerToolStripMenuItem.Text = "&Debugger";
+            this.debuggerToolStripMenuItem.Click += new System.EventHandler(this.debuggerToolStripMenuItem_Click);
+            // 
+            // treeToolStripMenuItem
+            // 
+            this.treeToolStripMenuItem.Checked = true;
+            this.treeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.treeToolStripMenuItem.Name = "treeToolStripMenuItem";
+            this.treeToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
+            this.treeToolStripMenuItem.Text = "&Tree";
+            this.treeToolStripMenuItem.Click += new System.EventHandler(this.treeToolStripMenuItem_Click);
             // 
             // networkToolStripMenuItem
             // 
@@ -243,7 +248,7 @@
             this.listenPortToolStripMenuItem,
             this.stopToolStripMenuItem});
             this.networkToolStripMenuItem.Name = "networkToolStripMenuItem";
-            this.networkToolStripMenuItem.Size = new System.Drawing.Size(79, 34);
+            this.networkToolStripMenuItem.Size = new System.Drawing.Size(79, 24);
             this.networkToolStripMenuItem.Text = "&Network";
             // 
             // connectToolStripMenuItem
@@ -286,7 +291,7 @@
             this.sourceToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 34);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // sourceToolStripMenuItem
@@ -308,7 +313,7 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 728);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 704);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
             this.statusStrip1.Size = new System.Drawing.Size(1451, 26);
@@ -324,7 +329,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 48);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 28);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -335,8 +340,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1814, 863);
-            this.splitContainer1.SplitterDistance = 1145;
+            this.splitContainer1.Size = new System.Drawing.Size(1451, 676);
+            this.splitContainer1.SplitterDistance = 1094;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 3;
             // 
@@ -351,7 +356,7 @@
             this.mainTabControl.Margin = new System.Windows.Forms.Padding(4);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(1145, 863);
+            this.mainTabControl.Size = new System.Drawing.Size(1094, 676);
             this.mainTabControl.TabIndex = 1;
             // 
             // piConsole
@@ -362,7 +367,7 @@
             this.piConsole.Margin = new System.Windows.Forms.Padding(4);
             this.piConsole.Name = "piConsole";
             this.piConsole.Padding = new System.Windows.Forms.Padding(4);
-            this.piConsole.Size = new System.Drawing.Size(1295, 830);
+            this.piConsole.Size = new System.Drawing.Size(907, 665);
             this.piConsole.TabIndex = 1;
             this.piConsole.Text = "Pi";
             this.piConsole.UseVisualStyleBackColor = true;
@@ -375,7 +380,7 @@
             this.piInput.Location = new System.Drawing.Point(4, 44);
             this.piInput.Margin = new System.Windows.Forms.Padding(4);
             this.piInput.Name = "piInput";
-            this.piInput.Size = new System.Drawing.Size(1287, 782);
+            this.piInput.Size = new System.Drawing.Size(899, 617);
             this.piInput.TabIndex = 1;
             this.piInput.Text = "";
             this.piInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PiInputKeyDown);
@@ -388,7 +393,7 @@
             this.piStatus.Margin = new System.Windows.Forms.Padding(4);
             this.piStatus.Name = "piStatus";
             this.piStatus.ReadOnly = true;
-            this.piStatus.Size = new System.Drawing.Size(1287, 40);
+            this.piStatus.Size = new System.Drawing.Size(899, 40);
             this.piStatus.TabIndex = 0;
             this.piStatus.Text = "";
             // 
@@ -400,7 +405,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(1137, 830);
+            this.tabPage1.Size = new System.Drawing.Size(1086, 643);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Rho";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -413,59 +418,27 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1129, 822);
+            this.panel1.Size = new System.Drawing.Size(1078, 635);
             this.panel1.TabIndex = 0;
             // 
             // splitter2
             // 
             this.splitter2.Location = new System.Drawing.Point(644, 0);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(8, 822);
+            this.splitter2.Size = new System.Drawing.Size(8, 635);
             this.splitter2.TabIndex = 1;
             this.splitter2.TabStop = false;
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.treeView1);
+            this.panel2.Controls.Add(this.treeViewControl1);
             this.panel2.Controls.Add(this.splitter1);
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(644, 822);
+            this.panel2.Size = new System.Drawing.Size(644, 635);
             this.panel2.TabIndex = 0;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(0, 391);
-            this.treeView1.Name = "treeView1";
-            treeNode11.Name = "Node0";
-            treeNode11.Text = "Node0";
-            treeNode12.Name = "Node3";
-            treeNode12.Text = "Node3";
-            treeNode13.Name = "Node4";
-            treeNode13.Text = "Node4";
-            treeNode14.Name = "Node6";
-            treeNode14.Text = "Node6";
-            treeNode15.Name = "Node7";
-            treeNode15.Text = "Node7";
-            treeNode16.Name = "Node8";
-            treeNode16.Text = "Node8";
-            treeNode17.Name = "Node9";
-            treeNode17.Text = "Node9";
-            treeNode18.Name = "Node5";
-            treeNode18.Text = "Node5";
-            treeNode19.Name = "Node1";
-            treeNode19.Text = "Node1";
-            treeNode20.Name = "Node2";
-            treeNode20.Text = "Node2";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode11,
-            treeNode19,
-            treeNode20});
-            this.treeView1.Size = new System.Drawing.Size(644, 431);
-            this.treeView1.TabIndex = 2;
             // 
             // splitter1
             // 
@@ -500,8 +473,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.output1);
-            this.splitContainer2.Size = new System.Drawing.Size(664, 863);
-            this.splitContainer2.SplitterDistance = 507;
+            this.splitContainer2.Size = new System.Drawing.Size(352, 676);
+            this.splitContainer2.SplitterDistance = 397;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -523,7 +496,7 @@
             this.contextStackView1.Location = new System.Drawing.Point(652, 0);
             this.contextStackView1.MainForm = null;
             this.contextStackView1.Name = "contextStackView1";
-            this.contextStackView1.Size = new System.Drawing.Size(477, 822);
+            this.contextStackView1.Size = new System.Drawing.Size(426, 635);
             this.contextStackView1.TabIndex = 2;
             // 
             // rhoEditorControl1
@@ -541,8 +514,9 @@
             // 
             this.dataStackView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataStackView1.Location = new System.Drawing.Point(0, 0);
+            this.dataStackView1.MainForm = null;
             this.dataStackView1.Name = "dataStackView1";
-            this.dataStackView1.Size = new System.Drawing.Size(664, 507);
+            this.dataStackView1.Size = new System.Drawing.Size(352, 397);
             this.dataStackView1.TabIndex = 0;
             // 
             // output1
@@ -553,14 +527,25 @@
             this.output1.Location = new System.Drawing.Point(0, 0);
             this.output1.MainForm = null;
             this.output1.Name = "output1";
-            this.output1.Size = new System.Drawing.Size(830, 439);
+            this.output1.Size = new System.Drawing.Size(352, 274);
             this.output1.TabIndex = 0;
+            this.output1.AutoSizeChanged += new System.EventHandler(this.stackToolStripMenuItem_Click);
+            // 
+            // treeViewControl1
+            // 
+            this.treeViewControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewControl1.Location = new System.Drawing.Point(0, 391);
+            this.treeViewControl1.MainForm = null;
+            this.treeViewControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.treeViewControl1.Name = "treeViewControl1";
+            this.treeViewControl1.Size = new System.Drawing.Size(644, 244);
+            this.treeViewControl1.TabIndex = 2;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1451, 754);
+            this.ClientSize = new System.Drawing.Size(1451, 730);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -605,7 +590,6 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -614,9 +598,6 @@
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem toolstripToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
         private System.Windows.Forms.TabPage piConsole;
         private System.Windows.Forms.RichTextBox piInput;
         private System.Windows.Forms.RichTextBox piStatus;
@@ -637,11 +618,17 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TreeView treeView1;
         private UserControls.RhoEditorControl rhoEditorControl1;
         private UserControls.ContextStackView contextStackView1;
         private UserControls.DataStackView dataStackView1;
         private UserControls.Output output1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem treeToolStripMenuItem;
+        private UserControls.TreeViewControl treeViewControl1;
     }
 }
 

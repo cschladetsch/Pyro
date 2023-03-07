@@ -8,16 +8,26 @@
     /// Also known as a co-routine.
     /// Can be interrupted mid-execution and later resumed.
     /// </summary>
-    public partial class Continuation
-    //        : IGenerator
-    {
+    public partial class Continuation {
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block.
         /// </summary>
         public int Ip { get; private set; }
+
         public IList<object> Code { get; set; }
+
         public IList<string> Args { get; private set; }
+
+        public delegate void ContinuationHandler(Continuation continuation);
+        public event ContinuationHandler OnScopeChanged;
+        public event ContinuationHandler OnLeave;
+
+        internal void FireOnLeave() {
+            OnLeave?.Invoke(this);
+        }
+
         private IDictionary<string, object> _scope => Scope;
+
         private IEnumerator _enumerator;
 
         public Continuation(IList<object> code) {
@@ -34,9 +44,6 @@
         public void Delay(int millis)
             => ResumeAfter(TimeSpan.FromMilliseconds(millis));
 
-        //        public void Wait(ITransient other)
-        //            => ResumeAfter(other);
-        //
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
         /// </summary>
@@ -112,15 +119,6 @@
             cp.Kernel = exec.Kernel;
             cp.Ip = Ip;
             cp.Scope = Scope;
-            //cp.Kernel.Root.Add(cp);
-
-            //            void End(ITransient tr)
-            //            {
-            //                exec.RemoveContinuation(this);
-            //                cp.Completed -= End;
-            //            }
-            //
-            //            cp.Completed += End;
 
             cp.Resumed += tr => {
                 //exec.PushContext(cp);
@@ -139,6 +137,8 @@
 
                 foreach (var arg in Args)
                     cp.Scope[arg] = exec.DataStack.Pop();
+
+                OnScopeChanged?.Invoke(cp);
             }
 
             return cp;
@@ -147,8 +147,10 @@
         public bool HasScopeObject(string label)
             => _scope.ContainsKey(label);
 
-        public void SetScopeObject(string label, object val)
-            => _scope[label] = val;
+        public void SetScopeObject(string label, object val) {
+            _scope[label] = val;
+            OnScopeChanged?.Invoke(this);
+        }
 
         public object FromScope(string label)
             => _scope.TryGetValue(label, out var value) ? value : null;
@@ -167,16 +169,6 @@
             Ip = 0;
             return true;
         }
-
-        //        IGenerator IGenerator.AddTo(IGroup @group)
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //
-        //        IGenerator IGenerator.Named(string name)
-        //        {
-        //            throw new NotImplementedException();
-        //        }
 
         public void SetRange(IEnumerable range) {
             if (range == null) {

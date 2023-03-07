@@ -9,11 +9,16 @@ namespace Pyro.Exec {
     public partial class Executor
         : Reflected<Executor> {
         public Stack<object> DataStack { get; private set; } = new Stack<object>();
+
         public List<Continuation> ContextStack { get; private set; } = new List<Continuation>();
-        private int NumOps { get; set; }
+
         public bool Rethrows { get; set; }
+
+        public Continuation Current => _current;
+
         public string SourceFilename;
 
+        private int NumOps { get; set; }
         private bool _break;
         private Continuation _current;
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
@@ -41,6 +46,9 @@ namespace Pyro.Exec {
         }
 
         private void SetCurrent(Continuation continuation) {
+            if (_current != null) {
+                _current.FireOnLeave();
+            }
             _current = continuation;
             FireContinuationChanged();
         }
@@ -223,7 +231,6 @@ namespace Pyro.Exec {
         /// Perform a continuation, then return to current context
         /// </summary>
         private new void Suspend() {
-
             Resume();
         }
 
@@ -231,7 +238,7 @@ namespace Pyro.Exec {
         /// Resume the continuation that spawned the current one
         /// </summary>
         private new void Resume() {
-            if (!RPop(out var next)) {
+            if (!ResolvePop(out var next)) {
                 Break();
                 return;
             }
@@ -345,8 +352,8 @@ namespace Pyro.Exec {
             SetCurrent(null);
         }
 
-        private T RPop<T>() {
-            if (RPop<T>(out var val))
+        private T ResolvePop<T>() {
+            if (ResolvePop<T>(out var val))
                 return val;
             throw new DataStackEmptyException();
         }
@@ -354,8 +361,8 @@ namespace Pyro.Exec {
         /// <summary>
         /// Get top of stack as a value of type T, or as a name of a value of type T
         /// </summary>
-        private bool RPop<T>(out T val) {
-            val = default(T);
+        private bool ResolvePop<T>(out T val) {
+            val = default;
             var pop = (object)Pop();
             if (!TryResolve(pop, out var found))
                 return false;
@@ -364,7 +371,7 @@ namespace Pyro.Exec {
             return true;
         }
 
-        private bool RPop(out dynamic val)
+        private bool ResolvePop(out dynamic val)
             => TryResolve(Pop(), out val);
 
         private static void DebugBreak()
