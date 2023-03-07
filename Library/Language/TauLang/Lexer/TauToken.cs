@@ -17,5 +17,12 @@
 
             return $"{Type}: '{Text}'";
         }
+
+        public override bool Equals(object obj) {
+            if (obj is TauToken tok) {
+                return _type == tok._type;
+            }
+            return false;
+        }
     }
 }

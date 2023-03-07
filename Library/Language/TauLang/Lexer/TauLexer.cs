@@ -18,14 +18,8 @@ namespace Pyro.TauLang.Lexer {
             _keyWords.Add("string", ETauToken.String);
             _keyWords.Add("float", ETauToken.Float);
             _keyWords.Add("class", ETauToken.Class);
-            _keyWords.Add("(", ETauToken.OpenParan);
-            _keyWords.Add(")", ETauToken.CloseParan);
-            _keyWords.Add(",", ETauToken.Comma);
             _keyWords.Add("get", ETauToken.Getter);
             _keyWords.Add("set", ETauToken.Setter);
-            _keyWords.Add(";", ETauToken.Semi);
-            _keyWords.Add("<", ETauToken.LessThan);
-            _keyWords.Add(">", ETauToken.GreaterThan);
             _keyWords.Add("Func", ETauToken.Func);
             _keyWords.Add("List", ETauToken.List);
             _keyWords.Add("Set", ETauToken.Set);
@@ -58,9 +52,12 @@ namespace Pyro.TauLang.Lexer {
                 // TODO: This means we can't use ` at all in embedded Pi code.
                 case '(': return Add(ETauToken.OpenParan);
                 case ')': return Add(ETauToken.CloseParan);
-                case ' ': return AddSlice(ETauToken.Space, Gather(c => c == ' '));
+                case ' ': return AddSlice(ETauToken.WhiteSpace, Gather(c => c == ' '));
+                case '\t': return AddSlice(ETauToken.WhiteSpace, Gather(c => c == ' ' || c == '\t')); 
                 case ',': return Add(ETauToken.Comma);
                 case ';': return Add(ETauToken.Semi);
+                case '{': return Add(ETauToken.OpenBrace);
+                case '}': return Add(ETauToken.CloseBrace);
                 case '\r': {
                         // fuck I hate this
                         Next();
@@ -97,6 +94,5 @@ namespace Pyro.TauLang.Lexer {
 
         protected override void Terminate()
             => _Tokens.Add(_Factory.NewToken(ETauToken.Nop, new Slice(this, _offset, _offset)));
-
     }
 }

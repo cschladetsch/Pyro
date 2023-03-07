@@ -34,7 +34,7 @@
 
         NewLine,
         Comment,
-        Space,
+        WhiteSpace,
         Tab,
 
         End,

@@ -12,4 +12,10 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj" />
+      <ProjectReference Include="..\..\Library\Language\Common\Common.csproj" />
+      <ProjectReference Include="..\..\Library\Language\TauLang\TauLang.csproj" />
+    </ItemGroup>
+
 </Project>
