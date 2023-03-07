@@ -22,5 +22,9 @@ namespace WinForms {
 
         public virtual void Render() {
         }
+
+        public void Perform(EOperation operation) {
+            MainForm.Perform(operation);
+        }
     }
 }

@@ -59,22 +59,16 @@
     <Compile Include="UserControls\ContextStackView.Designer.cs">
       <DependentUpon>ContextStackView.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DataStackView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\DataStackView.Designer.cs">
-      <DependentUpon>DataStackView.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm\MainForm.ColorisePi.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm\MainForm.ColoriseRho.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="MainForm\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="MainForm\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\NetworkConnect.cs">
@@ -85,7 +79,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IUserControlCommon.cs" />
+    <Compile Include="UserControls\DataStackView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\DataStackView.Designer.cs">
+      <DependentUpon>DataStackView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\IUserControlCommon.cs" />
     <Compile Include="UserControls\Output.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -119,10 +119,7 @@
     <EmbeddedResource Include="UserControls\ContextStackView.resx">
       <DependentUpon>ContextStackView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\DataStackView.resx">
-      <DependentUpon>DataStackView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="MainForm\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\NetworkConnect.resx">
@@ -141,6 +138,9 @@
     <Compile Include="MainForm\MainForm.Colorise.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="UserControls\DataStackView.resx">
+      <DependentUpon>DataStackView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Output.resx">
       <DependentUpon>Output.cs</DependentUpon>
     </EmbeddedResource>

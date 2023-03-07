@@ -19,6 +19,13 @@ namespace Pyro.Exec {
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
 
+        public delegate void ContextStackChangedHandler(Executor executor, List<Continuation> context);
+        public delegate void DataStackChangedHandler(Executor executor, Stack<object> context);
+        public delegate void ContinuationChangedHandler(Executor executor, Continuation context);
+        public event ContextStackChangedHandler OnContextStackChanged;
+        public event DataStackChangedHandler OnDataStackChanged;
+        public event ContinuationChangedHandler OnContinuationChanged;
+
         public Executor() {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
@@ -28,7 +35,26 @@ namespace Pyro.Exec {
 
         private void PushContext(Continuation continuation) {
             ContextStack.Add(continuation);
-            _current = null;
+            FireContextStackChanged();
+
+            SetCurrent(null);
+        }
+
+        private void SetCurrent(Continuation continuation) {
+            _current = continuation;
+            FireContinuationChanged();
+        }
+
+        private void FireContextStackChanged() {
+            OnContextStackChanged?.Invoke(this, ContextStack);
+        }
+
+        private void FireDataStackChanged() {
+            OnDataStackChanged?.Invoke(this, DataStack);
+        }
+
+        private void FireContinuationChanged() {
+            OnContinuationChanged?.Invoke(this, _current);
         }
 
         public void Continue(IRef<Continuation> continuation)
@@ -44,7 +70,7 @@ namespace Pyro.Exec {
                 Execute(_current);
                 _break = false;
 
-                _current = PopContext();
+                SetCurrent(PopContext());
                 if (_current == null)
                     break;
             }
@@ -55,13 +81,13 @@ namespace Pyro.Exec {
         }
 
         private void Execute(Continuation cont) {
-            _current = cont;
+            SetCurrent(cont);
             while (Next()) {
                 if (!_break)
                     continue;
 
                 _break = false;
-                _current = PopContext();
+                SetCurrent(PopContext());
             }
         }
 
@@ -72,7 +98,7 @@ namespace Pyro.Exec {
                 => cont != null && cont.IsRunning();
 
             while (!IsRunning(_current)) {
-                _current = PopContext();
+                SetCurrent(PopContext());
                 if (_current == null)
                     return false;
             }
@@ -122,7 +148,7 @@ namespace Pyro.Exec {
                     if (!TryResolve(next, out var eval))
                         throw new UnknownIdentifierException(next);
 
-                    DataStack.Push(eval);
+                    DataStackPush(eval);
                     break;
             }
         }
@@ -197,7 +223,7 @@ namespace Pyro.Exec {
         /// Perform a continuation, then return to current context
         /// </summary>
         private new void Suspend() {
-            PushContext(_current);
+
             Resume();
         }
 
@@ -236,11 +262,11 @@ namespace Pyro.Exec {
                     break;
 
                 default:
-                    if ((next.GetType()) != typeof(Continuation)) {
+                    if (next.GetType() != typeof(Continuation)) {
                         throw new Exception("Cannot resume type " + next.GetType());
                     }
                     PushContext(next);
-                    _current = null;
+                    SetCurrent(null);
                     break;
             }
 
@@ -251,7 +277,7 @@ namespace Pyro.Exec {
             if (obj == null)
                 throw new NullValueException();
 
-            DataStack.Push(obj);
+            DataStackPush(obj);
         }
 
         public T Pop<T>() {
@@ -259,6 +285,8 @@ namespace Pyro.Exec {
                 throw new DataStackEmptyException();
 
             var top = Pop();
+            FireDataStackChanged();
+
             if (top == null)
                 throw new NullValueException();
 
@@ -275,8 +303,19 @@ namespace Pyro.Exec {
             if (DataStack.Count == 0)
                 throw new DataStackEmptyException();
 
-            var pop = DataStack.Pop();
+            var pop = DataStackPop();
             return !(pop is IRefBase data) ? pop : data.BaseValue;
+        }
+
+        private object DataStackPop() {
+            var top = DataStack.Pop();
+            FireDataStackChanged();
+            return top;
+        }
+
+        private void DataStackPush(object obj) {
+            DataStack.Push(obj);
+            FireDataStackChanged();
         }
 
         private Continuation PopContext() {
@@ -289,7 +328,9 @@ namespace Pyro.Exec {
                     continue;
 
                 ContextStack.RemoveAt(n);
-                return _current = cont.Start(this);
+                FireContextStackChanged();
+                SetCurrent(cont.Start(this));
+                return _current;
             }
 
             return null;
@@ -301,7 +342,7 @@ namespace Pyro.Exec {
         /// </summary>
         private void Break() {
             _break = true;
-            _current = null;
+            SetCurrent(null);
         }
 
         private T RPop<T>() {

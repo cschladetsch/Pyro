@@ -9,6 +9,11 @@
     /// Debug methods for executor. Removed from main implementation for clarity.
     /// </summary>
     public partial class Executor {
+
+        public delegate void DebugTraceDelegate(string text);
+
+        public static event DebugTraceDelegate OnDebugTrace;
+
         private static void Write(object obj)
             => Write($"{obj}");
 
@@ -16,10 +21,11 @@
             => WriteLine($"{obj}");
 
         private static void Write(string text, params object[] args) {
-            //Console.Write(text);
+            Console.Write(text);
             //Debug.Write(text);
             //Trace.Write(text);
             TestContext.Out.WriteLine(text);
+            OnDebugTrace?.Invoke(text);
         }
 
         private static void WriteLine(string fmt, params object[] args) {

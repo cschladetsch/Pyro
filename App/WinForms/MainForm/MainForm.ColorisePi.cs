@@ -25,7 +25,7 @@ namespace WinForms {
                 foreach (var tok in lex.Tokens)
                     ColorisePiToken(tok, tok.Slice);
             } catch (Exception e) {
-                output.Text = $"{e.Message}: {lex.Error}";
+                output1.Text += $"{e.Message}: {lex.Error}";
             } finally {
                 EndUpdate(rtb);
             }
