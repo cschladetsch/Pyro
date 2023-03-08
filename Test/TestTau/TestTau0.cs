@@ -15,12 +15,27 @@ namespace TestTau {
         [Test]
         public void Test1() {
             var input =
-@"namespace Foo {
+                @"namespace Foo {
     class Bar {
-        void fun(int n, float f, string s);
+        event Func<int, string> SomeEvent;
+        string Name { get; }
+        float Age { get; set; }
+        int Sum(int a, int b);
+        void Call();
     }
 }";
-            AssertSameTokens(input, ETauToken.Namespace, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Class, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Void, ETauToken.Ident, ETauToken.OpenParan, ETauToken.Int, ETauToken.Ident, ETauToken.Comma, ETauToken.Float, ETauToken.Ident, ETauToken.Comma, ETauToken.String, ETauToken.Ident, ETauToken.CloseParan, ETauToken.Semi, ETauToken.CloseBrace, ETauToken.CloseBrace, ETauToken.Nop);
+            AssertSameTokens(input, 
+                ETauToken.Namespace, ETauToken.Ident, ETauToken.OpenBrace, 
+                    ETauToken.Class, ETauToken.Ident, ETauToken.OpenBrace,
+                        ETauToken.Event, ETauToken.Func, ETauToken.LessThan, ETauToken.Int, ETauToken.Comma, ETauToken.String, ETauToken.GreaterThan, ETauToken.Ident, ETauToken.Semi,
+                        ETauToken.String, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.CloseBrace,
+                        ETauToken.Float, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.Setter, ETauToken.Semi, ETauToken.CloseBrace,
+                        ETauToken.Int, ETauToken.Ident, ETauToken.OpenParan, ETauToken.Int, ETauToken.Ident, ETauToken.Comma, ETauToken.Int, ETauToken.Ident, ETauToken.CloseParan, ETauToken.Semi, 
+                        ETauToken.Void, ETauToken.Ident, ETauToken.OpenParan, ETauToken.CloseParan, ETauToken.Semi, 
+                    ETauToken.CloseBrace,
+                ETauToken.CloseBrace,
+                ETauToken.Nop
+                );
         }
 
         protected void AssertSameTokens(string input, params ETauToken[] tokens) {
@@ -40,7 +55,7 @@ namespace TestTau {
                 Console.Write($"{token}, ");
             }
             if (tokens.Count() != stripped.Count()) {
-                Assert.Fail($"Different size collections: {tokens.Length} != {input.Count()}");
+                Assert.Fail($"Different size collections: expected {tokens.Length}, got {input.Count()}");
             }
             int i = 0;
             foreach (var next in stripped) {

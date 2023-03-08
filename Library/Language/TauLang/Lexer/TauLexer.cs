@@ -58,6 +58,8 @@ namespace Pyro.TauLang.Lexer {
                 case ';': return Add(ETauToken.Semi);
                 case '{': return Add(ETauToken.OpenBrace);
                 case '}': return Add(ETauToken.CloseBrace);
+                case '<': return Add(ETauToken.LessThan);
+                case '>': return Add(ETauToken.GreaterThan);
                 case '\r': {
                         // fuck I hate this
                         Next();
