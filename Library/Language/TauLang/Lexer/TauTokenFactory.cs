@@ -1,4 +1,4 @@
-﻿namespace Pyro.TauLang.Lexer { 
+﻿namespace Pyro.Language.Tau.Lexer { 
     using Language;
     public class TauTokenFactory
         : ITokenFactory<ETauToken, TauToken> {

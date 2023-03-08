@@ -1,4 +1,4 @@
-﻿namespace Pyro.TauLang.Lexer {
+﻿namespace Pyro.Language.Tau.Lexer {
     using Pyro.Language;
     using Pyro.Language.Impl;
 
@@ -23,6 +23,10 @@
                 return _type == tok._type;
             }
             return false;
+        }
+
+        public override int GetHashCode() {
+            return (int)_type % Slice.GetHashCode();
         }
     }
 }

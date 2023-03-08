@@ -5,7 +5,7 @@ namespace TestTau {
 
     using NUnit.Framework;
 
-    using Pyro.TauLang.Lexer;
+    using Pyro.Language.Tau.Lexer;
 
     public class Tests {
         [SetUp]
@@ -16,7 +16,7 @@ namespace TestTau {
         public void Test1() {
             var input =
                 @"namespace Foo {
-    class Bar {
+    interface Bar {
         event Func<int, string> SomeEvent;
         string Name { get; }
         float Age { get; set; }
@@ -26,7 +26,7 @@ namespace TestTau {
 }";
             AssertSameTokens(input, 
                 ETauToken.Namespace, ETauToken.Ident, ETauToken.OpenBrace, 
-                    ETauToken.Class, ETauToken.Ident, ETauToken.OpenBrace,
+                    ETauToken.Interface, ETauToken.Ident, ETauToken.OpenBrace,
                         ETauToken.Event, ETauToken.Func, ETauToken.LessThan, ETauToken.Int, ETauToken.Comma, ETauToken.String, ETauToken.GreaterThan, ETauToken.Ident, ETauToken.Semi,
                         ETauToken.String, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.CloseBrace,
                         ETauToken.Float, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.Setter, ETauToken.Semi, ETauToken.CloseBrace,

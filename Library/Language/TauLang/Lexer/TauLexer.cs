@@ -1,9 +1,8 @@
 ﻿// (C) 2023 christian.schladetsch@gmail.com
 
-using Pyro.Language;
-using Pyro.Language.Impl;
+namespace Pyro.Language.Tau.Lexer {
+    using Impl;
 
-namespace Pyro.TauLang.Lexer {
     public class TauLexer
         : LexerCommon<ETauToken, TauToken, TauTokenFactory> {
         public TauLexer(string input)
@@ -12,12 +11,12 @@ namespace Pyro.TauLang.Lexer {
 
         protected override void AddKeyWords() {
             _keyWords.Add("namespace", ETauToken.Namespace);
+            _keyWords.Add("interface", ETauToken.Interface);
             _keyWords.Add("event", ETauToken.Event);
             _keyWords.Add("void", ETauToken.Void);
             _keyWords.Add("int", ETauToken.Int);
             _keyWords.Add("string", ETauToken.String);
             _keyWords.Add("float", ETauToken.Float);
-            _keyWords.Add("class", ETauToken.Class);
             _keyWords.Add("get", ETauToken.Getter);
             _keyWords.Add("set", ETauToken.Setter);
             _keyWords.Add("Func", ETauToken.Func);

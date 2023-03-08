@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿namespace Pyro.Language.Impl {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using System.Collections.Generic;
 
-namespace Pyro.Language.Impl {
     /// <inheritdoc />
     /// <summary>
     /// Common for all Parsers.
@@ -19,10 +19,8 @@ namespace Pyro.Language.Impl {
                 : class, ITokenNode<ETokenEnum>
             where TAstNode
                 : class {
-        /// <summary>
-        /// The list of input tokens.
-        /// </summary>
-        protected List<TTokenNode> _Tokens = new List<TTokenNode>();
+        
+        protected readonly List<TTokenNode> _Tokens = new List<TTokenNode>();
 
         /// <summary>
         /// The runtime stack of AstNodes. This will change as
@@ -35,14 +33,8 @@ namespace Pyro.Language.Impl {
         /// </summary>
         protected int _Current;
 
-        /// <summary>
-        /// The Lexer to use. TODO: Use interfaces instead?
-        /// </summary>
         protected TLexer _Lexer;
 
-        /// <summary>
-        /// How to make Ast tokens.
-        /// </summary>
         protected AstFactory _AstFactory = new AstFactory();
 
         protected ParserCommon(TLexer lexer, IRegistry reg)
@@ -77,7 +69,7 @@ namespace Pyro.Language.Impl {
         public override string ToString()
             => PrintTree();
 
-        protected bool Has()
+        private bool Has()
             => _Current < _Tokens.Count;
 
         protected TAstNode Pop()
@@ -119,7 +111,7 @@ namespace Pyro.Language.Impl {
             return true;
         }
 
-        protected TTokenNode Next() {
+        private TTokenNode Next() {
             if (_Current != _Tokens.Count)
                 return _Tokens[++_Current];
 
@@ -145,7 +137,7 @@ namespace Pyro.Language.Impl {
 
         protected TAstNode Expect(ETokenEnum type) {
             var tok = Current();
-            if (!tok.Type.Equals(type))
+            if (!type.Equals(tok.Type))
                 FailLocation($"Expected {type}, have {tok}");
             else
                 Next();
@@ -156,7 +148,7 @@ namespace Pyro.Language.Impl {
         protected bool Empty()
             => _Current >= _Tokens.Count;
 
-        protected TTokenNode Last()
+        private TTokenNode Last()
             => _Tokens[_Current - 1];
 
         protected TTokenNode Peek()

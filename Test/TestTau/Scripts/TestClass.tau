@@ -1,7 +1,7 @@
 ﻿// A comment
 namespace Melb0
 {
-    class Foo
+    interface Foo
     {
         event Func<int, string> SomeEvent;
         string Name { get; }

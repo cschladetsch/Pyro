@@ -1,4 +1,4 @@
-﻿namespace Pyro.TauLang.Lexer { 
+﻿namespace Pyro.Language.Tau.Lexer { 
     public enum ETauToken {
         None,
         Nop,
@@ -6,8 +6,8 @@
         Namespace,
         OpenBrace,
         CloseBrace,
-        Class,
-
+        Interface,
+        
         Ident,
         OpenParan,
         CloseParan,
@@ -36,7 +36,5 @@
         Comment,
         WhiteSpace,
         Tab,
-
-        End,
     }
 }
