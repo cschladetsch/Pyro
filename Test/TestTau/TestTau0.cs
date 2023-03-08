@@ -20,7 +20,7 @@ namespace TestTau {
         void fun(int n, float f, string s);
     }
 }";
-            AssertSameTokens(input, ETauToken.Namespace, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Class, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Void, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Int, ETauToken.Ident, ETauToken.Comma, ETauToken.Float, ETauToken.Ident, ETauToken.Comma, ETauToken.String, ETauToken.Ident, ETauToken.CloseParan, ETauToken.Semi, ETauToken.CloseBrace, ETauToken.CloseBrace, ETauToken.Nop);
+            AssertSameTokens(input, ETauToken.Namespace, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Class, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Void, ETauToken.Ident, ETauToken.OpenParan, ETauToken.Int, ETauToken.Ident, ETauToken.Comma, ETauToken.Float, ETauToken.Ident, ETauToken.Comma, ETauToken.String, ETauToken.Ident, ETauToken.CloseParan, ETauToken.Semi, ETauToken.CloseBrace, ETauToken.CloseBrace, ETauToken.Nop);
         }
 
         protected void AssertSameTokens(string input, params ETauToken[] tokens) {
@@ -44,7 +44,7 @@ namespace TestTau {
             }
             int i = 0;
             foreach (var next in stripped) {
-                if (tokens[i] != next) {
+                if (tokens[i++] != next) {
                     Assert.Fail("Sequences do not match at index " + i);
                 }
             }
