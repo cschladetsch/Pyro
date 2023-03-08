@@ -90,6 +90,10 @@
 
         // public bool Quoted { get; set; }
         public new bool Quoted { get; set; }
+
+        public bool IsAbsolute => throw new NotImplementedException();
+
+        List<PathElement> IPathname.Elements => throw new NotImplementedException();
     }
 }
 
