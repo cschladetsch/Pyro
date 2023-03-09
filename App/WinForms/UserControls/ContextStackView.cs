@@ -17,7 +17,7 @@
             MainForm = mainForm;
             Executor.OnContextStackChanged += ContextStackChanged;
             Executor.OnContinuationChanged += ContextChanged;
-            SetStatusText("Empty");
+            SetStatusFromContinuation();
         }
 
         internal void ContextStackChanged(Executor executor, List<Continuation> contexts) {
@@ -32,7 +32,6 @@
             context.OnScopeChanged += UpdateCont;
             context.OnLeave += RemoveEvents;
             context.OnIpChanged += OnIpChanged;
-            UpdateStatus();
         }
 
         void SetStatusText(string text) {
@@ -47,7 +46,7 @@
         }
 
         private void SetStatusStripEmpty() {
-            SetStatusText("Empty");
+            SetStatusText("No Continuation");
         }
 
         private void RemoveEvents(Continuation continuation) {
@@ -96,7 +95,11 @@
                 return;
             }
 
-            SetStatusText($"{current.Name} {current.Ip}/{current.Code.Count}");
+            var opText = "";
+            if (current.Ip < current.Code.Count) {
+                opText = $"[{Registry.ToPiScript(current.Code[current.Ip])}]";
+            }
+            SetStatusText($"{current.Name} {current.Ip}/{current.Code.Count} {opText}");
         }
 
         private void AddScopeItem(string name, object value) {
