@@ -13,36 +13,11 @@
             InitializeComponent();
         }
 
-        private void ContextStackView_Load(object sender, EventArgs e) {
-        }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e) {
-        }
-
-        internal void Show(Continuation cont) {
-        }
-
-        private ListViewItem.ListViewSubItem NewSubItem(ListViewItem item, int n, string text) {
-            return new ListViewItem.ListViewSubItem(item, text);
-        }
-
-        private ListViewItem MakeCodeViewItem(int n, object item) {
-            var row = new ListViewItem(n.ToString());
-            DataStackView.AddSubItem(row, MainForm.Registry.ToPiScript(item));
-            DataStackView.AddSubItem(row, DataStackView.GetType(item));
-            if (item as IReflected != null) {
-                DataStackView.AddSubItem(row, (item as IReflected).SelfBase.Id.ToString());
-            }
-            return row;
-        }
-
         public override void Construct(IMainForm mainForm) {
             MainForm = mainForm;
             Executor.OnContextStackChanged += ContextStackChanged;
             Executor.OnContinuationChanged += ContextChanged;
-        }
-
-        public override void Render() {
+            SetStatusText("Empty");
         }
 
         internal void ContextStackChanged(Executor executor, List<Continuation> contexts) {
@@ -57,6 +32,22 @@
             context.OnScopeChanged += UpdateCont;
             context.OnLeave += RemoveEvents;
             context.OnIpChanged += OnIpChanged;
+            UpdateStatus();
+        }
+
+        void SetStatusText(string text) {
+            contextViewStatus0.Text = text;
+        }
+
+        private void UpdateStatus() {
+            if (Executor.Current == null) {
+                SetStatusStripEmpty();
+            }
+            SetStatusFromContinuation();
+        }
+
+        private void SetStatusStripEmpty() {
+            SetStatusText("Empty");
         }
 
         private void RemoveEvents(Continuation continuation) {
@@ -70,6 +61,7 @@
             if (current < codeView.Items.Count) {
                 codeView.Items[current].BackColor = Color.LightGray;
             }
+            UpdateStatus();
         }
 
         private void UpdateCont(Continuation continuation) {
@@ -93,6 +85,18 @@
             foreach (var item in current.Scope) {
                 AddScopeItem(item.Key, item.Value);
             }
+
+            SetStatusFromContinuation();
+        }
+
+        private void SetStatusFromContinuation() {
+            Continuation current = Executor.Current;
+            if (current == null) {
+                SetStatusStripEmpty();
+                return;
+            }
+
+            SetStatusText($"{current.Name} {current.Ip}/{current.Code.Count}");
         }
 
         private void AddScopeItem(string name, object value) {
@@ -116,10 +120,6 @@
 
         private void UpdateContextStack() {
             contextStack.Items.Clear();
-            var stack = Executor.ContextStack;
-            if (stack == null || stack.Count == 0) {
-                return;
-            }
         }
 
         private void AddContinuationToStack(int v, Continuation item) {
@@ -128,6 +128,7 @@
         private void AddContinuation(int num, Continuation continuation) {
             UpdateScope(continuation);
             UpdateCode(continuation);
+            SetStatusFromContinuation();
         }
 
         private void UpdateScope(Continuation continuation) {
@@ -169,6 +170,7 @@
             if (cont.Ip > cont.Code.Count) {
                 MessageBox.Show("End of Continuation", "At End", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            UpdateStatus();
         }
 
         internal void UpdateView() {
