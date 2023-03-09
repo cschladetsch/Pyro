@@ -95,9 +95,11 @@
                 return;
             }
 
-            var opText = "";
+            string opText; 
             if (current.Ip < current.Code.Count) {
                 opText = $"[{Registry.ToPiScript(current.Code[current.Ip])}]";
+            } else {
+                opText = "[At End]";
             }
             SetStatusText($"{current.Name} {current.Ip}/{current.Code.Count} {opText}");
         }
@@ -179,6 +181,10 @@
         internal void UpdateView() {
             UpdateContextStack();
             UpdateContinuation();
+        }
+
+        private void runButton_Click(object sender, EventArgs e) {
+            Executor.Continue();
         }
     }
 }

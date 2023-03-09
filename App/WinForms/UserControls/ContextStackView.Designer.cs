@@ -75,6 +75,7 @@ namespace WinForms.UserControls {
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(64, 25);
             this.runButton.Text = "Run";
+            this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // stepNext
             // 

@@ -48,7 +48,7 @@
             this.toolStripButton3});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(434, 29);
+            this.toolStrip1.Size = new System.Drawing.Size(434, 38);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -58,7 +58,7 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(34, 24);
+            this.toolStripButton1.Size = new System.Drawing.Size(34, 33);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
             // toolStripButton2
@@ -107,10 +107,10 @@
             this.stackView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stackView.Font = new System.Drawing.Font("Courier New", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stackView.HideSelection = false;
-            this.stackView.Location = new System.Drawing.Point(0, 29);
+            this.stackView.Location = new System.Drawing.Point(0, 38);
             this.stackView.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stackView.Name = "stackView";
-            this.stackView.Size = new System.Drawing.Size(434, 395);
+            this.stackView.Size = new System.Drawing.Size(434, 386);
             this.stackView.TabIndex = 2;
             this.stackView.UseCompatibleStateImageBehavior = false;
             this.stackView.View = System.Windows.Forms.View.Details;

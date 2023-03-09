@@ -108,7 +108,6 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PiDebugger";
             this.Size = new System.Drawing.Size(672, 551);
-            //TODO this.Load += new System.EventHandler(this.PiDebugger_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);

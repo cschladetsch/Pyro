@@ -1,11 +1,8 @@
-﻿// random ideas
-
-// not implemented
-//fun test_lambdas()
-    //a = () => 1
-    //b = (x,y) => x + y
-    //assert(a() == 1)
-    //assert(b(a(), 2) == 3)
+﻿fun test_lambdas()
+    a = () => 1
+    b = (x,y) => x + y
+    assert(a() == 1)
+    assert(b(a(), 2) == 3)
 
 fun infinite_mutual_recurse()
     count = 10000
@@ -21,7 +18,7 @@ fun infinite_mutual_recurse()
     assert(foo(bar, 0) == count)    
 
 fun embed_pi()
-    a = `{ 1 2 + }`     // a is a coroutine
+    a = `{ 1 2 + }`     // a is a coroutine written in raw pi code
     assert(a() == 3)    // invoke it with (), which is like a subroutine call. invoke with !() to replace current context instead
     fun spam(x,y)
         x*y
