@@ -241,6 +241,7 @@ namespace Pyro.Test {
         }
 
         protected void TestScript(string scriptName) {
+            WriteLine($"Testing script {scriptName}.");
             Assert.IsTrue(RunScript(scriptName), $"Script={scriptName}");
             if (DataStack.Count != 0) {
                 var sb = new StringBuilder();

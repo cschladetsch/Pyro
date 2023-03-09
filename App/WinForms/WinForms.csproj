@@ -87,6 +87,7 @@
       <DependentUpon>DataStackView.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\IUserControlCommon.cs" />
+    <Compile Include="UserControls\Extentions.cs" />
     <Compile Include="UserControls\Output.cs">
       <SubType>UserControl</SubType>
     </Compile>

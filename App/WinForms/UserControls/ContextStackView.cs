@@ -152,7 +152,17 @@
         private void stepNextClicked(object sender, EventArgs e) {
             var exec = MainForm.Executor;
             var cont = MainForm.Executor.Current;
-            exec.Next();
+            try {
+                exec.Next();
+            } catch (Exception ex) {
+                var current = exec.Current;
+                if (current != null) {
+                    MessageBox.Show("Nothing to Continue", "If a tree falls in the woods, does anyone hear it?", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                MessageBox.Show(ex.Message, $"Error executing {current.Code[current.Ip]}", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (cont == null) {
                 return;
             }
