@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Generator\AgentGenerator.cs" />
     <Compile Include="Generator\Generator.cs" />
+    <Compile Include="Generator\Output\Example1.cs" />
     <Compile Include="Generator\ProxyGenerator.cs" />
     <Compile Include="Lexer\ETauToken.cs" />
     <Compile Include="Lexer\TauLexer.cs" />
@@ -68,6 +69,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

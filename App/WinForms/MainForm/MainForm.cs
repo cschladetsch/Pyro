@@ -8,6 +8,7 @@ namespace WinForms {
     using System.Drawing;
     using System.IO;
     using System.Windows.Forms;
+    using WinForms.UserControls;
     using static Pyro.Create;
 
 
@@ -33,6 +34,8 @@ namespace WinForms {
         internal RichTextBox rhoInput => rhoEditorControl1.RichTextBox;
 
         int IMainForm.ListenPort => throw new NotImplementedException();
+
+        public ContextStackView ContextView => contextStackView1;
 
         private readonly IPeer _peer;
         private readonly ExecutionContext _context;
@@ -233,20 +236,6 @@ namespace WinForms {
             }
         }
 
-        //private void UpdateStackView() {
-        //    stackView.Items.Clear();
-        //    var n = 0;
-        //    foreach (var item in DataStack)
-        //        stackView.Items.Add(MakeStackViewItem(n++, item));
-        //}
-
-        //private ListViewItem MakeStackViewItem(int n, object item) {
-        //    var row = new ListViewItem();
-        //    AddSubItem(row, n.ToString());
-        //    AddSubItem(row, _context.Registry.ToPiScript(item));
-        //    return row;
-        //}
-
         public void Perform(EOperation op) {
             try {
                 if (_local)
@@ -337,6 +326,39 @@ namespace WinForms {
             }
         }
 
+        private void decompile_Click(object sender, EventArgs e) {
+            var cont = GetContinuation();
+            if (cont == null) {
+                return;
+            }
+            Executor.PushContext(cont);
+            UpdateContextView();
+        }
+
+        private void run_Click(object sender, EventArgs e) {
+            ExecuteRho();
+        }
+
+        Continuation GetContinuation() {
+            var isRho = mainTabControl.SelectedIndex == 1;
+            var text = isRho ? rhoEditorControl1.RichTextBox.Text : piInput.Text;
+            _context.Language = Pyro.Language.ELanguage.Rho;
+            if (!_context.Translate(text, out Continuation cont)) {
+                MessageBox.Show(_context.Error, "Failed to Translate", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+            return cont;
+        }
+
+        private void toPi_Click(object sender, EventArgs e) {
+            var cont = GetContinuation();
+            if (cont == null) {
+                return;
+            }
+            piInput.Text = Registry.ToPiScript(cont);
+            ColorisePi();
+            mainTabControl.SelectedIndex = 0;
+        }
     }
 }
 

@@ -1,8 +1,5 @@
-﻿// A comment
-namespace Melb0
-{
-    interface Foo
-    {
+﻿namespace Foo {
+    interface Bar {
         event Func<int, string> SomeEvent;
         string Name { get; }
         float Age { get; set; }

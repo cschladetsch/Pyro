@@ -14,7 +14,7 @@
             PiRun("{ { 1 + } 'b # 3 b & } & ");
             AssertPop(4);
 
-            PiRun("3 'a # { { 1 + } 'b # 4 b & } 123 writeln & a +");
+            PiRun("3 'a # { { 1 + } 'b # 4 b & } & a +");
             AssertPop(8);
             AssertEmpty();
 

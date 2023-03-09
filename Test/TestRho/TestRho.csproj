@@ -53,6 +53,7 @@
     <None Include="Scripts\Functions.rho" />
     <None Include="Scripts\PiRho\PiFromRho1.rho" />
     <None Include="Scripts\PiRho\PiFromRho0.rho" />
+    <Compile Include="Output\Example1.cs" />
     <Compile Include="TestPiFromRho.cs" />
     <None Include="Scripts\NestedLoops.rho" />
     <Compile Include="TestRhoClass.cs" />
@@ -110,6 +111,7 @@
     <Content Include="Scripts\Conditionals0.rho" />
     <Content Include="Scripts\Conditionals1.rho" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -38,11 +38,10 @@ namespace Pyro.Exec {
             AddOperations();
         }
 
-        private void PushContext(Continuation continuation) {
+        public void PushContext(Continuation continuation) {
             ContextStack.Add(continuation);
+            SetCurrent(continuation);
             FireContextStackChanged();
-
-            SetCurrent(null);
         }
 
         private void SetCurrent(Continuation continuation) {
@@ -137,6 +136,9 @@ namespace Pyro.Exec {
             return true;
         }
 
+        public void Prev() {
+            throw new NotImplementedException();
+        }
 
         public void Perform(object next) {
             ++NumOps;

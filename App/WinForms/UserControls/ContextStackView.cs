@@ -1,4 +1,5 @@
 ﻿namespace WinForms.UserControls {
+    using Pyro;
     using Pyro.Exec;
     using System;
     using System.Collections.Generic;
@@ -22,6 +23,16 @@
 
         private ListViewItem.ListViewSubItem NewSubItem(ListViewItem item, int n, string text) {
             return new ListViewItem.ListViewSubItem(item, text);
+        }
+
+        private ListViewItem MakeCodeViewItem(int n, object item) {
+            var row = new ListViewItem(n.ToString());
+            DataStackView.AddSubItem(row, MainForm.Registry.ToPiScript(item));
+            DataStackView.AddSubItem(row, DataStackView.GetType(item));
+            if (item as IReflected != null) {
+                DataStackView.AddSubItem(row, (item as IReflected).SelfBase.Id.ToString());
+            }
+            return row;
         }
 
         public override void Construct(IMainForm mainForm) {
@@ -52,6 +63,7 @@
         }
 
         private void UpdateCont(Continuation continuation) {
+            Executor.PushContext(continuation);
             UpdateContinuation();
         }
 
@@ -59,6 +71,7 @@
             codeView.Items.Clear();
             var current = Executor.Current;
             if (current == null) {
+                MessageBox.Show("Nothing to Continue", "Empty Context Stack", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             var n = 0;
@@ -80,15 +93,13 @@
         }
 
         private void AddCodeItem(int n, object obj) {
-            var item = new ListViewItem();
-            var subs = new ListViewItem.ListViewSubItem[3];
+            var item = new ListViewItem(n.ToString());
             if (obj == null) {
-                subs[0] = NewSubItem(item, n, "null");
+                DataStackView.AddSubItem(item, "<null>");
                 return;
             }
 
-            subs[1] = NewSubItem(item, 1, Registry.ToPiScript(obj));
-            subs[2] = NewSubItem(item, 2, obj.GetType().ToString());
+            DataStackView.AddSubItem(item, MainForm.Registry.ToPiScript(obj));
             codeView.Items.Add(item);
         }
 
@@ -98,20 +109,36 @@
             if (stack == null || stack.Count == 0) {
                 return;
             }
-            var n = 0;
-            foreach (var item in stack) {
-                AddContinuation(n++, item);
-            }
+        }
+
+        private void AddContinuationToStack(int v, Continuation item) {
         }
 
         private void AddContinuation(int num, Continuation continuation) {
-            var item = new ListViewItem(num.ToString());
-            var subs = new ListViewItem.ListViewSubItem[3];
-
-
+            UpdateScope(continuation);
+            UpdateCode(continuation);
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e) {
+        private void UpdateScope(Continuation continuation) {
+            scopeView.Items.Clear();
+            foreach (var scoped in continuation.Scope) {
+                AddScopeItem(scoped.Key, scoped.Value);
+
+            }
+        }
+        private void UpdateCode(Continuation continuation) {
+            codeView.Items.Clear();
+            int n = 0;
+            foreach (var op in continuation.Code) {
+                AddCodeItem(n++, op);
+            }
+        }
+
+        private void stepPreviousClicked(object sender, EventArgs e) {
+            MainForm.Executor.Prev();
+        }
+
+        private void stepNextClicked(object sender, EventArgs e) {
             MainForm.Executor.Next();
         }
 

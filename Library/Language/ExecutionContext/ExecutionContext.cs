@@ -97,7 +97,6 @@
         }
 
         private bool Translate(ITranslator translator, out Continuation result, string text) {
-            result = null;
             return translator.Translate(text, out result) || Fail(translator.Error);
         }
 

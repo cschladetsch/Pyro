@@ -6,17 +6,24 @@
 
 ## Overview
 
-*Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel. It is based on [Flow](https://github.com/cschladetsch/Flow), [Kai](https://github.com/cschladetsch/KAI) and [Om](https://github.com/cschladetsch/OM) before that, dating back decades.
+*Pyro* is a cross-platform collection of .Net libraries supporting object persistence, 
+networking, and a coroutine micro-kernel. 
 
-Each major component has its own project, and its own `Readme.md` file.
+It is based on [Flow](https://github.com/cschladetsch/Flow), 
+[Kai](https://github.com/cschladetsch/KAI) and 
+[Om](https://github.com/cschladetsch/OM) before that, dating back decades.
 
-*Pyro* is based on two language systems, an object registry, and a generalised virtual machine named *Executor*.
+Each major component has its own project, and its own `Readme.md` file. In fact, each major folder has its own *Readme.md*.
 
-The two key languages are:
+*Pyro* is based on language systems, an object registry, and a generalised virtual machine named *Executor*.
+
+The key languages are:
 
 * **Pi**. A reverse-polish double stack-based language with fast lexing and parsing. See [pi](https://github.com/cschladetsch/Pyro/wiki/Pi).
 
 * **Rho**. An infix language that looks a lot like Python. It translates to Pi code and shares the same *Executor*.
+
+* **Tau**. An IDL (Interface Definition Language) that creates code that you can derive from to implement *Proxies* and *Agents*.
 
 From either *Pi* or *Rho* it is trivial to access all .Net objects, and also simple to add new custom types that you can expose to the runtime. 
 
@@ -42,8 +49,8 @@ Each project also copies its output assembly to the `Assemblies` folder within t
 ## Applications
 There are four main applications that come with the *Pyro* suite:
 1. A command-line Repl interface.
-1. A Gui interface.
-1. A network generation tool for proxies and agents.
+1. A Gui interface written in WinForms. Yes, I'm old. Should maybe redo in WPF or other later system.
+1. A network generation tool for proxies and agents (*TauGenerater*).
 1. A Unity3d console with Pi, Rho, Stack and Output panels.
 
 All components support colored output and on-the-fly colored syntax highlighting.
@@ -51,6 +58,14 @@ All components support colored output and on-the-fly colored syntax highlighting
 ## Window
 
 ![Window](Resources/PyroWindow.PNG)
+
+## Tutorial
+
+TODO
+
+## Examples
+
+For the moment, the best place is the unit tests.
 
 ## Code Analysis
 
