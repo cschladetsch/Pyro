@@ -2,6 +2,7 @@
 using Pyro.Exec;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WinForms.UserControls {
@@ -20,8 +21,9 @@ namespace WinForms.UserControls {
         private void DataStackChanged(Executor executor, Stack<object> dataStack) {
             stackView.Items.Clear();
             var n = 0;
-            foreach (var item in dataStack)
+            foreach (var item in dataStack.Reverse()) {
                 stackView.Items.Add(MakeStackViewItem(n++, item));
+            }
         }
 
         //public static void Populate(registry, ListView list, IEnumerable objects) {

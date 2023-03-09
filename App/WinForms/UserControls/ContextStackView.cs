@@ -3,6 +3,7 @@
     using Pyro.Exec;
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Windows.Forms;
 
     public partial class ContextStackView
@@ -55,11 +56,20 @@
             UpdateContinuation();
             context.OnScopeChanged += UpdateCont;
             context.OnLeave += RemoveEvents;
+            context.OnIpChanged += OnIpChanged;
         }
 
         private void RemoveEvents(Continuation continuation) {
             continuation.OnScopeChanged -= UpdateCont;
             continuation.OnLeave -= RemoveEvents;
+            continuation.OnIpChanged -= OnIpChanged;
+        }
+
+        private void OnIpChanged(Continuation continuation, int last, int current) {
+            codeView.Items[last].BackColor = Color.White;
+            if (current < codeView.Items.Count) {
+                codeView.Items[current].BackColor = Color.LightGray;
+            }
         }
 
         private void UpdateCont(Continuation continuation) {
@@ -93,14 +103,15 @@
         }
 
         private void AddCodeItem(int n, object obj) {
-            var item = new ListViewItem(n.ToString());
+            var row = new ListViewItem(n.ToString());
             if (obj == null) {
-                DataStackView.AddSubItem(item, "<null>");
+                DataStackView.AddSubItem(row, "<null>");
                 return;
             }
 
-            DataStackView.AddSubItem(item, MainForm.Registry.ToPiScript(obj));
-            codeView.Items.Add(item);
+            DataStackView.AddSubItem(row, MainForm.Registry.ToPiScript(obj));
+            DataStackView.AddSubItem(row, (obj as IReflected)?.SelfBase.Id.ToString());
+            codeView.Items.Add(row);
         }
 
         private void UpdateContextStack() {
@@ -139,7 +150,15 @@
         }
 
         private void stepNextClicked(object sender, EventArgs e) {
-            MainForm.Executor.Next();
+            var exec = MainForm.Executor;
+            var cont = MainForm.Executor.Current;
+            exec.Next();
+            if (cont == null) {
+                return;
+            }
+            if (cont.Ip > cont.Code.Count) {
+                MessageBox.Show("End of Continuation", "At End", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         internal void UpdateView() {

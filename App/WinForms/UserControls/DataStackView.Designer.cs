@@ -105,6 +105,7 @@
             this.columnHeader3,
             this.columnHeader4});
             this.stackView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.stackView.Font = new System.Drawing.Font("Courier New", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stackView.HideSelection = false;
             this.stackView.Location = new System.Drawing.Point(0, 29);
             this.stackView.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -121,10 +122,12 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Value";
+            this.columnHeader2.Width = 126;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Type";
+            this.columnHeader3.Width = 148;
             // 
             // columnHeader4
             // 

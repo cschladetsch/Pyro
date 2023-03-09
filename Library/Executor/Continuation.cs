@@ -2,6 +2,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     /// <summary>
@@ -12,15 +13,27 @@
         /// <summary>
         /// The 'instruction pointer', or the thing to execute next in list of objects in code block.
         /// </summary>
-        public int Ip { get; private set; }
+        public int Ip
+        {
+            get { return _ip; }
+            private set
+            {
+                OnIpChanged?.Invoke(this, _ip, value);
+                _ip = value;
+            }
+        }
 
         public IList<object> Code { get; set; }
 
         public IList<string> Args { get; private set; }
 
         public delegate void ContinuationHandler(Continuation continuation);
+        public delegate void ContinuationIpChangedHandler(Continuation continuation, int last, int current);
         public event ContinuationHandler OnScopeChanged;
         public event ContinuationHandler OnLeave;
+        public event ContinuationIpChangedHandler OnIpChanged;
+
+        private int _ip = 0;
 
         internal void FireOnLeave() {
             OnLeave?.Invoke(this);
@@ -135,7 +148,7 @@
                 if (exec.DataStack.Count < Args.Count)
                     throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
 
-                foreach (var arg in Args)
+                foreach (var arg in Args.Reverse())
                     cp.Scope[arg] = exec.DataStack.Pop();
 
                 OnScopeChanged?.Invoke(cp);
