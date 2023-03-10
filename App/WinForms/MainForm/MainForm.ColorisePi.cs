@@ -14,7 +14,7 @@ namespace WinForms {
         private bool ColorisePi() {
             CheckFonts();
 
-            var rtb = _editor.GetLanguageText(ELanguage.Pi);
+            var rtb = editor.GetLanguageText(ELanguage.Pi);
             BeginUpdate(rtb);
 
             var input = rtb.Text + " \n";

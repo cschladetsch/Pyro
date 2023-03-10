@@ -53,8 +53,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this._editor = new WinForms.UserControls.RhoEditorControl();
-            this.ConextView = new WinForms.UserControls.ContextStackView();
+            this.editor = new WinForms.UserControls.RhoEditorControl();
+            this.contextView = new WinForms.UserControls.ContextStackView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataStack = new WinForms.UserControls.DataStackView();
             this.output = new WinForms.UserControls.Output();
@@ -291,8 +291,8 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this._editor);
-            this.splitContainer1.Panel1.Controls.Add(this.ConextView);
+            this.splitContainer1.Panel1.Controls.Add(this.editor);
+            this.splitContainer1.Panel1.Controls.Add(this.contextView);
             // 
             // splitContainer1.Panel2
             // 
@@ -304,23 +304,23 @@
             // 
             // rhoEditorControl1
             // 
-            this._editor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._editor.Language = Pyro.Language.ELanguage.Rho;
-            this._editor.Location = new System.Drawing.Point(0, 0);
-            this._editor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this._editor.Name = "RhoEditor";
-            this._editor.Size = new System.Drawing.Size(806, 997);
-            this._editor.TabIndex = 1;
+            this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor.Language = Pyro.Language.ELanguage.Rho;
+            this.editor.Location = new System.Drawing.Point(0, 0);
+            this.editor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.editor.Name = "RhoEditor";
+            this.editor.Size = new System.Drawing.Size(806, 997);
+            this.editor.TabIndex = 1;
             // 
             // contextStackView1
             // 
-            this.ConextView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ConextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConextView.Location = new System.Drawing.Point(806, 0);
-            this.ConextView.MainForm = null;
-            this.ConextView.Name = "ContextView";
-            this.ConextView.Size = new System.Drawing.Size(353, 997);
-            this.ConextView.TabIndex = 0;
+            this.contextView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.contextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contextView.Location = new System.Drawing.Point(806, 0);
+            this.contextView.MainForm = null;
+            this.contextView.Name = "contextView";
+            this.contextView.Size = new System.Drawing.Size(353, 997);
+            this.contextView.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -434,14 +434,17 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem loadRhoToolStripMenuItem;
-        private UserControls.DataStackView dataStack;
-        private UserControls.Output output;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem treeToolStripMenuItem;
+        
+        private UserControls.RhoEditorControl editor;
+        private UserControls.DataStackView dataStack;
+        private UserControls.ContextStackView contextView;
+        private UserControls.Output output;
     }
 }
 

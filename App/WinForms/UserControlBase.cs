@@ -6,8 +6,8 @@ namespace WinForms {
     public class UserControlBase
         : UserControl
         , IUserControlCommon {
-        protected Executor Executor => MainForm.Executor;
-        protected IRegistry Registry => Executor.Self.Registry;
+        public Executor Executor => MainForm.Executor;
+        public IRegistry Registry => Executor.Self.Registry;
 
         public IMainForm MainForm { get; set; }
 

@@ -23,25 +23,24 @@ namespace WinForms {
         , IMainForm {
         public int ListenPort { get; } = 7777;
         
-        public Executor Executor => _context.Executor;
+        public Executor Executor => contextView.Executor;
 
-        public IRegistry Registry => _context.Registry;
+        public IRegistry Registry => contextView.Registry;
+
+        public ContextStackView ContextView => contextView;
 
         public Stack<object> DataStack => Executor.DataStack;
-
-        public ContextStackView ConextView { get; private set; }
-
-        private ExecutionContext _context { get; }
+        
         private List<object> _last;
         private IPeer _peer;
-        private RhoEditorControl _editor { get; set; }
-        private RichTextBox _piInput => _editor.GetLanguageText(ELanguage.Pi);
-        private RichTextBox _rhoInput => _editor.GetLanguageText(ELanguage.Rho);
-        private RichTextBox _tauInput => _editor.GetLanguageText(ELanguage.Tau);
+        private RichTextBox _piInput => editor.GetLanguageText(ELanguage.Pi);
+        private RichTextBox _rhoInput => editor.GetLanguageText(ELanguage.Rho);
+        private RichTextBox _tauInput => editor.GetLanguageText(ELanguage.Tau);
         private bool _localProcess = true;
         private System.Windows.Forms.Timer _timer;
         private readonly int _saveTimerIntervalMills = 500;
 
+        private ExecutionContext _context;
 
         public MainForm() {
             InitializeComponent();
@@ -110,9 +109,9 @@ namespace WinForms {
 
         private void ConnectUserControls() {
             dataStack.Construct(this);
-            ConextView.Construct(this);
+            contextView.Construct(this);
             output.Construct(this);
-            _editor.Construct(this);
+            editor.Construct(this);
         }
 
         private void Print(object obj) {
@@ -163,7 +162,7 @@ namespace WinForms {
         }
 
         private void UpdateContextView() {
-            ConextView.UpdateView();
+            contextView.UpdateView();
         }
 
 
@@ -230,7 +229,7 @@ namespace WinForms {
         }
 
         private void SaveAsFile(object sender, EventArgs e) {
-            var isPi = _editor.Language == ELanguage.Pi;
+            var isPi = editor.Language == ELanguage.Pi;
             var save = isPi ? savePiDialog : saveRhoDialog;
             if (save.ShowDialog() == DialogResult.OK)
                 File.WriteAllText(save.FileName, isPi ? _piInput.Text : _rhoInput.Text);
@@ -277,7 +276,7 @@ namespace WinForms {
         }
 
         private void debuggerToolStripMenuItem_Click(object sender, EventArgs e) {
-            ToggleControlVisibility(ConextView);
+            ToggleControlVisibility(contextView);
         }
 
         private void treeToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -313,12 +312,12 @@ namespace WinForms {
         }
 
         private Continuation GetContinuation() {
-            _context.Language = _editor.Language;
-            if (_context.Translate(_editor.RichTextBox.Text, out var cont)) {
+            _context.Language = editor.Language;
+            if (_context.Translate(editor.RichTextBox.Text, out var cont)) {
                 return cont;
             }
 
-            MessageBox.Show(_context.Error, $"Failed to Translate {_editor.Language}", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(_context.Error, $"Failed to Translate {editor.Language}", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return null;
         }
         
