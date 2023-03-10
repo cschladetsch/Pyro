@@ -78,6 +78,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{B335B44D-47EB-4EF1-81EF-B41045689865}"
 	ProjectSection(SolutionItems) = preProject
 		Resources\PyroWindow.PNG = Resources\PyroWindow.PNG
+		Resources\PyroWindow2.png = Resources\PyroWindow2.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{AAF6F6C3-B4AC-4634-8B74-33953E96AB8A}"
