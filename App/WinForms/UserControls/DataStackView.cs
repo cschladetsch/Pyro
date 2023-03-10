@@ -24,6 +24,12 @@ namespace WinForms.UserControls {
             foreach (var item in dataStack.Reverse()) {
                 stackView.Items.Add(MakeStackViewItem(n++, item));
             }
+
+            UpdateStatusText();
+        }
+
+        private void UpdateStatusText() {
+            toolStripStatusLabel1.Text = $"{stackView.Items.Count} Items";
         }
 
         //public static void Populate(registry, ListView list, IEnumerable objects) {
