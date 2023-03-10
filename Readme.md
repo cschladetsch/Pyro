@@ -13,9 +13,9 @@ It is based on [Flow](https://github.com/cschladetsch/Flow),
 [Kai](https://github.com/cschladetsch/KAI) and 
 [Om](https://github.com/cschladetsch/OM) before that, dating back decades.
 
-Each major component has its own project, and its own `Readme.md` file. In fact, each major folder has its own *Readme.md*.
+Each major component has its own project, and its own `Readme.md` file.
 
-*Pyro* is based on language systems, an object registry, and a generalised virtual machine named *Executor*.
+*Pyro* is based on various language systems, an object [Registry](registry), and a generalised virtual machine named [Executor](Executor).
 
 The key languages are:
 
