@@ -175,10 +175,7 @@
                 if (PreProcess(input))
                     return true;
 
-                if (!_context.Translate(input, out var cont))
-                    return Error(_context.Error);
-
-                return _peer.Execute(cont.ToText());
+                return !_context.Translate(input, out var cont) ? Error(_context.Error) : _peer.Execute(cont.ToText());
             } catch (Exception e) {
                 Error(e.Message);
                 _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");

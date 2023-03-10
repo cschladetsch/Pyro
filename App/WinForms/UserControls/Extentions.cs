@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WinForms.UserControls {
-    internal class Extentions {
+    internal class Extensions {
     }
 }

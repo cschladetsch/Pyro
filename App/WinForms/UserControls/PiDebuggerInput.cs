@@ -3,8 +3,7 @@
     using System.Windows.Forms;
 
     public partial class PiDebuggerInput
-        : UserControlBase
-        , IUserControlCommon {
+        : UserControlBase {
         public PiDebuggerInput() {
             InitializeComponent();
         }
@@ -50,10 +49,6 @@
         }
 
         public override void Construct(IMainForm mainForm) {
-            throw new NotImplementedException();
-        }
-
-        public override void Render() {
             throw new NotImplementedException();
         }
     }

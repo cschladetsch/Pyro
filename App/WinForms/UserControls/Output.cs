@@ -31,7 +31,5 @@
             Pyro.Exec.Executor.OnDebugTrace += (text) => Append(text);
         }
 
-        public override void Render() {
-        }
     }
 }

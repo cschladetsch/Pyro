@@ -25,7 +25,7 @@
                 return true;
             }
 
-            public static System.IO.FileStream Open(string path) {
+            public static FileStream Open(string path) {
                 return new FileStream(path, FileMode.OpenOrCreate);
             }
 

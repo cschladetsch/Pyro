@@ -267,7 +267,7 @@
             throw new NotImplementedException("TranslateMap");
         }
 
-        private bool TranslateArray(PiAstNode piAstNode, IList<object> objects) {
+        private bool TranslateArray(PiAstNode piAstNode, ICollection<object> objects) {
             var array = new List<object>();
             if (!TranslateNode(piAstNode, array))
                 return Fail($"Failed to translate ${piAstNode}");
@@ -275,7 +275,7 @@
             return true;
         }
 
-        private bool TranslateContinuation(PiAstNode piAstNode, IList<object> objects) {
+        private bool TranslateContinuation(PiAstNode piAstNode, ICollection<object> objects) {
             var cont = Continuation.New(_reg);
             if (!TranslateNode(piAstNode, cont.Code))
                 return Fail($"Failed to translate ${piAstNode}");

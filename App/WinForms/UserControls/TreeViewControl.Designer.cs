@@ -117,7 +117,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(141, 35);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "home >";
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // panel2
             // 

@@ -2,13 +2,13 @@
 
 namespace WinForms.UserControls {
     public partial class RhoEditorControl : UserControl {
-        public RichTextBox RichTextBox => richTextBox1;
+        public RichTextBox RichTextBox { get; private set; }
 
         public RhoEditorControl() {
             InitializeComponent();
 
-            richTextBox1.Multiline = true;
-            richTextBox1.AcceptsTab = true;
+            RichTextBox.Multiline = true;
+            RichTextBox.AcceptsTab = true;
         }
     }
 }

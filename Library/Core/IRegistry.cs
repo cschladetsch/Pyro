@@ -46,11 +46,11 @@
         IClassBase GetClass(string name);
 
         /// <summary>
-        /// Get the underlying value of a given object. This is equivalent to derefenencing.
+        /// Get the underlying value of a given object. This is equivalent to dereferencing.
         /// </summary>
         /// <typeparam name="T">The type to get</typeparam>
         /// <param name="obj">The generic object to dereference.</param>
-        /// <returns>The deferenced typer</returns>
+        /// <returns>The dereferenced type</returns>
         T Get<T>(object obj);
 
         /// <summary>
@@ -86,7 +86,7 @@
         IConstRefBase AddConst(object val);
 
         /// <summary>
-        /// Add a const-reference to given stronly-typed (reference) type.
+        /// Add a const-reference to given strongly-typed (reference) type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="val"></param>

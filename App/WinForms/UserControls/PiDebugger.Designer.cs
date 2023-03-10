@@ -119,9 +119,6 @@
             MainForm = mainForm;
         }
 
-        public override void Render() {
-            throw new System.NotImplementedException();
-        }
 
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;

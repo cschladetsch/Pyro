@@ -6,13 +6,10 @@ namespace WinForms {
     public class UserControlBase
         : UserControl
         , IUserControlCommon {
+        protected Executor Executor => MainForm.Executor;
+        protected IRegistry Registry => Executor.Self.Registry;
 
-        public Executor Executor { get { return MainForm.Executor; } }
-        public IRegistry Registry => Executor.Self.Registry;
-
-        public IMainForm MainForm { get { return _mainForm; } set { _mainForm = value; } }
-
-        private IMainForm _mainForm;
+        public IMainForm MainForm { get; set; }
 
         Executor IUserControlCommon.Executor => throw new System.NotImplementedException();
 
@@ -20,10 +17,8 @@ namespace WinForms {
             MainForm = mainForm;
         }
 
-        public virtual void Render() {
-        }
 
-        public void Perform(EOperation operation) {
+        protected void Perform(EOperation operation) {
             MainForm.Perform(operation);
         }
     }

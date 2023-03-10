@@ -7,7 +7,7 @@
         /// <summary>
         /// TODO: make this is a property
         /// </summary>
-        public string Text;
+        public readonly string Text;
 
         public Label(string text, bool quoted = false)
             : base(quoted) {

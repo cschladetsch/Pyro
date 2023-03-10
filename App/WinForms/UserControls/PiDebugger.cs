@@ -11,9 +11,6 @@
             private void PiDebugger_Load(object sender, EventArgs e) {
             }
 
-            public override void Render() {
-            }
-
             public void Input(string pi) {
                 Console.WriteLine($"Debugging {pi}");
             }
