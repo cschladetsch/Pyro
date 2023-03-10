@@ -186,6 +186,10 @@
         private void runButton_Click(object sender, EventArgs e) {
             MainForm.RunCurrent();
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e) {
+            Executor.Clear();
+        }
     }
 }
 

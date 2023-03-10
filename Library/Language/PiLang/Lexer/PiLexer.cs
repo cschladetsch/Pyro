@@ -25,16 +25,17 @@
 
             if (char.IsDigit(current)) {
                 var start = Gather(char.IsDigit);
-                if (Current() == '.') {
-                    Next();
-                    var end = Gather(char.IsDigit);
-                    if (start.LineNumber != end.LineNumber)
-                        return Fail("Bad float literal");
-
-                    return AddSlice(EPiToken.Float, new Slice(this, start.Start, end.End));
+                if (Current() != '.') {
+                    return AddSlice(EPiToken.Int, start);
                 }
 
-                return AddSlice(EPiToken.Int, start);
+                Next();
+                var end = Gather(char.IsDigit);
+                if (start.LineNumber != end.LineNumber)
+                    return Fail("Bad float literal");
+
+                return AddSlice(EPiToken.Float, new Slice(this, start.Start, end.End));
+
             }
 
             switch (current) {

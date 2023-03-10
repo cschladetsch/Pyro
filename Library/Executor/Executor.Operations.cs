@@ -142,6 +142,10 @@
 
             _break = false;
             _current = null;
+
+            FireContextStackChanged();
+            FireContinuationChanged();
+            FireDataStackChanged();
         }
 
         private void Assert() {

@@ -60,7 +60,8 @@ namespace WinForms {
             SaveAllRegularly();
             
             Executor.Rethrows = true;
-            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
+            Executor.Verbosity = 0;
+            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion() + '\n';
         }
 
         private void SaveAllRegularly() {
@@ -188,7 +189,7 @@ namespace WinForms {
                 var start = DateTime.Now;
                 action();
                 var span = DateTime.Now - start;
-                toolStripStatusLabel1.Text = $"Took {span.TotalMilliseconds:0.00}ms";
+                toolStripMenuItem1.Text = $"Took {span.TotalMilliseconds:0.00}ms (with UI updates)";
                 if (!string.IsNullOrEmpty(_context.Error))
                     output.Append("\n" + _context.Error);
             } catch (Exception e) {
@@ -201,7 +202,7 @@ namespace WinForms {
             if (e.Message == _context.Error) {
                 text = $"{e.Message}";
             }
-            output.Append(text, Color.Red);
+            output.Append(text + '\n', Color.Red);
             Console.WriteLine(e);
             MessageBox.Show(text, "Pyro Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
