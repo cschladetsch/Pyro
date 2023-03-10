@@ -248,6 +248,7 @@ namespace Pyro.Exec {
             switch (next) {
                 case ICallable call:
                     call.Invoke(_registry, DataStack);
+                    FireDataStackChanged();
                     break;
 
                 case IClassBase @class:
