@@ -16,15 +16,15 @@ It is based on [Flow](https://github.com/cschladetsch/Flow),
 
 Each major component has its own project, and its own `Readme.md` file.
 
-*Pyro* is based on various language systems, an object [Registry](../../wiki/registry), and a generalised virtual machine named (Executor)[../../wiki/Executor].
+*Pyro* is based on various language systems, an object [Registry](../../wiki/registry), and a generalised virtual machine named [Executor](../../wiki/Executor).
 
 The key languages are:
 
-* **Pi**. A reverse-polish double stack-based language with fast lexing and parsing. See [pi](https://github.com/cschladetsch/Pyro/wiki/Pi).
+* [Pi](../../wiki/PiLang). A reverse-polish double stack-based language with fast lexing and parsing.
 
-* **Rho**. An infix language that looks a lot like Python. It translates to Pi code and shares the same *Executor*.
+* [Rho](../../wiki/RhoLang). An infix language that looks a lot like Python. It translates to Pi code and shares the same *Executor*.
 
-* **Tau**. An IDL (Interface Definition Language) that creates code that you can derive from to implement *Proxies* and *Agents*.
+* [Tau](../../wiki/TauLang). An IDL (Interface Definition Language) that creates code that you can derive from to implement *Proxies* and *Agents*.
 
 From either *Pi* or *Rho* it is trivial to access all .Net objects, and also simple to add new custom types that you can expose to the runtime. 
 
