@@ -1,3 +1,4 @@
+using System.Runtime.Remoting.Channels;
 using Pyro.Language;
 
 namespace WinForms {
@@ -37,8 +38,9 @@ namespace WinForms {
         private RichTextBox _piInput => _rhoEditor.GetLanguageText(ELanguage.Pi);
         private RichTextBox _rhoInput => _rhoEditor.GetLanguageText(ELanguage.Rho);
         private RichTextBox _tauInput => _rhoEditor.GetLanguageText(ELanguage.Tau);
-        
         private bool _local = true;
+        private System.Windows.Forms.Timer _timer;
+
         
         public MainForm() {
             InitializeComponent();
@@ -55,18 +57,35 @@ namespace WinForms {
             AddBuiltinMethods();
             ConnectUserControls();
             AddClosingEvent();
+            SaveAllRegularly();
             
             Executor.Rethrows = true;
             output1.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
+
+        }
+
+        private void SaveAllRegularly() {
+            _timer = new System.Windows.Forms.Timer();
+            _timer.Interval = 5000; // milliseconds
+            _timer.Tick += SaveAll;
+        }
+
+        private void SaveAll(object sender, EventArgs eventArgs) {
+            SaveFiles();
         }
 
         private void AddClosingEvent() {
             FormClosing += (a, b) =>
             {
-                SaveFile("pi", _piInput.Text);
-                SaveFile("rho", _rhoInput.Text);
+                SaveFiles();
                 _peer?.Stop();
             };
+        }
+
+        private void SaveFiles() {
+            SaveFile("pi", _piInput.Text);
+            SaveFile("rho", _rhoInput.Text);
+            SaveFile("tau", _tauInput.Text);
         }
 
         private void AddEventHandlers() {
