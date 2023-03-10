@@ -29,19 +29,20 @@ namespace WinForms {
 
         public Stack<object> DataStack => Executor.DataStack;
 
-        public ContextStackView ContextView { get; private set; }
+        public ContextStackView ConextView { get; private set; }
 
         private ExecutionContext _context { get; }
         private List<object> _last;
         private IPeer _peer;
-        private RhoEditorControl _rhoEditor { get; set; }
-        private RichTextBox _piInput => _rhoEditor.GetLanguageText(ELanguage.Pi);
-        private RichTextBox _rhoInput => _rhoEditor.GetLanguageText(ELanguage.Rho);
-        private RichTextBox _tauInput => _rhoEditor.GetLanguageText(ELanguage.Tau);
-        private bool _local = true;
+        private RhoEditorControl _editor { get; set; }
+        private RichTextBox _piInput => _editor.GetLanguageText(ELanguage.Pi);
+        private RichTextBox _rhoInput => _editor.GetLanguageText(ELanguage.Rho);
+        private RichTextBox _tauInput => _editor.GetLanguageText(ELanguage.Tau);
+        private bool _localProcess = true;
         private System.Windows.Forms.Timer _timer;
+        private readonly int _saveTimerIntervalMills = 500;
 
-        
+
         public MainForm() {
             InitializeComponent();
 
@@ -59,13 +60,12 @@ namespace WinForms {
             SaveAllRegularly();
             
             Executor.Rethrows = true;
-            output1.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
-
+            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion();
         }
 
         private void SaveAllRegularly() {
             _timer = new System.Windows.Forms.Timer();
-            _timer.Interval = 5000; // milliseconds
+            _timer.Interval = _saveTimerIntervalMills; // milliseconds
             _timer.Tick += SaveAll;
         }
 
@@ -74,8 +74,7 @@ namespace WinForms {
         }
 
         private void AddClosingEvent() {
-            FormClosing += (a, b) =>
-            {
+            FormClosing += (a, b) => {
                 SaveFiles();
                 _peer?.Stop();
             };
@@ -109,10 +108,10 @@ namespace WinForms {
         }
 
         private void ConnectUserControls() {
-            dataStackView1.Construct(this);
-            ContextView.Construct(this);
-            output1.Construct(this);
-            _rhoEditor.Construct(this);
+            dataStack.Construct(this);
+            ConextView.Construct(this);
+            output.Construct(this);
+            _editor.Construct(this);
         }
 
         private void Print(object obj) {
@@ -120,7 +119,7 @@ namespace WinForms {
                 return;
 
             Console.WriteLine(obj);
-            output1.Text += "\n" + obj;
+            output.Text += "\n" + obj;
         }
 
         private void Received(IClient client, string text) {
@@ -163,13 +162,13 @@ namespace WinForms {
         }
 
         private void UpdateContextView() {
-            ContextView.UpdateView();
+            ConextView.UpdateView();
         }
 
 
         public void Run(string text, ELanguage language) {
             try {
-                if (_local) {
+                if (_localProcess) {
                     Perform(() => _context.Exec(language, text));
                     return;
                 }
@@ -191,7 +190,7 @@ namespace WinForms {
                 var span = DateTime.Now - start;
                 toolStripStatusLabel1.Text = $"Took {span.TotalMilliseconds:0.00}ms";
                 if (!string.IsNullOrEmpty(_context.Error))
-                    output1.Append("\n" + _context.Error);
+                    output.Append("\n" + _context.Error);
             } catch (Exception e) {
                 OutputException(e);
             }
@@ -202,7 +201,7 @@ namespace WinForms {
             if (e.Message == _context.Error) {
                 text = $"{e.Message}";
             }
-            output1.Append(text, Color.Red);
+            output.Append(text, Color.Red);
             Console.WriteLine(e);
             MessageBox.Show(text, "Pyro Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -220,7 +219,7 @@ namespace WinForms {
 
         public void Perform(EOperation op) {
             try {
-                if (_local)
+                if (_localProcess)
                     Perform(() => Executor.Perform(op));
                 else
                     _peer.Execute(_context.Registry.ToPiScript(op));
@@ -230,7 +229,7 @@ namespace WinForms {
         }
 
         private void SaveAsFile(object sender, EventArgs e) {
-            var isPi = _rhoEditor.Language == ELanguage.Pi;
+            var isPi = _editor.Language == ELanguage.Pi;
             var save = isPi ? savePiDialog : saveRhoDialog;
             if (save.ShowDialog() == DialogResult.OK)
                 File.WriteAllText(save.FileName, isPi ? _piInput.Text : _rhoInput.Text);
@@ -277,7 +276,7 @@ namespace WinForms {
         }
 
         private void debuggerToolStripMenuItem_Click(object sender, EventArgs e) {
-            ToggleControlVisibility(ContextView);
+            ToggleControlVisibility(ConextView);
         }
 
         private void treeToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -285,10 +284,10 @@ namespace WinForms {
         }
 
         private void outputToolStripMenuItem_Click(object sender, EventArgs e) {
-            ToggleControlVisibility(output1);
+            ToggleControlVisibility(output);
         }
         private void stackToolStripMenuItem_Click(object sender, EventArgs e) {
-            ToggleControlVisibility(dataStackView1);
+            ToggleControlVisibility(dataStack);
         }
 
         private void ToggleControlVisibility(UserControl control) {
@@ -313,12 +312,12 @@ namespace WinForms {
         }
 
         private Continuation GetContinuation() {
-            _context.Language = _rhoEditor.Language;
-            if (_context.Translate(_rhoEditor.RichTextBox.Text, out var cont)) {
+            _context.Language = _editor.Language;
+            if (_context.Translate(_editor.RichTextBox.Text, out var cont)) {
                 return cont;
             }
 
-            MessageBox.Show(_context.Error, $"Failed to Translate {_rhoEditor.Language}", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(_context.Error, $"Failed to Translate {_editor.Language}", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return null;
         }
         

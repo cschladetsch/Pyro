@@ -12,7 +12,7 @@ namespace WinForms {
 
         IRegistry Registry { get; }
 
-        ContextStackView ContextView { get; }
+        ContextStackView ConextView { get; }
 
         void Perform(EOperation op);
         void ConvertToPi();

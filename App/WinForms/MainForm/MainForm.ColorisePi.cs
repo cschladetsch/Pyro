@@ -14,7 +14,7 @@ namespace WinForms {
         private bool ColorisePi() {
             CheckFonts();
 
-            var rtb = _rhoEditor.GetLanguageText(ELanguage.Pi);
+            var rtb = _editor.GetLanguageText(ELanguage.Pi);
             BeginUpdate(rtb);
 
             var input = rtb.Text + " \n";
@@ -28,7 +28,7 @@ namespace WinForms {
                 foreach (var tok in lex.Tokens)
                     ColorisePiToken(tok, tok.Slice);
             } catch (Exception e) {
-                output1.Text += $"{e.Message}: {lex.Error}";
+                output.Text += $"{e.Message}: {lex.Error}";
             } finally {
                 EndUpdate(rtb);
             }

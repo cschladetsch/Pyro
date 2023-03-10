@@ -53,11 +53,11 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this._rhoEditor = new WinForms.UserControls.RhoEditorControl();
-            this.ContextView = new WinForms.UserControls.ContextStackView();
+            this._editor = new WinForms.UserControls.RhoEditorControl();
+            this.ConextView = new WinForms.UserControls.ContextStackView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.dataStackView1 = new WinForms.UserControls.DataStackView();
-            this.output1 = new WinForms.UserControls.Output();
+            this.dataStack = new WinForms.UserControls.DataStackView();
+            this.output = new WinForms.UserControls.Output();
             this.savePiDialog = new System.Windows.Forms.SaveFileDialog();
             this.saveRhoDialog = new System.Windows.Forms.SaveFileDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -291,8 +291,8 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this._rhoEditor);
-            this.splitContainer1.Panel1.Controls.Add(this.ContextView);
+            this.splitContainer1.Panel1.Controls.Add(this._editor);
+            this.splitContainer1.Panel1.Controls.Add(this.ConextView);
             // 
             // splitContainer1.Panel2
             // 
@@ -304,23 +304,23 @@
             // 
             // rhoEditorControl1
             // 
-            this._rhoEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._rhoEditor.Language = Pyro.Language.ELanguage.Rho;
-            this._rhoEditor.Location = new System.Drawing.Point(0, 0);
-            this._rhoEditor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this._rhoEditor.Name = "RhoEditor";
-            this._rhoEditor.Size = new System.Drawing.Size(806, 997);
-            this._rhoEditor.TabIndex = 1;
+            this._editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._editor.Language = Pyro.Language.ELanguage.Rho;
+            this._editor.Location = new System.Drawing.Point(0, 0);
+            this._editor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this._editor.Name = "RhoEditor";
+            this._editor.Size = new System.Drawing.Size(806, 997);
+            this._editor.TabIndex = 1;
             // 
             // contextStackView1
             // 
-            this.ContextView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ContextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ContextView.Location = new System.Drawing.Point(806, 0);
-            this.ContextView.MainForm = null;
-            this.ContextView.Name = "ContextView";
-            this.ContextView.Size = new System.Drawing.Size(353, 997);
-            this.ContextView.TabIndex = 0;
+            this.ConextView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ConextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConextView.Location = new System.Drawing.Point(806, 0);
+            this.ConextView.MainForm = null;
+            this.ConextView.Name = "ContextView";
+            this.ConextView.Size = new System.Drawing.Size(353, 997);
+            this.ConextView.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -332,11 +332,11 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.dataStackView1);
+            this.splitContainer2.Panel1.Controls.Add(this.dataStack);
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.output1);
+            this.splitContainer2.Panel2.Controls.Add(this.output);
             this.splitContainer2.Size = new System.Drawing.Size(373, 997);
             this.splitContainer2.SplitterDistance = 585;
             this.splitContainer2.SplitterWidth = 6;
@@ -344,26 +344,26 @@
             // 
             // dataStackView1
             // 
-            this.dataStackView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataStackView1.Location = new System.Drawing.Point(0, 0);
-            this.dataStackView1.MainForm = null;
-            this.dataStackView1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dataStackView1.Name = "dataStackView1";
-            this.dataStackView1.Size = new System.Drawing.Size(373, 585);
-            this.dataStackView1.TabIndex = 0;
+            this.dataStack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataStack.Location = new System.Drawing.Point(0, 0);
+            this.dataStack.MainForm = null;
+            this.dataStack.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dataStack.Name = "dataStack";
+            this.dataStack.Size = new System.Drawing.Size(373, 585);
+            this.dataStack.TabIndex = 0;
             // 
             // output1
             // 
-            this.output1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.output1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.output1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.output1.Location = new System.Drawing.Point(0, 0);
-            this.output1.MainForm = null;
-            this.output1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.output1.Name = "output1";
-            this.output1.Size = new System.Drawing.Size(373, 406);
-            this.output1.TabIndex = 0;
-            this.output1.AutoSizeChanged += new System.EventHandler(this.stackToolStripMenuItem_Click);
+            this.output.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.output.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.output.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.output.Location = new System.Drawing.Point(0, 0);
+            this.output.MainForm = null;
+            this.output.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.output.Name = "output";
+            this.output.Size = new System.Drawing.Size(373, 406);
+            this.output.TabIndex = 0;
+            this.output.AutoSizeChanged += new System.EventHandler(this.stackToolStripMenuItem_Click);
             // 
             // savePiDialog
             // 
@@ -434,8 +434,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem loadRhoToolStripMenuItem;
-        private UserControls.DataStackView dataStackView1;
-        private UserControls.Output output1;
+        private UserControls.DataStackView dataStack;
+        private UserControls.Output output;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stackToolStripMenuItem;

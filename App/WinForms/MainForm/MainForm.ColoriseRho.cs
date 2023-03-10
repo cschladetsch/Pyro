@@ -25,7 +25,7 @@ namespace WinForms {
                 foreach (var tok in lex.Tokens)
                     ColoriseRhoToken(tok, tok.Slice);
             } catch (Exception e) {
-                output1.Append($"{e.Message}: {lex.Error}");
+                output.Append($"{e.Message}: {lex.Error}");
             } finally {
                 EndUpdate(rtb);
             }
