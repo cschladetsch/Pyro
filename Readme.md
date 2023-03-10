@@ -8,7 +8,7 @@
 
 *Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine micro-kernel. 
 
-Check out the [wiki](../../wiki/Overview).
+Check out the [wiki](../../wiki).
 
 It is based on [Flow](https://github.com/cschladetsch/Flow), 
 [Kai](https://github.com/cschladetsch/KAI) and 
