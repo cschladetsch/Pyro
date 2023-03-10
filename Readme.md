@@ -15,7 +15,7 @@ It is based on [Flow](https://github.com/cschladetsch/Flow),
 
 Each major component has its own project, and its own `Readme.md` file.
 
-*Pyro* is based on various language systems, an object [Registry](wiki/registry), and a generalised virtual machine named [Executor](wiki/Executor).
+*Pyro* is based on various language systems, an object [Registry](../../../wiki/registry), and a generalised virtual machine named [Executor](../../../wiki/Executor).
 
 The key languages are:
 
