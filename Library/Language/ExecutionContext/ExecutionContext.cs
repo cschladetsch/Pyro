@@ -21,6 +21,7 @@
 
         private readonly PiTranslator _pi;
         private readonly RhoTranslator _rho;
+        //private readonly TauTranslator _tau;
 
         public IDictionary<string, object> Scope
         {

@@ -106,6 +106,12 @@
     <Compile Include="UserControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\PiPrompt.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\PiPrompt.Designer.cs">
+      <DependentUpon>PiPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\RhoEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -151,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PiDebuggerInput.resx">
       <DependentUpon>PiDebuggerInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PiPrompt.resx">
+      <DependentUpon>PiPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RhoEditorControl.resx">
       <DependentUpon>RhoEditorControl.cs</DependentUpon>

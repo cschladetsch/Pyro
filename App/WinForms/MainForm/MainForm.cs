@@ -51,7 +51,6 @@ namespace WinForms {
             SetupNetwork();
             AddEventHandlers();
             LoadPrevious();
-            UpdatePiContext();
             ColorisePi();
             ColoriseRho();
             AddBuiltinMethods();
@@ -145,11 +144,6 @@ namespace WinForms {
         private void LoadPrevious() {
             _piInput.Text = LoadFile("pi");
             _rhoInput.Text = LoadFile("rho");
-        }
-
-        private void UpdatePiContext() {
-            // TODO: Add concept of a `tree`
-            //piStatus.Text = "/home λ";
         }
 
         private void RhoTextKeyDown(object sender, KeyEventArgs e) {

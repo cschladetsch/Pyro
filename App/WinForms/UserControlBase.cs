@@ -17,7 +17,6 @@ namespace WinForms {
             MainForm = mainForm;
         }
 
-
         protected void Perform(EOperation operation) {
             MainForm.Perform(operation);
         }

@@ -95,7 +95,11 @@
             _actions[EOperation.Rot] = Rot;
             _actions[EOperation.Over] = Over;
             _actions[EOperation.Dup] = Dup;
-            _actions[EOperation.Clear] = () => DataStack.Clear();
+            _actions[EOperation.Clear] = () =>
+            {
+                 DataStack.Clear();
+                 OnDataStackChanged?.Invoke(this, DataStack);
+            };
             _actions[EOperation.Less] = Less;
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;

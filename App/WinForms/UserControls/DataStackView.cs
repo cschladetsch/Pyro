@@ -16,6 +16,7 @@ namespace WinForms.UserControls {
         public override void Construct(IMainForm mainForm) {
             base.Construct(mainForm);
             MainForm.Executor.OnDataStackChanged += DataStackChanged;
+            piPrompt1.Construct(mainForm);
         }
 
         private void DataStackChanged(Executor executor, Stack<object> dataStack) {
@@ -80,5 +81,6 @@ namespace WinForms.UserControls {
 
         private void StackDropClick(object sender, EventArgs e)
             => Perform(EOperation.Drop);
+
     }
 }
