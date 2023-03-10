@@ -13,7 +13,7 @@ fun bar(f, n)
 assert(bar(foo, 1) == 2)
 assert(bar(foo, 2) == 3)
 
-// multiple nested ffunctions
+// multiple nested functions
 fun foo()
 	fun bar(f, num)
 		1 + f(num)

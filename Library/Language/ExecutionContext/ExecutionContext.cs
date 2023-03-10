@@ -1,11 +1,12 @@
 ﻿namespace Pyro.ExecutionContext {
+    using System;
+    using System.IO;
+    using System.Collections.Generic;
+    
     using Exec;
     using Impl;
     using Language;
     using RhoLang;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
 
     /// <inheritdoc />
     /// <summary>
@@ -61,7 +62,7 @@
         public bool ExecRho(string text)
             => Exec(ELanguage.Rho, text);
 
-        public bool ExecPi(string text)
+        private bool ExecPi(string text)
             => Exec(ELanguage.Pi, text);
 
         public bool Exec(string text)
@@ -89,7 +90,7 @@
             Exec("start.rho");
         }
 
-        protected string HomePath() {
+        private static string HomePath() {
             return (Environment.OSVersion.Platform == PlatformID.Unix ||
                 Environment.OSVersion.Platform == PlatformID.MacOSX)
                 ? Environment.GetEnvironmentVariable("HOME")
@@ -115,7 +116,7 @@
             return true;
         }
 
-        public bool ExecFile(string fileName) {
+        private bool ExecFile(string fileName) {
             if (!File.Exists(fileName))
                 return Fail($"File '{fileName}' doesn't exist");
 
@@ -143,6 +144,7 @@
                 case ELanguage.Rho:
                     return Exec(_rho, text);
 
+                case ELanguage.Tau:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lang), lang, null);
             }
