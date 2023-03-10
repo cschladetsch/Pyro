@@ -12,7 +12,7 @@ namespace WinForms {
         private void ColoriseRho() {
             CheckFonts();
 
-            var rtb = rhoInput;
+            var rtb = _rhoInput;
             BeginUpdate(rtb);
 
             var input = rtb.Text + " \n";
@@ -97,6 +97,6 @@ namespace WinForms {
         }
 
         private bool SetRhoSliceColor(Slice slice, Color color, Font font)
-            => SetSliceColor(rhoInput, slice, color, font);
+            => SetSliceColor(_rhoInput, slice, color, font);
     }
 }

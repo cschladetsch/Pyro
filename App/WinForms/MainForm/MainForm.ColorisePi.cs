@@ -2,19 +2,22 @@
 using Pyro.Language.Lexer;
 using System;
 using System.Drawing;
+using System.Windows.Forms;
+using WinForms.UserControls;
 
 namespace WinForms {
     /// <summary>
     /// Colorise Pi script.
     /// </summary>
     partial class MainForm {
+        
         private bool ColorisePi() {
             CheckFonts();
 
-            var rtb = piInput;
+            var rtb = _rhoEditor.GetLanguageText(ELanguage.Pi);
             BeginUpdate(rtb);
 
-            var input = piInput.Text + " \n";
+            var input = rtb.Text + " \n";
             var lex = new PiLexer(input);
             try {
                 // start by setting everything to default color and font
@@ -62,7 +65,7 @@ namespace WinForms {
                 case EPiToken.String:
                     // color the quotes too
                     var expanded = new Slice(slice.Lexer, slice.LineNumber, slice.Start - 1, slice.End + 1);
-                    return SetSliceColor(piInput, expanded, Color.Blue, _boldFont);
+                    return SetSliceColor(_piInput, expanded, Color.Blue, _boldFont);
 
                 case EPiToken.Int:
                     return Render(Color.Brown);
@@ -106,7 +109,7 @@ namespace WinForms {
         }
 
         private bool SetPiSliceColor(Slice slice, Color color, Font font)
-            => SetSliceColor(piInput, slice, color, font);
+            => SetSliceColor(_piInput, slice, color, font);
     }
 }
 

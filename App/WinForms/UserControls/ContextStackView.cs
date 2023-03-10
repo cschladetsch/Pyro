@@ -184,7 +184,7 @@
         }
 
         private void runButton_Click(object sender, EventArgs e) {
-            Executor.Continue();
+            MainForm.RunCurrent();
         }
     }
 }

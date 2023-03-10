@@ -1,4 +1,6 @@
-﻿namespace WinForms {
+﻿using Pyro.Language;
+
+namespace WinForms {
     using Pyro;
     using Pyro.Exec;
     using WinForms.UserControls;
@@ -13,6 +15,10 @@
         ContextStackView ContextView { get; }
 
         void Perform(EOperation op);
+        void ConvertToPi();
+        void Decompile();
+        void RunCurrent();
+        void Run(string text, ELanguage language);
     }
 }
 

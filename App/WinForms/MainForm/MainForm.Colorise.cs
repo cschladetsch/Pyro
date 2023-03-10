@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace WinForms {
     /// <summary>
-    /// Colorisation systems that are language-independant.
+    /// Colorisation systems that are language-independent.
     /// </summary>
     public partial class MainForm {
         private Font _defaultFont;
@@ -26,7 +26,7 @@ namespace WinForms {
                 return false;
 
             var scroll = rtb.AutoScrollOffset;
-            var slct = rtb.SelectionIndent;
+            var selectionIndent = rtb.SelectionIndent;
             var ss = rtb.SelectionStart;
 
             rtb.SelectionStart = GetStartOffset(rtb, slice);
@@ -35,7 +35,7 @@ namespace WinForms {
             rtb.SelectionFont = font;
 
             rtb.SelectionStart = ss;
-            rtb.SelectionIndent = slct;
+            rtb.SelectionIndent = selectionIndent;
             rtb.AutoScrollOffset = scroll;
 
             return true;
@@ -45,25 +45,25 @@ namespace WinForms {
             if (_defaultFont != null)
                 return;
 
-            _defaultFont = piInput.Font;
+            _defaultFont = _piInput.Font;
             _boldFont = new Font(_defaultFont.FontFamily, _defaultFont.Size, FontStyle.Bold);
         }
 
         #region Native
         private const int WmUser = 0x0400;
-        private const int EmSeteventmask = (WmUser + 69);
+        private const int EmSeteventmask = WmUser + 69;
         private const int WmSetredraw = 0x0b;
         private IntPtr _oldEventMask;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        public void BeginUpdate(Control control) {
+        private void BeginUpdate(Control control) {
             SendMessage(control.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
             _oldEventMask = SendMessage(control.Handle, EmSeteventmask, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public void EndUpdate(Control control) {
+        private void EndUpdate(Control control) {
             SendMessage(control.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
             SendMessage(control.Handle, EmSeteventmask, IntPtr.Zero, _oldEventMask);
         }

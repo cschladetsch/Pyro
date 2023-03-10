@@ -45,6 +45,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WinForms">
+      <HintPath>bin\Debug\WinForms.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dialogs\AboutBox.cs">
@@ -93,12 +96,6 @@
     </Compile>
     <Compile Include="UserControls\Output.Designer.cs">
       <DependentUpon>Output.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PiDebugger.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PiDebugger.Designer.cs">
-      <DependentUpon>PiDebugger.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PiDebuggerInput.cs">
       <SubType>UserControl</SubType>
@@ -151,9 +148,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Output.resx">
       <DependentUpon>Output.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PiDebugger.resx">
-      <DependentUpon>PiDebugger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PiDebuggerInput.resx">
       <DependentUpon>PiDebuggerInput.cs</DependentUpon>
