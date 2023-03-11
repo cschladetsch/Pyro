@@ -1,4 +1,0 @@
-﻿// test while loops
-
-{ 1 + } { 4 < } "not implemented" throw
-

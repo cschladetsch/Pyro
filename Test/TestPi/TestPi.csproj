@@ -75,7 +75,6 @@
     <None Include="Scripts\Boolean.pi" />
     <None Include="Scripts\Continuations.pi" />
     <None Include="Scripts\Conditionals.pi" />
-    <None Include="Scripts\Loops.pi" />
     <None Include="Scripts\Map.pi" />
     <None Include="Scripts\Relational.pi" />
     <None Include="Scripts\StackOperations.pi" />

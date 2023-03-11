@@ -53,6 +53,7 @@
 
             var pi = _Registry.ToPiScript(user);
             PiRun(pi);
+            WriteLine($"TestPersistedInstances: pi={pi}");
             var user2 = Pop<User>();
             Assert.AreEqual(user.Name, user2.Name);
             Assert.AreEqual(user.Last, user2.Last);
