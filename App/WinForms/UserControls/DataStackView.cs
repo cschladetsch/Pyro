@@ -21,9 +21,9 @@ namespace WinForms.UserControls {
 
         private void DataStackChanged(Executor executor, Stack<object> dataStack) {
             stackView.Items.Clear();
-            var n = 0;
+            var n = dataStack.Count - 1;
             foreach (var item in dataStack.Reverse()) {
-                stackView.Items.Add(MakeStackViewItem(n++, item));
+                stackView.Items.Add(MakeStackViewItem(n--, item));
             }
 
             UpdateStatusText();
