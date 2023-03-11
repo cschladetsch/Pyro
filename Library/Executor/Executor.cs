@@ -26,7 +26,7 @@ namespace Pyro.Exec {
 
         public delegate void ContextStackChangedHandler(Executor executor, List<Continuation> context);
         public delegate void DataStackChangedHandler(Executor executor, Stack<object> context);
-        public delegate void ContinuationChangedHandler(Executor executor, Continuation context);
+        public delegate void ContinuationChangedHandler(Executor executor, Continuation previous, Continuation current);
         public event ContextStackChangedHandler OnContextStackChanged;
         public event DataStackChangedHandler OnDataStackChanged;
         public event ContinuationChangedHandler OnContinuationChanged;
@@ -48,8 +48,7 @@ namespace Pyro.Exec {
             if (_current != null) {
                 _current.FireOnLeave();
             }
-            _current = continuation;
-            FireContinuationChanged();
+            FireContinuationChanged(_current, continuation);
         }
 
         private void FireContextStackChanged() {
@@ -60,8 +59,9 @@ namespace Pyro.Exec {
             OnDataStackChanged?.Invoke(this, DataStack);
         }
 
-        private void FireContinuationChanged() {
-            OnContinuationChanged?.Invoke(this, _current);
+        private void FireContinuationChanged(Continuation previous, Continuation current) {
+            OnContinuationChanged?.Invoke(this, previous, current);
+            _current = current;
         }
 
         public void Continue(IRef<Continuation> continuation)

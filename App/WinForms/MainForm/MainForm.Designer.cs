@@ -53,6 +53,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.editor = new WinForms.UserControls.RhoEditorControl();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.contextView = new WinForms.UserControls.ContextStackView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataStack = new WinForms.UserControls.DataStackView();
@@ -291,6 +292,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.editor);
+            this.splitContainer1.Panel1.Controls.Add(this.splitter1);
             this.splitContainer1.Panel1.Controls.Add(this.contextView);
             // 
             // splitContainer1.Panel2
@@ -309,18 +311,26 @@
             this.editor.MainForm = null;
             this.editor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.editor.Name = "editor";
-            this.editor.Size = new System.Drawing.Size(806, 997);
-            this.editor.TabIndex = 1;
-            this.editor.Load += new System.EventHandler(this.editor_Load);
+            this.editor.Size = new System.Drawing.Size(591, 997);
+            this.editor.TabIndex = 2;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter1.Location = new System.Drawing.Point(591, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 997);
+            this.splitter1.TabIndex = 1;
+            this.splitter1.TabStop = false;
             // 
             // contextView
             // 
             this.contextView.Dock = System.Windows.Forms.DockStyle.Right;
             this.contextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.contextView.Location = new System.Drawing.Point(806, 0);
+            this.contextView.Location = new System.Drawing.Point(594, 0);
             this.contextView.MainForm = null;
             this.contextView.Name = "contextView";
-            this.contextView.Size = new System.Drawing.Size(353, 997);
+            this.contextView.Size = new System.Drawing.Size(565, 997);
             this.contextView.TabIndex = 0;
             // 
             // splitContainer2
@@ -404,6 +414,10 @@
             this.PerformLayout();
         }
 
+        private WinForms.UserControls.RhoEditorControl editor;
+
+        private System.Windows.Forms.Splitter splitter1;
+
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -440,10 +454,9 @@
         private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem treeToolStripMenuItem;
-        
-        private WinForms.UserControls.RhoEditorControl editor;
+
         private UserControls.DataStackView dataStack;
-        private UserControls.ContextStackView contextView;
+        private WinForms.UserControls.ContextStackView contextView;
         private UserControls.Output output;
     }
 }

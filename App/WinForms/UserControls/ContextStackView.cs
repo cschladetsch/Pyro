@@ -24,14 +24,22 @@
             UpdateContextStack();
         }
 
-        internal void ContextChanged(Executor executor, Continuation context) {
-            if (context == null) {
+        internal void ContextChanged(Executor executor, Continuation previous, Continuation current) {
+            if (previous != null) {
+                previous.OnScopeChanged -= UpdateCont;
+                previous.OnLeave -= RemoveEvents;
+                previous.OnIpChanged -= OnIpChanged;
+            }
+            
+            UpdateContinuation(current);
+            
+            if (current == null) {
                 return;
             }
-            UpdateContinuation();
-            context.OnScopeChanged += UpdateCont;
-            context.OnLeave += RemoveEvents;
-            context.OnIpChanged += OnIpChanged;
+            
+            current.OnScopeChanged += UpdateCont;
+            current.OnLeave += RemoveEvents;
+            current.OnIpChanged += OnIpChanged;
         }
 
         void SetStatusText(string text) {
@@ -65,14 +73,12 @@
 
         private void UpdateCont(Continuation continuation) {
             Executor.PushContext(continuation);
-            UpdateContinuation();
+            UpdateContinuation(continuation);
         }
 
-        private void UpdateContinuation() {
+        private void UpdateContinuation(Continuation current) {
             codeView.Items.Clear();
-            var current = Executor.Current;
             if (current == null) {
-                MessageBox.Show("Nothing to Continue", "Empty Context Stack", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             var n = 0;
@@ -180,7 +186,8 @@
 
         internal void UpdateView() {
             UpdateContextStack();
-            UpdateContinuation();
+            UpdateContinuation(Executor.Current);
+            UpdateStatus();
         }
 
         private void runButton_Click(object sender, EventArgs e) {

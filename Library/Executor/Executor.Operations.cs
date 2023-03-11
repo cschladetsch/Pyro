@@ -136,15 +136,15 @@
         }
 
         public void Clear() {
-            DataStack = new Stack<object>();
-            ContextStack = new List<Continuation>();
+            DataStack.Clear();
+            ContextStack.Clear();
             NumOps = 0;
 
             _break = false;
+            FireContinuationChanged(_current, null);
             _current = null;
 
             FireContextStackChanged();
-            FireContinuationChanged();
             FireDataStackChanged();
         }
 

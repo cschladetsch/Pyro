@@ -331,9 +331,6 @@ namespace WinForms {
             ColorisePi();
         }
 
-        private void editor_Load(object sender, EventArgs e) {
-            throw new System.NotImplementedException();
-        }
     }
 }
 
