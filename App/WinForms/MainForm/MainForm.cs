@@ -23,9 +23,9 @@ namespace WinForms {
         , IMainForm {
         public int ListenPort { get; } = 7777;
         
-        public Executor Executor => contextView.Executor;
+        public Executor Executor => _context.Executor;
 
-        public IRegistry Registry => contextView.Registry;
+        public IRegistry Registry => _context.Registry;
 
         public ContextStackView ContextView => contextView;
 
@@ -48,7 +48,6 @@ namespace WinForms {
             _context = new ExecutionContext();
             
             Perform(EOperation.Clear);
-            SetupNetwork();
             AddEventHandlers();
             LoadPrevious();
             ColorisePi();
@@ -57,9 +56,10 @@ namespace WinForms {
             ConnectUserControls();
             AddClosingEvent();
             SaveAllRegularly();
+            SetupNetwork();
             
             Executor.Rethrows = true;
-            Executor.Verbosity = 0;
+            Executor.Verbosity = 20;
             output.Text = Pyro.AppCommon.AppCommonBase.GetVersion() + '\n';
         }
 
@@ -329,6 +329,10 @@ namespace WinForms {
             
             _piInput.Text = Registry.ToPiScript(cont) + " &";
             ColorisePi();
+        }
+
+        private void editor_Load(object sender, EventArgs e) {
+            throw new System.NotImplementedException();
         }
     }
 }

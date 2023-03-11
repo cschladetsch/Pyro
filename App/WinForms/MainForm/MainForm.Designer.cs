@@ -23,7 +23,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -302,17 +301,19 @@
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 3;
             // 
-            // rhoEditorControl1
+            // editor
             // 
             this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editor.Language = Pyro.Language.ELanguage.Rho;
             this.editor.Location = new System.Drawing.Point(0, 0);
+            this.editor.MainForm = null;
             this.editor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.editor.Name = "RhoEditor";
+            this.editor.Name = "editor";
             this.editor.Size = new System.Drawing.Size(806, 997);
             this.editor.TabIndex = 1;
+            this.editor.Load += new System.EventHandler(this.editor_Load);
             // 
-            // contextStackView1
+            // contextView
             // 
             this.contextView.Dock = System.Windows.Forms.DockStyle.Right;
             this.contextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -342,7 +343,7 @@
             this.splitContainer2.SplitterWidth = 6;
             this.splitContainer2.TabIndex = 0;
             // 
-            // dataStackView1
+            // dataStack
             // 
             this.dataStack.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataStack.Location = new System.Drawing.Point(0, 0);
@@ -352,7 +353,7 @@
             this.dataStack.Size = new System.Drawing.Size(373, 585);
             this.dataStack.TabIndex = 0;
             // 
-            // output1
+            // output
             // 
             this.output.Dock = System.Windows.Forms.DockStyle.Fill;
             this.output.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -383,7 +384,6 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
@@ -441,7 +441,7 @@
         private System.Windows.Forms.ToolStripMenuItem debuggerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem treeToolStripMenuItem;
         
-        private UserControls.RhoEditorControl editor;
+        private WinForms.UserControls.RhoEditorControl editor;
         private UserControls.DataStackView dataStack;
         private UserControls.ContextStackView contextView;
         private UserControls.Output output;
