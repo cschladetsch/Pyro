@@ -201,7 +201,7 @@
 
         private void Dup() {
             // TODO: don't use a fucking stack. use a vector.
-            var top = DataStack.Reverse().First();
+            var top = DataStack.Pop();
             var dup = Duplicate(top); // TODO: copy-on-write duplication
             Push(top);
             Push(dup);
