@@ -20,11 +20,11 @@
             SetStatusFromContinuation();
         }
 
-        internal void ContextStackChanged(Executor executor, List<Continuation> contexts) {
-            UpdateContextStack();
+        private void ContextStackChanged(Executor executor, List<Continuation> contexts) {
+            UpdateContextStack(executor, contexts);
         }
 
-        internal void ContextChanged(Executor executor, Continuation previous, Continuation current) {
+        private void ContextChanged(Executor executor, Continuation previous, Continuation current) {
             if (previous != null) {
                 previous.OnScopeChanged -= UpdateCont;
                 previous.OnLeave -= RemoveEvents;
@@ -42,7 +42,7 @@
             current.OnIpChanged += OnIpChanged;
         }
 
-        void SetStatusText(string text) {
+        private void SetStatusText(string text) {
             contextViewStatus0.Text = text;
         }
 
@@ -74,6 +74,7 @@
         private void UpdateCont(Continuation continuation) {
             Executor.PushContext(continuation);
             UpdateContinuation(continuation);
+            OnIpChanged(continuation, 0, 0);
         }
 
         private void UpdateContinuation(Continuation current) {
@@ -129,18 +130,28 @@
             codeView.Items.Add(row);
         }
 
-        private void UpdateContextStack() {
+        private void UpdateContextStack(Executor executor, List<Continuation> contexts) {
             contextStack.Items.Clear();
+            var n = 0;
+            foreach (var cont in contexts) {
+                AddContinuationToStack(n++, cont);
+            }
         }
 
-        private void AddContinuationToStack(int v, Continuation item) {
+        private void AddContinuationToStack(int n, Continuation continuation) {
+            var row = new ListViewItem(n.ToString());
+            var loc = new ListViewItem.ListViewSubItem(row, $"{continuation.Ip}");
+            var code = new ListViewItem.ListViewSubItem(row, Registry.ToPiScript(continuation));
+            row.SubItems.Add(loc);
+            row.SubItems.Add(code);
+            contextStack.Items.Add(row);
         }
 
-        private void AddContinuation(int num, Continuation continuation) {
-            UpdateScope(continuation);
-            UpdateCode(continuation);
-            SetStatusFromContinuation();
-        }
+        // private void AddContinuation(int num, Continuation continuation) {
+        //     UpdateScope(continuation);
+        //     UpdateCode(continuation);
+        //     SetStatusFromContinuation();
+        // }
 
         private void UpdateScope(Continuation continuation) {
             scopeView.Items.Clear();
@@ -185,7 +196,7 @@
         }
 
         internal void UpdateView() {
-            UpdateContextStack();
+            UpdateContextStack(Executor, Executor.ContextStack);
             UpdateContinuation(Executor.Current);
             UpdateStatus();
         }

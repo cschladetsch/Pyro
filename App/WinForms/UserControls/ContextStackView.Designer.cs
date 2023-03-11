@@ -30,27 +30,27 @@ namespace WinForms.UserControls {
             this.runButton = new System.Windows.Forms.ToolStripButton();
             this.stepNext = new System.Windows.Forms.ToolStripButton();
             this.stepPrevious = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.contextViewStatus0 = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.contextStack = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.label3 = new System.Windows.Forms.Label();
             this.scopeView = new System.Windows.Forms.ListView();
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.label4 = new System.Windows.Forms.Label();
             this.codeView = new System.Windows.Forms.ListView();
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader9 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader10 = new System.Windows.Forms.ColumnHeader();
             this.fromRho.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,14 +59,10 @@ namespace WinForms.UserControls {
             // 
             this.fromRho.Font = new System.Drawing.Font("MesloLGS NF", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fromRho.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.fromRho.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runButton,
-            this.stepNext,
-            this.stepPrevious,
-            this.toolStripButton1});
+            this.fromRho.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.runButton, this.stepNext, this.stepPrevious, this.toolStripButton1 });
             this.fromRho.Location = new System.Drawing.Point(0, 0);
             this.fromRho.Name = "fromRho";
-            this.fromRho.Size = new System.Drawing.Size(654, 30);
+            this.fromRho.Size = new System.Drawing.Size(654, 28);
             this.fromRho.TabIndex = 0;
             this.fromRho.Text = "toolStrip1";
             // 
@@ -97,14 +93,22 @@ namespace WinForms.UserControls {
             this.stepPrevious.Text = "Prev";
             this.stepPrevious.Click += new System.EventHandler(this.stepPreviousClicked);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(84, 25);
+            this.toolStripButton1.Text = "Clear";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contextViewStatus0});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 745);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.contextViewStatus0 });
+            this.statusStrip1.Location = new System.Drawing.Point(0, 747);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(654, 36);
+            this.statusStrip1.Size = new System.Drawing.Size(654, 34);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -119,7 +123,7 @@ namespace WinForms.UserControls {
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(0, 30);
+            this.label1.Location = new System.Drawing.Point(0, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 28);
             this.label1.TabIndex = 2;
@@ -127,13 +131,10 @@ namespace WinForms.UserControls {
             // 
             // contextStack
             // 
-            this.contextStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
+            this.contextStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.columnHeader1, this.columnHeader2, this.columnHeader3 });
             this.contextStack.Dock = System.Windows.Forms.DockStyle.Top;
             this.contextStack.HideSelection = false;
-            this.contextStack.Location = new System.Drawing.Point(0, 58);
+            this.contextStack.Location = new System.Drawing.Point(0, 56);
             this.contextStack.Name = "contextStack";
             this.contextStack.Size = new System.Drawing.Size(654, 97);
             this.contextStack.TabIndex = 3;
@@ -152,11 +153,12 @@ namespace WinForms.UserControls {
             // columnHeader3
             // 
             this.columnHeader3.Text = "Code";
+            this.columnHeader3.Width = 551;
             // 
             // splitter1
             // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter1.Location = new System.Drawing.Point(0, 155);
+            this.splitter1.Location = new System.Drawing.Point(0, 153);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(654, 13);
             this.splitter1.TabIndex = 4;
@@ -167,7 +169,7 @@ namespace WinForms.UserControls {
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Top;
             this.label3.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(0, 168);
+            this.label3.Location = new System.Drawing.Point(0, 166);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 28);
             this.label3.TabIndex = 6;
@@ -175,14 +177,10 @@ namespace WinForms.UserControls {
             // 
             // scopeView
             // 
-            this.scopeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader4,
-            this.columnHeader5,
-            this.columnHeader6,
-            this.columnHeader7});
+            this.scopeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.columnHeader4, this.columnHeader5, this.columnHeader6, this.columnHeader7 });
             this.scopeView.Dock = System.Windows.Forms.DockStyle.Top;
             this.scopeView.HideSelection = false;
-            this.scopeView.Location = new System.Drawing.Point(0, 196);
+            this.scopeView.Location = new System.Drawing.Point(0, 194);
             this.scopeView.Name = "scopeView";
             this.scopeView.Size = new System.Drawing.Size(654, 141);
             this.scopeView.TabIndex = 7;
@@ -196,21 +194,22 @@ namespace WinForms.UserControls {
             // columnHeader5
             // 
             this.columnHeader5.Text = "Value";
-            this.columnHeader5.Width = 96;
+            this.columnHeader5.Width = 255;
             // 
             // columnHeader6
             // 
             this.columnHeader6.Text = "Type";
-            this.columnHeader6.Width = 131;
+            this.columnHeader6.Width = 222;
             // 
             // columnHeader7
             // 
             this.columnHeader7.Text = "Id";
+            this.columnHeader7.Width = 108;
             // 
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter2.Location = new System.Drawing.Point(0, 337);
+            this.splitter2.Location = new System.Drawing.Point(0, 335);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(654, 10);
             this.splitter2.TabIndex = 8;
@@ -221,7 +220,7 @@ namespace WinForms.UserControls {
             this.label4.AutoSize = true;
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
             this.label4.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(0, 347);
+            this.label4.Location = new System.Drawing.Point(0, 345);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 28);
             this.label4.TabIndex = 9;
@@ -229,15 +228,12 @@ namespace WinForms.UserControls {
             // 
             // codeView
             // 
-            this.codeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader10});
+            this.codeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.columnHeader8, this.columnHeader9, this.columnHeader10 });
             this.codeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.codeView.HideSelection = false;
-            this.codeView.Location = new System.Drawing.Point(0, 375);
+            this.codeView.Location = new System.Drawing.Point(0, 373);
             this.codeView.Name = "codeView";
-            this.codeView.Size = new System.Drawing.Size(654, 370);
+            this.codeView.Size = new System.Drawing.Size(654, 374);
             this.codeView.TabIndex = 10;
             this.codeView.UseCompatibleStateImageBehavior = false;
             this.codeView.View = System.Windows.Forms.View.Details;
@@ -250,21 +246,12 @@ namespace WinForms.UserControls {
             // columnHeader9
             // 
             this.columnHeader9.Text = "Object";
-            this.columnHeader9.Width = 254;
+            this.columnHeader9.Width = 452;
             // 
             // columnHeader10
             // 
             this.columnHeader10.Text = "Id";
             this.columnHeader10.Width = 100;
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(84, 25);
-            this.toolStripButton1.Text = "Clear";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // ContextStackView
             // 
@@ -289,7 +276,6 @@ namespace WinForms.UserControls {
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
