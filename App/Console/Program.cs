@@ -29,7 +29,7 @@
         private Program(string[] args)
             : base(args) {
             _context = new ExecutionContext { Language = ELanguage.Rho };
-            RegisterTypes.Register(_context.Registry);
+            Factory.RegisterTypes(_context.Registry);
 
             if (!StartPeer(args))
                 Exit(1);
@@ -49,7 +49,7 @@
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
 
-            _peer = Create.NewPeer(port);
+            _peer = Factory.NewPeer(port);
             var ctx = _peer.Local.ExecutionContext;
             var reg = ctx.Registry;
             var scope = ctx.Executor.Scope;

@@ -26,7 +26,7 @@
         [Test]
         public void TestSelfHosting()
         {
-            var peer = Network.Create.NewPeer(ListenPort);
+            var peer = Network.Factory.NewPeer(ListenPort);
             peer.OnConnected += Connected;
             peer.OnReceivedRequest += Received;
 
@@ -92,7 +92,7 @@
         //[Test]
         public void TestAgents()
         {
-            var peer = Network.Create.NewPeer(ListenPort);
+            var peer = Network.Factory.NewPeer(ListenPort);
             Assert.IsTrue(peer.SelfHost(), peer.Error);
 
             IAgent007 agent = peer.NewAgent<IAgent007>();

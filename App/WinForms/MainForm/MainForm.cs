@@ -93,11 +93,11 @@ namespace WinForms {
         }
 
         private void SetupNetwork() {
-            _peer = Pyro.Network.Create.NewPeer(ListenPort);
+            _peer = Pyro.Network.Factory.NewPeer(ListenPort);
             _peer.OnConnected += Connected;
             _peer.OnReceivedResponse += Received;
 
-            Pyro.Network.RegisterTypes.Register(_context.Registry);
+            Pyro.Network.Factory.RegisterTypes(_context.Registry);
         }
 
         private void AddBuiltinMethods() {
