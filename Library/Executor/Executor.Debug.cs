@@ -54,10 +54,10 @@
 
         private void WriteContinuation(StringBuilder str) {
             str.AppendLine("Context:");
-            if (Context() == null)
+            if (_current == null)
                 str.AppendLine("    No continuation");
             else
-                Context().DebugWrite(str);
+                _current.DebugWrite(str);
         }
 
         public void WriteDataStack(int max = 4) {
