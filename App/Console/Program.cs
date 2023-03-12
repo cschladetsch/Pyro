@@ -41,7 +41,7 @@
 
         private void SetupPeer() {
             _peer.OnConnected += OnConnected;
-            //_peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
+            _peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
         private bool StartPeer(string[] args) {
@@ -184,11 +184,11 @@
             return false;
         }
 
-        private void OnConnected(IPeer peer, IClient client) {
+        private static void OnConnected(IPeer peer, IClient client) {
             WriteLine($"Connected to {client}.");
         }
 
-        public static void WriteDataStackContents(INetCommon client, int max = 50) {
+        private static void WriteDataStackContents(INetCommon client, int max = 50) {
             var str = new StringBuilder();
             // Make a copy as it could be changed by another network call while we're iterating over data stack.
             var results = client.ExecutionContext.Executor.DataStack.ToList();
