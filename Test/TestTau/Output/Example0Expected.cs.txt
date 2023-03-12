@@ -2,78 +2,6 @@
 using Pyro;
 using Pyro.Network;
 using System.Collections.Generic;
-
-public interface INetworkEntity {
-    Pyro.Network.NetId NetId { get; } 
-}
-
-/// <summary>
-/// Common to untyped Proxies and Agents
-/// </summary>
-public class EntityBase 
-    : INetworkEntity {
-
-    public NetId NetId => _netId;
-
-    private Pyro.Network.NetId _netId;
-
-    public EntityBase(NetId sourceNetId) {
-        _netId = sourceNetId;
-    }
-
-}
-
-// TODO: IConstRe<T>
-
-/// <summary>
-/// Common to Typed Proxies and Agents
-public class EntityCommon<T>
-    : EntityBase {
-
-    private IRef<T> _ref;
-
-    public EntityCommon(NetId sourceNetId, IRef<T> obj)
-        : base(sourceNetId) {
-        _ref = obj;
-    }
-}
-
-/// <summary>
-/// Common to all typed Proxies
-/// </summary>
-/// <typeparam name="T"></typeparam>
-public class ProxyBase<T>
-    : EntityCommon<T> {
-    public ProxyBase(NetId sourceNetId, IRef<T> obj) : base(sourceNetId, obj) {
-    }
-}
-
-/// <summary>
-/// Common to all typed Agents
-/// </summary>
-public class AgentBase<T>
-    : EntityCommon<T> {
-    public AgentBase(NetId sourceNetId, IRef<T> obj): base(sourceNetId, obj) {
-    }
-}
-
-struct Null { };
-
-
-public class NetEvent<ReturnValue, Class>
-    {
-    public ReturnValue Invoke(params object[] args) {
-        return default;
-    }
-}
-
-public class NetEvent<ReturnValue, Class, T0> {
-}
-
-public class NetEvent<ReturnValue, Class, T0, T1> {
-}
-
-
 //================================================================
 
 namespace Foo.Agent {
@@ -104,7 +32,6 @@ namespace Foo.Agent {
 /// <summary>
 /// Many subscribers can subscribe to the one network event.
 /// </summary>
-/// <typeparam name="BarAgentSomeEventHandler"></typeparam>
 public class NetworkEvent<NetworkEventHandler> {
     private List<INetworkEntity> _subscribers;
 

@@ -49,18 +49,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory.cs" />
-    <Compile Include="Impl\Client.cs" />
     <Compile Include="IAgent.cs" />
+    <Compile Include="Impl\AgentBase.cs" />
+    <Compile Include="Impl\Client.cs" />
+    <Compile Include="Impl\EntityBase.cs" />
+    <Compile Include="Impl\EntityCommon.cs" />
     <Compile Include="IAgentBase.cs" />
     <Compile Include="IClient.cs" />
     <Compile Include="IDomain.cs" />
+    <Compile Include="Impl\NetEvent.cs" />
+    <Compile Include="Impl\NetId.cs" />
+    <Compile Include="Impl\ProxyBase.cs" />
     <Compile Include="INetCommon.cs" />
+    <Compile Include="INetworkEntity.cs" />
     <Compile Include="IPeer.cs" />
     <Compile Include="IProxy.cs" />
     <Compile Include="IProxyBase.cs" />
     <Compile Include="Impl\NetCommon.cs" />
     <Compile Include="IServer.cs" />
-    <Compile Include="NetId.cs" />
     <Compile Include="Impl\NetworkConsoleWriter.cs" />
     <Compile Include="Impl\Peer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
