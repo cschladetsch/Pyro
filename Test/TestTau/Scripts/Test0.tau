@@ -1,0 +1,6 @@
+﻿
+class Foo
+{
+    string Name { get; set; }
+    int Sum(int a, int b);
+}

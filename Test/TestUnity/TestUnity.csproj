@@ -7,8 +7,16 @@
     <OutputType>Library</OutputType>
     <RootNamespace>TestUnity</RootNamespace>
     <AssemblyName>TestUnity</AssemblyName>
+<<<<<<< HEAD
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+=======
+<<<<<<< HEAD
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+=======
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+>>>>>>> d0a5f36 (Add Unit test for Butterworth Filter.)
+>>>>>>> 889fbac (Add Unit test for Butterworth Filter.)
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
