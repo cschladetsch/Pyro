@@ -1,5 +1,4 @@
 ﻿namespace WinForms.UserControls {
-    using System;
     using System.Windows.Forms;
     
     using Pyro.Language;
@@ -23,9 +22,14 @@
                 return;
             }
             MainForm.Run(text, ELanguage.Pi);
+            AddToHistory(text);
+        }
+
+        private void AddToHistory(string text) {
             while (comboBox1.Items.Count > MaxHistoryCount) {
                 comboBox1.Items.RemoveAt(0);
             }
+
             comboBox1.Items.Add(text);
         }
 

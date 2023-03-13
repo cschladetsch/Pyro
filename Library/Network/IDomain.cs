@@ -1,4 +1,9 @@
-﻿namespace Pyro.Network {
+﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using Flow;
+
+namespace Pyro.Network {
     /// <summary>
     /// A collection of objects that spatially coherent across the network.
     ///
@@ -7,6 +12,15 @@
     /// </summary>
     public interface IDomain
        : IRegistry {
+        /// <summary>
+        /// Make a new local Agent
+        /// </summary>
+        TAgent NewAgent<TAgent>(IDomain domain, ICollection<object> dataStack) where TAgent : IAgentBase;
+
+        /// <summary>
+        /// Make a local proxy to a remote Agent
+        /// </summary>
+        IFuture<TProxy> NewProxy<TProxy>(Guid domainId);
     }
 }
 

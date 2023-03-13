@@ -19,11 +19,16 @@ namespace Pyro.Network.Impl {
         }
 
         public int ListenPort => _port;
+
+        public IDomain Domain => _domain;
+        
         public event MessageHandler ReceivedRequest;
 
         private const int RequestBacklogCount = 50;
         private Socket _listener;
         private readonly int _port;
+        private object _receivedRequest;
+        private IRegistry _registry => _executionContext.Registry;
 
         public Server(Peer peer, int port)
             : base(peer) {
@@ -94,14 +99,14 @@ namespace Pyro.Network.Impl {
                     return false;
 
                 // clear remote stack, send the datastack back as a list, then expand it to the remote stack, and drop the number of items that 'expand' adds to the stack
-                var stack = "clear " + _Registry.ToPiScript(Exec.DataStack.ToList()) + " expand drop";
+                var stack = "clear " + Registry.ToPiScript(Exec.DataStack.ToList()) + " expand drop";
                 return Send(sender, stack);
             } catch (Exception e) {
                 var msg = $"{e.Message} {e.InnerException?.Message}";
                 Exec.Push($"Error: {msg}");
                 return Error(msg);
             } finally {
-                ReceivedRequest?.Invoke(_Peer.GetClient(sender), pi);
+                ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
             }
         }
 
@@ -137,6 +142,12 @@ namespace Pyro.Network.Impl {
             _Peer.NewServerConnection(socket);
             Receive(socket);
             Listen();
+        }
+
+        public TIAgent NewAgent<TIAgent>()
+            where TIAgent : IAgentBase {
+            var agent = Domain.NewAgent<TIAgent>(Domain, default);
+            return agent;
         }
     }
 }

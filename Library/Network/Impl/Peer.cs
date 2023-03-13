@@ -12,7 +12,7 @@
     /// A network peer. Contains a client and a server.
     /// </summary>
     public class Peer
-        : NetworkConsoleWriter
+        : NetCommon
         , IPeer {
         public string LocalHostName => GetLocalHostname();
 
@@ -24,9 +24,8 @@
         // a local client (and there could be many different local clients) received a response.
         public event MessageHandler OnReceivedResponse;
 
-        public IList<object> Stack { get; }
-
         public IList<IClient> Clients => _clients.Cast<IClient>().ToList();
+        public IDomain Domain { get; }
         public IServer Local => _server;
         public IClient Remote => _remote;
         public string HostName => GetHostName();
@@ -44,14 +43,12 @@
         //            }
         //        }
 
-        private Server _server;
+        private IServer _server;
         private IClient _remote;
         private readonly List<IClient> _clients = new List<IClient>();
 
-        public Peer() {
-        }
-
-        public Peer(int listenPort) {
+        public Peer(IDomain domain, int listenPort) {
+            Domain = domain;
             StartServer(listenPort);
         }
 
@@ -145,15 +142,6 @@
             return true;
         }
 
-        public void Stop() {
-            WriteLine($"Closing {_clients.Count} connections");
-            foreach (var client in _clients)
-                client.Close();
-
-            _clients.Clear();
-            _server.Stop();
-            _server = null;
-        }
 
         public TIAgent NewAgent<TIAgent>() {
             // TODO NEXT
@@ -258,5 +246,7 @@
 
         private IClient FindClient(Socket socket)
             => _clients.FirstOrDefault(c => c.Socket == socket);
+
+        public override Socket Socket { get; set; }
     }
 }

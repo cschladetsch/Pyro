@@ -31,7 +31,7 @@
             peer.OnReceivedRequest += Received;
 
             Assert.IsTrue(peer.SelfHost(), peer.Error);
-            Assert.IsTrue(peer.Execute("1 2 +"), peer.Error);
+            Assert.IsTrue(peer.Execute("{1 2 +}"), peer.Error);
             Settle();
             peer.Stop();
         }
@@ -65,6 +65,7 @@
 
         public interface IAgent007
             : IAgent<IAgent007>
+            , IReflected
         {
             int GetNumber();
         }
@@ -89,19 +90,18 @@
             }
         }
 
-        //[Test]
+        [Test]
         public void TestAgents()
         {
-            var peer = Network.Factory.NewPeer(ListenPort);
+            var peer = Factory.NewPeer(ListenPort);
             Assert.IsTrue(peer.SelfHost(), peer.Error);
 
-            IAgent007 agent = peer.NewAgent<IAgent007>();
+            var agent = peer.Domain.NewAgent<IAgent007>();
 
             IEnumerator Gen(IGenerator self)
             {
-                var proxy = peer.NewProxy<IProxy007>(agent.NetId);
+                var proxy = peer.Domain.NewProxy<IProxy007>(agent.NetId);
                 yield return self.ResumeAfter(proxy);
-                Assert.IsTrue(proxy.Available);
                 var number = proxy.Value.GetNumber();
                 yield return self.ResumeAfter(number);
                 Assert.AreEqual(42, number.Value);

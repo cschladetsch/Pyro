@@ -8,7 +8,8 @@
     /// Base for Peer, Client and Server.
     /// </summary>
     public class NetworkConsoleWriter
-        : Process {
+        : Process
+        {
         public event OnWriteDelegate OnWrite;
 
         protected override bool Fail(string text) {

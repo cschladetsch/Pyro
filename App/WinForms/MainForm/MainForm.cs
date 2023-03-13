@@ -1,5 +1,7 @@
+using System.Data;
 using System.Runtime.Remoting.Channels;
 using Pyro.Language;
+using Pyro.Network.Impl;
 
 namespace WinForms {
     using Pyro;
@@ -40,7 +42,8 @@ namespace WinForms {
         private System.Windows.Forms.Timer _timer;
         private readonly int _saveTimerIntervalMills = 500;
 
-        private ExecutionContext _context;
+        private readonly ExecutionContext _context;
+        private readonly IDomain _netDomain = new Domain();
 
         public MainForm() {
             InitializeComponent();
@@ -60,6 +63,8 @@ namespace WinForms {
             
             Executor.Rethrows = true;
             Executor.Verbosity = 20;
+            editor.Language = ELanguage.Pi;
+            Decompile();
             output.Text = Pyro.AppCommon.AppCommonBase.GetVersion() + '\n';
         }
 
@@ -93,7 +98,7 @@ namespace WinForms {
         }
 
         private void SetupNetwork() {
-            _peer = Pyro.Network.Factory.NewPeer(ListenPort);
+            _peer = Pyro.Network.Factory.NewPeer(_netDomain, ListenPort);
             _peer.OnConnected += Connected;
             _peer.OnReceivedResponse += Received;
 
@@ -122,7 +127,7 @@ namespace WinForms {
             output.Text += "\n" + obj;
         }
 
-        private void Received(IClient client, string text) {
+        private void Received(IPeer self, IClient client, string text) {
             if (InvokeRequired) {
                 Invoke(new MessageHandler(Received), client, text);
                 return;
@@ -330,7 +335,6 @@ namespace WinForms {
             _piInput.Text = Registry.ToPiScript(cont) + " &";
             ColorisePi();
         }
-
     }
 }
 

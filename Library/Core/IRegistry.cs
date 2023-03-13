@@ -63,19 +63,13 @@
         bool TryGet<T>(object obj, out T val);
 
         /// <summary>
-        /// Add a new object to the registry
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        IRefBase Add(object value);
-
-        /// <summary>
         /// Add a new object given a specific value.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns>A reference to the new reference object</returns>
         IRef<T> Add<T>(T value);
+        
         IRef<T> Add<T>();
 
         /// <summary>
@@ -92,13 +86,22 @@
         /// <param name="val"></param>
         /// <returns></returns>
         IConstRef<T> AddConst<T>(T val);
+        
         IConstRef<T> AddConst<T>();
+        
         IClassBase GetClass(Type type);
+        IClassBase AddClass<T>(IClassBase @class);
+        
         IClass<T> GetClass<T>();
+        
         object New(IClassBase @class, Stack<object> dataStack);
+        
         IRefBase NewRef(IClassBase @class, Stack<object> dataStack);
+        
         IConstRefBase NewConstRef(IClassBase @class, Stack<object> dataStack);
+        
         void ToPiScript(StringBuilder stringBuilder, object o);
+        
         string ToPiScript(object obj);
 
         /// <summary>

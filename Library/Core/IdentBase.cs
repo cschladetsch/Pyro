@@ -6,9 +6,9 @@
         /// <summary>
         /// If Quoted the ident will not be resolved immediately by an Executor.
         /// </summary>
-        public bool Quoted;
+        public readonly bool Quoted;
 
-        public IdentBase(bool quoted = false)
+        protected IdentBase(bool quoted = false)
             => Quoted = quoted;
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="IAgent.cs" />
     <Compile Include="Impl\AgentBase.cs" />
     <Compile Include="Impl\Client.cs" />
+    <Compile Include="Impl\Domain.cs" />
     <Compile Include="Impl\EntityBase.cs" />
     <Compile Include="Impl\EntityCommon.cs" />
     <Compile Include="IAgentBase.cs" />

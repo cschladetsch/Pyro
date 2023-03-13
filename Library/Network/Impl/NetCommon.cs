@@ -15,14 +15,20 @@
     public abstract class NetCommon
         : NetworkConsoleWriter
         , INetCommon {
-        // TODO: should a server have a different context for each client?
         public ExecutionContext ExecutionContext => _executionContext;
+        
         public abstract Socket Socket { get; set; }
 
         protected readonly Peer _Peer;
+        
         protected readonly ExecutionContext _executionContext;
+        
         protected Executor Exec => _executionContext.Executor;
-        protected IRegistry _Registry => _executionContext.Registry;
+        
+        protected readonly IDomain _domain = new Domain();
+        
+        protected IRegistry Registry => _executionContext.Registry;
+        
         protected bool _Stopping;
 
         protected NetCommon(Peer peer) {
@@ -111,7 +117,7 @@
 
         private void ProcessInput(StateObject state, Socket socket) {
             var content = state.sb.ToString();
-            //            WriteLine($"ProcessInput: {content}");
+            Verbose($"ProcessInput: {content}");
             var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere in scripts!
             if (end < 0)
                 return;
@@ -125,6 +131,10 @@
             ResetState(state, content, end);
         }
 
+        private void Verbose(string s) {
+            // TODO: distributed logging
+        }
+
         private static void ResetState(StateObject state, string content, int end) {
             state.sb.Clear();
             state.sb.Append(content.Substring(end + 1));
@@ -136,4 +146,3 @@
         }
     }
 }
-

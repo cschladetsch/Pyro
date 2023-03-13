@@ -55,9 +55,13 @@ namespace Pyro.Impl {
             return false;
         }
 
-        public IRefBase Add(object value) {
+        private IRefBase Add(object value) {
             var klass = GetClass(value?.GetType());
             return klass == null ? null : AddNew(klass, value);
+        }
+
+        public IClassBase AddClass<T>(IClassBase @class) {
+            throw new NotImplementedException();
         }
 
         public IClass<T> GetClass<T>() {
@@ -68,6 +72,18 @@ namespace Pyro.Impl {
             var @class = new Class<T>(this);
             AddClass(type, @class);
             return @class;
+        }
+
+        public object New<T>(params object[] args) {
+            var klass = GetClass<T>();
+            return klass.Create(NextId(), args);
+        }
+
+        public object New<T>() {
+            var klass = GetClass<T>();
+            if (klass == null)
+                klass = AddClass<T>(new Class<T>(this));
+            return klass.NewInstance();
         }
 
         public object New(IClassBase @class, Stack<object> dataStack) {
@@ -193,6 +209,14 @@ namespace Pyro.Impl {
             throw new NotImplementedException();
         }
 
+        public IClass<T> AddClass<T>(IClass<T> klass) {
+            var type = typeof(T);
+            if (_classes.ContainsKey(type)) {
+                throw new ClassAlreadyExists(type);
+            }
+
+            return klass;
+        }
         public IClassBase GetClass(Type type) {
             if (type == null)
                 type = typeof(void);
@@ -244,13 +268,20 @@ namespace Pyro.Impl {
             self.Class = classBase;
         }
 
-        private void AddClass(Type type, IClassBase @class) {
+        private IClassBase AddClass(Type type, IClassBase @class) {
             _classes[type] = @class;
             _classNames[type.Name] = @class;
+            return @class;
         }
 
         private Id NextId() {
             return new Id(++_nextId);
+        }
+    }
+
+    public class ClassAlreadyExists : Exception {
+        public ClassAlreadyExists(Type type) 
+            : base($"Class already exists: {type}") {
         }
     }
 }
