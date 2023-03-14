@@ -41,7 +41,7 @@
 
         private void SetupPeer() {
             _peer.OnConnected += OnConnected;
-            _peer.OnReceivedRequest += (client, text) => WriteLine(text, ConsoleColor.Magenta);
+            _peer.OnReceivedRequest += (_peer, client, text) => WriteLine(text, ConsoleColor.Magenta);
         }
 
         private bool StartPeer(string[] args) {
@@ -49,7 +49,8 @@
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
 
-            _peer = Factory.NewPeer(port);
+            //FIX
+            _peer = Factory.NewPeer(null, port);
             var ctx = _peer.Local.ExecutionContext;
             var reg = ctx.Registry;
             var scope = ctx.Executor.Scope;

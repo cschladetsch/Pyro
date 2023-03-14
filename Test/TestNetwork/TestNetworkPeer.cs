@@ -1,4 +1,6 @@
-﻿namespace Pyro.Test
+﻿using Pyro.Network.Impl;
+
+namespace Pyro.Test
 {
     using System;
     using System.Collections;
@@ -26,7 +28,8 @@
         [Test]
         public void TestSelfHosting()
         {
-            var peer = Network.Factory.NewPeer(ListenPort);
+            var domain = new Domain();
+            var peer = Network.Factory.NewPeer(domain, ListenPort);
             peer.OnConnected += Connected;
             peer.OnReceivedRequest += Received;
 
@@ -46,7 +49,7 @@
             WriteLine($"Test: Connected to {client}");
         }
 
-        private void Received(IClient client, string request)
+        private void Received(IPeer self, IClient client, string request)
         {
             Assert.IsNotEmpty(request);
             _context.Language = ELanguage.Pi;
@@ -93,10 +96,11 @@
         [Test]
         public void TestAgents()
         {
-            var peer = Factory.NewPeer(ListenPort);
+            var domain = new Domain();
+            var peer = Factory.NewPeer(domain, ListenPort);
             Assert.IsTrue(peer.SelfHost(), peer.Error);
 
-            var agent = peer.Domain.NewAgent<IAgent007>();
+            var agent = peer.Domain.NewAgent<IAgent007>(null);
 
             IEnumerator Gen(IGenerator self)
             {

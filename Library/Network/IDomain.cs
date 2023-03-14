@@ -15,7 +15,7 @@ namespace Pyro.Network {
         /// <summary>
         /// Make a new local Agent
         /// </summary>
-        TAgent NewAgent<TAgent>(IDomain domain, ICollection<object> dataStack) where TAgent : IAgentBase;
+        TAgent NewAgent<TAgent>(ICollection<object> dataStack) where TAgent : IAgentBase;
 
         /// <summary>
         /// Make a local proxy to a remote Agent

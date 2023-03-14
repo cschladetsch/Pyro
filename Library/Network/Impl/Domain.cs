@@ -15,7 +15,7 @@ namespace Pyro.Network.Impl {
             throw new NotImplementedException();
         }
 
-        public TAgent NewAgent<TAgent>(IDomain domain, ICollection<object> dataStack) where TAgent : IAgentBase {
+        public TAgent NewAgent<TAgent>(ICollection<object> dataStack) where TAgent : IAgentBase {
             throw new NotImplementedException();
         }
 

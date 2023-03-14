@@ -32,7 +32,7 @@
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.piPrompt1 = new WinForms.UserControls.PiPrompt();
+            this.piPrompt1 = new PiPrompt();
             this.stackView = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -184,7 +184,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
 
-        private WinForms.UserControls.PiPrompt piPrompt1;
+        private PiPrompt piPrompt1;
 
         #endregion
 

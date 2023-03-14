@@ -1,4 +1,6 @@
-﻿namespace Pyro.Network.Impl {
+﻿using System.Runtime.CompilerServices;
+
+namespace Pyro.Network.Impl {
     using Flow;
     using System;
     using System.Collections.Generic;
@@ -12,7 +14,7 @@
     /// A network peer. Contains a client and a server.
     /// </summary>
     public class Peer
-        : NetCommon
+        : Server
         , IPeer {
         public string LocalHostName => GetLocalHostname();
 
@@ -47,7 +49,9 @@
         private IClient _remote;
         private readonly List<IClient> _clients = new List<IClient>();
 
-        public Peer(IDomain domain, int listenPort) {
+        public Peer(IDomain domain, int listenPort)
+        //FIX
+            : base(null, listenPort) {
             Domain = domain;
             StartServer(listenPort);
         }
@@ -88,7 +92,7 @@
             => _server.Start();
 
         public void Received(Socket socket, string text)
-            => OnReceivedResponse?.Invoke(FindClient(socket), text);
+            => OnReceivedResponse?.Invoke(this, FindClient(socket), text);
 
         public void Leave() {
             if (_remote == _clients[0]) {
@@ -202,9 +206,10 @@
         }
         private void StartServer(int listenPort) {
             _server = new Server(this, listenPort);
-            _server.ReceivedRequest += (client, text) => {
-                OnReceivedRequest?.Invoke(client, text);
-            };
+            //FIX
+            // _server.ReceivedRequest += (client, text) => {
+            //     OnReceivedRequest?.Invoke(this, client, text);
+            // };
         }
 
         private string GetHostName()

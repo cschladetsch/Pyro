@@ -106,25 +106,25 @@ namespace Pyro.Network.Impl {
                 Exec.Push($"Error: {msg}");
                 return Error(msg);
             } finally {
-                ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
+                //FIX ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
             }
         }
 
         private bool RunLocally(string pi) {
-            if (!_executionContext.Translate(pi, out var cont)) {
+            if (!_executionContext.Translate(pi, out var continuation)) {
                 Exec.Push(_executionContext.Error);
                 return Error(_executionContext.Error);
             }
 
-            if (cont.Code.Count == 0)
+            if (continuation.Code.Count == 0)
                 return true;
 
-            cont = cont.Code[0] as Continuation;
-            if (cont == null)
+            continuation = continuation.Code[0] as Continuation;
+            if (continuation == null)
                 return Error("Server.RunLocally: Continuation expected");
 
-            cont.Scope = Exec.Scope;
-            Exec.Continue(cont);
+            continuation.Scope = Exec.Scope;
+            Exec.Continue(continuation);
 
             return true;
         }
@@ -146,7 +146,7 @@ namespace Pyro.Network.Impl {
 
         public TIAgent NewAgent<TIAgent>()
             where TIAgent : IAgentBase {
-            var agent = Domain.NewAgent<TIAgent>(Domain, default);
+            var agent = Domain.NewAgent<TIAgent>(default);
             return agent;
         }
     }
