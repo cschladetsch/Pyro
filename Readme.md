@@ -62,11 +62,11 @@ All components support colored output and on-the-fly colored syntax highlighting
 
 ## Tutorial
 
-TODO
+Maybe one day. For the moment, you best bet are the...
 
 ## Examples
 
-For the moment, the best place is the unit tests.
+For the moment, the best place is the [unit tests](Tests).
 
 ## Code Analysis
 
