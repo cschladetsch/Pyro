@@ -13,7 +13,7 @@ Contains definitions for, among other things:
 * Identifier
 * Process
 
-## IReflected and IReflected\<T\>
+## IReflected and IReflected<<T>>
 
 This is a C# code for two interfaces called "IReflected" and "IReflected<T>". These interfaces are used to provide a way for instances of classes to have access to their own reference base, which is an instance of the "IRefBase" interface.
 
