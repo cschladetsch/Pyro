@@ -184,10 +184,8 @@
             switch (node.Type) {
                 case ERhoAst.Suspend:
                     return Append(EOperation.Suspend);
-
                 case ERhoAst.Pathname:
                     return Token(node);
-
                 case ERhoAst.Assignment:
                     Generate(node.GetChild(0));
                     AppendQuoted(node.GetChild(1));

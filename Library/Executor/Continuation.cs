@@ -15,7 +15,7 @@
         /// </summary>
         public int Ip
         {
-            get { return _ip; }
+            get => _ip;
             private set
             {
                 OnIpChanged?.Invoke(this, _ip, value);
@@ -60,7 +60,7 @@
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
         /// </summary>
-        public static new Continuation New(IRegistry reg) {
+        public new static Continuation New(IRegistry reg) {
             var code = reg.Add(new List<object>());
             return reg.Add(new Continuation(code.Value)).Value;
         }

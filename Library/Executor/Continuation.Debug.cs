@@ -24,10 +24,10 @@
                     wrap1 = " >>> ";
                     wrap2 = " <<< ";
                 }
+                
                 str.Append($"{wrap1}{Code[n]}{wrap2}, ");
             }
         }
-
     }
 }
 

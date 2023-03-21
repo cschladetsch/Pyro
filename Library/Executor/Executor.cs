@@ -17,19 +17,19 @@ namespace Pyro.Exec {
         public Continuation Current => _current;
 
         public string SourceFilename;
-
-        private int NumOps { get; set; }
-        private bool _break;
-        private Continuation _current;
-        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
-        private IRegistry _registry => Self.Registry;
-
+        
         public delegate void ContextStackChangedHandler(Executor executor, List<Continuation> context);
         public delegate void DataStackChangedHandler(Executor executor, Stack<object> context);
         public delegate void ContinuationChangedHandler(Executor executor, Continuation previous, Continuation current);
         public event ContextStackChangedHandler OnContextStackChanged;
         public event DataStackChangedHandler OnDataStackChanged;
         public event ContinuationChangedHandler OnContinuationChanged;
+
+        private int NumOps { get; set; }
+        private bool _break;
+        private Continuation _current;
+        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+        private IRegistry _registry => Self.Registry;
 
         public Executor() {
             Kernel = Flow.Create.Kernel();
