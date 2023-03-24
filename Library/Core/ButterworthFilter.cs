@@ -78,20 +78,5 @@
             outputHistory[1] = outputHistory[0];
             outputHistory[0] = newOutput;
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c8d15cc (Add graphed output for Butterworth filter.)
-
-        public void SetHistory(float x)
-        {
-            inputHistory[0] = inputHistory[1] = x;
-            outputHistory[0] = outputHistory[1] = outputHistory[2] = x;
-        }
-<<<<<<< HEAD
-=======
->>>>>>> 4e4c86c (Rebasing to master.)
-=======
->>>>>>> c8d15cc (Add graphed output for Butterworth filter.)
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
-
+using System.Reflection;
 using Pyro.Exec;
 
 namespace Pyro.Network.Impl
@@ -28,6 +28,8 @@ namespace Pyro.Network.Impl
         private Socket _listener;
         private readonly int _port;
 
+        private readonly Pyro.ExecutionContext.ExecutionContext _Context = new ExecutionContext.ExecutionContext();
+
         public Server(Peer peer, int port)
             : base(peer)
         {
@@ -41,18 +43,8 @@ namespace Pyro.Network.Impl
             scope["peer"] = _Peer;
             scope["server"] = this;
             // work
-<<<<<<< HEAD
             scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
             
-=======
-<<<<<<< HEAD
-            //scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
-
-=======
-            scope["connect"] = TranslateRho("peer.Connect(\"192.168.3.146\", 9999)");
-            
->>>>>>> 6540cf5 (wip)
->>>>>>> 4e4c86c (Rebasing to master.)
             // home
             //scope["connect"] = TranslateRho("peer.Connect(\"192.168.171.1\", 9999)");
             scope["enter"] = TranslateRho("peer.Enter(2)");
