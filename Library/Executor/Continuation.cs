@@ -44,8 +44,8 @@
         private IEnumerator _enumerator;
 
         public Continuation(IList<object> code) {
-            Active = true;
-            Running = true;
+            Active = false;
+            Running = false;
             Code = code;
         }
 
@@ -127,36 +127,39 @@
         }
 
         public Continuation Start(Executor exec) {
-            var cp = Self.Registry.Add(new Continuation(Code, Args)).Value;
+            //var cp = Self.Registry.Add(new Continuation(Code, Args)).Value;
 
-            cp.Kernel = exec.Kernel;
-            cp.Ip = Ip;
-            cp.Scope = Scope;
+            //cp.Kernel = exec.Kernel;
+            //cp.Ip = Ip;
+            //cp.Scope = Scope;
 
-            cp.Resumed += tr => {
+            //cp.Resumed += tr => {
                 //exec.PushContext(cp);
-                Info("Resumed coro");
-            };
+                //Info("Resumed coro");
+            //};
 
-            cp.Suspended += tr => {
-                Info("Suspended coro");
-            };
+            //cp.Suspended += tr => {
+                //Info("Suspended coro");
+            //};
 
-            cp.Resume();
+            Ip = 0;
+            Running = true;
+            Active = true;
+            Resume();
 
             if (Args == null) {
-                return cp;
+                return this;
             }
 
             if (exec.DataStack.Count < Args.Count)
                 throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
 
             foreach (var arg in Args.Reverse())
-                cp.Scope[arg] = exec.DataStack.Pop();
+                Scope[arg] = exec.DataStack.Pop();
 
-            OnScopeChanged?.Invoke(cp);
+            OnScopeChanged?.Invoke(this);
 
-            return cp;
+            return this;
         }
 
         public bool HasScopeObject(string label)
@@ -175,27 +178,14 @@
             next = has ? Code[Ip++] : null;
             if (has)
                 return true;
-            if (_enumerator == null)
-                return false;
-            if (!_enumerator.MoveNext())
-                return false;
-
-            next = _enumerator.Current;
             Ip = 0;
-            return true;
+            Suspend();
+            return false;
         }
 
-        public void SetRange(IEnumerable range) {
-            if (range == null) {
-                _enumerator = null;
-                return;
-            }
-
-            _enumerator = range.GetEnumerator();
-        }
 
         public bool IsRunning()
-            => Running && Active && (Ip < Code.Count || _enumerator != null);
+            => Running && Active && Ip < Code.Count;
     }
 }
 

@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Pyro.Exec {
     using System;
     using System.Collections.Generic;
@@ -46,7 +48,17 @@ namespace Pyro.Exec {
 
         private void SetCurrent(Continuation continuation) {
             _current?.FireOnLeave();
+            
             FireContinuationChanged(_current, continuation);
+            if (continuation == null)
+                return;
+            
+            if (!continuation.Active) {
+                continuation.Start(this);
+            }
+            else {
+                continuation.Resume();
+            }
         }
 
         private void FireContextStackChanged() {
@@ -70,29 +82,18 @@ namespace Pyro.Exec {
 
         public void Continue(Continuation continuation) {
             PushContext(continuation);
+            SetCurrent(continuation);
 
             while (true) {
-                Execute(_current);
                 _break = false;
+                while (Next()) {
+                    if (_break)
+                        break;
+                }
 
                 SetCurrent(PopContext());
                 if (_current == null)
                     break;
-            }
-        }
-
-        public bool Single() {
-            return Next();
-        }
-
-        private void Execute(Continuation cont) {
-            SetCurrent(cont);
-            while (Next()) {
-                if (!_break)
-                    continue;
-
-                _break = false;
-                SetCurrent(PopContext());
             }
         }
 
@@ -224,13 +225,14 @@ namespace Pyro.Exec {
             return Scope.TryGetValue(ident, out obj);
         }
 
-        public Continuation Context()
+        private Continuation Context()
             => _current;
 
         /// <summary>
         /// Perform a continuation, then return to current context
         /// </summary>
         private new void Suspend() {
+            PushContext(_current);
             Resume();
         }
 
@@ -274,7 +276,8 @@ namespace Pyro.Exec {
                         throw new Exception("Cannot resume type " + next.GetType());
                     }
                     PushContext(next);
-                    SetCurrent(null);
+                    //SetCurrent(null);
+                    _break = true;
                     break;
             }
 
@@ -350,7 +353,7 @@ namespace Pyro.Exec {
         /// </summary>
         private void Break() {
             _break = true;
-            SetCurrent(null);
+            //SetCurrent(null);
         }
 
         private T ResolvePop<T>() {

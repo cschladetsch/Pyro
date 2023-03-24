@@ -84,7 +84,7 @@
             _actions[EOperation.Assign] = Assign;
             _actions[EOperation.GetMember] = GetMember;
             _actions[EOperation.SetMember] = SetMember;
-            _actions[EOperation.ForEachIn] = ForEachIn;
+            // _actions[EOperation.ForEachIn] = ForEachIn;
             _actions[EOperation.ForLoop] = ForLoop;
             _actions[EOperation.Freeze] = Freeze;
             _actions[EOperation.Thaw] = Thaw;
@@ -259,59 +259,18 @@
             throw new NotImplementedException();
         }
 
-        private void ForEachIn() {
-            var forLoop = Pop<Continuation>();
-            var range = RPop();
-            if (!(range is IEnumerable))
-                throw new CannotEnumerate(range);
-
-            var label = Pop<Label>().Text;
-            forLoop.SetScopeObject(label, null);
-            forLoop.SetRange(range);
-            Push(forLoop);
-            Suspend();
-        }
-
-        private IEnumerable ForEachInLoop(Continuation block, IEnumerable obj, string label) {
-            var next = obj.GetEnumerator();
-            if (!next.MoveNext())
-                yield break;
-
-            AddContext(_current);
-
-            // We need to ensure that when an inner loop ends,
-            // the outer loop doesn't move to next value in the
-            // enumeration.
-            //
-            // This is what _leaveForEach is used for. It's
-            // a bit complicated, sorry.
-            while (true) {
-                var val = next.Current;
-                block.SetScopeObject(label, val);
-                _current = block;
-                _break = false;
-                Execute(block);
-
-                if (!_leaveForEach && !next.MoveNext()) {
-                    _leaveForEach = true;
-                    break;
-                }
-
-                _leaveForEach = false;
-                yield return val;
-            }
-
-            PopContext();
-
-            Break();
-        }
-
-        private void AddContext(Continuation current) {
-            if (current == null)
-                throw new ArgumentNullException(nameof(current));
-
-            ContextStack.Add(current);
-        }
+        // private void ForEachIn() {
+        //     var forLoop = Pop<Continuation>();
+        //     var range = RPop();
+        //     if (!(range is IEnumerable))
+        //         throw new CannotEnumerate(range);
+        //
+        //     var label = Pop<Label>().Text;
+        //     forLoop.SetScopeObject(label, null);
+        //     forLoop.SetRange(range);
+        //     Push(forLoop);
+        //     Suspend();
+        // }
 
         private void OpNew() {
             var obj = RPop();

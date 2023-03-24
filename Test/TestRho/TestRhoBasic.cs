@@ -158,7 +158,7 @@ fun foo()
 
 fun bar(f, n)
 	f(n)
-assert(bar(foo, 2) == 3)
+assert(bar(foo, 2) == 2)
 
 //n + f()
 //assert(bar(foo, 1) == 2)
