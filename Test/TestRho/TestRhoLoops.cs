@@ -13,7 +13,8 @@ c = c + 2
 assert(c == 0 + 1 + 2)
 ");
         }
-        // TODO [Test]
+        
+        [Test]
         public void TestForEachIn() {
             //_Exec.Verbosity = 0;
             RhoRun(@"
@@ -25,7 +26,7 @@ assert(c == 3)
 ");
         }
 
-        // TODO [Test]
+        [Test]
         public void TestNestedForEachIn() {
             RhoRun(@"
 c = 0

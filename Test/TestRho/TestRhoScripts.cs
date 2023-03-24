@@ -72,7 +72,6 @@ else
             AssertPop(20);
         }
 
-
         [Test]
         public void RunSomeRhoScripts() {
             BuiltinTypes.BuiltinTypes.Register(_Registry);
@@ -92,19 +91,18 @@ else
             TestScript("Variables.rho");
             TestScript("Strings.rho");
             TestScript("Arithmetic.rho");
+            TestScript("Coros.rho");
+            TestScript("Yielding.rho");
+            TestScript("NestedFunctions.rho");
+            TestScript("PassingFunctions.rho");
 
+            // needs re-arch
             // Failing:
-            //TestScript("Coros.rho");
+            //TestScript("FreezeThaw.rho");
             //TestScript("NestedLoops.rho");
-            //TestScript("Yielding.rho");
             //TestScript("ForLoops.rho");
             //TestScript("RangeLoops.rho");
             //TestScript("ForLoops.rho");
-            //TestScript("NestedFunctions.rho");
-            //TestScript("PassingFunctions.rho");
-
-            // needs re-arch
-            //TestScript("FreezeThaw.rho");
         }
 
         private void DebugTrace(object obj) {

@@ -141,25 +141,20 @@
         private void AddContinuationToStack(int n, Continuation continuation) {
             var row = new ListViewItem(n.ToString());
             var loc = new ListViewItem.ListViewSubItem(row, $"{continuation.Ip}");
-            var code = new ListViewItem.ListViewSubItem(row, Registry.ToPiScript(continuation));
+            // var code = new ListViewItem.ListViewSubItem(row, Registry.ToPiScript(continuation));
+            var code = new ListViewItem.ListViewSubItem(row, continuation.ToString());
             row.SubItems.Add(loc);
             row.SubItems.Add(code);
             contextStack.Items.Add(row);
         }
 
-        // private void AddContinuation(int num, Continuation continuation) {
-        //     UpdateScope(continuation);
-        //     UpdateCode(continuation);
-        //     SetStatusFromContinuation();
-        // }
-
         private void UpdateScope(Continuation continuation) {
             scopeView.Items.Clear();
             foreach (var scoped in continuation.Scope) {
                 AddScopeItem(scoped.Key, scoped.Value);
-
             }
         }
+        
         private void UpdateCode(Continuation continuation) {
             codeView.Items.Clear();
             int n = 0;

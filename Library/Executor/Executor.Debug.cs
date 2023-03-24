@@ -54,10 +54,10 @@
 
         private void WriteContinuation(StringBuilder str) {
             str.AppendLine("Context:");
-            if (_current == null)
+            if (Current == null)
                 str.AppendLine("    No continuation");
             else
-                _current.DebugWrite(str);
+                Current.DebugWrite(str);
         }
 
         public void WriteDataStack(int max = 4) {
@@ -108,7 +108,7 @@
             if (Verbosity > 5) {
                 WriteDataStack(str);
                 str.AppendLine("Current: ");
-                _current?.DebugWrite(str);
+                Current?.DebugWrite(str);
                 str.AppendLine();
                 WriteContextStack(str);
                 str.AppendLine($"Next:\n\t'{GetTyped(next)}'");

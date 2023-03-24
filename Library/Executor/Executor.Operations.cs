@@ -104,7 +104,7 @@
             _actions[EOperation.LessOrEquiv] = LessEquiv;
             _actions[EOperation.Greater] = Greater;
             _actions[EOperation.GreaterOrEquiv] = GreaterEquiv;
-            _actions[EOperation.Self] = () => Push(_current);
+            _actions[EOperation.Self] = () => Push(Current);
             _actions[EOperation.Exists] = Exists;
         }
 
@@ -112,7 +112,8 @@
             => Push(TryResolve(Pop(), out object _));
 
         private void Replace() {
-            throw new NotImplementedException("Replace.");
+            PopContext();
+            Resume();
         }
 
         private void SetMember() {
@@ -141,8 +142,8 @@
             NumOps = 0;
 
             _break = false;
-            FireContinuationChanged(_current, null);
-            _current = null;
+            FireContinuationChanged(Current, null);
+            Current = null;
 
             FireContextStackChanged();
             FireDataStackChanged();
@@ -252,7 +253,7 @@
         }
 
         private void Freeze() {
-            Push(_current.ToText());
+            Push(Current.ToText());
         }
 
         private static void ForLoop() {
@@ -368,7 +369,7 @@
 
             // If nothing found in context stack,
             // make new object in current scope.
-            _current.SetScopeObject(ident, val);
+            Current.SetScopeObject(ident, val);
         }
 
         private void IfElse() {

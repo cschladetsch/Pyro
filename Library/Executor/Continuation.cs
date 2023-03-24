@@ -43,9 +43,12 @@
 
         private IEnumerator _enumerator;
 
-        public Continuation(IList<object> code) {
-            Active = false;
+        public Continuation() {
+            Active = true;
             Running = false;
+        }
+        
+        public Continuation(IList<object> code) : this() {
             Code = code;
         }
 
@@ -126,7 +129,7 @@
             Args.Add(ident);
         }
 
-        public Continuation Start(Executor exec) {
+        public Continuation Enter(Executor exec) {
             //var cp = Self.Registry.Add(new Continuation(Code, Args)).Value;
 
             //cp.Kernel = exec.Kernel;
@@ -142,9 +145,10 @@
                 //Info("Suspended coro");
             //};
 
-            Ip = 0;
-            Running = true;
-            Active = true;
+            if (Ip == Code.Count) {
+                Ip = 0;
+            }
+            
             Resume();
 
             if (Args == null) {
@@ -185,7 +189,11 @@
 
 
         public bool IsRunning()
-            => Running && Active && Ip < Code.Count;
+            => Running && !AtEnd();
+
+        public bool AtEnd() {
+            return Code == null || Ip == Code.Count;
+        }
     }
 }
 

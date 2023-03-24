@@ -16,9 +16,9 @@ namespace Pyro.Exec {
 
         public bool Rethrows { get; set; }
 
-        public Continuation Current => _current;
+        public Continuation Current { get; private set; }
 
-        public string SourceFilename;
+        public string SourceFilename = "<script>";
         
         public delegate void ContextStackChangedHandler(Executor executor, List<Continuation> context);
         public delegate void DataStackChangedHandler(Executor executor, Stack<object> context);
@@ -29,7 +29,6 @@ namespace Pyro.Exec {
 
         private int NumOps { get; set; }
         private bool _break;
-        private Continuation _current;
         private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
         private IRegistry _registry => Self.Registry;
 
@@ -40,25 +39,12 @@ namespace Pyro.Exec {
             AddOperations();
         }
 
-        public void PushContext(Continuation continuation) {
-            ContextStack.Add(continuation);
-            SetCurrent(continuation);
-            FireContextStackChanged();
-        }
-
         private void SetCurrent(Continuation continuation) {
-            _current?.FireOnLeave();
+            Current?.FireOnLeave();
             
-            FireContinuationChanged(_current, continuation);
-            if (continuation == null)
-                return;
-            
-            if (!continuation.Active) {
-                continuation.Start(this);
-            }
-            else {
-                continuation.Resume();
-            }
+            FireContinuationChanged(Current, continuation);
+
+            continuation?.Enter(this);
         }
 
         private void FireContextStackChanged() {
@@ -71,7 +57,7 @@ namespace Pyro.Exec {
 
         private void FireContinuationChanged(Continuation previous, Continuation current) {
             OnContinuationChanged?.Invoke(this, previous, current);
-            _current = current;
+            Current = current;
         }
 
         public void Continue(IRef<Continuation> continuation)
@@ -82,7 +68,7 @@ namespace Pyro.Exec {
 
         public void Continue(Continuation continuation) {
             PushContext(continuation);
-            SetCurrent(continuation);
+            //SetCurrent(continuation);
 
             while (true) {
                 _break = false;
@@ -92,7 +78,7 @@ namespace Pyro.Exec {
                 }
 
                 SetCurrent(PopContext());
-                if (_current == null)
+                if (Current == null)
                     break;
             }
         }
@@ -100,28 +86,30 @@ namespace Pyro.Exec {
         public bool Next() {
             Kernel.Step();
 
-            bool IsRunning(Continuation cont)
-                => cont != null && cont.IsRunning();
-
-            while (!IsRunning(_current)) {
+            if (Current == null) {
                 SetCurrent(PopContext());
-                if (_current == null)
-                    return false;
+                if (Current == null) {
+                    throw new InvalidOperationException("No continuation to execute");
+                }
             }
 
-            var end = !_current.Next(out var next);
+            if (!Current.Next(out var next)) {
+                if (ContextStack.Count > 0) {
+                    SetCurrent(PopContext());
+                }
+                Break();
+                return false;
+            }
             if (next is IRefBase refBase)
                 next = refBase.BaseValue;
 
             try {
                 Perform(next);
-                if (end)
-                    _current.Complete();
             } catch (Exception e) {
                 if (!string.IsNullOrEmpty(SourceFilename))
                     WriteLine($"While executing {SourceFilename}:");
 
-                if (Verbosity > 10) {
+                if (Verbosity > 5) {
                     WriteLine(DebugWrite());
                     WriteLine($"Exception: {e}");
                 }
@@ -226,13 +214,13 @@ namespace Pyro.Exec {
         }
 
         private Continuation Context()
-            => _current;
+            => Current;
 
         /// <summary>
         /// Perform a continuation, then return to current context
         /// </summary>
         private new void Suspend() {
-            PushContext(_current);
+            PushContext(Current);
             Resume();
         }
 
@@ -277,7 +265,6 @@ namespace Pyro.Exec {
                     }
                     PushContext(next);
                     //SetCurrent(null);
-                    _break = true;
                     break;
             }
 
@@ -329,22 +316,38 @@ namespace Pyro.Exec {
             FireDataStackChanged();
         }
 
+        public void PushContext(Continuation continuation) {
+            if (continuation == null) {
+                throw new ArgumentNullException("Cannot push null context " + nameof(continuation));
+            }
+            if (continuation.AtEnd()) {
+                return;
+            }
+            ContextStack.Add(continuation);
+            FireContextStackChanged();
+        }
+        
         private Continuation PopContext() {
-            for (var n = ContextStack.Count - 1; n >= 0; --n) {
-                var cont = ContextStack[n];
-                if (cont == null) {
-                    throw new NullValueException("Context stack empty.");
-                }
-                if (!cont.Active || !cont.Running)
-                    continue;
-
-                ContextStack.RemoveAt(n);
-                FireContextStackChanged();
-                SetCurrent(cont.Start(this));
-                return _current;
+            var contextStackCount = ContextStack.Count;
+            if (contextStackCount == 0) {
+                SetCurrent(null);
+                return null;
             }
 
-            return null;
+            var last = contextStackCount - 1;
+            var cont = ContextStack[last];
+            if (cont == null) {
+                throw new NullValueException("Unexpected null continuation");
+            }
+
+            ContextStack.RemoveAt(last);
+            if (cont.AtEnd()) {
+                cont.Enter(this);
+            }
+            
+            SetCurrent(cont);
+            FireContextStackChanged();
+            return Current;
         }
 
         /// <summary>
