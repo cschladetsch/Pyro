@@ -144,15 +144,17 @@
 
             cp.Resume();
 
-            if (Args != null) {
-                if (exec.DataStack.Count < Args.Count)
-                    throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
-
-                foreach (var arg in Args.Reverse())
-                    cp.Scope[arg] = exec.DataStack.Pop();
-
-                OnScopeChanged?.Invoke(cp);
+            if (Args == null) {
+                return cp;
             }
+
+            if (exec.DataStack.Count < Args.Count)
+                throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
+
+            foreach (var arg in Args.Reverse())
+                cp.Scope[arg] = exec.DataStack.Pop();
+
+            OnScopeChanged?.Invoke(cp);
 
             return cp;
         }

@@ -45,9 +45,7 @@ namespace Pyro.Exec {
         }
 
         private void SetCurrent(Continuation continuation) {
-            if (_current != null) {
-                _current.FireOnLeave();
-            }
+            _current?.FireOnLeave();
             FireContinuationChanged(_current, continuation);
         }
 
