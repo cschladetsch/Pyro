@@ -1,4 +1,6 @@
-﻿namespace Pyro.Console {
+﻿using Pyro.Network.Impl;
+
+namespace Pyro.Console {
     using ExecutionContext;
     using Language;
     using Network;
@@ -49,7 +51,7 @@
             if (args.Length == 1 && !int.TryParse(args[0], out port))
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
 
-            _peer = Factory.NewPeer(port);
+            _peer = Factory.NewPeer(new Domain(), port);
             var ctx = _peer.Local.ExecutionContext;
             var reg = ctx.Registry;
             var scope = ctx.Executor.Scope;

@@ -25,7 +25,7 @@
         
         protected Executor Exec => _executionContext.Executor;
         
-        protected readonly IDomain _domain = new Domain();
+        protected readonly IDomain Domain = new Domain();
         
         protected IRegistry Registry => _executionContext.Registry;
         

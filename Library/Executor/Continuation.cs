@@ -151,15 +151,13 @@
             
             Resume();
 
-            if (Args == null) {
-                return this;
+            if (Args != null) {
+                if (exec.DataStack.Count < Args.Count)
+                    throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
+
+                foreach (var arg in Args.Reverse())
+                    Scope[arg] = exec.DataStack.Pop();
             }
-
-            if (exec.DataStack.Count < Args.Count)
-                throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
-
-            foreach (var arg in Args.Reverse())
-                Scope[arg] = exec.DataStack.Pop();
 
             OnScopeChanged?.Invoke(this);
 

@@ -44,7 +44,21 @@ namespace Pyro.Exec {
             
             FireContinuationChanged(Current, continuation);
 
-            continuation?.Enter(this);
+            if (continuation == null) {
+                Current = null;
+                return;
+            }
+
+            if (ContextStack.Count == 0) {
+                continuation.Resume();
+                return;
+            }
+            
+            if (continuation.AtEnd() || continuation.Ip == 0) {
+                continuation.Enter(this);
+            } else if (!continuation.Running) {
+                continuation.Resume();
+            }
         }
 
         private void FireContextStackChanged() {
@@ -68,18 +82,19 @@ namespace Pyro.Exec {
 
         public void Continue(Continuation continuation) {
             PushContext(continuation);
-            //SetCurrent(continuation);
 
             while (true) {
+                if (ContextStack.Count == 0) {
+                    break;
+                }
+                
+                SetCurrent(PopContext());
+                
                 _break = false;
                 while (Next()) {
                     if (_break)
                         break;
                 }
-
-                SetCurrent(PopContext());
-                if (Current == null)
-                    break;
             }
         }
 
@@ -88,18 +103,13 @@ namespace Pyro.Exec {
 
             if (Current == null) {
                 SetCurrent(PopContext());
-                if (Current == null) {
-                    throw new InvalidOperationException("No continuation to execute");
-                }
             }
-
+            
             if (!Current.Next(out var next)) {
-                if (ContextStack.Count > 0) {
-                    SetCurrent(PopContext());
-                }
                 Break();
                 return false;
             }
+            
             if (next is IRefBase refBase)
                 next = refBase.BaseValue;
 
@@ -229,8 +239,7 @@ namespace Pyro.Exec {
         /// </summary>
         private new void Resume() {
             if (!ResolvePop(out var next)) {
-                Break();
-                return;
+                throw new DataStackEmptyException("Cannot resume");
             }
 
             switch (next) {
@@ -244,19 +253,7 @@ namespace Pyro.Exec {
                     break;
 
                 case MethodInfo mi:
-                    var numArgs = mi.GetParameters().Length;
-                    if (DataStack.Count < numArgs + 1) {
-                        var servant = DataStack.Count > 0 ? DataStack.Peek() : "null";
-                        throw new NotEnoughArgumentsException($"{servant}.{mi.Name} expects {numArgs} args");
-                    }
-
-                    var obj = Pop();
-                    var args = new object[numArgs];
-                    for (var n = 0; n < numArgs; ++n)
-                        args[numArgs - n - 1] = Pop();
-                    var ret = mi.Invoke(obj, args);
-                    if (mi.ReturnType != typeof(void))
-                        Push(ret);
+                    ResumeMethod(mi);
                     break;
 
                 default:
@@ -269,6 +266,22 @@ namespace Pyro.Exec {
             }
 
             Break();
+        }
+
+        private void ResumeMethod(MethodInfo mi) {
+            var numArgs = mi.GetParameters().Length;
+            if (DataStack.Count < numArgs + 1) {
+                var servant = DataStack.Count > 0 ? DataStack.Peek() : "null";
+                throw new NotEnoughArgumentsException($"{servant}.{mi.Name} expects {numArgs} args");
+            }
+
+            var obj = Pop();
+            var args = new object[numArgs];
+            for (var n = 0; n < numArgs; ++n)
+                args[numArgs - n - 1] = Pop();
+            var ret = mi.Invoke(obj, args);
+            if (mi.ReturnType != typeof(void))
+                Push(ret);
         }
 
         public void Push(object obj) {
@@ -320,9 +333,6 @@ namespace Pyro.Exec {
             if (continuation == null) {
                 throw new ArgumentNullException("Cannot push null context " + nameof(continuation));
             }
-            if (continuation.AtEnd()) {
-                return;
-            }
             ContextStack.Add(continuation);
             FireContextStackChanged();
         }
@@ -330,8 +340,7 @@ namespace Pyro.Exec {
         private Continuation PopContext() {
             var contextStackCount = ContextStack.Count;
             if (contextStackCount == 0) {
-                SetCurrent(null);
-                return null;
+                throw new ContextStackEmptyException();
             }
 
             var last = contextStackCount - 1;
@@ -341,13 +350,9 @@ namespace Pyro.Exec {
             }
 
             ContextStack.RemoveAt(last);
-            if (cont.AtEnd()) {
-                cont.Enter(this);
-            }
             
-            SetCurrent(cont);
             FireContextStackChanged();
-            return Current;
+            return cont;
         }
 
         /// <summary>

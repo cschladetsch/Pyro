@@ -64,7 +64,14 @@
         }
 
         private void OnIpChanged(Continuation continuation, int last, int current) {
-            codeView.Items[last].BackColor = Color.White;
+            if (last >= codeView.Items.Count) {
+                foreach (ListViewItem item in codeView.Items) {
+                    item.BackColor = Color.White;
+                }
+            }
+            else {
+                codeView.Items[last].BackColor = Color.White;
+            }
             if (current < codeView.Items.Count) {
                 codeView.Items[current].BackColor = Color.LightGray;
             }

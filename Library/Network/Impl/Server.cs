@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
-using System.Reflection;
 using Pyro.Exec;
 
 namespace Pyro.Network.Impl
@@ -110,7 +109,7 @@ namespace Pyro.Network.Impl
                     return false;
 
                 // clear remote stack, send the datastack back as a list, then expand it to the remote stack, and drop the number of items that 'expand' adds to the stack
-                var stack = "clear " + _Registry.ToPiScript(Exec.DataStack.ToList()) + " expand drop";
+                var stack = "clear " + Registry.ToPiScript(Exec.DataStack.ToList()) + " expand drop";
                 return Send(sender, stack);
             }
             catch (Exception e)
@@ -118,31 +117,18 @@ namespace Pyro.Network.Impl
                 var msg = $"{e.Message} {e.InnerException?.Message}";
                 Exec.Push($"Error: {msg}");
                 return Error(msg);
-<<<<<<< HEAD
             } finally {
                 //FIX ReceivedRequest?.Invoke(this, _Peer.GetClient(sender), pi);
             }
         }
 
-        private bool RunLocally(string pi) {
-            if (!_executionContext.Translate(pi, out var continuation)) {
-                Exec.Push(_executionContext.Error);
-                return Error(_executionContext.Error);
-=======
-            }
-            finally
-            {
-                ReceivedRequest?.Invoke(_Peer.GetClient(sender), pi);
-            }
-        }
 
         private bool RunLocally(string pi)
         {
-            if (!_Context.Translate(pi, out var cont))
+            if (!_Context.Translate(pi, out var continuation))
             {
                 Exec.Push(_Context.Error);
                 return Error(_Context.Error);
->>>>>>> 6811f79 (Adding.)
             }
 
             if (continuation.Code.Count == 0)
@@ -151,15 +137,12 @@ namespace Pyro.Network.Impl
             continuation = continuation.Code[0] as Continuation;
             if (continuation == null)
                 return Error("Server.RunLocally: Continuation expected");
-<<<<<<< HEAD
 
             continuation.Scope = Exec.Scope;
             Exec.Continue(continuation);
-=======
             
-            cont.Scope = Exec.Scope;
-            Exec.Continue(cont);
->>>>>>> 6811f79 (Adding.)
+            continuation.Scope = Exec.Scope;
+            Exec.Continue(continuation);
 
             return true;
         }
@@ -180,15 +163,12 @@ namespace Pyro.Network.Impl
             Receive(socket);
             Listen();
         }
-<<<<<<< HEAD
 
         public TIAgent NewAgent<TIAgent>()
             where TIAgent : IAgentBase {
             var agent = Domain.NewAgent<TIAgent>(default);
             return agent;
         }
-=======
->>>>>>> 6811f79 (Adding.)
     }
 }
 
