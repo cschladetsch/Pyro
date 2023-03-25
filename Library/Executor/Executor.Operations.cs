@@ -10,11 +10,6 @@
     /// </summary>
     public partial class Executor {
         /// <summary>
-        /// The number of significant digits for float comparisons.
-        /// </summary>
-        public int FloatPrecision;
-
-        /// <summary>
         /// A hack that is broken anyway.
         /// </summary>
         private bool _leaveForEach;
@@ -25,6 +20,8 @@
             throw new DataStackEmptyException();
         }
 
+        private const float FLOAT_EPSILON = 0.00001f;
+        
         /// <summary>
         /// Add options to the internal mapping of EOperation enum to
         /// functor that does the work for that operation.
@@ -78,7 +75,6 @@
             _actions[EOperation.DebugPrintContextStack] = DebugPrintContextStack;
             _actions[EOperation.DebugPrint] = DebugTrace;
             _actions[EOperation.Depth] = () => Push(DataStack.Count);
-            _actions[EOperation.SetFloatPrecision] = SetFloatPrecision;
             _actions[EOperation.Write] = () => Write(RPop());
             _actions[EOperation.WriteLine] = () => WriteLine(RPop());
             _actions[EOperation.If] = If;
@@ -389,10 +385,6 @@
                 Push(ifBody);
         }
 
-        private void SetFloatPrecision() {
-            FloatPrecision = ResolvePop<int>();
-        }
-
         private void LogicalXor() {
             var a = RPop();
             var b = RPop();
@@ -646,12 +638,6 @@
             Push(a.Equals(b));
         }
 
-        private const float FLOAT_EPSILON = 0.00001f;
-
-        public void RemoveContinuation(Continuation continuation) {
-            ContextStack.Remove(continuation);
-            Break();
-        }
     }
 }
 
