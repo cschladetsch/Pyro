@@ -85,7 +85,7 @@ namespace Pyro.Exec {
                 case EOperation.ThawYaml:
                     return "thawy";
                 case EOperation.Not:
-                    return "!";
+                    return "not";
                 case EOperation.Equiv:
                     return "==";
                 case EOperation.LogicalAnd:

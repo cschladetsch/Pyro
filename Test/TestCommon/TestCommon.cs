@@ -278,8 +278,8 @@ namespace Pyro.Test {
 
         private Continuation FreezeThaw(ITranslator trans, string text) {
             void Noisey(string info) {
-                //if (Verbose)
-                //    WriteLine(info);
+                if (Verbose)
+                    WriteLine(info);
             }
             Noisey("--- Input:");
             Noisey(text);
