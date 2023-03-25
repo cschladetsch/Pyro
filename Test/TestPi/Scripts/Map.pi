@@ -1,10 +1,10 @@
 ﻿// dictionaries
 
-1 2 "foo" "bar" 3 tomap 'm #
+1 2 "foo" "bar" 2 tomap 'm #
+"spam" 123 m insert
+"spam" m at 123 == assert
+666 m has not assert
 1 m has assert
 "foo" m has assert
 1 m at 2 == assert
 "foo" m at "bar" == assert
-666 m has not == assert
-"spam" 123 m insert
-"spam" m at 123 == assert
