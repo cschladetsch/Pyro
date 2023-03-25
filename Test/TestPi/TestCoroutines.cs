@@ -6,6 +6,14 @@
         : TestCommon {
         [Test]
         public void TestCoro1() {
+            // fun f()
+            //      123
+            // fun b(a)
+            //      a()
+            // b(f)
+            PiRun("{123} 'f# {&} 'b# f b&");
+            AssertPop(123);
+            
             PiRun("{1} 'f# f& f& + ");
             AssertPop(2);
             
@@ -15,13 +23,6 @@
             PiRun("{1} 'f# f&");
             AssertPop(1);
 
-            // fun f()
-            //      123
-            // fun b(a)
-            //      a()
-            // b(f)
-            PiRun("{123} 'f# {&} 'b# f b&", true);
-            AssertPop(123);
         }
     }
 }

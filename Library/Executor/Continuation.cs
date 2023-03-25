@@ -129,28 +129,11 @@
             Args.Add(ident);
         }
 
-        public Continuation Enter(Executor exec) {
-            //var cp = Self.Registry.Add(new Continuation(Code, Args)).Value;
-
-            //cp.Kernel = exec.Kernel;
-            //cp.Ip = Ip;
-            //cp.Scope = Scope;
-
-            //cp.Resumed += tr => {
-                //exec.PushContext(cp);
-                //Info("Resumed coro");
-            //};
-
-            //cp.Suspended += tr => {
-                //Info("Suspended coro");
-            //};
-
+        public void Enter(Executor exec) {
             if (Ip == Code.Count) {
                 Ip = 0;
             }
             
-            Resume();
-
             if (Args != null) {
                 if (exec.DataStack.Count < Args.Count)
                     throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
@@ -160,8 +143,6 @@
             }
 
             OnScopeChanged?.Invoke(this);
-
-            return this;
         }
 
         public bool HasScopeObject(string label)

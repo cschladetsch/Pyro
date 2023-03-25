@@ -44,21 +44,7 @@ namespace Pyro.Exec {
             
             FireContinuationChanged(Current, continuation);
 
-            if (continuation == null) {
-                Current = null;
-                return;
-            }
-
-            if (ContextStack.Count == 0) {
-                continuation.Resume();
-                return;
-            }
-            
-            if (continuation.AtEnd() || continuation.Ip == 0) {
-                continuation.Enter(this);
-            } else if (!continuation.Running) {
-                continuation.Resume();
-            }
+            Current = continuation;
         }
 
         private void FireContextStackChanged() {
@@ -257,11 +243,13 @@ namespace Pyro.Exec {
                     break;
 
                 default:
-                    if (next.GetType() != typeof(Continuation)) {
+                    if (next is Continuation cont) {
+                        PushContext(cont);
+                        cont.Enter(this);
+                    }
+                    else {
                         throw new Exception("Cannot resume type " + next.GetType());
                     }
-                    PushContext(next);
-                    //SetCurrent(null);
                     break;
             }
 
