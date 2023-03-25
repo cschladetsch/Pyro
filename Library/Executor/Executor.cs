@@ -1,5 +1,3 @@
-using System.Configuration;
-
 namespace Pyro.Exec {
     using System;
     using System.Collections.Generic;
@@ -10,9 +8,9 @@ namespace Pyro.Exec {
     /// </summary>
     public partial class Executor
         : Reflected<Executor> {
-        public Stack<object> DataStack { get; private set; } = new Stack<object>();
+        public Stack<object> DataStack { get; } = new Stack<object>();
 
-        public List<Continuation> ContextStack { get; private set; } = new List<Continuation>();
+        public List<Continuation> ContextStack { get; } = new List<Continuation>();
 
         public bool Rethrows { get; set; }
 
@@ -284,7 +282,6 @@ namespace Pyro.Exec {
                 throw new DataStackEmptyException();
 
             var top = Pop();
-            FireDataStackChanged();
 
             if (top == null)
                 throw new NullValueException();
