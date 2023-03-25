@@ -125,8 +125,6 @@ namespace Pyro.Test {
 
                 Assert.IsFalse(trans.Failed);
                 _Exec.Continue(cont);
-                while (_Exec.Next())
-                    ;
             } catch (Exception e) {
                 WriteLine($"Script {fileName}: Exception={e.Message}");
                 return false;

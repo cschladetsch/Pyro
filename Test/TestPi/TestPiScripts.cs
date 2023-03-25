@@ -26,6 +26,8 @@
 
         [Test]
         public void RunSomePiScripts() {
+            TestScript("Floats.pi");
+            TestScript("Continuations.pi");
             TestScript("Variables.pi");
             TestScript("Common.pi");
             TestScript("Arithmetic.pi");
@@ -35,18 +37,17 @@
             TestScript("Relational.pi");
             TestScript("StackOperations.pi");
             TestScript("Strings.pi");
-            TestScript("Continuations.pi");
 
-            //TestScript("Current.pi");
-            //TestScript("Floats.pi");
-            //TestScript("Conditionals.pi");
+            TestScript("Current.pi");
+            TestScript("Conditionals.pi");
+            TestScript("Map.pi");
+            
             //TestScript("Loops.pi");
-            //TestScript("Map.pi");
             //TestScript("TestAppCalls.pi");
             //TestScript("TreeScope.pi");
         }
 
-        [Test]
+        //[Test]
         public void RunAllPiScripts() {
             foreach (var file in Directory.GetFiles(GetScriptsPath(), "*.pi"))
                 Assert.IsTrue(RunScriptPathname(file));

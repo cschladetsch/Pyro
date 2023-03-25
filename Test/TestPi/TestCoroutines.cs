@@ -23,6 +23,13 @@
             PiRun("{1} 'f# f&");
             AssertPop(1);
 
+            PiRun("1 2 +");
+            AssertPop(3);
+            
+            PiRun("1 2 {+} &");
+            AssertPop(3);
+            
+            PiRun("1 2 { + } & 3 == assert");
         }
     }
 }
