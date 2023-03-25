@@ -150,19 +150,18 @@ fun foo()
             _Exec.Verbosity = 100;
             RhoRun(
 @"
-fun foo()
-	1
-//assert(foo() == 1)
-//assert(foo() + 1 == 2)
-//assert(foo() + 2 == 3)
+fun foo(n)
+	n + 1
+assert(foo(1) == 2)
+assert(foo(1) == 2)
+assert(foo(2) + 1 == 3)
+assert(foo(2) + 1 == 3)
 
 fun bar(f, n)
-	f(n)
-assert(bar(foo, 2) == 2)
+	f(n) + 1
 
-//n + f()
-//assert(bar(foo, 1) == 2)
-//assert(bar(foo, 2) == 3)
+assert(bar(foo, 2) == 3)
+assert(bar(foo, 2) == 3)
 ");
         }
 
@@ -276,6 +275,7 @@ fun foo(a)
 	b = a + 1
 	assert(b == 3)
 foo(2)
+assert(!exists('b))
 ");
         }
 
