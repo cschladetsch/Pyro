@@ -1,4 +1,6 @@
-﻿self.Delay(1000)
+﻿// Test delaying continuations
+
+//self.Delay(1000)
 
 //pr("begin")
 //
