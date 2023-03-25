@@ -66,7 +66,7 @@ Maybe one day. For the moment, you best bet are the...
 
 ## Examples
 
-For the moment, the best place is the [unit tests](Tests).
+For the moment, the best place is the [unit tests](Test).
 
 ## Code Analysis
 
