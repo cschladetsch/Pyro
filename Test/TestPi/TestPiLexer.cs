@@ -15,6 +15,18 @@
         }
 
         [Test]
+        public void TestFloorAndCeiling() {
+            AssertSameTokens(
+                "floor ceiling",
+                EPiToken.Floor, EPiToken.Ceiling
+            );
+            AssertSameTokens(
+                "1.1 floor ceiling",
+                EPiToken.Float, EPiToken.Floor, EPiToken.Ceiling
+            );
+        }
+        
+        [Test]
         public void TestNumbersAndOps() {
             AssertSameTokens(
                 "1 2 + 2 - 3 *",

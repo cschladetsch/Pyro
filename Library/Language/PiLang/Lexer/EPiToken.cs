@@ -22,6 +22,8 @@
         Suspend,
         Replace,
         Resume,
+        Floor,
+        Ceiling,
         Break,
         Plus,
         Minus,

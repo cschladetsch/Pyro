@@ -3,6 +3,8 @@
 
     public partial class PiLexer {
         protected override void AddKeyWords() {
+            AddKeyword("floor", EPiToken.Floor);
+            AddKeyword("ceiling", EPiToken.Ceiling);
             AddKeyword("break", EPiToken.Break);
             AddKeyword("if", EPiToken.If);
             AddKeyword("ife", EPiToken.IfElse);
@@ -145,6 +147,8 @@
             //_opToToken[EOperation.ForLoop] = EPiToken.ForLoop;
             _opToToken[EOperation.Drop] = EPiToken.Drop;
             _opToToken[EOperation.DropN] = EPiToken.DropN;
+            _opToToken[EOperation.Floor] = EPiToken.Floor;
+            _opToToken[EOperation.Ceiling] = EPiToken.Ceiling;
         }
     }
 }

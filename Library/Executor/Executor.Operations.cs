@@ -43,6 +43,8 @@
             };
 
             _actions[EOperation.Multiply] = () => Push(RPop() * RPop());
+            _actions[EOperation.Floor] = () => Push(Math.Floor(RPop()));
+            _actions[EOperation.Ceiling] = () => Push(Math.Ceiling(RPop()));
             _actions[EOperation.Divide] = Divide;
             _actions[EOperation.Suspend] = Suspend;
             _actions[EOperation.Resume] = Resume;
@@ -452,17 +454,19 @@
         private void Has() {
             var cont = RPop();
             switch (cont) {
-                case List<object> list:
+                case IList list:
                     Push(list.Contains(RPop()));
                     break;
 
-                case Dictionary<object, object> dict:
+                case IDictionary<object, object> dict:
                     Push(dict.ContainsKey(RPop()));
                     break;
 
+                /*
                 case HashSet<object> set:
                     Push(set.Contains(RPop()));
                     break;
+                    */
 
                 default:
                     throw new NotImplementedException($"Cannot use 'has' on type {cont.GetType().Name}");
@@ -470,15 +474,19 @@
         }
 
         private void At() {
-            var index = RPop();
             var cont = RPop();
+            var index = RPop();
             switch (cont) {
                 case IList list:
                     Push(list[ConstRef<int>(index)]);
                     break;
 
                 case IDictionary dict:
-                    Push(dict[RPop()]);
+                    if (!dict.Contains(index)) {
+                        throw new KeyNotFoundException($"Key '{index}' not found in dictionary");
+                    }
+
+                    Push(dict[index]);
                     break;
 
                 default:
@@ -516,18 +524,15 @@
         private void Insert() {
             var cont = RPop();
             switch (cont) {
-                case List<object> list:
+                case IList list:
                     var index = RPop();
                     list.Insert(index, RPop());
                     break;
 
-                case Dictionary<object, object> map:
-                    var kv = RPop();
-                    map.Add(kv.Key, kv.Value);
-                    break;
-
-                case HashSet<object> set:
-                    set.Add(RPop());
+                case IDictionary<object, object> map:
+                    var value = RPop();
+                    var key = RPop();
+                    map.Add(key, value);
                     break;
 
                 default:
@@ -625,16 +630,23 @@
             var b = RPop();
             switch (a) {
                 case IEnumerable<object> list: {
-                        if (!(b is IEnumerable<object> other))
-                            throw new CannotCompareEnumerationsException(a, b);
+                    if (!(b is IEnumerable<object> other))
+                        throw new CannotCompareEnumerationsException(a, b);
 
-                        Push(list.SequenceEqual(other));
-                        return;
-                    }
+                    Push(list.SequenceEqual(other));
+                    return;
+                }
+                case float real: {
+                    var delta = Math.Abs(real - (float)b);
+                    Push(delta < FLOAT_EPSILON);
+                    return;
+                }
             }
 
             Push(a.Equals(b));
         }
+
+        private const float FLOAT_EPSILON = 0.00001f;
 
         public void RemoveContinuation(Continuation continuation) {
             ContextStack.Remove(continuation);

@@ -24,6 +24,8 @@
         Plus,
         Minus,
         Multiply,
+        Floor,
+        Ceiling,
         Divide,
         Modulo,
 

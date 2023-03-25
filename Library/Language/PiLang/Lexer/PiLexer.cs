@@ -9,7 +9,7 @@
     /// </summary>
     public partial class PiLexer
         : LexerCommon<EPiToken, PiToken, PiTokenFactory> {
-        public static Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
+        private static Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
 
         public PiLexer(string input)
             : base(input)
