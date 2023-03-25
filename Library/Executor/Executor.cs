@@ -83,39 +83,62 @@ namespace Pyro.Exec {
         }
 
         public bool Next() {
-            Kernel.Step();
-
-            if (Current == null) {
-                SetCurrent(PopContext());
-            }
-            
-            if (!Current.Next(out var next)) {
-                Break();
+            if (!StepCurrent(out var next)) {
                 return false;
             }
-            
-            if (next is IRefBase refBase)
-                next = refBase.BaseValue;
 
             try {
                 Perform(next);
             } catch (Exception e) {
-                if (!string.IsNullOrEmpty(SourceFilename))
-                    WriteLine($"While executing {SourceFilename}:");
-
-                if (Verbosity > 5) {
-                    WriteLine(DebugWrite());
-                    WriteLine($"Exception: {e}");
-                }
-
-                if (Rethrows)
-                    throw;
-
-                return false;
+                return Throw(e);
             }
 
             return true;
        }
+
+        private bool StepCurrent(out object next) {
+            Kernel.Step();
+
+            GetCurrent();
+
+            if (!Current.Next(out next)) {
+                Break();
+                return false;
+            }
+
+            if (next is IRefBase refBase) {
+                next = refBase.BaseValue;
+            }
+
+            return true;
+        }
+
+        private void GetCurrent() {
+            if (Current != null) {
+                return;
+            }
+
+            SetCurrent(PopContext());
+            if (Current == null) {
+                throw new Exception("No current continuation");
+            }
+        }
+
+        private bool Throw(Exception e) {
+            if (!string.IsNullOrEmpty(SourceFilename))
+                WriteLine($"While executing {SourceFilename}:");
+
+            if (Verbosity > 5) {
+                WriteLine(DebugWrite());
+                WriteLine($"Exception: {e}");
+            }
+
+            if (Rethrows) {
+                throw e;
+            }
+            
+            return false;
+        }
 
         public void Prev() {
             throw new NotImplementedException();
@@ -189,9 +212,6 @@ namespace Pyro.Exec {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Attempt to resolve a name by looking at the context stack
-        /// </summary>
         private bool TryResolveContextually(Label label, out object obj) {
             obj = null;
             var ident = label.Text;
@@ -241,17 +261,20 @@ namespace Pyro.Exec {
                     break;
 
                 default:
-                    if (next is Continuation cont) {
-                        PushContext(cont);
-                        cont.Enter(this);
-                    }
-                    else {
-                        throw new Exception("Cannot resume type " + next.GetType());
-                    }
+                    ResumeContinuation(next);
                     break;
             }
 
             Break();
+        }
+
+        private void ResumeContinuation(dynamic next) {
+            if (!(next is Continuation cont)) {
+                throw new Exception("Cannot resume type " + next.GetType());
+            }
+
+            PushContext(cont);
+            cont.Enter(this);
         }
 
         private void ResumeMethod(MethodInfo mi) {
@@ -346,7 +369,6 @@ namespace Pyro.Exec {
         /// </summary>
         private void Break() {
             _break = true;
-            //SetCurrent(null);
         }
 
         private T ResolvePop<T>() {
@@ -355,9 +377,6 @@ namespace Pyro.Exec {
             throw new DataStackEmptyException();
         }
 
-        /// <summary>
-        /// Get top of stack as a value of type T, or as a name of a value of type T
-        /// </summary>
         private bool ResolvePop<T>(out T val) {
             val = default;
             var pop = (object)Pop();
