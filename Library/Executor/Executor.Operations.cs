@@ -199,7 +199,6 @@
         }
 
         private void Dup() {
-            // TODO: don't use a fucking stack. use a vector.
             var top = DataStack.Pop();
             var dup = Duplicate(top); // TODO: copy-on-write duplication
             Push(top);
@@ -327,12 +326,12 @@
             if (type == null)
                 return false;
 
-            var mi = type.GetMethod(member);
-            if (mi == null)
+            var methodInfo = type.GetMethod(member);
+            if (methodInfo == null)
                 return false;
 
             Push(obj);
-            Push(mi);
+            Push(methodInfo);
 
             return true;
         }
@@ -340,7 +339,7 @@
         private bool GetCallable(IClassBase @class, string member, object obj) {
             var callable = @class.GetCallable(member);
             if (callable == null)
-                return false;//throw new MemberNotFoundException(obj.GetType(), member);
+                return false;
 
             Push(obj);
             Push(callable);

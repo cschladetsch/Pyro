@@ -1,15 +1,13 @@
-﻿using System;
-
+﻿using NUnit.Framework;
 using Pyro.Impl;
 using Pyro.Language.Tau.Lexer;
 using Pyro.Language.Tau.Parser;
 
-using NUnit.Framework;
-
 namespace TestTau {
-    public class TestTauParser {
+    public class TestTauGenerator
+        : TestTauCommon {
         [Test]
-        public void TestParser1() {
+        public void TestGenerator1() {
             var lexer = new TauLexer(LoadTauScript("Test0.tau"));
             if (lexer.Failed) {
                 Assert.Fail("Lexer failed: {0}", lexer.Error);
@@ -19,10 +17,10 @@ namespace TestTau {
             if (parser.Failed) {
                 Assert.Fail("Parser failed: {0}", parser.Error);
             }
-        }
-
-        private string LoadTauScript(string fileName) {
-            throw new NotImplementedException();
+            var generator = new TauGenerator(parser);
+            if (generator.Failed) {
+                Assert.Fail("Generator failed: {0}", generator.Error);
+            }
         }
     }
 }

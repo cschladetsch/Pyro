@@ -10,7 +10,7 @@ namespace Pyro.Language.Tau.Parser {
 
         private readonly EStructure _structure;
 
-        public TauParser(TauLexer lexer, IRegistry reg, EStructure st)
+        public TauParser(TauLexer lexer, IRegistry reg, EStructure st = EStructure.Namespace)
             : base(lexer, reg) {
             _Current = 0;
             _structure = st;

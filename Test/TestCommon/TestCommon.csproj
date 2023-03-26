@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="TestCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCommonBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Core\Core.csproj">
@@ -77,6 +78,10 @@
     <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
       <Project>{2C48A0F7-1EF0-4AC7-BE71-E16667CF1E10}</Project>
       <Name>RhoLang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Language\TauLang\TauLang.csproj">
+      <Project>{82e001b5-0d5e-42b7-b9d5-8b63ad82bf9a}</Project>
+      <Name>TauLang</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

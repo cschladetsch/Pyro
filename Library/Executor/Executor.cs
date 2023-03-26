@@ -76,8 +76,9 @@ namespace Pyro.Exec {
                 
                 _break = false;
                 while (Next()) {
-                    if (_break)
+                    if (_break) {
                         break;
+                    }
                 }
             }
         }
@@ -90,11 +91,26 @@ namespace Pyro.Exec {
             try {
                 Perform(next);
             } catch (Exception e) {
-                return Throw(e);
+                HandleException(e);
+                return false;
             }
 
             return true;
-       }
+        }
+
+        private void HandleException(Exception e) {
+            if (!string.IsNullOrEmpty(SourceFilename))
+                WriteLine($"While executing {SourceFilename}:");
+
+            if (Verbosity > 5) {
+                WriteLine(DebugWrite());
+                WriteLine($"Exception: {e}");
+            }
+
+            if (Rethrows) {
+                throw e;
+            }
+        }
 
         private bool StepCurrent(out object next) {
             Kernel.Step();
@@ -146,8 +162,9 @@ namespace Pyro.Exec {
 
         public void Perform(object next) {
             ++NumOps;
-            if (next == null)
+            if (next == null) {
                 throw new NullValueException();
+            }
 
             PerformPrelude(next);
             switch (next) {
@@ -159,8 +176,9 @@ namespace Pyro.Exec {
                     throw new NotImplementedException($"Operation {op} not implemented");
 
                 default:
-                    if (!TryResolve(next, out var eval))
+                    if (!TryResolve(next, out var eval)) {
                         throw new UnknownIdentifierException(next);
+                    }
 
                     DataStackPush(eval);
                     break;
@@ -169,16 +187,18 @@ namespace Pyro.Exec {
 
         private bool TryResolve(object obj, out object found) {
             found = null;
-            if (obj == null)
+            if (obj == null) {
                 return false;
+            }
 
             if (!(obj is IdentBase ident)) {
                 found = obj;
                 return true;
             }
 
-            if (!ident.Quoted)
+            if (!ident.Quoted) {
                 return TryResolve(ident, out found);
+            }
 
             found = obj;
             return true;

@@ -310,7 +310,7 @@ namespace WinForms {
 
         public void RunCurrent() {
             try {
-                Executor.Continue(GetContinuation());
+                Executor.Continue();
             } catch (Exception e) {
                 OutputException(e);
             }

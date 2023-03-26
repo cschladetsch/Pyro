@@ -1,6 +1,4 @@
-﻿
-class Foo
-{
+﻿interface Foo {
     string Name { get; set; }
     int Sum(int a, int b);
 }

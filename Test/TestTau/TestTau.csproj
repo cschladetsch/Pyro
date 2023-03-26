@@ -13,28 +13,14 @@
     </ItemGroup>
 
     <ItemGroup>
-<<<<<<< HEAD
-<<<<<<< HEAD
       <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
       <ProjectReference Include="..\TestCore\TestCore.csproj" />
-=======
-=======
->>>>>>> 4c3f272 (Add TestTau.)
       <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj" />
       <ProjectReference Include="..\..\Library\Language\Common\Common.csproj" />
       <ProjectReference Include="..\..\Library\Language\TauLang\TauLang.csproj" />
-<<<<<<< HEAD
->>>>>>> 1bc813b (Start to add tests for Tau Language, starting at Lexer.)
-=======
       <ProjectReference Include="..\..\Library\Network\Network.csproj" />
-<<<<<<< HEAD
->>>>>>> 4229f83 (Context stack now shows decompiled Rho code.)
-=======
-=======
       <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
       <ProjectReference Include="..\TestCore\TestCore.csproj" />
->>>>>>> 6e50dd3 (Add TestTau.)
->>>>>>> 4c3f272 (Add TestTau.)
     </ItemGroup>
 
 </Project>
