@@ -56,7 +56,6 @@
     <None Include="Readme.md" />
     <None Include="Scripts\Array.pi" />
     <None Include="Scripts\Comments.pi" />
-    <None Include="Scripts\Common.pi" />
     <None Include="Scripts\Current.pi" />
     <None Include="Scripts\Floats.pi" />
     <Compile Include="TestConditionals.cs" />

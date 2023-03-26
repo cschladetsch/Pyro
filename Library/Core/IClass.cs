@@ -1,5 +1,6 @@
-﻿namespace Pyro {
-    using System.Text;
+﻿using System.Text;
+
+namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>

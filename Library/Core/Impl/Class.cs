@@ -44,7 +44,7 @@
             if (_toText != null)
                 _toText(_registry, str, obj);
             else
-                str.Append(obj.ToString());
+                str.Append(obj);
         }
     }
 }

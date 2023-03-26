@@ -20,14 +20,6 @@
 
         internal ClassBase(IRegistry reg, Type type)
             : base(reg, type) {
-            //foreach (var method in type.GetMethods())
-            //{
-            //    var call = MakeCallable(method);
-            //    if (call == null)
-            //        continue;
-
-            //    _callables[method.Name] = call;
-            //}
         }
 
         public object Duplicate(object obj) {

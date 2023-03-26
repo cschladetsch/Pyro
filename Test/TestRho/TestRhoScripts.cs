@@ -1,10 +1,9 @@
 ﻿using System;
+using NUnit.Framework;
+using System.IO;
+using static Pyro.Create;
 
 namespace Pyro.Test.Rho {
-    using NUnit.Framework;
-    using System.IO;
-    using static Create;
-
     [TestFixture]
     public class TestRhoScripts
         : TestCommon {
@@ -105,7 +104,7 @@ else
             //TestScript("ForLoops.rho");
         }
 
-        private void DebugTrace(object obj) {
+        private static void DebugTrace(object obj) {
             var text = "****> " + obj + " <****";
             TestContext.Out.WriteLine(text);
             System.Diagnostics.Trace.WriteLine(text);

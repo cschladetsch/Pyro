@@ -1,6 +1,7 @@
-﻿namespace Pyro {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>

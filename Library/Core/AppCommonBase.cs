@@ -31,9 +31,6 @@
             return $"{desc} v{v} built {b}";
         }
 
-        protected virtual void ProcessArgs(string[] args) {
-        }
-
         protected abstract void Shutdown();
 
         protected void Exit(int result = 0) {

@@ -1,9 +1,9 @@
-﻿namespace Pyro.Exec {
-    using System;
-    using System.Text;
+﻿using System;
+using System.Text;
 
-    using NUnit.Framework;
+using NUnit.Framework;
 
+namespace Pyro.Exec {
     /// <inheritdoc />
     /// <summary>
     /// Debug methods for executor. Removed from main implementation for clarity.
@@ -22,17 +22,16 @@
 
         private static void Write(string text, params object[] args) {
             Console.Write(text);
-            //Debug.Write(text);
-            //Trace.Write(text);
             TestContext.Out.WriteLine(text);
             OnDebugTrace?.Invoke(text);
         }
 
         private static void WriteLine(string fmt, params object[] args) {
-            if (args == null || args.Length == 0)
+            if (args == null || args.Length == 0) {
                 Write(fmt + '\n');
-            else
+            } else {
                 Write($"{string.Format(fmt, args)}\n");
+            }
         }
 
         public void DebugTrace()
@@ -54,10 +53,12 @@
 
         private void WriteContinuation(StringBuilder str) {
             str.AppendLine("Context:");
-            if (Current == null)
+            if (Current == null) {
                 str.AppendLine("    No continuation");
-            else
+            }
+            else {
                 Current.DebugWrite(str);
+            }
         }
 
         public void WriteDataStack(int max = 4) {
@@ -70,6 +71,7 @@
             str.AppendLine("Data:");
             var data = DataStack.ToArray();
             max = Math.Min(data.Length, max);
+
             for (var n = max - 1; n >= 0; --n) {
                 var obj = data[n];
                 str.AppendLine($"\t[{n}]: {GetTyped(obj)}");
@@ -83,13 +85,16 @@
                 str.AppendLine("\tEmpty");
                 return;
             }
+
             for (var n = max - 1; n >= 0; --n) {
                 str.Append($"\t[{n}]: ");
                 var obj = ContextStack[n];
+
                 if (obj == null) {
                     str.AppendLine("ERROR: NULL CONTEXT");
                     continue;
                 }
+
                 obj.DebugWrite(str);
                 str.AppendLine();
             }
@@ -99,8 +104,9 @@
             => obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
 
         private void PerformPrelude(object next) {
-            if (Verbosity == 0)
+            if (Verbosity == 0) {
                 return;
+            }
 
             var str = new StringBuilder();
             str.AppendLine($"---- Step #{Kernel.StepNumber}");
@@ -118,4 +124,3 @@
         }
     }
 }
-

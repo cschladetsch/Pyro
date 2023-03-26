@@ -156,14 +156,14 @@
             var name = Pop<IdentBase>();
             var val = Pop();
             if (name is Label label)
-                Context().SetScopeObject(label.Text, val);
+                Current.SetScopeObject(label.Text, val);
             else
                 throw new Exception($"Can't store to {name}");
         }
 
         private void GetValue() {
             var label = Pop<string>();
-            var fromScope = Context().FromScope(label);
+            var fromScope = Current.FromScope(label);
             Push(fromScope);
         }
 

@@ -1,10 +1,9 @@
-﻿namespace Pyro.Exec {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
+namespace Pyro.Exec {
     /// <summary>
     /// Also known as a co-routine.
     /// Can be interrupted mid-execution and later resumed.
@@ -23,10 +22,8 @@
             }
         }
 
-        public IList<object> Code { get; set; }
-
+        public IList<object> Code { get; }
         public IList<string> Args { get; private set; }
-
         public delegate void ContinuationHandler(Continuation continuation);
         public delegate void ContinuationIpChangedHandler(Continuation continuation, int last, int current);
         public event ContinuationHandler OnScopeChanged;
@@ -47,18 +44,11 @@
             Active = true;
             Running = false;
         }
-        
-        public Continuation(IList<object> code) : this() {
+
+        public Continuation(IList<object> code) 
+            : this() {
             Code = code;
         }
-
-        private Continuation(IList<object> code, IList<string> args)
-            : this(code) {
-            Args = args;
-        }
-
-        public void Delay(int millis)
-            => ResumeAfter(TimeSpan.FromMilliseconds(millis));
 
         /// <summary>
         /// Helper to make a new continuation, which also uses a referenced list for scope
@@ -91,10 +81,6 @@
             str.Append('}');
         }
 
-        public static void Register(IRegistry reg)
-            => reg.Register(new ClassBuilder<Continuation>(reg, ToText)
-            .Class);
-
         // this is human-readable version. for transmission/persistence, use ToPiScript()
         public override string ToString() {
             var str = new StringBuilder();
@@ -123,8 +109,9 @@
         }
 
         public void AddArg(string ident) {
-            if (Args == null)
+            if (Args == null) {
                 Args = new List<string>();
+            }
 
             Args.Add(ident);
         }
@@ -162,16 +149,7 @@
             if (has)
                 return true;
             Ip = 0;
-            Suspend();
             return false;
-        }
-
-
-        public bool IsRunning()
-            => Running && !AtEnd();
-
-        public bool AtEnd() {
-            return Code == null || Ip == Code.Count;
         }
     }
 }

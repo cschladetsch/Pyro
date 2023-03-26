@@ -118,35 +118,6 @@ namespace Pyro.Impl {
             return str.ToString();
         }
 
-        // public static bool IsBasicType(Type t) {
-        //     if (t == typeof(string) || t.IsPrimitive || t.IsEnum || t == typeof(DateTime) || t == typeof(decimal) ||
-        //         t == typeof(Guid))
-        //         return true;
-        //
-        //     if (IsNullable(t, out var nullableValueType) && nullableValueType != null)
-        //         return IsBasicType(nullableValueType);
-        //
-        //     return false;
-        // }
-
-        // /// <summary>
-        // /// Determines whether the specified type is nullable.
-        // /// </summary>
-        // /// <param name="type">The type to check.</param>
-        // /// <param name="valueType">The value type of the corresponding nullable type.</param>
-        // /// <returns>
-        // /// <c>true</c> if the specified type is nullable; otherwise, <c>false</c>.
-        // /// </returns>
-        // public static bool IsNullable(Type type, out Type? valueType) {
-        //     if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
-        //         valueType = type.GetGenericArguments()[0];
-        //         return true;
-        //     }
-        //
-        //     valueType = null;
-        //     return false;
-        // }
-
         public object Duplicate(object obj) {
             var type = obj.GetType();
             if (type == typeof(string)) {

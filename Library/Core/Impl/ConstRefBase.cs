@@ -8,7 +8,6 @@ namespace Pyro.Impl {
     /// </summary>
     internal class ConstRefBase
         : IConstRefBase {
-        public static ConstRefBase None = new ConstRefBase(null, null, Id.None);
         public Id Id => _id;
         public IRegistry Registry { get; internal set; }
         public Type ValueType => BaseValue?.GetType();

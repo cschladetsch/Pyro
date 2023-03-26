@@ -1,8 +1,8 @@
-namespace Pyro.Exec {
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
+namespace Pyro.Exec {
     /// <summary>
     /// Processes a sequence of Continuations.
     /// </summary>
@@ -39,9 +39,7 @@ namespace Pyro.Exec {
 
         private void SetCurrent(Continuation continuation) {
             Current?.FireOnLeave();
-            
             FireContinuationChanged(Current, continuation);
-
             Current = continuation;
         }
 
@@ -99,8 +97,9 @@ namespace Pyro.Exec {
         }
 
         private void HandleException(Exception e) {
-            if (!string.IsNullOrEmpty(SourceFilename))
+            if (!string.IsNullOrEmpty(SourceFilename)) {
                 WriteLine($"While executing {SourceFilename}:");
+            }
 
             if (Verbosity > 5) {
                 WriteLine(DebugWrite());
@@ -138,22 +137,6 @@ namespace Pyro.Exec {
             if (Current == null) {
                 throw new Exception("No current continuation");
             }
-        }
-
-        private bool Throw(Exception e) {
-            if (!string.IsNullOrEmpty(SourceFilename))
-                WriteLine($"While executing {SourceFilename}:");
-
-            if (Verbosity > 5) {
-                WriteLine(DebugWrite());
-                WriteLine($"Exception: {e}");
-            }
-
-            if (Rethrows) {
-                throw e;
-            }
-            
-            return false;
         }
 
         public void Prev() {
@@ -236,19 +219,19 @@ namespace Pyro.Exec {
             obj = null;
             var ident = label.Text;
 
-            var current = Context();
-            if (current.Scope.TryGetValue(ident, out obj))
+            var current = Current;
+            if (current.Scope.TryGetValue(ident, out obj)) {
                 return true;
+            }
 
-            foreach (var cont in ContextStack)
-                if (cont.Scope.TryGetValue(ident, out obj))
+            foreach (var cont in ContextStack) {
+                if (cont.Scope.TryGetValue(ident, out obj)) {
                     return true;
+                }
+            }
 
             return Scope.TryGetValue(ident, out obj);
         }
-
-        private Continuation Context()
-            => Current;
 
         /// <summary>
         /// Perform a continuation, then return to current context
@@ -263,7 +246,7 @@ namespace Pyro.Exec {
         /// </summary>
         private new void Resume() {
             if (!ResolvePop(out var next)) {
-                throw new DataStackEmptyException("Cannot resume");
+                throw new DataStackEmptyException("Cannot resume: empty data stack");
             }
 
             switch (next) {
@@ -306,41 +289,49 @@ namespace Pyro.Exec {
 
             var obj = Pop();
             var args = new object[numArgs];
-            for (var n = 0; n < numArgs; ++n)
+            for (var n = 0; n < numArgs; ++n) {
                 args[numArgs - n - 1] = Pop();
+            }
+
             var ret = mi.Invoke(obj, args);
-            if (mi.ReturnType != typeof(void))
+            if (mi.ReturnType != typeof(void)) {
                 Push(ret);
+            }
         }
 
         public void Push(object obj) {
-            if (obj == null)
+            if (obj == null) {
                 throw new NullValueException();
+            }
 
             DataStackPush(obj);
         }
 
         public T Pop<T>() {
-            if (DataStack.Count == 0)
+            if (DataStack.Count == 0) {
                 throw new DataStackEmptyException();
+            }
 
             var top = Pop();
-
-            if (top == null)
+            if (top == null) {
                 throw new NullValueException();
+            }
 
-            if (top is T val)
+            if (top is T val) {
                 return val;
+            }
 
-            if (!(top is IRef<T> data))
+            if (!(top is IRef<T> data)) {
                 throw new TypeMismatchError(typeof(T), top.GetType());
+            }
 
             return data.Value;
         }
 
         public dynamic Pop() {
-            if (DataStack.Count == 0)
+            if (DataStack.Count == 0) {
                 throw new DataStackEmptyException();
+            }
 
             var pop = DataStackPop();
             return !(pop is IRefBase data) ? pop : data.BaseValue;
@@ -392,16 +383,19 @@ namespace Pyro.Exec {
         }
 
         private T ResolvePop<T>() {
-            if (ResolvePop<T>(out var val))
+            if (ResolvePop<T>(out var val)) {
                 return val;
+            }
+
             throw new DataStackEmptyException();
         }
 
         private bool ResolvePop<T>(out T val) {
             val = default;
             var pop = (object)Pop();
-            if (!TryResolve(pop, out var found))
+            if (!TryResolve(pop, out var found)) {
                 return false;
+            }
 
             val = (T)found;
             return true;
@@ -414,4 +408,3 @@ namespace Pyro.Exec {
             => throw new DebugBreakException();
     }
 }
-

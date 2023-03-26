@@ -1,9 +1,0 @@
-﻿// executed before all other tests
-
-// set precision of floating-point fractional comparisons
-4 set_float_precision
-
-// helper to ease readability
-{ == assert } 'eq #
-
-//"Setup common" writeln

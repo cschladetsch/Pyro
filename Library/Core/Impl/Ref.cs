@@ -25,9 +25,5 @@ namespace Pyro.Impl {
         public Ref(IRegistry reg, IClassBase class1, Id id, T value)
             : base(reg, class1, id, value) {
         }
-
-        public void Set(object value) {
-            throw new NotImplementedException();
-        }
     }
 }

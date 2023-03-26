@@ -29,7 +29,6 @@
             TestScript("Floats.pi");
             TestScript("Continuations.pi");
             TestScript("Variables.pi");
-            TestScript("Common.pi");
             TestScript("Arithmetic.pi");
             TestScript("Array.pi");
             TestScript("Boolean.pi");

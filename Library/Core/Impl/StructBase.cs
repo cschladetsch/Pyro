@@ -75,9 +75,5 @@ namespace Pyro.Impl {
         public void InvokeEvent(string name, List<object> args) {
             throw new NotImplementedException();
         }
-
-        public void SetValue(IRefBase objectBase, object value) {
-            throw new System.NotImplementedException();
-        }
     }
 }

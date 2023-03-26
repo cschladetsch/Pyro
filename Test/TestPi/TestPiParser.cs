@@ -19,11 +19,6 @@
         }
 
         [Test]
-        public void TestFloatPrecision() {
-            PiRun("4 set_float_precision { == assert } 'eq #");
-        }
-
-        [Test]
         public void TestSimpleTokens() {
             var lexer = new PiLexer("1 2 3");
             Assert.IsTrue(lexer.Process());

@@ -7,7 +7,7 @@ using Pyro.Language.Tau.Lexer;
 namespace TestTau {
     public class TestTauCommon {
         protected string LoadTauScript(string fileName) {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected void AssertSameTokens(string input, params ETauToken[] tokens) {
@@ -17,7 +17,7 @@ namespace TestTau {
         }
 
         private static void AssertSameTokens(IEnumerable<TauToken> input, params ETauToken[] tokens) {
-            var stripped = input.Cast<TauToken>().Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
+            var stripped = input.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
             var expected = stripped.ToList();
             foreach (var token in stripped) {
                 Console.Write($"{token}, ");

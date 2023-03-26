@@ -6,8 +6,8 @@
 
         public new object BaseValue
         {
-            get => base._baseValue;
-            set => base._baseValue = value;
+            get => _baseValue;
+            set => _baseValue = value;
         }
 
         internal RefBase(IRegistry reg, IClassBase @class, Id id)

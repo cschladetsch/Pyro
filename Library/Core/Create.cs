@@ -1,7 +1,8 @@
 ﻿using Pyro.Impl;
 
+using System;
+
 namespace Pyro {
-    using System;
 
     /// <summary>
     /// Top-level factory for Core
