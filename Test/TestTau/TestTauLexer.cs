@@ -1,9 +1,8 @@
 using NUnit.Framework;
 using Pyro.Language.Tau.Lexer;
+
 namespace TestTau {
-
-
-    public class Tests
+    public class TestTauLexer
         : TestTauCommon {
         [SetUp]
         public void Setup() {
@@ -11,7 +10,7 @@ namespace TestTau {
 
         [Test]
         public void Test1() {
-            var input =
+            const string input = 
 @"namespace Foo {
     interface Bar {
         event Func<int, string> SomeEvent;
