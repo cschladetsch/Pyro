@@ -196,7 +196,7 @@ namespace Pyro.Language.Tau.Parser {
                 property.Add(ETauToken.Setter);
             }
 
-            if (!Maybe(ETauToken.CloseBrace)) {
+            if (!MaybeConsume(ETauToken.CloseBrace)) {
                 return FailLocation("Expected '}' after property");
             }
 

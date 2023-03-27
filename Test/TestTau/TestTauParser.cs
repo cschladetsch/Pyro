@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Pyro.Impl;
 using Pyro.Language.Tau.Lexer;
 using Pyro.Language.Tau.Parser;
