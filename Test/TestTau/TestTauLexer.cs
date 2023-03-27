@@ -21,13 +21,13 @@ namespace TestTau {
     }
 }";
             AssertSameTokens(input, 
-                ETauToken.Namespace, ETauToken.Ident, ETauToken.OpenBrace, 
-                    ETauToken.Interface, ETauToken.Ident, ETauToken.OpenBrace,
-                        ETauToken.Event, ETauToken.Func, ETauToken.LessThan, ETauToken.Int, ETauToken.Comma, ETauToken.String, ETauToken.GreaterThan, ETauToken.Ident, ETauToken.Semi,
-                        ETauToken.String, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.CloseBrace,
-                        ETauToken.Float, ETauToken.Ident, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.Setter, ETauToken.Semi, ETauToken.CloseBrace,
-                        ETauToken.Int, ETauToken.Ident, ETauToken.OpenParan, ETauToken.Int, ETauToken.Ident, ETauToken.Comma, ETauToken.Int, ETauToken.Ident, ETauToken.CloseParan, ETauToken.Semi, 
-                        ETauToken.Void, ETauToken.Ident, ETauToken.OpenParan, ETauToken.CloseParan, ETauToken.Semi, 
+                ETauToken.Namespace, ETauToken.Identifier, ETauToken.OpenBrace, 
+                    ETauToken.Interface, ETauToken.Identifier, ETauToken.OpenBrace,
+                        ETauToken.Event, ETauToken.Func, ETauToken.LessThan, ETauToken.Int, ETauToken.Comma, ETauToken.String, ETauToken.GreaterThan, ETauToken.Identifier, ETauToken.Semi,
+                        ETauToken.String, ETauToken.Identifier, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.CloseBrace,
+                        ETauToken.Float, ETauToken.Identifier, ETauToken.OpenBrace, ETauToken.Getter, ETauToken.Semi, ETauToken.Setter, ETauToken.Semi, ETauToken.CloseBrace,
+                        ETauToken.Int, ETauToken.Identifier, ETauToken.OpenParan, ETauToken.Int, ETauToken.Identifier, ETauToken.Comma, ETauToken.Int, ETauToken.Identifier, ETauToken.CloseParan, ETauToken.Semi, 
+                        ETauToken.Void, ETauToken.Identifier, ETauToken.OpenParan, ETauToken.CloseParan, ETauToken.Semi, 
                     ETauToken.CloseBrace,
                 ETauToken.CloseBrace,
                 ETauToken.Nop

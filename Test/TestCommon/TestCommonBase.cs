@@ -27,8 +27,11 @@ namespace Pyro.Test {
         private static string MakeLocalPath(string relative)
             => Path.Combine(GetFolderRoot(), relative);
 
-        private static string GetFolderRoot()
-            => TestContext.CurrentContext.TestDirectory.Replace(@"\bin\Debug", "");
+        private static string GetFolderRoot() {
+            var testDirectory = TestContext.CurrentContext.TestDirectory;
+            return testDirectory.Replace(@"\bin\Debug", "").Replace(@"netcoreapp3.0", "");
+        }
+
         protected string GetFullScriptPathname(string scriptName)
             => Path.Combine(GetScriptsPath(), scriptName);
 

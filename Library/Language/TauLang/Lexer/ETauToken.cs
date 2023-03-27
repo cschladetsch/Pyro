@@ -8,7 +8,6 @@
         CloseBrace,
         Interface,
         
-        Ident,
         OpenParan,
         CloseParan,
 

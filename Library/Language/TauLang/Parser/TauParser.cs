@@ -61,8 +61,18 @@ namespace Pyro.Language.Tau.Parser {
             return true;
         }
 
+        // TODO: push into ParserCommon
+        private bool MaybeConsume(ETauToken type) {
+            if (!Maybe(type)) {
+                return false;
+            }
+
+            Consume();
+            return true;
+        }
+
         private bool Namespace() {
-            if (!Maybe(ETauToken.Namespace))
+            if (!MaybeConsume(ETauToken.Namespace))
                 return false;
 
             var name = Expect(ETauToken.Identifier);
@@ -73,7 +83,7 @@ namespace Pyro.Language.Tau.Parser {
             var ns = _AstFactory.New(ETauAst.Namespace, name.TauToken);
             _Stack.Push(ns);
 
-            if (!Maybe(ETauToken.OpenBrace)) {
+            if (!MaybeConsume(ETauToken.OpenBrace)) {
                 return FailLocation("Expected '{' after namespace name");
             }
 
@@ -98,9 +108,9 @@ namespace Pyro.Language.Tau.Parser {
 
             Consume();
 
-            Result.Add(_AstFactory.New(ETauAst.Interface, Expect(ETauToken.Identifier).TauToken));
+            _Stack.Push(_AstFactory.New(ETauAst.Interface, Expect(ETauToken.Identifier).TauToken));
 
-            if (!Maybe(ETauToken.OpenBrace)) {
+            if (!MaybeConsume(ETauToken.OpenBrace)) {
                 return FailLocation("Expected '{' after interface name");
             }
 
@@ -111,6 +121,7 @@ namespace Pyro.Language.Tau.Parser {
                     case ETauToken.Int:
                     case ETauToken.Float:
                     case ETauToken.Identifier:
+                        Consume();
                         if (!PropertyOrMethod(next)) {
                             return Fail("Property or method expected");
                         }
@@ -118,20 +129,18 @@ namespace Pyro.Language.Tau.Parser {
                     case ETauToken.CloseBrace:
                         return true;
                     default:
-                        return FailLocation(@"Unexpected token {next} in interface");
+                        return FailLocation($@"Unexpected token {next.Type} in interface");
                 }
             }
         }
 
         private bool PropertyOrMethod(TauToken type ) {
             var name = Expect(ETauToken.Identifier);
-            if (Maybe(ETauToken.OpenBrace)) {
-                Consume();
+            if (MaybeConsume(ETauToken.OpenBrace)) {
                 return Property(type, name);
             }
 
-            if (Maybe(ETauToken.OpenParan)) {
-                Consume();
+            if (MaybeConsume(ETauToken.OpenParan)) {
                 return ParseMethod(type, name);
             }
 
@@ -145,19 +154,20 @@ namespace Pyro.Language.Tau.Parser {
             _AstFactory.AddChild(method, returnType);
             _AstFactory.AddChild(method, parameters);
 
-            while (!Failed && !Maybe(ETauToken.CloseParan)) {
-                if (Maybe(ETauToken.CloseParan)) {
+            while (!Failed) {
+                if (MaybeConsume(ETauToken.CloseParan)) {
                     break;
                 }
 
-                var type = Consume();
+                var type = Expect(ETauToken.Identifier);
                 var argName = Expect(ETauToken.Identifier);
 
-                parameters.Add(_AstFactory.New(ETauAst.Ident, type));
+                parameters.Add(type);
                 parameters.Add(argName);
 
-                if (!Maybe(ETauToken.Comma)) {
-                    return Maybe(ETauToken.CloseParan);
+                if (!MaybeConsume(ETauToken.Comma)) {
+                    Expect(ETauToken.CloseParan);
+                    break;
                 }
             }
 
@@ -170,7 +180,7 @@ namespace Pyro.Language.Tau.Parser {
             property.Add(name);
             if (Maybe(ETauToken.Getter)) {
                 Consume();
-                if (!Maybe(ETauToken.Semi)) {
+                if (!MaybeConsume(ETauToken.Semi)) {
                     return FailLocation("Expected ';' after getter");
                 }
 
@@ -179,7 +189,7 @@ namespace Pyro.Language.Tau.Parser {
 
             if (Maybe(ETauToken.Setter)) {
                 Consume();
-                if (!Maybe(ETauToken.Semi)) {
+                if (!MaybeConsume(ETauToken.Semi)) {
                     return FailLocation("Expected ';' after setter");
                 }
 

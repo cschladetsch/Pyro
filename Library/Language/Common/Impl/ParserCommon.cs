@@ -169,7 +169,7 @@ namespace Pyro.Language.Impl {
             => Enumerable.Contains(types, Current().Type);
 
         protected bool Maybe(ETokenEnum type)
-            => !Empty() && Current().Type.Equals(type);
+            => !Failed && !Empty() && Current().Type.Equals(type);
 
         protected bool FailLocation(string text)
             => Fail(!HasTokens() ? text : _Lexer.CreateErrorMessage(Current(), text));
