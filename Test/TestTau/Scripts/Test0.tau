@@ -1,4 +1,6 @@
-﻿interface Foo {
-    string Name { get; set; }
-    int Sum(int a, int b);
+﻿namespace MyNamespace {
+    interface Foo {
+        string Name { get; set; }
+        int Sum(int a, int b);
+    }
 }

@@ -1,19 +1,19 @@
-﻿namespace Pyro.Language.Impl {
-    using System;
-    using System.Linq;
-    using System.Text;
-    using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Collections.Generic;
 
+namespace Pyro.Language.Impl {
     /// <inheritdoc />
     /// <summary>
     /// Common for all Parsers.
     /// Iterate over a stream of tokens to produce an abstract syntax tree
     /// </summary>
-    public class ParserCommon<TLexer, TAstNode, TTokenNode, ETokenEnum, EAstEnum, AstFactory>
+    public class ParserCommon<TLexer, TAstNode, TTokenNode, ETokenEnum, EAstEnum, TAstFactory>
         : ProcessCommon
             where TLexer
                 : ILexerCommon<TTokenNode>
-            where AstFactory
+            where TAstFactory
                 : class, IAstFactory<TTokenNode, TAstNode, EAstEnum>, new()
             where TTokenNode
                 : class, ITokenNode<ETokenEnum>
@@ -35,7 +35,7 @@
 
         protected TLexer _Lexer;
 
-        protected AstFactory _AstFactory = new AstFactory();
+        protected TAstFactory _AstFactory = new TAstFactory();
 
         protected ParserCommon(TLexer lexer, IRegistry reg)
             : base(reg) {
@@ -44,8 +44,9 @@
         }
 
         public string PrintTree() {
-            if (_Stack.Count == 0)
+            if (_Stack.Count == 0) {
                 return "[Empty]";
+            }
 
             var str = new StringBuilder();
             PrintTree(str, 0, _Stack.Peek());
@@ -54,11 +55,13 @@
 
         private void PrintTree(StringBuilder str, int level, TAstNode root) {
             var val = root.ToString();
-            if (string.IsNullOrEmpty(val))
+            if (string.IsNullOrEmpty(val)) {
                 return;
+            }
 
-            for (var n = 0; n < level; ++n)
+            for (var n = 0; n < level; ++n) {
                 str.Append("  ");
+            }
 
             str.Append(val);
             str.Append(Environment.NewLine);
@@ -69,34 +72,38 @@
         public override string ToString()
             => PrintTree();
 
-        private bool Has()
+        private bool HasTokens()
             => _Current < _Tokens.Count;
 
         protected TAstNode Pop()
-            => !StackHas() ? null : _Stack.Pop();
+            => !StackNotEmpty() ? null : _Stack.Pop();
 
         protected TAstNode Top()
-            => !StackHas() ? null : _Stack.Peek();
+            => !StackNotEmpty() ? null : _Stack.Peek();
 
-        private bool StackHas()
+        private bool StackNotEmpty()
             => _Stack.Count > 0 || FailLocation("Empty context stack");
 
         protected bool Push(TAstNode node) {
-            if (node == null)
+            if (node == null) {
                 throw new NullValueException();
+            }
 
             _Stack.Push(node);
             return true;
         }
 
         protected bool Append(TAstNode obj) {
-            if (obj == null)
+            if (obj == null) {
                 return FailLocation("Cannot add Null object to internal parse stack");
+            }
 
-            if (Top() == null)
+            if (Top() == null) {
                 Push(obj);
-            else
+            } else {
                 _AstFactory.AddChild(Top(), obj);
+            }
+
             return true;
         }
 
@@ -112,24 +119,27 @@
         }
 
         private TTokenNode Next() {
-            if (_Current != _Tokens.Count)
+            if (_Current != _Tokens.Count) {
                 return _Tokens[++_Current];
+            }
 
             FailLocation("Expected more");
             throw new Exception("Expected more");
         }
 
         protected TTokenNode Current() {
-            if (Has())
+            if (HasTokens()) {
                 return _Tokens[_Current];
+            }
 
-            Fail("Expected something more");
-            throw new Exception("Expected something");
+            FailLocation("Expected something more");
+            throw new Exception(_Lexer.CreateErrorMessage(Current(), @"Unexpected end of text"));
         }
 
         protected TTokenNode Consume() {
-            if (_Current != _Tokens.Count)
+            if (_Current != _Tokens.Count) {
                 return _Tokens[_Current++];
+            }
 
             FailLocation("Expected something more");
             throw new NotImplementedException("Expected something");
@@ -137,10 +147,11 @@
 
         protected TAstNode Expect(ETokenEnum type) {
             var tok = Current();
-            if (!type.Equals(tok.Type))
+            if (!type.Equals(tok.Type)) {
                 FailLocation($"Expected {type}, have {tok}");
-            else
+            } else {
                 Next();
+            }
 
             return _AstFactory.New(Last());
         }
@@ -157,11 +168,11 @@
         protected bool Try(IList<ETokenEnum> types)
             => Enumerable.Contains(types, Current().Type);
 
-        protected bool Try(ETokenEnum type)
+        protected bool Maybe(ETokenEnum type)
             => !Empty() && Current().Type.Equals(type);
 
         protected bool FailLocation(string text)
-            => Fail(!Has() ? text : _Lexer.CreateErrorMessage(Current(), text));
+            => Fail(!HasTokens() ? text : _Lexer.CreateErrorMessage(Current(), text));
 
         protected TAstNode NewNode(EAstEnum a)
             => _AstFactory.New(a);
@@ -170,4 +181,3 @@
             => _AstFactory.New(t);
     }
 }
-

@@ -13,9 +13,9 @@
     public class RhoAstFactory
         : IAstFactory<RhoToken, RhoAstNode, ERhoAst> {
         public void AddChild(RhoAstNode parent, RhoAstNode node) => parent.Children.Add(node);
-        public RhoAstNode New(RhoToken t) => new RhoAstNode(ERhoAst.TokenType, t);
-        public RhoAstNode New(ERhoAst e, RhoToken t) => new RhoAstNode(e, t);
-        public RhoAstNode New(ERhoAst t) => new RhoAstNode(t);
+        public RhoAstNode New(RhoToken tokenNode) => new RhoAstNode(ERhoAst.TokenType, tokenNode);
+        public RhoAstNode New(ERhoAst astEnum, RhoToken tokenNode) => new RhoAstNode(astEnum, tokenNode);
+        public RhoAstNode New(ERhoAst astEnum) => new RhoAstNode(astEnum);
         public IList<RhoAstNode> GetChildren(RhoAstNode node) => node.Children;
     }
 }

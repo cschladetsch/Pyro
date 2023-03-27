@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -23,22 +22,26 @@ namespace Pyro.Exec {
         }
 
         public IList<object> Code { get; }
-        public IList<string> Args { get; private set; }
+
         public delegate void ContinuationHandler(Continuation continuation);
+
         public delegate void ContinuationIpChangedHandler(Continuation continuation, int last, int current);
+
         public event ContinuationHandler OnScopeChanged;
+
         public event ContinuationHandler OnLeave;
+
         public event ContinuationIpChangedHandler OnIpChanged;
 
-        private int _ip = 0;
+        private IList<string> Args { get; set; }
+
+        private int _ip;
 
         internal void FireOnLeave() {
             OnLeave?.Invoke(this);
         }
 
         private IDictionary<string, object> _scope => Scope;
-
-        private IEnumerator _enumerator;
 
         public Continuation() {
             Active = true;
@@ -146,11 +149,12 @@ namespace Pyro.Exec {
         public bool Next(out object next) {
             var has = Ip < Code.Count;
             next = has ? Code[Ip++] : null;
-            if (has)
+            if (has) {
                 return true;
+            }
+
             Ip = 0;
             return false;
         }
     }
 }
-

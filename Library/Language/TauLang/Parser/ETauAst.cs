@@ -10,6 +10,6 @@
         Setter,
         Method,
         TokenType,
-        Ident,
+        Ident, ParameterList
     }
 }

@@ -1,8 +1,9 @@
-﻿namespace Pyro {
-    using Impl;
-    using System;
-    using System.Text;
+﻿using System;
+using System.Text;
 
+using Pyro.Impl;
+
+namespace Pyro {
     /// <summary>
     /// Make a new class that can added to a Registry.
     ///

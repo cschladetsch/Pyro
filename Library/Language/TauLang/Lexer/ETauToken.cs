@@ -35,6 +35,7 @@
         NewLine,
         Comment,
         WhiteSpace,
-        Tab,
+        Tab, 
+        Identifier,
     }
 }

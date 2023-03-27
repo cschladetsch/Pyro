@@ -1,16 +1,18 @@
-﻿using Pyro.Impl;
+﻿using System;
 
-using System;
+using Pyro.Impl;
 
 namespace Pyro {
-
     /// <summary>
     /// Top-level factory for Core
     /// </summary>
     public static class Create {
         public static IFactory Factory = new Factory();
+
         public static IRegistry Registry() => Factory.NewRegistry();
+
         public static ITree Tree() => Factory.NewTree();
+
         public static IPathname Pathname(string path) => new Pathname(path);
 
         public static ICallable Function(Action act)

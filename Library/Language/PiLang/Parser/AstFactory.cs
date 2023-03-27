@@ -10,9 +10,9 @@
         : IAstFactory<PiToken, PiAstNode, EPiAst> {
         public void AddChild(PiAstNode parent, PiAstNode node) => parent.Children.Add(node);
         public IList<PiAstNode> GetChildren(PiAstNode node) => node.Children;
-        public PiAstNode New(PiToken piToken) => new PiAstNode(EPiAst.TokenType, piToken);
-        public PiAstNode New(EPiAst ePi, PiToken t) => new PiAstNode(ePi, t);
-        public PiAstNode New(EPiAst t) => new PiAstNode(t);
+        public PiAstNode New(PiToken tokenNode) => new PiAstNode(EPiAst.TokenType, tokenNode);
+        public PiAstNode New(EPiAst astEnum, PiToken tokenNode) => new PiAstNode(astEnum, tokenNode);
+        public PiAstNode New(EPiAst astEnum) => new PiAstNode(astEnum);
     }
 }
 

@@ -45,7 +45,7 @@
             if (!Expression())
                 return FailLocation("Statement or expression expected.");
 
-            return Append(Pop()) && !Try(ERhoToken.Nop);
+            return Append(Pop()) && !Maybe(ERhoToken.Nop);
         }
 
         private bool NamedBlock()
@@ -56,7 +56,7 @@
 
             Expect(ERhoToken.OpenParan);
             var args = NewNode(ERhoAst.ArgList);
-            if (Try(ERhoToken.Ident)) {
+            if (Maybe(ERhoToken.Ident)) {
                 args.Add(Consume());
 
                 while (TryConsume(ERhoToken.Comma))

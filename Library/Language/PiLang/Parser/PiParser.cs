@@ -157,7 +157,7 @@ done:
         private bool ParseCompound(PiAstNode root, EPiAst type, EPiToken end) {
             Consume();
             var node = NewNode(type);
-            while (!Empty() && !Try(end)) {
+            while (!Empty() && !Maybe(end)) {
                 if (!NextSingle(node))
                     return FailLocation($"Malformed compound {type}");
 

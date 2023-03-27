@@ -53,14 +53,14 @@
 
             ConsumeNewLines();
 
-            if (!Try(ERhoToken.Nop))
+            if (!Maybe(ERhoToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
             return _Stack.Count == 1 || InternalFail("Semantic stack not empty after parsing");
         }
 
         private bool Program() {
-            while (!Failed && !Try(ERhoToken.Nop))
+            while (!Failed && !Maybe(ERhoToken.Nop))
                 if (!Statement()) {
                     var c = Current();
                     return c.Type == ERhoToken.Nop;
@@ -81,7 +81,7 @@
 
             Push(NewNode(ERhoAst.Block));
             while (!Failed) {
-                if (Try(ERhoToken.Pass))
+                if (Maybe(ERhoToken.Pass))
                     return true;
 
                 if (!Statement())
@@ -108,7 +108,7 @@
 
         private bool TryConsume(ERhoToken token) {
             ConsumeNewLines();
-            if (!Try(token))
+            if (!Maybe(token))
                 return false;
 
             Consume();
@@ -137,7 +137,7 @@
         }
 
         private void ConsumeNewLines() {
-            while (Try(ERhoToken.NewLine))
+            while (Maybe(ERhoToken.NewLine))
                 Consume();
         }
     }

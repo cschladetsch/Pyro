@@ -13,11 +13,11 @@
             if (!Logical())
                 return false;
 
-            if (Try(ERhoToken.Assign)
-                || Try(ERhoToken.PlusAssign)
-                || Try(ERhoToken.MinusAssign)
-                || Try(ERhoToken.MulAssign)
-                || Try(ERhoToken.DivAssign)
+            if (Maybe(ERhoToken.Assign)
+                || Maybe(ERhoToken.PlusAssign)
+                || Maybe(ERhoToken.MinusAssign)
+                || Maybe(ERhoToken.MulAssign)
+                || Maybe(ERhoToken.DivAssign)
                ) {
                 var assign = NewNode(Consume());
                 var ident = Pop();
@@ -36,7 +36,7 @@
             if (!Relational())
                 return false;
 
-            while (Try(ERhoToken.And) || Try(ERhoToken.Or) || Try(ERhoToken.Xor)) {
+            while (Maybe(ERhoToken.And) || Maybe(ERhoToken.Or) || Maybe(ERhoToken.Xor)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Relational())
@@ -53,12 +53,12 @@
             if (!Additive())
                 return false;
 
-            while (Try(ERhoToken.Less)
-                   || Try(ERhoToken.Greater)
-                   || Try(ERhoToken.Equiv)
-                   || Try(ERhoToken.NotEquiv)
-                   || Try(ERhoToken.LessEquiv)
-                   || Try(ERhoToken.GreaterEquiv)
+            while (Maybe(ERhoToken.Less)
+                   || Maybe(ERhoToken.Greater)
+                   || Maybe(ERhoToken.Equiv)
+                   || Maybe(ERhoToken.NotEquiv)
+                   || Maybe(ERhoToken.LessEquiv)
+                   || Maybe(ERhoToken.GreaterEquiv)
                 ) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
@@ -74,7 +74,7 @@
 
         private bool Additive() {
             // unary +/- operator
-            if (Try(ERhoToken.Plus) || Try(ERhoToken.Minus)) {
+            if (Maybe(ERhoToken.Plus) || Maybe(ERhoToken.Minus)) {
                 var signed = NewNode(Consume());
                 if (!Term())
                     return FailLocation("Term expected");
@@ -83,7 +83,7 @@
                 return Push(signed);
             }
 
-            if (Try(ERhoToken.Not)) {
+            if (Maybe(ERhoToken.Not)) {
                 var negate = NewNode(Consume());
                 if (!Additive())
                     return FailLocation("Additive sub-component expected");
@@ -95,7 +95,7 @@
             if (!Term())
                 return false;
 
-            while (Try(ERhoToken.Plus) || Try(ERhoToken.Minus)) {
+            while (Maybe(ERhoToken.Plus) || Maybe(ERhoToken.Minus)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Term())
@@ -112,7 +112,7 @@
             if (!Factor())
                 return false;
 
-            while (Try(ERhoToken.Multiply) || Try(ERhoToken.Divide)) {
+            while (Maybe(ERhoToken.Multiply) || Maybe(ERhoToken.Divide)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
                 if (!Factor())
@@ -126,29 +126,29 @@
         }
 
         private bool Factor() {
-            if (Try(ERhoToken.New))
+            if (Maybe(ERhoToken.New))
                 return New();
 
-            if (Try(ERhoToken.OpenParan))
+            if (Maybe(ERhoToken.OpenParan))
                 return Paran();
 
-            if (Try(ERhoToken.PiSlice))
+            if (Maybe(ERhoToken.PiSlice))
                 return Pi();
 
             if (TryConsume(ERhoToken.OpenBrace))
                 return AddList();
 
-            if (Try(ERhoToken.Self))
+            if (Maybe(ERhoToken.Self))
                 return FactorIdent();
 
-            if (Try(ERhoToken.Ident) || Try(ERhoToken.Pathname))
+            if (Maybe(ERhoToken.Ident) || Maybe(ERhoToken.Pathname))
                 return FactorIdent();
 
-            if (Try(ERhoToken.Int)
-                || Try(ERhoToken.Float)
-                || Try(ERhoToken.String)
-                || Try(ERhoToken.True)
-                || Try(ERhoToken.False)
+            if (Maybe(ERhoToken.Int)
+                || Maybe(ERhoToken.Float)
+                || Maybe(ERhoToken.String)
+                || Maybe(ERhoToken.True)
+                || Maybe(ERhoToken.False)
                 ) {
                 return PushConsumed();
             }
@@ -225,13 +225,13 @@
             PushConsume();
 
             while (!Failed) {
-                if (Try(ERhoToken.Dot)) {
+                if (Maybe(ERhoToken.Dot)) {
                     if (!GetMember())
                         return false;
-                } else if (Try(ERhoToken.OpenParan)) {
+                } else if (Maybe(ERhoToken.OpenParan)) {
                     if (!Call())
                         return false;
-                } else if (Try(ERhoToken.OpenSquareBracket)) {
+                } else if (Maybe(ERhoToken.OpenSquareBracket)) {
                     if (!IndexOp())
                         return false;
                 } else {
@@ -267,7 +267,7 @@
 
             if (Expression()) {
                 args.Add(Pop());
-                while (Try(ERhoToken.Comma)) {
+                while (Maybe(ERhoToken.Comma)) {
                     Consume();
                     if (!Expression())
                         return FailLocation("Argument expected");

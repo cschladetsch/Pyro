@@ -1,18 +1,27 @@
-﻿namespace Pyro.Language.Tau.Parser {
-    using System.Collections.Generic;
-    using Lexer;
+﻿using System.Collections.Generic;
+
+using Pyro.Language.Tau.Lexer;
+
+namespace Pyro.Language.Tau.Parser {
 
     public class TauAstNode {
         public ETauAst Type = ETauAst.None;
-        public TauToken TauToken;
+
+        public readonly TauToken TauToken;
+
         public TauToken Token => TauToken;
+
         public object Value;
+
         public IList<TauAstNode> Children => _children;
-        public string Text => Token?.Text;
+
+        public string Text 
+            => Token?.Text;
 
         private readonly List<TauAstNode> _children = new List<TauAstNode>();
 
-        public TauAstNode(ETauAst type) => Type = type;
+        public TauAstNode(ETauAst type)
+            => Type = type;
 
         public TauAstNode(ETauToken type) {
             Type = ETauAst.TokenType;
@@ -41,10 +50,16 @@
             return $"{type}{val} {text}";
         }
 
-        public void Add(TauAstNode node) => _children.Add(node);
-        public void Add(TauToken token) => _children.Add(new TauAstNode(ETauAst.TokenType, token));
-        public void Add(ETauToken piToken) => _children.Add(new TauAstNode(piToken));
-        public TauAstNode GetChild(int n) => Children[n];
+        public void Add(TauAstNode node)
+            => _children.Add(node);
 
+        public void Add(TauToken token)
+            => _children.Add(new TauAstNode(ETauAst.TokenType, token));
+
+        public void Add(ETauToken piToken)
+            => _children.Add(new TauAstNode(piToken));
+
+        public TauAstNode GetChild(int n)
+            => Children[n];
     }
 }
