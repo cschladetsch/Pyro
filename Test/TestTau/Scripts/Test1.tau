@@ -1,0 +1,10 @@
+﻿namespace MyNamespace {
+    interface Foo {
+        string Name { get; set; }
+        string Name2 { set; }
+        string Name3 { get; }
+        
+        void Act();
+        string Add(string a, string b);
+    }
+}

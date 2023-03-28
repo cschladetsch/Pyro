@@ -10,8 +10,17 @@ namespace TestTau {
     public class TestTauParser
         : TestCommon {
         [Test]
+        public void TestParser0() {
+            TestTauScript("Test0.tau");
+        }
+
+        [Test]
         public void TestParser1() {
-            var lexer = new TauLexer(LoadTauScript("Test0.tau"));
+            TestTauScript("Test1.tau");
+        }
+
+        public void TestTauScript(string fileName) {
+            var lexer = new TauLexer(LoadTauScript(fileName));
 
             lexer.Process();
             if (lexer.Failed) {

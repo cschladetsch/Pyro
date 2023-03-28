@@ -120,6 +120,7 @@ namespace Pyro.Language.Tau.Parser {
                     case ETauToken.String:
                     case ETauToken.Int:
                     case ETauToken.Float:
+                    case ETauToken.Void:
                     case ETauToken.Identifier:
                         Consume();
                         if (!PropertyOrMethod(next)) {
