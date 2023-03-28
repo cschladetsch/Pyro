@@ -3,6 +3,8 @@
 namespace MyNamespace.Agent {
     interface IFooAgent
         : IAgentBase<IFooAgent> {
+        string Name { get return GetName(); set return SetName(value); }
+        
         string GetName();
         bool SetName(string name);
         int Sum(int a, int b);
