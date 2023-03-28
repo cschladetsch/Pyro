@@ -145,10 +145,20 @@ namespace Pyro.Language.Impl {
             throw new NotImplementedException("Expected something");
         }
 
+        protected bool Require(ETokenEnum type) {
+            var token = Current();
+            if (!type.Equals(token.Type)) {
+                return FailLocation($"Expected {type}, have {token}");
+            }
+
+            ++_Current;
+            return true;
+        }
+
         protected TAstNode Expect(ETokenEnum type) {
-            var tok = Current();
-            if (!type.Equals(tok.Type)) {
-                FailLocation($"Expected {type}, have {tok}");
+            var token = Current();
+            if (!type.Equals(token.Type)) {
+                FailLocation($"Expected {type}, have {token}");
             } else {
                 Next();
             }

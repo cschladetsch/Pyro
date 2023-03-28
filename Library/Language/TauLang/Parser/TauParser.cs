@@ -48,12 +48,13 @@ namespace Pyro.Language.Tau.Parser {
             if (!Maybe(ETauToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _Stack.Count == 1 || InternalFail("Semantic stack not empty after parsing");
+            return _Stack.Count == 1 || InternalFail("Stack not empty after parsing");
         }
 
         private bool Definition() {
             while (!Failed && !Maybe(ETauToken.Nop)) {
-                while (Namespace());
+                while (Namespace()) {
+                }
 
                 return Current().Type == ETauToken.Nop || FailLocation("Extra stuff found");
             }
@@ -80,34 +81,33 @@ namespace Pyro.Language.Tau.Parser {
                 return Fail("Expected namespace name");
             }
 
-            var ns = _AstFactory.New(ETauAst.Namespace, name.TauToken);
-            _Stack.Push(ns);
+            var @namespace = _AstFactory.New(ETauAst.Namespace, name.TauToken);
+            _Stack.Push(@namespace);
 
             if (!MaybeConsume(ETauToken.OpenBrace)) {
                 return FailLocation("Expected '{' after namespace name");
             }
 
-            while (true) {
-                while (Interface()) {
+            while (!Empty()) {
+                while (MaybeConsume(ETauToken.Interface)) {
+                    if (!Interface()) {
+                        return false;
+                    }
                 }
 
                 if (Failed) {
                     return false;
                 }
 
-                if (!Maybe(ETauToken.CloseBrace)) {
-                    return FailLocation("Expected '}' after namespace body");
-                }
+                @namespace.Add(Pop());
+
+                return MaybeConsume(ETauToken.CloseBrace) || FailLocation("Expected '}}' after namespace body");
             }
+
+            return true;
         }
 
         private bool Interface() {
-            if (!Maybe(ETauToken.Interface)) {
-                return FailLocation("Expected interface");
-            }
-
-            Consume();
-
             _Stack.Push(_AstFactory.New(ETauAst.Interface, Expect(ETauToken.Identifier).TauToken));
 
             if (!MaybeConsume(ETauToken.OpenBrace)) {
@@ -127,11 +127,13 @@ namespace Pyro.Language.Tau.Parser {
                         }
                         break;
                     case ETauToken.CloseBrace:
+                        Consume();
                         return true;
                     default:
                         return FailLocation($@"Unexpected token {next.Type} in interface");
                 }
             }
+
         }
 
         private bool PropertyOrMethod(TauToken type ) {
@@ -159,7 +161,7 @@ namespace Pyro.Language.Tau.Parser {
                     break;
                 }
 
-                var type = Expect(ETauToken.Identifier);
+                var type = ExpectTypeName();
                 var argName = Expect(ETauToken.Identifier);
 
                 parameters.Add(type);
@@ -172,7 +174,21 @@ namespace Pyro.Language.Tau.Parser {
             }
 
             Result.Add(method);
-            return true;
+            return Require(ETauToken.Semi);
+        }
+
+        private TauAstNode ExpectTypeName() {
+            var next = Current();
+            switch (next.Type) {
+                case ETauToken.String:
+                case ETauToken.Int:
+                case ETauToken.Float:
+                case ETauToken.Identifier:
+                    return _AstFactory.New(Consume());
+            }
+
+            FailLocation("Expected type name");
+            return null;
         }
 
         private bool Property(TauToken tauToken, TauAstNode name) {

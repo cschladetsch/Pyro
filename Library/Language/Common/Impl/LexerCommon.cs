@@ -23,16 +23,6 @@ namespace Pyro.Language.Impl {
         protected TTokenFactory _Factory = new TTokenFactory();
         public TToken ErrorToken;
 
-        protected LexerCommon(string input)
-            : base(input) {
-        }
-
-        protected override void LexError(string fmt, params object[] args) => Error = string.Format(fmt, args);
-        protected override void AddStringToken(Slice slice) => _Tokens.Add(_Factory.NewTokenString(slice));
-        protected virtual bool NextToken() => false;
-        protected virtual void Terminate() { }
-        protected virtual void AddKeyWords() { }
-
         public TEnum StringToEnum(string str)
             => _keyWords.TryGetValue(str, out var e) ? e : default;
 
@@ -52,6 +42,23 @@ namespace Pyro.Language.Impl {
 
             return str.ToString();
         }
+
+        protected LexerCommon(string input)
+            : base(input) {
+        }
+
+        protected override void LexError(string fmt, params object[] args)
+            => Error = string.Format(fmt, args);
+
+        protected override void AddStringToken(Slice slice)
+            => _Tokens.Add(_Factory.NewTokenString(slice));
+
+        protected virtual bool NextToken()
+            => false;
+
+        protected virtual void Terminate() { }
+
+        protected virtual void AddKeyWords() { }
 
         protected bool Run() {
             _offset = 0;
@@ -147,4 +154,3 @@ namespace Pyro.Language.Impl {
         }
     }
 }
-

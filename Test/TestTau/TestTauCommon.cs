@@ -3,32 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Pyro.Language.Tau.Lexer;
+using Pyro.Test;
 
 namespace TestTau {
-    public class TestTauCommon {
+    public class TestTauCommon
+        : TestCommon {
         protected string LoadTauScript(string fileName) {
-            throw new NotImplementedException();
+            return LoadScript(GetFullScriptPathname(fileName));
         }
 
-        protected void AssertSameTokens(string input, params ETauToken[] tokens) {
-            var toks = new TauLexer(input);
-            toks.Process();
-            AssertSameTokens(toks.Tokens, tokens);
+        protected static void AssertSameTokens(string input, params ETauToken[] tokens) {
+            var tauLexer = new TauLexer(input);
+            tauLexer.Process();
+            AssertSameTokens(tauLexer.Tokens, tokens);
         }
 
         private static void AssertSameTokens(IEnumerable<TauToken> input, params ETauToken[] tokens) {
-            var stripped = input.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
-            var expected = stripped.ToList();
+            var tauTokens = input as TauToken[] ?? input.ToArray();
+            var stripped = tauTokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
+            /*
             foreach (var token in stripped) {
                 Console.Write($"{token}, ");
             }
+
             Console.WriteLine();
             foreach (var token in tokens) {
                 Console.Write($"{token}, ");
             }
+            */
+
             if (tokens.Count() != stripped.Count()) {
-                Assert.Fail($"Different size collections: expected {tokens.Length}, got {input.Count()}");
+                Assert.Fail($"Different size collections: expected {tokens.Length}, got {stripped.Count}");
             }
+
             int i = 0;
             foreach (var next in stripped) {
                 if (tokens[i++] != next) {

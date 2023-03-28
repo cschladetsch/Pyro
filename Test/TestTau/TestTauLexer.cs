@@ -4,10 +4,6 @@ using Pyro.Language.Tau.Lexer;
 namespace TestTau {
     public class TestTauLexer
         : TestTauCommon {
-        [SetUp]
-        public void Setup() {
-        }
-
         [Test]
         public void Test1() {
             const string input = 
