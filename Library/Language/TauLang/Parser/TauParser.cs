@@ -48,7 +48,7 @@ namespace Pyro.Language.Tau.Parser {
             if (!Maybe(ETauToken.Nop))
                 return FailLocation("Unexpected extra stuff found");
 
-            return _Stack.Count == 1 || InternalFail("Stack not empty after parsing");
+            return !Failed && _Stack.Count == 1 || InternalFail("Stack not empty after parsing");
         }
 
         private bool Definition() {

@@ -76,8 +76,9 @@
             // unary +/- operator
             if (Maybe(ERhoToken.Plus) || Maybe(ERhoToken.Minus)) {
                 var signed = NewNode(Consume());
-                if (!Term())
+                if (!Term()) {
                     return FailLocation("Term expected");
+                }
 
                 signed.Add(Pop());
                 return Push(signed);
@@ -85,8 +86,9 @@
 
             if (Maybe(ERhoToken.Not)) {
                 var negate = NewNode(Consume());
-                if (!Additive())
+                if (!Additive()) {
                     return FailLocation("Additive sub-component expected");
+                }
 
                 negate.Add(Pop());
                 return Push(negate);
@@ -98,8 +100,9 @@
             while (Maybe(ERhoToken.Plus) || Maybe(ERhoToken.Minus)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
-                if (!Term())
+                if (!Term()) {
                     return FailLocation("Term expected");
+                }
 
                 node.Add(Pop());
                 Push(node);
@@ -115,8 +118,9 @@
             while (Maybe(ERhoToken.Multiply) || Maybe(ERhoToken.Divide)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
-                if (!Factor())
+                if (!Factor()) {
                     return FailLocation("Term expected a factor");
+                }
 
                 node.Add(Pop());
                 Push(node);
@@ -292,6 +296,7 @@
             Push(index);
 
             Expect(ERhoToken.CloseSquareBracket);
+
             return true;
         }
     }

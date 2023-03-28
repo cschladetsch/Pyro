@@ -1,0 +1,11 @@
+﻿using namespace Flow;
+using namespace Pyro.Network;
+
+namespace MyNamespace.Proxy {
+    class FooProxy 
+        : IProxyBase {
+        IFuture<string> GetName();
+        IFuture<bool> SetName(string name);
+        IFuture<int> Sum(int a, int b);
+    }
+}

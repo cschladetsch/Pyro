@@ -16,7 +16,7 @@ namespace TestTau {
                 return Fail(_parser.Error);
             }
 
-            return true;
+            return !Failed;
         }
     }
 }

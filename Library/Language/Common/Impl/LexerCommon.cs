@@ -32,7 +32,7 @@ namespace Pyro.Language.Impl {
         public bool Process() {
             AddKeyWords();
             CreateLines();
-            return Run();
+            return Run() && !Failed;
         }
 
         public override string ToString() {

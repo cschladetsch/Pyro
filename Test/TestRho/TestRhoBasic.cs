@@ -272,7 +272,7 @@ if true
         public void TestLocalScope() {
             RhoRun(@"
 fun foo(a)
-	b = a + 1
+	'b = a + 1
 	assert(b == 3)
 foo(2)
 assert(!exists('b))

@@ -240,9 +240,6 @@
 
             @for.Add(Pop());
 
-            //Expect(ERhoToken.CloseParan);
-
-            //return Block() || FailLocation("For each in what?");
             return true;
         }
     }
