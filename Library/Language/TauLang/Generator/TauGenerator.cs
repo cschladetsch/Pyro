@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Pyro.Language.Tau.Parser;
+﻿using Pyro.Language.Tau.Parser;
 
 namespace Pyro.Language.Tau {
     public class TauGenerator
@@ -27,17 +26,21 @@ namespace Pyro.Language.Tau {
         }
 
         private bool GenerateAgents() {
-            var agentGenerator = new AgentGenerator(_parser);
-            return !agentGenerator.Process() ? Fail($"Generator Failed: {agentGenerator.Error}") : WriteFile("Agents", agentGenerator.Result);
+            return Generate("Agents", new AgentGenerator(_parser));
+        }
+
+        private bool GenerateProxies() {
+            return Generate("Proxies", new ProxyGenerator(_parser));
+        }
+
+        private bool Generate(string baseFolder, GeneratorBase generator) {
+            return !generator.Run()
+                ? Fail($"Generator Failed: {generator.Error}")
+                : WriteFile(baseFolder, generator.Result);
         }
 
         private bool WriteFile(string baseFolder, string contents) {
             return false;
-        }
-
-        private bool GenerateProxies() {
-            var proxyGenerator = new ProxyGenerator(_parser);
-            return !proxyGenerator.Process() ? Fail($"Generator Failed: {proxyGenerator.Error}") : WriteFile("Agents", proxyGenerator.Result);
         }
     }
 }

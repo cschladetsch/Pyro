@@ -4,8 +4,6 @@ namespace Pyro.Language.Tau {
     public class ProxyGenerator 
         : GeneratorBase {
 
-        public string Result => _stringBuilder.ToString();
-
         public ProxyGenerator(TauParser parser)
             : base(parser) {
         }
