@@ -21,16 +21,6 @@ namespace TestTau {
         private static void AssertSameTokens(IEnumerable<TauToken> input, params ETauToken[] tokens) {
             var tauTokens = input as TauToken[] ?? input.ToArray();
             var stripped = tauTokens.Where(t => !IsWhiteSpace(t)).Select(t => t.Type).ToList();
-            /*
-            foreach (var token in stripped) {
-                Console.Write($"{token}, ");
-            }
-
-            Console.WriteLine();
-            foreach (var token in tokens) {
-                Console.Write($"{token}, ");
-            }
-            */
 
             if (tokens.Count() != stripped.Count()) {
                 Assert.Fail($"Different size collections: expected {tokens.Length}, got {stripped.Count}");

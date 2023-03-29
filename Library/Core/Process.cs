@@ -15,6 +15,10 @@
             Error = "";
         }
 
+        public virtual bool Run() {
+            return Failed;
+        }
+
         /// <summary>
         /// A special kind of failure: this is a failure of the system itself,
         /// rather than a failure to produce results given invalid user input.

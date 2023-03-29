@@ -7,7 +7,7 @@ namespace Pyro.Language.Tau.Parser {
     public class TauParser 
         : ParserCommon<TauLexer, TauAstNode, TauToken, ETauToken, ETauAst, TauAstFactory>
         , IParser {
-        private TauAstNode Result => _Stack.Peek();
+        public TauAstNode Result => _Stack.Peek();
 
         private readonly EStructure _structure;
 
@@ -18,8 +18,9 @@ namespace Pyro.Language.Tau.Parser {
         }
 
         public bool Process() {
-            if (_Lexer.Failed)
+            if (_Lexer.Failed) {
                 return Fail(_Lexer.Error);
+            }
 
             RemoveWhitespace();
 
@@ -42,11 +43,13 @@ namespace Pyro.Language.Tau.Parser {
 
         private bool Parse() {
             var result = Definition();
-            if (Failed || !result)
+            if (Failed || !result) {
                 return false;
+            }
 
-            if (!Maybe(ETauToken.Nop))
+            if (!Maybe(ETauToken.Nop)) {
                 return FailLocation("Unexpected extra stuff found");
+            }
 
             return !Failed && _Stack.Count == 1 || InternalFail("Stack not empty after parsing");
         }
@@ -73,8 +76,9 @@ namespace Pyro.Language.Tau.Parser {
         }
 
         private bool Namespace() {
-            if (!MaybeConsume(ETauToken.Namespace))
+            if (!MaybeConsume(ETauToken.Namespace)) {
                 return false;
+            }
 
             var name = Expect(ETauToken.Identifier);
             if (Failed) {
@@ -195,8 +199,7 @@ namespace Pyro.Language.Tau.Parser {
         private bool Property(TauToken tauToken, TauAstNode name) {
             var property = _AstFactory.New(ETauAst.Property, name.TauToken);
             property.Add(name);
-            if (Maybe(ETauToken.Getter)) {
-                Consume();
+            if (MaybeConsume(ETauToken.Getter)) {
                 if (!MaybeConsume(ETauToken.Semi)) {
                     return FailLocation("Expected ';' after getter");
                 }
@@ -204,8 +207,7 @@ namespace Pyro.Language.Tau.Parser {
                 property.Add(ETauToken.Getter);
             }
 
-            if (Maybe(ETauToken.Setter)) {
-                Consume();
+            if (MaybeConsume(ETauToken.Setter)) {
                 if (!MaybeConsume(ETauToken.Semi)) {
                     return FailLocation("Expected ';' after setter");
                 }
