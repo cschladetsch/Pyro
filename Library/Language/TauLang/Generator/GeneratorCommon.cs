@@ -4,9 +4,8 @@ using Pyro.Language.Tau.Parser;
 namespace Pyro.Language.Tau {
     public class GeneratorCommon
         : GeneratorBase
-        , IGeneratorCommon {
-
-        protected readonly string _prelude = @"
+            , IGeneratorCommon {
+        private const string _Prelude = @"
 using System;
 using System.Collections.Generic;
 
@@ -16,22 +15,22 @@ using Pyro;
 using Pyro.Network;
 ";
 
-        protected EGeneratedType _ClassType;
-        protected readonly TauParser _Parser;
+        private readonly EGeneratedType _classType;
+        private readonly TauParser _parser;
 
         protected GeneratorCommon(TauParser parser, EGeneratedType classType)
             : base(parser) {
-            AppendLine(_prelude);
-            _ClassType = classType;
-            _Parser = parser;
+            AppendLine(_Prelude);
+            _classType = classType;
+            _parser = parser;
         }
 
         public override bool Run() {
-            return GenerateNamespace(_Parser.Result);
+            return GenerateNamespace(_parser.Result);
         }
 
         public bool GenerateNamespace(TauAstNode node) {
-            Append($"namespace Pyro.Network.{node.Text}{_ClassType.GetGeneratedTypeString()} {{");
+            Append($"namespace Pyro.Network.{node.Text}{_classType.GetGeneratedTypeString()} {{");
             foreach (var @interface in node.Children) {
                 if (@interface.Type != ETauAst.Interface) {
                     return FailLocation(@interface, "Expected interface");
@@ -48,26 +47,26 @@ using Pyro.Network;
 
         public virtual bool GenerateInterface(TauAstNode @interface) {
             _stringBuilder.AppendLine($"    public interface I{@interface.Text}{@interface.Text} : IProxyBase {{");
-            foreach (var member in @interface.Children) {
+            foreach (var member in @interface.Children)
                 switch (member.Type) {
                     case ETauAst.Method:
                         if (!GenerateMethod(member)) {
                             return false;
                         }
-
                         break;
+
                     case ETauAst.Property:
                         if (!GenerateProperty(member)) {
                             return false;
                         }
-
                         break;
+
                     case ETauAst.Event:
                         throw new NotImplementedException("Events");
+
                     default:
                         return Fail($"Unexpected token {member} in proxy interface.");
                 }
-            }
 
             return !Failed;
         }
@@ -79,7 +78,7 @@ using Pyro.Network;
 
             var info = new Property(property);
             AppendLine($"        {GenerateReturn(info.Type)} {info.Name} {{ {info.Getter} {info.Setter} }}");
-            
+
             return true;
         }
 
@@ -89,12 +88,12 @@ using Pyro.Network;
             return true;
         }
 
-        private string GenerateReturn(string infoType) {
-            return _ClassType == EGeneratedType.EAgent ? infoType : $"IFuture<{infoType}>";
+        public bool FailLocation(TauAstNode node, string text) {
+            return _parser.FailLocation(text);
         }
 
-        public bool FailLocation(TauAstNode node, string text) {
-            return _Parser.FailLocation(text);
+        private string GenerateReturn(string infoType) {
+            return _classType == EGeneratedType.EAgent ? infoType : $"IFuture<{infoType}>";
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace Pyro.Test {
-    using NUnit.Framework;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
+namespace Pyro.Test {
     // WIP
     //[TestFixture]
     public class TestPiFreezeThaw
@@ -33,9 +33,9 @@
         }
 
         public class User {
-            public string Name;
-            public string Last;
             public int Age;
+            public string Last;
+            public string Name;
             public IRef<Organisation> Org;
         }
 
@@ -113,4 +113,3 @@
         }
     }
 }
-

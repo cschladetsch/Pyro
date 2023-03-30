@@ -4,21 +4,24 @@ using System.Collections.Generic;
 namespace Pyro.Impl {
     /// <inheritdoc cref="CallableBase" />
     /// <summary>
-    /// Method with no arguments.
+    ///     Method with no arguments.
     /// </summary>
     /// <typeparam name="R">Return type.</typeparam>
     public class Function<R>
         : CallableBase {
         private readonly Func<R> _fun;
 
-        public Function(Func<R> fun) : base(fun) => _fun = fun;
+        public Function(Func<R> fun) : base(fun) {
+            _fun = fun;
+        }
 
-        public override void Invoke(IRegistry reg, Stack<object> stack)
-            => stack.Push(_fun());
+        public override void Invoke(IRegistry reg, Stack<object> stack) {
+            stack.Push(_fun());
+        }
     }
 
     /// <summary>
-    /// Function with one argument.
+    ///     Function with one argument.
     /// </summary>
     /// <typeparam name="R">Return type.</typeparam>
     /// <typeparam name="A0">First argument type.</typeparam>
@@ -26,7 +29,9 @@ namespace Pyro.Impl {
         : CallableBase {
         private readonly Func<A0, R> _fun;
 
-        public Function(Func<A0, R> fun) : base(fun) => _fun = fun;
+        public Function(Func<A0, R> fun) : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var a = stack.Pop();
@@ -35,7 +40,7 @@ namespace Pyro.Impl {
     }
 
     /// <summary>
-    /// A function with two arguments.
+    ///     A function with two arguments.
     /// </summary>
     /// <typeparam name="R">Return type.</typeparam>
     /// <typeparam name="A0">First argument type.</typeparam>
@@ -44,7 +49,9 @@ namespace Pyro.Impl {
         : CallableBase {
         private readonly Func<A0, A1, R> _fun;
 
-        public Function(Func<A0, A1, R> fun) : base(fun) => _fun = fun;
+        public Function(Func<A0, A1, R> fun) : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var a0 = stack.Pop();
@@ -53,4 +60,3 @@ namespace Pyro.Impl {
         }
     }
 }
-

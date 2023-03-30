@@ -1,7 +1,7 @@
-﻿namespace Pyro.Test {
-    using NUnit.Framework;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestContainers
         : TestCommon {
@@ -49,7 +49,6 @@
 
             PiRun("1 2 3 3 tolist");
             TestListContents();
-
         }
 
         private void TestListContents() {

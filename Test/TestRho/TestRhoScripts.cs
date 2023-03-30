@@ -1,6 +1,7 @@
 ﻿using System;
-using NUnit.Framework;
+using System.Diagnostics;
 using System.IO;
+using NUnit.Framework;
 using static Pyro.Create;
 
 namespace Pyro.Test.Rho {
@@ -62,12 +63,12 @@ else
             var c2 = RhoTranslate(s2);
 
             _Exec.Continue(c0);
-            AssertPop(30);    // a = 1, b = 1 => c = 30
+            AssertPop(30); // a = 1, b = 1 => c = 30
 
-            _Exec.Continue(c1);    // a = 2, b = 2 => c= 10
+            _Exec.Continue(c1); // a = 2, b = 2 => c= 10
             AssertPop(10);
 
-            _Exec.Continue(c2);    // a = 2, b = 3 => c= 20
+            _Exec.Continue(c2); // a = 2, b = 3 => c= 20
             AssertPop(20);
         }
 
@@ -107,7 +108,7 @@ else
         private static void DebugTrace(object obj) {
             var text = "****> " + obj + " <****";
             TestContext.Out.WriteLine(text);
-            System.Diagnostics.Trace.WriteLine(text);
+            Trace.WriteLine(text);
             Console.WriteLine(text);
         }
 
@@ -118,4 +119,3 @@ else
         }
     }
 }
-

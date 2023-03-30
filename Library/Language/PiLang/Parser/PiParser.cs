@@ -1,14 +1,14 @@
-﻿namespace Pyro.Language.Parser {
-    using Impl;
-    using Lexer;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Pyro.Language.Impl;
+using Pyro.Language.Lexer;
 
+namespace Pyro.Language.Parser {
     /// <summary>
-    /// PiParser for the Pi language. It's quite simple.
+    ///     PiParser for the Pi language. It's quite simple.
     /// </summary>
     public class PiParser
         : ParserCommon<PiLexer, PiAstNode, PiToken, EPiToken, EPiAst, PiAstFactory>
-        , IParser {
+            , IParser {
         public PiParser(PiLexer lexer)
             : base(lexer, null) {
         }
@@ -20,8 +20,9 @@
             _Current = 0;
             _Lexer = lex;
 
-            if (_Lexer.Failed)
+            if (_Lexer.Failed) {
                 return Fail(_Lexer.Error);
+            }
 
             RemoveWhitespace();
 
@@ -50,8 +51,9 @@
         }
 
         private bool NextSingle(PiAstNode context) {
-            if (Empty())
+            if (Empty()) {
                 return false;
+            }
 
             switch (Current().Type) {
                 case EPiToken.Quote:
@@ -89,24 +91,31 @@
             while (true) {
                 switch (Current().Type) {
                     case EPiToken.Quote:
-                        if (quoted || elements.Count > 0)
+                        if (quoted || elements.Count > 0) {
                             goto done;
+                        }
+
                         quoted = true;
                         break;
 
                     case EPiToken.Separator:
-                        if (prev == EPiToken.Separator)
+                        if (prev == EPiToken.Separator) {
                             return FailLocation("Malformed pathname");
+                        }
+
                         elements.Add(new Pathname.Element(Pathname.EElementType.Separator));
                         break;
 
                     case EPiToken.Ident:
                         // we can have an ident after an optional initial quote, or after a separator
                         var start = prev == EPiToken.None || prev == EPiToken.Quote;
-                        if (start || prev == EPiToken.Separator)
+                        if (start || prev == EPiToken.Separator) {
                             elements.Add(new Pathname.Element(Current().Text));
-                        else
+                        }
+                        else {
                             goto done;
+                        }
+
                         break;
 
                     default:
@@ -115,19 +124,22 @@
 
                 prev = Current().Type;
                 Consume();
-                if (Empty())
+                if (Empty()) {
                     break;
+                }
             }
 
-done:
+        done:
             PiAstNode node = null;
             if (elements.Count == 1 && elements[0].Type == Pathname.EElementType.Ident) {
                 node = NewNode(EPiAst.Ident);
                 node.Value = new Label(elements[0].Ident, quoted);
-            } else {
+            }
+            else {
                 node = NewNode(EPiAst.Pathname);
                 node.Value = new Pathname(elements, quoted);
             }
+
             context.Add(node);
 
             return true;
@@ -158,15 +170,18 @@ done:
             Consume();
             var node = NewNode(type);
             while (!Empty() && !Maybe(end)) {
-                if (!NextSingle(node))
+                if (!NextSingle(node)) {
                     return FailLocation($"Malformed compound {type}");
+                }
 
-                if (Failed)
+                if (Failed) {
                     return false;
+                }
             }
 
-            if (Empty())
+            if (Empty()) {
                 return FailLocation($"Malformed compound {type}");
+            }
 
             Consume();
             root.Add(node);
@@ -174,4 +189,3 @@ done:
         }
     }
 }
-

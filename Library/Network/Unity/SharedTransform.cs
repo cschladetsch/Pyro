@@ -1,8 +1,8 @@
-﻿namespace Pyro.Network.Unity {
-    using UnityEngine;
+﻿using UnityEngine;
 
+namespace Pyro.Network.Unity {
     /// <summary>
-    /// An Object Transform that is shared across the network.
+    ///     An Object Transform that is shared across the network.
     /// </summary>
     public class SharedTransform
         : Common {

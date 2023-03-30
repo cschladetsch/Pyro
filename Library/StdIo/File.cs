@@ -1,8 +1,8 @@
-﻿namespace Pyro {
-    using Impl;
-    using System;
-    using System.IO;
+﻿using System;
+using System.IO;
+using Pyro.Impl;
 
+namespace Pyro {
     public static class Io {
         public static void Register(Registry reg, ITree tree) {
             const string root = "/bin";
@@ -34,8 +34,9 @@
             }
 
             public static bool WriteAllText(string path, string text) {
-                if (!System.IO.File.Exists(path))
+                if (!System.IO.File.Exists(path)) {
                     return false;
+                }
 
                 try {
                     System.IO.File.WriteAllText(path, text);

@@ -1,123 +1,123 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
-  <Import Project="..\..\packages\NUnit.3.13.3\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestRho</RootNamespace>
-    <AssemblyName>TestRho</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.13.3.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.13.3\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Scripts\Add.rho" />
-    <None Include="Scripts\Comments.rho" />
-    <None Include="Scripts\Coros.rho" />
-    <None Include="Scripts\ForLoops.rho" />
-    <None Include="Scripts\Functions.rho" />
-    <None Include="Scripts\PiRho\PiFromRho1.rho" />
-    <None Include="Scripts\PiRho\PiFromRho0.rho" />
-    <Compile Include="Output\Example1.cs" />
-    <Compile Include="TestPiFromRho.cs" />
-    <None Include="Scripts\NestedLoops.rho" />
-    <Compile Include="TestRhoClass.cs" />
-    <Compile Include="TestRhoFreezeThaw.cs" />
-    <Compile Include="TestRhoIndexing.cs" />
-    <Compile Include="TestRhoLoops.cs" />
-    <Compile Include="TestRhoBasic.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestRhoCustomClass.cs" />
-    <Compile Include="TestRhoNativeObject.cs" />
-    <Compile Include="TestRhoScripts.cs" />
-    <None Include="Scripts\Print.rho" />
-    <None Include="Scripts\Yielding.rho" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Readme.md" />
-    <None Include="Scripts\Array.rho" />
-    <None Include="Scripts\BasicClass.rho" />
-    <None Include="Scripts\TemplateClass.rho" />
-    <None Include="Scripts\FreezeThaw.rho" />
-    <None Include="Scripts\NestedFunctions.rho" />
-    <None Include="Scripts\PassingFunctions.rho" />
-    <None Include="Scripts\Experimental.rho" />
-    <None Include="Scripts\Arithmetic.rho" />
-    <None Include="Scripts\Strings.rho" />
-    <None Include="Scripts\Variables.rho" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Library\Core\Core.csproj">
-      <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
-      <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
-      <Name>Executor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
-      <Project>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
-      <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
-      <Name>RhoLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{AFC905F1-F4D7-430D-B005-B6B9E01245AF}</Project>
-      <Name>TestCommon</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\Conditionals0.rho" />
-    <Content Include="Scripts\Conditionals1.rho" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Import Project="..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')"/>
+    <Import Project="..\..\packages\NUnit.3.13.3\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{2CC3C5E5-DDF4-47D6-8252-3CEDBBCB580E}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>TestRho</RootNamespace>
+        <AssemblyName>TestRho</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <Deterministic>true</Deterministic>
+        <NuGetPackageImportStamp>
+        </NuGetPackageImportStamp>
+        <TargetFrameworkProfile/>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.13.3\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
-  </Target>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <LangVersion>7.1</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <LangVersion>7.1</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="nunit.framework, Version=3.13.3.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+            <HintPath>..\..\packages\NUnit.3.13.3\lib\net45\nunit.framework.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Scripts\Add.rho"/>
+        <None Include="Scripts\Comments.rho"/>
+        <None Include="Scripts\Coros.rho"/>
+        <None Include="Scripts\ForLoops.rho"/>
+        <None Include="Scripts\Functions.rho"/>
+        <None Include="Scripts\PiRho\PiFromRho1.rho"/>
+        <None Include="Scripts\PiRho\PiFromRho0.rho"/>
+        <Compile Include="Output\Example1.cs"/>
+        <Compile Include="TestPiFromRho.cs"/>
+        <None Include="Scripts\NestedLoops.rho"/>
+        <Compile Include="TestRhoClass.cs"/>
+        <Compile Include="TestRhoFreezeThaw.cs"/>
+        <Compile Include="TestRhoIndexing.cs"/>
+        <Compile Include="TestRhoLoops.cs"/>
+        <Compile Include="TestRhoBasic.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="TestRhoCustomClass.cs"/>
+        <Compile Include="TestRhoNativeObject.cs"/>
+        <Compile Include="TestRhoScripts.cs"/>
+        <None Include="Scripts\Print.rho"/>
+        <None Include="Scripts\Yielding.rho"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Readme.md"/>
+        <None Include="Scripts\Array.rho"/>
+        <None Include="Scripts\BasicClass.rho"/>
+        <None Include="Scripts\TemplateClass.rho"/>
+        <None Include="Scripts\FreezeThaw.rho"/>
+        <None Include="Scripts\NestedFunctions.rho"/>
+        <None Include="Scripts\PassingFunctions.rho"/>
+        <None Include="Scripts\Experimental.rho"/>
+        <None Include="Scripts\Arithmetic.rho"/>
+        <None Include="Scripts\Strings.rho"/>
+        <None Include="Scripts\Variables.rho"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Library\Core\Core.csproj">
+            <Project>{575091D8-A55C-4794-9F15-120E927C3305}</Project>
+            <Name>Core</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
+            <Project>{4dfe7bd2-f168-4ae7-b569-c684c1615ea7}</Project>
+            <Name>Executor</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj">
+            <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+            <Name>Flow</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
+            <Project>{329084C8-82D9-44C9-86DD-FA587C1A6FA4}</Project>
+            <Name>Common</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
+            <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
+            <Name>RhoLang</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\TestCommon\TestCommon.csproj">
+            <Project>{AFC905F1-F4D7-430D-B005-B6B9E01245AF}</Project>
+            <Name>TestCommon</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Scripts\Conditionals0.rho"/>
+        <Content Include="Scripts\Conditionals1.rho"/>
+    </ItemGroup>
+    <ItemGroup/>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+        <PropertyGroup>
+            <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+        </PropertyGroup>
+        <Error Condition="!Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.13.3\build\NUnit.props'))"/>
+        <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))"/>
+    </Target>
 </Project>

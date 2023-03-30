@@ -1,15 +1,15 @@
-﻿namespace Pyro.Network.Impl {
-    using Flow;
-    using System;
-    using Con = System.Console;
+﻿using System;
+using Flow;
+
+namespace Pyro.Network.Impl {
+    using Con = Console;
 
     /// <inheritdoc />
     /// <summary>
-    /// Base for Peer, Client and Server.
+    ///     Base for Peer, Client and Server.
     /// </summary>
     public class NetworkConsoleWriter
-        : Process
-        {
+        : Process {
         public event OnWriteDelegate OnWrite;
 
         public override bool Fail(string text) {
@@ -51,4 +51,3 @@
         }
     }
 }
-

@@ -1,13 +1,13 @@
-﻿namespace Pyro.Test.Rho {
-    using NUnit.Framework;
+﻿using NUnit.Framework;
 
+namespace Pyro.Test.Rho {
     public class Inner {
         public string s;
     }
 
     public class Class {
-        public int n;
         public Inner inner = new Inner();
+        public int n;
     }
 
     [TestFixture]
@@ -16,18 +16,18 @@
         [Test]
         public void TestString() {
             RhoRun(
-@"a = ""foobar""
+                @"a = ""foobar""
 ");
             AssertVarEquals("a", "foobar");
 
             RhoRun(
-@"a = ""foobar""
+                @"a = ""foobar""
 b = a.Substring(0, 3)
 ");
             AssertVarEquals("b", "foo");
 
             RhoRun(
-@"a = ""foobar""
+                @"a = ""foobar""
 //assert(a.Length == 6)
 b = a.Substring(0, 3).Substring(0,1)
 //assert(b == ""f"")
@@ -36,7 +36,7 @@ b = a.Substring(0, 3).Substring(0,1)
 ");
 
             RhoRun(
-@"a = ""foobar""
+                @"a = ""foobar""
 b = a.Substring(0, 3)
 c = a.Substring(3, 3)
 d = a.Substring1(4)
@@ -62,4 +62,3 @@ k
         }
     }
 }
-

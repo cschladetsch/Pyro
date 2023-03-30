@@ -1,8 +1,8 @@
-﻿namespace Pyro {
-    using System;
+﻿using System;
 
+namespace Pyro {
     /// <summary>
-    /// DOC
+    ///     DOC
     /// </summary>
     public static class Timer {
         public static string Time(string label, Action action) {
@@ -13,4 +13,3 @@
         }
     }
 }
-

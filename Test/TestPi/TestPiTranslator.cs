@@ -1,11 +1,16 @@
-﻿namespace Pyro.Test {
-    using NUnit.Framework;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestPiTranslator
         : TestCommon {
+        [SetUp]
+        public void LoadCommon() {
+            RunScript("Common.pi");
+        }
+
         [Test]
         public void TestContinuations() {
             PiRun("{1 +} 'a # 3 a &");
@@ -38,11 +43,6 @@
 
             PiRun("1 { 1 + } { 2 + } false ife &");
             AssertPop(3);
-        }
-
-        [SetUp]
-        public void LoadCommon() {
-            RunScript("Common.pi");
         }
 
         [Test]
@@ -175,4 +175,3 @@
         }
     }
 }
-

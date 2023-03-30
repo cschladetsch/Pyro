@@ -1,11 +1,11 @@
-﻿namespace Pyro.RhoLang.Parser {
-    using Lexer;
+﻿using Pyro.RhoLang.Lexer;
 
+namespace Pyro.RhoLang.Parser {
     /// <inheritdoc cref="IProcess" />
     /// <summary>
-    /// Rho statements are stand-alone components made of sub-expressions.
-    /// <b>NOTE</b> that Statements do not leave anything on the parsing stack:
-    /// They either succeed or leave a decent contextual lexical+semantic error message.
+    ///     Rho statements are stand-alone components made of sub-expressions.
+    ///     <b>NOTE</b> that Statements do not leave anything on the parsing stack:
+    ///     They either succeed or leave a decent contextual lexical+semantic error message.
     /// </summary>
     public partial class RhoParser {
         private bool Statement() {
@@ -21,11 +21,13 @@
                 case ERhoToken.Yield:
                 case ERhoToken.Resume:
                 case ERhoToken.Suspend: {
-                        var change = NewNode(Consume());
-                        if (Expression())
-                            change.Add(Pop());
-                        return Append(change);
+                    var change = NewNode(Consume());
+                    if (Expression()) {
+                        change.Add(Pop());
                     }
+
+                    return Append(change);
+                }
                 case ERhoToken.While:
                     return While();
                 case ERhoToken.For:
@@ -42,14 +44,16 @@
                     return false;
             }
 
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("Statement or expression expected.");
+            }
 
             return Append(Pop()) && !Maybe(ERhoToken.Nop);
         }
 
-        private bool NamedBlock()
-            => AddNamedBlock(NewNode(Consume()));
+        private bool NamedBlock() {
+            return AddNamedBlock(NewNode(Consume()));
+        }
 
         private bool AddNamedBlock(RhoAstNode cont) {
             var ident = Expect(ERhoToken.Ident);
@@ -66,8 +70,9 @@
             Expect(ERhoToken.CloseParan);
             Expect(ERhoToken.NewLine);
 
-            if (!Block())
+            if (!Block()) {
                 return FailLocation("Function block expected.");
+            }
 
             // make the continuation
             var block = Pop();
@@ -86,14 +91,16 @@
         private bool While() {
             var @while = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("While what?");
+            }
 
             Expect(ERhoToken.CloseParan);
             @while.Add(Pop());
 
-            if (!Block())
+            if (!Block()) {
                 return FailLocation("No While body.");
+            }
 
             @while.Add(Pop());
             return Append(@while);
@@ -102,8 +109,9 @@
         private bool Assert() {
             var assert = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("Assert needs an expression to test.");
+            }
 
             Expect(ERhoToken.CloseParan);
 
@@ -114,8 +122,9 @@
         private bool Write() {
             var write = NewNode(Consume());
             Expect(ERhoToken.OpenParan);
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("Write what?");
+            }
 
             Expect(ERhoToken.CloseParan);
 
@@ -134,28 +143,32 @@
             var indent = _Current - start;
 
             var @if = NewNode(Consume());
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("If what?");
+            }
 
             @if.Add(Pop());
 
             // get the true-clause
-            if (!Block())
+            if (!Block()) {
                 return FailLocation("If needs a block.");
+            }
 
             @if.Add(Pop());
 
             while (indent >= 0) {
                 if (TryConsume(ERhoToken.Else)) {
-                    if (!Block())
+                    if (!Block()) {
                         return FailLocation("No else block.");
+                    }
 
                     @if.Add(Pop());
                     return Append(@if);
                 }
 
-                if (!TryConsume(ERhoToken.Tab))
+                if (!TryConsume(ERhoToken.Tab)) {
                     return Append(@if);
+                }
 
                 indent--;
             }
@@ -164,35 +177,39 @@
         }
 
         /// <summary>
-        /// A for-loop. Could be one of:
+        ///     A for-loop. Could be one of:
         ///     for (a in b)
-        ///         block
-        /// or
+        ///     block
+        ///     or
         ///     for (a = 0; a &lt; 10; ++a)
-        ///         block
-        /// These are stored in the same Ast node. The way to tell the
-        /// difference is by the number of children in the node.
+        ///     block
+        ///     These are stored in the same Ast node. The way to tell the
+        ///     difference is by the number of children in the node.
         /// </summary>
         /// <returns>True if parsing succeeded.</returns>
         private bool For() {
             var @for = NewNode(Consume());
 
             Expect(ERhoToken.OpenParan);
-            if (Failed)
+            if (Failed) {
                 return false;
+            }
 
             // add loop variable name
             @for.Add(Expect(ERhoToken.Ident));
 
             if (TryConsume(ERhoToken.In)) {
                 // for (a in b) ...
-                if (!ForEach(@for))
+                if (!ForEach(@for)) {
                     return false;
-            } else {
+                }
+            }
+            else {
                 _Current--;
                 // for (a = 0; n < 10; ++a) ...
-                if (!ForLoop(@for))
+                if (!ForLoop(@for)) {
                     return false;
+                }
             }
 
             // always add the final part of the for-loop. for the moment,
@@ -202,12 +219,14 @@
 
             // both for-loops ends with a closing paran and a block
             Expect(ERhoToken.CloseParan);
-            if (Failed)
+            if (Failed) {
                 return false;
+            }
 
             // add the iteration block
-            if (!Block())
+            if (!Block()) {
                 return FailLocation("For block expected.");
+            }
 
             @for.Add(Pop());
 
@@ -216,27 +235,33 @@
 
         // for (a in [1 2 3])
         //      block
-        private bool ForEach(RhoAstNode @for) =>
-            Expression() || FailLocation("For each in what?");
+        private bool ForEach(RhoAstNode @for) {
+            return Expression() || FailLocation("For each in what?");
+        }
 
         // for (a = 0; a < 10; ++a)
         //      block
         private bool ForLoop(RhoAstNode @for) {
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("Initialisation expression expected.");
+            }
 
             @for.Add(Pop());
-            if (!TryConsume(ERhoToken.Semi))
+            if (!TryConsume(ERhoToken.Semi)) {
                 return FailLocation("Semi expected.");
+            }
 
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("When does the for statement stop?");
+            }
+
             @for.Add(Pop());
 
             Expect(ERhoToken.Semi);
 
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("What happens at end of for loop?");
+            }
 
             @for.Add(Pop());
 
@@ -244,4 +269,3 @@
         }
     }
 }
-

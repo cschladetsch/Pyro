@@ -1,8 +1,8 @@
-﻿namespace Pyro.Exec {
-    using System;
+﻿using System;
 
+namespace Pyro.Exec {
     /// <summary>
-    /// DOC
+    ///     DOC
     /// </summary>
     public class CannotConvertException
         : Exception {
@@ -19,5 +19,3 @@
         }
     }
 }
-
-

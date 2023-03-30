@@ -1,14 +1,14 @@
-﻿namespace Pyro.Test.Rho {
-    using Exec;
-    using Language;
-    using NUnit.Framework;
-    using RhoLang.Lexer;
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Pyro.Exec;
+using Pyro.Language;
+using Pyro.RhoLang.Lexer;
 
+namespace Pyro.Test.Rho {
     /// <inheritdoc />
     /// <summary>
-    /// Test basic Rho functionality: boolean logic, arithmetic, strings, conditionals.
+    ///     Test basic Rho functionality: boolean logic, arithmetic, strings, conditionals.
     /// </summary>
     [TestFixture]
     public class TestRhoBasic
@@ -74,11 +74,13 @@
                 assert(!false)");
         }
 
-        private void False(string text)
-            => Assert.Throws<AssertionFailedException>(() => True(text));
+        private void False(string text) {
+            Assert.Throws<AssertionFailedException>(() => True(text));
+        }
 
-        private void True(string text)
-            => RhoRun($"assert({text})");
+        private void True(string text) {
+            RhoRun($"assert({text})");
+        }
 
         [Test]
         public void TestArithmetic() {
@@ -126,7 +128,7 @@
         [Test]
         public void TestParseFunDef() {
             var code = RhoTranslate(
-@"
+                @"
 fun foo()
 	1
 	2
@@ -149,7 +151,7 @@ fun foo()
             _Exec.DataStack.Clear();
             _Exec.Verbosity = 100;
             RhoRun(
-@"
+                @"
 fun foo(n)
 	n + 1
 assert(foo(1) == 2)
@@ -168,20 +170,20 @@ assert(bar(foo, 2) == 3)
         [Test]
         public void TestReturnVal0() {
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	3
 assert(foo() == 3)
 assert(foo() == 3)
 ");
 
             RhoRun(
-@"fun foo(n)
+                @"fun foo(n)
 	n
 assert(foo(1) == 1)
 assert(foo(2) == 2)
 ");
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	1
 foo()
 writeln(foo)
@@ -190,19 +192,19 @@ writeln(foo)
 ");
 
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	1
 assert(foo() == 1)
 ");
 
 
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	1
 assert(foo() == 1)
 ");
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	2
 assert(foo() == 2)
 assert(foo() == 2)
@@ -214,30 +216,29 @@ assert(foo() == 2)
             RhoRun("a = 1");
 
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	1
 foo()
 ");
             AssertPop(1);
 
             RhoRun(
-@"fun foo()
+                @"fun foo()
 	1
 assert(foo() == 1)
 ");
 
             RhoRun(
-@"fun foo(a)
+                @"fun foo(a)
 	a
 foo(42)
 ");
-
         }
 
         [Test]
         public void TestConditionals() {
             var ifThen =
-@"
+                @"
 if true
 	1
 ";
@@ -282,7 +283,7 @@ assert(!exists('b))
         [Test]
         public void TestNestedFunctions() {
             RhoRun(
-@"
+                @"
 fun foo()
 	fun bar(f, num)
 		1 + f(num)
@@ -294,4 +295,3 @@ assert(foo() == 6)
         }
     }
 }
-

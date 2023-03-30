@@ -1,16 +1,16 @@
-﻿namespace Pyro.RhoLang {
-    using Exec;
-    using Language;
-    using Language.Impl;
-    using Language.Parser;
-    using Lexer;
-    using Parser;
-    using System;
-    using System.Linq;
+﻿using System;
+using System.Linq;
+using Pyro.Exec;
+using Pyro.Language;
+using Pyro.Language.Impl;
+using Pyro.Language.Parser;
+using Pyro.RhoLang.Lexer;
+using Pyro.RhoLang.Parser;
 
+namespace Pyro.RhoLang {
     /// <inheritdoc />
     /// <summary>
-    /// Translate from Rho script to an executable Continuation.
+    ///     Translate from Rho script to an executable Continuation.
     /// </summary>
     public class RhoTranslator
         : TranslatorBase<RhoLexer, RhoParser> {
@@ -18,35 +18,42 @@
             : base(r) {
         }
 
-        public override string ToString()
-            => $"=== RhoTranslator:\n--- Input: {_Lexer.Input}--- Lexer: {_Lexer}\n--- Parser: {_Parser}\n--- Code: {Result}";
+        public override string ToString() {
+            return
+                $"=== RhoTranslator:\n--- Input: {_Lexer.Input}--- Lexer: {_Lexer}\n--- Parser: {_Parser}\n--- Code: {Result}";
+        }
 
         public override bool Translate(string text, out Continuation result, EStructure st = EStructure.Program) {
-            if (!base.Translate(text, out result, st))
+            if (!base.Translate(text, out result, st)) {
                 return false;
+            }
 
-            if (string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text)) {
                 return true;
+            }
 
             _Lexer = new RhoLexer(text);
             _Lexer.Process();
-            if (_Lexer.Failed)
+            if (_Lexer.Failed) {
                 return Fail(_Lexer.Error);
+            }
 
             _Parser = new RhoParser(_Lexer, _reg, st);
             _Parser.Process();
-            if (_Parser.Failed)
+            if (_Parser.Failed) {
                 return Fail(_Parser.Error);
+            }
 
-            if (!Generate(_Parser.Result))
+            if (!Generate(_Parser.Result)) {
                 return false;
+            }
 
             result = Result;
             return !Failed;
         }
 
         /// <summary>
-        /// Translate given node into pi-code.
+        ///     Translate given node into pi-code.
         /// </summary>
         private bool Token(RhoAstNode node) {
             switch (node.RhoToken.Type) {
@@ -129,8 +136,10 @@
                     // DO NOT REFACTOR INTO LINQ.
                     // In fact, don't use Linq anywhere in this library.
                     foreach (var child in node.Children)
-                        if (!Generate(child))
+                        if (!Generate(child)) {
                             return false;
+                        }
+
                     return Append(EOperation.Resume);
                 case ERhoToken.For:
                     return For(node);
@@ -146,21 +155,26 @@
             return Append(EOperation.New);
         }
 
-        private bool AppendChildOp(RhoAstNode node, EOperation op)
-            => Generate(node.GetChild(0)) && Append(op);
+        private bool AppendChildOp(RhoAstNode node, EOperation op) {
+            return Generate(node.GetChild(0)) && Append(op);
+        }
 
-        private bool AppendQuoted(RhoAstNode node)
-            => Append(new Label(node.Text, true));
+        private bool AppendQuoted(RhoAstNode node) {
+            return Append(new Label(node.Text, true));
+        }
 
-        private bool List(RhoAstNode node)
-            => PushNew() && GenerateChildren(node) && Append(Pop().Code);
+        private bool List(RhoAstNode node) {
+            return PushNew() && GenerateChildren(node) && Append(Pop().Code);
+        }
 
-        private bool Block(RhoAstNode node)
-            => GenerateChildren(node);
+        private bool Block(RhoAstNode node) {
+            return GenerateChildren(node);
+        }
 
         private bool PiSlice(RhoAstNode rhoNode) {
-            if (!(rhoNode.Value is PiAstNode piNode))
+            if (!(rhoNode.Value is PiAstNode piNode)) {
                 return InternalFail("PiAstNode type expected");
+            }
 
             // TODO: store a private _piTranslator that is re-used
             return new PiTranslator(_reg).TranslateNode(piNode, Top().Code)
@@ -175,11 +189,12 @@
         }
 
         /// <summary>
-        /// Generate executable pi-code from given node.
+        ///     Generate executable pi-code from given node.
         /// </summary>
         private bool Generate(RhoAstNode node) {
-            if (node == null)
+            if (node == null) {
                 return InternalFail("Unexpected empty RhoAstNode");
+            }
 
             switch (node.Type) {
                 case ERhoAst.Suspend:
@@ -213,15 +228,16 @@
 
         private bool GenerateChildren(RhoAstNode node) {
             foreach (var st in node.Children)
-                if (!Generate(st))
+                if (!Generate(st)) {
                     return InternalFail($"Failed to generate code for '{st}' from {node}");
+                }
 
             return true;
         }
 
         private bool Assign(RhoAstNode node) {
             var ch = node.Children;
-            Generate(ch[0]);    // the r-value
+            Generate(ch[0]); // the r-value
 
             switch (ch[1].Type) {
                 case ERhoAst.TokenType:
@@ -229,6 +245,7 @@
                         case ERhoToken.Ident:
                             return AppendQuoted(ch[1]) && Append(EOperation.Assign);
                     }
+
                     break;
 
                 case ERhoAst.GetMember:
@@ -271,10 +288,12 @@
             Generate(name);
 
             // TODO: add Replace/Suspend/Resume to children
-            if (children.Count > 2 && children[2].Token.Type == ERhoToken.Replace)
+            if (children.Count > 2 && children[2].Token.Type == ERhoToken.Replace) {
                 Append(EOperation.Replace);
-            else
+            }
+            else {
                 Append(EOperation.Suspend);
+            }
 
             return true;
         }
@@ -298,8 +317,9 @@
             var hasElse = elseBlock != null;
 
             Generate(thenBlock);
-            if (hasElse)
+            if (hasElse) {
                 Generate(elseBlock);
+            }
 
             Generate(test);
             Append(hasElse ? EOperation.IfElse : EOperation.If);
@@ -326,8 +346,8 @@
             return Append(EOperation.ForLoop);
         }
 
-        private static bool While(RhoAstNode node)
-            => throw new NotImplementedException("while loops");
+        private static bool While(RhoAstNode node) {
+            throw new NotImplementedException("while loops");
+        }
     }
 }
-

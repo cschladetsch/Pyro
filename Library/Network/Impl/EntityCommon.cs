@@ -1,6 +1,6 @@
 ﻿namespace Pyro.Network.Impl {
     /// <summary>
-    /// Common to Typed Proxies and Agents
+    ///     Common to Typed Proxies and Agents
     public class EntityCommon<T>
         : EntityBase {
         private IRef<T> _ref;

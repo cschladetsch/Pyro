@@ -1,13 +1,12 @@
-﻿namespace Pyro.Test {
-    using Language;
-    using Language.Lexer;
-    using Language.Parser;
-    using NUnit.Framework;
-    using System.Collections.Generic;
-    using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using NUnit.Framework;
+using Pyro.Language.Lexer;
+using Pyro.Language.Parser;
 
+namespace Pyro.Test {
     [TestFixture]
-    class TestPiParser
+    internal class TestPiParser
         : TestCommon {
         protected internal PiParser PiParser;
         protected internal IList<PiAstNode> Sequence => PiParser.Root.Children;
@@ -71,19 +70,26 @@
         private void Parse(string text, bool verbose = false) {
             var lexer = new PiLexer(text);
             Assert.IsTrue(lexer.Process());
-            if (verbose)
+            if (verbose) {
                 WriteLine(lexer.ToString());
-            if (lexer.Failed)
+            }
+
+            if (lexer.Failed) {
                 WriteLine(lexer.Error);
+            }
+
             PiParser = new PiParser(lexer);
-            PiParser.Process(lexer, EStructure.None);
-            if (verbose)
+            PiParser.Process(lexer);
+            if (verbose) {
                 WriteLine(PiParser.PrintTree());
-            if (PiParser.Failed)
+            }
+
+            if (PiParser.Failed) {
                 Debug.WriteLine(PiParser.Error);
+            }
+
             Assert.IsFalse(PiParser.Failed);
             Assert.IsNotNull(PiParser.Root);
         }
     }
 }
-

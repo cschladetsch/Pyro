@@ -1,8 +1,8 @@
-﻿namespace Pyro.Test {
-    using Language.Lexer;
-    using NUnit.Framework;
-    using System.Linq;
+﻿using System.Linq;
+using NUnit.Framework;
+using Pyro.Language.Lexer;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestPiLexer
         : TestCommon {
@@ -25,7 +25,7 @@
                 EPiToken.Float, EPiToken.Floor, EPiToken.Ceiling
             );
         }
-        
+
         [Test]
         public void TestNumbersAndOps() {
             AssertSameTokens(
@@ -60,4 +60,3 @@
         }
     }
 }
-

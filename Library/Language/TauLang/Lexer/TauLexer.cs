@@ -1,8 +1,8 @@
 ﻿// (C) 2023 christian.schladetsch@gmail.com
 
-namespace Pyro.Language.Tau.Lexer {
-    using Impl;
+using Pyro.Language.Impl;
 
+namespace Pyro.Language.Tau.Lexer {
     public class TauLexer
         : LexerCommon<ETauToken, TauToken, TauTokenFactory> {
         public TauLexer(string input)
@@ -27,19 +27,22 @@ namespace Pyro.Language.Tau.Lexer {
 
         protected override bool NextToken() {
             var current = Current();
-            if (current == 0)
+            if (current == 0) {
                 return false;
+            }
 
-            if (char.IsLetter(current) || current == '_')
+            if (char.IsLetter(current) || current == '_') {
                 return IdentOrKeyword();
+            }
 
             if (char.IsDigit(current)) {
                 var start = Gather(char.IsDigit);
                 if (Current() == '.') {
                     Next();
                     var end = Gather(char.IsDigit);
-                    if (start.LineNumber != end.LineNumber)
+                    if (start.LineNumber != end.LineNumber) {
                         return Fail("Bad float literal");
+                    }
 
                     return AddSlice(ETauToken.Float, new Slice(this, start.Start, end.End));
                 }
@@ -52,7 +55,7 @@ namespace Pyro.Language.Tau.Lexer {
                 case '(': return Add(ETauToken.OpenParan);
                 case ')': return Add(ETauToken.CloseParan);
                 case ' ': return AddSlice(ETauToken.WhiteSpace, Gather(c => c == ' '));
-                case '\t': return AddSlice(ETauToken.WhiteSpace, Gather(c => c == ' ' || c == '\t')); 
+                case '\t': return AddSlice(ETauToken.WhiteSpace, Gather(c => c == ' ' || c == '\t'));
                 case ',': return Add(ETauToken.Comma);
                 case ';': return Add(ETauToken.Semi);
                 case '{': return Add(ETauToken.OpenBrace);
@@ -60,10 +63,10 @@ namespace Pyro.Language.Tau.Lexer {
                 case '<': return Add(ETauToken.LessThan);
                 case '>': return Add(ETauToken.GreaterThan);
                 case '\r': {
-                        // fuck I hate this
-                        Next();
-                        return true;
-                    }
+                    // fuck I hate this
+                    Next();
+                    return true;
+                }
                 case '\n': return Add(ETauToken.NewLine);
                 case '/':
                     if (Peek() == '/') {
@@ -79,21 +82,23 @@ namespace Pyro.Language.Tau.Lexer {
                         _Tokens.Add(comment);
                         return true;
                     }
+
                     break;
             }
 
             LexError($"Unrecognised TauToken '{current}'.");
 
             return false;
-        } 
-        
+        }
+
         protected override void AddKeywordOrIdent(Slice slice) {
             _Tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
                 ? _Factory.NewToken(tok, slice)
                 : _Factory.NewTokenIdent(slice));
         }
 
-        protected override void Terminate()
-            => _Tokens.Add(_Factory.NewToken(ETauToken.Nop, new Slice(this, _offset, _offset)));
+        protected override void Terminate() {
+            _Tokens.Add(_Factory.NewToken(ETauToken.Nop, new Slice(this, _offset, _offset)));
+        }
     }
 }

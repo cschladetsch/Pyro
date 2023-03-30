@@ -1,27 +1,31 @@
 ﻿using System.Collections.Generic;
-
 using Pyro.Language.Tau.Lexer;
 
 namespace Pyro.Language.Tau.Parser {
     public class TauAstFactory
         : IAstFactory<TauToken, TauAstNode, ETauAst> {
+        public void AddChild(TauAstNode parent, TauAstNode node) {
+            parent.Children.Add(node);
+        }
 
-        public void AddChild(TauAstNode parent, TauAstNode node)
-            => parent.Children.Add(node);
+        public TauAstNode New(TauToken tokenNode) {
+            return new TauAstNode(ETauAst.TokenType, tokenNode);
+        }
 
-        public void AddChild(TauAstNode parent, TauToken token)
-            => parent.Children.Add(New(token));
+        public TauAstNode New(ETauAst astEnum, TauToken tokenNode) {
+            return new TauAstNode(astEnum, tokenNode);
+        }
 
-        public TauAstNode New(TauToken tokenNode)
-            => new TauAstNode(ETauAst.TokenType, tokenNode);
+        public TauAstNode New(ETauAst astEnum) {
+            return new TauAstNode(astEnum);
+        }
 
-        public TauAstNode New(ETauAst astEnum, TauToken tokenNode)
-            => new TauAstNode(astEnum, tokenNode);
+        public IList<TauAstNode> GetChildren(TauAstNode node) {
+            return node.Children;
+        }
 
-        public TauAstNode New(ETauAst astEnum)
-            => new TauAstNode(astEnum);
-
-        public IList<TauAstNode> GetChildren(TauAstNode node)
-            => node.Children;
+        public void AddChild(TauAstNode parent, TauToken token) {
+            parent.Children.Add(New(token));
+        }
     }
 }

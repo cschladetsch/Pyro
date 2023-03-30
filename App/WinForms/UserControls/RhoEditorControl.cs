@@ -1,13 +1,28 @@
-﻿using System.Data;
+﻿using System;
+using System.Windows.Forms;
+using Pyro.Language;
 
 namespace WinForms.UserControls {
-    using System;
-    using System.Windows.Forms;
-    
-    using Pyro.Language;
-
     public partial class RhoEditorControl
         : UserControlBase {
+        private ELanguage _language;
+
+        public RhoEditorControl() {
+            InitializeComponent();
+
+            RichTextBoxPi.Text = RichTextBoxRho.Text = RichTextBoxTau.Text = "";
+            RichTextBoxPi.Dock = RichTextBoxRho.Dock = RichTextBoxTau.Dock = DockStyle.Fill;
+
+            RichTextBoxRho.Multiline = true;
+            RichTextBoxRho.AcceptsTab = true;
+
+            RichTextBoxTau.Multiline = true;
+            RichTextBoxTau.AcceptsTab = true;
+
+            RichTextBoxPi.Multiline = true;
+
+            Language = ELanguage.Rho;
+        }
 
         public ELanguage Language {
             get => _language;
@@ -17,6 +32,28 @@ namespace WinForms.UserControls {
         public RichTextBox RichTextBox {
             get {
                 switch (Language) {
+                    case ELanguage.None:
+                        break;
+                    case ELanguage.Pi:
+                        return RichTextBoxPi;
+                    case ELanguage.Rho:
+                        return RichTextBoxRho;
+                    case ELanguage.Tau:
+                        return RichTextBoxTau;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                return null;
+            }
+        }
+
+        public RichTextBox GetLanguageText() {
+            return GetLanguageText(_language);
+        }
+
+        public RichTextBox GetLanguageText(ELanguage language) {
+            switch (language) {
                 case ELanguage.None:
                     break;
                 case ELanguage.Pi:
@@ -26,64 +63,27 @@ namespace WinForms.UserControls {
                 case ELanguage.Tau:
                     return RichTextBoxTau;
                 default:
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                return null;
+                    throw new ArgumentOutOfRangeException(nameof(language), language, null);
             }
-        }
 
-        private ELanguage _language;
-
-        public RhoEditorControl() {
-            InitializeComponent();
-
-            RichTextBoxPi.Text = RichTextBoxRho.Text = RichTextBoxTau.Text = "";
-            RichTextBoxPi.Dock = RichTextBoxRho.Dock = RichTextBoxTau.Dock = DockStyle.Fill;
-            
-            RichTextBoxRho.Multiline = true;
-            RichTextBoxRho.AcceptsTab = true;
-            
-            RichTextBoxTau.Multiline = true;
-            RichTextBoxTau.AcceptsTab = true;
-            
-            RichTextBoxPi.Multiline = true;
-
-            Language = ELanguage.Rho;
-        }
-
-        public RichTextBox GetLanguageText()
-            => GetLanguageText(_language);
-        
-        public RichTextBox GetLanguageText(ELanguage language) {
-            switch (language) {
-            case ELanguage.None:
-                break;
-            case ELanguage.Pi:
-                return RichTextBoxPi;
-            case ELanguage.Rho:
-                return RichTextBoxRho;
-            case ELanguage.Tau:
-                return RichTextBoxTau;
-            }
             throw new ArgumentOutOfRangeException();
         }
 
         private void SetLanguage(ELanguage lang) {
             switch (_language = lang) {
-            case ELanguage.None:
-                break;
-            case ELanguage.Pi:
-                SelectEditor(RichTextBoxPi);
-                break;
-            case ELanguage.Rho:
-                SelectEditor(RichTextBoxRho);
-                break;
-            case ELanguage.Tau:
-                SelectEditor(RichTextBoxTau);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(lang), lang, null);
+                case ELanguage.None:
+                    break;
+                case ELanguage.Pi:
+                    SelectEditor(RichTextBoxPi);
+                    break;
+                case ELanguage.Rho:
+                    SelectEditor(RichTextBoxRho);
+                    break;
+                case ELanguage.Tau:
+                    SelectEditor(RichTextBoxTau);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lang), lang, null);
             }
         }
 
@@ -93,7 +93,7 @@ namespace WinForms.UserControls {
             RichTextBoxPi.Hide();
             RichTextBoxRho.Hide();
             RichTextBoxTau.Hide();
-            
+
             richTextBox.Show();
             RichTextBox.TextChanged += UpdateStatus;
             RichTextBox.CursorChanged += UpdateStatus;
@@ -120,20 +120,24 @@ namespace WinForms.UserControls {
             var text = rtb.Lines[rtb.GetLineFromCharIndex(rtb.SelectionStart)];
             MainForm.Run(text, Language);
         }
-        
+
         private void Execute() {
             var script = RichTextBox.SelectedText.Length > 0 ? RichTextBox.SelectedText : RichTextBox.Text;
             MainForm.Run(script, Language);
         }
+
         private void PiInputKeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.Enter: {
-                        if (e.Control) {
-                            MainForm.RunCurrent();
-                            e.Handled = true;
-                        }
-                        break;
+                    if (e.Control) {
+                        MainForm.RunCurrent();
+                        e.Handled = true;
                     }
+
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

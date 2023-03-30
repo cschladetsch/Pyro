@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Pyro.Impl {
     /// <inheritdoc />
     /// <summary>
-    /// TODO
+    ///     TODO
     /// </summary>
     public class CallableBase
         : ICallable {

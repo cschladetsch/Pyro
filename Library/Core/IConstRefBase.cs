@@ -1,10 +1,10 @@
-﻿namespace Pyro {
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Pyro {
     /// <inheritdoc />
     /// <summary>
-    /// Common to all types that provide const-only access to underlying value.
+    ///     Common to all types that provide const-only access to underlying value.
     /// </summary>
     public interface IConstRefBase
         : IObject {
@@ -19,4 +19,3 @@
         T Value { get; }
     }
 }
-

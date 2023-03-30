@@ -1,15 +1,15 @@
-﻿namespace Pyro.Language {
-    using Exec;
-    using Impl;
-    using Lexer;
-    using Parser;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Pyro.Exec;
+using Pyro.Language.Impl;
+using Pyro.Language.Lexer;
+using Pyro.Language.Parser;
 
+namespace Pyro.Language {
     /// <inheritdoc />
     /// <summary>
-    /// Translates input Pi text source code to an executable Continuation.
+    ///     Translates input Pi text source code to an executable Continuation.
     /// </summary>
     public class PiTranslator
         : TranslatorBase<PiLexer, PiParser> {
@@ -23,35 +23,43 @@
             string input,
             out Continuation result,
             EStructure st = EStructure.Program) {
-            if (!base.Translate(input, out result, st))
+            if (!base.Translate(input, out result, st)) {
                 return false;
+            }
 
             _continuation = Continuation.New(_reg);
 
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input)) {
                 return true;
+            }
 
             _Lexer = new PiLexer(input);
 
-            if (!_Lexer.Process())
+            if (!_Lexer.Process()) {
                 return Fail($"LexerError: {_Lexer.Error}");
+            }
 
             _Parser = new PiParser(_Lexer);
-            if (!Parser.Process(_Lexer, EStructure.Program))
+            if (!Parser.Process(_Lexer, EStructure.Program)) {
                 return Fail($"ParserError: {Parser.Error}");
+            }
 
-            if (!TranslateNode(Parser.Root, _continuation.Code))
+            if (!TranslateNode(Parser.Root, _continuation.Code)) {
                 return false;
+            }
 
             result = _continuation;
             return result != null;
         }
 
-        public override string ToString()
-            => $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
+        public override string ToString() {
+            return
+                $"=== PITranslator:\nInput: {_Lexer.Input}PiLexer: {_Lexer}\nParser: {Parser}\nCode: {_continuation}\n";
+        }
 
-        public bool TranslateNode(PiAstNode node, IList<object> objects)
-            => node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
+        public bool TranslateNode(PiAstNode node, IList<object> objects) {
+            return node?.Children.All(ast => AddNode(ast, objects)) ?? Fail("Null Ast Node");
+        }
 
         private bool AddNode(PiAstNode piAst, IList<object> objects) {
             switch (piAst.Type) {
@@ -269,19 +277,22 @@
 
         private bool TranslateArray(PiAstNode piAstNode, ICollection<object> objects) {
             var array = new List<object>();
-            if (!TranslateNode(piAstNode, array))
+            if (!TranslateNode(piAstNode, array)) {
                 return Fail($"Failed to translate ${piAstNode}");
+            }
+
             objects.Add(array);
             return true;
         }
 
         private bool TranslateContinuation(PiAstNode piAstNode, ICollection<object> objects) {
             var cont = Continuation.New(_reg);
-            if (!TranslateNode(piAstNode, cont.Code))
+            if (!TranslateNode(piAstNode, cont.Code)) {
                 return Fail($"Failed to translate ${piAstNode}");
+            }
+
             objects.Add(cont);
             return true;
         }
     }
 }
-

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using NUnit.Framework;
-
-using Pyro.Test;
 using Pyro.Language.Tau.Lexer;
+using Pyro.Test;
 
 namespace TestTau {
     public class TestTauCommon
@@ -27,12 +25,11 @@ namespace TestTau {
                 Assert.Fail($"Different size collections: expected {tokens.Length}, got {stripped.Count}");
             }
 
-            int i = 0;
-            foreach (var next in stripped) {
+            var i = 0;
+            foreach (var next in stripped)
                 if (tokens[i++] != next) {
                     Assert.Fail("Sequences do not match at index " + i);
                 }
-            }
         }
 
         private static bool IsWhiteSpace(TauToken piToken) {

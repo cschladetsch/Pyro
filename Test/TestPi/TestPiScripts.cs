@@ -1,7 +1,7 @@
-﻿namespace Pyro.Test {
-    using NUnit.Framework;
-    using System.IO;
+﻿using System.IO;
+using NUnit.Framework;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestPiScripts
         : TestCommon {
@@ -40,7 +40,7 @@
             TestScript("Current.pi");
             TestScript("Conditionals.pi");
             TestScript("Map.pi");
-            
+
             //TestScript("Loops.pi");
             //TestScript("TestAppCalls.pi");
             //TestScript("TreeScope.pi");

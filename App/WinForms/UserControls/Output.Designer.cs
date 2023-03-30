@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.TextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             //
             // richTextBox1
             //
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(542, 377);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "Output goes here.";
+            this.TextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TextBox.Location = new System.Drawing.Point(0, 0);
+            this.TextBox.Name = "TextBox";
+            this.TextBox.Size = new System.Drawing.Size(542, 377);
+            this.TextBox.TabIndex = 0;
+            this.TextBox.Text = "Output goes here.";
             //
             // Output
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.TextBox);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Output";
             this.Size = new System.Drawing.Size(542, 377);
@@ -54,7 +54,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }

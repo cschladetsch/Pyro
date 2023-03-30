@@ -1,48 +1,56 @@
-﻿namespace Pyro.Language {
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Pyro.Language {
     /// <inheritdoc cref="Process" />
     /// <inheritdoc cref="ILexer" />
     /// <summary>
-    /// Common to all lexers. Provides basic lexing functionality that is not specific to
-    /// any token-type.
+    ///     Common to all lexers. Provides basic lexing functionality that is not specific to
+    ///     any token-type.
     /// </summary>
     public class LexerBase
         : Process
-        , ILexer {
+            , ILexer {
+        protected int _offset, _lineNumber;
+
+        protected LexerBase(string input) {
+            Input = UnfuckNewLines(input);
+        }
+
         private int Offset => _offset;
         public int LineNumber => _lineNumber;
         private string Line => Lines[_lineNumber];
         public List<string> Lines { get; } = new List<string>();
-        public string Input => _input;
+        public string Input { get; private set; }
 
-        private string _input;
-        protected int _offset, _lineNumber;
-        protected virtual void AddStringToken(Slice slice) { }
-        protected virtual void LexError(string fmt, params object[] args) { }
+        protected virtual void AddStringToken(Slice slice) {
+        }
 
-        protected LexerBase(string input)
-            => _input = UnfuckNewLines(input);
+        protected virtual void LexError(string fmt, params object[] args) {
+        }
 
-        public string GetLine(int lineNumber)
-            => Lines[lineNumber];
+        public string GetLine(int lineNumber) {
+            return Lines[lineNumber];
+        }
 
-        public string GetText(Slice slice)
-            => Lines[slice.LineNumber].Substring(slice.Start, slice.Length);
+        public string GetText(Slice slice) {
+            return Lines[slice.LineNumber].Substring(slice.Start, slice.Length);
+        }
 
         protected void CreateLines() {
-            if (string.IsNullOrEmpty(_input))
+            if (string.IsNullOrEmpty(Input)) {
                 return;
+            }
 
             const char newLine = '\n';
-            if (_input[_input.Length - 1] != newLine)
-                _input += newLine;
+            if (Input[Input.Length - 1] != newLine) {
+                Input += newLine;
+            }
 
             int lineStart = 0, n = 0;
-            foreach (var c in _input) {
+            foreach (var c in Input) {
                 if (c == newLine) {
-                    Lines.Add(_input.Substring(lineStart, n - lineStart + 1));
+                    Lines.Add(Input.Substring(lineStart, n - lineStart + 1));
                     lineStart = n + 1;
                 }
 
@@ -84,8 +92,9 @@
         }
 
         protected char Current() {
-            if (_lineNumber == Lines.Count)
+            if (_lineNumber == Lines.Count) {
                 return (char)0;
+            }
 
             return Line[_offset];
         }
@@ -94,11 +103,14 @@
             if (EndOfLine()) {
                 _offset = 0;
                 ++_lineNumber;
-            } else
+            }
+            else {
                 ++_offset;
+            }
 
-            if (_lineNumber == Lines.Count)
+            if (_lineNumber == Lines.Count) {
                 return (char)0;
+            }
 
             return Line[_offset];
         }
@@ -109,18 +121,20 @@
         }
 
         /// <summary>
-        /// Peek N glyphs ahead on current line.
+        ///     Peek N glyphs ahead on current line.
         /// </summary>
         /// <param name="n">The number of glyphs to look ahead.</param>
         /// <returns>(char)0 if cannot peek, else the char peeked.</returns>
         protected char Peek(int n = 1) {
             const char end = (char)0;
 
-            if (Current() == 0)
+            if (Current() == 0) {
                 return end;
+            }
 
-            if (EndOfLine())
+            if (EndOfLine()) {
                 return end;
+            }
 
             return _offset + n >= Line.Length ? end : Line[_offset + n];
         }
@@ -139,11 +153,13 @@
             return true;
         }
 
-        protected virtual void AddKeywordOrIdent(Slice gatherIdent)
-            => throw new NotImplementedException();
+        protected virtual void AddKeywordOrIdent(Slice gatherIdent) {
+            throw new NotImplementedException();
+        }
 
-        private static bool IsValidIdentGlyph(char ch)
-            => char.IsLetterOrDigit(ch) || ch == '_';
+        private static bool IsValidIdentGlyph(char ch) {
+            return char.IsLetterOrDigit(ch) || ch == '_';
+        }
 
         private Slice GatherIdent() {
             var begin = _offset;
@@ -153,11 +169,12 @@
             return new Slice(this, begin, _offset);
         }
 
-        protected static bool IsSpaceChar(char arg)
-            => char.IsWhiteSpace(arg);
+        protected static bool IsSpaceChar(char arg) {
+            return char.IsWhiteSpace(arg);
+        }
 
-        private string UnfuckNewLines(string input)
-            => input.Replace("\r", "");
+        private string UnfuckNewLines(string input) {
+            return input.Replace("\r", "");
+        }
     }
 }
-

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-class TestClient {
+internal class TestClient {
     private readonly Dictionary<int, object> _objects = new Dictionary<int, object>();
 
     public void AddRemote(string fullName, int id) {
@@ -11,7 +12,7 @@ class TestClient {
 
         _objects[id] = new object();
 
-        System.Console.WriteLine($"AddRemote: {fullName} {id}");
+        Console.WriteLine($"AddRemote: {fullName} {id}");
     }
 
     // TODO: make UnityEngine.Vector3 and .Quaternion known types.
@@ -23,7 +24,7 @@ class TestClient {
         }
 
         //obj.transform.position = new Vector3(x,y,z);// TODO: make UnityEngine.Vector3 a known type
-        System.Console.WriteLine($"Update: {id}: {x} {y} {z}");
+        Console.WriteLine($"Update: {id}: {x} {y} {z}");
     }
 
     public void Disconnect(int id) {
@@ -33,7 +34,6 @@ class TestClient {
         }
 
         _objects.Remove(id);
-        System.Console.WriteLine($"Disconnect: {id}");
+        Console.WriteLine($"Disconnect: {id}");
     }
 }
-

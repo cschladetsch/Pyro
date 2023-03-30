@@ -1,8 +1,7 @@
-﻿namespace Pyro.TestCore {
-    using Impl;
-    using NUnit.Framework;
-    using Pyro;
+﻿using NUnit.Framework;
+using Pyro.Impl;
 
+namespace Pyro.TestCore {
     public class Foo {
         public IRef<int> Num;
     }
@@ -29,9 +28,8 @@
         [Test]
         public void TestReferenceFields() {
             var reg = new Registry();
-            IRef<Foo> foo = reg.Add(new Foo());
+            var foo = reg.Add(new Foo());
             Assert.AreSame(foo.Class.Type, typeof(Foo));
         }
     }
 }
-

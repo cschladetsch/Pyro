@@ -4,18 +4,32 @@ using System.Text;
 
 namespace Pyro.Exec {
     /// <summary>
-    /// Also known as a co-routine.
-    /// Can be interrupted mid-execution and later resumed.
+    ///     Also known as a co-routine.
+    ///     Can be interrupted mid-execution and later resumed.
     /// </summary>
     public partial class Continuation {
+        public delegate void ContinuationHandler(Continuation continuation);
+
+        public delegate void ContinuationIpChangedHandler(Continuation continuation, int last, int current);
+
+        private int _ip;
+
+        public Continuation() {
+            Active = true;
+            Running = false;
+        }
+
+        public Continuation(IList<object> code)
+            : this() {
+            Code = code;
+        }
+
         /// <summary>
-        /// The 'instruction pointer', or the thing to execute next in list of objects in code block.
+        ///     The 'instruction pointer', or the thing to execute next in list of objects in code block.
         /// </summary>
-        public int Ip
-        {
+        public int Ip {
             get => _ip;
-            private set
-            {
+            private set {
                 OnIpChanged?.Invoke(this, _ip, value);
                 _ip = value;
             }
@@ -23,9 +37,9 @@ namespace Pyro.Exec {
 
         public IList<object> Code { get; }
 
-        public delegate void ContinuationHandler(Continuation continuation);
+        private IList<string> Args { get; set; }
 
-        public delegate void ContinuationIpChangedHandler(Continuation continuation, int last, int current);
+        private IDictionary<string, object> _scope => Scope;
 
         public event ContinuationHandler OnScopeChanged;
 
@@ -33,28 +47,12 @@ namespace Pyro.Exec {
 
         public event ContinuationIpChangedHandler OnIpChanged;
 
-        private IList<string> Args { get; set; }
-
-        private int _ip;
-
         internal void FireOnLeave() {
             OnLeave?.Invoke(this);
         }
 
-        private IDictionary<string, object> _scope => Scope;
-
-        public Continuation() {
-            Active = true;
-            Running = false;
-        }
-
-        public Continuation(IList<object> code) 
-            : this() {
-            Code = code;
-        }
-
         /// <summary>
-        /// Helper to make a new continuation, which also uses a referenced list for scope
+        ///     Helper to make a new continuation, which also uses a referenced list for scope
         /// </summary>
         public new static Continuation New(IRegistry reg) {
             var code = reg.Add(new List<object>());
@@ -123,10 +121,11 @@ namespace Pyro.Exec {
             if (Ip == Code.Count) {
                 Ip = 0;
             }
-            
+
             if (Args != null) {
-                if (exec.DataStack.Count < Args.Count)
+                if (exec.DataStack.Count < Args.Count) {
                     throw new DataStackEmptyException($"Expected at least {Args.Count} objects on stack.");
+                }
 
                 foreach (var arg in Args.Reverse())
                     Scope[arg] = exec.DataStack.Pop();
@@ -135,16 +134,18 @@ namespace Pyro.Exec {
             OnScopeChanged?.Invoke(this);
         }
 
-        public bool HasScopeObject(string label)
-            => _scope.ContainsKey(label);
+        public bool HasScopeObject(string label) {
+            return _scope.ContainsKey(label);
+        }
 
         public void SetScopeObject(string label, object val) {
             _scope[label] = val;
             OnScopeChanged?.Invoke(this);
         }
 
-        public object FromScope(string label)
-            => _scope.TryGetValue(label, out var value) ? value : null;
+        public object FromScope(string label) {
+            return _scope.TryGetValue(label, out var value) ? value : null;
+        }
 
         public bool Next(out object next) {
             var has = Ip < Code.Count;

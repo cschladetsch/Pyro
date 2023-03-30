@@ -4,10 +4,28 @@ using System.Reflection;
 
 namespace Pyro.Exec {
     /// <summary>
-    /// Processes a sequence of Continuations.
+    ///     Processes a sequence of Continuations.
     /// </summary>
     public partial class Executor
         : Reflected<Executor> {
+        public delegate void ContextStackChangedHandler(Executor executor, List<Continuation> context);
+
+        public delegate void ContinuationChangedHandler(Executor executor, Continuation previous, Continuation current);
+
+        public delegate void DataStackChangedHandler(Executor executor, Stack<object> context);
+
+        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
+        private bool _break;
+
+        public string SourceFilename = "<script>";
+
+        public Executor() {
+            Kernel = Flow.Create.Kernel();
+            Rethrows = true;
+            Verbosity = 100;
+            AddOperations();
+        }
+
         public Stack<object> DataStack { get; } = new Stack<object>();
 
         public List<Continuation> ContextStack { get; } = new List<Continuation>();
@@ -16,26 +34,11 @@ namespace Pyro.Exec {
 
         public Continuation Current { get; private set; }
 
-        public string SourceFilename = "<script>";
-        
-        public delegate void ContextStackChangedHandler(Executor executor, List<Continuation> context);
-        public delegate void DataStackChangedHandler(Executor executor, Stack<object> context);
-        public delegate void ContinuationChangedHandler(Executor executor, Continuation previous, Continuation current);
+        private int NumOps { get; set; }
+        private IRegistry _registry => Self.Registry;
         public event ContextStackChangedHandler OnContextStackChanged;
         public event DataStackChangedHandler OnDataStackChanged;
         public event ContinuationChangedHandler OnContinuationChanged;
-
-        private int NumOps { get; set; }
-        private bool _break;
-        private readonly Dictionary<EOperation, Action> _actions = new Dictionary<EOperation, Action>();
-        private IRegistry _registry => Self.Registry;
-
-        public Executor() {
-            Kernel = Flow.Create.Kernel();
-            Rethrows = true;
-            Verbosity = 100;
-            AddOperations();
-        }
 
         private void SetCurrent(Continuation continuation) {
             Current?.FireOnLeave();
@@ -56,11 +59,13 @@ namespace Pyro.Exec {
             Current = current;
         }
 
-        public void Continue(IRef<Continuation> continuation)
-            => Continue(continuation.Value);
+        public void Continue(IRef<Continuation> continuation) {
+            Continue(continuation.Value);
+        }
 
-        public void Continue()
-            => Continue(PopContext());
+        public void Continue() {
+            Continue(PopContext());
+        }
 
         public void Continue(Continuation continuation) {
             PushContext(continuation);
@@ -69,15 +74,14 @@ namespace Pyro.Exec {
                 if (ContextStack.Count == 0) {
                     break;
                 }
-                
+
                 SetCurrent(PopContext());
-                
+
                 _break = false;
-                while (Next()) {
+                while (Next())
                     if (_break) {
                         break;
                     }
-                }
             }
         }
 
@@ -193,14 +197,17 @@ namespace Pyro.Exec {
                 case Label label:
                     // TODO: search System types like System.Int32 etc
                     found = _registry.GetClass(label.Text);
-                    if (found != null)
+                    if (found != null) {
                         return true;
+                    }
 
-                    if (TryResolveContextually(label, out found))
+                    if (TryResolveContextually(label, out found)) {
                         return true;
+                    }
 
-                    if (Scope.TryGetValue(label.Text, out found))
+                    if (Scope.TryGetValue(label.Text, out found)) {
                         return true;
+                    }
 
                     return false;
 
@@ -224,17 +231,16 @@ namespace Pyro.Exec {
                 return true;
             }
 
-            foreach (var cont in ContextStack) {
+            foreach (var cont in ContextStack)
                 if (cont.Scope.TryGetValue(ident, out obj)) {
                     return true;
                 }
-            }
 
             return Scope.TryGetValue(ident, out obj);
         }
 
         /// <summary>
-        /// Perform a continuation, then return to current context
+        ///     Perform a continuation, then return to current context
         /// </summary>
         private new void Suspend() {
             PushContext(Current);
@@ -242,7 +248,7 @@ namespace Pyro.Exec {
         }
 
         /// <summary>
-        /// Resume the continuation that spawned the current one
+        ///     Resume the continuation that spawned the current one
         /// </summary>
         private new void Resume() {
             if (!ResolvePop(out var next)) {
@@ -289,9 +295,7 @@ namespace Pyro.Exec {
 
             var obj = Pop();
             var args = new object[numArgs];
-            for (var n = 0; n < numArgs; ++n) {
-                args[numArgs - n - 1] = Pop();
-            }
+            for (var n = 0; n < numArgs; ++n) args[numArgs - n - 1] = Pop();
 
             var ret = mi.Invoke(obj, args);
             if (mi.ReturnType != typeof(void)) {
@@ -352,10 +356,11 @@ namespace Pyro.Exec {
             if (continuation == null) {
                 throw new ArgumentNullException("Cannot push null context " + nameof(continuation));
             }
+
             ContextStack.Add(continuation);
             FireContextStackChanged();
         }
-        
+
         private Continuation PopContext() {
             var contextStackCount = ContextStack.Count;
             if (contextStackCount == 0) {
@@ -369,14 +374,14 @@ namespace Pyro.Exec {
             }
 
             ContextStack.RemoveAt(last);
-            
+
             FireContextStackChanged();
             return cont;
         }
 
         /// <summary>
-        /// Stop the current continuation and resume whatever is on the
-        /// context stack.
+        ///     Stop the current continuation and resume whatever is on the
+        ///     context stack.
         /// </summary>
         private void Break() {
             _break = true;
@@ -401,10 +406,12 @@ namespace Pyro.Exec {
             return true;
         }
 
-        private bool ResolvePop(out dynamic val)
-            => TryResolve(Pop(), out val);
+        private bool ResolvePop(out dynamic val) {
+            return TryResolve(Pop(), out val);
+        }
 
-        private static void DebugBreak()
-            => throw new DebugBreakException();
+        private static void DebugBreak() {
+            throw new DebugBreakException();
+        }
     }
 }

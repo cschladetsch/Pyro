@@ -1,55 +1,43 @@
-using System.Data;
-using System.Runtime.Remoting.Channels;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using Pyro;
+using Pyro.AppCommon;
+using Pyro.Exec;
+using Pyro.ExecutionContext;
 using Pyro.Language;
+using Pyro.Network;
 using Pyro.Network.Impl;
+using WinForms.UserControls;
+using Process = System.Diagnostics.Process;
+using Timer = System.Windows.Forms.Timer;
 
 namespace WinForms {
-    using Pyro;
-    using Pyro.Exec;
-    using Pyro.ExecutionContext;
-    using Pyro.Network;
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.IO;
-    using System.Windows.Forms;
-    using UserControls;
-    using static Pyro.Create;
+    using static Create;
 
 
     /// <summary>
-    /// The main form for the application.
+    ///     The main form for the application.
     /// </summary>
     public partial class MainForm
         : Form
-        , IMainForm {
-        public int ListenPort { get; } = 7777;
-        
-        public Executor Executor => _context.Executor;
-
-        public IRegistry Registry => _context.Registry;
-
-        public ContextStackView ContextView => contextView;
-
-        public Stack<object> DataStack => Executor.DataStack;
-        
-        private List<object> _last;
-        private IPeer _peer;
-        private RichTextBox _piInput => editor.GetLanguageText(ELanguage.Pi);
-        private RichTextBox _rhoInput => editor.GetLanguageText(ELanguage.Rho);
-        private RichTextBox _tauInput => editor.GetLanguageText(ELanguage.Tau);
-        private bool _localProcess = true;
-        private System.Windows.Forms.Timer _timer;
-        private readonly int _saveTimerIntervalMills = 500;
-
+            , IMainForm {
         private readonly ExecutionContext _context;
         private readonly IDomain _netDomain = new Domain();
+        private readonly int _saveTimerIntervalMills = 500;
+
+        private List<object> _last;
+        private readonly bool _localProcess = true;
+        private IPeer _peer;
+        private Timer _timer;
 
         public MainForm() {
             InitializeComponent();
 
             _context = new ExecutionContext();
-            
+
             Perform(EOperation.Clear);
             AddEventHandlers();
             LoadPrevious();
@@ -60,16 +48,84 @@ namespace WinForms {
             AddClosingEvent();
             SaveAllRegularly();
             SetupNetwork();
-            
+
             Executor.Rethrows = true;
             Executor.Verbosity = 20;
             editor.Language = ELanguage.Pi;
             Decompile();
-            output.Text = Pyro.AppCommon.AppCommonBase.GetVersion() + '\n';
+            output.Text = AppCommonBase.GetVersion() + '\n';
+        }
+
+        public Stack<object> DataStack => Executor.DataStack;
+        private RichTextBox _piInput => editor.GetLanguageText(ELanguage.Pi);
+        private RichTextBox _rhoInput => editor.GetLanguageText(ELanguage.Rho);
+        private RichTextBox _tauInput => editor.GetLanguageText(ELanguage.Tau);
+        public int ListenPort { get; } = 7777;
+
+        public Executor Executor => _context.Executor;
+
+        public IRegistry Registry => _context.Registry;
+
+        public ContextStackView ContextView { get; private set; }
+
+
+        public void Run(string text, ELanguage language) {
+            try {
+                if (_localProcess) {
+                    Perform(() => _context.Exec(language, text));
+                    return;
+                }
+
+                var script = language == ELanguage.Pi ? text : Registry.ToPiScript(text);
+                Perform(() => _peer.Execute(script));
+            } catch (Exception e) {
+                OutputException(e);
+            }
+        }
+
+        public void Perform(EOperation op) {
+            try {
+                if (_localProcess) {
+                    Perform(() => Executor.Perform(op));
+                }
+                else {
+                    _peer.Execute(_context.Registry.ToPiScript(op));
+                }
+            } catch (Exception e) {
+                OutputException(e);
+            }
+        }
+
+        public void Decompile() {
+            var cont = GetContinuation();
+            if (cont == null) {
+                return;
+            }
+
+            Executor.PushContext(cont);
+            UpdateContextView();
+        }
+
+        public void RunCurrent() {
+            try {
+                Executor.Continue();
+            } catch (Exception e) {
+                OutputException(e);
+            }
+        }
+
+        public void ConvertToPi() {
+            var cont = GetContinuation();
+            if (cont == null) {
+                return;
+            }
+
+            _piInput.Text = Registry.ToPiScript(cont) + " &";
+            ColorisePi();
         }
 
         private void SaveAllRegularly() {
-            _timer = new System.Windows.Forms.Timer();
+            _timer = new Timer();
             _timer.Interval = _saveTimerIntervalMills; // milliseconds
             _timer.Tick += SaveAll;
         }
@@ -79,7 +135,8 @@ namespace WinForms {
         }
 
         private void AddClosingEvent() {
-            FormClosing += (a, b) => {
+            FormClosing += (a, b) =>
+            {
                 SaveFiles();
                 _peer?.Stop();
             };
@@ -114,14 +171,15 @@ namespace WinForms {
 
         private void ConnectUserControls() {
             dataStack.Construct(this);
-            contextView.Construct(this);
+            ContextView.Construct(this);
             output.Construct(this);
             editor.Construct(this);
         }
 
         private void Print(object obj) {
-            if (obj == null)
+            if (obj == null) {
                 return;
+            }
 
             Console.WriteLine(obj);
             output.Text += "\n" + obj;
@@ -153,36 +211,23 @@ namespace WinForms {
         private void RhoTextKeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.Enter: {
-                        if (e.Control) {
-                            RunCurrent();
-                            e.Handled = true;
-                        }
-                        if (e.Alt & e.Control) {
-                            UpdateContextView();
-                            e.Handled = true;
-                        }
-                        break;
+                    if (e.Control) {
+                        RunCurrent();
+                        e.Handled = true;
                     }
+
+                    if (e.Alt & e.Control) {
+                        UpdateContextView();
+                        e.Handled = true;
+                    }
+
+                    break;
+                }
             }
         }
 
         private void UpdateContextView() {
-            contextView.UpdateView();
-        }
-
-
-        public void Run(string text, ELanguage language) {
-            try {
-                if (_localProcess) {
-                    Perform(() => _context.Exec(language, text));
-                    return;
-                }
-
-                var script = language == ELanguage.Pi ? text : Registry.ToPiScript(text);
-                Perform(() => _peer.Execute(script));
-            } catch (Exception e) {
-                OutputException(e);
-            }
+            ContextView.UpdateView();
         }
 
 
@@ -194,8 +239,9 @@ namespace WinForms {
                 action();
                 var span = DateTime.Now - start;
                 toolStripMenuItem1.Text = $"Took {span.TotalMilliseconds:0.00}ms (with UI updates)";
-                if (!string.IsNullOrEmpty(_context.Error))
+                if (!string.IsNullOrEmpty(_context.Error)) {
                     output.Append("\n" + _context.Error);
+                }
             } catch (Exception e) {
                 OutputException(e);
             }
@@ -206,6 +252,7 @@ namespace WinForms {
             if (e.Message == _context.Error) {
                 text = $"{e.Message}";
             }
+
             output.Append(text + '\n', Color.Red);
             Console.WriteLine(e);
             MessageBox.Show(text, "Pyro Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -214,20 +261,8 @@ namespace WinForms {
         private void CopyStack() {
             try {
                 _last = new List<object>();
-                foreach (var obj in Executor.DataStack) {
-                    _last.Add(_context.Registry.Duplicate(obj)); // TODO: copy-on-write duplicates
-                }
-            } catch (Exception e) {
-                OutputException(e);
-            }
-        }
-
-        public void Perform(EOperation op) {
-            try {
-                if (_localProcess)
-                    Perform(() => Executor.Perform(op));
-                else
-                    _peer.Execute(_context.Registry.ToPiScript(op));
+                foreach (var obj in
+                    Executor.DataStack) _last.Add(_context.Registry.Duplicate(obj)); // TODO: copy-on-write duplicates
             } catch (Exception e) {
                 OutputException(e);
             }
@@ -236,42 +271,54 @@ namespace WinForms {
         private void SaveAsFile(object sender, EventArgs e) {
             var isPi = editor.Language == ELanguage.Pi;
             var save = isPi ? savePiDialog : saveRhoDialog;
-            if (save.ShowDialog() == DialogResult.OK)
+            if (save.ShowDialog() == DialogResult.OK) {
                 File.WriteAllText(save.FileName, isPi ? _piInput.Text : _rhoInput.Text);
+            }
         }
 
-        private void GotoSourceClick(object sender, EventArgs e)
-            => System.Diagnostics.Process.Start(@"https://www.github.com/cschladetsch/pyro");
+        private void GotoSourceClick(object sender, EventArgs e) {
+            Process.Start(@"https://www.github.com/cschladetsch/pyro");
+        }
 
-        private void ShowAboutBox(object sender, EventArgs e)
-            => new AboutBox().ShowDialog();
+        private void ShowAboutBox(object sender, EventArgs e) {
+            new AboutBox().ShowDialog();
+        }
 
-        private void Exit(object sender, EventArgs e)
-            => Application.Exit();
+        private void Exit(object sender, EventArgs e) {
+            Application.Exit();
+        }
 
-        private static string LoadFile(string name)
-            => File.ReadAllText(TmpFile(name));
+        private static string LoadFile(string name) {
+            return File.ReadAllText(TmpFile(name));
+        }
 
-        private static void SaveFile(string name, string contents)
-            => File.WriteAllText(TmpFile(name), contents);
+        private static void SaveFile(string name, string contents) {
+            File.WriteAllText(TmpFile(name), contents);
+        }
 
-        private static string TmpFile(string name)
-            => Path.Combine(GetFolderPath(), $"last.{name}");
+        private static string TmpFile(string name) {
+            return Path.Combine(GetFolderPath(), $"last.{name}");
+        }
 
-        private static string GetFolderPath()
-            => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static string GetFolderPath() {
+            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        }
 
-        private void SaveFile(object sender, EventArgs e)
-            => throw new NotImplementedException();
+        private void SaveFile(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
 
-        private void NetworkConnect(object sender, EventArgs e)
-            => new NetworkConnect(_peer).Show();
+        private void NetworkConnect(object sender, EventArgs e) {
+            new NetworkConnect(_peer).Show();
+        }
 
-        private void PiInputOnTextChanged(object sender, EventArgs e)
-            => ColorisePi();
+        private void PiInputOnTextChanged(object sender, EventArgs e) {
+            ColorisePi();
+        }
 
-        private void RhoInputOnTextChanged(object sender, EventArgs e)
-            => ColoriseRho();
+        private void RhoInputOnTextChanged(object sender, EventArgs e) {
+            ColoriseRho();
+        }
 
         private static void Connected(IPeer peer, IClient client) {
             Console.WriteLine($"Connected: {peer} {client}");
@@ -281,7 +328,7 @@ namespace WinForms {
         }
 
         private void debuggerToolStripMenuItem_Click(object sender, EventArgs e) {
-            ToggleControlVisibility(contextView);
+            ToggleControlVisibility(ContextView);
         }
 
         private void treeToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -291,6 +338,7 @@ namespace WinForms {
         private void outputToolStripMenuItem_Click(object sender, EventArgs e) {
             ToggleControlVisibility(output);
         }
+
         private void stackToolStripMenuItem_Click(object sender, EventArgs e) {
             ToggleControlVisibility(dataStack);
         }
@@ -299,42 +347,15 @@ namespace WinForms {
             control.Visible = !control.Visible;
         }
 
-        public void Decompile() {
-            var cont = GetContinuation();
-            if (cont == null) {
-                return;
-            }
-            Executor.PushContext(cont);
-            UpdateContextView();
-        }
-
-        public void RunCurrent() {
-            try {
-                Executor.Continue();
-            } catch (Exception e) {
-                OutputException(e);
-            }
-        }
-
         private Continuation GetContinuation() {
             _context.Language = editor.Language;
             if (_context.Translate(editor.RichTextBox.Text, out var cont)) {
                 return cont;
             }
 
-            MessageBox.Show(_context.Error, $"Failed to Translate {editor.Language}", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(_context.Error, $"Failed to Translate {editor.Language}", MessageBoxButtons.OK
+                , MessageBoxIcon.Information);
             return null;
-        }
-        
-        public void ConvertToPi() {
-            var cont = GetContinuation();
-            if (cont == null) {
-                return;
-            }
-            
-            _piInput.Text = Registry.ToPiScript(cont) + " &";
-            ColorisePi();
         }
     }
 }
-

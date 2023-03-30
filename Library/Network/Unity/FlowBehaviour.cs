@@ -1,11 +1,11 @@
-﻿namespace Pyro.Network.Unity {
-    using Flow;
-    using System;
-    using UnityEngine;
+﻿using System;
+using Flow;
+using UnityEngine;
 
+namespace Pyro.Network.Unity {
     public class FlowBehaviour
         : MonoBehaviour
-        , ITransient {
+            , ITransient {
         public string Name { get; set; }
 
         public event TransientHandler Completed;
@@ -22,7 +22,7 @@
             throw new NotImplementedException();
         }
 
-        public ITransient AddTo(IGroup @group) {
+        public ITransient AddTo(IGroup group) {
             throw new NotImplementedException();
         }
 

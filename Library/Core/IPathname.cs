@@ -1,7 +1,6 @@
-﻿namespace Pyro {
+﻿using System.Collections.Generic;
 
-    using System.Collections.Generic;
-
+namespace Pyro {
     //public class PathElement {
     //    public enum EType {
     //        None,
@@ -24,11 +23,10 @@
 
     /// <inheritdoc />
     /// <summary>
-    /// DOC
+    ///     DOC
     /// </summary>
     public interface IPathname
         : IIdentifer {
-
         bool IsAbsolute { get; }
 
         List<PathElement> Elements { get; }

@@ -1,10 +1,9 @@
-﻿using Pyro.Language;
+﻿using Pyro;
+using Pyro.Exec;
+using Pyro.Language;
+using WinForms.UserControls;
 
 namespace WinForms {
-    using Pyro;
-    using Pyro.Exec;
-    using WinForms.UserControls;
-
     public interface IMainForm {
         int ListenPort { get; }
 
@@ -21,4 +20,3 @@ namespace WinForms {
         void Run(string text, ELanguage language);
     }
 }
-

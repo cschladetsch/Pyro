@@ -1,6 +1,6 @@
-﻿namespace Pyro.Test {
-    using NUnit.Framework;
+﻿using NUnit.Framework;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestConditionals
         : TestCommon {

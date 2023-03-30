@@ -1,12 +1,13 @@
-﻿namespace Pyro.Exec {
-    using System.Text;
+﻿using System.Text;
 
+namespace Pyro.Exec {
     public partial class Continuation
         : Reflected<Continuation> {
         public void DebugWrite(StringBuilder str) {
             if (_scope == null || _scope.Count == 0) {
                 str.AppendLine("\tNothing in scope.");
-            } else {
+            }
+            else {
                 str.AppendLine("\tScope:");
                 foreach (var obj in _scope)
                     str.AppendLine($"\t\tname={obj.Key}, val={obj.Value}");
@@ -24,10 +25,9 @@
                     wrap1 = " >>> ";
                     wrap2 = " <<< ";
                 }
-                
+
                 str.Append($"{wrap1}{Code[n]}{wrap2}, ");
             }
         }
     }
 }
-

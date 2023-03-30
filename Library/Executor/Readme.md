@@ -7,7 +7,8 @@ A virtual machine with two distinct stacks:
 
 ## Overview
 
-This C# code defines a class Executor inside the namespace Pyro.Exec. The Executor class is responsible for processing a sequence of Continuation objects, which represent units of execution in the Pyro language runtime.
+This C# code defines a class Executor inside the namespace Pyro.Exec. The Executor class is responsible for processing a
+sequence of Continuation objects, which represent units of execution in the Pyro language runtime.
 
 Key elements of the Executor class include:
 
@@ -19,13 +20,11 @@ Properties:
 * Current: The current Continuation object in the execution process.
 * SourceFilename: A string containing the source filename of the code being executed.
 
-
 ### Events
 
 * OnContextStackChanged: Triggered when the context stack changes.
 * OnDataStackChanged: Triggered when the data stack changes.
 * OnContinuationChanged: Triggered when the current continuation changes.
-
 
 ### Constructor
 
@@ -53,7 +52,9 @@ Methods for resolving identifiers and handling execution:
 * TryResolvePath(): Not implemented, intended for resolving a path to a value.
 * TryResolveContextually(): Tries to resolve a label by checking the context stack and scope.
 * Suspend(): Suspends the current continuation and resumes the parent continuation.
-* Resume(): Resumes the continuation that spawned the current one, handling various types of callable objects and methods.
+* Resume(): Resumes the continuation that spawned the current one, handling various types of callable objects and
+  methods.
 * Break(): Stops the current continuation and resumes whatever is on the context stack.
 
-The Executor class is designed to manage the execution of Pyro language programs by managing the data stack and context stack, resolving identifiers, and handling continuations. It is an essential component of the Pyro language runtime.
+The Executor class is designed to manage the execution of Pyro language programs by managing the data stack and context
+stack, resolving identifiers, and handling continuations. It is an essential component of the Pyro language runtime.

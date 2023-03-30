@@ -1,11 +1,10 @@
-﻿namespace Pyro.RhoLang.Lexer {
-    using Language;
-    using Pyro.Language.Impl;
-    using System.Diagnostics.CodeAnalysis;
+﻿using Pyro.Language;
+using Pyro.Language.Impl;
 
+namespace Pyro.RhoLang.Lexer {
     /// <inheritdoc />
     /// <summary>
-    /// Lexer for the Rho language
+    ///     Lexer for the Rho language
     /// </summary>
     public class RhoLexer
         : LexerCommon<ERhoToken, RhoToken, RhoTokenFactory> {
@@ -35,19 +34,22 @@
 
         protected override bool NextToken() {
             var current = Current();
-            if (current == 0)
+            if (current == 0) {
                 return false;
+            }
 
-            if (char.IsLetter(current) || current == '_')
+            if (char.IsLetter(current) || current == '_') {
                 return IdentOrKeyword();
+            }
 
             if (char.IsDigit(current)) {
                 var start = Gather(char.IsDigit);
                 if (Current() == '.') {
                     Next();
                     var end = Gather(char.IsDigit);
-                    if (start.LineNumber != end.LineNumber)
+                    if (start.LineNumber != end.LineNumber) {
                         return Fail("Bad float literal");
+                    }
 
                     return AddSlice(ERhoToken.Float, new Slice(this, start.Start, end.End));
                 }
@@ -80,18 +82,24 @@
                 case ';': return Add(ERhoToken.Semi);
                 case '\t': return Add(ERhoToken.Tab);
                 case '\r': {
-                        // fuck I hate this
-                        Next();
-                        return true;
-                    }
+                    // fuck I hate this
+                    Next();
+                    return true;
+                }
                 case '\n': return Add(ERhoToken.NewLine);
                 case '-':
-                    if (char.IsDigit(Peek()))
+                    if (char.IsDigit(Peek())) {
                         return AddSlice(ERhoToken.Int, Gather(char.IsDigit));
-                    if (Peek() == '-')
+                    }
+
+                    if (Peek() == '-') {
                         return AddTwoCharOp(ERhoToken.Decrement);
-                    if (Peek() == '=')
+                    }
+
+                    if (Peek() == '=') {
                         return AddTwoCharOp(ERhoToken.MinusAssign);
+                    }
+
                     return Add(ERhoToken.Minus);
 
                 case '.':
@@ -101,15 +109,21 @@
                             Next();
                             return Add(ERhoToken.Resume, 3);
                         }
+
                         return Fail("Two dots doesn't work.");
                     }
+
                     return Add(ERhoToken.Dot);
 
                 case '+':
-                    if (Peek() == '+')
+                    if (Peek() == '+') {
                         return AddTwoCharOp(ERhoToken.Increment);
-                    if (Peek() == '=')
+                    }
+
+                    if (Peek() == '=') {
                         return AddTwoCharOp(ERhoToken.PlusAssign);
+                    }
+
                     return Add(ERhoToken.Plus);
 
                 case '/':
@@ -139,8 +153,10 @@
         private bool AddEmbeddedPi() {
             Next();
             AddSlice(ERhoToken.PiSlice, Gather(c => c != '`'));
-            if (Current() != '`')
+            if (Current() != '`') {
                 return Fail("Unterminated embedded Pi code");
+            }
+
             Next();
             return true;
         }
@@ -151,8 +167,8 @@
                 : _Factory.NewTokenIdent(slice));
         }
 
-        protected override void Terminate()
-            => _Tokens.Add(_Factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
+        protected override void Terminate() {
+            _Tokens.Add(_Factory.NewToken(ERhoToken.Nop, new Slice(this, _offset, _offset)));
+        }
     }
 }
-

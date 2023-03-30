@@ -1,39 +1,43 @@
-﻿namespace Pyro.Exec {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace Pyro.Exec {
     /// <inheritdoc />
     /// <summary>
-    /// Implementation of the various operations an Executor can perform.
+    ///     Implementation of the various operations an Executor can perform.
     /// </summary>
     public partial class Executor {
+        private const float FLOAT_EPSILON = 0.00001f;
+
         /// <summary>
-        /// A hack that is broken anyway.
+        ///     A hack that is broken anyway.
         /// </summary>
         private bool _leaveForEach;
 
         private dynamic RPop() {
-            if (TryResolve(Pop(), out object val))
+            if (TryResolve(Pop(), out object val)) {
                 return val;
+            }
+
             throw new DataStackEmptyException();
         }
 
-        private const float FLOAT_EPSILON = 0.00001f;
-        
         /// <summary>
-        /// Add options to the internal mapping of EOperation enum to
-        /// functor that does the work for that operation.
+        ///     Add options to the internal mapping of EOperation enum to
+        ///     functor that does the work for that operation.
         /// </summary>
         private void AddOperations() {
-            _actions[EOperation.Plus] = () => {
+            _actions[EOperation.Plus] = () =>
+            {
                 var b = RPop();
                 var a = RPop();
                 Push(a + b);
             };
 
-            _actions[EOperation.Minus] = () => {
+            _actions[EOperation.Minus] = () =>
+            {
                 var a = RPop();
                 var b = RPop();
                 Push(b - a);
@@ -95,8 +99,8 @@
             _actions[EOperation.Dup] = Dup;
             _actions[EOperation.Clear] = () =>
             {
-                 DataStack.Clear();
-                 OnDataStackChanged?.Invoke(this, DataStack);
+                DataStack.Clear();
+                OnDataStackChanged?.Invoke(this, DataStack);
             };
             _actions[EOperation.Less] = Less;
             _actions[EOperation.LessOrEquiv] = LessEquiv;
@@ -106,8 +110,9 @@
             _actions[EOperation.Exists] = Exists;
         }
 
-        private void Exists()
-            => Push(TryResolve(Pop(), out object _));
+        private void Exists() {
+            Push(TryResolve(Pop(), out object _));
+        }
 
         private void Replace() {
             PopContext();
@@ -148,17 +153,20 @@
         }
 
         private void Assert() {
-            if (!Pop<bool>())
+            if (!Pop<bool>()) {
                 throw new AssertionFailedException();
+            }
         }
 
         private void StoreValue() {
             var name = Pop<IdentBase>();
             var val = Pop();
-            if (name is Label label)
+            if (name is Label label) {
                 Current.SetScopeObject(label.Text, val);
-            else
+            }
+            else {
                 throw new Exception($"Can't store to {name}");
+            }
         }
 
         private void GetValue() {
@@ -169,8 +177,10 @@
 
         private void GetTypeOf() {
             var obj = Pop();
-            if (obj is IConstRefBase cref)
+            if (obj is IConstRefBase cref) {
                 Push(cref.Class.TypeName);
+            }
+
             Push(obj.GetType().FullName);
         }
 
@@ -273,8 +283,9 @@
         private void OpNew() {
             var obj = RPop();
             var @class = ConstRef<IClassBase>(RPop());
-            if (@class == null)
+            if (@class == null) {
                 throw new Exception($"Couldn't get class from {obj}");
+            }
 
             Push(_registry.New(@class, DataStack));
         }
@@ -287,25 +298,30 @@
             // TODO: not need to have to register classes.
             var @class = _registry.GetClass(type);
 
-            if (GetField(type, member, obj))
+            if (GetField(type, member, obj)) {
                 return;
+            }
 
-            if (GetProperty(type, member, obj))
+            if (GetProperty(type, member, obj)) {
                 return;
+            }
 
-            if (GetCallable(@class, member, obj))
+            if (GetCallable(@class, member, obj)) {
                 return;
+            }
 
-            if (GetMethod(type, member, obj, @class))
+            if (GetMethod(type, member, obj, @class)) {
                 return;
+            }
 
             throw new MemberNotFoundException(obj.GetType(), member);
         }
 
         private bool GetField(Type type, string member, object obj) {
             var field = type.GetField(member);
-            if (field == null)
+            if (field == null) {
                 return false;
+            }
 
             Push(field.GetValue(obj));
             return true;
@@ -313,22 +329,27 @@
 
         private bool GetProperty(Type type, string member, object obj) {
             var pi = type.GetProperty(member);
-            if (pi == null)
+            if (pi == null) {
                 return false;
+            }
 
             Push(pi.GetValue(obj));
             return true;
         }
 
         private bool GetMethod(Type type, string member, object obj, IClassBase @class) {
-            if (@class == null)
+            if (@class == null) {
                 return false;
-            if (type == null)
+            }
+
+            if (type == null) {
                 return false;
+            }
 
             var methodInfo = type.GetMethod(member);
-            if (methodInfo == null)
+            if (methodInfo == null) {
                 return false;
+            }
 
             Push(obj);
             Push(methodInfo);
@@ -338,8 +359,9 @@
 
         private bool GetCallable(IClassBase @class, string member, object obj) {
             var callable = @class.GetCallable(member);
-            if (callable == null)
+            if (callable == null) {
                 return false;
+            }
 
             Push(obj);
             Push(callable);
@@ -357,8 +379,9 @@
             // First, search context for an object with
             // matching name and use that.
             foreach (var c in ContextStack) {
-                if (!c.HasScopeObject(ident))
+                if (!c.HasScopeObject(ident)) {
                     continue;
+                }
 
                 c.SetScopeObject(ident, val);
                 return;
@@ -380,8 +403,9 @@
         private void If() {
             var test = ResolvePop<bool>();
             var ifBody = RPop();
-            if (test)
+            if (test) {
                 Push(ifBody);
+            }
         }
 
         private void LogicalXor() {
@@ -506,8 +530,9 @@
             }
 
             var type = Type.GetType(typeName);
-            if (type == null)
+            if (type == null) {
                 throw new UnknownIdentifierException(typeName);
+            }
 
             Push(Activator.CreateInstance(type));
         }
@@ -538,7 +563,8 @@
                     Push(kv.Key);
                     Push(kv.Value);
                 }
-            } else {
+            }
+            else {
                 foreach (var obj in cont)
                     Push(obj);
             }
@@ -592,15 +618,16 @@
         }
 
         private void PushBack() {
-            var cont = ResolvePop<List<object>>() as List<object>;
+            var cont = ResolvePop<List<object>>();
             var obj = RPop();
             cont.Add(obj);
             Push(cont);
         }
 
         private void PushFront() {
-            if (!(ResolvePop<List<object>>() is List<object> cont))
+            if (!(ResolvePop<List<object>>() is List<object> cont)) {
                 throw new Exception("Expected a list.");
+            }
 
             cont.Insert(0, RPop());
             Push(cont);
@@ -621,8 +648,9 @@
             var b = RPop();
             switch (a) {
                 case IEnumerable<object> list: {
-                    if (!(b is IEnumerable<object> other))
+                    if (!(b is IEnumerable<object> other)) {
                         throw new CannotCompareEnumerationsException(a, b);
+                    }
 
                     Push(list.SequenceEqual(other));
                     return;
@@ -636,7 +664,5 @@
 
             Push(a.Equals(b));
         }
-
     }
 }
-

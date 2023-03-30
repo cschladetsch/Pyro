@@ -1,6 +1,6 @@
-﻿namespace Pyro.Network.Unity {
-    using Flow;
+﻿using Flow;
 
+namespace Pyro.Network.Unity {
     public class NetworkKernel
         : Singleton<NetworkKernel> {
         public IKernel Kernel;
@@ -9,7 +9,7 @@
         private void Awake() {
             DontDestroyOnLoad(gameObject);
 
-            Kernel = Create.Kernel();
+            Kernel = Flow.Create.Kernel();
         }
 
         private void Update() {

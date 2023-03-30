@@ -1,16 +1,13 @@
-﻿using Pyro.Language;
-using Pyro.Language.Lexer;
-using System;
+﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
-using WinForms.UserControls;
+using Pyro.Language;
+using Pyro.Language.Lexer;
 
 namespace WinForms {
     /// <summary>
-    /// Colorise Pi script.
+    ///     Colorise Pi script.
     /// </summary>
     partial class MainForm {
-        
         private bool ColorisePi() {
             CheckFonts();
 
@@ -29,7 +26,8 @@ namespace WinForms {
                     ColorisePiToken(tok, tok.Slice);
             } catch (Exception e) {
                 output.Text += $"{e.Message}: {lex.Error}";
-            } finally {
+            }
+            finally {
                 EndUpdate(rtb);
             }
 
@@ -37,11 +35,17 @@ namespace WinForms {
         }
 
         private bool ColorisePiToken(PiToken tok, Slice slice) {
-            if (slice.Length < 0)
+            if (slice.Length < 0) {
                 return false;
+            }
 
-            bool Render(Color color) => SetPiSliceColor(slice, color, _defaultFont);
-            bool RenderBold(Color color) => SetPiSliceColor(slice, color, _boldFont);
+            bool Render(Color color) {
+                return SetPiSliceColor(slice, color, _defaultFont);
+            }
+
+            bool RenderBold(Color color) {
+                return SetPiSliceColor(slice, color, _boldFont);
+            }
 
             switch (tok.Type) {
                 case EPiToken.Assert:
@@ -108,8 +112,8 @@ namespace WinForms {
             }
         }
 
-        private bool SetPiSliceColor(Slice slice, Color color, Font font)
-            => SetSliceColor(_piInput, slice, color, font);
+        private bool SetPiSliceColor(Slice slice, Color color, Font font) {
+            return SetSliceColor(_piInput, slice, color, font);
+        }
     }
 }
-

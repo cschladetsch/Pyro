@@ -1,35 +1,38 @@
-﻿namespace WinForms.UserControls {
-    using System.Drawing;
-    using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
+using Pyro.Exec;
 
+namespace WinForms.UserControls {
     public partial class Output
         : UserControlBase
-        , IUserControlCommon {
+            , IUserControlCommon {
+        public Output() {
+            InitializeComponent();
+        }
 
-        public RichTextBox TextBox => richTextBox1;
+        public RichTextBox TextBox { get; private set; }
 
-        public new string Text { get => richTextBox1.Text; set => richTextBox1.Text = value; }
+        public new string Text {
+            get => TextBox.Text;
+            set => TextBox.Text = value;
+        }
+
+        public override void Construct(IMainForm mainForm) {
+            base.Construct(mainForm);
+            Executor.OnDebugTrace += text => Append(text);
+        }
 
         public void Append(string text) {
             TextBox.AppendText(text);
         }
 
         public void Append(string text, Color color) {
-            var box = richTextBox1;
+            var box = TextBox;
             box.SelectionLength = 0;
             box.SelectionColor = color;
             box.AppendText(text);
-            box.SelectionColor = box.ForeColor; ;
+            box.SelectionColor = box.ForeColor;
+            ;
         }
-
-        public Output() {
-            InitializeComponent();
-        }
-
-        public override void Construct(IMainForm mainForm) {
-            base.Construct(mainForm);
-            Pyro.Exec.Executor.OnDebugTrace += (text) => Append(text);
-        }
-
     }
 }

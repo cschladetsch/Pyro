@@ -1,26 +1,24 @@
-﻿namespace Pyro.Language.Parser {
-    using Lexer;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Pyro.Language.Lexer;
 
+namespace Pyro.Language.Parser {
     /// <summary>
-    /// A node in the Abstract Syntax Tree (Ast)
+    ///     A node in the Abstract Syntax Tree (Ast)
     /// </summary>
     public class PiAstNode {
         private readonly List<PiAstNode> _children = new List<PiAstNode>();
+        public PiToken PiToken;
 
         public EPiAst Type;
-        public PiToken PiToken;
         public object Value;
-        public IList<PiAstNode> Children => _children;
 
-        public PiAstNode(EPiAst type) => Type = type;
-        public void Add(PiAstNode node) => _children.Add(node);
-        public void Add(EPiToken piToken) => _children.Add(new PiAstNode(piToken));
-        public void Add(EPiAst type, object value) => _children.Add(new PiAstNode(type, value));
+        public PiAstNode(EPiAst type) {
+            Type = type;
+        }
 
         public PiAstNode(EPiToken type) {
             Type = EPiAst.TokenType;
-            PiToken = new PiToken() { Type = type };
+            PiToken = new PiToken { Type = type };
         }
 
         public PiAstNode(EPiAst type, PiToken piToken) {
@@ -33,10 +31,25 @@
             Value = value;
         }
 
+        public IList<PiAstNode> Children => _children;
+
+        public void Add(PiAstNode node) {
+            _children.Add(node);
+        }
+
+        public void Add(EPiToken piToken) {
+            _children.Add(new PiAstNode(piToken));
+        }
+
+        public void Add(EPiAst type, object value) {
+            _children.Add(new PiAstNode(type, value));
+        }
+
         public override string ToString() {
             var text = $"{PiToken}";
-            if (string.IsNullOrEmpty(text) && Value != null)
+            if (string.IsNullOrEmpty(text) && Value != null) {
                 text = Value.ToString();
+            }
 
             return $"{Type}: '{text}'";
         }

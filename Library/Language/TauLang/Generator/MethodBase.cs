@@ -4,10 +4,10 @@ using Pyro.Language.Tau.Parser;
 
 namespace Pyro.Language.Tau {
     internal class MethodBase {
-        internal readonly string Name;
-        internal readonly string Type;
-        internal readonly string ParameterText;
         private readonly GeneratorBase _generatorBase;
+        internal readonly string Name;
+        internal readonly string ParameterText;
+        internal readonly string Type;
 
         internal MethodBase(GeneratorBase generatorBase, TauAstNode member) {
             _generatorBase = generatorBase;

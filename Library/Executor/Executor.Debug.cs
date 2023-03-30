@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Text;
-
 using NUnit.Framework;
 
 namespace Pyro.Exec {
     /// <inheritdoc />
     /// <summary>
-    /// Debug methods for executor. Removed from main implementation for clarity.
+    ///     Debug methods for executor. Removed from main implementation for clarity.
     /// </summary>
     public partial class Executor {
-
         public delegate void DebugTraceDelegate(string text);
 
         public static event DebugTraceDelegate OnDebugTrace;
 
-        private static void Write(object obj)
-            => Write($"{obj}");
+        private static void Write(object obj) {
+            Write($"{obj}");
+        }
 
-        private static void WriteLine(object obj)
-            => WriteLine($"{obj}");
+        private static void WriteLine(object obj) {
+            WriteLine($"{obj}");
+        }
 
         private static void Write(string text, params object[] args) {
             Console.Write(text);
@@ -29,13 +29,15 @@ namespace Pyro.Exec {
         private static void WriteLine(string fmt, params object[] args) {
             if (args == null || args.Length == 0) {
                 Write(fmt + '\n');
-            } else {
+            }
+            else {
                 Write($"{string.Format(fmt, args)}\n");
             }
         }
 
-        public void DebugTrace()
-            => WriteLine(DebugWrite());
+        public void DebugTrace() {
+            WriteLine(DebugWrite());
+        }
 
         private string DebugWrite() {
             var str = new StringBuilder();
@@ -100,8 +102,9 @@ namespace Pyro.Exec {
             }
         }
 
-        private static string GetTyped(object obj)
-            => obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
+        private static string GetTyped(object obj) {
+            return obj == null ? "null" : $"{obj} ({obj.GetType().Name})";
+        }
 
         private void PerformPrelude(object next) {
             if (Verbosity == 0) {

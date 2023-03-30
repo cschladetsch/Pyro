@@ -54,7 +54,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.editor = new WinForms.UserControls.RhoEditorControl();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.contextView = new WinForms.UserControls.ContextStackView();
+            this.ContextView = new WinForms.UserControls.ContextStackView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataStack = new WinForms.UserControls.DataStackView();
             this.output = new WinForms.UserControls.Output();
@@ -293,7 +293,7 @@
             // 
             this.splitContainer1.Panel1.Controls.Add(this.editor);
             this.splitContainer1.Panel1.Controls.Add(this.splitter1);
-            this.splitContainer1.Panel1.Controls.Add(this.contextView);
+            this.splitContainer1.Panel1.Controls.Add(this.ContextView);
             // 
             // splitContainer1.Panel2
             // 
@@ -325,13 +325,13 @@
             // 
             // contextView
             // 
-            this.contextView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.contextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.contextView.Location = new System.Drawing.Point(594, 0);
-            this.contextView.MainForm = null;
-            this.contextView.Name = "contextView";
-            this.contextView.Size = new System.Drawing.Size(565, 997);
-            this.contextView.TabIndex = 0;
+            this.ContextView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ContextView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ContextView.Location = new System.Drawing.Point(594, 0);
+            this.ContextView.MainForm = null;
+            this.ContextView.Name = "ContextView";
+            this.ContextView.Size = new System.Drawing.Size(565, 997);
+            this.ContextView.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -456,7 +456,6 @@
         private System.Windows.Forms.ToolStripMenuItem treeToolStripMenuItem;
 
         private UserControls.DataStackView dataStack;
-        private WinForms.UserControls.ContextStackView contextView;
         private UserControls.Output output;
     }
 }

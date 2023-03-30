@@ -1,28 +1,29 @@
-﻿namespace Pyro.RhoLang.Parser {
-    using Language.Lexer;
-    using Language.Parser;
-    using Lexer;
+﻿using Pyro.Language.Lexer;
+using Pyro.Language.Parser;
+using Pyro.RhoLang.Lexer;
 
+namespace Pyro.RhoLang.Parser {
     /// <summary>
-    /// Functions that deal only with parsing expressions.
-    ///
-    /// NOTE in Rho, a statement can also be an expression.
+    ///     Functions that deal only with parsing expressions.
+    ///     NOTE in Rho, a statement can also be an expression.
     /// </summary>
     public partial class RhoParser {
         private bool Expression() {
-            if (!Logical())
+            if (!Logical()) {
                 return false;
+            }
 
             if (Maybe(ERhoToken.Assign)
                 || Maybe(ERhoToken.PlusAssign)
                 || Maybe(ERhoToken.MinusAssign)
                 || Maybe(ERhoToken.MulAssign)
                 || Maybe(ERhoToken.DivAssign)
-               ) {
+            ) {
                 var assign = NewNode(Consume());
                 var ident = Pop();
-                if (!Logical())
+                if (!Logical()) {
                     return FailLocation("Logical sub-expression expected");
+                }
 
                 assign.Add(Pop());
                 assign.Add(ident);
@@ -33,14 +34,16 @@
         }
 
         private bool Logical() {
-            if (!Relational())
+            if (!Relational()) {
                 return false;
+            }
 
             while (Maybe(ERhoToken.And) || Maybe(ERhoToken.Or) || Maybe(ERhoToken.Xor)) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
-                if (!Relational())
+                if (!Relational()) {
                     return FailLocation("Relational sub-expression expected");
+                }
 
                 node.Add(Pop());
                 Push(node);
@@ -50,20 +53,22 @@
         }
 
         private bool Relational() {
-            if (!Additive())
+            if (!Additive()) {
                 return false;
+            }
 
             while (Maybe(ERhoToken.Less)
-                   || Maybe(ERhoToken.Greater)
-                   || Maybe(ERhoToken.Equiv)
-                   || Maybe(ERhoToken.NotEquiv)
-                   || Maybe(ERhoToken.LessEquiv)
-                   || Maybe(ERhoToken.GreaterEquiv)
-                ) {
+                || Maybe(ERhoToken.Greater)
+                || Maybe(ERhoToken.Equiv)
+                || Maybe(ERhoToken.NotEquiv)
+                || Maybe(ERhoToken.LessEquiv)
+                || Maybe(ERhoToken.GreaterEquiv)
+            ) {
                 var node = NewNode(Consume());
                 node.Add(Pop());
-                if (!Additive())
+                if (!Additive()) {
                     return FailLocation("Additive sub-expression expected");
+                }
 
                 node.Add(Pop());
                 Push(node);
@@ -94,8 +99,9 @@
                 return Push(negate);
             }
 
-            if (!Term())
+            if (!Term()) {
                 return false;
+            }
 
             while (Maybe(ERhoToken.Plus) || Maybe(ERhoToken.Minus)) {
                 var node = NewNode(Consume());
@@ -112,8 +118,9 @@
         }
 
         private bool Term() {
-            if (!Factor())
+            if (!Factor()) {
                 return false;
+            }
 
             while (Maybe(ERhoToken.Multiply) || Maybe(ERhoToken.Divide)) {
                 var node = NewNode(Consume());
@@ -130,30 +137,36 @@
         }
 
         private bool Factor() {
-            if (Maybe(ERhoToken.New))
+            if (Maybe(ERhoToken.New)) {
                 return New();
+            }
 
-            if (Maybe(ERhoToken.OpenParan))
+            if (Maybe(ERhoToken.OpenParan)) {
                 return Paran();
+            }
 
-            if (Maybe(ERhoToken.PiSlice))
+            if (Maybe(ERhoToken.PiSlice)) {
                 return Pi();
+            }
 
-            if (TryConsume(ERhoToken.OpenBrace))
+            if (TryConsume(ERhoToken.OpenBrace)) {
                 return AddList();
+            }
 
-            if (Maybe(ERhoToken.Self))
+            if (Maybe(ERhoToken.Self)) {
                 return FactorIdent();
+            }
 
-            if (Maybe(ERhoToken.Ident) || Maybe(ERhoToken.Pathname))
+            if (Maybe(ERhoToken.Ident) || Maybe(ERhoToken.Pathname)) {
                 return FactorIdent();
+            }
 
             if (Maybe(ERhoToken.Int)
                 || Maybe(ERhoToken.Float)
                 || Maybe(ERhoToken.String)
                 || Maybe(ERhoToken.True)
                 || Maybe(ERhoToken.False)
-                ) {
+            ) {
                 return PushConsumed();
             }
 
@@ -162,10 +175,12 @@
 
         private bool New() {
             var @new = NewNode(Consume());
-            if (Expression())
+            if (Expression()) {
                 @new.Add(Pop());
-            else
+            }
+            else {
                 return FailLocation("new what?");
+            }
 
             return Push(@new);
         }
@@ -173,13 +188,16 @@
         private bool AddList() {
             var list = NewNode(ERhoAst.List);
             while (true) {
-                if (TryConsume(ERhoToken.CloseBrace))
+                if (TryConsume(ERhoToken.CloseBrace)) {
                     break;
+                }
 
-                if (Expression())
+                if (Expression()) {
                     list.Add(Pop());
-                else
+                }
+                else {
                     return FailLocation("Expression required within array");
+                }
 
                 //if (!TryConsume(ERhoToken.Comma))
                 //    break;
@@ -193,8 +211,9 @@
 
         private bool Paran() {
             var exp = NewNode(Consume());
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("Expected an expression");
+            }
 
             Expect(ERhoToken.CloseParan);
 
@@ -212,12 +231,14 @@
         private bool Pi() {
             var input = Current().Text;
             var lexer = new PiLexer(input);
-            if (!lexer.Process())
+            if (!lexer.Process()) {
                 return FailLocation(lexer.Error);
+            }
 
             var parser = new PiParser(lexer);
-            if (!parser.Process(lexer))
+            if (!parser.Process(lexer)) {
                 return FailLocation(parser.Error);
+            }
 
             var pi = NewNode(Consume());
             pi.Value = parser.Root;
@@ -228,20 +249,25 @@
         private bool FactorIdent() {
             PushConsume();
 
-            while (!Failed) {
+            while (!Failed)
                 if (Maybe(ERhoToken.Dot)) {
-                    if (!GetMember())
+                    if (!GetMember()) {
                         return false;
-                } else if (Maybe(ERhoToken.OpenParan)) {
-                    if (!Call())
+                    }
+                }
+                else if (Maybe(ERhoToken.OpenParan)) {
+                    if (!Call()) {
                         return false;
-                } else if (Maybe(ERhoToken.OpenSquareBracket)) {
-                    if (!IndexOp())
+                    }
+                }
+                else if (Maybe(ERhoToken.OpenSquareBracket)) {
+                    if (!IndexOp()) {
                         return false;
-                } else {
+                    }
+                }
+                else {
                     break;
                 }
-            }
 
             return !Failed;
         }
@@ -273,8 +299,9 @@
                 args.Add(Pop());
                 while (Maybe(ERhoToken.Comma)) {
                     Consume();
-                    if (!Expression())
+                    if (!Expression()) {
                         return FailLocation("Argument expected");
+                    }
 
                     args.Add(Pop());
                 }
@@ -289,8 +316,9 @@
 
             var index = NewNode(ERhoAst.IndexOp);
             index.Add(Pop());
-            if (!Expression())
+            if (!Expression()) {
                 return FailLocation("Indexing expression expected");
+            }
 
             index.Add(Pop());
             Push(index);
@@ -301,4 +329,3 @@
         }
     }
 }
-

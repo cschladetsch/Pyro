@@ -1,15 +1,14 @@
-﻿namespace Pyro.Network {
-    using ExecutionContext;
-    using Flow;
-    using System;
-    using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
+using Flow;
 
+namespace Pyro.Network {
     /// <summary>
-    /// Common interface to clients and servers.
+    ///     Common interface to clients and servers.
     /// </summary>
     public interface INetCommon
         : IProcess {
-        ExecutionContext ExecutionContext { get; }
+        ExecutionContext.ExecutionContext ExecutionContext { get; }
         Socket Socket { get; }
 
         IFuture<DateTime> Ping();

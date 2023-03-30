@@ -1,31 +1,39 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using Pyro.Exec;
+using Pyro.Impl;
+using Pyro.Language;
+using Pyro.Language.Lexer;
+using Pyro.RhoLang;
+using RegisterTypes = Pyro.Exec.RegisterTypes;
 
 namespace Pyro.Test {
-    using Exec;
-    using Impl;
-    using Language;
-    using Language.Lexer;
-    using NUnit.Framework;
-    using RhoLang;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
     /// <inheritdoc />
     /// <summary>
-    /// Common to most unit tests in the system.
+    ///     Common to most unit tests in the system.
     /// </summary>
     [TestFixture]
     public class TestCommon
         : TestCommonBase {
+        [SetUp]
+        public void Setup() {
+            _Registry = new Registry();
+            RegisterTypes.Register(_Registry);
+
+            _pi = new PiTranslator(_Registry);
+            _rho = new RhoTranslator(_Registry);
+            _ExecutorRef = _Registry.Add(new Executor());
+        }
+
         protected bool Verbose = true;
 
-        private Continuation Continuation => _Continuation;
+        private Continuation Continuation { get; set; }
 
-        private Continuation _Continuation;
-
-        protected IDictionary<string, object> _Scope => _Continuation?.Scope;
+        protected IDictionary<string, object> _Scope => Continuation?.Scope;
 
         protected Stack<object> DataStack => _Exec.DataStack;
 
@@ -38,23 +46,13 @@ namespace Pyro.Test {
         private ITranslator _pi;
         private ITranslator _rho;
 
-        [SetUp]
-        public void Setup() {
-            _Registry = new Registry();
-            Exec.RegisterTypes.Register(_Registry);
-
-            _pi = new PiTranslator(_Registry);
-            _rho = new RhoTranslator(_Registry);
-            _ExecutorRef = _Registry.Add(new Executor());
-        }
-
         protected void PiRun(string text, bool trace = false) {
-            _Continuation = PiTranslate(text, trace);
+            Continuation = PiTranslate(text, trace);
             Run(trace);
         }
 
         protected void RhoRun(string text, bool trace = false, EStructure st = EStructure.Program) {
-            _Continuation = RhoTranslate(text, trace, st);
+            Continuation = RhoTranslate(text, trace, st);
             Run(trace);
         }
 
@@ -63,7 +61,8 @@ namespace Pyro.Test {
             if (trace) {
                 WriteLine(Continuation.ToString());
             }
-            _Exec.Continue(_Continuation);
+
+            _Exec.Continue(Continuation);
         }
 
         private Continuation PiTranslate(string piScript, bool trace = false) {
@@ -71,13 +70,13 @@ namespace Pyro.Test {
             if (!trans.Translate(piScript, out var cont)) {
                 WriteLine($"Error: {trans.Error}");
             }
-            
+
             if (trace) {
                 WriteLine(cont.ToString());
             }
 
             Assert.IsFalse(trans.Failed, trans.Error);
-            return _Continuation = cont;
+            return Continuation = cont;
         }
 
         protected Continuation RhoTranslate(string rhoScript, bool trace = false, EStructure st = EStructure.Program) {
@@ -91,7 +90,7 @@ namespace Pyro.Test {
             }
 
             Assert.IsFalse(trans.Failed, trans.Error);
-            return _Continuation = cont;
+            return Continuation = cont;
         }
 
         private ITranslator MakeTranslator(string scriptName) {
@@ -118,11 +117,13 @@ namespace Pyro.Test {
                 _Exec.SourceFilename = fileName;
                 var text = File.ReadAllText(filePath);
                 var trans = MakeTranslator(filePath);
-                if (!trans.Translate(text, out var cont))
+                if (!trans.Translate(text, out var cont)) {
                     WriteLine($"Error: {trans.Error}");
+                }
 
-                if (Verbose)
+                if (Verbose) {
                     WriteLine(trans.ToString());
+                }
 
                 Assert.IsFalse(trans.Failed);
                 _Exec.Continue(cont);
@@ -134,48 +135,60 @@ namespace Pyro.Test {
             return true;
         }
 
-        protected bool RunScript(string scriptName)
-            => RunScriptPathname(GetFullScriptPathname(scriptName));
+        protected bool RunScript(string scriptName) {
+            return RunScriptPathname(GetFullScriptPathname(scriptName));
+        }
 
 
-        protected void AssertEmpty()
-            => Assert.AreEqual(0, DataStack.Count);
+        protected void AssertEmpty() {
+            Assert.AreEqual(0, DataStack.Count);
+        }
 
-        protected void AssertPop<T>(T val)
-            => Assert.AreEqual(val, Pop<T>());
+        protected void AssertPop<T>(T val) {
+            Assert.AreEqual(val, Pop<T>());
+        }
 
-        protected T ConstRef<T>(object o)
-            => Executor.ConstRef<T>(o);
+        protected T ConstRef<T>(object o) {
+            return Executor.ConstRef<T>(o);
+        }
 
-        protected void TestFreezeThawPi(string text)
-            => Assert.IsTrue(Continue(FreezeThaw(_pi, text)));
+        protected void TestFreezeThawPi(string text) {
+            Assert.IsTrue(Continue(FreezeThaw(_pi, text)));
+        }
 
-        private void TestFreezeThawRho(string text)
-            => Assert.IsTrue(Continue(FreezeThaw(_rho, text)));
+        private void TestFreezeThawRho(string text) {
+            Assert.IsTrue(Continue(FreezeThaw(_rho, text)));
+        }
 
         protected object Pop() {
-            if (Verbose && _Exec.DataStack.Count == 0)
+            if (Verbose && _Exec.DataStack.Count == 0) {
                 _Exec.DebugTrace();
+            }
+
             Assert.Greater(DataStack.Count, 0, "Empty Datastack");
             return DataStack.Pop();
         }
 
         protected T Pop<T>() {
             var top = Pop();
-            if (top is T result)                // Deal with unwrapped values.
+            if (top is T result) // Deal with unwrapped values.
+            {
                 return result;
+            }
 
-            var typed = top as IConstRef<T>;    // Deal with boxed values.
-            if (typed == null)
+            var typed = top as IConstRef<T>; // Deal with boxed values.
+            if (typed == null) {
                 throw new TypeMismatchError(typeof(T), top.GetType());
+            }
 
             return typed.Value;
         }
 
         protected static PiLexer PiLex(string input) {
             var lex = new PiLexer(input);
-            if (lex.Failed)
+            if (lex.Failed) {
                 WriteLine("LexerFailed: {0}", lex.Error);
+            }
 
             Assert.IsTrue(lex.Process(), lex.Error);
             return lex;
@@ -225,6 +238,7 @@ namespace Pyro.Test {
                 _Exec.WriteDataStack(sb, 10);
                 WriteLine(sb.ToString());
             }
+
             Assert.AreEqual(0, DataStack.Count, $"Stack not empty {DataStack.Count} remain.");
             DataStack.Clear();
         }
@@ -257,9 +271,11 @@ namespace Pyro.Test {
 
         private Continuation FreezeThaw(ITranslator trans, string text) {
             void Noisey(string info) {
-                if (Verbose)
+                if (Verbose) {
                     WriteLine(info);
+                }
             }
+
             Noisey("--- Input:");
             Noisey(text);
             Assert.IsTrue(trans.Translate(text, out var cont));
@@ -275,7 +291,5 @@ namespace Pyro.Test {
             Assert.IsNotNull(continuation);
             return continuation;
         }
-
     }
 }
-

@@ -7,5 +7,5 @@ Rho is an in-fix language that looks a lot like Python.
 * Supports native continuations and parameterised functions.
 * *Rho* is much more human-readable than *Pi*
 * *Rho* takes a little longer to parse and execute.
-    * Translating and executing many pages of *Rho* script from scratch takes ~1ms. 
+    * Translating and executing many pages of *Rho* script from scratch takes ~1ms.
     * But *Pi* will always be faster to translate and execute.

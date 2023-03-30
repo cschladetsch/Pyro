@@ -2,7 +2,7 @@
     // TODO: IConstRe<T>
 
     internal struct Null {
-    };
+    }
 
 
     public class NetEvent<TReturnValue, TClass> {

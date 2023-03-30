@@ -1,8 +1,8 @@
-namespace Pyro.Test {
-    using Language.Lexer;
-    using NUnit.Framework;
-    using System.Collections.Generic;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Pyro.Language.Lexer;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestNativeObjects
         : TestCommon {
@@ -71,4 +71,3 @@ namespace Pyro.Test {
         }
     }
 }
-

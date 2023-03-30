@@ -1,60 +1,61 @@
-﻿namespace Pyro.Network.Impl {
-    using Exec;
-    using Flow;
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Text;
-    using ELanguage = Language.ELanguage;
-    using ExecutionContext = ExecutionContext.ExecutionContext;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using Flow;
+using Pyro.Exec;
+using Pyro.Language;
 
+namespace Pyro.Network.Impl {
     /// <summary>
-    /// Functionality common to both Client and Server aspects of a Peer
+    ///     Functionality common to both Client and Server aspects of a Peer
     /// </summary>
     public abstract class NetCommon
         : NetworkConsoleWriter
-        , INetCommon {
-        public ExecutionContext ExecutionContext => _executionContext;
-        
-        public abstract Socket Socket { get; set; }
+            , INetCommon {
+        protected readonly ExecutionContext.ExecutionContext _executionContext;
 
         protected readonly Peer _Peer;
-        
-        protected readonly ExecutionContext _executionContext;
-        
-        protected Executor Exec => _executionContext.Executor;
-        
+
         protected readonly IDomain Domain = new Domain();
-        
-        protected IRegistry Registry => _executionContext.Registry;
-        
+
         protected bool _Stopping;
 
         protected NetCommon(Peer peer) {
             _Peer = peer;
-            _executionContext = new ExecutionContext { Language = ELanguage.Pi };
+            _executionContext = new ExecutionContext.ExecutionContext { Language = ELanguage.Pi };
             RegisterTypes.Register(_executionContext.Registry);
         }
+
+        protected Executor Exec => _executionContext.Executor;
+
+        protected IRegistry Registry => _executionContext.Registry;
+        public ExecutionContext.ExecutionContext ExecutionContext => _executionContext;
+
+        public abstract Socket Socket { get; set; }
 
         public IFuture<DateTime> Ping() {
             throw new NotImplementedException();
         }
 
         protected Continuation TranslatePi(string pi) {
-            if (_executionContext.Translate(pi, out var cont))
+            if (_executionContext.Translate(pi, out var cont)) {
                 return cont;
+            }
 
             Error(_executionContext.Error);
             return null;
         }
 
-        protected bool Send(string text)
-            => Send(Socket, text);
+        protected bool Send(string text) {
+            return Send(Socket, text);
+        }
 
         protected bool Send(Socket socket, string text) {
-            if (socket == null)
+            if (socket == null) {
                 return Fail("No socket to send with");
+            }
 
             var byteData = Encoding.ASCII.GetBytes(text + '~');
             socket.BeginSend(byteData, 0, byteData.Length, 0, Sent, socket);
@@ -79,8 +80,9 @@
 
         protected IPEndPoint GetLocalEndPoint(int port) {
             var address = GetAddress(Dns.GetHostName());
-            if (address != null)
+            if (address != null) {
                 return new IPEndPoint(address, port);
+            }
 
             Error("Couldn't find suitable localhost address");
             return null;
@@ -90,8 +92,9 @@
             try {
                 ProcessRead(ar);
             } catch (ObjectDisposedException) {
-                if (!_Stopping)
+                if (!_Stopping) {
                     throw;
+                }
             } catch (Exception e) {
                 Error($"{e.Message}");
             }
@@ -103,8 +106,9 @@
 
             var bytesRead = socket.EndReceive(ar);
             //WriteLine($"NetCommon: Process Read: {bytesRead}");
-            if (bytesRead <= 0)
+            if (bytesRead <= 0) {
                 return;
+            }
 
             EndReceive(state, bytesRead, socket);
         }
@@ -119,8 +123,9 @@
             var content = state.sb.ToString();
             Verbose($"ProcessInput: {content}");
             var end = content.IndexOf('~'); // yes. this means we can't use tilde anywhere in scripts!
-            if (end < 0)
+            if (end < 0) {
                 return;
+            }
 
             try {
                 ProcessReceived(socket, content.Substring(0, end));

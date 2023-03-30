@@ -1,15 +1,16 @@
-﻿namespace Pyro.Test.Rho {
-    using NUnit.Framework;
+﻿using NUnit.Framework;
 
+namespace Pyro.Test.Rho {
     [TestFixture]
     public class TestRhoCustomClass
         : TestCommon {
         public class Foo {
-            public int Num => 42;
             public string Str = "foobar";
+            public int Num => 42;
 
-            public int Sum(int a, int b)
-                => a + b;
+            public int Sum(int a, int b) {
+                return a + b;
+            }
 
             public string MulString(string a, int b) {
                 var str = "";
@@ -32,12 +33,12 @@
         public void TestCustomClass() {
             _Registry.Register(new ClassBuilder<Foo>(_Registry)
                 .Methods
-                    .Add<int, int, int>("Sum", (q, a, b) => q.Sum(a, b))
-                    .Add<string, int, string>("MulString", (q, a, b) => q.MulString(a, b))
+                .Add<int, int, int>("Sum", (q, a, b) => q.Sum(a, b))
+                .Add<string, int, string>("MulString", (q, a, b) => q.MulString(a, b))
                 .Class);
 
             RhoRun(
-@"
+                @"
 fun foo(type)
 	a = new ""Foo""//type()
 	assert(a.Num == 42)

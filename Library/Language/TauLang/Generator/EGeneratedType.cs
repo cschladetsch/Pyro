@@ -1,8 +1,8 @@
 ﻿namespace Pyro.Language.Tau {
     public enum EGeneratedType {
-        ENone,
-        EProxy,
-        EAgent,
+        ENone
+        , EProxy
+        , EAgent
     }
 
     public static class EGeneratedTypeExtensions {

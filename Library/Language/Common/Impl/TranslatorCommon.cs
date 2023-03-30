@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Pyro.Exec;
 
 namespace Pyro.Language.Impl {
-    using Exec;
-
     /// <inheritdoc cref="ITranslator" />
     /// <summary>
-    /// Common to all processes that translate an AST to Pi code sequences.
+    ///     Common to all processes that translate an AST to Pi code sequences.
     /// </summary>
     public class TranslatorCommon
         : ProcessCommon
-        , ITranslator {
-        public int TraceLevel { get; set; }
-        protected virtual Continuation Result => _stack.Count == 0 ? null : Top();
+            , ITranslator {
         private readonly Stack<Continuation> _stack = new Stack<Continuation>();
 
-        protected TranslatorCommon(IRegistry r) : base(r) => Reset();
+        protected TranslatorCommon(IRegistry r) : base(r) {
+            Reset();
+        }
+
+        protected virtual Continuation Result => _stack.Count == 0 ? null : Top();
+        public int TraceLevel { get; set; }
 
         public virtual bool Translate(string text, out Continuation cont, EStructure st = EStructure.Program) {
             Reset();
@@ -42,11 +44,13 @@ namespace Pyro.Language.Impl {
             return true;
         }
 
-        protected Continuation Pop()
-            => _stack.Pop();
+        protected Continuation Pop() {
+            return _stack.Pop();
+        }
 
-        protected Continuation Top()
-            => _stack.Peek();
+        protected Continuation Top() {
+            return _stack.Peek();
+        }
 
         protected bool Append(object obj) {
             Top().Code.Add(obj);
@@ -54,4 +58,3 @@ namespace Pyro.Language.Impl {
         }
     }
 }
-

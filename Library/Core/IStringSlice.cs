@@ -1,8 +1,8 @@
-﻿namespace Pyro {
-    using Impl;
+﻿using Pyro.Impl;
 
+namespace Pyro {
     /// <summary>
-    /// A part of a string.
+    ///     A part of a string.
     /// </summary>
     public interface IStringSlice {
         IString Text { get; }
@@ -10,4 +10,3 @@
         int End { get; }
     }
 }
-

@@ -8,13 +8,15 @@ This is a Python-like, more human-readable language to be used across the wire.
 
 Has built-in support for Continuations, including the following three main operations:
 
-* `Suspend`. This is similar to a traditional function call. Execution will return to current context after being suspended to the given coroutine.
+* `Suspend`. This is similar to a traditional function call. Execution will return to current context after being
+  suspended to the given coroutine.
 * `Replace`. This will continue what is on the data stack, and will not return to current context.
 * `Resume`. This drops the current context completely, and resumes whatever is on the data stack.
 
 ## Embedded Pi
 
 *Rho* code can have *Pi* code embedded in it, contained between back-tic ` characters:
+
 ```
 assert(`1 1 +` == 2)
 ```

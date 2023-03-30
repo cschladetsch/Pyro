@@ -1,11 +1,9 @@
-﻿namespace WinForms.UserControls {
-    using System.Windows.Forms;
-    
-    using Pyro.Language;
+﻿using System.Windows.Forms;
+using Pyro.Language;
 
-    public partial class PiPrompt 
+namespace WinForms.UserControls {
+    public partial class PiPrompt
         : UserControlBase {
-        
         private readonly int MaxHistoryCount = 20;
 
         public PiPrompt() {
@@ -21,14 +19,13 @@
             if (string.IsNullOrEmpty(text.Trim())) {
                 return;
             }
+
             MainForm.Run(text, ELanguage.Pi);
             AddToHistory(text);
         }
 
         private void AddToHistory(string text) {
-            while (comboBox1.Items.Count > MaxHistoryCount) {
-                comboBox1.Items.RemoveAt(0);
-            }
+            while (comboBox1.Items.Count > MaxHistoryCount) comboBox1.Items.RemoveAt(0);
 
             comboBox1.Items.Add(text);
         }

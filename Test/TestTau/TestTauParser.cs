@@ -1,7 +1,5 @@
 ﻿using System.IO;
-
 using NUnit.Framework;
-
 using Pyro.Impl;
 using Pyro.Language.Tau.Lexer;
 using Pyro.Language.Tau.Parser;

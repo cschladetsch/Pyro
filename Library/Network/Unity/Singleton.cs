@@ -1,12 +1,9 @@
-﻿namespace Pyro.Network.Unity {
-    using UnityEngine;
+﻿using UnityEngine;
 
+namespace Pyro.Network.Unity {
     public class Singleton<T>
         : MonoBehaviour
         where T : class {
-        public T Instance
-        {
-            get { return null; }
-        }
+        public T Instance => null;
     }
 }

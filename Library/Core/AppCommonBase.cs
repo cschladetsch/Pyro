@@ -1,11 +1,12 @@
-﻿namespace Pyro.AppCommon {
-    using System;
-    using System.Reflection;
-    using static System.Console;
-    using Con = System.Console;
+﻿using System;
+using System.Reflection;
+
+namespace Pyro.AppCommon {
+    using static Console;
+    using Con = Console;
 
     /// <summary>
-    /// Functionality that is common to all (console) Apps that use Pyro libraries.
+    ///     Functionality that is common to all (console) Apps that use Pyro libraries.
     /// </summary>
     public abstract class AppCommonBase {
         private static AppCommonBase _self;
@@ -43,17 +44,20 @@
             return false;
         }
 
-        protected static void Write(string text, ConsoleColor color = ConsoleColor.White)
-            => ConWrite(text, color, Con.Write);
+        protected static void Write(string text, ConsoleColor color = ConsoleColor.White) {
+            ConWrite(text, color, Con.Write);
+        }
 
-        protected static void WriteLine(string text, ConsoleColor color = ConsoleColor.White)
-            => ConWrite(text, color, Con.WriteLine);
+        protected static void WriteLine(string text, ConsoleColor color = ConsoleColor.White) {
+            ConWrite(text, color, Con.WriteLine);
+        }
 
-        private static void WriteHeader()
-            => WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
+        private static void WriteHeader() {
+            WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
+        }
 
         /// <summary>
-        /// Save/restore current foreground color while writing a string to the console.
+        ///     Save/restore current foreground color while writing a string to the console.
         /// </summary>
         private static void ConWrite(string text, ConsoleColor color, Action<string> write) {
             var current = ForegroundColor;
@@ -69,4 +73,3 @@
         }
     }
 }
-

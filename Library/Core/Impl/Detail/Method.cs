@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Pyro.Impl {
     /// <summary>
-    /// Method with no arguments.
+    ///     Method with no arguments.
     /// </summary>
     public class Method<T, R>
         : CallableBase, ICallable<T>
@@ -22,7 +22,7 @@ namespace Pyro.Impl {
     }
 
     /// <summary>
-    /// Method with one argument.
+    ///     Method with one argument.
     /// </summary>
     public class Method<T, A0, R>
         : CallableBase, ICallable<T>
@@ -30,7 +30,9 @@ namespace Pyro.Impl {
         private readonly Func<T, A0, R> _fun;
 
         public Method(Func<T, A0, R> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -40,7 +42,7 @@ namespace Pyro.Impl {
     }
 
     /// <summary>
-    /// Method with two arguments.
+    ///     Method with two arguments.
     /// </summary>
     public class Method<T, A0, A1, R>
         : CallableBase
@@ -49,7 +51,9 @@ namespace Pyro.Impl {
         private readonly Func<T, A0, A1, R> _fun;
 
         public Method(Func<T, A0, A1, R> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -60,16 +64,18 @@ namespace Pyro.Impl {
     }
 
     /// <summary>
-    /// Method with three arguments.
+    ///     Method with three arguments.
     /// </summary>
     public class Method<T, A0, A1, A2, R>
         : CallableBase
-        , ICallable<T>
+            , ICallable<T>
         where T : class {
         private readonly Func<T, A0, A1, A2, R> _fun;
 
         public Method(Func<T, A0, A1, A2, R> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -80,4 +86,3 @@ namespace Pyro.Impl {
         }
     }
 }
-

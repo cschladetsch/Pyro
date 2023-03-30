@@ -1,222 +1,222 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{22096879-8D63-4BBA-A77C-C82506994F8F}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>WinForms</RootNamespace>
-    <AssemblyName>WinForms</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>false</Deterministic>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WinForms">
-      <HintPath>bin\Debug\WinForms.exe</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Dialogs\AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\AboutBox.Designer.cs">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm\IMainForm.cs" />
-    <Compile Include="UserControls\ContextStackView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ContextStackView.Designer.cs">
-      <DependentUpon>ContextStackView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm\MainForm.ColorisePi.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm\MainForm.ColoriseRho.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\NetworkConnect.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\NetworkConnect.Designer.cs">
-      <DependentUpon>NetworkConnect.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\DataStackView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\DataStackView.Designer.cs">
-      <DependentUpon>DataStackView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\IUserControlCommon.cs" />
-    <Compile Include="UserControls\Extentions.cs" />
-    <Compile Include="UserControls\Output.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\Output.Designer.cs">
-      <DependentUpon>Output.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PiDebuggerInput.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PiDebuggerInput.Designer.cs">
-      <DependentUpon>PiDebuggerInput.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControlBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PiPrompt.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PiPrompt.Designer.cs">
-      <DependentUpon>PiPrompt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\RhoEditorControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\RhoEditorControl.Designer.cs">
-      <DependentUpon>RhoEditorControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\TreeViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\TreeViewControl.Designer.cs">
-      <DependentUpon>TreeViewControl.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Dialogs\AboutBox.resx">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ContextStackView.resx">
-      <DependentUpon>ContextStackView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\NetworkConnect.resx">
-      <DependentUpon>NetworkConnect.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="MainForm\MainForm.Colorise.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <EmbeddedResource Include="UserControls\DataStackView.resx">
-      <DependentUpon>DataStackView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Output.resx">
-      <DependentUpon>Output.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PiDebuggerInput.resx">
-      <DependentUpon>PiDebuggerInput.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PiPrompt.resx">
-      <DependentUpon>PiPrompt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\RhoEditorControl.resx">
-      <DependentUpon>RhoEditorControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\TreeViewControl.resx">
-      <DependentUpon>TreeViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Library\Core\Core.csproj">
-      <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
-      <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
-      <Name>Executor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj">
-      <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
-      <Name>Flow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
-      <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\ExecutionContext\ExecutionContext.csproj">
-      <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
-      <Name>ExecutionContext</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\PiLang\PiLang.csproj">
-      <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
-      <Name>PiLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
-      <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
-      <Name>RhoLang</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Network\Network.csproj">
-      <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
-      <Name>Network</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Readme.md" />
-    <None Include="Resources\flame.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{22096879-8D63-4BBA-A77C-C82506994F8F}</ProjectGuid>
+        <OutputType>WinExe</OutputType>
+        <RootNamespace>WinForms</RootNamespace>
+        <AssemblyName>WinForms</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <Deterministic>false</Deterministic>
+        <TargetFrameworkProfile/>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <Prefer32Bit>true</Prefer32Bit>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="System.Data.DataSetExtensions"/>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Deployment"/>
+        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Windows.Forms"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="WinForms">
+            <HintPath>bin\Debug\WinForms.exe</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Dialogs\AboutBox.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Dialogs\AboutBox.Designer.cs">
+            <DependentUpon>AboutBox.cs</DependentUpon>
+        </Compile>
+        <Compile Include="MainForm\IMainForm.cs"/>
+        <Compile Include="UserControls\ContextStackView.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\ContextStackView.Designer.cs">
+            <DependentUpon>ContextStackView.cs</DependentUpon>
+        </Compile>
+        <Compile Include="MainForm\MainForm.ColorisePi.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="MainForm\MainForm.ColoriseRho.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="MainForm\MainForm.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="MainForm\MainForm.Designer.cs">
+            <DependentUpon>MainForm.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Dialogs\NetworkConnect.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Dialogs\NetworkConnect.Designer.cs">
+            <DependentUpon>NetworkConnect.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Program.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="UserControls\DataStackView.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\DataStackView.Designer.cs">
+            <DependentUpon>DataStackView.cs</DependentUpon>
+        </Compile>
+        <Compile Include="UserControls\IUserControlCommon.cs"/>
+        <Compile Include="UserControls\Extentions.cs"/>
+        <Compile Include="UserControls\Output.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\Output.Designer.cs">
+            <DependentUpon>Output.cs</DependentUpon>
+        </Compile>
+        <Compile Include="UserControls\PiDebuggerInput.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\PiDebuggerInput.Designer.cs">
+            <DependentUpon>PiDebuggerInput.cs</DependentUpon>
+        </Compile>
+        <Compile Include="UserControlBase.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\PiPrompt.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\PiPrompt.Designer.cs">
+            <DependentUpon>PiPrompt.cs</DependentUpon>
+        </Compile>
+        <Compile Include="UserControls\RhoEditorControl.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\RhoEditorControl.Designer.cs">
+            <DependentUpon>RhoEditorControl.cs</DependentUpon>
+        </Compile>
+        <Compile Include="UserControls\TreeViewControl.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="UserControls\TreeViewControl.Designer.cs">
+            <DependentUpon>TreeViewControl.cs</DependentUpon>
+        </Compile>
+        <EmbeddedResource Include="Dialogs\AboutBox.resx">
+            <DependentUpon>AboutBox.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="UserControls\ContextStackView.resx">
+            <DependentUpon>ContextStackView.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="MainForm\MainForm.resx">
+            <DependentUpon>MainForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Dialogs\NetworkConnect.resx">
+            <DependentUpon>NetworkConnect.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+            <SubType>Designer</SubType>
+        </EmbeddedResource>
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+        </Compile>
+        <Compile Include="MainForm\MainForm.Colorise.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <EmbeddedResource Include="UserControls\DataStackView.resx">
+            <DependentUpon>DataStackView.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="UserControls\Output.resx">
+            <DependentUpon>Output.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="UserControls\PiDebuggerInput.resx">
+            <DependentUpon>PiDebuggerInput.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="UserControls\PiPrompt.resx">
+            <DependentUpon>PiPrompt.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="UserControls\RhoEditorControl.resx">
+            <DependentUpon>RhoEditorControl.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="UserControls\TreeViewControl.resx">
+            <DependentUpon>TreeViewControl.cs</DependentUpon>
+        </EmbeddedResource>
+        <None Include="Properties\Settings.settings">
+            <Generator>SettingsSingleFileGenerator</Generator>
+            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+        </None>
+        <Compile Include="Properties\Settings.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="App.config"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Library\Core\Core.csproj">
+            <Project>{575091d8-a55c-4794-9f15-120e927c3305}</Project>
+            <Name>Core</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Executor\Executor.csproj">
+            <Project>{4DFE7BD2-F168-4AE7-B569-C684C1615EA7}</Project>
+            <Name>Executor</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj">
+            <Project>{18326c80-2cc4-417d-8fee-ea608ed85636}</Project>
+            <Name>Flow</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Language\Common\Common.csproj">
+            <Project>{329084c8-82d9-44c9-86dd-fa587c1a6fa4}</Project>
+            <Name>Common</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Language\ExecutionContext\ExecutionContext.csproj">
+            <Project>{f0f5e736-155f-4d5f-b53e-665f708fd4ed}</Project>
+            <Name>ExecutionContext</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Language\PiLang\PiLang.csproj">
+            <Project>{142affdb-3fa9-47d2-b28a-ec01595cfa19}</Project>
+            <Name>PiLang</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Language\RhoLang\RhoLang.csproj">
+            <Project>{2c48a0f7-1ef0-4ac7-be71-e16667cf1e10}</Project>
+            <Name>RhoLang</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Library\Network\Network.csproj">
+            <Project>{cdf87e43-0a6b-48e4-bd94-c44e35592ad4}</Project>
+            <Name>Network</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Readme.md"/>
+        <None Include="Resources\flame.png"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

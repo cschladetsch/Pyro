@@ -1,6 +1,6 @@
 ﻿namespace Pyro.Language {
     /// <summary>
-    /// A text segment in a Lexer.
+    ///     A text segment in a Lexer.
     /// </summary>
     public struct Slice {
         public int Length => End - Start;
@@ -30,13 +30,14 @@
         public override bool Equals(object obj) {
             if (obj is Slice slice) {
                 return ReferenceEquals(slice.Lexer, Lexer) && slice.Start == Start && slice.End == End &&
-                       slice.LineNumber == LineNumber;
+                    slice.LineNumber == LineNumber;
             }
+
             return false;
         }
 
         public override int GetHashCode() {
-            return -8276583 + Lexer.GetHashCode() * (Start - End*LineNumber);
+            return -8276583 + Lexer.GetHashCode() * (Start - End * LineNumber);
         }
     }
 }

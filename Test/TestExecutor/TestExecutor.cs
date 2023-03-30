@@ -1,15 +1,15 @@
-﻿namespace Pyro.Test {
-    using Exec;
-    using NUnit.Framework;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+using Pyro.Exec;
 
+namespace Pyro.Test {
     [TestFixture]
     public class TestExecutor
         : TestCommon {
         [Test]
         public void TestOne() {
             PiRun("42");
-            AssertPop<int>(42);
+            AssertPop(42);
         }
 
         [Test]
@@ -56,4 +56,3 @@
         // }
     }
 }
-

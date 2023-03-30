@@ -1,17 +1,15 @@
-﻿namespace Pyro.RhoLang.Parser {
-    using Language;
-    using Language.Impl;
-    using Lexer;
+﻿using Pyro.Language;
+using Pyro.Language.Impl;
+using Pyro.RhoLang.Lexer;
 
+namespace Pyro.RhoLang.Parser {
     /// <inheritdoc cref="IParser" />
     /// <summary>
-    /// Parser for the in-fix Rho language that uses tabs for block definitions like Python.
+    ///     Parser for the in-fix Rho language that uses tabs for block definitions like Python.
     /// </summary>
     public partial class RhoParser
         : ParserCommon<RhoLexer, RhoAstNode, RhoToken, ERhoToken, ERhoAst, RhoAstFactory>
-        , IParser {
-        public RhoAstNode Result => _Stack.Peek();
-
+            , IParser {
         private readonly EStructure _structure;
 
         public RhoParser(RhoLexer lexer, IRegistry reg, EStructure st)
@@ -20,9 +18,12 @@
             _structure = st;
         }
 
+        public RhoAstNode Result => _Stack.Peek();
+
         public bool Process() {
-            if (_Lexer.Failed)
+            if (_Lexer.Failed) {
                 return Fail(_Lexer.Error);
+            }
 
             RemoveWhitespace();
 
@@ -30,8 +31,9 @@
         }
 
         private bool Parse(EStructure st) {
-            if (st != EStructure.Expression)
+            if (st != EStructure.Expression) {
                 _Stack.Push(NewNode(ERhoAst.Program));
+            }
 
             var result = false;
             switch (st) {
@@ -48,13 +50,15 @@
                     break;
             }
 
-            if (Failed || !result)
+            if (Failed || !result) {
                 return false;
+            }
 
             ConsumeNewLines();
 
-            if (!Maybe(ERhoToken.Nop))
+            if (!Maybe(ERhoToken.Nop)) {
                 return FailLocation("Unexpected extra stuff found");
+            }
 
             return _Stack.Count == 1 || InternalFail("Semantic stack not empty after parsing");
         }
@@ -76,16 +80,19 @@
             while (TryConsume(ERhoToken.Tab))
                 ++indent;
 
-            if (indent == 0)
+            if (indent == 0) {
                 return false;
+            }
 
             Push(NewNode(ERhoAst.Block));
             while (!Failed) {
-                if (Maybe(ERhoToken.Pass))
+                if (Maybe(ERhoToken.Pass)) {
                     return true;
+                }
 
-                if (!Statement())
+                if (!Statement()) {
                     return FailLocation("Statement expected");
+                }
 
                 ConsumeNewLines();
 
@@ -95,12 +102,13 @@
 
                 if (level < indent) {
                     // return to start so top block can continue
-                    _Current--;// -= indent;
+                    _Current--; // -= indent;
                     return true;
                 }
 
-                if (level != indent)
+                if (level != indent) {
                     return FailLocation("Mismatch block indent");
+                }
             }
 
             return false;
@@ -108,8 +116,9 @@
 
         private bool TryConsume(ERhoToken token) {
             ConsumeNewLines();
-            if (!Maybe(token))
+            if (!Maybe(token)) {
                 return false;
+            }
 
             Consume();
             return true;
@@ -120,8 +129,9 @@
             foreach (var tok in _Lexer.Tokens) {
                 // remove useless consecutive newlines
                 var newLine = tok.Type == ERhoToken.NewLine;
-                if (prevNewLine && newLine)
+                if (prevNewLine && newLine) {
                     continue;
+                }
 
                 prevNewLine = newLine;
 
@@ -142,4 +152,3 @@
         }
     }
 }
-

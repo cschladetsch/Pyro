@@ -1,6 +1,6 @@
-﻿namespace Pyro.Language.Lexer {
-    using Exec;
+﻿using Pyro.Exec;
 
+namespace Pyro.Language.Lexer {
     public partial class PiLexer {
         protected override void AddKeyWords() {
             AddKeyword("floor", EPiToken.Floor);
@@ -67,8 +67,9 @@
         }
 
         private static void CreateOpToToken() {
-            if (_opToToken.Count > 0)
+            if (_opToToken.Count > 0) {
                 return;
+            }
 
             //_opToToken[EOperation.Nop] = EPiToken.Nop;
             //_opToToken[EOperation.HasType] = EPiToken.HasType;

@@ -1,7 +1,7 @@
-﻿namespace WinForms.UserControls {
-    using System;
-    using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
+namespace WinForms.UserControls {
     public partial class PiDebuggerInput
         : UserControlBase {
         public PiDebuggerInput() {
@@ -9,7 +9,6 @@
         }
 
         private void PiDebuggerInput_Load(object sender, EventArgs e) {
-
         }
 
         private void PiDebuggerInput_PreviewKeyDown(PreviewKeyDownEventArgs e) {
@@ -53,4 +52,3 @@
         }
     }
 }
-

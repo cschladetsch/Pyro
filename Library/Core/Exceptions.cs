@@ -2,10 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace Pyro {
-
     /// <inheritdoc />
     /// <summary>
-    /// Given member (field, property, method, inner class etc) not found.
+    ///     Given member (field, property, method, inner class etc) not found.
     /// </summary>
     public class MemberNotFoundException
         : Exception {
@@ -20,7 +19,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// Couldn't find class to make in Registry.
+    ///     Couldn't find class to make in Registry.
     /// </summary>
     [SuppressMessage("Microsoft.StyleCop.Csharp.Maintainability", "*")]
     public class CouldNotMakeClass
@@ -32,7 +31,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// The context stack was empty, and yet was attempted to be popp'ed
+    ///     The context stack was empty, and yet was attempted to be popp'ed
     /// </summary>
     public class ContextStackEmptyException
         : Exception {
@@ -43,7 +42,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// Used for debugging.
+    ///     Used for debugging.
     /// </summary>
     public class DebugBreakException
         : Exception {
@@ -54,7 +53,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// Thrown when an unexpected null reference was found
+    ///     Thrown when an unexpected null reference was found
     /// </summary>
     public class NullValueException
         : Exception {
@@ -65,7 +64,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// An Assertion failed.
+    ///     An Assertion failed.
     /// </summary>
     public class AssertionFailedException
         : Exception {
@@ -76,7 +75,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// An attempt was made to access the contents of and empty data-stack in an Executor.
+    ///     An attempt was made to access the contents of and empty data-stack in an Executor.
     /// </summary>
     public class DataStackEmptyException
         : Exception {
@@ -87,11 +86,12 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// Given identifier could not be resolved locally, in the context stack, or in the tree.
+    ///     Given identifier could not be resolved locally, in the context stack, or in the tree.
     /// </summary>
     public class UnknownIdentifierException
         : Exception {
         public object What;
+
         public UnknownIdentifierException(object obj)
             : base($"Unknown object '{obj}'") {
             What = obj;
@@ -102,17 +102,17 @@ namespace Pyro {
         : Exception {
         public NotEnoughArgumentsException(string text)
             : base(text) {
-
         }
     }
 
     /// <inheritdoc />
     /// <summary>
-    /// Invalid comparisons between two different enumeration types.
+    ///     Invalid comparisons between two different enumeration types.
     /// </summary>
     public class CannotCompareEnumerationsException
         : Exception {
         public object Left, Right;
+
         public CannotCompareEnumerationsException(object left, object right)
             : base($"Cannot enumerate {left.GetType().Name} with {right.GetType().Name}") {
             Left = left;
@@ -122,7 +122,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// Cannot resolve given identifier.
+    ///     Cannot resolve given identifier.
     /// </summary>
     public class CannotResolve
         : Exception {
@@ -133,7 +133,7 @@ namespace Pyro {
 
     /// <inheritdoc />
     /// <summary>
-    /// There was a mis-match in types for a given binary operation.
+    ///     There was a mis-match in types for a given binary operation.
     /// </summary>
     public class TypeMismatchError
         : Exception {
@@ -146,4 +146,3 @@ namespace Pyro {
         }
     }
 }
-

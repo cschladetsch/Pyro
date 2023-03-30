@@ -1,9 +1,8 @@
-﻿namespace Pyro.Network.Unity {
-    using System.Collections.Generic;
-    using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using UnityEngine;
 
-    using UnityEngine;
-
+namespace Pyro.Network.Unity {
     public class SharedProperties
         : Common {
         public GameObject Target;

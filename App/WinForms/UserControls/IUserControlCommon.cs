@@ -1,6 +1,6 @@
-﻿namespace WinForms {
-    using Pyro.Exec;
+﻿using Pyro.Exec;
 
+namespace WinForms {
     public interface IUserControlCommon {
         Executor Executor { get; }
 

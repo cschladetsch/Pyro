@@ -1,10 +1,9 @@
 ﻿namespace Pyro {
     /// <inheritdoc />
     /// <summary>
-    /// TODO
+    ///     TODO
     /// </summary>
     internal interface IStructBase
         : ITypeBase {
     }
 }
-

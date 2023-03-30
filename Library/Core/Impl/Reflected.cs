@@ -5,27 +5,26 @@ using System.Text;
 namespace Pyro {
     /// <inheritdoc cref="IReflected{T}" />
     /// <summary>
-    /// TODO
+    ///     TODO
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class Reflected<T>
         : ReflectedBase
-        , IReflected<T> {
-        public IDictionary<string, object> Scope
-        {
+            , IReflected<T> {
+        private IDictionary<string, object> _scope;
+
+        public IDictionary<string, object> Scope {
             get => _scope ?? (_scope = new Dictionary<string, object>());
             set => _scope = value;
         }
 
-        private IDictionary<string, object> _scope;
-
-        public IRef<T> Self
-        {
+        public IRef<T> Self {
             get => SelfBase as IRef<T>;
-            set
-            {
-                if (value == null)
+            set {
+                if (value == null) {
                     throw new ArgumentNullException(nameof(value));
+                }
+
                 SelfBase = Self = value;
             }
         }

@@ -1,54 +1,73 @@
-﻿namespace Pyro.Network.Impl {
-    using Exec;
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Sockets;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using Pyro.Exec;
 
+namespace Pyro.Network.Impl {
     /// <inheritdoc cref="IClient" />
     /// <inheritdoc cref="NetCommon" />
     /// <summary>
-    /// A connection to a remote server. Can send executable script, and receive
-    /// results that are also executable scripts.
+    ///     A connection to a remote server. Can send executable script, and receive
+    ///     results that are also executable scripts.
     /// </summary>
     public class Client
         : NetCommon
-        , IClient {
+            , IClient {
+        private IList<string> _results = new List<string>();
+
+        private Socket _socket;
+
+        public Client(Peer peer)
+            : base(peer) {
+        }
+
         public event ClientReceivedHandler OnReceived;
 
         // TODO: Move to NetCommon
         public string HostName => GetHostName();
         public int HostPort => GetHostPort();
 
-        public override Socket Socket
-        {
+        public override Socket Socket {
             get => _socket;
             set => _socket = value;
         }
 
-        private Socket _socket;
-        private IList<string> _results = new List<string>();
-
-        public Client(Peer peer)
-            : base(peer) {
-        }
-
-        public override string ToString()
-            => $"Client: connected to {HostName}:{HostPort}";
-
-        public void CompleteConnect(Socket socket)
-            => _socket = socket;
-
         //public bool Continue(Continuation cont)
         //=> Send(cont?.ToText());
 
-        public bool Continue(string script)
-            => Send(script);
+        public bool Continue(string script) {
+            return Send(script);
+        }
+
+        public void Close() {
+            _Stopping = true;
+            _socket.Close();
+            _socket = null;
+        }
+
+        public void GetLatest() {
+            // hacks
+            Send(" ");
+        }
+
+        public bool ContinueRho(string rhoScript) {
+            return _executionContext.ExecRho(rhoScript) || Error($"Failed to execute {rhoScript}");
+        }
+
+        public override string ToString() {
+            return $"Client: connected to {HostName}:{HostPort}";
+        }
+
+        public void CompleteConnect(Socket socket) {
+            _socket = socket;
+        }
 
         public bool Connect(string hostName, int port) {
             var address = GetAddress(hostName);
-            if (address == null)
+            if (address == null) {
                 return Fail($"Couldn't find address for {hostName}");
+            }
 
             var endPoint = new IPEndPoint(address, port);
             var client = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -57,13 +76,8 @@
             return true;
         }
 
-        public bool Send(Continuation continuation)
-            => Send(continuation.ToText());
-
-        public void Close() {
-            _Stopping = true;
-            _socket.Close();
-            _socket = null;
+        public bool Send(Continuation continuation) {
+            return Send(continuation.ToText());
         }
 
         private void Connected(IAsyncResult ar) {
@@ -83,19 +97,11 @@
             }
         }
 
-        public void GetLatest() {
-            // hacks
-            Send(" ");
-        }
-
-        public bool ContinueRho(string rhoScript) {
-            return _executionContext.ExecRho(rhoScript) || Error($"Failed to execute {rhoScript}");
-        }
-
         protected override bool ProcessReceived(Socket sender, string pi) {
             try {
-                if (!_executionContext.Translate(pi, out var cont))
+                if (!_executionContext.Translate(pi, out var cont)) {
                     return Error($"Failed to translate {pi}");
+                }
 
                 cont.Scope = Exec.Scope;
                 Exec.Continue(cont);

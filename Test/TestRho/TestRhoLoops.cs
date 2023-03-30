@@ -1,6 +1,6 @@
-﻿namespace Pyro.Test.Rho {
-    using NUnit.Framework;
+﻿using NUnit.Framework;
 
+namespace Pyro.Test.Rho {
     [TestFixture]
     public class TestRhoLoops
         : TestCommon {
@@ -13,7 +13,7 @@ c = c + 2
 assert(c == 0 + 1 + 2)
 ");
         }
-        
+
         [Test]
         public void TestForEachIn() {
             //_Exec.Verbosity = 0;

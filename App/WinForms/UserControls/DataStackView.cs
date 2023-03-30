@@ -1,14 +1,13 @@
-﻿using Pyro;
-using Pyro.Exec;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Pyro;
+using Pyro.Exec;
 
 namespace WinForms.UserControls {
     public partial class DataStackView
-        : UserControlBase
-        , IUserControlCommon {
+        : UserControlBase {
         public DataStackView() {
             InitializeComponent();
         }
@@ -22,9 +21,7 @@ namespace WinForms.UserControls {
         private void DataStackChanged(Executor executor, Stack<object> dataStack) {
             stackView.Items.Clear();
             var n = dataStack.Count - 1;
-            foreach (var item in dataStack.Reverse()) {
-                stackView.Items.Add(MakeStackViewItem(n--, item));
-            }
+            foreach (var item in dataStack.Reverse()) stackView.Items.Add(MakeStackViewItem(n--, item));
 
             UpdateStatusText();
         }
@@ -47,6 +44,7 @@ namespace WinForms.UserControls {
             if (item as IReflected != null) {
                 AddSubItem(row, (item as IReflected).SelfBase.Id.ToString());
             }
+
             return row;
         }
 
@@ -54,33 +52,41 @@ namespace WinForms.UserControls {
             if (item == null) {
                 return "null";
             }
+
             var type = item.GetType().Name;
             if (type.StartsWith("System.")) {
                 type = type.Substring(7);
             }
+
             return type;
         }
 
-        public static void AddSubItem(ListViewItem row, string text)
-            => row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
+        public static void AddSubItem(ListViewItem row, string text) {
+            row.SubItems.Add(new ListViewItem.ListViewSubItem(row, text));
+        }
 
-        private void StackClearClick(object sender, EventArgs e)
-            => Perform(EOperation.Clear);
+        private void StackClearClick(object sender, EventArgs e) {
+            Perform(EOperation.Clear);
+        }
 
-        private void StackCountClick(object sender, EventArgs e)
-            => Perform(EOperation.Depth);
+        private void StackCountClick(object sender, EventArgs e) {
+            Perform(EOperation.Depth);
+        }
 
-        private void StackOverClick(object sender, EventArgs e)
-            => Perform(EOperation.Over);
+        private void StackOverClick(object sender, EventArgs e) {
+            Perform(EOperation.Over);
+        }
 
-        private void StackDupClick(object sender, EventArgs e)
-            => Perform(EOperation.Dup);
+        private void StackDupClick(object sender, EventArgs e) {
+            Perform(EOperation.Dup);
+        }
 
-        private void StackSwapClick(object sender, EventArgs e)
-            => Perform(EOperation.Swap);
+        private void StackSwapClick(object sender, EventArgs e) {
+            Perform(EOperation.Swap);
+        }
 
-        private void StackDropClick(object sender, EventArgs e)
-            => Perform(EOperation.Drop);
-
+        private void StackDropClick(object sender, EventArgs e) {
+            Perform(EOperation.Drop);
+        }
     }
 }

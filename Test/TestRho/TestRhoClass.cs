@@ -1,11 +1,11 @@
-﻿namespace Pyro.Test {
-    using NUnit.Framework;
+﻿using NUnit.Framework;
 
+namespace Pyro.Test {
     /// <inheritdoc />
     /// <summary>
-    /// Test classes in Rho-space.
+    ///     Test classes in Rho-space.
     /// </summary>
-    [TestFixture()]
+    [TestFixture]
     internal class TestRhoClass
         : TestCommon {
         [Test]
@@ -14,4 +14,3 @@
         }
     }
 }
-

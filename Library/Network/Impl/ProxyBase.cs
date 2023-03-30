@@ -1,6 +1,6 @@
 ﻿namespace Pyro.Network.Impl {
     /// <summary>
-    /// Common to all typed Proxies
+    ///     Common to all typed Proxies
     /// </summary>
     public class ProxyBase<T>
         : EntityCommon<T> {

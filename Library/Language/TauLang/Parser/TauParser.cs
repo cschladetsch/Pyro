@@ -1,14 +1,10 @@
-﻿
-using Pyro.Language.Impl;
+﻿using Pyro.Language.Impl;
 using Pyro.Language.Tau.Lexer;
 
 namespace Pyro.Language.Tau.Parser {
-    
-    public class TauParser 
+    public class TauParser
         : ParserCommon<TauLexer, TauAstNode, TauToken, ETauToken, ETauAst, TauAstFactory>
-        , IParser {
-        public TauAstNode Result => _Stack.Peek();
-
+            , IParser {
         private readonly EStructure _structure;
 
         public TauParser(TauLexer lexer, IRegistry reg, EStructure st = EStructure.Namespace)
@@ -16,6 +12,8 @@ namespace Pyro.Language.Tau.Parser {
             _Current = 0;
             _structure = st;
         }
+
+        public TauAstNode Result => _Stack.Peek();
 
         public bool Process() {
             if (_Lexer.Failed) {
@@ -26,7 +24,7 @@ namespace Pyro.Language.Tau.Parser {
 
             return Parse();
         }
-        
+
         private void RemoveWhitespace() {
             foreach (var tok in _Lexer.Tokens) {
                 switch (tok.Type) {
@@ -51,7 +49,7 @@ namespace Pyro.Language.Tau.Parser {
                 return FailLocation("Unexpected extra stuff found");
             }
 
-            return !Failed && _Stack.Count == 1 || InternalFail("Stack not empty after parsing");
+            return (!Failed && _Stack.Count == 1) || InternalFail("Stack not empty after parsing");
         }
 
         private bool Definition() {
@@ -93,11 +91,10 @@ namespace Pyro.Language.Tau.Parser {
             }
 
             while (!Empty()) {
-                while (MaybeConsume(ETauToken.Interface)) {
+                while (MaybeConsume(ETauToken.Interface))
                     if (!Interface()) {
                         return false;
                     }
-                }
 
                 if (Failed) {
                     return false;
@@ -130,6 +127,7 @@ namespace Pyro.Language.Tau.Parser {
                         if (!PropertyOrMethod(next)) {
                             return Fail("Property or method expected");
                         }
+
                         break;
                     case ETauToken.CloseBrace:
                         Consume();
@@ -138,10 +136,9 @@ namespace Pyro.Language.Tau.Parser {
                         return FailLocation($@"Unexpected token {next.Type} in interface");
                 }
             }
-
         }
 
-        private bool PropertyOrMethod(TauToken type ) {
+        private bool PropertyOrMethod(TauToken type) {
             var name = Expect(ETauToken.Identifier);
             if (MaybeConsume(ETauToken.OpenBrace)) {
                 return Property(type, name);

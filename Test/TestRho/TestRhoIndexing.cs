@@ -1,10 +1,10 @@
-﻿namespace Pyro.Test.Rho {
-    using NUnit.Framework;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
+namespace Pyro.Test.Rho {
     /// <inheritdoc />
     /// <summary>
-    /// Test basic Rho functionality: boolean logic, arithmetic, strings, conditionals.
+    ///     Test basic Rho functionality: boolean logic, arithmetic, strings, conditionals.
     /// </summary>
     [TestFixture]
     public class TestRhoIndexing
@@ -14,7 +14,7 @@
             var a = new List<int> { 1, 2, 3 };
             DataStack.Push(a);
             RhoRun(
-@"
+                @"
 a = {1 2 3}
 a[1]
 ");
@@ -22,4 +22,3 @@ a[1]
         }
     }
 }
-

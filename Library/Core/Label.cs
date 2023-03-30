@@ -1,11 +1,11 @@
 ﻿namespace Pyro {
     /// <inheritdoc />
     /// <summary>
-    /// A singular label (part of a path)
+    ///     A singular label (part of a path)
     /// </summary>
     public class Label : IdentBase {
         /// <summary>
-        /// TODO: make this is a property
+        ///     TODO: make this is a property
         /// </summary>
         public readonly string Text;
 
@@ -14,8 +14,8 @@
             Text = text;
         }
 
-        public override string ToString()
-            => $"{(Quoted ? "\'" : "")}{Text}";
+        public override string ToString() {
+            return $"{(Quoted ? "\'" : "")}{Text}";
+        }
     }
 }
-

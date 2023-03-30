@@ -4,41 +4,34 @@ using System.Reflection;
 
 namespace Pyro.Impl {
     /// <summary>
-    /// Common for all instance types
+    ///     Common for all instance types
     /// </summary>
     public class StructBase : IStructBase {
-        public string TypeName { get; }
-
-        public Type Type { get; }
-
-        protected readonly IRegistry _registry;
+        private readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
 
         protected readonly Dictionary<string, FieldInfo> _fields = new Dictionary<string, FieldInfo>();
-        private readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
         private readonly Dictionary<string, MethodInfo> _methods = new Dictionary<string, MethodInfo>();
-        private readonly Dictionary<string, EventInfo> _events = new Dictionary<string, EventInfo>();
+        private readonly Dictionary<string, PropertyInfo> _properties = new Dictionary<string, PropertyInfo>();
+
+        protected readonly IRegistry _registry;
 
         internal StructBase(IRegistry reg, Type type) {
             Type = type;
             _registry = reg;
             TypeName = type.FullName;
 
-            foreach (var field in type.GetFields()) {
-                _fields[field.Name] = field;
-            }
+            foreach (var field in type.GetFields()) _fields[field.Name] = field;
 
-            foreach (var prop in type.GetProperties()) {
-                _properties[prop.Name] = prop;
-            }
+            foreach (var prop in type.GetProperties()) _properties[prop.Name] = prop;
 
-            foreach (var method in type.GetMethods()) {
-                _methods[method.Name] = method;
-            }
+            foreach (var method in type.GetMethods()) _methods[method.Name] = method;
 
-            foreach (var ev in type.GetEvents()) {
-                _events[ev.Name] = ev;
-            }
+            foreach (var ev in type.GetEvents()) _events[ev.Name] = ev;
         }
+
+        public string TypeName { get; }
+
+        public Type Type { get; }
 
         public void SetProperty(IRefBase obj, string name, object value) {
             if (!_properties.TryGetValue(name, out var pi)) {

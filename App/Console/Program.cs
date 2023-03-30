@@ -1,44 +1,45 @@
-﻿using Pyro.Network.Impl;
+﻿using System;
+using System.Linq;
+using System.Text;
+using Pyro.AppCommon;
+using Pyro.Language;
+using Pyro.Network;
+using Pyro.Network.Impl;
 
 namespace Pyro.Console {
-    using ExecutionContext;
-    using Language;
-    using Network;
-    using System;
-    using System.Linq;
-    using System.Text;
     using Con = System.Console;
 
     /// <summary>
-    /// A Repl console for Pyro.
-    /// 
-    /// Can connect and enter into other consoles.
+    ///     A Repl console for Pyro.
+    ///     Can connect and enter into other consoles.
     /// </summary>
     internal class Program
-        : AppCommon.AppCommonBase {
+        : AppCommonBase {
         // Port that we listen on for incoming connections.
         private const int ListenPort = 7777;
+
+        // only used for translation - not execution. Execution is performed by servers or clients.
+        private readonly ExecutionContext.ExecutionContext _context;
 
         // our peer that can connect to any other peer, and can also be connected to by any other peer
         private IPeer _peer;
 
-        // only used for translation - not execution. Execution is performed by servers or clients.
-        private readonly ExecutionContext _context;
-
-        public static void Main(string[] args)
-            => new Program(args).Repl();
-
         private Program(string[] args)
             : base(args) {
-            _context = new ExecutionContext { Language = ELanguage.Rho };
+            _context = new ExecutionContext.ExecutionContext { Language = ELanguage.Rho };
             Factory.RegisterTypes(_context.Registry);
 
-            if (!StartPeer(args))
+            if (!StartPeer(args)) {
                 Exit(1);
+            }
 
             SetupPeer();
 
             RunInitialisationScripts();
+        }
+
+        public static void Main(string[] args) {
+            new Program(args).Repl();
         }
 
         private void SetupPeer() {
@@ -48,8 +49,9 @@ namespace Pyro.Console {
 
         private bool StartPeer(string[] args) {
             var port = ListenPort;
-            if (args.Length == 1 && !int.TryParse(args[0], out port))
+            if (args.Length == 1 && !int.TryParse(args[0], out port)) {
                 return Error($"Local server listen port number expected as argument, got {args[0]}");
+            }
 
             _peer = Factory.NewPeer(new Domain(), port);
             var ctx = _peer.Local.ExecutionContext;
@@ -67,17 +69,17 @@ namespace Pyro.Console {
         }
 
         private void Repl() {
-            while (true) {
+            while (true)
                 try {
                     WritePrompt();
-                    if (!Execute(GetInput()))
+                    if (!Execute(GetInput())) {
                         continue;
+                    }
 
                     WriteDataStack();
                 } catch (Exception e) {
                     Error($"{e.Message}");
                 }
-            }
         }
 
         private void WritePrompt() {
@@ -88,7 +90,7 @@ namespace Pyro.Console {
         }
 
         private string GetInput() {
-            return Console.ReadLine();
+            return Con.ReadLine();
             /* want to trap Ctrl-Keys
             var sb = new StringBuilder();
             while (true)
@@ -163,8 +165,8 @@ namespace Pyro.Console {
         }
 
         /// <summary>
-        /// First, we translate the input (which could be any supported language) to Pi.
-        /// Then we convert that to Pi text and send to current server.
+        ///     First, we translate the input (which could be any supported language) to Pi.
+        ///     Then we convert that to Pi text and send to current server.
         /// </summary>
         private bool Execute(string input) {
             if (string.IsNullOrEmpty(input)) {
@@ -174,8 +176,9 @@ namespace Pyro.Console {
             }
 
             try {
-                if (PreProcess(input))
+                if (PreProcess(input)) {
                     return true;
+                }
 
                 return !_context.Translate(input, out var cont) ? Error(_context.Error) : _peer.Execute(cont.ToText());
             } catch (Exception e) {
@@ -210,7 +213,7 @@ namespace Pyro.Console {
 
         private bool ShowHelp() {
             Con.WriteLine(
-@"
+                @"
 The prompt shows the current executing context and language.
 
 When you type at the prompt, your text is executed in the current context - which could be local (default) or remote.
@@ -239,4 +242,3 @@ Press Ctrl-C to quit.
         }
     }
 }
-

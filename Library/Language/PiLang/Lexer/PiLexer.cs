@@ -1,27 +1,30 @@
-﻿namespace Pyro.Language.Lexer {
-    using Exec;
-    using Impl;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Pyro.Exec;
+using Pyro.Language.Impl;
 
+namespace Pyro.Language.Lexer {
     /// <inheritdoc />
     /// <summary>
-    /// A Pi-lang lexer. Converts a string to a sequence of Pi tokens.
+    ///     A Pi-lang lexer. Converts a string to a sequence of Pi tokens.
     /// </summary>
     public partial class PiLexer
         : LexerCommon<EPiToken, PiToken, PiTokenFactory> {
-        private static Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
+        private static readonly Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
 
         public PiLexer(string input)
-            : base(input)
-            => CreateOpToToken();
+            : base(input) {
+            CreateOpToToken();
+        }
 
         protected override bool NextToken() {
             var current = Current();
-            if (current == 0)
+            if (current == 0) {
                 return false;
+            }
 
-            if (char.IsLetter(current) || current == '_')
+            if (char.IsLetter(current) || current == '_') {
                 return IdentOrKeyword();
+            }
 
             if (char.IsDigit(current)) {
                 var start = Gather(char.IsDigit);
@@ -31,11 +34,11 @@
 
                 Next();
                 var end = Gather(char.IsDigit);
-                if (start.LineNumber != end.LineNumber)
+                if (start.LineNumber != end.LineNumber) {
                     return Fail("Bad float literal");
+                }
 
                 return AddSlice(EPiToken.Float, new Slice(this, start.Start, end.End));
-
             }
 
             switch (current) {
@@ -65,24 +68,34 @@
                 case '\r':
                 case '\n': return Add(EPiToken.NewLine);
                 case '-':
-                    if (char.IsDigit(Peek()))
+                    if (char.IsDigit(Peek())) {
                         return AddSlice(EPiToken.Int, Gather(char.IsDigit));
-                    if (Peek() == '-')
+                    }
+
+                    if (Peek() == '-') {
                         return AddTwoCharOp(EPiToken.Decrement);
-                    if (Peek() == '=')
+                    }
+
+                    if (Peek() == '=') {
                         return AddTwoCharOp(EPiToken.MinusAssign);
+                    }
+
                     return Add(EPiToken.Minus);
 
                 case '.':
                     if (Peek() == '.') {
                         Next();
-                        if (Peek() != '.')
+                        if (Peek() != '.') {
                             return Fail("Two dots doesn't work");
+                        }
 
                         Next();
                         return Add(EPiToken.Resume, 3);
-                    } else if (Peek() == '@')
+                    }
+
+                    if (Peek() == '@') {
                         return AddTwoCharOp(EPiToken.GetMember);
+                    }
 
                     // test for floating-point numbers
                     var prev = PrevToken();
@@ -98,15 +111,20 @@
                     return Add(EPiToken.Dot);
 
                 case '+':
-                    if (Peek() == '+')
+                    if (Peek() == '+') {
                         return AddTwoCharOp(EPiToken.Increment);
-                    if (Peek() == '=')
+                    }
+
+                    if (Peek() == '=') {
                         return AddTwoCharOp(EPiToken.PlusAssign);
+                    }
+
                     return Add(EPiToken.Plus);
 
                 case '/':
-                    if (Peek() != '/')
+                    if (Peek() != '/') {
                         return Add(EPiToken.Divide);
+                    }
 
                     Next();
                     var start = _offset + 1;
@@ -131,22 +149,25 @@
 
         private bool AddQuotedOperation() {
             Next();
-            if (!int.TryParse(Gather(char.IsDigit).Text, out var num))
+            if (!int.TryParse(Gather(char.IsDigit).Text, out var num)) {
                 return Fail("Operation number expected");
+            }
+
             var op = (EOperation)num;
             return _opToToken.TryGetValue(op, out var tok) && Add(tok);
         }
 
-        public override bool Fail(string err)
-            => base.Fail($"{_lineNumber}({_offset}): {err}");
+        public override bool Fail(string err) {
+            return base.Fail($"{_lineNumber}({_offset}): {err}");
+        }
 
-        protected override void AddKeywordOrIdent(Slice slice)
-            => _Tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
-            ? _Factory.NewToken(tok, slice)
-            : _Factory.NewTokenIdent(slice));
+        protected override void AddKeywordOrIdent(Slice slice) {
+            _Tokens.Add(_keyWords.TryGetValue(slice.Text, out var tok)
+                ? _Factory.NewToken(tok, slice)
+                : _Factory.NewTokenIdent(slice));
+        }
 
         protected override void Terminate() {
         }
     }
 }
-

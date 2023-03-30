@@ -1,12 +1,12 @@
-﻿using Pyro.Language;
-using Pyro.RhoLang.Lexer;
-using System;
+﻿using System;
 using System.Drawing;
+using Pyro.Language;
+using Pyro.RhoLang.Lexer;
 
 namespace WinForms {
     /// <inheritdoc />
     /// <summary>
-    /// Colorise Rho script.
+    ///     Colorise Rho script.
     /// </summary>
     public partial class MainForm {
         private void ColoriseRho() {
@@ -26,7 +26,8 @@ namespace WinForms {
                     ColoriseRhoToken(tok, tok.Slice);
             } catch (Exception e) {
                 output.Append($"{e.Message}: {lex.Error}");
-            } finally {
+            }
+            finally {
                 EndUpdate(rtb);
             }
         }
@@ -36,11 +37,17 @@ namespace WinForms {
         }
 
         private bool ColoriseRhoToken(RhoToken tok, Slice slice) {
-            if (slice.Length < 0)
+            if (slice.Length < 0) {
                 return false;
+            }
 
-            bool Render(Color color) => SetRhoSliceColor(slice, color, _defaultFont);
-            bool RenderBold(Color color) => SetRhoSliceColor(slice, color, _boldFont);
+            bool Render(Color color) {
+                return SetRhoSliceColor(slice, color, _defaultFont);
+            }
+
+            bool RenderBold(Color color) {
+                return SetRhoSliceColor(slice, color, _boldFont);
+            }
 
             switch (tok.Type) {
                 case ERhoToken.Assert:
@@ -96,7 +103,8 @@ namespace WinForms {
             }
         }
 
-        private bool SetRhoSliceColor(Slice slice, Color color, Font font)
-            => SetSliceColor(_rhoInput, slice, color, font);
+        private bool SetRhoSliceColor(Slice slice, Color color, Font font) {
+            return SetSliceColor(_rhoInput, slice, color, font);
+        }
     }
 }

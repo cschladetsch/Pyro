@@ -1,10 +1,10 @@
-﻿namespace Pyro.Test {
-    using Language;
-    using NUnit.Framework;
+﻿using NUnit.Framework;
+using Pyro.Language;
 
+namespace Pyro.Test {
     /// <inheritdoc />
     /// <summary>
-    /// Run pi from rho.
+    ///     Run pi from rho.
     /// </summary>
     [TestFixture]
     public class PiFromRho
@@ -34,4 +34,3 @@
         }
     }
 }
-

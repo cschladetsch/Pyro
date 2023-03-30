@@ -1,127 +1,119 @@
 ﻿namespace Pyro.Language.Lexer {
     /// <summary>
-    /// A Pi-lang token type.
+    ///     A Pi-lang token type.
     /// </summary>
     public enum EPiToken {
-        None,
-        Integer,
-        Float,
-        Int,
-        String,
-        IpAddress,
-        True,
-        False,
-        Ident,
-        Exists,
-        Version,
-        OpenBrace,
-        CloseBrace,
-        OpenSquareBracket,
-        CloseSquareBracket,
-        Store,
-        Suspend,
-        Replace,
-        Resume,
-        Floor,
-        Ceiling,
-        Break,
-        Plus,
-        Minus,
-        Multiply,
-        Divide,
-        Equiv,
-        Assign,
-        NotEquiv,
-        Less,
-        Greater,
-        LessEquiv,
-        GreaterEquiv,
-        Dup,
-        Comma,
-        Drop,
-        Over,
-        Rot,
-        Depth,
-        Pick,
-        Expand,
-        Name,
-        Fullname,
-        Freeze,
-        Thaw,
-        StringFreeze,
-        StringThaw,
-        GetType,
-        This,
-        GetContents,
-        SetTraceLevel,
-        GetTraceLevel,
-        GetDebugLevel,
-        SetDebugLevel,
-
-        If,
-        IfElse,
-        For,
-        Self,
-        While,
-        Assert,
-        ToRho,
-        ToRhoSequence,
-        Not,
-        And,
-        Or,
-        Xor,
-
-        Swap,
-        RotN,
-        GarbageCollect,
-        Clear,
-        ChangeFolder,
-        PrintFolder,
-        ToList,
-        ToMap,
-        ToSet,
-        Write,
-        WriteLine,
-
-        Contents,
-        Size,
-        New,
-        DropN,
-
-        BitOr,
-        Decrement,
-        Increment,
-        MinusAssign,
-        Tab,
-        NewLine,
-
-        OpenParan,
-        CloseParan,
-        Colon,
-        Whitespace,
-        PlusAssign,
-        Comment,
-        Retrieve,
-        Separator,
-        Dot,
-        Quote,
-
-        DebugPrint,
-        DebugPrintDataStack,
-        DebugPrintContinuation,
-        DebugPrintContextStack,
-
-        GetMember,
-
-        ToArray,
-        Remove,
-        At,
-        PushBack,
-        PushFront,
-        Insert,
-        GetBack,
-        Has,
-        SetFloatPrecision,
-        Delete
+        None
+        , Integer
+        , Float
+        , Int
+        , String
+        , IpAddress
+        , True
+        , False
+        , Ident
+        , Exists
+        , Version
+        , OpenBrace
+        , CloseBrace
+        , OpenSquareBracket
+        , CloseSquareBracket
+        , Store
+        , Suspend
+        , Replace
+        , Resume
+        , Floor
+        , Ceiling
+        , Break
+        , Plus
+        , Minus
+        , Multiply
+        , Divide
+        , Equiv
+        , Assign
+        , NotEquiv
+        , Less
+        , Greater
+        , LessEquiv
+        , GreaterEquiv
+        , Dup
+        , Comma
+        , Drop
+        , Over
+        , Rot
+        , Depth
+        , Pick
+        , Expand
+        , Name
+        , Fullname
+        , Freeze
+        , Thaw
+        , StringFreeze
+        , StringThaw
+        , GetType
+        , This
+        , GetContents
+        , SetTraceLevel
+        , GetTraceLevel
+        , GetDebugLevel
+        , SetDebugLevel
+        , If
+        , IfElse
+        , For
+        , Self
+        , While
+        , Assert
+        , ToRho
+        , ToRhoSequence
+        , Not
+        , And
+        , Or
+        , Xor
+        , Swap
+        , RotN
+        , GarbageCollect
+        , Clear
+        , ChangeFolder
+        , PrintFolder
+        , ToList
+        , ToMap
+        , ToSet
+        , Write
+        , WriteLine
+        , Contents
+        , Size
+        , New
+        , DropN
+        , BitOr
+        , Decrement
+        , Increment
+        , MinusAssign
+        , Tab
+        , NewLine
+        , OpenParan
+        , CloseParan
+        , Colon
+        , Whitespace
+        , PlusAssign
+        , Comment
+        , Retrieve
+        , Separator
+        , Dot
+        , Quote
+        , DebugPrint
+        , DebugPrintDataStack
+        , DebugPrintContinuation
+        , DebugPrintContextStack
+        , GetMember
+        , ToArray
+        , Remove
+        , At
+        , PushBack
+        , PushFront
+        , Insert
+        , GetBack
+        , Has
+        , SetFloatPrecision
+        , Delete
     }
 }

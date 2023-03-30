@@ -4,18 +4,10 @@ using System.Collections.Generic;
 namespace Pyro.Impl {
     /// <inheritdoc />
     /// <summary>
-    /// Common implementation behind all type-specific objects in the Dive system.
+    ///     Common implementation behind all type-specific objects in the Dive system.
     /// </summary>
     internal class ConstRefBase
         : IConstRefBase {
-        public Id Id => _id;
-        public IRegistry Registry { get; internal set; }
-        public Type ValueType => BaseValue?.GetType();
-        public IClassBase Class { get; internal set; }
-        public bool IsConst => true;
-        public object BaseValue => _baseValue;
-        public IDictionary<string, object> Scope => _scope ?? (_scope = new Dictionary<string, object>());
-
         protected readonly Id _id;
         protected object _baseValue;
         private Dictionary<string, object> _scope;
@@ -31,9 +23,16 @@ namespace Pyro.Impl {
             reg.AddConst(val);
         }
 
+        public Id Id => _id;
+        public IRegistry Registry { get; internal set; }
+        public Type ValueType => BaseValue?.GetType();
+        public IClassBase Class { get; internal set; }
+        public bool IsConst => true;
+        public object BaseValue => _baseValue;
+        public IDictionary<string, object> Scope => _scope ?? (_scope = new Dictionary<string, object>());
+
         public T Get<T>() {
             return (T)_baseValue;
         }
     }
 }
-

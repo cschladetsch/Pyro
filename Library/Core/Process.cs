@@ -1,6 +1,6 @@
-﻿namespace Pyro {
-    using System;
+﻿using System;
 
+namespace Pyro {
     /// <inheritdoc />
     public class Process
         : IProcess {
@@ -8,7 +8,7 @@
         public string Error { get; protected set; }
 
         /// <summary>
-        /// Reset this Process to a successful state.
+        ///     Reset this Process to a successful state.
         /// </summary>
         public void Reset() {
             Failed = false;
@@ -20,8 +20,8 @@
         }
 
         /// <summary>
-        /// A special kind of failure: this is a failure of the system itself,
-        /// rather than a failure to produce results given invalid user input.
+        ///     A special kind of failure: this is a failure of the system itself,
+        ///     rather than a failure to produce results given invalid user input.
         /// </summary>
         /// <param name="error"></param>
         /// <returns></returns>
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// A Process failure due to client input.
+        ///     A Process failure due to client input.
         /// </summary>
         /// <param name="err">What went wrong.</param>
         /// <returns>false.</returns>
@@ -43,4 +43,3 @@
         }
     }
 }
-

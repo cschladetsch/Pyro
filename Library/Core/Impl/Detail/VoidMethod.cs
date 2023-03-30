@@ -9,7 +9,9 @@ namespace Pyro.Impl {
         private readonly Action<T> _fun;
 
         public VoidMethod(Action<T> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -24,7 +26,9 @@ namespace Pyro.Impl {
         private readonly Action<T, A0> _fun;
 
         public VoidMethod(Action<T, A0> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -35,7 +39,7 @@ namespace Pyro.Impl {
 
 
     /// <summary>
-    /// A callable thing that doesn't return anything and takes two arguments.
+    ///     A callable thing that doesn't return anything and takes two arguments.
     /// </summary>
     public class VoidMethod<T, A0, A1>
         : CallableBase
@@ -44,7 +48,9 @@ namespace Pyro.Impl {
         private readonly Action<T, A0, A1> _fun;
 
         public VoidMethod(Action<T, A0, A1> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -56,12 +62,14 @@ namespace Pyro.Impl {
 
     public class VoidMethod<T, A0, A1, A2>
         : CallableBase
-        , ICallable<T>
-            where T : class {
+            , ICallable<T>
+        where T : class {
         private readonly Action<T, A0, A1, A2> _fun;
 
         public VoidMethod(Action<T, A0, A1, A2> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();
@@ -79,7 +87,9 @@ namespace Pyro.Impl {
         private readonly Action<T, A0, A1, A2, A3> _fun;
 
         public VoidMethod(Action<T, A0, A1, A2, A3> fun)
-            : base(fun) => _fun = fun;
+            : base(fun) {
+            _fun = fun;
+        }
 
         public override void Invoke(IRegistry reg, Stack<object> stack) {
             var obj = stack.Pop();

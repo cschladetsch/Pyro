@@ -1,6 +1,6 @@
 ﻿namespace Pyro.Network.Impl {
     /// <summary>
-    /// Common to all typed Agents
+    ///     Common to all typed Agents
     /// </summary>
     public class AgentBase<T>
         : EntityCommon<T> {
