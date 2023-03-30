@@ -1,0 +1,9 @@
+﻿using Pyro.Network;
+
+namespace MyNamespace.Agent {
+    interface IFooAgent : IAgentBase {
+        string Name { get; set; }
+        
+        int Sum(int a, int b);
+    }
+}

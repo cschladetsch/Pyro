@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using Pyro.Impl;
 using Pyro.Language.Tau;
 using Pyro.Language.Tau.Lexer;
@@ -21,8 +22,10 @@ namespace TestTau {
                 Assert.Fail("Parser failed: {0}", parser.Error);
             }
 
+            var baseFolder = GetOutputPath();
+
             var generator = new TauGenerator(parser);
-            if (!generator.Process(true, true)) {
+            if (!generator.Process(Path.Combine(baseFolder, "Test0"), true, true)) {
                 Assert.Fail("Generator failed: {0}", generator.Error);
             }
         }

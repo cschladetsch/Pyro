@@ -1,4 +1,5 @@
-﻿using Pyro.Language.Tau.Parser;
+﻿using System.IO;
+using Pyro.Language.Tau.Parser;
 
 namespace Pyro.Language.Tau {
     public class TauGenerator
@@ -9,38 +10,39 @@ namespace Pyro.Language.Tau {
             _parser = parser;
         }
 
-        public bool Process(bool generateAgents, bool generateProxies) {
+        public bool Process(string baseName, bool generateAgents, bool generateProxies) {
             if (_parser.Failed) {
                 return Fail($"Generator failed because Parser error: {_parser.Error}");
             }
 
-            if (generateProxies && !GenerateProxies()) {
+            if (generateProxies && !GenerateProxies(baseName + "Proxy.cs")) {
                 return false;
             }
 
-            if (generateAgents && !GenerateAgents()) {
+            if (generateAgents && !GenerateAgents(baseName + "Agent.cs")) {
                 return false;
             }
 
             return !Failed;
         }
 
-        private bool GenerateAgents() {
-            return Generate("Agents", new AgentGenerator(_parser));
+        private bool GenerateAgents(string fileName) {
+            return Generate(fileName, new AgentGenerator(_parser));
         }
 
-        private bool GenerateProxies() {
-            return Generate("Proxies", new ProxyGenerator(_parser));
+        private bool GenerateProxies(string fileName) {
+            return Generate(fileName, new ProxyGenerator(_parser));
         }
 
-        private bool Generate(string baseFolder, GeneratorBase generator) {
+        private bool Generate(string fileName, GeneratorCommon generator) {
             return !generator.Run()
                 ? Fail($"Generator Failed: {generator.Error}")
-                : WriteFile(baseFolder, generator.Result);
+                : WriteFile(fileName, generator.Result);
         }
 
-        private bool WriteFile(string baseFolder, string contents) {
-            return false;
+        private bool WriteFile(string fileName, string contents) {
+            File.WriteAllText(fileName, contents);
+            return true;
         }
     }
 }

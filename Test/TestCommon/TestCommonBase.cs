@@ -6,6 +6,7 @@ namespace Pyro.Test {
     public class TestCommonBase
         : Process {
         private const string ScriptsFolder = "Scripts";
+        private const string OutputFolder = "Output";
 
         protected static void WriteLine(string fmt, params object[] args) {
             var text = fmt;
@@ -23,6 +24,9 @@ namespace Pyro.Test {
 
         protected static string GetScriptsPath()
             => MakeLocalPath(ScriptsFolder);
+
+        protected static string GetOutputPath()
+            => MakeLocalPath(OutputFolder);
 
         private static string MakeLocalPath(string relative)
             => Path.Combine(GetFolderRoot(), relative);

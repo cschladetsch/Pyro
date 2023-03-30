@@ -36,7 +36,7 @@
         /// </summary>
         /// <param name="err">What went wrong.</param>
         /// <returns>false.</returns>
-        protected virtual bool Fail(string err) {
+        public virtual bool Fail(string err) {
             Failed = true;
             Error = err;
             return false;

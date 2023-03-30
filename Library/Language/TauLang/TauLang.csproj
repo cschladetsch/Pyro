@@ -38,9 +38,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generator\AgentGenerator.cs" />
+    <Compile Include="Generator\EGeneratedType.cs" />
+    <Compile Include="Generator\GeneratorCommon.cs" />
+    <Compile Include="Generator\IGeneratorCommon.cs" />
+    <Compile Include="Generator\MethodBase.cs" />
+    <Compile Include="Generator\PropertyBase.cs" />
     <Compile Include="Generator\TauGenerator.cs" />
     <Compile Include="Generator\GeneratorBase.cs" />
-    <Compile Include="Generator\Output\Example1.cs" />
     <Compile Include="Generator\ProxyGenerator.cs" />
     <Compile Include="Lexer\ETauToken.cs" />
     <Compile Include="Lexer\TauLexer.cs" />

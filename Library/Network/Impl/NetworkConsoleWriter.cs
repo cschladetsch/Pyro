@@ -12,7 +12,7 @@
         {
         public event OnWriteDelegate OnWrite;
 
-        protected override bool Fail(string text) {
+        public override bool Fail(string text) {
             OnWrite?.Invoke(ELogLevel.Error, text);
             base.Fail(text);
             Error(text);

@@ -196,9 +196,9 @@ namespace Pyro.Language.Tau.Parser {
             return null;
         }
 
-        private bool Property(TauToken tauToken, TauAstNode name) {
+        private bool Property(TauToken type, TauAstNode name) {
             var property = _AstFactory.New(ETauAst.Property, name.TauToken);
-            property.Add(name);
+            property.Add(type);
             if (MaybeConsume(ETauToken.Getter)) {
                 if (!MaybeConsume(ETauToken.Semi)) {
                     return FailLocation("Expected ';' after getter");

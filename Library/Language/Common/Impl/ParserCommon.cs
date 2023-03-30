@@ -181,7 +181,7 @@ namespace Pyro.Language.Impl {
         protected bool Maybe(ETokenEnum type)
             => !Failed && !Empty() && Current().Type.Equals(type);
 
-        protected bool FailLocation(string text)
+        public bool FailLocation(string text)
             => Fail(!HasTokens() ? text : _Lexer.CreateErrorMessage(Current(), text));
 
         protected TAstNode NewNode(EAstEnum a)

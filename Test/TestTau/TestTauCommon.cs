@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
 using NUnit.Framework;
-using Pyro.Language.Tau.Lexer;
+
 using Pyro.Test;
+using Pyro.Language.Tau.Lexer;
 
 namespace TestTau {
     public class TestTauCommon
@@ -14,7 +15,7 @@ namespace TestTau {
 
         protected static void AssertSameTokens(string input, params ETauToken[] tokens) {
             var tauLexer = new TauLexer(input);
-            tauLexer.Process();
+            Assert.True(tauLexer.Process());
             AssertSameTokens(tauLexer.Tokens, tokens);
         }
 
@@ -44,6 +45,5 @@ namespace TestTau {
                     return false;
             }
         }
-        
     }
 }
