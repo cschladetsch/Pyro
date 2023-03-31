@@ -41,6 +41,7 @@
         <Compile Include="Generator\EGeneratedType.cs" />
         <Compile Include="Generator\GeneratorCommon.cs" />
         <Compile Include="Generator\IGeneratorCommon.cs" />
+        <Compile Include="Generator\MemberBase.cs" />
         <Compile Include="Generator\Method.cs" />
         <Compile Include="Generator\Property.cs" />
         <Compile Include="Generator\TauGenerator.cs" />

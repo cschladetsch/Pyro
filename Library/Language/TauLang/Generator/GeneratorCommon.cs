@@ -13,6 +13,7 @@ using Flow;
 
 using Pyro;
 using Pyro.Network;
+using Void = Pyro.BuiltinTypes.Void;
 ";
 
         private readonly EGeneratedType _classType;
@@ -51,7 +52,7 @@ using Pyro.Network;
         }
 
         public virtual bool GenerateInterface(TauAstNode @interface) {
-            _stringBuilder.AppendLine($"    public interface I{@interface.Text}{GetQualifier()} : {_baseType} {{\n");
+            _stringBuilder.AppendLine($"    public interface I{@interface.Text}{GetQualifier()} : {_baseType} {{");
             foreach (var member in @interface.Children)
                 switch (member.Type) {
                     case ETauAst.Method:
@@ -82,15 +83,15 @@ using Pyro.Network;
                 return FailLocation(property, "Property needs at least a name and a getter and/or setter");
             }
 
-            var info = new Property(property);
-            AppendLine($"        {GenerateReturn(info.Type)} {info.Name} {{ {info.Getter} {info.Setter} }}");
+            var info = new Property(this, property);
+            AppendLine($"        {GetReturnType(info.Type)} {info.Name} {{ {info.Getter} {info.Setter} }}");
 
             return true;
         }
 
         public virtual bool GenerateMethod(TauAstNode member) {
             var info = new Method(this, member);
-            AppendLine($"        {GenerateReturn(info.Type)} {info.Name}({info.ParameterText});");
+            AppendLine($"        {GetReturnType(info.Type)} {info.Name}({info.ParameterListString});");
             return true;
         }
 
@@ -98,8 +99,8 @@ using Pyro.Network;
             return _parser.FailLocation(text);
         }
 
-        private string GenerateReturn(string infoType) {
-            return _classType == EGeneratedType.EAgent ? infoType : $"IFuture<{infoType}>";
+        private string GetReturnType(string type) {
+            return _classType == EGeneratedType.EAgent ? type : $"IFuture<{type}>";
         }
     }
 }

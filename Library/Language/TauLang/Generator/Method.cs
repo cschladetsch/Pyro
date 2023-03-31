@@ -1,22 +1,23 @@
 ﻿using System.Linq;
 using System.Text;
+
 using Pyro.Language.Tau.Parser;
 
 namespace Pyro.Language.Tau {
-    internal class Method {
-        private readonly GeneratorBase _generatorBase;
+    internal class Method
+        : MemberBase {
         internal readonly string Name;
-        internal readonly string ParameterText;
+        internal readonly string ParameterListString;
         internal readonly string Type;
 
-        internal Method(GeneratorBase generatorBase, TauAstNode member) {
-            _generatorBase = generatorBase;
-            Name = member.Text;
-            Type = member.Children[0].Text;
-            ParameterText = BuildParameterText(member.Children[1]);
+        internal Method(GeneratorBase generatorBase, TauAstNode method)
+            : base(generatorBase) {
+            Name = method.Text;
+            Type = ConvertTypename(method.Children[0].Text);
+            ParameterListString = BuildParameterListString(method.Children[1]);
         }
 
-        private string BuildParameterText(TauAstNode parameters) {
+        private string BuildParameterListString(TauAstNode parameters) {
             var stringBuilder = new StringBuilder();
             if (parameters.Children.Count % 2 != 0) {
                 _generatorBase.Fail("Parameters must be a set of (type name)*");

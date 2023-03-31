@@ -10,8 +10,17 @@ namespace TestTau {
     public class TestTauGenerator
         : TestTauCommon {
         [Test]
+        public void TestGenerator0() {
+            TestGenerator("Test0");
+        }
+
+        [Test]
         public void TestGenerator1() {
-            var lexer = new TauLexer(LoadTauScript("Test0.tau"));
+            TestGenerator("Test1");
+        }
+
+        private void TestGenerator(string baseName) {
+            var lexer = new TauLexer(LoadTauScript(baseName + ".tau"));
             if (!lexer.Process()) {
                 Assert.Fail("Lexer failed: {0}", lexer.Error);
             }
@@ -25,7 +34,7 @@ namespace TestTau {
             var baseFolder = GetOutputPath();
 
             var generator = new TauGenerator(parser);
-            if (!generator.Process(Path.Combine(baseFolder, "Test0"), true, true)) {
+            if (!generator.Process(Path.Combine(baseFolder, baseName), true, true)) {
                 Assert.Fail("Generator failed: {0}", generator.Error);
             }
         }
