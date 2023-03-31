@@ -3,13 +3,13 @@ using System.Text;
 using Pyro.Language.Tau.Parser;
 
 namespace Pyro.Language.Tau {
-    internal class MethodBase {
+    internal class Method {
         private readonly GeneratorBase _generatorBase;
         internal readonly string Name;
         internal readonly string ParameterText;
         internal readonly string Type;
 
-        internal MethodBase(GeneratorBase generatorBase, TauAstNode member) {
+        internal Method(GeneratorBase generatorBase, TauAstNode member) {
             _generatorBase = generatorBase;
             Name = member.Text;
             Type = member.Children[0].Text;

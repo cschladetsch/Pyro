@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,7 +11,7 @@
         <AssemblyName>TauLang</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <TargetFrameworkProfile/>
+        <TargetFrameworkProfile />
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,29 +33,29 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Generator\AgentGenerator.cs"/>
-        <Compile Include="Generator\EGeneratedType.cs"/>
-        <Compile Include="Generator\GeneratorCommon.cs"/>
-        <Compile Include="Generator\IGeneratorCommon.cs"/>
-        <Compile Include="Generator\MethodBase.cs"/>
-        <Compile Include="Generator\PropertyBase.cs"/>
-        <Compile Include="Generator\TauGenerator.cs"/>
-        <Compile Include="Generator\GeneratorBase.cs"/>
-        <Compile Include="Generator\ProxyGenerator.cs"/>
-        <Compile Include="Lexer\ETauToken.cs"/>
-        <Compile Include="Lexer\TauLexer.cs"/>
-        <Compile Include="Lexer\TauToken.cs"/>
-        <Compile Include="Lexer\TauTokenFactory.cs"/>
-        <Compile Include="Parser\ETauAst.cs"/>
-        <Compile Include="Parser\TauAstFactory.cs"/>
-        <Compile Include="Parser\TauAstNode.cs"/>
-        <Compile Include="Parser\TauParser.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="TauTranslator.cs"/>
+        <Compile Include="Generator\AgentGenerator.cs" />
+        <Compile Include="Generator\EGeneratedType.cs" />
+        <Compile Include="Generator\GeneratorCommon.cs" />
+        <Compile Include="Generator\IGeneratorCommon.cs" />
+        <Compile Include="Generator\Method.cs" />
+        <Compile Include="Generator\Property.cs" />
+        <Compile Include="Generator\TauGenerator.cs" />
+        <Compile Include="Generator\GeneratorBase.cs" />
+        <Compile Include="Generator\ProxyGenerator.cs" />
+        <Compile Include="Lexer\ETauToken.cs" />
+        <Compile Include="Lexer\TauLexer.cs" />
+        <Compile Include="Lexer\TauToken.cs" />
+        <Compile Include="Lexer\TauTokenFactory.cs" />
+        <Compile Include="Parser\ETauAst.cs" />
+        <Compile Include="Parser\TauAstFactory.cs" />
+        <Compile Include="Parser\TauAstNode.cs" />
+        <Compile Include="Parser\TauParser.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="TauTranslator.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Core.csproj">
@@ -68,13 +68,13 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="ReadMe.md"/>
+        <Content Include="ReadMe.md" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="packages.config"/>
+        <None Include="packages.config" />
     </ItemGroup>
-    <ItemGroup/>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <ItemGroup />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
            Other similar extension points exist, see Microsoft.Common.targets.
       <Target Name="BeforeBuild">

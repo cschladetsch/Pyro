@@ -4,7 +4,7 @@ using Pyro.Language.Tau.Parser;
 namespace Pyro.Language.Tau {
     public class GeneratorCommon
         : GeneratorBase
-            , IGeneratorCommon {
+        , IGeneratorCommon {
         private const string _Prelude = @"
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ using Pyro.Network;
 
         private readonly EGeneratedType _classType;
         private readonly TauParser _parser;
+        protected virtual string _baseType { get; }
 
         protected GeneratorCommon(TauParser parser, EGeneratedType classType)
             : base(parser) {
@@ -30,7 +31,7 @@ using Pyro.Network;
         }
 
         public bool GenerateNamespace(TauAstNode node) {
-            Append($"namespace Pyro.Network.{node.Text}{_classType.GetGeneratedTypeString()} {{");
+            Append($"namespace Pyro.Network.{node.Text}{GetQualifier()} {{\n");
             foreach (var @interface in node.Children) {
                 if (@interface.Type != ETauAst.Interface) {
                     return FailLocation(@interface, "Expected interface");
@@ -45,8 +46,12 @@ using Pyro.Network;
             return !Failed;
         }
 
+        private string GetQualifier() {
+            return _classType.GetGeneratedTypeString();
+        }
+
         public virtual bool GenerateInterface(TauAstNode @interface) {
-            _stringBuilder.AppendLine($"    public interface I{@interface.Text}{@interface.Text} : IProxyBase {{");
+            _stringBuilder.AppendLine($"    public interface I{@interface.Text}{GetQualifier()} : {_baseType} {{\n");
             foreach (var member in @interface.Children)
                 switch (member.Type) {
                     case ETauAst.Method:
@@ -68,6 +73,7 @@ using Pyro.Network;
                         return Fail($"Unexpected token {member} in proxy interface.");
                 }
 
+            AppendLine("    }");
             return !Failed;
         }
 
@@ -83,7 +89,7 @@ using Pyro.Network;
         }
 
         public virtual bool GenerateMethod(TauAstNode member) {
-            var info = new MethodBase(this, member);
+            var info = new Method(this, member);
             AppendLine($"        {GenerateReturn(info.Type)} {info.Name}({info.ParameterText});");
             return true;
         }

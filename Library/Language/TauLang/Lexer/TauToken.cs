@@ -3,8 +3,8 @@
 namespace Pyro.Language.Tau.Lexer {
     public class TauToken
         : TokenBase<ETauToken>
-            , ITokenNode<ETauToken> {
-        public TauToken() {
+        , ITokenNode<ETauToken> {
+        public TauToken() : base() {
             _type = ETauToken.Nop;
         }
 

@@ -1,4 +1,7 @@
-﻿using Pyro.Language.Tau.Parser;
+﻿using System;
+using System.Security.AccessControl;
+using Pyro.Language.Tau.Lexer;
+using Pyro.Language.Tau.Parser;
 
 namespace Pyro.Language.Tau {
     public struct Property {
@@ -9,8 +12,8 @@ namespace Pyro.Language.Tau {
 
         public Property(TauAstNode node) {
             Name = node.Text;
-            Type = node.Children[1].Text;
-            var first = node.Children[0];
+            Type = node.Children[0].Text;
+            var first = node.Children[1];
             var second = node.Children.Count > 1 ? node.Children[2] : null;
 
             Getter = MakeTextAccessor(first);
@@ -21,15 +24,17 @@ namespace Pyro.Language.Tau {
             if (accessor == null) {
                 return string.Empty;
             }
+            if (accessor.Type != ETauAst.TokenType) {
+                throw new Exception("Property accessor must be getter or setter");
+            }
 
-            var text = accessor.Text;
-            switch (text) {
-                case "get":
+            switch (accessor.TauToken.Type) {
+                case ETauToken.Getter:
                     return "get;";
-                case "set":
+                case ETauToken.Setter:
                     return "set;";
                 default:
-                    return string.Empty;
+                    throw new Exception("Expected getter or setter");
             }
         }
     }

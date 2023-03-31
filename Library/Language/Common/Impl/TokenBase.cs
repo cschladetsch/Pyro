@@ -3,9 +3,29 @@
 namespace Pyro.Language.Impl {
     public class TokenBase<ETokenType>
         : ITokenBase<ETokenType> {
-        private readonly Slice _slice;
+        public string Text
+            => Lexer.GetText(Slice);
+
+        public char this[int n]
+            => Lexer.Input[_slice.Start + n];
+        
+        public Slice Slice
+            => _slice;
+
+        public ETokenType Type {
+            get => _type;
+            set => _type = value;
+        }
+
+        public int LineNumber
+            => _slice.LineNumber;
+
+        public LexerBase Lexer
+            => _slice.Lexer;
 
         protected ETokenType _type;
+
+        private readonly Slice _slice;
 
         protected TokenBase() {
         }
@@ -14,18 +34,6 @@ namespace Pyro.Language.Impl {
             _type = type;
             _slice = slice;
         }
-
-        public string Text => Lexer.GetText(Slice);
-        public char this[int n] => Lexer.Input[_slice.Start + n];
-        public Slice Slice => _slice;
-
-        public ETokenType Type {
-            get => _type;
-            set => _type = value;
-        }
-
-        public int LineNumber => _slice.LineNumber;
-        public LexerBase Lexer => _slice.Lexer;
 
         public override string ToString() {
             var str = new StringBuilder();

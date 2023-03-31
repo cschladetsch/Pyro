@@ -7,20 +7,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="nunit" Version="3.13.3"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="3.13.0"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0"/>
+        <PackageReference Include="nunit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TestCommon\TestCommon.csproj"/>
-        <ProjectReference Include="..\TestCore\TestCore.csproj"/>
-        <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj"/>
-        <ProjectReference Include="..\..\Library\Language\Common\Common.csproj"/>
-        <ProjectReference Include="..\..\Library\Language\TauLang\TauLang.csproj"/>
-        <ProjectReference Include="..\..\Library\Network\Network.csproj"/>
-        <ProjectReference Include="..\TestCommon\TestCommon.csproj"/>
-        <ProjectReference Include="..\TestCore\TestCore.csproj"/>
+        <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
+        <ProjectReference Include="..\TestCore\TestCore.csproj" />
+        <ProjectReference Include="..\..\Library\Ext\Flow\Flow.csproj" />
+        <ProjectReference Include="..\..\Library\Language\Common\Common.csproj" />
+        <ProjectReference Include="..\..\Library\Language\TauLang\TauLang.csproj" />
+        <ProjectReference Include="..\..\Library\Network\Network.csproj" />
+        <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
+        <ProjectReference Include="..\TestCore\TestCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Output\Test0Agent.cs" />
+      <Content Include="Output\Test0Agent.cs" />
+      <Compile Remove="Output\Test0Proxy.cs" />
+      <Content Include="Output\Test0Proxy.cs" />
     </ItemGroup>
 
 </Project>
