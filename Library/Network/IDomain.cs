@@ -13,11 +13,11 @@ namespace Pyro.Network {
         /// <summary>
         ///     Make a new local Agent
         /// </summary>
-        TAgent NewAgent<TAgent>(ICollection<object> dataStack) where TAgent : IAgentBase;
+        TAgent NewAgent<TAgent>(ICollection<object> dataStack) where TAgent : class, IAgentBase;
 
         /// <summary>
         ///     Make a local proxy to a remote Agent
         /// </summary>
-        IFuture<TProxy> NewProxy<TProxy>(Guid domainId);
+        IFuture<TProxy> NewProxy<TProxy>(Guid domainId) where TProxy : class, IProxyBase;   
     }
 }

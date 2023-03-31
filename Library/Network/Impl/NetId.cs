@@ -5,16 +5,19 @@ namespace Pyro.Network {
     ///     Identifies an object in a Domain
     /// </summary>
     public class NetId {
-        private Guid _domain;
+        private readonly Guid _domain;
+
+        public Id Id { get; }
+
+        public NetId() {
+            _domain = Guid.NewGuid();
+            Id = new Id();
+        }
 
         public NetId(Guid domain, Id id) {
             _domain = domain;
             Id = id;
         }
-
-        public Guid DomainId => _domain;
-
-        public Id Id { get; }
 
         public override string ToString() {
             return $"NetId: @{_domain}:{Id.Value}";
@@ -29,14 +32,10 @@ namespace Pyro.Network {
                 return true;
             }
 
-            if (obj.GetType() != GetType()) {
-                return false;
-            }
-
-            return Equals((NetId)obj);
+            return obj.GetType() == GetType() && Equals((NetId)obj);
         }
 
-        public bool Equals(NetId netId) {
+        private bool Equals(NetId netId) {
             return netId._domain == _domain && netId.Id == Id;
         }
 

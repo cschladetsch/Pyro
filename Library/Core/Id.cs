@@ -5,7 +5,7 @@ namespace Pyro {
     public class Id {
         internal static Id None = new Id();
 
-        internal Id(int num = 0) {
+        public Id(int num = 0) {
             Value = num;
         }
 

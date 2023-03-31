@@ -147,11 +147,5 @@ namespace Pyro.Network.Impl {
             Receive(socket);
             Listen();
         }
-
-        public TIAgent NewAgent<TIAgent>()
-            where TIAgent : IAgentBase {
-            var agent = Domain.NewAgent<TIAgent>(default);
-            return agent;
-        }
     }
 }
