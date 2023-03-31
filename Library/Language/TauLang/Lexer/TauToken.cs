@@ -16,7 +16,7 @@ namespace Pyro.Language.Tau.Lexer {
 
         public override string ToString() {
             if (Slice.Length == 0 || string.IsNullOrEmpty(Text) || string.IsNullOrEmpty(Text.Trim())) {
-                return Type?.ToString();
+                return Type.ToString();
             }
 
             return $"{Type}: '{Text}'";
@@ -24,10 +24,14 @@ namespace Pyro.Language.Tau.Lexer {
 
         public override bool Equals(object obj) {
             if (obj is TauToken tok) {
-                return _type == tok._type && Slice == tok.Slice;
+                return _type == tok._type && Equals(Slice, tok.Slice);
             }
 
             return false;
+        }
+
+        protected bool Equals(TauToken other) {
+            throw new System.NotImplementedException();
         }
 
         public override int GetHashCode() {
