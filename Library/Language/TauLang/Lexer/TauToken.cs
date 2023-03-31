@@ -4,7 +4,9 @@ namespace Pyro.Language.Tau.Lexer {
     public class TauToken
         : TokenBase<ETauToken>
         , ITokenNode<ETauToken> {
-        public TauToken() : base() {
+        
+        public TauToken() 
+            : base() {
             _type = ETauToken.Nop;
         }
 
@@ -14,7 +16,7 @@ namespace Pyro.Language.Tau.Lexer {
 
         public override string ToString() {
             if (Slice.Length == 0 || string.IsNullOrEmpty(Text) || string.IsNullOrEmpty(Text.Trim())) {
-                return Type.ToString();
+                return Type?.ToString();
             }
 
             return $"{Type}: '{Text}'";
@@ -22,7 +24,7 @@ namespace Pyro.Language.Tau.Lexer {
 
         public override bool Equals(object obj) {
             if (obj is TauToken tok) {
-                return _type == tok._type;
+                return _type == tok._type && Slice == tok.Slice;
             }
 
             return false;
