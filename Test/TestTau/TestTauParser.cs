@@ -1,5 +1,7 @@
 ﻿using System.IO;
+
 using NUnit.Framework;
+
 using Pyro.Impl;
 using Pyro.Language.Tau.Lexer;
 using Pyro.Language.Tau.Parser;
@@ -22,13 +24,13 @@ namespace TestTau {
             var lexer = new TauLexer(LoadTauScript(fileName));
 
             if (!lexer.Process()) {
-                Assert.Fail("Lexer failed: {0}", lexer.Error);
+                Assert.Fail("Lexer failed:\n{0}", lexer.Error);
             }
 
             var registry = new Registry();
             var parser = new TauParser(lexer, registry);
             if (!parser.Process()) {
-                Assert.Fail("Parser failed: {0}", parser.Error);
+                Assert.Fail("Parser failed:\n{0}", parser.Error);
             }
         }
 

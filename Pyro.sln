@@ -65,6 +65,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{ACE95B75-4
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Network", "Network", "{9E84ED57-1086-4B8E-A67A-AA86F9F411F1}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Network\Readme.md = Library\Network\Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Library\Network\Unity\Unity.csproj", "{9273DB5E-1F55-462F-A7EA-FA0A416FAF9A}"
 EndProject
