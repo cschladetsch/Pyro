@@ -95,11 +95,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{AAF6F6C3-B4A
 		App\Readme.md = App\Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{B8F3F0FB-24DE-4E53-B508-FC51EC07816B}"
-	ProjectSection(SolutionItems) = preProject
-		App\Readme.md = App\Readme.md
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUnity", "Test\TestUnity\TestUnity.csproj", "{0F86DE66-0B7D-4CBD-8C48-DCDF5C082756}"
 EndProject
 Global
