@@ -23,6 +23,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{086669FE-817A-4BD2-84A4-E1D90C667250}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{723E24B8-056B-4C33-9446-6777AC37FFA4}"
+	ProjectSection(SolutionItems) = preProject
+		Bin\ReadMeConnect.md = Bin\ReadMeConnect.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Library\Core\Core.csproj", "{575091D8-A55C-4794-9F15-120E927C3305}"
 EndProject
@@ -60,6 +63,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "Library\Ext\Flow\Flow.csproj", "{18326C80-2CC4-417D-8FEE-EA608ED85636}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{ACE95B75-45C8-4CF8-AE21-519F9A5F6F13}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Core\Readme.md = Library\Core\Readme.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Network", "Network", "{9E84ED57-1086-4B8E-A67A-AA86F9F411F1}"
 EndProject
@@ -74,6 +80,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetwork", "Test\TestNetwork\TestNetwork.csproj", "{E8BEDE94-9066-4113-BF03-CA02BACCDC39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{522EAA69-4A13-4134-AFE1-041BB1877638}"
+	ProjectSection(SolutionItems) = preProject
+		External\ReadMe.md = External\ReadMe.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity3d", "Unity3d", "{4743A956-2ABA-462E-8472-AC4178CF3FB7}"
 EndProject
@@ -81,6 +90,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{
 	ProjectSection(SolutionItems) = preProject
 		Resources\PyroWindow.PNG = Resources\PyroWindow.PNG
 		Resources\PyroWindow2.png = Resources\PyroWindow2.png
+		Resources\Readme.md = Resources\Readme.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{AAF6F6C3-B4AC-4634-8B74-33953E96AB8A}"
@@ -89,6 +99,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{AAF6F6C3-B4A
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{B8F3F0FB-24DE-4E53-B508-FC51EC07816B}"
+	ProjectSection(SolutionItems) = preProject
+		App\Readme.md = App\Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUnity", "Test\TestUnity\TestUnity.csproj", "{0F86DE66-0B7D-4CBD-8C48-DCDF5C082756}"
 EndProject

@@ -12,7 +12,7 @@ namespace Pyro.Network.Impl {
     /// </summary>
     public class Server
         : NetCommon
-            , IServer {
+        , IServer {
         private const int RequestBacklogCount = 50;
 
         private readonly ExecutionContext.ExecutionContext _Context = new ExecutionContext.ExecutionContext();
