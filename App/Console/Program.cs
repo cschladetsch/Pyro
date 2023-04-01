@@ -76,10 +76,7 @@ namespace Pyro.Console {
             while (true)
                 try {
                     WritePrompt();
-                    if (!Execute(GetInput())) {
-                        continue;
-                    }
-
+                    Execute(GetInput());
                     WriteDataStack();
                 } catch (Exception e) {
                     Error($"{e.Message}");
@@ -175,16 +172,19 @@ namespace Pyro.Console {
         }
 
         private static void WriteDataStackContents(INetCommon client, int max = 50) {
-            var str = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             // Make a copy as it could be changed by another network call while we're iterating over data stack.
             var results = client.ExecutionContext.Executor.DataStack.ToList();
             var reg = client.ExecutionContext.Registry;
             var n = Math.Min(max, results.Count - 1);
             foreach (var result in results) {
-                str.AppendLine($"{n--}: {reg.ToPiScript(result)}");
+                stringBuilder.AppendLine($"{n--}: {reg.ToPiScript(result)}");
             }
 
-            Write(str.ToString(), ConsoleColor.Yellow);
+            var str = stringBuilder.ToString();
+            if (!string.IsNullOrEmpty(str)) {
+                Write(stringBuilder.ToString(), ConsoleColor.Yellow);
+            }
         }
 
         private void WriteDataStack() {
