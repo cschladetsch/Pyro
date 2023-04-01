@@ -21,6 +21,7 @@ namespace Pyro.Console {
         // only used for translation - not execution. Execution is performed by servers or clients.
         private readonly ExecutionContext.ExecutionContext _context;
 
+
         // our peer that can connect to any other peer, and can also be connected to by any other peer
         private IPeer _peer;
 

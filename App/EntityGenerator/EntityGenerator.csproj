@@ -7,4 +7,11 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Library\Core\Core.csproj" />
+      <ProjectReference Include="..\..\Library\Executor\Executor.csproj" />
+      <ProjectReference Include="..\..\Library\Language\ExecutionContext\ExecutionContext.csproj" />
+      <ProjectReference Include="..\..\Library\Language\TauLang\TauLang.csproj" />
+    </ItemGroup>
+
 </Project>
