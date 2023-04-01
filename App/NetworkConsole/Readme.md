@@ -1,6 +1,12 @@
 # Console
 
-This is a **repl** (read-execute-print-loop) cross-platform text-based console for the system.
+This is a **Repl** (read-execute-print-loop) cross-platform text-based console for the *Pyro* system.
+
+Note that it starts with a local Server. Then it creates and connects a Peer to the server. The Peer is then used to connect to other Peers.~~~~
+                                     O
+This means that you can connect multiple Consoles to each other.
+
+Note that it's still missing the concept of a Domain, Peers and Agents as are implemented in the .Net version.~~~~
 
 It can connect to and remotely execute code on other peers in the domain. It can also be connected to by any other node. There is currently no security or ideas of users or permissions.
 
@@ -51,6 +57,3 @@ It uses an internal TCP connection between the input and the processor, such tha
 
 * Replicate remote data-stack.
 * Allow for remote object references.
-
-
-

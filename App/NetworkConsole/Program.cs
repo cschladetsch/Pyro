@@ -99,9 +99,9 @@ namespace Pyro.Console {
             var sb = new StringBuilder();
             while (true)
             {
-                if (Console.KeyAvailable)
+                if (NetworkConsole.KeyAvailable)
                 {
-                    var ch = Console.ReadKey();
+                    var ch = NetworkConsole.ReadKey();
                     if (ch.Key == ConsoleKey.Enter)
                     {
                         return sb.ToString();
@@ -158,7 +158,9 @@ namespace Pyro.Console {
                     return true;
                 }
 
-                return !_context.Translate(input, out var cont) ? Error(_context.Error) : _peer.Execute(cont.ToText());
+                return !_context.Translate(input, out var cont)
+                    ? Error(_context.Error) 
+                    : _peer.Execute(cont.ToText());
             } catch (Exception e) {
                 Error(e.Message);
                 _peer.Execute($"Error: {e.Message} {e.InnerException?.Message}");

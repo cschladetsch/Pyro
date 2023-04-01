@@ -25,16 +25,16 @@ namespace Pyro.Network.Impl {
         public event ClientReceivedHandler OnReceived;
 
         // TODO: Move to NetCommon
-        public string HostName => GetHostName();
-        public int HostPort => GetHostPort();
+        public string HostName
+            => GetHostName();
+
+        public int HostPort
+            => GetHostPort();
 
         public override Socket Socket {
             get => _socket;
             set => _socket = value;
         }
-
-        //public bool Continue(Continuation cont)
-        //=> Send(cont?.ToText());
 
         public bool Continue(string script) {
             return Send(script);

@@ -3,14 +3,8 @@ namespace Pyro {
     ///     Every object in a Registry has a unique Id.
     /// </summary>
     public class Id {
-        internal static Id None = new Id();
-
         public Id(int num = 0) {
             Value = num;
-        }
-
-        public Id(Id prev)
-            : this(prev.Value + 1) {
         }
 
         public int Value { get; }

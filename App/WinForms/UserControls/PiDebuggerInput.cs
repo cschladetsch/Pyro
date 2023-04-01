@@ -26,7 +26,7 @@ namespace WinForms.UserControls {
             //                }
             //                catch (Exception exception)
             //                {
-            //                    Console.WriteLine(exception);
+            //                    NetworkConsole.WriteLine(exception);
             //                }
             //            }
         }
