@@ -112,9 +112,8 @@ namespace Pyro.Exec {
             }
 
             var str = new StringBuilder();
-            str.AppendLine($"---- Step #{Kernel.StepNumber}");
-
             if (Verbosity > 5) {
+                str.AppendLine($"---- Step #{Kernel.StepNumber}");
                 WriteDataStack(str);
                 str.AppendLine("Current: ");
                 Current?.DebugWrite(str);

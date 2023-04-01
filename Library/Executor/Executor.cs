@@ -22,7 +22,7 @@ namespace Pyro.Exec {
         public Executor() {
             Kernel = Flow.Create.Kernel();
             Rethrows = true;
-            Verbosity = 100;
+            Verbosity = 5;
             AddOperations();
         }
 

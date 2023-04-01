@@ -1,11 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Threading;
-using Flow;
+using System.Collections;
+
 using NUnit.Framework;
+
+using Flow;
+
 using Pyro.Exec;
-using Pyro.Language;
 using Pyro.Network;
+using Pyro.Language;
 using Pyro.Network.Impl;
 
 namespace Pyro.Test {
@@ -13,7 +16,7 @@ namespace Pyro.Test {
     public class TestNetworkPeer
         : TestCommon {
         [SetUp]
-        public new void Setup() {
+        public override void Setup() {
             base.Setup();
             _context = new ExecutionContext.ExecutionContext();
         }

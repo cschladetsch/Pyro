@@ -8,6 +8,7 @@ using Pyro.Exec;
 using Pyro.Impl;
 using Pyro.Language;
 using Pyro.Language.Lexer;
+using Pyro.Language.Tau;
 using Pyro.RhoLang;
 using RegisterTypes = Pyro.Exec.RegisterTypes;
 
@@ -20,7 +21,7 @@ namespace Pyro.Test {
     public class TestCommon
         : TestCommonBase {
         [SetUp]
-        public void Setup() {
+        public virtual void Setup() {
             _Registry = new Registry();
             RegisterTypes.Register(_Registry);
 
@@ -44,6 +45,7 @@ namespace Pyro.Test {
         protected Executor _Exec => _ExecutorRef.Value;
 
         private ITranslator _pi;
+
         private ITranslator _rho;
 
         protected void PiRun(string text, bool trace = false) {
@@ -103,8 +105,11 @@ namespace Pyro.Test {
                 case ".rho":
                     klass = typeof(RhoTranslator);
                     break;
+                case ".tau":
+                    klass = typeof(TauTranslator);
+                    break;
                 default:
-                    throw new NotImplementedException($"Unsupported script {extension}");
+                    throw new NotImplementedException($"Unsupported script type {extension}");
             }
 
             return Activator.CreateInstance(klass, _Registry) as ITranslator;

@@ -126,9 +126,6 @@ namespace Pyro.Network.Impl {
             continuation.Scope = Exec.Scope;
             Exec.Continue(continuation);
 
-            continuation.Scope = Exec.Scope;
-            Exec.Continue(continuation);
-
             return true;
         }
 

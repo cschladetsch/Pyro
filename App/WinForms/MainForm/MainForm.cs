@@ -53,7 +53,7 @@ namespace WinForms {
             Executor.Verbosity = 20;
             editor.Language = ELanguage.Pi;
             Decompile();
-            output.Text = AppCommonBase.GetVersion() + '\n';
+            output.Text = ConsoleAppCommonBase.GetVersion() + '\n';
         }
 
         public Stack<object> DataStack => Executor.DataStack;

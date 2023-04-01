@@ -8,11 +8,11 @@ namespace Pyro.AppCommon {
     /// <summary>
     ///     Functionality that is common to all (console) Apps that use Pyro libraries.
     /// </summary>
-    public abstract class AppCommonBase {
-        private static AppCommonBase _self;
+    public abstract class ConsoleAppCommonBase {
+        private static ConsoleAppCommonBase _self;
         private readonly ConsoleColor _originalColor;
 
-        protected AppCommonBase(string[] args) {
+        protected ConsoleAppCommonBase(string[] args) {
             CancelKeyPress += Cancel;
             _originalColor = ForegroundColor;
             _self = this;
@@ -21,15 +21,15 @@ namespace Pyro.AppCommon {
 
         public static string GetVersion() {
             var asm = Assembly.GetEntryAssembly();
+            if (asm == null) {
+                return "[Pyro]";
+            }
             var desc = asm.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
             var name = asm.GetName();
             var version = name.Version;
-
             var built = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            var b = built.ToString("yy-MM-ddTHH:mm");
-            var v = $"{version.Build}.{version.Revision}";
 
-            return $"{desc} v{v} built {b}";
+            return $"{desc} v{version.Build}.{version.Revision} built {built:yy-MM-ddTHH:mm}";
         }
 
         protected abstract void Shutdown();
@@ -56,9 +56,6 @@ namespace Pyro.AppCommon {
             WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
         }
 
-        /// <summary>
-        ///     Save/restore current foreground color while writing a string to the console.
-        /// </summary>
         private static void ConWrite(string text, ConsoleColor color, Action<string> write) {
             var current = ForegroundColor;
             ForegroundColor = color;
@@ -67,7 +64,6 @@ namespace Pyro.AppCommon {
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e) {
-            // don't exit immediately - shut down networking gracefully first
             e.Cancel = true;
             _self.Shutdown();
         }

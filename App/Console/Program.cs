@@ -7,14 +7,14 @@ using Pyro.Network;
 using Pyro.Network.Impl;
 
 namespace Pyro.Console {
-    using Con = System.Console;
+    using SystemConsole = System.Console;
 
     /// <summary>
     ///     A Repl console for Pyro.
     ///     Can connect and enter into other consoles.
     /// </summary>
     internal class Program
-        : AppCommonBase {
+        : ConsoleAppCommonBase {
         // Port that we listen on for incoming connections.
         private const int ListenPort = 7777;
 
@@ -44,7 +44,11 @@ namespace Pyro.Console {
 
         private void SetupPeer() {
             _peer.OnConnected += OnConnected;
-            _peer.OnReceivedRequest += (_peer, client, text) => WriteLine(text, ConsoleColor.Magenta);
+            _peer.OnReceivedRequest += HandleInputRequest;
+        }
+
+        private void HandleInputRequest(IPeer _peer, IClient client, string text) {
+            WriteLine(text, ConsoleColor.Magenta);
         }
 
         private bool StartPeer(string[] args) {
@@ -82,15 +86,18 @@ namespace Pyro.Console {
                 }
         }
 
+        private readonly object _consoleLock = new object();
+
         private void WritePrompt() {
-            // TODO: use a lock to ensure these go on same line.
-            Write($"{_peer.Remote?.Socket?.RemoteEndPoint} ", ConsoleColor.DarkGray);
-            Write($"{_context.Language}> ", ConsoleColor.Gray);
-            Con.ForegroundColor = ConsoleColor.White;
+            lock (_consoleLock) {
+                Write($"{_peer.Remote?.Socket?.RemoteEndPoint} ", ConsoleColor.DarkGray);
+                Write($"{_context.Language}> ", ConsoleColor.Gray);
+                SystemConsole.ForegroundColor = ConsoleColor.White;
+            }
         }
 
         private string GetInput() {
-            return Con.ReadLine();
+            return SystemConsole.ReadLine();
             /* want to trap Ctrl-Keys
             var sb = new StringBuilder();
             while (true)
@@ -120,32 +127,6 @@ namespace Pyro.Console {
         }
 
         private bool PreProcess(string input) {
-            // Idea here was to allow execution of arbitrary commands in the current context.
-            // This is a wonderfully stupid idea for security reasons, but still.
-            // In any case, I've removed it for now.
-            //
-            // if (!string.IsNullOrEmpty(input))
-            // {
-            //    if (input.StartsWith("."))
-            //    {
-            //        //var cmd = input.Substring(1);
-            //        var bash = @"C:\Program Files\Git\git-bash.exe";
-            //        var proc = new System.Diagnostics.Process();
-            //        proc.OutputDataReceived += (sender, args) => WriteLine(args.Data);
-            //        ProcessStartInfo si = new ProcessStartInfo();
-            //        si.RedirectStandardOutput = true;
-            //        si.UseShellExecute = false;
-            //        si.CreateNoWindow = true;
-            //        si.RedirectStandardOutput = true;
-            //        si.FileName = bash;
-            //        //si.Arguments = cmd;
-            //        proc.StartInfo = si;
-            //        var sr =
-            //        proc.StandardOutput =
-            //        return true;
-            //    }
-            // }
-
             switch (input) {
                 case "?":
                 case "help":
@@ -199,28 +180,27 @@ namespace Pyro.Console {
             var results = client.ExecutionContext.Executor.DataStack.ToList();
             var reg = client.ExecutionContext.Registry;
             var n = Math.Min(max, results.Count - 1);
-            foreach (var result in results)
+            foreach (var result in results) {
                 str.AppendLine($"{n--}: {reg.ToPiScript(result)}");
+            }
 
-            WriteLine(str.ToString(), ConsoleColor.Yellow);
+            Write(str.ToString(), ConsoleColor.Yellow);
         }
 
         private void WriteDataStack() {
-            var current = Con.ForegroundColor;
+            var current = SystemConsole.ForegroundColor;
             WriteDataStackContents(_peer.Remote);
-            Con.ForegroundColor = current;
+            SystemConsole.ForegroundColor = current;
         }
 
         private bool ShowHelp() {
-            Con.WriteLine(
+            SystemConsole.WriteLine(
                 @"
 The prompt shows the current executing context and language.
-
 When you type at the prompt, your text is executed in the current context - which could be local (default) or remote.
-
 Before the prompt is printed, the data-stack of the current server is printed. Operations you perform act on this data-stack. Each connection to a remote server has its own private context.
-
 To connect to a remote node, type:
+
 Rho> peer.Connect(""_hostName"", port) 
 
 To then switch execution context, type:
@@ -237,7 +217,7 @@ Press Ctrl-C to quit.
             Error("Shutting down...", color);
             _peer?.Stop();
             Error("Done", color);
-            Con.ForegroundColor = ConsoleColor.White;
+            SystemConsole.ForegroundColor = ConsoleColor.White;
             Exit();
         }
     }
