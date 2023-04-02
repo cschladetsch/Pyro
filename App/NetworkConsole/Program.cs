@@ -63,8 +63,8 @@ namespace Pyro.Console {
             var reg = ctx.Registry;
             var scope = ctx.Executor.Scope;
 
-            reg.Register(new ClassBuilder<TestClient>(reg).Class);
-            scope["remote"] = new TestClient();
+            /*reg.Register(new ClassBuilder<TestClient>(reg).Class);
+            scope["remote"] = new TestClient();*/
 
             return _peer.SelfHost() || Error("Failed to start local server");
         }
