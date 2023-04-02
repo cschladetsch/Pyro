@@ -5,12 +5,10 @@ namespace Pyro.AppCommon {
     using static Console;
     using Con = Console;
 
-    /// <summary>
-    ///     Functionality that is common to all (console) Apps that use Pyro libraries.
-    /// </summary>
     public abstract class ConsoleAppCommonBase {
         private static ConsoleAppCommonBase _self;
         private readonly ConsoleColor _originalColor;
+        private readonly object _consoleLock = new object();
 
         protected ConsoleAppCommonBase(string[] args) {
             CancelKeyPress += Cancel;
@@ -39,12 +37,12 @@ namespace Pyro.AppCommon {
             Environment.Exit(result);
         }
 
-        protected static bool Error(string text, ConsoleColor color = ConsoleColor.Green) {
+        protected static bool Error(string text, ConsoleColor color = ConsoleColor.Red) {
             WriteLine(text, color);
             return false;
         }
 
-        protected static void Write(string text, ConsoleColor color = ConsoleColor.White) {
+        protected void Write(string text, ConsoleColor color = ConsoleColor.White) {
             ConWrite(text, color, Con.Write);
         }
 
@@ -57,10 +55,12 @@ namespace Pyro.AppCommon {
         }
 
         private static void ConWrite(string text, ConsoleColor color, Action<string> write) {
-            var current = ForegroundColor;
-            ForegroundColor = color;
-            write(text);
-            ForegroundColor = current;
+            lock (_self._consoleLock) {
+                var current = ForegroundColor;
+                ForegroundColor = color;
+                write(text);
+                ForegroundColor = current;
+            }
         }
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e) {

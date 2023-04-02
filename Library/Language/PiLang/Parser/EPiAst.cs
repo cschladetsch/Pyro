@@ -15,5 +15,6 @@
         , Ident
         , Pathname
         , Object
+        , Nop
     }
 }

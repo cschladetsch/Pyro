@@ -120,11 +120,6 @@ namespace Pyro.Language {
             return len == 0 || Offset == len - 1;
         }
 
-        /// <summary>
-        ///     Peek N glyphs ahead on current line.
-        /// </summary>
-        /// <param name="n">The number of glyphs to look ahead.</param>
-        /// <returns>(char)0 if cannot peek, else the char peeked.</returns>
         protected char Peek(int n = 1) {
             const char end = (char)0;
 

@@ -115,5 +115,6 @@
         , Has
         , SetFloatPrecision
         , Delete
+        , Nop
     }
 }

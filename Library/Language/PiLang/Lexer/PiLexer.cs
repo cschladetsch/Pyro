@@ -9,6 +9,7 @@ namespace Pyro.Language.Lexer {
     /// </summary>
     public partial class PiLexer
         : LexerCommon<EPiToken, PiToken, PiTokenFactory> {
+
         private static readonly Dictionary<EOperation, EPiToken> _opToToken = new Dictionary<EOperation, EPiToken>();
 
         public PiLexer(string input)

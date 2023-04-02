@@ -59,6 +59,7 @@ namespace Pyro.Language.Lexer {
             AddKeyword("writeln", EPiToken.WriteLine);
             AddKeyword("debug_datastack", EPiToken.DebugPrintDataStack);
             AddKeyword("set_float_precision", EPiToken.SetFloatPrecision);
+            AddKeyword("nop", EPiToken.Nop);
         }
 
         private void AddKeyword(string str, EPiToken tok) {
@@ -71,7 +72,7 @@ namespace Pyro.Language.Lexer {
                 return;
             }
 
-            //_opToToken[EOperation.Nop] = EPiToken.Nop;
+            _opToToken[EOperation.Nop] = EPiToken.Nop;
             //_opToToken[EOperation.HasType] = EPiToken.HasType;
             _opToToken[EOperation.GarbageCollect] = EPiToken.GarbageCollect;
             _opToToken[EOperation.Plus] = EPiToken.Plus;

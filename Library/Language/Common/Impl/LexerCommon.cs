@@ -16,8 +16,8 @@ namespace Pyro.Language.Impl {
         where TToken : class, ITokenBase<TEnum>, new()
         where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new() {
         protected TTokenFactory _Factory = new TTokenFactory();
-        protected Dictionary<string, TEnum> _keyWords = new Dictionary<string, TEnum>();
-        protected Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
+        protected readonly Dictionary<string, TEnum> _keyWords = new Dictionary<string, TEnum>();
+        protected readonly Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
 
         protected List<TToken> _Tokens = new List<TToken>();
         public TToken ErrorToken;
@@ -171,3 +171,4 @@ namespace Pyro.Language.Impl {
         }
     }
 }
+

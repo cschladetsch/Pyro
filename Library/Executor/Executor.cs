@@ -153,7 +153,10 @@ namespace Pyro.Exec {
                 throw new NullValueException();
             }
 
-            PerformPrelude(next);
+            if (Verbosity > 4) {
+                PerformPrelude(next);
+            }
+
             switch (next) {
                 case EOperation op when _actions.TryGetValue(op, out var action):
                     action();

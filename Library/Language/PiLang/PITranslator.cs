@@ -63,6 +63,8 @@ namespace Pyro.Language {
 
         private bool AddNode(PiAstNode piAst, IList<object> objects) {
             switch (piAst.Type) {
+                case EPiAst.Nop:
+                    break;
                 case EPiAst.None:
                     break;
                 case EPiAst.TokenType:
@@ -88,6 +90,8 @@ namespace Pyro.Language {
             // There just ended up being a huge amount of pi tokens that simply map directly to operations.
             // This wasn't obvious at first, and is not true in most languages!
             switch (token.Type) {
+                case EPiToken.Nop:
+                    return;
                 case EPiToken.Assign:
                     objects.Add(EOperation.Assign);
                     break;

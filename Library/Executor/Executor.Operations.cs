@@ -46,6 +46,7 @@ namespace Pyro.Exec {
             _actions[EOperation.Multiply] = () => Push(RPop() * RPop());
             _actions[EOperation.Floor] = () => Push(Math.Floor(RPop()));
             _actions[EOperation.Ceiling] = () => Push(Math.Ceiling(RPop()));
+            _actions[EOperation.Nop] = () => { };
             _actions[EOperation.Divide] = Divide;
             _actions[EOperation.Suspend] = Suspend;
             _actions[EOperation.Resume] = Resume;

@@ -22,7 +22,7 @@ The following are supported:
 ## Example
 
 ```
-> generate -i MyInterface.cs -op MyProxy.cs -oa MyAgent.cs
+> generate -i MyInterface.cs -op Proxies/MyProxy.cs -oa Agents/MyAgent.cs
 ```
 
 ## TODO

@@ -3,14 +3,12 @@
 This is a **Repl** (read-execute-print-loop) cross-platform text-based console for the *Pyro* system.
 
 Note that it starts with a local Server. Then it creates and connects a Peer to the server. The Peer is then used to connect to other Peers.~~~~
-                                     O
-This means that you can connect multiple Consoles to each other.
 
-Note that it's still missing the concept of a Domain, Peers and Agents as are implemented in the .Net version.~~~~
+This means that you can connect multiple Consoles to each other.
 
 It can connect to and remotely execute code on other peers in the domain. It can also be connected to by any other node. There is currently no security or ideas of users or permissions.
 
-There are two main languages used: Pi and Rho. You can switch between them by typing `pi` or `rho` at the prompt.
+There are two main languages used: [Pi](../../Library/Pi) and [Rho](../../Library/Rho). You can switch between them by typing `pi` or `rho` at the prompt.
 
 Whatever you enter at the prompt is sent to and executed in the context shown by the prompt. By default, this is the local machine.
 
@@ -22,7 +20,7 @@ Press control-C to quit.
 
 There isn't really a 'list of commands'. The language used exposes the .Net runtime so you can access pretty much everything.
 
-The syntax of pi and rho are explained in their relative locations.
+The syntax of *Pi* and *Rho* are explained in their relative locations.
 
 ## Description
 
