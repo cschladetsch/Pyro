@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestExecutor", "Test\TestEx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPi", "Test\TestPi\TestPi.csproj", "{BDA73C27-6B43-4F77-8D63-6DC8445553FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkConsole", "App\NetworkConsole\NetworkConsole.csproj", "{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "App\Console\Console.csproj", "{063FD01E-5FEF-47FE-912E-8ED54FEEA24B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiLang", "Library\Language\PiLang\PiLang.csproj", "{142AFFDB-3FA9-47D2-B28A-EC01595CFA19}"
 EndProject

@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 
 namespace Pyro.Language {
-    /// <inheritdoc cref="Process" />
-    /// <inheritdoc cref="ILexer" />
-    /// <summary>
-    ///     Common to all lexers. Provides basic lexing functionality that is not specific to
-    ///     any token-type.
-    /// </summary>
     public class LexerBase
         : Process
-            , ILexer {
+        , ILexer {
 
         public int LineNumber => _lineNumber;
 
@@ -24,6 +18,9 @@ namespace Pyro.Language {
     
         private string Line => Lines[_lineNumber];
 
+        protected LexerBase(string input) {
+            Input = UnfuckNewLines(input);
+        }
 
         protected virtual void AddStringToken(Slice slice) {
         }

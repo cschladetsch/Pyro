@@ -1,32 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Pyro.Language.Impl {
-    /// <inheritdoc cref="LexerBase" />
-    /// <summary>
-    ///     Common to all Lexers
-    /// </summary>
-    /// <typeparam name="TEnum">The enumeration type for tokens in the language</typeparam>
-    /// <typeparam name="TToken">The token type to use</typeparam>
-    /// <typeparam name="TTokenFactory">How to make Tokens</typeparam>
     public abstract class LexerCommon<TEnum, TToken, TTokenFactory>
         : LexerBase
             , ILexerCommon<TToken>
         where TToken : class, ITokenBase<TEnum>, new()
         where TTokenFactory : class, ITokenFactory<TEnum, TToken>, new() {
+
+        public TToken ErrorToken;
+
+        public IList<TToken> Tokens => _Tokens;
+
         protected TTokenFactory _Factory = new TTokenFactory();
+
         protected readonly Dictionary<string, TEnum> _keyWords = new Dictionary<string, TEnum>();
+
         protected readonly Dictionary<TEnum, string> _KeyWordsInvert = new Dictionary<TEnum, string>();
 
         protected List<TToken> _Tokens = new List<TToken>();
-        public TToken ErrorToken;
 
         protected LexerCommon(string input)
             : base(input) {
         }
-
-        public IList<TToken> Tokens => _Tokens;
 
         public string CreateErrorMessage(TToken tok, string fmt, params object[] args) {
             ErrorToken = tok;
@@ -112,12 +109,12 @@ namespace Pyro.Language.Impl {
         protected virtual void AddKeyWords() {
         }
 
-        protected bool Run() {
+        public override bool Run() {
             _offset = 0;
             _lineNumber = 0;
 
-            while (!Failed && NextToken())
-                ;
+            while (!Failed && NextToken()) {
+            }
 
             Terminate();
 

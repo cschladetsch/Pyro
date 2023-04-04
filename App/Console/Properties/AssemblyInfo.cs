@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PyroConsole")]
 [assembly: AssemblyDescription("PyroConsole")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("Pyro NetworkConsole")]
+[assembly: AssemblyProduct("Pyro Console")]
 [assembly: AssemblyCopyright("Copyright © Christian Schladetsch 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
