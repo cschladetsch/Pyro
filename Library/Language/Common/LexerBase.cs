@@ -11,17 +11,19 @@ namespace Pyro.Language {
     public class LexerBase
         : Process
             , ILexer {
+
+        public int LineNumber => _lineNumber;
+
+        public List<string> Lines { get; } = new List<string>();
+
+        public string Input { get; private set; }
+
         protected int _offset, _lineNumber;
 
-        protected LexerBase(string input) {
-            Input = UnfuckNewLines(input);
-        }
-
         private int Offset => _offset;
-        public int LineNumber => _lineNumber;
+    
         private string Line => Lines[_lineNumber];
-        public List<string> Lines { get; } = new List<string>();
-        public string Input { get; private set; }
+
 
         protected virtual void AddStringToken(Slice slice) {
         }
