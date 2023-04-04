@@ -67,6 +67,7 @@
         <Compile Include="BuiltinTypes\Void.cs" />
         <Compile Include="BuiltinTypes\BuiltinTypes.cs" />
         <Compile Include="ButterworthFilter.cs" />
+        <Compile Include="GetOpt.cs" />
         <Compile Include="IIdentifer.cs" />
         <Compile Include="Impl\Detail\VoidFunction.cs" />
         <Compile Include="Impl\Detail\Function.cs" />

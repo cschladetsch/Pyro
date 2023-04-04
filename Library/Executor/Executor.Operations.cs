@@ -11,11 +11,6 @@ namespace Pyro.Exec {
     public partial class Executor {
         private const float FLOAT_EPSILON = 0.00001f;
 
-        /// <summary>
-        ///     A hack that is broken anyway.
-        /// </summary>
-        private bool _leaveForEach;
-
         private dynamic RPop() {
             if (TryResolve(Pop(), out object val)) {
                 return val;
