@@ -30,7 +30,7 @@ The key languages are:
 * [Tau](../../wiki/TauLang). An IDL (Interface Definition Language) that creates code that you can derive from to
   implement *Proxies* and *Agents*.
 
-* [Sigma](../../wiki/SigmaLang). A language designed to with various human-provided script and still provide ver ysimilar outcomes.
+* [Sigma](../../wiki/SigmaLang). A language designed to with various human-provided script and still provide very similar outcomes to a full prgram. Uses Chat-GPT4 and similar systems.
 
 From either *Pi* or *Rho* it is trivial to access all .Net objects, and also simple to add new custom types that you can
 expose to the runtime.
