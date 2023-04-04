@@ -2,7 +2,9 @@
 
 This is a **Repl** (read-execute-print-loop) cross-platform text-based console for the *Pyro* system.
 
-Note that it starts with a local Server. Then it creates and connects a Peer to the server. The Peer is then used to connect to other Peers.~~~~
+Note that it starts with a local Server. Then it creates and connects a Peer to the server. The Peer is then used to connect to other Peers.
+
+This includes when running the app as a sole process. In this case, the Peer is connected to the Server and the Server is connected to the Peer. Just that the Peer connects to the Server on the same machine.
 
 This means that you can connect multiple Consoles to each other.
 

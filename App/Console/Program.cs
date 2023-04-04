@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 
-using Pyro.AppCommon;
-using Pyro.Language;
 using Pyro.Network;
+using Pyro.Language;
+using Pyro.AppCommon;
 using Pyro.Network.Impl;
 
 namespace Pyro.Console {
     using SystemConsole = System.Console;
 
-    /// <summary>
-    ///     A Repl console for Pyro.
-    ///     Can connect and enter into other consoles.
-    /// </summary>
     internal class Program
         : ConsoleAppCommonBase {
         // Port that we listen on for incoming connections.
@@ -52,8 +48,10 @@ namespace Pyro.Console {
             _peer.OnReceivedRequest += HandleInputRequest;
         }
 
+        private int n;
+
         private void HandleInputRequest(IPeer peer, IClient client, string text) {
-            WriteLine(text, ConsoleColor.Magenta);
+            WriteLine(n + text, ConsoleColor.Magenta);
         }
 
         private bool StartPeer(IReadOnlyList<string> args) {
@@ -118,7 +116,6 @@ namespace Pyro.Console {
 
         private bool Execute(string input) {
             if (string.IsNullOrEmpty(input)) {
-                // get refresh of remote data stack
                 _peer.Remote?.Continue("nop");
                 return true;
             }
@@ -139,7 +136,7 @@ namespace Pyro.Console {
             return false;
         }
 
-        private static void OnConnected(IPeer peer, IClient client) {
+        private void OnConnected(IPeer peer, IClient client) {
             WriteLine($"Connected to {client}.");
         }
 

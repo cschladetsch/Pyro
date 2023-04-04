@@ -37,7 +37,7 @@ namespace Pyro.AppCommon {
             Environment.Exit(result);
         }
 
-        protected static bool Error(string text, ConsoleColor color = ConsoleColor.Red) {
+        protected bool Error(string text, ConsoleColor color = ConsoleColor.Red) {
             WriteLine(text, color);
             return false;
         }
@@ -46,19 +46,21 @@ namespace Pyro.AppCommon {
             ConWrite(text, color, Con.Write);
         }
 
-        protected static void WriteLine(string text, ConsoleColor color = ConsoleColor.White) {
+        protected void WriteLine(string text, ConsoleColor color = ConsoleColor.White) {
             ConWrite(text, color, Con.WriteLine);
         }
 
-        private static void WriteHeader() {
+        private void WriteHeader() {
             WriteLine($"{GetVersion()}", ConsoleColor.DarkGray);
         }
 
-        private static void ConWrite(string text, ConsoleColor color, Action<string> write) {
+        private int k;
+
+        private void ConWrite(string text, ConsoleColor color, Action<string> write) {
             lock (_self._consoleLock) {
                 var current = ForegroundColor;
                 ForegroundColor = color;
-                write(text);
+                write(k++ + ": " + text);
                 ForegroundColor = current;
             }
         }

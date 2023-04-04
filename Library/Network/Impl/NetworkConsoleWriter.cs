@@ -1,13 +1,10 @@
 ﻿using System;
+using Con = System.Console;
+
 using Flow;
 
 namespace Pyro.Network.Impl {
-    using Con = Console;
 
-    /// <inheritdoc />
-    /// <summary>
-    ///     Base for Peer, Client and Server.
-    /// </summary>
     public class NetworkConsoleWriter
         : Process {
         public event OnWriteDelegate OnWrite;
@@ -21,32 +18,24 @@ namespace Pyro.Network.Impl {
 
         protected bool Warn(string text) {
             OnWrite?.Invoke(ELogLevel.Warn, text);
-            WriteLine($"Warn: {text}");
+            WriteLine($"Warn: {text}", ConsoleColor.Yellow);
             return true;
         }
 
         protected new bool Error(string text) {
             OnWrite?.Invoke(ELogLevel.Error, text);
-            WriteLine($"Error: {text}");
+            WriteLine($"Error: {text}", ConsoleColor.Red);
             base.Error = text;
             return false;
         }
 
-        protected bool WriteLine(ELogLevel log, string text) {
-            OnWrite?.Invoke(log, text);
-            WriteLine($"{log}: {text}");
-            var failed = log != ELogLevel.Error;
-            return !failed || Fail(text);
-        }
-
-        protected bool WriteLine(string text) {
+        protected bool WriteLine(string text, ConsoleColor color = ConsoleColor.White) {
             OnWrite?.Invoke(ELogLevel.Info, text);
 
-            var color = Con.ForegroundColor;
-            Con.ForegroundColor = ConsoleColor.Cyan;
-            //Con.WriteLine();
-            Con.WriteLine(text);
+            var previousColor = Con.ForegroundColor;
             Con.ForegroundColor = color;
+            Con.WriteLine(text);
+            Con.ForegroundColor = previousColor;
             return true;
         }
     }
