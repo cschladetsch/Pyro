@@ -72,7 +72,7 @@ All components support colored output and on-the-fly colored syntax highlighting
 ![Window](Resources/PyroWindow2.png)
 
 Note that 95% of the time taken to do anything is because there are events being fired whenever a data- or context-stack
-changes, etc. Without the UI events, the code executes an order of magnitude faster.
+changes, etc. Without the UI events, the code executes a few orders of magnitude faster.
 
 ## Tutorial
 
