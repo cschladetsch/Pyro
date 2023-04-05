@@ -10,4 +10,4 @@ There are three main languages:
 
 All of these languages use the same templated `Lexer<>`, `Parser<>` and `Translater<>`. This means that each language is about a few hundred lines long.
 
-Work has start on a new language called [_Sigma_](https://github.com/cschladetsch/Pyro/wiki/SigmaKang) intended to directly interact with external [Artificial Intelligence] systems and code-generation.
+Work has start on a new language called [_Sigma_](https://github.com/cschladetsch/Pyro/wiki/SigmaLang) intended to directly interact with external [Artificial Intelligence] systems and code-generation.
