@@ -9,8 +9,11 @@
 *Pyro* is a cross-platform collection of .Net libraries supporting object persistence, networking, and a coroutine
 micro-kernel.
 
-*Note that the code factor went from A+ to A- when I included Mono's _getopt_ system. Sigh.*
+Pyro is a collection of .Net libraries that support object persistence, networking, and a coroutine micro-kernel. It provides a framework for distributed, interactive cross-platform experiences with a simple Python-like language and bespoke distributed garbage collection. Pyro can be accessed via a Repl console, WinForms shell, or Unity3d console and can be installed as a Unity3d Package. 
 
+The key languages used in Pyro are Pi, Rho, Tau, and Sigma. 
+
+Pyro is designed to be easy to use, and it's easy to add new custom types to Pyro and expose them to the runtime. The Pyro suite includes four main applications: a command-line Repl interface, a GUI interface written in WinForms, a network generation tool for proxies and agents (TauGenerater), and a Unity3d console with Pi, Rho, Stack, and Output panels
 Check out the [wiki](../../wiki).
 
 It is based on [Flow](https://github.com/cschladetsch/Flow),
