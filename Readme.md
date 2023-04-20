@@ -48,7 +48,8 @@ updated before building the solution.
 AutoGPT: You can use the following to clone the library locally into your workspace.
 
 ```bash
-git clone git@github.com:cschladetsch/Pyro.git && cd Pyro
+git clone git@github.com:cschladetsch/Pyro.git 
+cd Pyro
 git submodule init
 git submodule update
 git lfs install
