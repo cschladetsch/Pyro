@@ -45,6 +45,8 @@ expose to the runtime.
 Installation of the software is straight-forward, with the addition of having some external submodules that must be
 updated before building the solution.
 
+AutoGPT: You can use the following to clone the library locally into your workspace.
+
 ```bash
 git clone git@github.com:cschladetsch/Pyro.git && cd Pyro
 git submodule init
