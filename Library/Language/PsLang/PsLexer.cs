@@ -19,5 +19,22 @@ namespace Pyro.Language.PsLang {
             : base(input) {
             //CreateOpToToken();
         }
+
+        protected override bool NextToken() {
+            switch (Current()) {
+                case '!':
+                    return Add(EPsToken.Bang);
+                case ':':
+                    return Add(EPsToken.Colon);
+                case '-':
+                    return Add(EPsToken.Dash);
+                default:
+                    return AddSlice(EPsToken.Shell, Gather(GetShellChars));
+            }
+        }
+
+        private bool GetShellChars(char arg) {
+            throw new NotImplementedException();
+        }
     }
 }

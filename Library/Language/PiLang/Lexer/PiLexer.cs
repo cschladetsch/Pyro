@@ -42,6 +42,10 @@ namespace Pyro.Language.Lexer {
                 return AddSlice(EPiToken.Float, new Slice(this, start.Start, end.End));
             }
 
+            return CreateToken(current);
+        }
+
+        private bool CreateToken(char current) {
             switch (current) {
                 case Pathname.Quote: return Add(EPiToken.Quote);
                 case '`': return AddQuotedOperation();

@@ -18,5 +18,7 @@ namespace Pyro.Language.PsLang {
 
         Ident,
         String,
+
+        Shell, // everything else to do with powershell
     }
 }
