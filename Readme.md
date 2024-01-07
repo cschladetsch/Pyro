@@ -13,6 +13,8 @@ Pyro is a collection of .Net libraries that support object persistence, networki
 
 The key languages used in Pyro are Pi, Rho, Tau, and Sigma. 
 
+There is also a custom PowerShell extension. This adds access to Pyro directly from the PowerShell prompt. It also adds `bang-commands` such as `!!`, `!:N`, `!$`, etc, as used by `bash`.
+
 Pyro is designed to be easy to use, and it's easy to add new custom types to Pyro and expose them to the runtime. The Pyro suite includes four main applications: a command-line Repl interface, a GUI interface written in WinForms, a network generation tool for proxies and agents (TauGenerater), and a Unity3d console with Pi, Rho, Stack, and Output panels
 Check out the [wiki](../../wiki).
 
