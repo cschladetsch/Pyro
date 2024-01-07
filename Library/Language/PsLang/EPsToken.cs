@@ -16,7 +16,6 @@ namespace Pyro.Language.PsLang {
         Number,     // int
         Dash,       // -
 
-        Ident,
         String,
 
         Shell, // everything else to do with powershell

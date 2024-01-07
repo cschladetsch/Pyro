@@ -9,7 +9,7 @@ namespace Pyro.Language.PsLang {
         : ITokenFactory<EPsToken, PsToken> {
         public PsToken NewToken(EPsToken en, Slice slice) => new PsToken(en, slice);
 
-        public PsToken NewTokenIdent(Slice slice) => NewToken(EPsToken.Ident, slice);
+        public PsToken NewTokenIdent(Slice slice) => throw new NotImplementedException();
 
         public PsToken NewTokenString(Slice slice) => NewToken(EPsToken.String, slice);
 
